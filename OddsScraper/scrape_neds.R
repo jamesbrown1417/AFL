@@ -30,7 +30,7 @@ df <- data.frame(event_name, event_id, competition_name)
 # Filter the data frame to only include matches with ' vs ' in the event name
 df <- df |> filter(str_detect(event_name, ' vs '))
 
-# Only get NBL Games
+# Only get AFL Games
 df <- df |> filter(str_detect(competition_name, 'AFL'))
 
 #===============================================================================
@@ -48,14 +48,20 @@ event_json_list <- list()
 
 # Loop through each event URL and get the event card JSON data
 for (url in event_json) {
-    tryCatch({
-        response2 <- request(url) |>
-            req_perform() |>
-            resp_body_json()
-        event_json_list <- append(event_json_list, list(response2))
-    }, error = function(e) {
-        cat("Error:", url, "\n")
-    })
+  tryCatch({
+    response2 <-
+      request(url) |>
+      req_headers(
+        accept = "*/*",
+        `User-Agent` = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.150 Safari/537.36",
+        `Accept-Language` = "en-US,en;q=0.9"
+      ) |>
+      req_perform() |>
+      resp_body_json()
+    event_json_list <- append(event_json_list, list(response2))
+  }, error = function(e) {
+    cat("Error:", url, "\n", e$message, "\n")
+  })
 }
 
 #===============================================================================
