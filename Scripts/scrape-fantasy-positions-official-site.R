@@ -27,6 +27,7 @@ get_afl_api_player_data <- function(player_data){
   # Name and price data
   first_name = player_data$first_name
   last_name = player_data$last_name
+  team_id = player_data$squad_id
   price = player_data$cost
   projected_average = player_data$stats$proj_avg
   adp = player_data$stats$adp
@@ -44,6 +45,7 @@ get_afl_api_player_data <- function(player_data){
   tibble(
     first_name,
     last_name,
+    team_id,
     price,
     projected_average,
     adp,
@@ -66,7 +68,27 @@ afl_player_api_data <-
   map(get_afl_api_player_data) |> 
   reduce(bind_rows) |>
   mutate(player_full_name = paste(first_name, last_name)) |> 
-  relocate(player_full_name, .after = last_name)
+  mutate(team_name = case_when(
+    team_id == 10 ~ "Adelaide Crows",
+    team_id == 20 ~ "Brisbane Lions",
+    team_id == 30 ~ "Carlton",
+    team_id == 40 ~ "Collingwood Magpies",
+    team_id == 50 ~ "Essendon Bombers",
+    team_id == 60 ~ "Fremantle Dockers",
+    team_id == 70 ~ "Geelong Cats",
+    team_id == 1000 ~ "Gold Coast Suns",
+    team_id == 1010 ~ "GWS Giants",
+    team_id == 80 ~ "Hawthorn Hawks",
+    team_id == 90 ~ "Melbourne Demons",
+    team_id == 100 ~ "North Melbourne Kangaroos",
+    team_id == 110 ~ "Port Adelaide Power",
+    team_id == 120 ~ "Richmond Tigers",
+    team_id == 130 ~ "St Kilda Saints",
+    team_id == 160 ~ "Sydney Swans",
+    team_id == 150 ~ "West Coast Eagles",
+    team_id == 140 ~ "Western Bulldogs"
+  )) |>
+  relocate(player_full_name, team_name, .after = last_name)
 
 
 # Write out as starting data for 2024 season

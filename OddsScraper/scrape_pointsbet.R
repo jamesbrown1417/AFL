@@ -8,6 +8,10 @@ library(tidyjson)
 # Function to fix team names
 source("Functions/fix_team_names.R")
 
+# Player names file
+player_names <- read_rds("C:/Users/james/R_Projects/AFL-2024/Data/2024_start_positions_and_prices.rds")
+player_names <- player_names |> select(player_full_name, team_name)
+
 pointsbet_h2h_main <- function() {
   # URL of website
   pointsbet_url = "https://api.pointsbet.com/api/v2/competitions/7523/events/featured?includeLive=false&page=1"
@@ -214,15 +218,15 @@ pointsbet_h2h_main <- function() {
   pointsbet_data_player_props <- map_df(match_urls, get_player_props)
   
   #===============================================================================
-  # Player Points
+  # Player Disposals
   #===============================================================================
   
-  # Player points alternative totals----------------------------------------------
+  # Player disposals alternative totals----------------------------------------------
   
-  # Filter list to player points
-  pointsbet_player_points_lines <-
+  # Filter list to player disposals
+  pointsbet_player_disposals_lines <-
     pointsbet_data_player_props |>
-    filter(str_detect(market, "Points To Get|Alternate Points")) |>
+    filter(str_detect(market, "Disposals To Get|Alternate Disposals")) |>
     mutate(line = str_extract(outcome, "[0-9]{1,2}")) |>
     mutate(line = as.numeric(line) - 0.5) |>
     mutate(match = str_replace(match, "@", "v")) |>
@@ -236,31 +240,6 @@ pointsbet_h2h_main <- function() {
     mutate(
       outcome = case_when(
         outcome == "Lebron James" ~ "LeBron James",
-        outcome == "D'angelo Russell" ~ "D'Angelo Russell",
-        outcome == "K. Caldwell-Pope" ~ "Kentavious Caldwell-Pope",
-        outcome == "De'andre Hunter" ~ "De'Andre Hunter",
-        outcome == "Lamelo Ball" ~ "LaMelo Ball",
-        outcome == "Fred Vanvleet" ~ "Fred VanVleet",
-        outcome == "Demar Derozan" ~ "DeMar DeRozan",
-        outcome == "Joshua Giddey" ~ "Josh Giddey",
-        outcome == "Rj Barrett" ~ "RJ Barrett",
-        outcome == "Michael Porter" ~ "Michael Porter Jr.",
-        outcome == "Wendell Carter" ~ "Wendell Carter Jr.",
-        outcome == "Zach Lavine" ~ "Zach LaVine",
-        outcome == "S. Gilgeous-Alexander" ~ "Shai Gilgeous-Alexander",
-        outcome == "De'aaron Fox" ~ "De'Aaron Fox",
-        outcome == "Gary Payton Ii" ~ "Gary Payton II",
-        outcome == "Nicolas Claxton" ~ "Nic Claxton",
-        outcome == "Gary Trent" ~ "Gary Trent Jr.",
-        outcome == "Cj Mccollum" ~ "CJ McCollum",
-        outcome == "Tim Hardaway" ~ "Tim Hardaway Jr.",
-        outcome == "De'anthony Melton" ~ "De'Anthony Melton",
-        outcome == "G. Antetokounmpo" ~ "Giannis Antetokounmpo",
-        outcome == "Cameron Thomas" ~ "Cam Thomas",
-        outcome == "Kelly Oubre" ~ "Kelly Oubre Jr.",
-        outcome == "Jaden Mcdaniels" ~ "Jaden McDaniels",
-        outcome == "O.G. Anunoby" ~ "OG Anunoby",
-        outcome == "Dereck Lively" ~ "Dereck Lively II",
         .default = outcome
       )
     ) |>
@@ -270,28 +249,28 @@ pointsbet_h2h_main <- function() {
       match,
       home_team,
       away_team,
-      market_name = "Player Points",
+      market_name = "Player Disposals",
       player_name = outcome,
       player_team = team_name,
       opposition_team,
       line,
       over_price = price,
-      agency = "Pointsbet",
+      agency = "Disposalsbet",
       EventKey,
       MarketKey,
       OutcomeKey
     )
   
-  # Player points over / under----------------------------------------------------
+  # Player disposals over / under----------------------------------------------------
   
-  # Filter list to player points over under
-  pointsbet_player_points_over_under <-
+  # Filter list to player disposals over under
+  pointsbet_player_disposals_over_under <-
     pointsbet_data_player_props |>
-    filter(str_detect(market, "Player Points Over/Under"))
+    filter(str_detect(market, "Player Disposals Over/Under"))
   
   # Get Overs
-  pointsbet_player_points_over <-
-    pointsbet_player_points_over_under |>
+  pointsbet_player_disposals_over <-
+    pointsbet_player_disposals_over_under |>
     filter(str_detect(outcome, "Over")) |>
     mutate(player_name = outcome) |>
     separate(outcome,
@@ -308,31 +287,6 @@ pointsbet_h2h_main <- function() {
     mutate(
       player_name = case_when(
         player_name == "Lebron James" ~ "LeBron James",
-        player_name == "D'angelo Russell" ~ "D'Angelo Russell",
-        player_name == "K. Caldwell-Pope" ~ "Kentavious Caldwell-Pope",
-        player_name == "De'andre Hunter" ~ "De'Andre Hunter",
-        player_name == "Lamelo Ball" ~ "LaMelo Ball",
-        player_name == "Fred Vanvleet" ~ "Fred VanVleet",
-        player_name == "Demar Derozan" ~ "DeMar DeRozan",
-        player_name == "Joshua Giddey" ~ "Josh Giddey",
-        player_name == "Rj Barrett" ~ "RJ Barrett",
-        player_name == "Michael Porter" ~ "Michael Porter Jr.",
-        player_name == "Wendell Carter" ~ "Wendell Carter Jr.",
-        player_name == "Zach Lavine" ~ "Zach LaVine",
-        player_name == "S. Gilgeous-Alexander" ~ "Shai Gilgeous-Alexander",
-        player_name == "De'aaron Fox" ~ "De'Aaron Fox",
-        player_name == "Gary Payton Ii" ~ "Gary Payton II",
-        player_name == "Nicolas Claxton" ~ "Nic Claxton",
-        player_name == "Gary Trent" ~ "Gary Trent Jr.",
-        player_name == "Cj Mccollum" ~ "CJ McCollum",
-        player_name == "Tim Hardaway" ~ "Tim Hardaway Jr.",
-        player_name == "De'anthony Melton" ~ "De'Anthony Melton",
-        player_name == "G. Antetokounmpo" ~ "Giannis Antetokounmpo",
-        player_name == "Cameron Thomas" ~ "Cam Thomas",
-        player_name == "Kelly Oubre" ~ "Kelly Oubre Jr.",
-        player_name == "Jaden Mcdaniels" ~ "Jaden McDaniels",
-        player_name == "O.G. Anunoby" ~ "OG Anunoby",
-        player_name == "Dereck Lively" ~ "Dereck Lively II",
         .default = player_name
       )
     ) |>
@@ -342,21 +296,21 @@ pointsbet_h2h_main <- function() {
       match,
       home_team,
       away_team,
-      market_name = "Player Points",
+      market_name = "Player Disposals",
       player_name,
       player_team = team_name,
       opposition_team,
       line,
       over_price = price,
-      agency = "Pointsbet",
+      agency = "Disposalsbet",
       EventKey,
       MarketKey,
       OutcomeKey
     )
   
   # Get Unders
-  pointsbet_player_points_under <-
-    pointsbet_player_points_over_under |>
+  pointsbet_player_disposals_under <-
+    pointsbet_player_disposals_over_under |>
     filter(str_detect(outcome, "Under")) |>
     mutate(player_name = outcome) |>
     separate(outcome,
@@ -373,31 +327,6 @@ pointsbet_h2h_main <- function() {
     mutate(
       player_name = case_when(
         player_name == "Lebron James" ~ "LeBron James",
-        player_name == "D'angelo Russell" ~ "D'Angelo Russell",
-        player_name == "K. Caldwell-Pope" ~ "Kentavious Caldwell-Pope",
-        player_name == "De'andre Hunter" ~ "De'Andre Hunter",
-        player_name == "Lamelo Ball" ~ "LaMelo Ball",
-        player_name == "Fred Vanvleet" ~ "Fred VanVleet",
-        player_name == "Demar Derozan" ~ "DeMar DeRozan",
-        player_name == "Joshua Giddey" ~ "Josh Giddey",
-        player_name == "Rj Barrett" ~ "RJ Barrett",
-        player_name == "Michael Porter" ~ "Michael Porter Jr.",
-        player_name == "Wendell Carter" ~ "Wendell Carter Jr.",
-        player_name == "Zach Lavine" ~ "Zach LaVine",
-        player_name == "S. Gilgeous-Alexander" ~ "Shai Gilgeous-Alexander",
-        player_name == "De'aaron Fox" ~ "De'Aaron Fox",
-        player_name == "Gary Payton Ii" ~ "Gary Payton II",
-        player_name == "Nicolas Claxton" ~ "Nic Claxton",
-        player_name == "Gary Trent" ~ "Gary Trent Jr.",
-        player_name == "Cj Mccollum" ~ "CJ McCollum",
-        player_name == "Tim Hardaway" ~ "Tim Hardaway Jr.",
-        player_name == "De'anthony Melton" ~ "De'Anthony Melton",
-        player_name == "G. Antetokounmpo" ~ "Giannis Antetokounmpo",
-        player_name == "Cameron Thomas" ~ "Cam Thomas",
-        player_name == "Kelly Oubre" ~ "Kelly Oubre Jr.",
-        player_name == "Jaden Mcdaniels" ~ "Jaden McDaniels",
-        player_name == "O.G. Anunoby" ~ "OG Anunoby",
-        player_name == "Dereck Lively" ~ "Dereck Lively II",
         .default = player_name
       )
     ) |>
@@ -407,22 +336,22 @@ pointsbet_h2h_main <- function() {
       match,
       home_team,
       away_team,
-      market_name = "Player Points",
+      market_name = "Player Disposals",
       player_name,
       player_team = team_name,
       opposition_team,
       line,
       under_price = price,
-      agency = "Pointsbet",
+      agency = "Disposalsbet",
       EventKey,
       MarketKey,
       OutcomeKey_unders = OutcomeKey
     )
   
   # Combine overs and unders
-  pointsbet_player_points_over_under <-
-    pointsbet_player_points_over |>
-    left_join(pointsbet_player_points_under) |>
+  pointsbet_player_disposals_over_under <-
+    pointsbet_player_disposals_over |>
+    left_join(pointsbet_player_disposals_under) |>
     select(
       match,
       home_team,
@@ -439,15 +368,15 @@ pointsbet_h2h_main <- function() {
     )
   
   #===============================================================================
-  # Player Assists
+  # Player Fantasy Points
   #===============================================================================
   
-  # Player assists alternative totals----------------------------------------------
+  # Player fantasy_points alternative totals----------------------------------------------
   
-  # Filter list to player assists
-  pointsbet_player_assists_lines <-
+  # Filter list to player fantasy_points
+  pointsbet_player_fantasy_points_lines <-
     pointsbet_data_player_props |>
-    filter(str_detect(market, "Assists To Get|Alternate Assists")) |>
+    filter(str_detect(market, "Fantasy Points To Get|Alternate Fantasy Points")) |>
     mutate(line = str_extract(outcome, "[0-9]{1,2}")) |>
     mutate(line = as.numeric(line) - 0.5) |>
     mutate(match = str_replace(match, "@", "v")) |>
@@ -461,31 +390,6 @@ pointsbet_h2h_main <- function() {
     mutate(
       outcome = case_when(
         outcome == "Lebron James" ~ "LeBron James",
-        outcome == "D'angelo Russell" ~ "D'Angelo Russell",
-        outcome == "K. Caldwell-Pope" ~ "Kentavious Caldwell-Pope",
-        outcome == "De'andre Hunter" ~ "De'Andre Hunter",
-        outcome == "Lamelo Ball" ~ "LaMelo Ball",
-        outcome == "Fred Vanvleet" ~ "Fred VanVleet",
-        outcome == "Demar Derozan" ~ "DeMar DeRozan",
-        outcome == "Joshua Giddey" ~ "Josh Giddey",
-        outcome == "Rj Barrett" ~ "RJ Barrett",
-        outcome == "Michael Porter" ~ "Michael Porter Jr.",
-        outcome == "Wendell Carter" ~ "Wendell Carter Jr.",
-        outcome == "Zach Lavine" ~ "Zach LaVine",
-        outcome == "S. Gilgeous-Alexander" ~ "Shai Gilgeous-Alexander",
-        outcome == "De'aaron Fox" ~ "De'Aaron Fox",
-        outcome == "Gary Payton Ii" ~ "Gary Payton II",
-        outcome == "Nicolas Claxton" ~ "Nic Claxton",
-        outcome == "Gary Trent" ~ "Gary Trent Jr.",
-        outcome == "Cj Mccollum" ~ "CJ McCollum",
-        outcome == "Tim Hardaway" ~ "Tim Hardaway Jr.",
-        outcome == "De'anthony Melton" ~ "De'Anthony Melton",
-        outcome == "G. Antetokounmpo" ~ "Giannis Antetokounmpo",
-        outcome == "Cameron Thomas" ~ "Cam Thomas",
-        outcome == "Kelly Oubre" ~ "Kelly Oubre Jr.",
-        outcome == "Jaden Mcdaniels" ~ "Jaden McDaniels",
-        outcome == "O.G. Anunoby" ~ "OG Anunoby",
-        outcome == "Dereck Lively" ~ "Dereck Lively II",
         .default = outcome
       )
     ) |>
@@ -495,7 +399,7 @@ pointsbet_h2h_main <- function() {
       match,
       home_team,
       away_team,
-      market_name = "Player Assists",
+      market_name = "Player Fantasy Points",
       player_name = outcome,
       player_team = team_name,
       opposition_team,
@@ -507,16 +411,16 @@ pointsbet_h2h_main <- function() {
       OutcomeKey
     )
   
-  # Player assists over / under----------------------------------------------------
+  # Player fantasy_points over / under----------------------------------------------------
   
-  # Filter list to player assists over under
-  pointsbet_player_assists_over_under <-
+  # Filter list to player fantasy_points over under
+  pointsbet_player_fantasy_points_over_under <-
     pointsbet_data_player_props |>
-    filter(str_detect(market, "Player Assists Over/Under"))
+    filter(str_detect(market, "Player Fantasy Points Over/Under"))
   
   # Get Overs
-  pointsbet_player_assists_over <-
-    pointsbet_player_assists_over_under |>
+  pointsbet_player_fantasy_points_over <-
+    pointsbet_player_fantasy_points_over_under |>
     filter(str_detect(outcome, "Over")) |>
     mutate(player_name = outcome) |>
     separate(outcome,
@@ -533,31 +437,6 @@ pointsbet_h2h_main <- function() {
     mutate(
       player_name = case_when(
         player_name == "Lebron James" ~ "LeBron James",
-        player_name == "D'angelo Russell" ~ "D'Angelo Russell",
-        player_name == "K. Caldwell-Pope" ~ "Kentavious Caldwell-Pope",
-        player_name == "De'andre Hunter" ~ "De'Andre Hunter",
-        player_name == "Lamelo Ball" ~ "LaMelo Ball",
-        player_name == "Fred Vanvleet" ~ "Fred VanVleet",
-        player_name == "Demar Derozan" ~ "DeMar DeRozan",
-        player_name == "Joshua Giddey" ~ "Josh Giddey",
-        player_name == "Rj Barrett" ~ "RJ Barrett",
-        player_name == "Michael Porter" ~ "Michael Porter Jr.",
-        player_name == "Wendell Carter" ~ "Wendell Carter Jr.",
-        player_name == "Zach Lavine" ~ "Zach LaVine",
-        player_name == "S. Gilgeous-Alexander" ~ "Shai Gilgeous-Alexander",
-        player_name == "De'aaron Fox" ~ "De'Aaron Fox",
-        player_name == "Gary Payton Ii" ~ "Gary Payton II",
-        player_name == "Nicolas Claxton" ~ "Nic Claxton",
-        player_name == "Gary Trent" ~ "Gary Trent Jr.",
-        player_name == "Cj Mccollum" ~ "CJ McCollum",
-        player_name == "Tim Hardaway" ~ "Tim Hardaway Jr.",
-        player_name == "De'anthony Melton" ~ "De'Anthony Melton",
-        player_name == "G. Antetokounmpo" ~ "Giannis Antetokounmpo",
-        player_name == "Cameron Thomas" ~ "Cam Thomas",
-        player_name == "Kelly Oubre" ~ "Kelly Oubre Jr.",
-        player_name == "Jaden Mcdaniels" ~ "Jaden McDaniels",
-        player_name == "O.G. Anunoby" ~ "OG Anunoby",
-        player_name == "Dereck Lively" ~ "Dereck Lively II",
         .default = player_name
       )
     ) |>
@@ -567,7 +446,7 @@ pointsbet_h2h_main <- function() {
       match,
       home_team,
       away_team,
-      market_name = "Player Assists",
+      market_name = "Player Fantasy Points",
       player_name,
       player_team = team_name,
       opposition_team,
@@ -580,8 +459,8 @@ pointsbet_h2h_main <- function() {
     )
   
   # Get Unders
-  pointsbet_player_assists_under <-
-    pointsbet_player_assists_over_under |>
+  pointsbet_player_fantasy_points_under <-
+    pointsbet_player_fantasy_points_over_under |>
     filter(str_detect(outcome, "Under")) |>
     mutate(player_name = outcome) |>
     separate(outcome,
@@ -598,31 +477,6 @@ pointsbet_h2h_main <- function() {
     mutate(
       player_name = case_when(
         player_name == "Lebron James" ~ "LeBron James",
-        player_name == "D'angelo Russell" ~ "D'Angelo Russell",
-        player_name == "K. Caldwell-Pope" ~ "Kentavious Caldwell-Pope",
-        player_name == "De'andre Hunter" ~ "De'Andre Hunter",
-        player_name == "Lamelo Ball" ~ "LaMelo Ball",
-        player_name == "Fred Vanvleet" ~ "Fred VanVleet",
-        player_name == "Demar Derozan" ~ "DeMar DeRozan",
-        player_name == "Joshua Giddey" ~ "Josh Giddey",
-        player_name == "Rj Barrett" ~ "RJ Barrett",
-        player_name == "Michael Porter" ~ "Michael Porter Jr.",
-        player_name == "Wendell Carter" ~ "Wendell Carter Jr.",
-        player_name == "Zach Lavine" ~ "Zach LaVine",
-        player_name == "S. Gilgeous-Alexander" ~ "Shai Gilgeous-Alexander",
-        player_name == "De'aaron Fox" ~ "De'Aaron Fox",
-        player_name == "Gary Payton Ii" ~ "Gary Payton II",
-        player_name == "Nicolas Claxton" ~ "Nic Claxton",
-        player_name == "Gary Trent" ~ "Gary Trent Jr.",
-        player_name == "Cj Mccollum" ~ "CJ McCollum",
-        player_name == "Tim Hardaway" ~ "Tim Hardaway Jr.",
-        player_name == "De'anthony Melton" ~ "De'Anthony Melton",
-        player_name == "G. Antetokounmpo" ~ "Giannis Antetokounmpo",
-        player_name == "Cameron Thomas" ~ "Cam Thomas",
-        player_name == "Kelly Oubre" ~ "Kelly Oubre Jr.",
-        player_name == "Jaden Mcdaniels" ~ "Jaden McDaniels",
-        player_name == "O.G. Anunoby" ~ "OG Anunoby",
-        player_name == "Dereck Lively" ~ "Dereck Lively II",
         .default = player_name
       )
     ) |>
@@ -632,7 +486,7 @@ pointsbet_h2h_main <- function() {
       match,
       home_team,
       away_team,
-      market_name = "Player Assists",
+      market_name = "Player Fantasy Points",
       player_name,
       player_team = team_name,
       opposition_team,
@@ -645,9 +499,9 @@ pointsbet_h2h_main <- function() {
     )
   
   # Combine overs and unders
-  pointsbet_player_assists_over_under <-
-    pointsbet_player_assists_over |>
-    left_join(pointsbet_player_assists_under) |>
+  pointsbet_player_fantasy_points_over_under <-
+    pointsbet_player_fantasy_points_over |>
+    left_join(pointsbet_player_fantasy_points_under) |>
     select(
       match,
       home_team,
@@ -664,15 +518,15 @@ pointsbet_h2h_main <- function() {
     )
   
   #===============================================================================
-  # Player Rebounds
+  # Player Goals
   #===============================================================================
   
-  # Player rebounds alternative totals----------------------------------------------
+  # Player goals alternative totals----------------------------------------------
   
-  # Filter list to player rebounds
-  pointsbet_player_rebounds_lines <-
+  # Filter list to player goals
+  pointsbet_player_goals_lines <-
     pointsbet_data_player_props |>
-    filter(str_detect(market, "Rebounds To Get|Alternate Rebounds")) |>
+    filter(str_detect(market, "Goals To Get|Alternate Goals")) |>
     mutate(line = str_extract(outcome, "[0-9]{1,2}")) |>
     mutate(line = as.numeric(line) - 0.5) |>
     mutate(match = str_replace(match, "@", "v")) |>
@@ -686,31 +540,6 @@ pointsbet_h2h_main <- function() {
     mutate(
       outcome = case_when(
         outcome == "Lebron James" ~ "LeBron James",
-        outcome == "D'angelo Russell" ~ "D'Angelo Russell",
-        outcome == "K. Caldwell-Pope" ~ "Kentavious Caldwell-Pope",
-        outcome == "De'andre Hunter" ~ "De'Andre Hunter",
-        outcome == "Lamelo Ball" ~ "LaMelo Ball",
-        outcome == "Fred Vanvleet" ~ "Fred VanVleet",
-        outcome == "Demar Derozan" ~ "DeMar DeRozan",
-        outcome == "Joshua Giddey" ~ "Josh Giddey",
-        outcome == "Rj Barrett" ~ "RJ Barrett",
-        outcome == "Michael Porter" ~ "Michael Porter Jr.",
-        outcome == "Wendell Carter" ~ "Wendell Carter Jr.",
-        outcome == "Zach Lavine" ~ "Zach LaVine",
-        outcome == "S. Gilgeous-Alexander" ~ "Shai Gilgeous-Alexander",
-        outcome == "De'aaron Fox" ~ "De'Aaron Fox",
-        outcome == "Gary Payton Ii" ~ "Gary Payton II",
-        outcome == "Nicolas Claxton" ~ "Nic Claxton",
-        outcome == "Gary Trent" ~ "Gary Trent Jr.",
-        outcome == "Cj Mccollum" ~ "CJ McCollum",
-        outcome == "Tim Hardaway" ~ "Tim Hardaway Jr.",
-        outcome == "De'anthony Melton" ~ "De'Anthony Melton",
-        outcome == "G. Antetokounmpo" ~ "Giannis Antetokounmpo",
-        outcome == "Cameron Thomas" ~ "Cam Thomas",
-        outcome == "Kelly Oubre" ~ "Kelly Oubre Jr.",
-        outcome == "Jaden Mcdaniels" ~ "Jaden McDaniels",
-        outcome == "O.G. Anunoby" ~ "OG Anunoby",
-        outcome == "Dereck Lively" ~ "Dereck Lively II",
         .default = outcome
       )
     ) |>
@@ -720,7 +549,7 @@ pointsbet_h2h_main <- function() {
       match,
       home_team,
       away_team,
-      market_name = "Player Rebounds",
+      market_name = "Player Goals",
       player_name = outcome,
       player_team = team_name,
       opposition_team,
@@ -732,17 +561,17 @@ pointsbet_h2h_main <- function() {
       OutcomeKey
     )
   
-  # Player rebounds over / under----------------------------------------------------
+  # Player goals over / under----------------------------------------------------
   
   
-  # Filter list to player rebounds over under
-  pointsbet_player_rebounds_over_under <-
+  # Filter list to player goals over under
+  pointsbet_player_goals_over_under <-
     pointsbet_data_player_props |>
-    filter(str_detect(market, "Player Rebounds Over/Under"))
+    filter(str_detect(market, "Player Goals Over/Under"))
   
   # Get Overs
-  pointsbet_player_rebounds_over <-
-    pointsbet_player_rebounds_over_under |>
+  pointsbet_player_goals_over <-
+    pointsbet_player_goals_over_under |>
     filter(str_detect(outcome, "Over")) |>
     mutate(player_name = outcome) |>
     separate(outcome,
@@ -793,7 +622,7 @@ pointsbet_h2h_main <- function() {
       match,
       home_team,
       away_team,
-      market_name = "Player Rebounds",
+      market_name = "Player Goals",
       player_name,
       player_team = team_name,
       opposition_team,
@@ -806,8 +635,8 @@ pointsbet_h2h_main <- function() {
     )
   
   # Get Unders
-  pointsbet_player_rebounds_under <-
-    pointsbet_player_rebounds_over_under |>
+  pointsbet_player_goals_under <-
+    pointsbet_player_goals_over_under |>
     filter(str_detect(outcome, "Under")) |>
     mutate(player_name = outcome) |>
     separate(outcome,
@@ -858,7 +687,7 @@ pointsbet_h2h_main <- function() {
       match,
       home_team,
       away_team,
-      market_name = "Player Rebounds",
+      market_name = "Player Goals",
       player_name,
       player_team = team_name,
       opposition_team,
@@ -871,913 +700,9 @@ pointsbet_h2h_main <- function() {
     )
   
   # Combine overs and unders
-  pointsbet_player_rebounds_over_under <-
-    pointsbet_player_rebounds_over |>
-    left_join(pointsbet_player_rebounds_under) |>
-    select(
-      match,
-      home_team,
-      away_team,
-      market_name,
-      player_name,
-      player_team,
-      opposition_team,
-      line,
-      over_price,
-      under_price,
-      agency,
-      contains("Key")
-    )
-  
-  #===============================================================================
-  # Player Threes
-  #===============================================================================
-  
-  # Player threes alternative totals----------------------------------------------
-  
-  # Filter list to player threes
-  pointsbet_player_threes_lines <-
-    pointsbet_data_player_props |>
-    filter(str_detect(market, "Threes To Get|Alternate Threes")) |>
-    mutate(line = str_extract(outcome, "[0-9]{1,2}")) |>
-    mutate(line = as.numeric(line) - 0.5) |>
-    mutate(match = str_replace(match, "@", "v")) |>
-    mutate(outcome = str_remove(outcome, " To Get.*$")) |>
-    separate(
-      match,
-      into = c("away_team", "home_team"),
-      sep = " v ",
-      remove = FALSE
-    ) |>
-    mutate(
-      outcome = case_when(
-        outcome == "Lebron James" ~ "LeBron James",
-        outcome == "D'angelo Russell" ~ "D'Angelo Russell",
-        outcome == "K. Caldwell-Pope" ~ "Kentavious Caldwell-Pope",
-        outcome == "De'andre Hunter" ~ "De'Andre Hunter",
-        outcome == "Lamelo Ball" ~ "LaMelo Ball",
-        outcome == "Fred Vanvleet" ~ "Fred VanVleet",
-        outcome == "Demar Derozan" ~ "DeMar DeRozan",
-        outcome == "Joshua Giddey" ~ "Josh Giddey",
-        outcome == "Rj Barrett" ~ "RJ Barrett",
-        outcome == "Michael Porter" ~ "Michael Porter Jr.",
-        outcome == "Wendell Carter" ~ "Wendell Carter Jr.",
-        outcome == "Zach Lavine" ~ "Zach LaVine",
-        outcome == "S. Gilgeous-Alexander" ~ "Shai Gilgeous-Alexander",
-        outcome == "De'aaron Fox" ~ "De'Aaron Fox",
-        outcome == "Gary Payton Ii" ~ "Gary Payton II",
-        outcome == "Nicolas Claxton" ~ "Nic Claxton",
-        outcome == "Gary Trent" ~ "Gary Trent Jr.",
-        outcome == "Cj Mccollum" ~ "CJ McCollum",
-        outcome == "Tim Hardaway" ~ "Tim Hardaway Jr.",
-        outcome == "De'anthony Melton" ~ "De'Anthony Melton",
-        outcome == "G. Antetokounmpo" ~ "Giannis Antetokounmpo",
-        outcome == "Cameron Thomas" ~ "Cam Thomas",
-        outcome == "Kelly Oubre" ~ "Kelly Oubre Jr.",
-        outcome == "Jaden Mcdaniels" ~ "Jaden McDaniels",
-        outcome == "O.G. Anunoby" ~ "OG Anunoby",
-        outcome == "Dereck Lively" ~ "Dereck Lively II",
-        .default = outcome
-      )
-    ) |>
-    left_join(player_names[, c("player_full_name", "team_name")], by = c("outcome" = "player_full_name")) |>
-    mutate(opposition_team = if_else(home_team == team_name, away_team, home_team)) |>
-    transmute(
-      match,
-      home_team,
-      away_team,
-      market_name = "Player Threes",
-      player_name = outcome,
-      player_team = team_name,
-      opposition_team,
-      line,
-      over_price = price,
-      agency = "Pointsbet",
-      EventKey,
-      MarketKey,
-      OutcomeKey
-    )
-  
-  # Player threes over / under----------------------------------------------------
-  
-  
-  # Filter list to player threes over under
-  pointsbet_player_threes_over_under <-
-    pointsbet_data_player_props |>
-    filter(str_detect(market, "3-Pointers"))
-  
-  # Get Overs
-  pointsbet_player_threes_over <-
-    pointsbet_player_threes_over_under |>
-    filter(str_detect(outcome, "Over")) |>
-    mutate(player_name = outcome) |>
-    separate(outcome,
-             into = c("player_name", "line"),
-             sep = " Over ") |>
-    mutate(line = as.numeric(line)) |>
-    mutate(match = str_replace(match, "@", "v")) |>
-    separate(
-      match,
-      into = c("away_team", "home_team"),
-      sep = " v ",
-      remove = FALSE
-    ) |>
-    mutate(
-      player_name = case_when(
-        player_name == "Lebron James" ~ "LeBron James",
-        player_name == "D'angelo Russell" ~ "D'Angelo Russell",
-        player_name == "K. Caldwell-Pope" ~ "Kentavious Caldwell-Pope",
-        player_name == "De'andre Hunter" ~ "De'Andre Hunter",
-        player_name == "Lamelo Ball" ~ "LaMelo Ball",
-        player_name == "Fred Vanvleet" ~ "Fred VanVleet",
-        player_name == "Demar Derozan" ~ "DeMar DeRozan",
-        player_name == "Joshua Giddey" ~ "Josh Giddey",
-        player_name == "Rj Barrett" ~ "RJ Barrett",
-        player_name == "Michael Porter" ~ "Michael Porter Jr.",
-        player_name == "Wendell Carter" ~ "Wendell Carter Jr.",
-        player_name == "Zach Lavine" ~ "Zach LaVine",
-        player_name == "S. Gilgeous-Alexander" ~ "Shai Gilgeous-Alexander",
-        player_name == "De'aaron Fox" ~ "De'Aaron Fox",
-        player_name == "Gary Payton Ii" ~ "Gary Payton II",
-        player_name == "Nicolas Claxton" ~ "Nic Claxton",
-        player_name == "Gary Trent" ~ "Gary Trent Jr.",
-        player_name == "Cj Mccollum" ~ "CJ McCollum",
-        player_name == "Tim Hardaway" ~ "Tim Hardaway Jr.",
-        player_name == "De'anthony Melton" ~ "De'Anthony Melton",
-        player_name == "G. Antetokounmpo" ~ "Giannis Antetokounmpo",
-        player_name == "Cameron Thomas" ~ "Cam Thomas",
-        player_name == "Kelly Oubre" ~ "Kelly Oubre Jr.",
-        player_name == "Jaden Mcdaniels" ~ "Jaden McDaniels",
-        player_name == "O.G. Anunoby" ~ "OG Anunoby",
-        player_name == "Dereck Lively" ~ "Dereck Lively II",
-        .default = player_name
-      )
-    ) |>
-    left_join(player_names[, c("player_full_name", "team_name")], by = c("player_name" = "player_full_name")) |>
-    mutate(opposition_team = if_else(home_team == team_name, away_team, home_team)) |>
-    transmute(
-      match,
-      home_team,
-      away_team,
-      market_name = "Player Threes",
-      player_name,
-      player_team = team_name,
-      opposition_team,
-      line,
-      over_price = price,
-      agency = "Pointsbet",
-      EventKey,
-      MarketKey,
-      OutcomeKey
-    )
-  
-  # Get Unders
-  pointsbet_player_threes_under <-
-    pointsbet_player_threes_over_under |>
-    filter(str_detect(outcome, "Under")) |>
-    mutate(player_name = outcome) |>
-    separate(outcome,
-             into = c("player_name", "line"),
-             sep = " Under ") |>
-    mutate(line = as.numeric(line)) |>
-    mutate(match = str_replace(match, "@", "v")) |>
-    separate(
-      match,
-      into = c("away_team", "home_team"),
-      sep = " v ",
-      remove = FALSE
-    ) |>
-    mutate(
-      player_name = case_when(
-        player_name == "Lebron James" ~ "LeBron James",
-        player_name == "D'angelo Russell" ~ "D'Angelo Russell",
-        player_name == "K. Caldwell-Pope" ~ "Kentavious Caldwell-Pope",
-        player_name == "De'andre Hunter" ~ "De'Andre Hunter",
-        player_name == "Lamelo Ball" ~ "LaMelo Ball",
-        player_name == "Fred Vanvleet" ~ "Fred VanVleet",
-        player_name == "Demar Derozan" ~ "DeMar DeRozan",
-        player_name == "Joshua Giddey" ~ "Josh Giddey",
-        player_name == "Rj Barrett" ~ "RJ Barrett",
-        player_name == "Michael Porter" ~ "Michael Porter Jr.",
-        player_name == "Wendell Carter" ~ "Wendell Carter Jr.",
-        player_name == "Zach Lavine" ~ "Zach LaVine",
-        player_name == "S. Gilgeous-Alexander" ~ "Shai Gilgeous-Alexander",
-        player_name == "De'aaron Fox" ~ "De'Aaron Fox",
-        player_name == "Gary Payton Ii" ~ "Gary Payton II",
-        player_name == "Nicolas Claxton" ~ "Nic Claxton",
-        player_name == "Gary Trent" ~ "Gary Trent Jr.",
-        player_name == "Cj Mccollum" ~ "CJ McCollum",
-        player_name == "Tim Hardaway" ~ "Tim Hardaway Jr.",
-        player_name == "De'anthony Melton" ~ "De'Anthony Melton",
-        player_name == "G. Antetokounmpo" ~ "Giannis Antetokounmpo",
-        player_name == "Cameron Thomas" ~ "Cam Thomas",
-        player_name == "Kelly Oubre" ~ "Kelly Oubre Jr.",
-        player_name == "Jaden Mcdaniels" ~ "Jaden McDaniels",
-        player_name == "O.G. Anunoby" ~ "OG Anunoby",
-        player_name == "Dereck Lively" ~ "Dereck Lively II",
-        .default = player_name
-      )
-    ) |>
-    left_join(player_names[, c("player_full_name", "team_name")], by = c("player_name" = "player_full_name")) |>
-    mutate(opposition_team = if_else(home_team == team_name, away_team, home_team)) |>
-    transmute(
-      match,
-      home_team,
-      away_team,
-      market_name = "Player Threes",
-      player_name,
-      player_team = team_name,
-      opposition_team,
-      line,
-      under_price = price,
-      agency = "Pointsbet",
-      EventKey,
-      MarketKey,
-      OutcomeKey_unders = OutcomeKey
-    )
-  
-  # Combine overs and unders
-  pointsbet_player_threes_over_under <-
-    pointsbet_player_threes_over |>
-    left_join(pointsbet_player_threes_under) |>
-    select(
-      match,
-      home_team,
-      away_team,
-      market_name,
-      player_name,
-      player_team,
-      opposition_team,
-      line,
-      over_price,
-      under_price,
-      agency,
-      contains("Key")
-    )
-  
-  #===============================================================================
-  # Player Steals
-  #===============================================================================
-  
-  # Player steals alternative totals----------------------------------------------
-  
-  # Filter list to player steals
-  pointsbet_player_steals_lines <-
-    pointsbet_data_player_props |>
-    filter(str_detect(market, "Alternate Steals")) |>
-    mutate(line = str_extract(outcome, "[0-9]{1,2}")) |>
-    mutate(line = as.numeric(line) - 0.5) |>
-    mutate(match = str_replace(match, "@", "v")) |>
-    mutate(outcome = str_remove(outcome, " To Get.*$")) |>
-    separate(
-      match,
-      into = c("away_team", "home_team"),
-      sep = " v ",
-      remove = FALSE
-    ) |>
-    mutate(
-      outcome = case_when(
-        outcome == "Lebron James" ~ "LeBron James",
-        outcome == "D'angelo Russell" ~ "D'Angelo Russell",
-        outcome == "K. Caldwell-Pope" ~ "Kentavious Caldwell-Pope",
-        outcome == "De'andre Hunter" ~ "De'Andre Hunter",
-        outcome == "Lamelo Ball" ~ "LaMelo Ball",
-        outcome == "Fred Vanvleet" ~ "Fred VanVleet",
-        outcome == "Demar Derozan" ~ "DeMar DeRozan",
-        outcome == "Joshua Giddey" ~ "Josh Giddey",
-        outcome == "Rj Barrett" ~ "RJ Barrett",
-        outcome == "Michael Porter" ~ "Michael Porter Jr.",
-        outcome == "Wendell Carter" ~ "Wendell Carter Jr.",
-        outcome == "Zach Lavine" ~ "Zach LaVine",
-        outcome == "S. Gilgeous-Alexander" ~ "Shai Gilgeous-Alexander",
-        outcome == "De'aaron Fox" ~ "De'Aaron Fox",
-        outcome == "Gary Payton Ii" ~ "Gary Payton II",
-        outcome == "Nicolas Claxton" ~ "Nic Claxton",
-        outcome == "Gary Trent" ~ "Gary Trent Jr.",
-        outcome == "Cj Mccollum" ~ "CJ McCollum",
-        outcome == "Tim Hardaway" ~ "Tim Hardaway Jr.",
-        outcome == "De'anthony Melton" ~ "De'Anthony Melton",
-        outcome == "G. Antetokounmpo" ~ "Giannis Antetokounmpo",
-        outcome == "Cameron Thomas" ~ "Cam Thomas",
-        outcome == "Kelly Oubre" ~ "Kelly Oubre Jr.",
-        outcome == "Jaden Mcdaniels" ~ "Jaden McDaniels",
-        outcome == "O.G. Anunoby" ~ "OG Anunoby",
-        outcome == "Dereck Lively" ~ "Dereck Lively II",
-        .default = outcome
-      )
-    ) |>
-    left_join(player_names[, c("player_full_name", "team_name")], by = c("outcome" = "player_full_name")) |>
-    mutate(opposition_team = if_else(home_team == team_name, away_team, home_team)) |>
-    transmute(
-      match,
-      home_team,
-      away_team,
-      market_name = "Player Steals",
-      player_name = outcome,
-      player_team = team_name,
-      opposition_team,
-      line,
-      over_price = price,
-      agency = "Pointsbet",
-      EventKey,
-      MarketKey,
-      OutcomeKey
-    )
-  
-  # Player steals over / under----------------------------------------------------
-  
-  
-  # Filter list to player steals over under
-  pointsbet_player_steals_over_under <-
-    pointsbet_data_player_props |>
-    filter(str_detect(market, "Player Steals"))
-  
-  # Get Overs
-  pointsbet_player_steals_over <-
-    pointsbet_player_steals_over_under |>
-    filter(str_detect(outcome, "Over")) |>
-    mutate(player_name = outcome) |>
-    separate(outcome,
-             into = c("player_name", "line"),
-             sep = " Over ") |>
-    mutate(line = as.numeric(line)) |>
-    mutate(match = str_replace(match, "@", "v")) |>
-    separate(
-      match,
-      into = c("away_team", "home_team"),
-      sep = " v ",
-      remove = FALSE
-    ) |>
-    mutate(
-      player_name = case_when(
-        player_name == "Lebron James" ~ "LeBron James",
-        player_name == "D'angelo Russell" ~ "D'Angelo Russell",
-        player_name == "K. Caldwell-Pope" ~ "Kentavious Caldwell-Pope",
-        player_name == "De'andre Hunter" ~ "De'Andre Hunter",
-        player_name == "Lamelo Ball" ~ "LaMelo Ball",
-        player_name == "Fred Vanvleet" ~ "Fred VanVleet",
-        player_name == "Demar Derozan" ~ "DeMar DeRozan",
-        player_name == "Joshua Giddey" ~ "Josh Giddey",
-        player_name == "Rj Barrett" ~ "RJ Barrett",
-        player_name == "Michael Porter" ~ "Michael Porter Jr.",
-        player_name == "Wendell Carter" ~ "Wendell Carter Jr.",
-        player_name == "Zach Lavine" ~ "Zach LaVine",
-        player_name == "S. Gilgeous-Alexander" ~ "Shai Gilgeous-Alexander",
-        player_name == "De'aaron Fox" ~ "De'Aaron Fox",
-        player_name == "Gary Payton Ii" ~ "Gary Payton II",
-        player_name == "Nicolas Claxton" ~ "Nic Claxton",
-        player_name == "Gary Trent" ~ "Gary Trent Jr.",
-        player_name == "Cj Mccollum" ~ "CJ McCollum",
-        player_name == "Tim Hardaway" ~ "Tim Hardaway Jr.",
-        player_name == "De'anthony Melton" ~ "De'Anthony Melton",
-        player_name == "G. Antetokounmpo" ~ "Giannis Antetokounmpo",
-        player_name == "Cameron Thomas" ~ "Cam Thomas",
-        player_name == "Kelly Oubre" ~ "Kelly Oubre Jr.",
-        player_name == "Jaden Mcdaniels" ~ "Jaden McDaniels",
-        player_name == "O.G. Anunoby" ~ "OG Anunoby",
-        player_name == "Dereck Lively" ~ "Dereck Lively II",
-        .default = player_name
-      )
-    ) |>
-    left_join(player_names[, c("player_full_name", "team_name")], by = c("player_name" = "player_full_name")) |>
-    mutate(opposition_team = if_else(home_team == team_name, away_team, home_team)) |>
-    transmute(
-      match,
-      home_team,
-      away_team,
-      market_name = "Player Steals",
-      player_name,
-      player_team = team_name,
-      opposition_team,
-      line,
-      over_price = price,
-      agency = "Pointsbet",
-      EventKey,
-      MarketKey,
-      OutcomeKey
-    )
-  
-  # Get Unders
-  pointsbet_player_steals_under <-
-    pointsbet_player_steals_over_under |>
-    filter(str_detect(outcome, "Under")) |>
-    mutate(player_name = outcome) |>
-    separate(outcome,
-             into = c("player_name", "line"),
-             sep = " Under ") |>
-    mutate(line = as.numeric(line)) |>
-    mutate(match = str_replace(match, "@", "v")) |>
-    separate(
-      match,
-      into = c("away_team", "home_team"),
-      sep = " v ",
-      remove = FALSE
-    ) |>
-    mutate(
-      player_name = case_when(
-        player_name == "Lebron James" ~ "LeBron James",
-        player_name == "D'angelo Russell" ~ "D'Angelo Russell",
-        player_name == "K. Caldwell-Pope" ~ "Kentavious Caldwell-Pope",
-        player_name == "De'andre Hunter" ~ "De'Andre Hunter",
-        player_name == "Lamelo Ball" ~ "LaMelo Ball",
-        player_name == "Fred Vanvleet" ~ "Fred VanVleet",
-        player_name == "Demar Derozan" ~ "DeMar DeRozan",
-        player_name == "Joshua Giddey" ~ "Josh Giddey",
-        player_name == "Rj Barrett" ~ "RJ Barrett",
-        player_name == "Michael Porter" ~ "Michael Porter Jr.",
-        player_name == "Wendell Carter" ~ "Wendell Carter Jr.",
-        player_name == "Zach Lavine" ~ "Zach LaVine",
-        player_name == "S. Gilgeous-Alexander" ~ "Shai Gilgeous-Alexander",
-        player_name == "De'aaron Fox" ~ "De'Aaron Fox",
-        player_name == "Gary Payton Ii" ~ "Gary Payton II",
-        player_name == "Nicolas Claxton" ~ "Nic Claxton",
-        player_name == "Gary Trent" ~ "Gary Trent Jr.",
-        player_name == "Cj Mccollum" ~ "CJ McCollum",
-        player_name == "Tim Hardaway" ~ "Tim Hardaway Jr.",
-        player_name == "De'anthony Melton" ~ "De'Anthony Melton",
-        player_name == "G. Antetokounmpo" ~ "Giannis Antetokounmpo",
-        player_name == "Cameron Thomas" ~ "Cam Thomas",
-        player_name == "Kelly Oubre" ~ "Kelly Oubre Jr.",
-        player_name == "Jaden Mcdaniels" ~ "Jaden McDaniels",
-        player_name == "O.G. Anunoby" ~ "OG Anunoby",
-        player_name == "Dereck Lively" ~ "Dereck Lively II",
-        .default = player_name
-      )
-    ) |>
-    left_join(player_names[, c("player_full_name", "team_name")], by = c("player_name" = "player_full_name")) |>
-    mutate(opposition_team = if_else(home_team == team_name, away_team, home_team)) |>
-    transmute(
-      match,
-      home_team,
-      away_team,
-      market_name = "Player Steals",
-      player_name,
-      player_team = team_name,
-      opposition_team,
-      line,
-      under_price = price,
-      agency = "Pointsbet",
-      EventKey,
-      MarketKey,
-      OutcomeKey_unders = OutcomeKey
-    )
-  
-  # Combine overs and unders
-  pointsbet_player_steals_over_under <-
-    pointsbet_player_steals_over |>
-    left_join(pointsbet_player_steals_under) |>
-    select(
-      match,
-      home_team,
-      away_team,
-      market_name,
-      player_name,
-      player_team,
-      opposition_team,
-      line,
-      over_price,
-      under_price,
-      agency,
-      contains("Key")
-    )
-  
-  
-  #===============================================================================
-  # Player Blocks
-  #===============================================================================
-  
-  # Player blocks alternative totals----------------------------------------------
-  
-  # Filter list to player blocks
-  pointsbet_player_blocks_lines <-
-    pointsbet_data_player_props |>
-    filter(str_detect(market, "Alternate Blocks")) |>
-    mutate(line = str_extract(outcome, "[0-9]{1,2}")) |>
-    mutate(line = as.numeric(line) - 0.5) |>
-    mutate(match = str_replace(match, "@", "v")) |>
-    mutate(outcome = str_remove(outcome, " To Get.*$")) |>
-    separate(
-      match,
-      into = c("away_team", "home_team"),
-      sep = " v ",
-      remove = FALSE
-    ) |>
-    mutate(
-      outcome = case_when(
-        outcome == "Lebron James" ~ "LeBron James",
-        outcome == "D'angelo Russell" ~ "D'Angelo Russell",
-        outcome == "K. Caldwell-Pope" ~ "Kentavious Caldwell-Pope",
-        outcome == "De'andre Hunter" ~ "De'Andre Hunter",
-        outcome == "Lamelo Ball" ~ "LaMelo Ball",
-        outcome == "Fred Vanvleet" ~ "Fred VanVleet",
-        outcome == "Demar Derozan" ~ "DeMar DeRozan",
-        outcome == "Joshua Giddey" ~ "Josh Giddey",
-        outcome == "Rj Barrett" ~ "RJ Barrett",
-        outcome == "Michael Porter" ~ "Michael Porter Jr.",
-        outcome == "Wendell Carter" ~ "Wendell Carter Jr.",
-        outcome == "Zach Lavine" ~ "Zach LaVine",
-        outcome == "S. Gilgeous-Alexander" ~ "Shai Gilgeous-Alexander",
-        outcome == "De'aaron Fox" ~ "De'Aaron Fox",
-        outcome == "Gary Payton Ii" ~ "Gary Payton II",
-        outcome == "Nicolas Claxton" ~ "Nic Claxton",
-        outcome == "Gary Trent" ~ "Gary Trent Jr.",
-        outcome == "Cj Mccollum" ~ "CJ McCollum",
-        outcome == "Tim Hardaway" ~ "Tim Hardaway Jr.",
-        outcome == "De'anthony Melton" ~ "De'Anthony Melton",
-        outcome == "G. Antetokounmpo" ~ "Giannis Antetokounmpo",
-        outcome == "Cameron Thomas" ~ "Cam Thomas",
-        outcome == "Kelly Oubre" ~ "Kelly Oubre Jr.",
-        outcome == "Jaden Mcdaniels" ~ "Jaden McDaniels",
-        outcome == "O.G. Anunoby" ~ "OG Anunoby",
-        outcome == "Dereck Lively" ~ "Dereck Lively II",
-        .default = outcome
-      )
-    ) |>
-    left_join(player_names[, c("player_full_name", "team_name")], by = c("outcome" = "player_full_name")) |>
-    mutate(opposition_team = if_else(home_team == team_name, away_team, home_team)) |>
-    transmute(
-      match,
-      home_team,
-      away_team,
-      market_name = "Player Blocks",
-      player_name = outcome,
-      player_team = team_name,
-      opposition_team,
-      line,
-      over_price = price,
-      agency = "Pointsbet",
-      EventKey,
-      MarketKey,
-      OutcomeKey
-    )
-  
-  # Player blocks over / under----------------------------------------------------
-  
-  
-  # Filter list to player blocks over under
-  pointsbet_player_blocks_over_under <-
-    pointsbet_data_player_props |>
-    filter(str_detect(market, "Player Blocks"))
-  
-  # Get Overs
-  pointsbet_player_blocks_over <-
-    pointsbet_player_blocks_over_under |>
-    filter(str_detect(outcome, "Over")) |>
-    mutate(player_name = outcome) |>
-    separate(outcome,
-             into = c("player_name", "line"),
-             sep = " Over ") |>
-    mutate(line = as.numeric(line)) |>
-    mutate(match = str_replace(match, "@", "v")) |>
-    separate(
-      match,
-      into = c("away_team", "home_team"),
-      sep = " v ",
-      remove = FALSE
-    ) |>
-    mutate(
-      player_name = case_when(
-        player_name == "Lebron James" ~ "LeBron James",
-        player_name == "D'angelo Russell" ~ "D'Angelo Russell",
-        player_name == "K. Caldwell-Pope" ~ "Kentavious Caldwell-Pope",
-        player_name == "De'andre Hunter" ~ "De'Andre Hunter",
-        player_name == "Lamelo Ball" ~ "LaMelo Ball",
-        player_name == "Fred Vanvleet" ~ "Fred VanVleet",
-        player_name == "Demar Derozan" ~ "DeMar DeRozan",
-        player_name == "Joshua Giddey" ~ "Josh Giddey",
-        player_name == "Rj Barrett" ~ "RJ Barrett",
-        player_name == "Michael Porter" ~ "Michael Porter Jr.",
-        player_name == "Wendell Carter" ~ "Wendell Carter Jr.",
-        player_name == "Zach Lavine" ~ "Zach LaVine",
-        player_name == "S. Gilgeous-Alexander" ~ "Shai Gilgeous-Alexander",
-        player_name == "De'aaron Fox" ~ "De'Aaron Fox",
-        player_name == "Gary Payton Ii" ~ "Gary Payton II",
-        player_name == "Nicolas Claxton" ~ "Nic Claxton",
-        player_name == "Gary Trent" ~ "Gary Trent Jr.",
-        player_name == "Cj Mccollum" ~ "CJ McCollum",
-        player_name == "Tim Hardaway" ~ "Tim Hardaway Jr.",
-        player_name == "De'anthony Melton" ~ "De'Anthony Melton",
-        player_name == "G. Antetokounmpo" ~ "Giannis Antetokounmpo",
-        player_name == "Cameron Thomas" ~ "Cam Thomas",
-        player_name == "Kelly Oubre" ~ "Kelly Oubre Jr.",
-        player_name == "Jaden Mcdaniels" ~ "Jaden McDaniels",
-        player_name == "O.G. Anunoby" ~ "OG Anunoby",
-        player_name == "Dereck Lively" ~ "Dereck Lively II",
-        .default = player_name
-      )
-    ) |>
-    left_join(player_names[, c("player_full_name", "team_name")], by = c("player_name" = "player_full_name")) |>
-    mutate(opposition_team = if_else(home_team == team_name, away_team, home_team)) |>
-    transmute(
-      match,
-      home_team,
-      away_team,
-      market_name = "Player Blocks",
-      player_name,
-      player_team = team_name,
-      opposition_team,
-      line,
-      over_price = price,
-      agency = "Pointsbet",
-      EventKey,
-      MarketKey,
-      OutcomeKey
-    )
-  
-  # Get Unders
-  pointsbet_player_blocks_under <-
-    pointsbet_player_blocks_over_under |>
-    filter(str_detect(outcome, "Under")) |>
-    mutate(player_name = outcome) |>
-    separate(outcome,
-             into = c("player_name", "line"),
-             sep = " Under ") |>
-    mutate(line = as.numeric(line)) |>
-    mutate(match = str_replace(match, "@", "v")) |>
-    separate(
-      match,
-      into = c("away_team", "home_team"),
-      sep = " v ",
-      remove = FALSE
-    ) |>
-    mutate(
-      player_name = case_when(
-        player_name == "Lebron James" ~ "LeBron James",
-        player_name == "D'angelo Russell" ~ "D'Angelo Russell",
-        player_name == "K. Caldwell-Pope" ~ "Kentavious Caldwell-Pope",
-        player_name == "De'andre Hunter" ~ "De'Andre Hunter",
-        player_name == "Lamelo Ball" ~ "LaMelo Ball",
-        player_name == "Fred Vanvleet" ~ "Fred VanVleet",
-        player_name == "Demar Derozan" ~ "DeMar DeRozan",
-        player_name == "Joshua Giddey" ~ "Josh Giddey",
-        player_name == "Rj Barrett" ~ "RJ Barrett",
-        player_name == "Michael Porter" ~ "Michael Porter Jr.",
-        player_name == "Wendell Carter" ~ "Wendell Carter Jr.",
-        player_name == "Zach Lavine" ~ "Zach LaVine",
-        player_name == "S. Gilgeous-Alexander" ~ "Shai Gilgeous-Alexander",
-        player_name == "De'aaron Fox" ~ "De'Aaron Fox",
-        player_name == "Gary Payton Ii" ~ "Gary Payton II",
-        player_name == "Nicolas Claxton" ~ "Nic Claxton",
-        player_name == "Gary Trent" ~ "Gary Trent Jr.",
-        player_name == "Cj Mccollum" ~ "CJ McCollum",
-        player_name == "Tim Hardaway" ~ "Tim Hardaway Jr.",
-        player_name == "De'anthony Melton" ~ "De'Anthony Melton",
-        player_name == "G. Antetokounmpo" ~ "Giannis Antetokounmpo",
-        player_name == "Cameron Thomas" ~ "Cam Thomas",
-        player_name == "Kelly Oubre" ~ "Kelly Oubre Jr.",
-        player_name == "Jaden Mcdaniels" ~ "Jaden McDaniels",
-        player_name == "O.G. Anunoby" ~ "OG Anunoby",
-        player_name == "Dereck Lively" ~ "Dereck Lively II",
-        .default = player_name
-      )
-    ) |>
-    left_join(player_names[, c("player_full_name", "team_name")], by = c("player_name" = "player_full_name")) |>
-    mutate(opposition_team = if_else(home_team == team_name, away_team, home_team)) |>
-    transmute(
-      match,
-      home_team,
-      away_team,
-      market_name = "Player Blocks",
-      player_name,
-      player_team = team_name,
-      opposition_team,
-      line,
-      under_price = price,
-      agency = "Pointsbet",
-      EventKey,
-      MarketKey,
-      OutcomeKey_unders = OutcomeKey
-    )
-  
-  # Combine overs and unders
-  pointsbet_player_blocks_over_under <-
-    pointsbet_player_blocks_over |>
-    left_join(pointsbet_player_blocks_under) |>
-    select(
-      match,
-      home_team,
-      away_team,
-      market_name,
-      player_name,
-      player_team,
-      opposition_team,
-      line,
-      over_price,
-      under_price,
-      agency,
-      contains("Key")
-    )
-  
-  #===============================================================================
-  # Player PRAs
-  #===============================================================================
-  
-  # Player pras alternative totals----------------------------------------------
-  
-  # Filter list to player pras
-  pointsbet_player_pras_lines <-
-    pointsbet_data_player_props |>
-    filter(str_detect(market, "Alternate PRAs")) |>
-    mutate(line = str_extract(outcome, "[0-9]{1,2}")) |>
-    mutate(line = as.numeric(line) - 0.5) |>
-    mutate(match = str_replace(match, "@", "v")) |>
-    mutate(outcome = str_remove(outcome, " To Get.*$")) |>
-    separate(
-      match,
-      into = c("away_team", "home_team"),
-      sep = " v ",
-      remove = FALSE
-    ) |>
-    mutate(
-      outcome = case_when(
-        outcome == "Lebron James" ~ "LeBron James",
-        outcome == "D'angelo Russell" ~ "D'Angelo Russell",
-        outcome == "K. Caldwell-Pope" ~ "Kentavious Caldwell-Pope",
-        outcome == "De'andre Hunter" ~ "De'Andre Hunter",
-        outcome == "Lamelo Ball" ~ "LaMelo Ball",
-        outcome == "Fred Vanvleet" ~ "Fred VanVleet",
-        outcome == "Demar Derozan" ~ "DeMar DeRozan",
-        outcome == "Joshua Giddey" ~ "Josh Giddey",
-        outcome == "Rj Barrett" ~ "RJ Barrett",
-        outcome == "Michael Porter" ~ "Michael Porter Jr.",
-        outcome == "Wendell Carter" ~ "Wendell Carter Jr.",
-        outcome == "Zach Lavine" ~ "Zach LaVine",
-        outcome == "S. Gilgeous-Alexander" ~ "Shai Gilgeous-Alexander",
-        outcome == "De'aaron Fox" ~ "De'Aaron Fox",
-        outcome == "Gary Payton Ii" ~ "Gary Payton II",
-        outcome == "Nicolas Claxton" ~ "Nic Claxton",
-        outcome == "Gary Trent" ~ "Gary Trent Jr.",
-        outcome == "Cj Mccollum" ~ "CJ McCollum",
-        outcome == "Tim Hardaway" ~ "Tim Hardaway Jr.",
-        outcome == "De'anthony Melton" ~ "De'Anthony Melton",
-        outcome == "G. Antetokounmpo" ~ "Giannis Antetokounmpo",
-        outcome == "Cameron Thomas" ~ "Cam Thomas",
-        outcome == "Kelly Oubre" ~ "Kelly Oubre Jr.",
-        outcome == "Jaden Mcdaniels" ~ "Jaden McDaniels",
-        outcome == "O.G. Anunoby" ~ "OG Anunoby",
-        outcome == "Dereck Lively" ~ "Dereck Lively II",
-        .default = outcome
-      )
-    ) |>
-    left_join(player_names[, c("player_full_name", "team_name")], by = c("outcome" = "player_full_name")) |>
-    mutate(opposition_team = if_else(home_team == team_name, away_team, home_team)) |>
-    transmute(
-      match,
-      home_team,
-      away_team,
-      market_name = "Player PRAs",
-      player_name = outcome,
-      player_team = team_name,
-      opposition_team,
-      line,
-      over_price = price,
-      agency = "Pointsbet",
-      EventKey,
-      MarketKey,
-      OutcomeKey
-    )
-  
-  # Player pras over / under----------------------------------------------------
-  
-  # Filter list to player pras over under
-  pointsbet_player_pras_over_under <-
-    pointsbet_data_player_props |>
-    filter(str_detect(market, "Pts \\+ Rebs \\+ Asts"))
-  
-  # Get Overs
-  pointsbet_player_pras_over <-
-    pointsbet_player_pras_over_under |>
-    filter(str_detect(outcome, "Over")) |>
-    mutate(player_name = outcome) |>
-    separate(outcome,
-             into = c("player_name", "line"),
-             sep = " Over ") |>
-    mutate(line = as.numeric(line)) |>
-    mutate(match = str_replace(match, "@", "v")) |>
-    separate(
-      match,
-      into = c("away_team", "home_team"),
-      sep = " v ",
-      remove = FALSE
-    ) |>
-    mutate(
-      player_name = case_when(
-        player_name == "Lebron James" ~ "LeBron James",
-        player_name == "D'angelo Russell" ~ "D'Angelo Russell",
-        player_name == "K. Caldwell-Pope" ~ "Kentavious Caldwell-Pope",
-        player_name == "De'andre Hunter" ~ "De'Andre Hunter",
-        player_name == "Lamelo Ball" ~ "LaMelo Ball",
-        player_name == "Fred Vanvleet" ~ "Fred VanVleet",
-        player_name == "Demar Derozan" ~ "DeMar DeRozan",
-        player_name == "Joshua Giddey" ~ "Josh Giddey",
-        player_name == "Rj Barrett" ~ "RJ Barrett",
-        player_name == "Michael Porter" ~ "Michael Porter Jr.",
-        player_name == "Wendell Carter" ~ "Wendell Carter Jr.",
-        player_name == "Zach Lavine" ~ "Zach LaVine",
-        player_name == "S. Gilgeous-Alexander" ~ "Shai Gilgeous-Alexander",
-        player_name == "De'aaron Fox" ~ "De'Aaron Fox",
-        player_name == "Gary Payton Ii" ~ "Gary Payton II",
-        player_name == "Nicolas Claxton" ~ "Nic Claxton",
-        player_name == "Gary Trent" ~ "Gary Trent Jr.",
-        player_name == "Cj Mccollum" ~ "CJ McCollum",
-        player_name == "Tim Hardaway" ~ "Tim Hardaway Jr.",
-        player_name == "De'anthony Melton" ~ "De'Anthony Melton",
-        player_name == "G. Antetokounmpo" ~ "Giannis Antetokounmpo",
-        player_name == "Cameron Thomas" ~ "Cam Thomas",
-        player_name == "Kelly Oubre" ~ "Kelly Oubre Jr.",
-        player_name == "Jaden Mcdaniels" ~ "Jaden McDaniels",
-        player_name == "O.G. Anunoby" ~ "OG Anunoby",
-        player_name == "Dereck Lively" ~ "Dereck Lively II",
-        .default = player_name
-      )
-    ) |>
-    left_join(player_names[, c("player_full_name", "team_name")], by = c("player_name" = "player_full_name")) |>
-    mutate(opposition_team = if_else(home_team == team_name, away_team, home_team)) |>
-    transmute(
-      match,
-      home_team,
-      away_team,
-      market_name = "Player PRAs",
-      player_name,
-      player_team = team_name,
-      opposition_team,
-      line,
-      over_price = price,
-      agency = "Pointsbet",
-      EventKey,
-      MarketKey,
-      OutcomeKey
-    )
-  
-  # Get Unders
-  pointsbet_player_pras_under <-
-    pointsbet_player_pras_over_under |>
-    filter(str_detect(outcome, "Under")) |>
-    mutate(player_name = outcome) |>
-    separate(outcome,
-             into = c("player_name", "line"),
-             sep = " Under ") |>
-    mutate(line = as.numeric(line)) |>
-    mutate(match = str_replace(match, "@", "v")) |>
-    separate(
-      match,
-      into = c("away_team", "home_team"),
-      sep = " v ",
-      remove = FALSE
-    ) |>
-    mutate(
-      player_name = case_when(
-        player_name == "Lebron James" ~ "LeBron James",
-        player_name == "D'angelo Russell" ~ "D'Angelo Russell",
-        player_name == "K. Caldwell-Pope" ~ "Kentavious Caldwell-Pope",
-        player_name == "De'andre Hunter" ~ "De'Andre Hunter",
-        player_name == "Lamelo Ball" ~ "LaMelo Ball",
-        player_name == "Fred Vanvleet" ~ "Fred VanVleet",
-        player_name == "Demar Derozan" ~ "DeMar DeRozan",
-        player_name == "Joshua Giddey" ~ "Josh Giddey",
-        player_name == "Rj Barrett" ~ "RJ Barrett",
-        player_name == "Michael Porter" ~ "Michael Porter Jr.",
-        player_name == "Wendell Carter" ~ "Wendell Carter Jr.",
-        player_name == "Zach Lavine" ~ "Zach LaVine",
-        player_name == "S. Gilgeous-Alexander" ~ "Shai Gilgeous-Alexander",
-        player_name == "De'aaron Fox" ~ "De'Aaron Fox",
-        player_name == "Gary Payton Ii" ~ "Gary Payton II",
-        player_name == "Nicolas Claxton" ~ "Nic Claxton",
-        player_name == "Gary Trent" ~ "Gary Trent Jr.",
-        player_name == "Cj Mccollum" ~ "CJ McCollum",
-        player_name == "Tim Hardaway" ~ "Tim Hardaway Jr.",
-        player_name == "De'anthony Melton" ~ "De'Anthony Melton",
-        player_name == "G. Antetokounmpo" ~ "Giannis Antetokounmpo",
-        player_name == "Cameron Thomas" ~ "Cam Thomas",
-        player_name == "Kelly Oubre" ~ "Kelly Oubre Jr.",
-        player_name == "Jaden Mcdaniels" ~ "Jaden McDaniels",
-        player_name == "O.G. Anunoby" ~ "OG Anunoby",
-        player_name == "Dereck Lively" ~ "Dereck Lively II",
-        .default = player_name
-      )
-    ) |>
-    left_join(player_names[, c("player_full_name", "team_name")], by = c("player_name" = "player_full_name")) |>
-    mutate(opposition_team = if_else(home_team == team_name, away_team, home_team)) |>
-    transmute(
-      match,
-      home_team,
-      away_team,
-      market_name = "Player PRAs",
-      player_name,
-      player_team = team_name,
-      opposition_team,
-      line,
-      under_price = price,
-      agency = "Pointsbet",
-      EventKey,
-      MarketKey,
-      OutcomeKey_unders = OutcomeKey
-    )
-  
-  # Combine overs and unders
-  pointsbet_player_pras_over_under <-
-    pointsbet_player_pras_over |>
-    left_join(pointsbet_player_pras_under) |>
+  pointsbet_player_goals_over_under <-
+    pointsbet_player_goals_over |>
+    left_join(pointsbet_player_goals_under) |>
     select(
       match,
       home_team,
@@ -1797,9 +722,9 @@ pointsbet_h2h_main <- function() {
   # Write to CSV
   #===============================================================================
   
-  # Points
-  pointsbet_player_points_lines |>
-    bind_rows(pointsbet_player_points_over_under) |>
+  # Disposals
+  pointsbet_player_disposals_lines |>
+    bind_rows(pointsbet_player_disposals_over_under) |>
     mutate(match = paste(home_team, away_team, sep = " v ")) |>
     select(
       "match",
@@ -1818,13 +743,13 @@ pointsbet_h2h_main <- function() {
       "OutcomeKey",
       "OutcomeKey_unders"
     ) |>
-    mutate(market_name = "Player Points") |>
-    mutate(agency = "Pointsbet") |>
-    write_csv("Data/scraped_odds/pointsbet_player_points.csv")
+    mutate(market_name = "Player Disposals") |>
+    mutate(agency = "Disposalsbet") |>
+    write_csv("Data/scraped_odds/pointsbet_player_disposals.csv")
   
-  # Rebounds
-  pointsbet_player_rebounds_lines |>
-    bind_rows(pointsbet_player_rebounds_over_under) |>
+  # Goals
+  pointsbet_player_goals_lines |>
+    bind_rows(pointsbet_player_goals_over_under) |>
     mutate(match = paste(home_team, away_team, sep = " v ")) |>
     select(
       "match",
@@ -1843,13 +768,13 @@ pointsbet_h2h_main <- function() {
       "OutcomeKey",
       "OutcomeKey_unders"
     ) |>
-    mutate(market_name = "Player Rebounds") |>
+    mutate(market_name = "Player Goals") |>
     mutate(agency = "Pointsbet") |>
-    write_csv("Data/scraped_odds/pointsbet_player_rebounds.csv")
+    write_csv("Data/scraped_odds/pointsbet_player_goals.csv")
   
-  # Assists
-  pointsbet_player_assists_lines |>
-    bind_rows(pointsbet_player_assists_over_under) |>
+  # Fantasy Points
+  pointsbet_player_fantasy_points_lines |>
+    bind_rows(pointsbet_player_fantasy_points_over_under) |>
     mutate(match = paste(home_team, away_team, sep = " v ")) |>
     select(
       "match",
@@ -1868,109 +793,9 @@ pointsbet_h2h_main <- function() {
       "OutcomeKey",
       "OutcomeKey_unders"
     ) |>
-    mutate(market_name = "Player Assists") |>
+    mutate(market_name = "Player Fantasy Points") |>
     mutate(agency = "Pointsbet") |>
-    write_csv("Data/scraped_odds/pointsbet_player_assists.csv")
-  
-  # Threes
-  pointsbet_player_threes_lines |>
-    bind_rows(pointsbet_player_threes_over_under) |>
-    mutate(match = paste(home_team, away_team, sep = " v ")) |>
-    select(
-      "match",
-      "home_team",
-      "away_team",
-      "market_name",
-      "player_name",
-      "player_team",
-      "line",
-      "over_price",
-      "under_price",
-      "agency",
-      "opposition_team",
-      "EventKey",
-      "MarketKey",
-      "OutcomeKey",
-      "OutcomeKey_unders"
-    ) |>
-    mutate(market_name = "Player Threes") |>
-    mutate(agency = "Pointsbet") |>
-    write_csv("Data/scraped_odds/pointsbet_player_threes.csv")
-  
-  # Steals
-  pointsbet_player_steals_lines |>
-    bind_rows(pointsbet_player_steals_over_under) |>
-    mutate(match = paste(home_team, away_team, sep = " v ")) |>
-    select(
-      "match",
-      "home_team",
-      "away_team",
-      "market_name",
-      "player_name",
-      "player_team",
-      "line",
-      "over_price",
-      "under_price",
-      "agency",
-      "opposition_team",
-      "EventKey",
-      "MarketKey",
-      "OutcomeKey",
-      "OutcomeKey_unders"
-    ) |>
-    mutate(market_name = "Player Steals") |>
-    mutate(agency = "Pointsbet") |>
-    write_csv("Data/scraped_odds/pointsbet_player_steals.csv")
-  
-  # Blocks
-  pointsbet_player_blocks_lines |>
-    bind_rows(pointsbet_player_blocks_over_under) |>
-    mutate(match = paste(home_team, away_team, sep = " v ")) |>
-    select(
-      "match",
-      "home_team",
-      "away_team",
-      "market_name",
-      "player_name",
-      "player_team",
-      "line",
-      "over_price",
-      "under_price",
-      "agency",
-      "opposition_team",
-      "EventKey",
-      "MarketKey",
-      "OutcomeKey",
-      "OutcomeKey_unders"
-    ) |>
-    mutate(market_name = "Player Blocks") |>
-    mutate(agency = "Pointsbet") |>
-    write_csv("Data/scraped_odds/pointsbet_player_blocks.csv")
-  
-  # PRAs
-  pointsbet_player_pras_lines |>
-    bind_rows(pointsbet_player_pras_over_under) |>
-    mutate(match = paste(home_team, away_team, sep = " v ")) |>
-    select(
-      "match",
-      "home_team",
-      "away_team",
-      "market_name",
-      "player_name",
-      "player_team",
-      "line",
-      "over_price",
-      "under_price",
-      "agency",
-      "opposition_team",
-      "EventKey",
-      "MarketKey",
-      "OutcomeKey",
-      "OutcomeKey_unders"
-    ) |>
-    mutate(market_name = "Player PRAs") |>
-    mutate(agency = "Pointsbet") |>
-    write_csv("Data/scraped_odds/pointsbet_player_pras.csv")
+    write_csv("Data/scraped_odds/pointsbet_player_fantasy_points.csv")
 }
 
 ##%######################################################%##
