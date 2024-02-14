@@ -11,16 +11,51 @@ library(bslib)
 library(gridlayout)
 library(DT)
 
+# Determine the operating system
+os_type <- Sys.info()["sysname"]
+
 # Read in data
 all_player_stats <- read_rds("../../Data/afl_fantasy_2015_2023_data.rds")
 
-# H2H Data
+# Agencies List
 agencies = c("TAB", "Pointsbet", "Neds", "Sportsbet", "Bet365", "Unibet", "BlueBet", "TopSport")
+
+#===============================================================================
+# Read in odds data
+#===============================================================================
+
+# Conditional logic for loading data based on OS
+if (os_type == "Windows") {
+  # Read RDS Data for Windows
+  h2h_data <- read_rds("../../Data/processed_odds/all_h2h.rds")
+  # player_points_data <- read_rds("../../Data/processed_odds/all_player_points.rds")
+  # player_assists_data <- read_rds("../../Data/processed_odds/all_player_assists.rds")
+  # player_rebounds_data <- read_rds("../../Data/processed_odds/all_player_rebounds.rds")
+  # player_pras_data <- read_rds("../../Data/processed_odds/all_player_pras.rds")
+  # player_steals_data <- read_rds("../../Data/processed_odds/all_player_steals.rds")
+  # player_threes_data <- read_rds("../../Data/processed_odds/all_player_threes.rds")
+  # player_blocks_data <- read_rds("../../Data/processed_odds/all_player_blocks.rds")
+} else {
+  # Google Sheets Data for other OS
+  ss_name <- gs4_find("NBA Data")
+  player_points_data <- read_sheet(ss = ss_name, sheet = "Player Points")
+  player_assists_data <- read_sheet(ss = ss_name, sheet = "Player Assists")
+  player_rebounds_data <- read_sheet(ss = ss_name, sheet = "Player Rebounds")
+  player_pras_data <- read_sheet(ss = ss_name, sheet = "Player PRAs")
+  player_steals_data <- read_sheet(ss = ss_name, sheet = "Player Steals")
+  player_threes_data <- read_sheet(ss = ss_name, sheet = "Player Threes")
+  player_blocks_data <- read_sheet(ss = ss_name, sheet = "Player Blocks")
+}
 
 # Add home_away variable
 all_player_stats <-
   all_player_stats |>
   mutate(home_away = ifelse(player_team == home_team, "Home", "Away"))
+
+# Make weather category Indoors if at Marvel Stadium
+all_player_stats <-
+  all_player_stats |>
+  mutate(weather_category = ifelse(venue == "Marvel Stadium", "Indoors", weather_category))
 
 # Add gameId variable
 all_player_stats <-
@@ -28,7 +63,7 @@ all_player_stats <-
   mutate(gameId = paste0(season_name, round, match_name))
 
 # Function to get correlation between players-----------------------------------
-get_player_correlation <- function(data = all_player_stats, seasons = NULL, name_a, name_b, metric_a, metric_b) {
+get_player_correlation <- function(data, seasons = NULL, name_a, name_b, metric_a, metric_b) {
   # Column names for later use
   col_name_a <- paste0(name_a, " ", metric_a)
   col_name_b <- paste0(name_b, " ", metric_b)
@@ -36,15 +71,15 @@ get_player_correlation <- function(data = all_player_stats, seasons = NULL, name
   # Get dataframe for player A
   df_player_a <- 
     data %>%
-    filter(player_full_name == name_a & season_name %in% seasons) |> 
-    select(gameId, player_full_name, all_of(metric_a)) |> 
+    filter(Player == name_a & Season %in% seasons) |> 
+    select(gameId, Player, all_of(metric_a)) |> 
     rename(!!col_name_a := all_of(metric_a))
   
   # Get dataframe for player B
   df_player_b <- 
     data %>%
-    filter(player_full_name == name_b & season_name %in% seasons) |> 
-    select(gameId, player_full_name, all_of(metric_b)) |> 
+    filter(Player == name_b & Season %in% seasons) |> 
+    select(gameId, Player, all_of(metric_b)) |> 
     rename(!!col_name_b := all_of(metric_b))
   
   # Merge the two dataframes
@@ -82,18 +117,18 @@ get_player_correlation <- function(data = all_player_stats, seasons = NULL, name
 }
 
 # Function to compare player performance w or w/o teammate----------------------
-compare_performance <- function(seasons = NULL, name, teammate_name, metric) {
+compare_performance <- function(data, seasons = NULL, name, teammate_name, metric) {
   # Filter the data for games with the main player
   df_player <-
-    all_player_stats %>%
-    filter(player_full_name == name) %>%
-    filter(season_name %in% seasons)
+    data %>%
+    filter(Player == name) %>%
+    filter(Season %in% seasons)
   
   # Find the game IDs where the teammate also played
   games_with_teammate <-
-    all_player_stats %>%
-    filter(season_name %in% seasons) %>%
-    filter(player_full_name == teammate_name) %>% pull(gameId)
+    data %>%
+    filter(Season %in% seasons) %>%
+    filter(Player == teammate_name) %>% pull(gameId)
   
   # Label each game as 'With Teammate' or 'Without Teammate'
   df_player <- df_player %>% 
@@ -120,6 +155,40 @@ compare_performance <- function(seasons = NULL, name, teammate_name, metric) {
   
   return(plot)
 }
+
+
+filtered_player_stats_2 <-
+  all_player_stats |>
+  arrange(start_time_utc) |>
+  mutate(game_number = row_number()) |>
+  select(
+    Date = start_time_utc,
+    Season = season_name,
+    gameId,
+    Round = round,
+    Home = home_team,
+    Venue = venue,
+    Weather = weather_category,
+    Away = away_team,
+    Player = player_full_name,
+    Team = player_team,
+    Opposition = opposition_team,
+    TOG = tog_percentage,
+    Disposals = disposals,
+    Kicks = kicks,
+    Handballs = handballs,
+    Marks = marks,
+    Goals = goals,
+    Behinds = behinds,
+    Tackles = tackles,
+    Hitouts = hitouts,
+    Frees_For = frees_for,
+    Frees_Against = frees_against,
+    Fantasy = fantasy_points,
+    CBAs = cbas,
+    game_number
+  ) |>
+  arrange(desc(Date))
 
 #===============================================================================
 # UI
@@ -175,6 +244,24 @@ ui <- page_navbar(
                         "Goals"),
             multiple = FALSE,
             selected = "Disposals"
+          ),
+          selectInput(
+            inputId = "opp_input_a",
+            label = "Select Opposition:",
+            choices = c(all_player_stats$opposition_team |> unique() |> sort()),
+            multiple = TRUE
+          ),
+          selectInput(
+            inputId = "venue_input_a",
+            label = "Select Venue:",
+            choices = c(all_player_stats$venue |> unique() |> sort()),
+            multiple = TRUE
+          ),
+          selectInput(
+            inputId = "weather_input_a",
+            label = "Select Weather:",
+            choices = c(all_player_stats$weather_category |> unique() |> sort()),
+            multiple = TRUE
           ),
           checkboxGroupInput(
             inputId = "home_status",
@@ -236,10 +323,10 @@ ui <- page_navbar(
                   selectInput(
                     inputId = "season_input_b",
                     label = "Select Season:",
-                    choices = all_player_stats$season |> unique(),
+                    choices = all_player_stats$season_name |> unique(),
                     multiple = TRUE,
                     selectize = TRUE,
-                    selected = all_player_stats$season |> unique()
+                    selected = all_player_stats$season_name |> unique()
                   ),
                   markdown(mds = c("__Select Only Last n Games:__")),
                   numericInput(
@@ -270,12 +357,12 @@ ui <- page_navbar(
                             choices = agencies,
                             multiple = TRUE,
                             selectize = TRUE,
-                            selected = agencies,
+                            selected = agencies
                           ),
                           selectInput(
                             inputId = "market_input",
                             label = "Select Market:",
-                            choices = c("Disposals", "Fantasy", "Goals", "Marks", "Tackles"),
+                            choices = c("H2H", "Total","Line", "Disposals", "Fantasy", "Goals", "Marks", "Tackles"),
                             multiple = FALSE
                           ),
                           selectInput(
@@ -382,26 +469,27 @@ ui <- page_navbar(
           textInput(
             inputId = "player_name",
             label = "Select Player:",
-            value = "Adam Treloar"
+            value = "Christian Petracca"
           ),
           textInput(
             inputId = "teammate_name",
             label = "Select Teammate:",
-            value = "Jack Macrae"
+            value = "Clayton Oliver"
           ),
           selectInput(
             inputId = "season_input",
             label = "Select Season:",
             choices = all_player_stats$season_name |> unique(),
             multiple = TRUE,
-            selectize = TRUE
+            selectize = TRUE,
+            selected = c("2023")
           ),
           selectInput(
             inputId = "metric_input",
             label = "Select Statistic:",
             choices = c("Disposals", "Fantasy", "Goals", "Marks", "Tackles"),
             multiple = FALSE,
-            selected = "Disposals"
+            selected = "Fantasy"
           )
         )
       ),
@@ -439,7 +527,7 @@ ui <- page_navbar(
           textInput(
             inputId = "teammate_name_corr",
             label = "Select Player 2:",
-            value = "Jack Macrae"
+            value = "Tim English"
           ),
           selectInput(
             inputId = "metric_input_corr_b",
@@ -453,7 +541,8 @@ ui <- page_navbar(
             label = "Select Season:",
             choices = all_player_stats$season_name |> unique(),
             multiple = TRUE,
-            selectize = TRUE
+            selectize = TRUE,
+            selected = c("2023")
           )
         )
       ),
@@ -521,6 +610,27 @@ server <- function(input, output) {
         slice_head(n = input$last_games)
     }
     
+    # Filter by opposition team
+    if (!is.null(input$opp_input_a)) {
+      filtered_player_stats <-
+        filtered_player_stats |>
+        filter(Opposition %in% input$opp_input_a)
+    }
+    
+    # Filter by weather
+    if (!is.null(input$weather_input_a)) {
+      filtered_player_stats <-
+        filtered_player_stats |>
+        filter(Weather %in% input$weather_input_a)
+    }
+    
+    # Filter by venue
+    if (!is.null(input$venue_input_a)) {
+      filtered_player_stats <-
+        filtered_player_stats |>
+        filter(Venue %in% input$venue_input_a)
+    }
+    
     # Return filtered player stats
     return(filtered_player_stats)
     
@@ -582,10 +692,10 @@ server <- function(input, output) {
       )) +
       
       # Basic Elements
-      geom_point(size = 3) +
+      geom_point(size = 4) +
       geom_smooth(
         method = "loess",
-        se = TRUE,
+        se = FALSE,
         inherit.aes = FALSE,
         mapping = aes(x = game_number, y = !!sym(input$stat_input_a))
       ) +
@@ -709,189 +819,187 @@ server <- function(input, output) {
   # Table Odds
   #=============================================================================
   
-  # # Reactive function to scrape odds
-  # scraped_odds <- reactive({
-  #   # Get odds---------------------------------------------------------------
-  #   
-  #   # Points
-  #   if (input$market_input == "Points") {
-  #     odds <-
-  #       player_points_data |> 
-  #       mutate(variation = round(variation, 2)) |>
-  #       filter(agency %in% input$agency_input) |> 
-  #       filter(match %in% input$match_input) |>
-  #       select(-match)
-  #   }
-  #   
-  #   # Rebounds
-  #   if (input$market_input == "Rebounds") {
-  #     odds <-
-  #       player_rebounds_data |> 
-  #       mutate(variation = round(variation, 2)) |>
-  #       filter(agency %in% input$agency_input) |> 
-  #       filter(match %in% input$match_input) |>
-  #       
-  #       select(-match) 
-  #   }
-  #   
-  #   # Assists
-  #   if (input$market_input == "Assists") {
-  #     odds <-
-  #       player_assists_data |> 
-  #       mutate(variation = round(variation, 2)) |>
-  #       filter(agency %in% input$agency_input) |> 
-  #       filter(match %in% input$match_input) |>
-  #       select(-match)
-  #   }
-  #   
-  #   # Blocks
-  #   if (input$market_input == "Blocks") {
-  #     odds <-
-  #       player_blocks_data |> 
-  #       mutate(variation = round(variation, 2)) |>
-  #       filter(agency %in% input$agency_input) |> 
-  #       filter(match %in% input$match_input) |>
-  #       select(-match)
-  #   }
-  #   
-  #   # Steals
-  #   if (input$market_input == "Steals") {
-  #     odds <-
-  #       player_steals_data |> 
-  #       mutate(variation = round(variation, 2)) |>
-  #       filter(agency %in% input$agency_input) |> 
-  #       filter(match %in% input$match_input) |>
-  #       select(-match)
-  #   }
-  #   
-  #   # Threes
-  #   if (input$market_input == "Threes") {
-  #     odds <-
-  #       player_threes_data |> 
-  #       mutate(variation = round(variation, 2)) |>
-  #       filter(agency %in% input$agency_input) |> 
-  #       filter(match %in% input$match_input) |>
-  #       select(-match)
-  #   }
-  #   
-  #   # PRAs
-  #   if (input$market_input == "PRAs") {
-  #     odds <-
-  #       player_pras_data |> 
-  #       mutate(variation = round(variation, 2)) |>
-  #       filter(agency %in% input$agency_input) |> 
-  #       filter(match %in% input$match_input) |>
-  #       select(-match)
-  #   }
-  #   
-  #   if (input$only_best == TRUE) {
-  #     odds <-
-  #       odds |> 
-  #       arrange(player_name, line, desc(over_price)) |>
-  #       group_by(player_name, line) |> 
-  #       slice_head(n = 1) |>
-  #       ungroup()
-  #   }
-  #   
-  #   if (input$only_best_unders == TRUE) {
-  #     odds <-
-  #       odds |> 
-  #       arrange(player_name, line, desc(under_price)) |>
-  #       group_by(player_name, line) |> 
-  #       slice_head(n = 1) |>
-  #       ungroup()
-  #   }
-  #   
-  #   # Min and max differences
-  #   if (!is.na(input$diff_minimum_22)) {
-  #     odds <-
-  #       odds |>
-  #       filter(diff_over_2022_23 >= input$diff_minimum_22)
-  #   }
-  #   
-  #   if (!is.na(input$diff_maximum_22)) {
-  #     odds <-
-  #       odds |>
-  #       filter(diff_over_2022_23 <= input$diff_maximum_22)
-  #   }
-  #   
-  #   if (!is.na(input$diff_minimum_23)) {
-  #     odds <-
-  #       odds |>
-  #       filter(diff_over_2023_24 >= input$diff_minimum_23)
-  #   }
-  #   
-  #   if (!is.na(input$diff_maximum_23)) {
-  #     odds <-
-  #       odds |>
-  #       filter(diff_over_2023_24 <= input$diff_maximum_23)
-  #   }
-  #   
-  #   if (!is.na(input$diff_minimum_23_unders)) {
-  #     odds <-
-  #       odds |>
-  #       filter(diff_under_2023_24 >= input$diff_minimum_23_unders)
-  #   }
-  #   
-  #   if (!is.na(input$diff_maximum_23_unders)) {
-  #     odds <-
-  #       odds |>
-  #       filter(diff_under_2023_24 <= input$diff_maximum_23_unders)
-  #   }
-  #   
-  #   if (!is.na(input$diff_minimum_22_unders)) {
-  #     odds <-
-  #       odds |>
-  #       filter(diff_under_2022_23 >= input$diff_minimum_22_unders)
-  #   }
-  #   
-  #   if (!is.na(input$diff_maximum_22_unders)) {
-  #     odds <-
-  #       odds |>
-  #       filter(diff_under_2022_23 <= input$diff_maximum_22_unders)
-  #   }
-  #   
-  #   # Odds Range
-  #   if (!is.na(input$odds_minimum)) {
-  #     odds <-
-  #       odds |>
-  #       filter(over_price >= input$odds_minimum)
-  #   }
-  #   
-  #   if (!is.na(input$odds_maximum)) {
-  #     odds <-
-  #       odds |>
-  #       filter(over_price <= input$odds_maximum)
-  #   }
-  #   
-  #   if (input$only_unders == TRUE) {
-  #     odds <-
-  #       odds |>
-  #       filter(!is.na(under_price))
-  #   }
-  #   
-  #   if (input$player_name_input_b != "") {
-  #     odds <-
-  #       odds |>
-  #       filter(str_detect(player_name, input$player_name_input_b))
-  #   }
-  #   
-  #   # Return odds
-  #   return(odds)
-  # })
-  # 
-  # # Table output
-  # output$scraped_odds_table <- renderDT({
-  #   datatable(scraped_odds(),
-  #             fillContainer = TRUE,
-  #             filter = "top",
-  #             options = list(
-  #               pageLength = 17,
-  #               autoWidth = FALSE,
-  #               scrollX = TRUE, scrollY = TRUE,
-  #               lengthMenu = c(5, 10, 15, 20, 25, 30)
-  #             ))
-  # })
+  # Reactive function to scrape odds
+  scraped_odds <- reactive({
+    # Get odds---------------------------------------------------------------
+
+    # Points
+    if (input$market_input == "H2H") {
+      odds <-
+        h2h_data
+        # filter(match %in% input$match_input) |>
+        # select(-match)
+    }
+
+    # Rebounds
+    if (input$market_input == "Rebounds") {
+      odds <-
+        player_rebounds_data |>
+        mutate(variation = round(variation, 2)) |>
+        filter(agency %in% input$agency_input) |>
+        filter(match %in% input$match_input) |>
+
+        select(-match)
+    }
+
+    # Assists
+    if (input$market_input == "Assists") {
+      odds <-
+        player_assists_data |>
+        mutate(variation = round(variation, 2)) |>
+        filter(agency %in% input$agency_input) |>
+        filter(match %in% input$match_input) |>
+        select(-match)
+    }
+
+    # Blocks
+    if (input$market_input == "Blocks") {
+      odds <-
+        player_blocks_data |>
+        mutate(variation = round(variation, 2)) |>
+        filter(agency %in% input$agency_input) |>
+        filter(match %in% input$match_input) |>
+        select(-match)
+    }
+
+    # Steals
+    if (input$market_input == "Steals") {
+      odds <-
+        player_steals_data |>
+        mutate(variation = round(variation, 2)) |>
+        filter(agency %in% input$agency_input) |>
+        filter(match %in% input$match_input) |>
+        select(-match)
+    }
+
+    # Threes
+    if (input$market_input == "Threes") {
+      odds <-
+        player_threes_data |>
+        mutate(variation = round(variation, 2)) |>
+        filter(agency %in% input$agency_input) |>
+        filter(match %in% input$match_input) |>
+        select(-match)
+    }
+
+    # PRAs
+    if (input$market_input == "PRAs") {
+      odds <-
+        player_pras_data |>
+        mutate(variation = round(variation, 2)) |>
+        filter(agency %in% input$agency_input) |>
+        filter(match %in% input$match_input) |>
+        select(-match)
+    }
+
+    if (input$only_best == TRUE) {
+      odds <-
+        odds |>
+        arrange(player_name, line, desc(over_price)) |>
+        group_by(player_name, line) |>
+        slice_head(n = 1) |>
+        ungroup()
+    }
+
+    if (input$only_best_unders == TRUE) {
+      odds <-
+        odds |>
+        arrange(player_name, line, desc(under_price)) |>
+        group_by(player_name, line) |>
+        slice_head(n = 1) |>
+        ungroup()
+    }
+
+    # Min and max differences
+    if (!is.na(input$diff_minimum_22)) {
+      odds <-
+        odds |>
+        filter(diff_over_2023 >= input$diff_minimum_22)
+    }
+
+    if (!is.na(input$diff_maximum_22)) {
+      odds <-
+        odds |>
+        filter(diff_over_2023 <= input$diff_maximum_22)
+    }
+
+    if (!is.na(input$diff_minimum_23)) {
+      odds <-
+        odds |>
+        filter(diff_over_2024 >= input$diff_minimum_23)
+    }
+
+    if (!is.na(input$diff_maximum_23)) {
+      odds <-
+        odds |>
+        filter(diff_over_2024 <= input$diff_maximum_23)
+    }
+
+    if (!is.na(input$diff_minimum_23_unders)) {
+      odds <-
+        odds |>
+        filter(diff_under_2024 >= input$diff_minimum_23_unders)
+    }
+
+    if (!is.na(input$diff_maximum_23_unders)) {
+      odds <-
+        odds |>
+        filter(diff_under_2024 <= input$diff_maximum_23_unders)
+    }
+
+    if (!is.na(input$diff_minimum_22_unders)) {
+      odds <-
+        odds |>
+        filter(diff_under_2023 >= input$diff_minimum_22_unders)
+    }
+
+    if (!is.na(input$diff_maximum_22_unders)) {
+      odds <-
+        odds |>
+        filter(diff_under_2023 <= input$diff_maximum_22_unders)
+    }
+
+    # Odds Range
+    if (!is.na(input$odds_minimum)) {
+      odds <-
+        odds |>
+        filter(over_price >= input$odds_minimum)
+    }
+
+    if (!is.na(input$odds_maximum)) {
+      odds <-
+        odds |>
+        filter(over_price <= input$odds_maximum)
+    }
+
+    if (input$only_unders == TRUE) {
+      odds <-
+        odds |>
+        filter(!is.na(under_price))
+    }
+
+    if (input$player_name_input_b != "") {
+      odds <-
+        odds |>
+        filter(str_detect(player_name, input$player_name_input_b))
+    }
+
+    # Return odds
+    return(odds)
+  })
+
+  # Table output
+  output$scraped_odds_table <- renderDT({
+    datatable(scraped_odds(),
+              fillContainer = TRUE,
+              filter = "top",
+              options = list(
+                pageLength = 17,
+                autoWidth = FALSE,
+                scrollX = TRUE, scrollY = TRUE,
+                lengthMenu = c(5, 10, 15, 20, 25, 30)
+              ))
+  })
   
   #=============================================================================
   # With / Without Teammate
@@ -900,11 +1008,13 @@ server <- function(input, output) {
   output$with_without_plot_output <- renderPlot({
     req(input$player_name, input$teammate_name, input$season_input, input$metric_input)
 
-    plot <- compare_performance(season = input$season_input,
-                                name = input$player_name,
-                                teammate_name = input$teammate_name,
-                                metric = input$metric_input)
-
+    plot <- compare_performance(
+      data = filtered_player_stats_2,
+      season = input$season_input,
+      name = input$player_name,
+      teammate_name = input$teammate_name,
+      metric = input$metric_input)
+    
     return(plot)
   })
   
@@ -914,20 +1024,19 @@ server <- function(input, output) {
   
   output$corr_plot_output <- renderPlot({
     req(input$player_name_corr, input$teammate_name_corr, input$season_input_corr, input$metric_input_corr_b, input$metric_input_corr_a)
-
+    
     plot <-
       get_player_correlation(
-        data = 
+        data = filtered_player_stats_2,
         seasons = input$season_input_corr,
         name_a = input$player_name_corr,
         name_b = input$teammate_name_corr,
         metric_a = input$metric_input_corr_a,
         metric_b = input$metric_input_corr_b
       )
-
+    
     return(plot)
   })
-
 }
 
 #===============================================================================

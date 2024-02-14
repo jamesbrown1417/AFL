@@ -6,6 +6,10 @@ library(httr2)
 # URL to get responses
 tab_url = "https://api.beta.tab.com.au/v1/recommendation-service/AFL%20Football/featured?jurisdiction=SA"
 
+# Player names file
+player_names <- read_rds("C:/Users/james/R_Projects/AFL-2024/Data/2024_start_positions_and_prices.rds")
+player_names <- player_names |> select(player_full_name, team_name)
+
 # Function to fix team names
 source("Functions/fix_team_names.R")
 
