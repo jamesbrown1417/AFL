@@ -8,42 +8,6 @@ library(glue)
 # URL of website
 sportsbet_url = "https://www.sportsbet.com.au/betting/basketball-us/nba"
 
-# Get teams table
-teams <-
-    read_csv("Data/all_teams.csv")
-
-# Get player names table
-player_names_all <-
-    read_csv("Data/all_rosters.csv") |>
-    select(player_full_name = PLAYER, TeamID) |> 
-    left_join(teams[, c("id", "full_name")], by = c("TeamID" = "id")) |> 
-    mutate(first_initial = str_sub(player_full_name, 1, 1)) |>
-    mutate(surname = str_extract(player_full_name, "(?<=\\s).*$")) |> 
-    mutate(join_name = paste(first_initial, surname, sep = " ")) |> 
-    rename(team_name = full_name)
-
-# unique join names
-player_names_unique <-
-    player_names_all |>
-    group_by(join_name) |> 
-    filter(n() == 1) |> 
-    ungroup()
-
-# Non unique names (take first two letters of first name)
-player_names_non_unique <-
-    player_names_all |>
-    group_by(join_name) |> 
-    filter(n() > 1) |> 
-    mutate(first_initial = str_sub(player_full_name, 1, 2)) |>
-    mutate(join_name = paste(first_initial, surname, sep = " ")) |> 
-    ungroup()
-
-player_names <-
-    bind_rows(player_names_unique, player_names_non_unique) |> 
-    mutate(join_name = ifelse(player_full_name == "Keyontae Johnson", "Key Johnson", join_name)) |> 
-    mutate(join_name = ifelse(player_full_name == "Miles Bridges", "Mil Bridges", join_name)) |> 
-    mutate(join_name = ifelse(player_full_name == "Jaylin Williams", "Jay Williams", join_name))
-
 #===============================================================================
 # Use rvest to get main market information-------------------------------------#
 #===============================================================================
