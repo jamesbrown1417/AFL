@@ -6,6 +6,9 @@ library(googledrive)
 # Get empirical probability function
 # source("Scripts/get_empirical_probabilities.R")
 
+# Get fixtures data
+current_season_fixture <- read_rds("Data/current_fixture.rds")
+
 # Google sheets authentification -----------------------------------------------
 options(gargle_oauth_cache = ".secrets")
 drive_auth(cache = ".secrets", email = "cuzzy.punting@gmail.com")
@@ -28,7 +31,7 @@ run_scraping("OddsScraper/scrape_pointsbet.R")
 # run_scraping("OddsScraper/scrape_sportsbet.R")
 run_scraping("OddsScraper/scrape_TAB.R")
 # run_scraping("OddsScraper/scrape_TopSport.R")
-# run_scraping("OddsScraper/scrape_bet365.R")
+run_scraping("OddsScraper/scrape_bet365.R")
 # run_scraping("OddsScraper/scrape_bluebet.R")
 run_scraping("OddsScraper/scrape_neds.R")
 # run_scraping("OddsScraper/scrape_unibet.R")
@@ -69,7 +72,9 @@ all_odds_h2h <-
   full_join(all_away, relationship = "many-to-many", by = c("match", "market_name")) |>
   mutate(margin = (1/home_win + 1/away_win)) |> 
   mutate(margin = round(100*(margin - 1), digits = 3)) |> 
-  arrange(margin)
+  arrange(margin) |>
+  left_join(current_season_fixture) |>
+  relocate(round, start_time, venue, .after = match)
 
 # Google Sheets-----------------------------------------------------
 # sheet <- gs4_find("AFL Data")

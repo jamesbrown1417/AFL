@@ -25,8 +25,8 @@ get_empirical_prob <- function(player_full_name, line, stat) {
   # Filter for player
   player_stats <-
     combined_stats |> 
-    filter(player_full_name == !!player_full_name) |> 
-    arrange(desc(start_time_utc))
+    tidytable::filter(player_full_name == !!player_full_name) |> 
+    tidytable::arrange(tidytable::desc(start_time_utc))
   
   # Ensure 'stat' column exists
   if(!stat %in% names(player_stats)) {
@@ -36,15 +36,15 @@ get_empirical_prob <- function(player_full_name, line, stat) {
   # Calculate proportion of games above 'line' for last 3, 5, 7, and 10 games
   last_games_stats <-
     player_stats |> 
-    mutate(
+    tidytable::mutate(
       above_line = as.numeric(!!sym(stat) > line), # Convert logical to numeric for summing
       emp_prob_last_3 = rollapply(above_line, width = 3, FUN = function(x) mean(x, na.rm = TRUE), partial = TRUE, align = "left"),
       emp_prob_last_5 = rollapply(above_line, width = 5, FUN = function(x) mean(x, na.rm = TRUE), partial = TRUE, align = "left"),
       emp_prob_last_7 = rollapply(above_line, width = 7, FUN = function(x) mean(x, na.rm = TRUE), partial = TRUE, align = "left"),
       emp_prob_last_10 = rollapply(above_line, width = 10, FUN = function(x) mean(x, na.rm = TRUE), partial = TRUE, align = "left")
     ) |> 
-    slice_head(n = 1) |> 
-    select(
+    tidytable::slice_head(n = 1) |> 
+    tidytable::select(
       player_full_name,
       emp_prob_last_3,
       emp_prob_last_5,

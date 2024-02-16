@@ -37,7 +37,7 @@ if (os_type == "Windows") {
   # player_blocks_data <- read_rds("../../Data/processed_odds/all_player_blocks.rds")
 } else {
   # Google Sheets Data for other OS
-  ss_name <- gs4_find("NBA Data")
+  ss_name <- gs4_find("AFL Data")
   player_points_data <- read_sheet(ss = ss_name, sheet = "Player Points")
   player_assists_data <- read_sheet(ss = ss_name, sheet = "Player Assists")
   player_rebounds_data <- read_sheet(ss = ss_name, sheet = "Player Rebounds")
