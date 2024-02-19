@@ -110,10 +110,10 @@ all_odds_line <-
 
 # Google Sheets-----------------------------------------------------
 # sheet <- gs4_find("AFL Data")
-# sheet_write(sheet, data = all_odds_h2h, sheet = "H2H")
+# sheet_write(sheet, data = all_odds_line, sheet = "Line")
 
 # Write as RDS
-all_odds_h2h |> write_rds("Data/processed_odds/all_h2h.rds")
+all_odds_line |> write_rds("Data/processed_odds/all_line.rds")
 
 ##%######################################################%##
 #                                                          #

@@ -28,6 +28,7 @@ agencies = c("TAB", "Pointsbet", "Neds", "Sportsbet", "Bet365", "Unibet", "BlueB
 if (os_type == "Windows") {
   # Read RDS Data for Windows
   h2h_data <- read_rds("../../Data/processed_odds/all_h2h.rds")
+  line_data <- read_rds("../../Data/processed_odds/all_line.rds")
   # player_points_data <- read_rds("../../Data/processed_odds/all_player_points.rds")
   # player_assists_data <- read_rds("../../Data/processed_odds/all_player_assists.rds")
   # player_rebounds_data <- read_rds("../../Data/processed_odds/all_player_rebounds.rds")
@@ -51,6 +52,17 @@ if (os_type == "Windows") {
 all_player_stats <-
   all_player_stats |>
   mutate(home_away = ifelse(player_team == home_team, "Home", "Away"))
+
+# Make margin variable negative if loss
+all_player_stats <-
+  all_player_stats |>
+  mutate(margin = ifelse((match_result == "Away Win" &
+                            home_away == "Home") |
+                           (match_result == "Home Win" &
+                              home_away == "Away"),-margin,
+                         margin
+  ))
+  
 
 # Make weather category Indoors if at Marvel Stadium
 all_player_stats <-
@@ -156,6 +168,77 @@ compare_performance <- function(data, seasons = NULL, name, teammate_name, metri
   return(plot)
 }
 
+# Function to compare player performance w or w/o teammate----------------------
+compare_performance_table <- function(data, seasons = NULL, name, teammate_name) {
+  # Filter the data for games with the main player
+  df_player <-
+    data %>%
+    filter(Player == name) %>%
+    filter(Season %in% seasons)
+  
+  # Find the game IDs where the teammate also played
+  games_with_teammate <-
+    data %>%
+    filter(Season %in% seasons) %>%
+    filter(Player == teammate_name) %>% pull(gameId)
+  
+  # Label each game as 'With Teammate' or 'Without Teammate'
+  df_player <- df_player %>% 
+    mutate(Teammate = if_else(gameId %in% games_with_teammate, 'With Teammate', 'Without Teammate'))
+  
+  # Calculate mean and count for both conditions
+  summary_stats <-
+    df_player %>%
+    group_by(Teammate) %>%
+    summarise(n_games = n(),
+              `AVG Disposals` = mean(Disposals, na.rm = TRUE),
+              `AVG Goals` = mean(Goals, na.rm = TRUE),
+              `AVG Fantasy` = mean(Fantasy, na.rm = TRUE),
+              `AVG CBA%` = mean(CBA, na.rm = TRUE)) |> 
+    mutate(across(`AVG Disposals`:`AVG CBA%`, ~ round(., 2)))
+  
+  return(summary_stats)
+}
+
+# Function to compare player performance under certain conditions---------------
+player_contrasts <- function(data, seasons = NULL, name, grouping_vars) {
+  # Filter the data for games with the main player
+  df_player <-
+    data %>%
+    filter(Player == name) %>%
+    filter(Season %in% seasons) |> 
+    rename(home_away = `Home / Away`)
+  
+  # Create margin_group variable
+  df_player <-
+    df_player %>%
+    mutate(
+      margin_group = case_when(
+        Margin >= 40 ~ "40+ Win",
+        between(Margin, 1, 39) ~ "1-39 Win",
+        Margin == 0 ~ "Draw",
+        between(Margin, -39, -1) ~ "1-39 Loss",
+        Margin <= -40 ~ "40+ Loss"
+      )
+    ) |>
+    mutate(margin_group = factor(
+      margin_group,
+      levels = c("40+ Win", "1-39 Win", "Draw", "1-39 Loss", "40+ Loss")
+    ))
+  
+  # Calculate mean and count for both conditions
+  summary_stats <-
+    df_player %>%
+    group_by(across(all_of(grouping_vars))) %>%
+    summarise(n_games = n(),
+              `AVG Disposals` = mean(Disposals, na.rm = TRUE),
+              `AVG Goals` = mean(Goals, na.rm = TRUE),
+              `AVG Fantasy` = mean(Fantasy, na.rm = TRUE),
+              `AVG CBA%` = mean(CBA, na.rm = TRUE)) |> 
+    mutate(across(`AVG Disposals`:`AVG CBA%`, ~ round(., 2)))
+  
+  return(summary_stats)
+}
 
 filtered_player_stats_2 <-
   all_player_stats |>
@@ -172,6 +255,8 @@ filtered_player_stats_2 <-
     Away = away_team,
     Player = player_full_name,
     Team = player_team,
+    `Home / Away` = home_away,
+    Margin = margin,
     Opposition = opposition_team,
     TOG = tog_percentage,
     Disposals = disposals,
@@ -185,7 +270,7 @@ filtered_player_stats_2 <-
     Frees_For = frees_for,
     Frees_Against = frees_against,
     Fantasy = fantasy_points,
-    CBAs = cbas,
+    CBA = cba_percentage,
     game_number
   ) |>
   arrange(desc(Date))
@@ -268,6 +353,17 @@ ui <- page_navbar(
             label = "Home / Away Games",
             choices = list("Home" = "Home", "Away" = "Away"),
             selected = c("Home", "Away")
+          ),
+          markdown(mds = c("__Select Margin Range:__")),
+          numericInput(
+            inputId = "margin_min",
+            label = "Minimum",
+            value = -200
+          ),
+          numericInput(
+            inputId = "margin_max",
+            label = "Maximum",
+            value = 200
           ),
           markdown(mds = c("__Select Only Last n Games:__")),
           numericInput(
@@ -368,10 +464,10 @@ ui <- page_navbar(
                           selectInput(
                             inputId = "match_input",
                             label = "Select Matches:",
-                            choices = c("Placeholder"),
+                            choices = h2h_data$match |> unique(),
                             multiple = TRUE,
-                            selectize = FALSE
-                            # selected = player_points_data$match |> unique()
+                            selectize = FALSE,
+                            selected = h2h_data$match |> unique()
                           ),
                           textInput(
                             inputId = "player_name_input_b",
@@ -493,13 +589,24 @@ ui <- page_navbar(
           )
         )
       ),
-      
       grid_card(area = "with_without_plot",
-                card_body(
-                  plotOutput(outputId = "with_without_plot_output", height = "800px", width = "50%")
-                ))
+                card_body(tabsetPanel(
+                  id = "with_without_tabs",
+                  tabPanel(
+                    "Plot",
+                    plotOutput(outputId = "with_without_plot_output", height = "800px")
+                  ),
+                  tabPanel(
+                    "Table",
+                    DTOutput(
+                      outputId = "with_without_table_output",
+                      width = "100%",
+                      height = "800px"
+                    )
+                  )
+                )))
     )
-  ),
+  ), 
   nav_panel(
     title = "Player Correlations",
     grid_container(
@@ -574,6 +681,8 @@ server <- function(input, output) {
         player_full_name == input$player_name_input_a,
         season_name %in% input$season_input_a,
         tog_percentage >= input$minutes_minimum,
+        margin >= input$margin_min,
+        margin <= input$margin_max,
         home_away %in% input$home_status
       ) |>
       arrange(start_time_utc) |>
@@ -587,6 +696,7 @@ server <- function(input, output) {
              Player = player_full_name,
              Team = player_team,
              Opposition = opposition_team,
+             Margin = margin,
              TOG = tog_percentage,
              Disposals = disposals,
              Kicks = kicks,
@@ -599,7 +709,7 @@ server <- function(input, output) {
              Frees_For = frees_for,
              Frees_Against = frees_against,
              Fantasy = fantasy_points,
-             CBAs = cbas,
+             CBA = cba_percentage,
              game_number) |> 
       arrange(desc(Date))
     
@@ -823,12 +933,12 @@ server <- function(input, output) {
   scraped_odds <- reactive({
     # Get odds---------------------------------------------------------------
 
-    # Points
+    # Head to Head
     if (input$market_input == "H2H") {
       odds <-
-        h2h_data
-        # filter(match %in% input$match_input) |>
-        # select(-match)
+        h2h_data |> 
+        filter(match %in% input$match_input) |> 
+        filter(home_agency %in% input$agency_input & away_agency %in% input$agency_input)
     }
 
     # Rebounds
@@ -1016,6 +1126,18 @@ server <- function(input, output) {
       metric = input$metric_input)
     
     return(plot)
+  })
+  
+  output$with_without_table_output <- renderDT({
+    req(input$player_name, input$teammate_name, input$season_input)
+    
+    table <- compare_performance_table(
+      data = filtered_player_stats_2,
+      season = input$season_input,
+      name = input$player_name,
+      teammate_name = input$teammate_name)
+    
+    return(table)
   })
   
   #=============================================================================
