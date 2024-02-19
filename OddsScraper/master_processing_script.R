@@ -28,7 +28,7 @@ run_scraping <- function(script_name) {
 # run_scraping("OddsScraper/scrape_BetRight.R")
 # run_scraping("OddsScraper/scrape_Palmerbet.R")
 run_scraping("OddsScraper/scrape_pointsbet.R")
-# run_scraping("OddsScraper/scrape_sportsbet.R")
+run_scraping("OddsScraper/scrape_sportsbet.R")
 run_scraping("OddsScraper/scrape_TAB.R")
 # run_scraping("OddsScraper/scrape_TopSport.R")
 run_scraping("OddsScraper/scrape_bet365.R")
@@ -75,6 +75,38 @@ all_odds_h2h <-
   arrange(margin) |>
   left_join(current_season_fixture) |>
   relocate(round, start_time, venue, .after = match)
+
+# Google Sheets-----------------------------------------------------
+# sheet <- gs4_find("AFL Data")
+# sheet_write(sheet, data = all_odds_h2h, sheet = "H2H")
+
+# Write as RDS
+all_odds_h2h |> write_rds("Data/processed_odds/all_h2h.rds")
+
+##%######################################################%##
+#                                                          #
+####                      Line                          ####
+#                                                          #
+##%######################################################%##
+
+# Get all scraped odds files and combine
+all_odds_files <-
+  list.files("Data/scraped_odds", full.names = TRUE, pattern = "line") |>
+  map(read_csv) |>
+  # Keep if nrow of dataframe greater than 0
+  keep(~nrow(.x) > 0) |>
+  reduce(bind_rows)
+
+# Arrange to get biggest discrepancies
+all_odds_line <-
+  all_odds_files |>
+  arrange(match, start_time, home_line) |>
+  group_by(match, home_team, away_team) |> 
+  mutate(min_home_line = min(home_line), max_home_line = max(home_line)) |>
+  mutate(diff = max_home_line - min_home_line) |>
+  ungroup() |>
+  arrange(desc(diff), start_time) |> 
+  select(-min_home_line, -max_home_line)
 
 # Google Sheets-----------------------------------------------------
 # sheet <- gs4_find("AFL Data")

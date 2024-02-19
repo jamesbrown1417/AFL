@@ -115,7 +115,7 @@ write_csv(tab_head_to_head_markets, "Data/scraped_odds/tab_h2h.csv")
 #===============================================================================
 
 # Home teams
-home_teams <-
+home_team_lines <-
   all_tab_markets |>
   separate(match, into = c("home_team", "away_team"), sep = " v ", remove = FALSE) |>
   filter(market_name == "Line") |> 
@@ -126,7 +126,7 @@ home_teams <-
   select(-prop_name, -prop_id)
 
 # Away teams
-away_teams <-
+away_team_lines <-
   all_tab_markets |>
   separate(match, into = c("home_team", "away_team"), sep = " v ", remove = FALSE) |>
   filter(market_name == "Line") |> 
@@ -138,8 +138,8 @@ away_teams <-
 
 # Combine
 tab_line_markets <-
-  home_teams |>
-  left_join(away_teams) |> 
+  home_team_lines |>
+  left_join(away_team_lines) |> 
   select(match, start_time, market_name, home_team, home_line, home_win, away_team, away_line, away_win) |> 
   mutate(margin = round((1/home_win + 1/away_win), digits = 3)) |> 
   mutate(agency = "TAB")

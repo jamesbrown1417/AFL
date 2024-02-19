@@ -125,6 +125,60 @@ pointsbet_h2h_main <- function() {
   write_csv(pointsbet_h2h, "Data/scraped_odds/pointsbet_h2h.csv")
   
   #===============================================================================
+  # Line Markets
+  #===============================================================================
+  
+  # Filter to head to head markets
+  pointsbet_data_line <-
+    pointsbet_data |>
+    filter(event == "Line")
+  
+  # Home Teams
+  pointsbet_data_line_home <-
+    pointsbet_data_line |>
+    group_by(match) |> 
+    filter(row_number() == 1) |> 
+    rename(home_win = price) |> 
+    mutate(home_line = as.numeric(str_extract(outcome, "-?\\d+\\.?\\d*"))) |> 
+    select(-outcome)
+  
+  # Away Teams
+  pointsbet_data_line_away <-
+    pointsbet_data_line |>
+    group_by(match) |> 
+    filter(row_number() == 2) |> 
+    rename(away_win = price) |> 
+    mutate(away_line = as.numeric(str_extract(outcome, "-?\\d+\\.?\\d*"))) |> 
+    select(-outcome)
+  
+  # Combine
+  pointsbet_line <-
+    full_join(
+      pointsbet_data_line_home,
+      pointsbet_data_line_away
+    ) |>
+    mutate(home_team = fix_team_names(home_team),
+           away_team = fix_team_names(away_team)) |>
+    mutate(match = paste(home_team, "v", away_team)) |>
+    mutate(market = "Line") |>
+    select(match,
+           start_time,
+           market_name = market,
+           home_team,
+           home_line,
+           home_win,
+           away_team,
+           away_line,
+           away_win) |>
+    mutate(home_win = as.numeric(home_win),
+           away_win = as.numeric(away_win)) |>
+    mutate(margin = round((1 / home_win + 1 / away_win), digits = 3)) |>
+    mutate(agency = "Pointsbet")
+  
+  # Write to csv
+  write_csv(pointsbet_line, "Data/scraped_odds/pointsbet_line.csv")
+  
+  #===============================================================================
   # Player Props
   #===============================================================================
   
