@@ -119,8 +119,8 @@ write_csv(sportsbet_h2h, "Data/scraped_odds/sportsbet_h2h.csv")
 #         html_text()
 #     
 #     # Home team and Away Team
-#     home_team <- team_names[2]
-#     away_team <- team_names[1]
+#     home_team <- team_names[1]
+#     away_team <- team_names[2]
 #     
 #     # Output
 #     tibble(home_team, away_team)
