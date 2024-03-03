@@ -18,7 +18,7 @@ os_type <- Sys.info()["sysname"]
 all_player_stats <- read_rds("../../Data/afl_fantasy_2015_2023_data.rds")
 
 # Agencies List
-agencies = c("TAB", "Pointsbet", "Neds", "Sportsbet", "Bet365", "Unibet", "BlueBet", "TopSport")
+agencies = c("TAB", "Pointsbet", "Neds", "Sportsbet", "Bet365", "Unibet", "BlueBet", "TopSport", "BetRight", "Betr")
 
 #===============================================================================
 # Read in odds data
@@ -29,8 +29,8 @@ if (os_type == "Windows") {
   # Read RDS Data for Windows
   h2h_data <- read_rds("../../Data/processed_odds/all_h2h.rds")
   line_data <- read_rds("../../Data/processed_odds/all_line.rds")
-  # player_points_data <- read_rds("../../Data/processed_odds/all_player_points.rds")
-  # player_assists_data <- read_rds("../../Data/processed_odds/all_player_assists.rds")
+  player_disposals_data <- read_rds("../../Data/processed_odds/all_player_disposals.rds")
+  player_goals_data <- read_rds("../../Data/processed_odds/all_player_goals.rds")
   # player_rebounds_data <- read_rds("../../Data/processed_odds/all_player_rebounds.rds")
   # player_pras_data <- read_rds("../../Data/processed_odds/all_player_pras.rds")
   # player_steals_data <- read_rds("../../Data/processed_odds/all_player_steals.rds")
@@ -499,50 +499,6 @@ ui <- page_navbar(
                             inputId = "odds_maximum",
                             label = "Max Odds",
                             value = NA
-                          ),
-                          markdown(mds = c("__Select Difference Range 2023:__")),
-                          numericInput(
-                            inputId = "diff_minimum_23",
-                            label = "Min Diff",
-                            value = NA
-                          ),
-                          numericInput(
-                            inputId = "diff_maximum_23",
-                            label = "Max Diff",
-                            value = NA
-                          ),
-                          markdown(mds = c("__Select Difference Range 2022:__")),
-                          numericInput(
-                            inputId = "diff_minimum_22",
-                            label = "Min Diff",
-                            value = NA
-                          ),
-                          numericInput(
-                            inputId = "diff_maximum_22",
-                            label = "Max Diff",
-                            value = NA
-                          ),
-                          markdown(mds = c("__Select Difference Range 2023 - Unders:__")),
-                          numericInput(
-                            inputId = "diff_minimum_23_unders",
-                            label = "Min Diff",
-                            value = NA
-                          ),
-                          numericInput(
-                            inputId = "diff_maximum_23_unders",
-                            label = "Max Diff",
-                            value = NA
-                          ),
-                          markdown(mds = c("__Select Difference Range 2022 - Unders:__")),
-                          numericInput(
-                            inputId = "diff_minimum_22_unders",
-                            label = "Min Diff",
-                            value = NA
-                          ),
-                          numericInput(
-                            inputId = "diff_maximum_22_unders",
-                            label = "Max Diff",
-                            value = NA
                           )
                         )),
               grid_card(area = "odds_table",
@@ -940,66 +896,33 @@ server <- function(input, output) {
         filter(match %in% input$match_input) |> 
         filter(home_agency %in% input$agency_input & away_agency %in% input$agency_input)
     }
-
-    # Rebounds
-    if (input$market_input == "Rebounds") {
+    
+    # Head to Head
+    if (input$market_input == "Line") {
       odds <-
-        player_rebounds_data |>
-        mutate(variation = round(variation, 2)) |>
-        filter(agency %in% input$agency_input) |>
-        filter(match %in% input$match_input) |>
-
-        select(-match)
+        line_data |> 
+        filter(match %in% input$match_input) |> 
+        filter(agency %in% input$agency_input)
     }
 
-    # Assists
-    if (input$market_input == "Assists") {
+    # Disposals
+    if (input$market_input == "Disposals") {
       odds <-
-        player_assists_data |>
+        player_disposals_data |>
         mutate(variation = round(variation, 2)) |>
         filter(agency %in% input$agency_input) |>
         filter(match %in% input$match_input) |>
-        select(-match)
+        select(-match, -group_by_header, -outcome_name, -outcome_name_under)
     }
 
-    # Blocks
-    if (input$market_input == "Blocks") {
+    # Goals
+    if (input$market_input == "Goals") {
       odds <-
-        player_blocks_data |>
+        player_goals_data |>
         mutate(variation = round(variation, 2)) |>
         filter(agency %in% input$agency_input) |>
         filter(match %in% input$match_input) |>
-        select(-match)
-    }
-
-    # Steals
-    if (input$market_input == "Steals") {
-      odds <-
-        player_steals_data |>
-        mutate(variation = round(variation, 2)) |>
-        filter(agency %in% input$agency_input) |>
-        filter(match %in% input$match_input) |>
-        select(-match)
-    }
-
-    # Threes
-    if (input$market_input == "Threes") {
-      odds <-
-        player_threes_data |>
-        mutate(variation = round(variation, 2)) |>
-        filter(agency %in% input$agency_input) |>
-        filter(match %in% input$match_input) |>
-        select(-match)
-    }
-
-    # PRAs
-    if (input$market_input == "PRAs") {
-      odds <-
-        player_pras_data |>
-        mutate(variation = round(variation, 2)) |>
-        filter(agency %in% input$agency_input) |>
-        filter(match %in% input$match_input) |>
-        select(-match)
+        select(-match, -group_by_header, -outcome_name, -outcome_name_under)
     }
 
     if (input$only_best == TRUE) {
@@ -1018,55 +941,6 @@ server <- function(input, output) {
         group_by(player_name, line) |>
         slice_head(n = 1) |>
         ungroup()
-    }
-
-    # Min and max differences
-    if (!is.na(input$diff_minimum_22)) {
-      odds <-
-        odds |>
-        filter(diff_over_2023 >= input$diff_minimum_22)
-    }
-
-    if (!is.na(input$diff_maximum_22)) {
-      odds <-
-        odds |>
-        filter(diff_over_2023 <= input$diff_maximum_22)
-    }
-
-    if (!is.na(input$diff_minimum_23)) {
-      odds <-
-        odds |>
-        filter(diff_over_2024 >= input$diff_minimum_23)
-    }
-
-    if (!is.na(input$diff_maximum_23)) {
-      odds <-
-        odds |>
-        filter(diff_over_2024 <= input$diff_maximum_23)
-    }
-
-    if (!is.na(input$diff_minimum_23_unders)) {
-      odds <-
-        odds |>
-        filter(diff_under_2024 >= input$diff_minimum_23_unders)
-    }
-
-    if (!is.na(input$diff_maximum_23_unders)) {
-      odds <-
-        odds |>
-        filter(diff_under_2024 <= input$diff_maximum_23_unders)
-    }
-
-    if (!is.na(input$diff_minimum_22_unders)) {
-      odds <-
-        odds |>
-        filter(diff_under_2023 >= input$diff_minimum_22_unders)
-    }
-
-    if (!is.na(input$diff_maximum_22_unders)) {
-      odds <-
-        odds |>
-        filter(diff_under_2023 <= input$diff_maximum_22_unders)
     }
 
     # Odds Range
@@ -1104,7 +978,7 @@ server <- function(input, output) {
               fillContainer = TRUE,
               filter = "top",
               options = list(
-                pageLength = 17,
+                pageLength = 15,
                 autoWidth = FALSE,
                 scrollX = TRUE, scrollY = TRUE,
                 lengthMenu = c(5, 10, 15, 20, 25, 30)

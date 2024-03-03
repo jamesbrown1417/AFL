@@ -5,6 +5,7 @@ library(httr2)
 
 # URL to get responses
 tab_url = "https://api.beta.tab.com.au/v1/recommendation-service/AFL%20Football/featured?jurisdiction=SA"
+tab_url = "https://api.beta.tab.com.au/v1/tab-info-service/sports/AFL%20Football/competitions/AFL?homeState=SA&jurisdiction=SA"
 
 # Player names file
 player_names <- read_rds("Data/2024_start_positions_and_prices.rds")
@@ -15,13 +16,60 @@ source("Functions/fix_team_names.R")
 
 main_tab <- function() {
 
-# Make request and get response
-tab_response <-
-    request(tab_url) |>
-    req_perform() |> 
-    resp_body_json()
+# # Make request and get response
+# tab_response <-
+#     request(tab_url) |>
+#     req_perform() |> 
+#     resp_body_json()
 
-tab_response <- tab_response$competitions[[1]]
+  # Function to fetch and parse JSON with exponential backoff
+  fetch_data_with_backoff <-
+    function(url,
+             delay = 1,
+             max_retries = 5,
+             backoff_multiplier = 2) {
+      tryCatch({
+        # Attempt to fetch and parse the JSON
+        tab_response <-
+          read_html_live(url) |>
+          html_nodes("pre") %>%
+          html_text() %>%
+          fromJSON(simplifyVector = FALSE)
+        
+        # Return the parsed response
+        return(tab_response)
+      }, error = function(e) {
+        if (max_retries > 0) {
+          # Log the retry attempt
+          message(sprintf("Error encountered. Retrying in %s seconds...", delay))
+          
+          # Wait for the specified delay
+          Sys.sleep(delay)
+          
+          # Recursively call the function with updated parameters
+          return(
+            fetch_data_with_backoff(
+              url,
+              delay * backoff_multiplier,
+              max_retries - 1,
+              backoff_multiplier
+            )
+          )
+        } else {
+          # Max retries reached, throw an error
+          stop("Failed to fetch data after multiple retries.")
+        }
+      })
+    }
+  
+  tab_response <- fetch_data_with_backoff(tab_url)
+
+# # Get index element of competitions with name value "AFL"
+# names_list <- map(tab_response$competitions, "name")
+# index <- which(names_list == "AFL")
+# 
+# # Get the response
+# tab_response <- tab_response$competitions[[index]]
 
 # Function to extract market info from response---------------------------------
 get_market_info <- function(markets) {
@@ -155,6 +203,50 @@ tab_line_markets <-
 write_csv(tab_line_markets, "Data/scraped_odds/tab_line.csv")
 
 #===============================================================================
+# Alt Line markets
+#===============================================================================
+
+# # Home teams
+# home_team_lines <-
+#   all_tab_markets |>
+#   separate(match, into = c("home_team", "away_team"), sep = " v ", remove = FALSE) |>
+#   filter(market_name == "Line") |> 
+#   group_by(match) |> 
+#   filter(row_number() == 1) |> 
+#   rename(home_win = price) |> 
+#   mutate(home_line = as.numeric(str_extract(prop_name, "-?\\d+\\.?\\d*"))) |>
+#   select(-prop_name, -prop_id)
+# 
+# # Away teams
+# away_team_lines <-
+#   all_tab_markets |>
+#   separate(match, into = c("home_team", "away_team"), sep = " v ", remove = FALSE) |>
+#   filter(market_name == "Line") |> 
+#   group_by(match) |> 
+#   filter(row_number() == 2) |> 
+#   rename(away_win = price) |> 
+#   mutate(away_line = as.numeric(str_extract(prop_name, "-?\\d+\\.?\\d*"))) |>
+#   select(-prop_name, -prop_id)
+# 
+# # Combine
+# tab_line_markets <-
+#   home_team_lines |>
+#   left_join(away_team_lines) |> 
+#   select(match, start_time, market_name, home_team, home_line, home_win, away_team, away_line, away_win) |> 
+#   mutate(margin = round((1/home_win + 1/away_win), digits = 3)) |> 
+#   mutate(agency = "TAB")
+# 
+# # Fix team names
+# tab_line_markets <-
+#   tab_line_markets |> 
+#   mutate(home_team = fix_team_names(home_team)) |>
+#   mutate(away_team = fix_team_names(away_team)) |>
+#   mutate(match = paste(home_team, "v", away_team))
+# 
+# # Write to csv
+# write_csv(tab_line_markets, "Data/scraped_odds/tab_line.csv")
+
+#===============================================================================
 # Player Disposals
 #===============================================================================
 
@@ -212,7 +304,13 @@ tab_player_disposals_markets <-
 tab_player_disposals_markets <-
     tab_player_disposals_markets |> 
     separate(match, into = c("home_team", "away_team"), sep = " v ", remove = FALSE) |>
-    mutate(match = paste(home_team, "v", away_team))
+    mutate(home_team = fix_team_names(home_team)) |>
+    mutate(away_team = fix_team_names(away_team)) |>
+    mutate(match = paste(home_team, "v", away_team)) |> 
+    left_join(player_names, by = c("player_name" = "player_full_name")) |> 
+    rename(player_team = team_name) |> 
+    mutate(opposition_team = ifelse(home_team == player_team, away_team, home_team)) |>
+    relocate(player_team, opposition_team, .after = player_name)
 
 #===============================================================================
 # Player Goals
@@ -226,7 +324,8 @@ player_goals_markets <-
 # Alternate Player Goals
 alternate_player_goals_markets <-
     all_tab_markets |> 
-    filter(str_detect(market_name, "\\d+\\+ Goals$"))
+    filter(str_detect(market_name, "(\\d+\\+ Goals$)|(A Goal)")) |> 
+    mutate(market_name = if_else(str_detect(market_name, "A Goal"), "1+ Goals", market_name))
 
 # Extract player names
 player_goals_markets <-
@@ -272,8 +371,15 @@ tab_player_goals_markets <-
 # Fix team names
 tab_player_goals_markets <-
     tab_player_goals_markets |> 
-    separate(match, into = c("home_team", "away_team"), sep = " v ", remove = FALSE) |>
-    mutate(match = paste(home_team, "v", away_team))
+  separate(match, into = c("home_team", "away_team"), sep = " v ", remove = FALSE) |>
+  mutate(home_team = fix_team_names(home_team)) |>
+  mutate(away_team = fix_team_names(away_team)) |>
+  mutate(match = paste(home_team, "v", away_team)) |> 
+  mutate(player_name = ifelse(player_name == "Matt Cottrell", "Matthew Cottrell", player_name)) |>
+  left_join(player_names, by = c("player_name" = "player_full_name")) |> 
+  rename(player_team = team_name) |> 
+  mutate(opposition_team = ifelse(home_team == player_team, away_team, home_team)) |>
+  relocate(player_team, opposition_team, .after = player_name)
 
 #===============================================================================
 # Write to CSV------------------------------------------------------------------

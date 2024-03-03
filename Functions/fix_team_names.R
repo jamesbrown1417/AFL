@@ -19,7 +19,7 @@ fix_team_names <- function(team_name_vector) {
     str_detect(., "^St Kilda") ~ "St Kilda Saints",
     str_detect(., "^Sydney") ~ "Sydney Swans",
     str_detect(., "^West Coast") ~ "West Coast Eagles",
-    str_detect(., "^Western Bulldogs") ~ "Western Bulldogs",
+    str_detect(., "(^Western Bulldogs)|(Bulldogs)") ~ "Western Bulldogs",
     TRUE ~ . # Default case to return the original team name
   ))
 }

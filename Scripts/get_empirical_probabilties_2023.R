@@ -28,7 +28,7 @@ players_this_year <-
 #===============================================================================
 
 # Get Disposal Lines
-disposal_lines <- c(9.5, 14.5, 19.5, 24.5, 29.5, 34.5, 40.5)
+disposal_lines <- c(9.5, 14.5, 19.5, 24.5, 29.5, 34.5, 39.5)
 
 # Get table of all player, disposal combinations
 disposals_table <- 

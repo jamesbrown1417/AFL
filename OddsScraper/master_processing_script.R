@@ -4,7 +4,10 @@ library(googlesheets4)
 library(googledrive)
 
 # Get empirical probability function
-# source("Scripts/get_empirical_probabilities.R")
+# source("Scripts/get_empirical_probabilities_2023.R")
+
+# Read in 2023 empirical probabilities
+empirical_probabilities_2023 <- read_rds("Data/empirical_probabilities_2023.rds")
 
 # Get fixtures data
 current_season_fixture <- read_rds("Data/current_fixture.rds")
@@ -24,13 +27,13 @@ run_scraping <- function(script_name) {
 }
 
 # Run all odds scraping scripts
-# run_scraping("OddsScraper/scrape_betr.R")
-# run_scraping("OddsScraper/scrape_BetRight.R")
+run_scraping("OddsScraper/scrape_betr.R")
+run_scraping("OddsScraper/scrape_BetRight.R")
 # run_scraping("OddsScraper/scrape_Palmerbet.R")
 run_scraping("OddsScraper/scrape_pointsbet.R")
 run_scraping("OddsScraper/scrape_sportsbet.R")
 run_scraping("OddsScraper/scrape_TAB.R")
-# run_scraping("OddsScraper/scrape_TopSport.R")
+run_scraping("OddsScraper/scrape_TopSport.R")
 run_scraping("OddsScraper/scrape_bet365.R")
 # run_scraping("OddsScraper/scrape_bluebet.R")
 run_scraping("OddsScraper/scrape_neds.R")
@@ -105,7 +108,7 @@ all_odds_line <-
   mutate(min_home_line = min(home_line), max_home_line = max(home_line)) |>
   mutate(diff = max_home_line - min_home_line) |>
   ungroup() |>
-  arrange(desc(diff), start_time) |> 
+  arrange(desc(diff), match, desc(home_line)) |> 
   select(-min_home_line, -max_home_line)
 
 # Google Sheets-----------------------------------------------------
@@ -121,71 +124,124 @@ all_odds_line |> write_rds("Data/processed_odds/all_line.rds")
 #                                                          #
 ##%######################################################%##
 
-# # Get all scraped odds files and combine
-# all_player_disposals <-
-#   list.files("Data/scraped_odds", full.names = TRUE, pattern = "Player Disposals") |>
-#   map(read_csv) |>
-#   # Ignore null elements
-#   keep(~nrow(.x) > 0) |>
-#   reduce(bind_rows) |> 
-#   arrange(player_name, line, desc(over_price)) |> 
-#   select(-matches("id"))
-# 
-# # Add empirical probabilities---------------------------------------------------
-# 
-# # Disposals
-# distinct_point_combos <-
-#   all_player_disposals |> 
-#   distinct(player_name, line)
-# 
-# player_emp_probs_2023 <-
-#   pmap(distinct_point_combos, get_empirical_prob, "Disposals", "2023", .progress = TRUE) |> 
-#   bind_rows() |> 
-#   select(player_name, line, games_played_2023 = games_played, empirical_prob_2023)
-# 
-# player_emp_probs_2024 <- 
-#   pmap(distinct_point_combos, get_empirical_prob, "Disposals", "2024", .progress = TRUE) |> 
-#   bind_rows() |> 
+# Get all scraped odds files and combine
+all_player_disposals <-
+  list.files("Data/scraped_odds", full.names = TRUE, pattern = "disposals") |>
+  map(read_csv) |>
+  # Ignore null elements
+  keep(~nrow(.x) > 0) |>
+  reduce(bind_rows) |>
+  arrange(player_name, line, desc(over_price)) |>
+  select(-matches("id"))
+
+# Add empirical probabilities---------------------------------------------------
+
+# Disposals
+distinct_point_combos <-
+  all_player_disposals |>
+  distinct(player_name, line)
+
+player_emp_probs_2023 <-
+  empirical_probabilities_2023 |>
+  filter(stat == "disposals") |>
+  select(-stat) |> 
+  rename(player_name = player_full_name,
+         empirical_prob_over_2023 = emp_prob_2023)
+  
+# player_emp_probs_2024 <-
+#   pmap(distinct_point_combos, get_empirical_prob, "Disposals", "2024", .progress = TRUE) |>
+#   bind_rows() |>
 #   select(player_name, line, games_played_2024 = games_played, empirical_prob_2024, empirical_prob_last_10)
-# 
-# all_player_disposals <-
-#   all_player_disposals |>
-#   mutate(
-#     implied_prob_over = 1 / over_price,
-#     implied_prob_under = 1 / under_price
-#   ) |>
-#   left_join(player_emp_probs_2022_23, by = c("player_name", "line")) |>
-#   left_join(player_emp_probs_2023_24, by = c("player_name", "line")) |>
-#   rename(empirical_prob_over_2022_23 = empirical_prob_2023,
-#          empirical_prob_over_2023_24 = empirical_prob_2024) |>
-#   mutate(empirical_prob_under_2022_23 = 1 - empirical_prob_over_2022_23,
-#          empirical_prob_under_2023_24 = 1 - empirical_prob_over_2023_24) |>
-#   mutate(
-#     diff_over_2022_23 = empirical_prob_over_2022_23 - implied_prob_over,
-#     diff_under_2022_23 = empirical_prob_under_2022_23 - implied_prob_under,
-#     diff_over_2023_24 = empirical_prob_over_2023_24 - implied_prob_over,
-#     diff_under_2023_24 = empirical_prob_under_2023_24 - implied_prob_under,
-#     diff_over_last_10 = empirical_prob_last_10 - implied_prob_over,
-#     diff_under_last_10 = (1 - empirical_prob_last_10) - implied_prob_under
-#   ) |>
-#   relocate(agency, .after = diff_under_last_10) |>
-#   mutate_if(is.double, round, 2) |>
-#   filter(!is.na(opposition_team)) |>
-#   left_join(NBA_schedule, by = "match") |>
-#   relocate(start_time, .after = match) |>
-#   filter(match %in% next_week_games$match) |> 
-#   group_by(player_name, line) |>
-#   mutate(
-#     min_implied_prob = min(implied_prob_over, na.rm = TRUE),
-#     max_implied_prob = max(implied_prob_over, na.rm = TRUE)
-#   ) |>
-#   mutate(variation = max_implied_prob - min_implied_prob) |>
-#   ungroup() |>
-#   select(-min_implied_prob,-max_implied_prob) |>
-#   arrange(desc(variation), player_name, desc(over_price), line)
-# 
-# # Add to google sheets
+
+all_player_disposals <-
+  all_player_disposals |>
+  mutate(
+    implied_prob_over = 1 / over_price,
+    implied_prob_under = 1 / under_price
+  ) |>
+  left_join(player_emp_probs_2023, by = c("player_name", "line")) |>
+  # left_join(player_emp_probs_2024, by = c("player_name", "line")) |>
+  mutate(empirical_prob_under_2023 = 1 - empirical_prob_over_2023) |> 
+  mutate(
+    diff_over_2023 = empirical_prob_over_2023 - implied_prob_over,
+    diff_under_2023 = empirical_prob_under_2023 - implied_prob_under) |> 
+  mutate_if(is.double, round, 2) |>
+  group_by(player_name, line) |>
+  mutate(
+    min_implied_prob = min(implied_prob_over, na.rm = TRUE),
+    max_implied_prob = max(implied_prob_over, na.rm = TRUE)
+  ) |>
+  mutate(variation = max_implied_prob - min_implied_prob) |>
+  ungroup() |>
+  select(-min_implied_prob,-max_implied_prob) |>
+  arrange(desc(variation), player_name, desc(over_price), line)
+
+# Add to google sheets
 # sheet_write(sheet, data = all_player_disposals, sheet = "Player Disposals")
-# 
-# # Write as RDS
-# all_player_disposals |> write_rds("Data/processed_odds/all_player_disposals.rds")
+
+# Write as RDS
+all_player_disposals |> write_rds("Data/processed_odds/all_player_disposals.rds")
+
+##%######################################################%##
+#                                                          #
+####                   Player Goals                     ####
+#                                                          #
+##%######################################################%##
+
+# Get all scraped odds files and combine
+all_player_goals <-
+  list.files("Data/scraped_odds", full.names = TRUE, pattern = "goals") |>
+  map(read_csv) |>
+  # Ignore null elements
+  keep(~nrow(.x) > 0) |>
+  reduce(bind_rows) |>
+  arrange(player_name, line, desc(over_price)) |>
+  select(-matches("id"))
+
+# Add empirical probabilities---------------------------------------------------
+
+# goals
+distinct_point_combos <-
+  all_player_goals |>
+  distinct(player_name, line)
+
+player_emp_probs_2023 <-
+  empirical_probabilities_2023 |>
+  filter(stat == "goals") |>
+  select(-stat) |> 
+  rename(player_name = player_full_name,
+         empirical_prob_over_2023 = emp_prob_2023)
+
+# player_emp_probs_2024 <-
+#   pmap(distinct_point_combos, get_empirical_prob, "goals", "2024", .progress = TRUE) |>
+#   bind_rows() |>
+#   select(player_name, line, games_played_2024 = games_played, empirical_prob_2024, empirical_prob_last_10)
+
+all_player_goals <-
+  all_player_goals |>
+  mutate(
+    implied_prob_over = 1 / over_price,
+    implied_prob_under = 1 / under_price
+  ) |>
+  left_join(player_emp_probs_2023, by = c("player_name", "line")) |>
+  # left_join(player_emp_probs_2024, by = c("player_name", "line")) |>
+  mutate(empirical_prob_under_2023 = 1 - empirical_prob_over_2023) |> 
+  mutate(
+    diff_over_2023 = empirical_prob_over_2023 - implied_prob_over,
+    diff_under_2023 = empirical_prob_under_2023 - implied_prob_under) |> 
+  mutate_if(is.double, round, 2) |>
+  group_by(player_name, line) |>
+  mutate(
+    min_implied_prob = min(implied_prob_over, na.rm = TRUE),
+    max_implied_prob = max(implied_prob_over, na.rm = TRUE)
+  ) |>
+  mutate(variation = max_implied_prob - min_implied_prob) |>
+  ungroup() |>
+  select(-min_implied_prob,-max_implied_prob) |>
+  arrange(desc(variation), player_name, desc(over_price), line)
+
+# Add to google sheets
+# sheet_write(sheet, data = all_player_goals, sheet = "Player goals")
+
+# Write as RDS
+all_player_goals |> write_rds("Data/processed_odds/all_player_goals.rds")

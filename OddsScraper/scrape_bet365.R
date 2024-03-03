@@ -28,6 +28,21 @@ bet365_h2h_odds <-
     html_nodes(".src-ParticipantOddsOnly50_Odds") |> 
     html_text()
 
+# Get Handicap
+bet365_handicap <-
+    read_html(scraped_file) |> 
+    html_nodes(".src-ParticipantCenteredStacked50_Handicap") |> 
+    html_text()
+
+# Get Handicap Price
+bet365_handicap_price <-
+    read_html(scraped_file) |> 
+    html_nodes(".src-ParticipantCenteredStacked50_Odds") |> 
+    html_text()
+
+# Remove empty strings
+bet365_handicap_price <- bet365_handicap_price[!bet365_handicap_price == ""]
+
 # Get Start Time
 bet365_start_time <-
     read_html(scraped_file) |> 
@@ -94,6 +109,49 @@ bet365_h2h <-
 
 # Write to csv
 write_csv(bet365_h2h, "Data/scraped_odds/bet365_h2h.csv")
+
+#===============================================================================
+# Create Handicap table--------------------------------------------------------#
+#===============================================================================
+
+# Get Home teams - Odd elements
+home_teams <- bet365_teams[seq(1, length(bet365_teams), 2)]
+home_handicap <- bet365_handicap[seq(1, length(bet365_handicap), 2)]
+home_handicap_price <- bet365_handicap_price[seq(1, length(bet365_handicap_price), 2)]
+
+home_handicap <- tibble(home_teams, home_handicap, home_handicap_price) |>
+    bind_cols(start_dates)
+
+# Get Away teams - Even elements
+away_teams <- bet365_teams[seq(2, length(bet365_teams), 2)]
+away_handicap <- bet365_handicap[seq(2, length(bet365_handicap), 2)]
+away_handicap_price <- bet365_handicap_price[seq(2, length(bet365_handicap_price), 2)]
+
+away_handicap <- tibble(away_teams, away_handicap, away_handicap_price) |>
+    bind_cols(start_dates)
+
+# Combine together into one table
+bet365_handicap <-
+    bind_cols(home_handicap, away_handicap) |>
+    mutate(home_teams = fix_team_names(home_teams),
+           away_teams = fix_team_names(away_teams)) |>
+    transmute(match = paste(home_teams, away_teams, sep = " v "),
+              start_date = `start_date...4`,
+              start_time = `start_time...5`, 
+              market_name = "Line",
+              home_team = home_teams,
+              home_line = as.numeric(home_handicap),
+              home_win = as.numeric(home_handicap_price),
+              away_team = away_teams,
+              away_line = as.numeric(away_handicap),
+              away_win = as.numeric(away_handicap_price)) |>
+    mutate(start_time = dmy_hm(paste(start_date, "2023", start_time))) |> 
+    mutate(margin = round((1/home_win + 1/away_win), digits = 3)) |> 
+    mutate(agency = "Bet365") |> 
+    select(-start_date)
+
+# Write to csv
+write_csv(bet365_handicap, "Data/scraped_odds/bet365_line.csv")
 }
 
 ##%######################################################%##
