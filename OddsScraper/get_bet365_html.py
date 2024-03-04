@@ -16,7 +16,6 @@ async def main():
 
     async with webdriver.Chrome(options=options) as driver:
         await driver.get('https://www.bet365.com.au/#/AC/B36/C20925848/D48/E360013/F48/')
-        # await driver.get('https://www.bet365.com.au/#/AC/B36/C20948193/D48/E360013/F48/') # Pre season games for testing
         await driver.sleep(0.5)
         
         # wait 100s for elem to exist
@@ -41,11 +40,16 @@ async def main():
             # Get the team elements again as the page has been refreshed
             team_elements = await driver.find_elements(By.XPATH, "//div[contains(@class, 'src-ParticipantFixtureDetailsHigher_TeamNames')]")
             
+            # Scroll into view, in the middle of screen
             await driver.execute_script("arguments[0].scrollIntoView(true);", team_elements[index])
+            await driver.execute_script("window.scrollBy(0, -150)")
+            
+            # Wait 5 seconds
+            await driver.sleep(0.5)
             
             # Click on the current element
             await team_elements[index].click()
-
+            
             # Get Current URL
             cur_url = await driver.current_url
 

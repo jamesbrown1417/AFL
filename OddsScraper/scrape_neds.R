@@ -176,7 +176,7 @@ h2h_data <-
 # Filter to only include player disposals markets
 player_disposals_data <-
 market_df |> 
-    filter(str_detect(market_name, "(Player Disposals O/U)|(To Score)"))
+    filter(str_detect(market_name, "(Player Disposals O/U)|(To Get)"))
 
 # Overs
 disposals_overs <-
