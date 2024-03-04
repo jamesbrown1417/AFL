@@ -176,13 +176,13 @@ h2h_data <-
 # Filter to only include player disposals markets
 player_disposals_data <-
 market_df |> 
-    filter(str_detect(market_name, "(Player Disposals O/U)|(To Get)"))
+    filter(str_detect(market_name, "(Player Disposals O/U)|(To Have \\d+\\+ Disposals)"))
 
 # Overs
 disposals_overs <-
     player_disposals_data |>
     filter(str_detect(entrants, "Over") |
-               str_detect(market_name, "To Score")) |>
+               str_detect(market_name, "To Have")) |>
     mutate(handicap_1 = as.numeric(str_extract(market_name, "\\d+")) - 0.5) |>
     mutate(handicap = coalesce(handicaps, handicap_1)) |>
     mutate(player_name_1 = str_extract(entrants, pattern <-
@@ -222,6 +222,10 @@ player_disposals_data <-
     disposals_overs |> 
     full_join(disposals_unders, by = c("match", "player_name", "line", "agency", "market_name")) |> 
     select(match, market_name, player_name, line, over_price, under_price, agency) |> 
+    separate(match, into = c("home_team", "away_team"), sep = " vs ", remove = FALSE) |>
+    mutate(home_team = fix_team_names(home_team)) |>
+    mutate(away_team = fix_team_names(away_team)) |>
+    mutate(match = paste(home_team, "v", away_team, sep = " ")) |>
     mutate(player_name = case_when(player_name == "PJ Washington" ~ "P.J. Washington",
                                    player_name == "Kelly Oubre" ~ "Kelly Oubre Jr.",
                                    player_name == "Derrick Jones" ~ "Derrick Jones Jr.",
@@ -229,12 +233,148 @@ player_disposals_data <-
                                    .default = player_name)) |> 
     left_join(player_names[, c("player_full_name", "team_name")], by = c("player_name" = "player_full_name")) |> 
     rename(player_team = team_name) |>
-    mutate(match = str_replace(match, " vs ", " v ")) |>
-    separate(match, into = c("home_team", "away_team"), sep = " v ", remove = FALSE) |> 
     mutate(opposition_team = case_when(player_team == home_team ~ away_team,
                                        player_team == away_team ~ home_team)) |>
     relocate(player_team, opposition_team, .after = player_name)
 
+##%######################################################%##
+#                                                          #
+####               Player Goals Data                ####
+#                                                          #
+##%######################################################%##
+
+# Filter to only include player goals markets
+player_goals_data <-
+  market_df |> 
+  mutate(market_name = if_else(market_name == "Player Goals - Anytime Goal Kicker", "Player Goals - To Kick 1+ Goals", market_name)) |> 
+  filter(str_detect(market_name, "(Player Goals O/U)|(To Kick)"))
+
+# Overs
+goals_overs <-
+  player_goals_data |>
+  filter(str_detect(entrants, "Over") |
+           str_detect(market_name, "To Kick")) |>
+  mutate(handicap_1 = as.numeric(str_extract(market_name, "\\d+")) - 0.5) |>
+  mutate(handicap = coalesce(handicaps, handicap_1)) |>
+  mutate(player_name_1 = str_extract(entrants, pattern <-
+                                       ".*(?= \\()")) |>
+  mutate(player_name_2 = str_extract(market_name, "(?<= \\- ).*")) |> 
+  mutate(player_name = coalesce(player_name_1, player_name_2)) |>
+  transmute(
+    match = match_name,
+    market_name = "Player Goals",
+    player_name,
+    line = handicap,
+    over_price = price,
+    agency = "Neds"
+  )
+
+# Unders
+goals_unders <-
+  player_goals_data |>
+  filter(str_detect(entrants, "Under")) |>
+  mutate(handicap_1 = as.numeric(str_extract(market_name, "\\d+")) - 0.5) |>
+  mutate(handicap = coalesce(handicaps, handicap_1)) |>
+  mutate(player_name_1 = str_extract(entrants, pattern <-
+                                       ".*(?= \\()")) |>
+  mutate(player_name_2 = str_extract(market_name, "(?<= \\- ).*")) |>
+  mutate(player_name = coalesce(player_name_1, player_name_2)) |>
+  transmute(
+    match = match_name,
+    market_name = "Player Goals",
+    player_name,
+    line = handicap,
+    under_price = price,
+    agency = "Neds"
+  )
+
+# Merge overs and unders
+player_goals_data <-
+  goals_overs |> 
+  full_join(goals_unders, by = c("match", "player_name", "line", "agency", "market_name")) |> 
+  select(match, market_name, player_name, line, over_price, under_price, agency) |> 
+  separate(match, into = c("home_team", "away_team"), sep = " vs ", remove = FALSE) |>
+  mutate(home_team = fix_team_names(home_team)) |>
+  mutate(away_team = fix_team_names(away_team)) |>
+  mutate(match = paste(home_team, "v", away_team, sep = " ")) |>
+  mutate(player_name = case_when(player_name == "Harry Petty" ~ "Harrison Petty",
+                                 player_name == "Tom Berry" ~ "Thomas Berry",
+                                 .default = player_name)) |> 
+  left_join(player_names[, c("player_full_name", "team_name")], by = c("player_name" = "player_full_name")) |> 
+  rename(player_team = team_name) |>
+  mutate(opposition_team = case_when(player_team == home_team ~ away_team,
+                                     player_team == away_team ~ home_team)) |>
+  relocate(player_team, opposition_team, .after = player_name)
+
+##%######################################################%##
+#                                                          #
+####               Player Fantasy Data                ####
+#                                                          #
+##%######################################################%##
+
+# Filter to only include player fantasy markets
+player_fantasy_data <-
+  market_df |> 
+  filter(str_detect(market_name, "(Player Fantasy O/U)|(To Have \\d+\\+ AFL Fantasy Points)"))
+
+# Overs
+fantasy_overs <-
+  player_fantasy_data |>
+  filter(str_detect(entrants, "Over") |
+           str_detect(market_name, "To Have")) |>
+  mutate(handicap_1 = as.numeric(str_extract(market_name, "\\d+")) - 0.5) |>
+  mutate(handicap = coalesce(handicaps, handicap_1)) |>
+  mutate(player_name_1 = str_extract(entrants, pattern <-
+                                       ".*(?= \\()")) |>
+  mutate(player_name_2 = str_extract(market_name, "(?<= \\- ).*")) |> 
+  mutate(player_name = coalesce(player_name_1, player_name_2)) |>
+  transmute(
+    match = match_name,
+    market_name = "Player Fantasy",
+    player_name,
+    line = handicap,
+    over_price = price,
+    agency = "Neds"
+  )
+
+# Unders
+fantasy_unders <-
+  player_fantasy_data |>
+  filter(str_detect(entrants, "Under")) |>
+  mutate(handicap_1 = as.numeric(str_extract(market_name, "\\d+")) - 0.5) |>
+  mutate(handicap = coalesce(handicaps, handicap_1)) |>
+  mutate(player_name_1 = str_extract(entrants, pattern <-
+                                       ".*(?= \\()")) |>
+  mutate(player_name_2 = str_extract(market_name, "(?<= \\- ).*")) |>
+  mutate(player_name = coalesce(player_name_1, player_name_2)) |>
+  transmute(
+    match = match_name,
+    market_name = "Player Fantasy",
+    player_name,
+    line = handicap,
+    under_price = price,
+    agency = "Neds"
+  )
+
+# Merge overs and unders
+player_fantasy_data <-
+  fantasy_overs |> 
+  full_join(fantasy_unders, by = c("match", "player_name", "line", "agency", "market_name")) |> 
+  select(match, market_name, player_name, line, over_price, under_price, agency) |> 
+  separate(match, into = c("home_team", "away_team"), sep = " vs ", remove = FALSE) |>
+  mutate(home_team = fix_team_names(home_team)) |>
+  mutate(away_team = fix_team_names(away_team)) |>
+  mutate(match = paste(home_team, "v", away_team, sep = " ")) |>
+  mutate(player_name = case_when(player_name == "PJ Washington" ~ "P.J. Washington",
+                                 player_name == "Kelly Oubre" ~ "Kelly Oubre Jr.",
+                                 player_name == "Derrick Jones" ~ "Derrick Jones Jr.",
+                                 player_name == "Jabari Smith Jr" ~ "Jabari Smith Jr.",
+                                 .default = player_name)) |> 
+  left_join(player_names[, c("player_full_name", "team_name")], by = c("player_name" = "player_full_name")) |> 
+  rename(player_team = team_name) |>
+  mutate(opposition_team = case_when(player_team == home_team ~ away_team,
+                                     player_team == away_team ~ home_team)) |>
+  relocate(player_team, opposition_team, .after = player_name)
 
 ##%######################################################%##
 #                                                          #
@@ -244,3 +384,5 @@ player_disposals_data <-
 
 h2h_data |> write_csv("Data/scraped_odds/neds_h2h.csv")
 player_disposals_data |> write_csv("Data/scraped_odds/neds_player_disposals.csv")
+player_goals_data |> write_csv("Data/scraped_odds/neds_player_goals.csv")
+player_fantasy_data |> write_csv("Data/scraped_odds/neds_player_fantasy.csv")
