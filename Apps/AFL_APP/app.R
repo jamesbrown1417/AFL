@@ -18,7 +18,7 @@ os_type <- Sys.info()["sysname"]
 all_player_stats <- read_rds("../../Data/afl_fantasy_2015_2023_data.rds")
 
 # Agencies List
-agencies = c("TAB", "Pointsbet", "Neds", "Sportsbet", "Bet365", "Unibet", "BlueBet", "TopSport", "BetRight", "Betr")
+agencies = c("TAB", "Pointsbet", "Neds", "Sportsbet", "Bet365", "Unibet", "BlueBet", "TopSport", "BetRight", "Betr", "Dabble")
 
 #===============================================================================
 # Read in odds data

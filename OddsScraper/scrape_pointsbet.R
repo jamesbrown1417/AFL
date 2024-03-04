@@ -280,17 +280,18 @@ pointsbet_h2h_main <- function() {
   # Filter list to player disposals
   pointsbet_player_disposals_lines <-
     pointsbet_data_player_props |>
-    filter(str_detect(market, "Disposals To Get|Alternate Disposals")) |>
-    mutate(line = str_extract(outcome, "[0-9]{1,2}")) |>
+    filter(str_detect(market, "Disposals")) |>
+    mutate(line = str_extract(market, "[0-9]{1,2}")) |>
     mutate(line = as.numeric(line) - 0.5) |>
-    mutate(match = str_replace(match, "@", "v")) |>
-    mutate(outcome = str_remove(outcome, " To Score.*$")) |>
     separate(
       match,
-      into = c("away_team", "home_team"),
+      into = c("home_team", "away_team"),
       sep = " v ",
       remove = FALSE
     ) |>
+    mutate(home_team = fix_team_names(home_team),
+           away_team = fix_team_names(away_team)) |>
+    mutate(match = paste(home_team, "v", away_team)) |>
     mutate(
       outcome = case_when(
         outcome == "Lebron James" ~ "LeBron James",
@@ -309,7 +310,7 @@ pointsbet_h2h_main <- function() {
       opposition_team,
       line,
       over_price = price,
-      agency = "Disposalsbet",
+      agency = "Pointsbet",
       EventKey,
       MarketKey,
       OutcomeKey
@@ -334,7 +335,7 @@ pointsbet_h2h_main <- function() {
     mutate(match = str_replace(match, "@", "v")) |>
     separate(
       match,
-      into = c("away_team", "home_team"),
+      into = c("home_team", "away_team"),
       sep = " v ",
       remove = FALSE
     ) |>
@@ -356,7 +357,7 @@ pointsbet_h2h_main <- function() {
       opposition_team,
       line,
       over_price = price,
-      agency = "Disposalsbet",
+      agency = "Pointsbet",
       EventKey,
       MarketKey,
       OutcomeKey
@@ -374,7 +375,7 @@ pointsbet_h2h_main <- function() {
     mutate(match = str_replace(match, "@", "v")) |>
     separate(
       match,
-      into = c("away_team", "home_team"),
+      into = c("home_team", "away_team"),
       sep = " v ",
       remove = FALSE
     ) |>
@@ -396,7 +397,7 @@ pointsbet_h2h_main <- function() {
       opposition_team,
       line,
       under_price = price,
-      agency = "Disposalsbet",
+      agency = "Pointsbet",
       EventKey,
       MarketKey,
       OutcomeKey_unders = OutcomeKey
@@ -425,22 +426,23 @@ pointsbet_h2h_main <- function() {
   # Player Fantasy Points
   #===============================================================================
   
-  # Player fantasy_points alternative totals----------------------------------------------
+  # Player fantasy alternative totals----------------------------------------------
   
-  # Filter list to player fantasy_points
-  pointsbet_player_fantasy_points_lines <-
+  # Filter list to player fantasy
+  pointsbet_player_fantasy_lines <-
     pointsbet_data_player_props |>
-    filter(str_detect(market, "Fantasy Points To Get|Alternate Fantasy Points")) |>
-    mutate(line = str_extract(outcome, "[0-9]{1,2}")) |>
+    filter(str_detect(market, "Fantasy")) |>
+    mutate(line = str_extract(market, "[0-9]{1,2}")) |>
     mutate(line = as.numeric(line) - 0.5) |>
-    mutate(match = str_replace(match, "@", "v")) |>
-    mutate(outcome = str_remove(outcome, " To Get.*$")) |>
     separate(
       match,
-      into = c("away_team", "home_team"),
+      into = c("home_team", "away_team"),
       sep = " v ",
       remove = FALSE
     ) |>
+    mutate(home_team = fix_team_names(home_team),
+           away_team = fix_team_names(away_team)) |>
+    mutate(match = paste(home_team, "v", away_team)) |>
     mutate(
       outcome = case_when(
         outcome == "Lebron James" ~ "LeBron James",
@@ -453,7 +455,7 @@ pointsbet_h2h_main <- function() {
       match,
       home_team,
       away_team,
-      market_name = "Player Fantasy Points",
+      market_name = "Player Fantasy",
       player_name = outcome,
       player_team = team_name,
       opposition_team,
@@ -465,16 +467,16 @@ pointsbet_h2h_main <- function() {
       OutcomeKey
     )
   
-  # Player fantasy_points over / under----------------------------------------------------
+  # Player fantasy over / under----------------------------------------------------
   
-  # Filter list to player fantasy_points over under
-  pointsbet_player_fantasy_points_over_under <-
+  # Filter list to player fantasy over under
+  pointsbet_player_fantasy_over_under <-
     pointsbet_data_player_props |>
-    filter(str_detect(market, "Player Fantasy Points Over/Under"))
+    filter(str_detect(market, "Player Fantasy Over/Under"))
   
   # Get Overs
-  pointsbet_player_fantasy_points_over <-
-    pointsbet_player_fantasy_points_over_under |>
+  pointsbet_player_fantasy_over <-
+    pointsbet_player_fantasy_over_under |>
     filter(str_detect(outcome, "Over")) |>
     mutate(player_name = outcome) |>
     separate(outcome,
@@ -484,7 +486,7 @@ pointsbet_h2h_main <- function() {
     mutate(match = str_replace(match, "@", "v")) |>
     separate(
       match,
-      into = c("away_team", "home_team"),
+      into = c("home_team", "away_team"),
       sep = " v ",
       remove = FALSE
     ) |>
@@ -500,7 +502,7 @@ pointsbet_h2h_main <- function() {
       match,
       home_team,
       away_team,
-      market_name = "Player Fantasy Points",
+      market_name = "Player Fantasy",
       player_name,
       player_team = team_name,
       opposition_team,
@@ -513,8 +515,8 @@ pointsbet_h2h_main <- function() {
     )
   
   # Get Unders
-  pointsbet_player_fantasy_points_under <-
-    pointsbet_player_fantasy_points_over_under |>
+  pointsbet_player_fantasy_under <-
+    pointsbet_player_fantasy_over_under |>
     filter(str_detect(outcome, "Under")) |>
     mutate(player_name = outcome) |>
     separate(outcome,
@@ -524,7 +526,7 @@ pointsbet_h2h_main <- function() {
     mutate(match = str_replace(match, "@", "v")) |>
     separate(
       match,
-      into = c("away_team", "home_team"),
+      into = c("home_team", "away_team"),
       sep = " v ",
       remove = FALSE
     ) |>
@@ -540,7 +542,7 @@ pointsbet_h2h_main <- function() {
       match,
       home_team,
       away_team,
-      market_name = "Player Fantasy Points",
+      market_name = "Player Fantasy",
       player_name,
       player_team = team_name,
       opposition_team,
@@ -553,9 +555,9 @@ pointsbet_h2h_main <- function() {
     )
   
   # Combine overs and unders
-  pointsbet_player_fantasy_points_over_under <-
-    pointsbet_player_fantasy_points_over |>
-    left_join(pointsbet_player_fantasy_points_under) |>
+  pointsbet_player_fantasy_over_under <-
+    pointsbet_player_fantasy_over |>
+    left_join(pointsbet_player_fantasy_under) |>
     select(
       match,
       home_team,
@@ -571,6 +573,7 @@ pointsbet_h2h_main <- function() {
       contains("Key")
     )
   
+  
   #===============================================================================
   # Player Goals
   #===============================================================================
@@ -580,17 +583,19 @@ pointsbet_h2h_main <- function() {
   # Filter list to player goals
   pointsbet_player_goals_lines <-
     pointsbet_data_player_props |>
-    filter(str_detect(market, "Goals To Get|Alternate Goals")) |>
-    mutate(line = str_extract(outcome, "[0-9]{1,2}")) |>
+    mutate(market = ifelse(str_detect(market,"Anytime Goalscorer"), "To Kick 1+ Goals", market)) |>
+    filter(str_detect(market, "^To Kick \\d+\\+ Goals")) |>
+    mutate(line = str_extract(market, "[0-9]{1,2}")) |>
     mutate(line = as.numeric(line) - 0.5) |>
-    mutate(match = str_replace(match, "@", "v")) |>
-    mutate(outcome = str_remove(outcome, " To Get.*$")) |>
     separate(
       match,
-      into = c("away_team", "home_team"),
+      into = c("home_team", "away_team"),
       sep = " v ",
       remove = FALSE
     ) |>
+    mutate(home_team = fix_team_names(home_team),
+           away_team = fix_team_names(away_team)) |>
+    mutate(match = paste(home_team, "v", away_team)) |>
     mutate(
       outcome = case_when(
         outcome == "Lebron James" ~ "LeBron James",
@@ -617,7 +622,6 @@ pointsbet_h2h_main <- function() {
   
   # Player goals over / under----------------------------------------------------
   
-  
   # Filter list to player goals over under
   pointsbet_player_goals_over_under <-
     pointsbet_data_player_props |>
@@ -635,38 +639,13 @@ pointsbet_h2h_main <- function() {
     mutate(match = str_replace(match, "@", "v")) |>
     separate(
       match,
-      into = c("away_team", "home_team"),
+      into = c("home_team", "away_team"),
       sep = " v ",
       remove = FALSE
     ) |>
     mutate(
       player_name = case_when(
         player_name == "Lebron James" ~ "LeBron James",
-        player_name == "D'angelo Russell" ~ "D'Angelo Russell",
-        player_name == "K. Caldwell-Pope" ~ "Kentavious Caldwell-Pope",
-        player_name == "De'andre Hunter" ~ "De'Andre Hunter",
-        player_name == "Lamelo Ball" ~ "LaMelo Ball",
-        player_name == "Fred Vanvleet" ~ "Fred VanVleet",
-        player_name == "Demar Derozan" ~ "DeMar DeRozan",
-        player_name == "Joshua Giddey" ~ "Josh Giddey",
-        player_name == "Rj Barrett" ~ "RJ Barrett",
-        player_name == "Michael Porter" ~ "Michael Porter Jr.",
-        player_name == "Wendell Carter" ~ "Wendell Carter Jr.",
-        player_name == "Zach Lavine" ~ "Zach LaVine",
-        player_name == "S. Gilgeous-Alexander" ~ "Shai Gilgeous-Alexander",
-        player_name == "De'aaron Fox" ~ "De'Aaron Fox",
-        player_name == "Gary Payton Ii" ~ "Gary Payton II",
-        player_name == "Nicolas Claxton" ~ "Nic Claxton",
-        player_name == "Gary Trent" ~ "Gary Trent Jr.",
-        player_name == "Cj Mccollum" ~ "CJ McCollum",
-        player_name == "Tim Hardaway" ~ "Tim Hardaway Jr.",
-        player_name == "De'anthony Melton" ~ "De'Anthony Melton",
-        player_name == "G. Antetokounmpo" ~ "Giannis Antetokounmpo",
-        player_name == "Cameron Thomas" ~ "Cam Thomas",
-        player_name == "Kelly Oubre" ~ "Kelly Oubre Jr.",
-        player_name == "Jaden Mcdaniels" ~ "Jaden McDaniels",
-        player_name == "O.G. Anunoby" ~ "OG Anunoby",
-        player_name == "Dereck Lively" ~ "Dereck Lively II",
         .default = player_name
       )
     ) |>
@@ -700,38 +679,13 @@ pointsbet_h2h_main <- function() {
     mutate(match = str_replace(match, "@", "v")) |>
     separate(
       match,
-      into = c("away_team", "home_team"),
+      into = c("home_team", "away_team"),
       sep = " v ",
       remove = FALSE
     ) |>
     mutate(
       player_name = case_when(
         player_name == "Lebron James" ~ "LeBron James",
-        player_name == "D'angelo Russell" ~ "D'Angelo Russell",
-        player_name == "K. Caldwell-Pope" ~ "Kentavious Caldwell-Pope",
-        player_name == "De'andre Hunter" ~ "De'Andre Hunter",
-        player_name == "Lamelo Ball" ~ "LaMelo Ball",
-        player_name == "Fred Vanvleet" ~ "Fred VanVleet",
-        player_name == "Demar Derozan" ~ "DeMar DeRozan",
-        player_name == "Joshua Giddey" ~ "Josh Giddey",
-        player_name == "Rj Barrett" ~ "RJ Barrett",
-        player_name == "Michael Porter" ~ "Michael Porter Jr.",
-        player_name == "Wendell Carter" ~ "Wendell Carter Jr.",
-        player_name == "Zach Lavine" ~ "Zach LaVine",
-        player_name == "S. Gilgeous-Alexander" ~ "Shai Gilgeous-Alexander",
-        player_name == "De'aaron Fox" ~ "De'Aaron Fox",
-        player_name == "Gary Payton Ii" ~ "Gary Payton II",
-        player_name == "Nicolas Claxton" ~ "Nic Claxton",
-        player_name == "Gary Trent" ~ "Gary Trent Jr.",
-        player_name == "Cj Mccollum" ~ "CJ McCollum",
-        player_name == "Tim Hardaway" ~ "Tim Hardaway Jr.",
-        player_name == "De'anthony Melton" ~ "De'Anthony Melton",
-        player_name == "G. Antetokounmpo" ~ "Giannis Antetokounmpo",
-        player_name == "Cameron Thomas" ~ "Cam Thomas",
-        player_name == "Kelly Oubre" ~ "Kelly Oubre Jr.",
-        player_name == "Jaden Mcdaniels" ~ "Jaden McDaniels",
-        player_name == "O.G. Anunoby" ~ "OG Anunoby",
-        player_name == "Dereck Lively" ~ "Dereck Lively II",
         .default = player_name
       )
     ) |>
@@ -798,7 +752,7 @@ pointsbet_h2h_main <- function() {
       "OutcomeKey_unders"
     ) |>
     mutate(market_name = "Player Disposals") |>
-    mutate(agency = "Disposalsbet") |>
+    mutate(agency = "Pointsbet") |>
     write_csv("Data/scraped_odds/pointsbet_player_disposals.csv")
   
   # Goals

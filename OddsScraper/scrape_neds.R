@@ -40,6 +40,14 @@ df <- df |> filter(str_detect(event_name, ' vs '))
 # Only get AFL Games
 df <- df |> filter(str_detect(competition_name, 'AFL'))
 
+# Event IDs list
+event_ids_df <-
+  df |>
+  separate(event_name, into = c("home_team", "away_team"), sep = " vs ", remove = FALSE) |>
+  mutate(home_team = fix_team_names(home_team), away_team = fix_team_names(away_team)) |>
+  mutate(match = paste(home_team, "v", away_team)) |> 
+  select(match, event_id)
+
 #===============================================================================
 # Get event card data for each match
 #===============================================================================
@@ -81,6 +89,7 @@ market_lookup_id <- character()
 
 # Initialize empty vectors to store data
 entrants <- character()
+entrant_id <- character()
 market_id <- character()
 match_names <- character()
 handicaps <- numeric()
@@ -93,6 +102,7 @@ for (i in seq_along(event_json_list)) {
     
     for (entrant in match$entrants) {
         entrants <- c(entrants, entrant$name)
+        entrant_id <- c(entrant_id, entrant$id)
         market_id <- c(market_id, entrant$market_id)
         match_names <- c(match_names, match_name)
     }
@@ -121,13 +131,13 @@ for (i in seq_along(event_json_list)) {
 market_lookup_df <- data.frame(market_id = market_lookup_id, market_name = market_lookup_name, handicaps = handicaps)
 
 # Create market dataframe
-market_df <- data.frame(match_name = match_names, market_id = market_id, entrants = entrants, price = prices)
+market_df <- data.frame(match_name = match_names, market_id = market_id, entrants = entrants, price = prices, entrant_id = entrant_id)
 
 # Merge market lookup dataframe with market dataframe
 market_df <- merge(market_df, market_lookup_df, by = 'market_id', all.x = TRUE)
 
 # Reorder columns in market_df
-market_df <- market_df |> select(match_name, market_name, entrants, handicaps, price)
+market_df <- market_df |> select(match_name, market_name, market_id, entrants, entrant_id, handicaps, price)
 
 ##%######################################################%##
 #                                                          #
@@ -192,7 +202,9 @@ disposals_overs <-
     transmute(
         match = match_name,
         market_name = "Player Disposals",
+        market_id,
         player_name,
+        entrant_id,
         line = handicap,
         over_price = price,
         agency = "Neds"
@@ -211,7 +223,9 @@ disposals_unders <-
     transmute(
         match = match_name,
         market_name = "Player Disposals",
+        market_id,
         player_name,
+        entrant_id,
         line = handicap,
         under_price = price,
         agency = "Neds"
@@ -219,23 +233,47 @@ disposals_unders <-
 
 # Merge overs and unders
 player_disposals_data <-
-    disposals_overs |> 
-    full_join(disposals_unders, by = c("match", "player_name", "line", "agency", "market_name")) |> 
-    select(match, market_name, player_name, line, over_price, under_price, agency) |> 
-    separate(match, into = c("home_team", "away_team"), sep = " vs ", remove = FALSE) |>
-    mutate(home_team = fix_team_names(home_team)) |>
-    mutate(away_team = fix_team_names(away_team)) |>
-    mutate(match = paste(home_team, "v", away_team, sep = " ")) |>
-    mutate(player_name = case_when(player_name == "PJ Washington" ~ "P.J. Washington",
-                                   player_name == "Kelly Oubre" ~ "Kelly Oubre Jr.",
-                                   player_name == "Derrick Jones" ~ "Derrick Jones Jr.",
-                                   player_name == "Jabari Smith Jr" ~ "Jabari Smith Jr.",
-                                   .default = player_name)) |> 
-    left_join(player_names[, c("player_full_name", "team_name")], by = c("player_name" = "player_full_name")) |> 
-    rename(player_team = team_name) |>
-    mutate(opposition_team = case_when(player_team == home_team ~ away_team,
-                                       player_team == away_team ~ home_team)) |>
-    relocate(player_team, opposition_team, .after = player_name)
+  disposals_overs |>
+  full_join(disposals_unders,
+            by = c("match", "player_name", "line", "agency", "market_name", "market_id", "entrant_id")) |>
+  select(
+    match,
+    market_name,
+    market_id,
+    player_name,
+    entrant_id,
+    line,
+    over_price,
+    under_price,
+    agency
+  ) |>
+  separate(
+    match,
+    into = c("home_team", "away_team"),
+    sep = " vs ",
+    remove = FALSE
+  ) |>
+  mutate(home_team = fix_team_names(home_team)) |>
+  mutate(away_team = fix_team_names(away_team)) |>
+  mutate(match = paste(home_team, "v", away_team, sep = " ")) |>
+  mutate(
+    player_name = case_when(
+      player_name == "PJ Washington" ~ "P.J. Washington",
+      player_name == "Kelly Oubre" ~ "Kelly Oubre Jr.",
+      player_name == "Derrick Jones" ~ "Derrick Jones Jr.",
+      player_name == "Jabari Smith Jr" ~ "Jabari Smith Jr.",
+      .default = player_name
+    )
+  ) |>
+  left_join(player_names[, c("player_full_name", "team_name")], by = c("player_name" = "player_full_name")) |>
+  rename(player_team = team_name) |>
+  mutate(
+    opposition_team = case_when(
+      player_team == home_team ~ away_team,
+      player_team == away_team ~ home_team
+    )
+  ) |>
+  relocate(player_team, opposition_team, .after = player_name)
 
 ##%######################################################%##
 #                                                          #
@@ -263,7 +301,9 @@ goals_overs <-
   transmute(
     match = match_name,
     market_name = "Player Goals",
+    market_id,
     player_name,
+    entrant_id,
     line = handicap,
     over_price = price,
     agency = "Neds"
@@ -282,7 +322,9 @@ goals_unders <-
   transmute(
     match = match_name,
     market_name = "Player Goals",
+    market_id,
     player_name,
+    entrant_id,
     line = handicap,
     under_price = price,
     agency = "Neds"
@@ -291,8 +333,18 @@ goals_unders <-
 # Merge overs and unders
 player_goals_data <-
   goals_overs |> 
-  full_join(goals_unders, by = c("match", "player_name", "line", "agency", "market_name")) |> 
-  select(match, market_name, player_name, line, over_price, under_price, agency) |> 
+  full_join(goals_unders, by = c("match", "player_name", "line", "agency", "market_name", "market_id", "entrant_id")) |>
+  select(
+    match,
+    market_name,
+    market_id,
+    player_name,
+    entrant_id,
+    line,
+    over_price,
+    under_price,
+    agency
+  ) |> 
   separate(match, into = c("home_team", "away_team"), sep = " vs ", remove = FALSE) |>
   mutate(home_team = fix_team_names(home_team)) |>
   mutate(away_team = fix_team_names(away_team)) |>
@@ -331,7 +383,9 @@ fantasy_overs <-
   transmute(
     match = match_name,
     market_name = "Player Fantasy",
+    market_id,
     player_name,
+    entrant_id,
     line = handicap,
     over_price = price,
     agency = "Neds"
@@ -350,7 +404,9 @@ fantasy_unders <-
   transmute(
     match = match_name,
     market_name = "Player Fantasy",
+    market_id,
     player_name,
+    entrant_id,
     line = handicap,
     under_price = price,
     agency = "Neds"
@@ -358,23 +414,61 @@ fantasy_unders <-
 
 # Merge overs and unders
 player_fantasy_data <-
-  fantasy_overs |> 
-  full_join(fantasy_unders, by = c("match", "player_name", "line", "agency", "market_name")) |> 
-  select(match, market_name, player_name, line, over_price, under_price, agency) |> 
-  separate(match, into = c("home_team", "away_team"), sep = " vs ", remove = FALSE) |>
+  fantasy_overs |>
+  full_join(fantasy_unders,
+            by = c("match", "player_name", "line", "agency", "market_name", "market_id", "entrant_id")) |>
+  select(
+    match,
+    market_name,
+    market_id,
+    player_name,
+    entrant_id,
+    line,
+    over_price,
+    under_price,
+    agency
+  ) |>
+  separate(
+    match,
+    into = c("home_team", "away_team"),
+    sep = " vs ",
+    remove = FALSE
+  ) |>
   mutate(home_team = fix_team_names(home_team)) |>
   mutate(away_team = fix_team_names(away_team)) |>
   mutate(match = paste(home_team, "v", away_team, sep = " ")) |>
-  mutate(player_name = case_when(player_name == "PJ Washington" ~ "P.J. Washington",
-                                 player_name == "Kelly Oubre" ~ "Kelly Oubre Jr.",
-                                 player_name == "Derrick Jones" ~ "Derrick Jones Jr.",
-                                 player_name == "Jabari Smith Jr" ~ "Jabari Smith Jr.",
-                                 .default = player_name)) |> 
-  left_join(player_names[, c("player_full_name", "team_name")], by = c("player_name" = "player_full_name")) |> 
+  mutate(
+    player_name = case_when(
+      player_name == "PJ Washington" ~ "P.J. Washington",
+      player_name == "Kelly Oubre" ~ "Kelly Oubre Jr.",
+      player_name == "Derrick Jones" ~ "Derrick Jones Jr.",
+      player_name == "Jabari Smith Jr" ~ "Jabari Smith Jr.",
+      .default = player_name
+    )
+  ) |>
+  left_join(player_names[, c("player_full_name", "team_name")], by = c("player_name" = "player_full_name")) |>
   rename(player_team = team_name) |>
-  mutate(opposition_team = case_when(player_team == home_team ~ away_team,
-                                     player_team == away_team ~ home_team)) |>
+  mutate(
+    opposition_team = case_when(
+      player_team == home_team ~ away_team,
+      player_team == away_team ~ home_team)) |>
   relocate(player_team, opposition_team, .after = player_name)
+
+# Add event ID to each
+player_fantasy_data <-
+  player_fantasy_data |>
+  left_join(event_ids_df, by = c("match")) |>
+  relocate(event_id, .after = match)
+
+player_disposals_data <-
+  player_disposals_data |>
+  left_join(event_ids_df, by = c("match")) |>
+  relocate(event_id, .after = match)
+
+player_goals_data <-
+  player_goals_data |>
+  left_join(event_ids_df, by = c("match")) |>
+  relocate(event_id, .after = match)
 
 ##%######################################################%##
 #                                                          #
@@ -385,4 +479,4 @@ player_fantasy_data <-
 h2h_data |> write_csv("Data/scraped_odds/neds_h2h.csv")
 player_disposals_data |> write_csv("Data/scraped_odds/neds_player_disposals.csv")
 player_goals_data |> write_csv("Data/scraped_odds/neds_player_goals.csv")
-player_fantasy_data |> write_csv("Data/scraped_odds/neds_player_fantasy.csv")
+player_fantasy_data |> write_csv("Data/scraped_odds/neds_player_fantasy_points.csv")

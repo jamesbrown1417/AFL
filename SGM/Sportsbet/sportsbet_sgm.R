@@ -7,12 +7,12 @@ library(purrr)
 # Sportsbet SGM-----------------------------------------------------------------
 # Read in all odds
 all_files <-
-  list.files("../../Data/scraped_odds", pattern = "sportsbet_player")
+  list.files("Data/scraped_odds", pattern = "sportsbet_player")
 
 # Read in a loop
 sportsbet_sgm <-
   map(all_files, function(x) {
-    read_csv(paste0("../../Data/scraped_odds/", x))
+    read_csv(paste0("Data/scraped_odds/", x))
   }) |> 
   bind_rows()
 

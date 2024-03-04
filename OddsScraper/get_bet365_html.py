@@ -16,7 +16,7 @@ async def main():
 
     async with webdriver.Chrome(options=options) as driver:
         await driver.get('https://www.bet365.com.au/#/AC/B36/C20925848/D48/E360013/F48/')
-        await driver.sleep(0.5)
+        await driver.sleep(0.1)
         
         # wait 100s for elem to exist
         elem = await driver.find_element(By.XPATH, "//div[contains(@class, 'src-MarketGroup')]", timeout=100)
@@ -45,7 +45,7 @@ async def main():
             await driver.execute_script("window.scrollBy(0, -150)")
             
             # Wait 5 seconds
-            await driver.sleep(0.5)
+            await driver.sleep(0.1)
             
             # Click on the current element
             await team_elements[index].click()

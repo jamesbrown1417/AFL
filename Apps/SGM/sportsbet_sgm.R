@@ -3,18 +3,20 @@ library(jsonlite)
 library(dplyr)
 library(purrr)
 library(mongolite)
-uri <- Sys.getenv("mongodb_connection_string")
 
 # Sportsbet SGM-----------------------------------------------------------------
-sbsgm_con <- mongo(collection = "Sportsbet-SGM", db = "Odds", url = uri)
-sportsbet_sgm <- sbsgm_con$find('{}') |> tibble()
+sportsbet_sgm <-
+  read_csv("../../Data/scraped_odds/sportsbet_player_disposals.csv") |> 
+  rename(price = over_price,
+         number_of_disposals = line) |> 
+  select(-contains("under"))
 
 sportsbet_sgm <-
   rename(
     sportsbet_sgm,
-    eventExternalId = match_id,
-    competitionExternalId = comp_id,
-    classExternalId = class_id,
+    eventExternalId = event_external_id ,
+    competitionExternalId = competition_external_id,
+    classExternalId = class_external_id ,
     marketExternalId = market_id,
     outcomeExternalId = player_id
   )
@@ -107,3 +109,9 @@ call_sgm_sportsbet <- function(data, player_names, disposal_counts) {
   
   return(output_data)
 }
+
+call_sgm_sportsbet(
+  data = sportsbet_sgm,
+  player_names = c("Nick Daicos", "Tom Green"),
+  disposal_counts = c(29.5, 29.5)
+)

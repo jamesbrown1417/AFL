@@ -3,11 +3,13 @@ library(jsonlite)
 library(dplyr)
 library(purrr)
 library(mongolite)
-uri <- Sys.getenv("mongodb_connection_string")
 
 # Pointsbet SGM-----------------------------------------------------------------
-pbsgm_con <- mongo(collection = "Pointsbet-SGM", db = "Odds", url = uri)
-pointsbet_sgm <- pbsgm_con$find('{}') |> tibble()
+pointsbet_sgm <-
+  read_csv("../../Data/scraped_odds/pointsbet_player_disposals.csv") |> 
+  rename(price = over_price,
+         number_of_disposals = line) |> 
+  select(-contains("under"))
 
 #===============================================================================
 # Function to get SGM data
@@ -27,9 +29,9 @@ get_sgm_pointsbet <- function(data, player_names, disposal_counts) {
     filtered_df <- bind_rows(filtered_df, temp_df)
   }
   
-  id_list <- as.character(filtered_df$outcome_id)
-  market_id_list <- as.character(filtered_df$market_id)
-  event_key <- as.character(filtered_df$match_id[1])
+  id_list <- as.character(filtered_df$OutcomeKey)
+  market_id_list <- as.character(filtered_df$MarketKey)
+  event_key <- as.character(filtered_df$EventKey[1])
   
   selected_outcomes <- lapply(1:length(id_list), function(i) 
     list(MarketKey = unbox(market_id_list[i]), OutcomeKey = unbox(id_list[i]))
@@ -101,6 +103,9 @@ call_sgm_pointsbet <- function(data, player_names, disposal_counts) {
   return(output_data)
 }
 
-data = pointsbet_sgm
-player_names = c("Jack Sinclair", "Sam Docherty")
-disposal_counts = c("25+", "25+")
+call_sgm_pointsbet(
+  data = pointsbet_sgm,
+  player_names = c("Clayton Oliver", "Errol Gulden"),
+  disposal_counts = c(24.5, 29.5)
+)
+

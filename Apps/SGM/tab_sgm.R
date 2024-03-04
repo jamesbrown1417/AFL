@@ -2,8 +2,6 @@ library(httr)
 library(jsonlite)
 library(dplyr)
 library(purrr)
-library(mongolite)
-uri <- Sys.getenv("mongodb_connection_string")
 
 # TAB SGM-----------------------------------------------------------------------
 tab_sgm <-

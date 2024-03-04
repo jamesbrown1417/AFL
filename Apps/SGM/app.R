@@ -17,9 +17,9 @@ library(mongolite)
 # Source scripts
 source("betright_sgm.R")
 source("tab_sgm.R")
-# source("sportsbet_sgm.R")
-# source("pointsbet_sgm.R")
-# source("palmerbet_sgm.R")
+source("sportsbet_sgm.R")
+source("pointsbet_sgm.R")
+source("neds_sgm.R")
 
 #===============================================================================
 # Create compare sgm function
@@ -41,10 +41,10 @@ compare_sgm <- function(player_names, disposal_counts) {
   sportsbet_data <- handle_call_sgm(call_sgm_sportsbet, sportsbet_sgm, player_names, disposal_counts)
   tab_data <- handle_call_sgm(call_sgm_tab, tab_sgm, player_names, disposal_counts)
   betright_data <- handle_call_sgm(call_sgm_betright, betright_sgm, player_names, disposal_counts)
-  palmerbet_data <- handle_call_sgm(call_sgm_palmerbet, palmerbet_sgm, player_names, disposal_counts)
+  neds_data <- handle_call_sgm(call_sgm_neds, neds_sgm, player_names, disposal_counts)
   
   # Bind together and return
-  bind_rows(pointsbet_data, sportsbet_data, tab_data, betright_data, palmerbet_data) |>
+  bind_rows(pointsbet_data, sportsbet_data, tab_data, betright_data, neds_data) |>
     mutate(Adjusted_Price = round(Adjusted_Price, 2),
            Unadjusted_Price = round(Unadjusted_Price, 2),
            Adjustment_Factor = round(Adjustment_Factor, 2)
@@ -52,87 +52,87 @@ compare_sgm <- function(player_names, disposal_counts) {
     arrange(desc(Adjusted_Price))
 }
 
-#===============================================================================
-# Function to get all combinations and get SGM prices
-#===============================================================================
-
-sgm_combinations <- function(player_names, disposal_counts) {
-  
-  # Creat tibble out of output
-  input_dat <- tibble(player_names, disposal_counts)
-  
-  # Get all row combinations
-  row_combinations_2 <- combn(nrow(input_dat), 2, simplify = FALSE)
-  row_combinations_3 <- combn(nrow(input_dat), 3, simplify = FALSE)
-  row_combinations_4 <- combn(nrow(input_dat), 4, simplify = FALSE)
-  row_combinations_5 <- combn(nrow(input_dat), 5, simplify = FALSE)
-  
-  
-  # Get list of all 2-way combinations
-  combinations_list_2 <-
-    lapply(row_combinations_2, function(indices) {
-      input_dat[indices, ]
-  })
-  
-  # Get list of all 3-way combinations
-  combinations_list_3 <-
-    lapply(row_combinations_3, function(indices) {
-      input_dat[indices, ]
-    })
-  
-  # Get list of all 4-way combinations
-  combinations_list_4 <-
-    lapply(row_combinations_4, function(indices) {
-      input_dat[indices, ]
-    })
-  
-  # Get list of all 5-way combinations
-  combinations_list_5 <-
-    lapply(row_combinations_5, function(indices) {
-      input_dat[indices, ]
-    })
-  
-  # Create a function that takes a tibble and applies compare_sgm to each col
-  compare_sgm_tibble <- function(input_tibble) {
-    
-    # Get input cols
-    player_names_tib <- input_tibble$player_names
-    disposal_counts_tib <- input_tibble$disposal_counts
-    
-    # Apply compare SGM
-    compare_sgm(player_names_tib, disposal_counts_tib)
-  }
-  
-  # Get list of every combination
-  all_combinations_list <- c(combinations_list_2, combinations_list_3, combinations_list_4, combinations_list_5)
-  
-  # Map over lists
-  output_list <- map(all_combinations_list, compare_sgm_tibble)
-  
-  # Get a tibble to summarise data
-  return_data <- bind_rows(output_list, .id = "id")
-  
-  return_data <-
-    return_data |>
-    mutate(unadjusted_implied_prob = 1/Unadjusted_Price, adjusted_implied_prob = 1/Adjusted_Price) |>
-    mutate(implied_prob_difference = unadjusted_implied_prob - adjusted_implied_prob) |>
-    mutate(unadjusted_implied_prob = round(unadjusted_implied_prob, 2),
-           adjusted_implied_prob = round(adjusted_implied_prob, 2),
-           implied_prob_difference = round(implied_prob_difference, 2))
-  
-  # Get biggest difference between first and second
-  return_data <-
-    return_data |>
-    group_by(id) |>
-    mutate(best_price = first(adjusted_implied_prob),
-           second_best_price = nth(adjusted_implied_prob, 2)) |>
-    mutate(price_drop = second_best_price - best_price) |>
-    select(-best_price, -second_best_price) |>
-    ungroup() |>
-    mutate(price_drop = round(price_drop, 2))
-  
-  return(return_data)
-}
+# #===============================================================================
+# # Function to get all combinations and get SGM prices
+# #===============================================================================
+# 
+# sgm_combinations <- function(player_names, disposal_counts) {
+#   
+#   # Creat tibble out of output
+#   input_dat <- tibble(player_names, disposal_counts)
+#   
+#   # Get all row combinations
+#   row_combinations_2 <- combn(nrow(input_dat), 2, simplify = FALSE)
+#   row_combinations_3 <- combn(nrow(input_dat), 3, simplify = FALSE)
+#   row_combinations_4 <- combn(nrow(input_dat), 4, simplify = FALSE)
+#   row_combinations_5 <- combn(nrow(input_dat), 5, simplify = FALSE)
+#   
+#   
+#   # Get list of all 2-way combinations
+#   combinations_list_2 <-
+#     lapply(row_combinations_2, function(indices) {
+#       input_dat[indices, ]
+#   })
+#   
+#   # Get list of all 3-way combinations
+#   combinations_list_3 <-
+#     lapply(row_combinations_3, function(indices) {
+#       input_dat[indices, ]
+#     })
+#   
+#   # Get list of all 4-way combinations
+#   combinations_list_4 <-
+#     lapply(row_combinations_4, function(indices) {
+#       input_dat[indices, ]
+#     })
+#   
+#   # Get list of all 5-way combinations
+#   combinations_list_5 <-
+#     lapply(row_combinations_5, function(indices) {
+#       input_dat[indices, ]
+#     })
+#   
+#   # Create a function that takes a tibble and applies compare_sgm to each col
+#   compare_sgm_tibble <- function(input_tibble) {
+#     
+#     # Get input cols
+#     player_names_tib <- input_tibble$player_names
+#     disposal_counts_tib <- input_tibble$disposal_counts
+#     
+#     # Apply compare SGM
+#     compare_sgm(player_names_tib, disposal_counts_tib)
+#   }
+#   
+#   # Get list of every combination
+#   all_combinations_list <- c(combinations_list_2, combinations_list_3, combinations_list_4, combinations_list_5)
+#   
+#   # Map over lists
+#   output_list <- map(all_combinations_list, compare_sgm_tibble)
+#   
+#   # Get a tibble to summarise data
+#   return_data <- bind_rows(output_list, .id = "id")
+#   
+#   return_data <-
+#     return_data |>
+#     mutate(unadjusted_implied_prob = 1/Unadjusted_Price, adjusted_implied_prob = 1/Adjusted_Price) |>
+#     mutate(implied_prob_difference = unadjusted_implied_prob - adjusted_implied_prob) |>
+#     mutate(unadjusted_implied_prob = round(unadjusted_implied_prob, 2),
+#            adjusted_implied_prob = round(adjusted_implied_prob, 2),
+#            implied_prob_difference = round(implied_prob_difference, 2))
+#   
+#   # Get biggest difference between first and second
+#   return_data <-
+#     return_data |>
+#     group_by(id) |>
+#     mutate(best_price = first(adjusted_implied_prob),
+#            second_best_price = nth(adjusted_implied_prob, 2)) |>
+#     mutate(price_drop = second_best_price - best_price) |>
+#     select(-best_price, -second_best_price) |>
+#     ungroup() |>
+#     mutate(price_drop = round(price_drop, 2))
+#   
+#   return(return_data)
+# }
 
 # Read in datasets--------------------------------------------------------------
 disposals <-
@@ -210,20 +210,15 @@ ui <- fluidPage(
                  uiOutput("summary"),
                  h3("Odds Comparison"),
                  actionButton("get_comparison", label = "Compare Odds"),
-                 DT::dataTableOutput("odds_compare"),
-                 h3("SGM Combinations"),
-                 actionButton("get_combos", label = "Get All Combinations"),
+                 DT::dataTableOutput("odds_compare")
                ),
                
                mainPanel(
                  tabsetPanel(
                    tabPanel("Player List", 
                             DT::dataTableOutput("table")
-                   ),
-                   tabPanel("Selected Combinations", 
-                            DT::dataTableOutput("all_selected_combinations")
                    )
-                 )
+                   )
                )
              )
     ),
@@ -346,6 +341,9 @@ server <- function(input, output, session) {
     output$selected_cross <- renderDT({
       if(!is.null(input$table_cross_rows_selected)){
         filtered_data_cross <- disposals_display[disposals_display$agency == input$agency_cross,]
+        
+        if (input$best_odds_cross) {filtered_data_cross <- filtered_data_cross |> filter(market_best) |> select(-market_best)}
+        
         selected_data_cross <- filtered_data_cross[input$table_cross_rows_selected, c("player_name", "number_of_disposals", "price")]
         datatable(selected_data_cross)
       }
@@ -355,6 +353,9 @@ server <- function(input, output, session) {
   output$summary_cross <- renderUI({
     if(!is.null(input$table_cross_rows_selected)){
       filtered_data_cross <- disposals_display[disposals_display$agency == input$agency_cross,]
+      
+      if (input$best_odds_cross) {filtered_data_cross <- filtered_data_cross |> filter(market_best) |> select(-market_best)}
+      
       selected_data_cross <- filtered_data_cross[input$table_cross_rows_selected, ]
       uncorrelated_price_cross <- prod(selected_data_cross$price)
       empirical_price_cross <- 1 / prod(selected_data_cross$prob_2023)

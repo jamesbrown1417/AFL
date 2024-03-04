@@ -38,6 +38,7 @@ run_scraping("OddsScraper/scrape_bet365.R")
 # run_scraping("OddsScraper/scrape_bluebet.R")
 run_scraping("OddsScraper/scrape_neds.R")
 # run_scraping("OddsScraper/scrape_unibet.R")
+run_scraping("OddsScraper/scrape_dabble.R")
 
 ##%######################################################%##
 #                                                          #
@@ -130,6 +131,8 @@ all_player_disposals <-
   map(read_csv) |>
   # Ignore null elements
   keep(~nrow(.x) > 0) |>
+  # de-select event_id from each if it exists
+  map(~select(.x, -matches("id"))) |>
   reduce(bind_rows) |>
   arrange(player_name, line, desc(over_price)) |>
   select(-matches("id"))
@@ -194,6 +197,8 @@ all_player_goals <-
   map(read_csv) |>
   # Ignore null elements
   keep(~nrow(.x) > 0) |>
+  # de-select event_id from each if it exists
+  map(~select(.x, -matches("id"))) |>
   reduce(bind_rows) |>
   arrange(player_name, line, desc(over_price)) |>
   select(-matches("id"))
