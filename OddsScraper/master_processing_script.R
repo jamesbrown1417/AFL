@@ -81,8 +81,8 @@ all_odds_h2h <-
   relocate(round, start_time, venue, .after = match)
 
 # Google Sheets-----------------------------------------------------
-# sheet <- gs4_find("AFL Data")
-# sheet_write(sheet, data = all_odds_h2h, sheet = "H2H")
+sheet <- gs4_find("AFL Data")
+sheet_write(sheet, data = all_odds_h2h, sheet = "H2H")
 
 # Write as RDS
 all_odds_h2h |> write_rds("Data/processed_odds/all_h2h.rds")
@@ -113,8 +113,7 @@ all_odds_line <-
   select(-min_home_line, -max_home_line)
 
 # Google Sheets-----------------------------------------------------
-# sheet <- gs4_find("AFL Data")
-# sheet_write(sheet, data = all_odds_line, sheet = "Line")
+sheet_write(sheet, data = all_odds_line, sheet = "Line")
 
 # Write as RDS
 all_odds_line |> write_rds("Data/processed_odds/all_line.rds")
@@ -180,7 +179,7 @@ all_player_disposals <-
   arrange(desc(variation), player_name, desc(over_price), line)
 
 # Add to google sheets
-# sheet_write(sheet, data = all_player_disposals, sheet = "Player Disposals")
+sheet_write(sheet, data = all_player_disposals, sheet = "Player Disposals")
 
 # Write as RDS
 all_player_disposals |> write_rds("Data/processed_odds/all_player_disposals.rds")
@@ -246,7 +245,7 @@ all_player_goals <-
   arrange(desc(variation), player_name, desc(over_price), line)
 
 # Add to google sheets
-# sheet_write(sheet, data = all_player_goals, sheet = "Player goals")
+sheet_write(sheet, data = all_player_goals, sheet = "Player Goals")
 
 # Write as RDS
 all_player_goals |> write_rds("Data/processed_odds/all_player_goals.rds")

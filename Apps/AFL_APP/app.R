@@ -10,6 +10,8 @@ library(tidyverse)
 library(bslib)
 library(gridlayout)
 library(DT)
+library(googlesheets4)
+library(googledrive)
 
 # Determine the operating system
 os_type <- Sys.info()["sysname"]
@@ -31,21 +33,13 @@ if (os_type == "Windows") {
   line_data <- read_rds("../../Data/processed_odds/all_line.rds")
   player_disposals_data <- read_rds("../../Data/processed_odds/all_player_disposals.rds")
   player_goals_data <- read_rds("../../Data/processed_odds/all_player_goals.rds")
-  # player_rebounds_data <- read_rds("../../Data/processed_odds/all_player_rebounds.rds")
-  # player_pras_data <- read_rds("../../Data/processed_odds/all_player_pras.rds")
-  # player_steals_data <- read_rds("../../Data/processed_odds/all_player_steals.rds")
-  # player_threes_data <- read_rds("../../Data/processed_odds/all_player_threes.rds")
-  # player_blocks_data <- read_rds("../../Data/processed_odds/all_player_blocks.rds")
 } else {
   # Google Sheets Data for other OS
   ss_name <- gs4_find("AFL Data")
-  player_points_data <- read_sheet(ss = ss_name, sheet = "Player Points")
-  player_assists_data <- read_sheet(ss = ss_name, sheet = "Player Assists")
-  player_rebounds_data <- read_sheet(ss = ss_name, sheet = "Player Rebounds")
-  player_pras_data <- read_sheet(ss = ss_name, sheet = "Player PRAs")
-  player_steals_data <- read_sheet(ss = ss_name, sheet = "Player Steals")
-  player_threes_data <- read_sheet(ss = ss_name, sheet = "Player Threes")
-  player_blocks_data <- read_sheet(ss = ss_name, sheet = "Player Blocks")
+  h2h_data <- read_sheet(ss = ss_name, sheet = "H2H")
+  line_data <- read_sheet(ss = ss_name, sheet = "Line")
+  player_disposals_data <- read_sheet(ss = ss_name, sheet = "Player Disposals")
+  player_goals_data <- read_sheet(ss = ss_name, sheet = "Player Goals")
 }
 
 # Add home_away variable
