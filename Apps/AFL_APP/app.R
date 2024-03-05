@@ -19,6 +19,9 @@ os_type <- Sys.info()["sysname"]
 # Read in data
 all_player_stats <- read_rds("../../Data/afl_fantasy_2015_2023_data.rds")
 
+# Fix CBA Percentage
+all_player_stats$cba_percentage <- round(all_player_stats$cba_percentage, 3)
+
 # Agencies List
 agencies = c("TAB", "Pointsbet", "Neds", "Sportsbet", "Bet365", "Unibet", "BlueBet", "TopSport", "BetRight", "Betr", "Dabble")
 

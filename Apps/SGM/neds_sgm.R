@@ -60,6 +60,10 @@ call_sgm_neds <- function(data, player_names, disposal_counts) {
     filtered_df <- bind_rows(filtered_df, temp_df)
   }
   
+  if (nrow(filtered_df) != length(player_names)) {
+    return(NULL)
+  }
+  
   # Use Filtered DF to get the API URL
   event_id <- filtered_df$event_id[1]
   market_ids <- filtered_df$market_id
@@ -96,8 +100,8 @@ call_sgm_neds <- function(data, player_names, disposal_counts) {
   
 }
 
-# call_sgm_neds(
-#   data = neds_sgm,
-#   player_names = c("Nick Blakey", "Angus Sheldrick"),
-#   disposal_counts = c("14.5", "14.5")
-# )
+call_sgm_neds(
+  data = neds_sgm,
+  player_names = c("Oliver Florent", "Clayton Oliver"),
+  disposal_counts = c("19.5", "19.5")
+)

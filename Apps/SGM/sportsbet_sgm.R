@@ -70,6 +70,10 @@ call_sgm_sportsbet <- function(data, player_names, disposal_counts) {
     filtered_df <- bind_rows(filtered_df, temp_df)
   }
   
+  if (nrow(filtered_df) != length(player_names)) {
+    return(NULL)
+  }
+  
   unadjusted_price <- prod(filtered_df$price)
   
   payload <- get_sgm_sportsbet(data, player_names, disposal_counts)

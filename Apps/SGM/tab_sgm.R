@@ -56,6 +56,10 @@ call_sgm_tab <- function(data, player_names, disposal_counts) {
       filtered_df <- bind_rows(filtered_df, temp_df)
     }
     
+    if (nrow(filtered_df) != length(player_names)) {
+      return(NULL)
+    }
+    
     # Unadjusted price
     unadjusted_price <- prod(filtered_df$price)
     
