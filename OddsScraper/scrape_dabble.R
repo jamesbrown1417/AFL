@@ -244,7 +244,8 @@ alternate_player_goals_markets <-
   prop_data |>
   mutate(market_name = if_else(market_name == "Anytime Goal Scorer", "To Kick 1+ Goals", market_name)) |>
   mutate(market_name = if_else(market_name == "Anytime Goalscorer", "To Kick 1+ Goals", market_name)) |>
-  filter(str_detect(market_name, "To Kick"))
+  filter(str_detect(market_name, "To Kick")) |> 
+  filter(str_detect(market_name, "(Half$)|(Quarter$)", negate = TRUE))
 
 # Extract player names
 player_goals_markets <-

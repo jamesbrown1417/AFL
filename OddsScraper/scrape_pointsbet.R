@@ -432,7 +432,8 @@ pointsbet_h2h_main <- function() {
   pointsbet_player_fantasy_lines <-
     pointsbet_data_player_props |>
     filter(str_detect(market, "Fantasy")) |>
-    mutate(line = str_extract(market, "[0-9]{1,2}")) |>
+    filter(str_detect(market, "To Get")) |>
+    mutate(line = str_extract(market, "[0-9]{1,3}")) |>
     mutate(line = as.numeric(line) - 0.5) |>
     separate(
       match,
@@ -781,8 +782,10 @@ pointsbet_h2h_main <- function() {
     write_csv("Data/scraped_odds/pointsbet_player_goals.csv")
   
   # Fantasy Points
-  pointsbet_player_fantasy_points_lines |>
-    bind_rows(pointsbet_player_fantasy_points_over_under) |>
+  pointsbet_player_fantasy_lines |>
+    bind_rows(pointsbet_player_fantasy_over_under) |>
+    mutate(home_team = fix_team_names(home_team)) |>
+    mutate(away_team = fix_team_names(away_team)) |>
     mutate(match = paste(home_team, away_team, sep = " v ")) |>
     select(
       "match",

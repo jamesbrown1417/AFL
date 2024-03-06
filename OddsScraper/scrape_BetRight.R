@@ -371,6 +371,7 @@ betright_player_goals_alternate <-
   map(player_goals_links, safe_get_prop_data) |> 
   map("result") |>
   bind_rows() |> 
+  filter(str_detect(outcome_title, "(Quarter)|(Half)", negate = TRUE)) |> 
   rename(match_id = link) |> 
   mutate(match_id = as.integer(str_extract(match_id, "[0-9]{4,7}"))) |> 
   left_join(match_names) |> 

@@ -36,6 +36,7 @@ if (os_type == "Windows") {
   line_data <- read_rds("../../Data/processed_odds/all_line.rds")
   player_disposals_data <- read_rds("../../Data/processed_odds/all_player_disposals.rds")
   player_goals_data <- read_rds("../../Data/processed_odds/all_player_goals.rds")
+  player_fantasy_data <- read_rds("../../Data/processed_odds/all_player_fantasy_points.rds")
 } else {
   # Google Sheets Data for other OS
   ss_name <- gs4_find("AFL Data")
@@ -43,6 +44,7 @@ if (os_type == "Windows") {
   line_data <- read_sheet(ss = ss_name, sheet = "Line")
   player_disposals_data <- read_sheet(ss = ss_name, sheet = "Player Disposals")
   player_goals_data <- read_sheet(ss = ss_name, sheet = "Player Goals")
+  player_fantasy_data <- read_sheet(ss = ss_name, sheet = "Player Fantasy Points")
 }
 
 # Add home_away variable
@@ -909,7 +911,18 @@ server <- function(input, output) {
         mutate(variation = round(variation, 2)) |>
         filter(agency %in% input$agency_input) |>
         filter(match %in% input$match_input) |>
-        select(-match, -group_by_header, -outcome_name, -outcome_name_under)
+        select(-any_of(
+          c(
+            "match",
+            "group_by_header",
+            "outcome_name",
+            "outcome_name_under",
+            "EventKey",
+            "MarketKey",
+            "OutcomeKey",
+            "OutcomeKey_unders"
+          )
+        ))
     }
 
     # Goals
@@ -919,7 +932,39 @@ server <- function(input, output) {
         mutate(variation = round(variation, 2)) |>
         filter(agency %in% input$agency_input) |>
         filter(match %in% input$match_input) |>
-        select(-match, -group_by_header, -outcome_name, -outcome_name_under)
+        select(-any_of(
+          c(
+            "match",
+            "group_by_header",
+            "outcome_name",
+            "outcome_name_under",
+            "EventKey",
+            "MarketKey",
+            "OutcomeKey",
+            "OutcomeKey_unders"
+          )
+        ))
+    }
+    
+    # Fantasy Points
+    if (input$market_input == "Fantasy") {
+      odds <-
+        player_fantasy_data |>
+        mutate(variation = round(variation, 2)) |>
+        filter(agency %in% input$agency_input) |>
+        filter(match %in% input$match_input) |>
+        select(-any_of(
+          c(
+            "match",
+            "group_by_header",
+            "outcome_name",
+            "outcome_name_under",
+            "EventKey",
+            "MarketKey",
+            "OutcomeKey",
+            "OutcomeKey_unders"
+          )
+        ))
     }
 
     if (input$only_best == TRUE) {

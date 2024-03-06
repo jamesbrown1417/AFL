@@ -114,7 +114,7 @@ props_function <- function() {
 read_topsport_html <- function(url) {
     
     # Get market name from url
-    market_name <- str_extract(url, "(?<=AFL/).*")
+    market_name <- str_extract(url, "(?<=Aussie_Rules/).*")
     market_name <- str_remove(market_name, "\\/.*$")
     
     # Get line from market name
@@ -128,8 +128,9 @@ read_topsport_html <- function(url) {
         html_text() |> 
         paste(collapse = " ")
     
-    # Get match name from extracted text
-    match_name <- str_extract(match_name_html, "(?<=\\- )[A-Za-z0-9- ]+")
+    match_name_html <- strsplit(match_name_html, split = " - ")
+    match_name <- match_name_html[[1]][length(match_name_html[[1]])]
+    player_name <- match_name_html[[1]][length(match_name_html[[1]]) - 1]
     
     # Get data from html
     result <-    
@@ -140,55 +141,40 @@ read_topsport_html <- function(url) {
     
     # Get tibble
     result[[1]] |>
-        mutate(line = as.numeric(line)) |> 
-        mutate(match = match_name)
+        mutate(line = ifelse(!is.na(line), line, str_extract(Selection, "\\d+\\.\\d+"))) |>
+        mutate(match = match_name) |>
+        mutate(Selection = if_else(str_detect(Selection, "(Over)|(Under)"), paste(player_name, Selection), Selection))
 }
 
 # Get data for pick your own player disposals--------------------------------------
 
 # Get URLs
 pick_your_own_disposals_markets <- 
-    topsport_other_markets[str_detect(topsport_other_markets, "Player_to_Score_[0-9]{1,2}_Disposals")]
+    topsport_other_markets[str_detect(topsport_other_markets, "Player_to_Have_[0-9]{1,2}_Disposals")]
+
+# Get Unique URLs
+pick_your_own_disposals_markets <- unique(pick_your_own_disposals_markets)
 
 # Map function
 player_disposals_alternate <-
 map(pick_your_own_disposals_markets, read_topsport_html) |> 
     bind_rows() |> 
-    mutate(line = line - 0.5) |>
+    mutate(line = as.numeric(line) - 0.5) |>
     rename(over_price = Win) |> 
     rename(player_name = Selection) |> 
+    separate(match, into = c("home_team", "away_team"), sep = " v ", remove = FALSE) |> 
+    mutate(away_team = fix_team_names(away_team)) |>
+    mutate(home_team = fix_team_names(home_team)) |>
+    mutate(match = paste(home_team, "v", away_team)) |>
     mutate(player_name = str_remove(player_name, " \\(.*\\)$")) |>
     mutate(
         player_name =
             case_when(
-                player_name == "PJ Washington" ~ "P.J. Washington",
-                player_name == "Lebron James" ~ "LeBron James",
-                player_name == "Michael Porter Jr" ~ "Michael Porter Jr.",
-                player_name == "Dangelo Russell" ~ "D'Angelo Russell",
-                player_name == "Kentavious Caldwell Pope" ~ "Kentavious Caldwell-Pope",
-                player_name == "Wendell Carter Jr" ~ "Wendell Carter Jr.",
-                player_name == "Cj Mccollum" ~ "CJ McCollum",
-                player_name ==  "Shai Gilgeous Alexander" ~ "Shai Gilgeous-Alexander",
-                player_name == "Jaren Jackson Jr" ~ "Jaren Jackson Jr.",
-                player_name == "Xavier Tillman Sr" ~ "Xavier Tillman",
-                player_name == "Deandre Hunter" ~ "De'Andre Hunter",
-                player_name == "DeAndre Ayton" ~ "Deandre Ayton",
-                player_name == "Dereck Lively" ~ "Dereck Lively II",
-                player_name == "Karl Anthony Towns" ~ "Karl-Anthony Towns",
-                player_name == "Jimmy Butler III" ~ "Jimmy Butler",
-                player_name == "Talen Horton Tucker" ~ "Talen Horton-Tucker",
-                player_name == "Anthony Davis Jr" ~ "Anthony Davis",
-                player_name == "De'andre Hunter" ~ "De'Andre Hunter",
-                player_name == "Lamelo Ball" ~ "LaMelo Ball",
-                player_name == "Rj Barrett" ~ "RJ Barrett",
-                player_name == "Bruce Brown Jr" ~ "Bruce Brown",
-                player_name == "Alperen Seng?n" ~ "Alperen Sengun",
-                player_name == "Franz Wagnr" ~ "Franz Wagner",
-                player_name == "Fred Vanvleet" ~ "Fred VanVleet",
+                player_name == "Matthew Roberts" ~ "Matt Roberts",
+                player_name == "Samuel Wicks" ~ "Sam Wicks",
                 .default = player_name)) |>
     left_join(player_names[, c("player_full_name", "team_name")], by = c("player_name" = "player_full_name")) |>
     relocate(match, .before = player_name) |> 
-    separate(match, into = c("away_team", "home_team"), sep = " v ", remove = FALSE) |> 
     rename(player_team = team_name) |> 
     mutate(opposition_team = if_else(player_team == home_team, away_team, home_team))
 
@@ -205,89 +191,50 @@ if (length(player_disposals_markets) > 0) {
 player_disposals_lines <-
     map(player_disposals_markets, read_topsport_html) |> 
     bind_rows() |> 
-    mutate(line = line - 0.5) |>
+    mutate(line = as.numeric(line)) |>
     rename(over_price = Win)
 
 # Get Overs
 player_disposals_lines_overs <-
     player_disposals_lines |> 
-    select(-line) |> 
     filter(str_detect(Selection, "Over")) |>
     separate(Selection, into = c("player_name", "line"), sep = " Over ") |> 
+    mutate(player_name = str_remove(player_name, " \\(.*\\)$")) |>
     mutate(line = as.numeric(line)) |>
+    separate(match, into = c("home_team", "away_team"), sep = " v ", remove = FALSE) |> 
+    mutate(away_team = fix_team_names(away_team)) |>
+    mutate(home_team = fix_team_names(home_team)) |>
+    mutate(match = paste(home_team, "v", away_team)) |>
     mutate(
         player_name =
           case_when(
-            player_name == "PJ Washington" ~ "P.J. Washington",
-            player_name == "Lebron James" ~ "LeBron James",
-            player_name == "Michael Porter Jr" ~ "Michael Porter Jr.",
-            player_name == "Dangelo Russell" ~ "D'Angelo Russell",
-            player_name == "Kentavious Caldwell Pope" ~ "Kentavious Caldwell-Pope",
-            player_name == "Wendell Carter Jr" ~ "Wendell Carter Jr.",
-            player_name == "Cj Mccollum" ~ "CJ McCollum",
-            player_name ==  "Shai Gilgeous Alexander" ~ "Shai Gilgeous-Alexander",
-            player_name == "Jaren Jackson Jr" ~ "Jaren Jackson Jr.",
-            player_name == "Xavier Tillman Sr" ~ "Xavier Tillman",
-            player_name == "Deandre Hunter" ~ "De'Andre Hunter",
-            player_name == "DeAndre Ayton" ~ "Deandre Ayton",
-            player_name == "Dereck Lively" ~ "Dereck Lively II",
-            player_name == "Karl Anthony Towns" ~ "Karl-Anthony Towns",
-            player_name == "Jimmy Butler III" ~ "Jimmy Butler",
-            player_name == "Talen Horton Tucker" ~ "Talen Horton-Tucker",
-            player_name == "Anthony Davis Jr" ~ "Anthony Davis",
-            player_name == "De'andre Hunter" ~ "De'Andre Hunter",
-            player_name == "Lamelo Ball" ~ "LaMelo Ball",
-            player_name == "Rj Barrett" ~ "RJ Barrett",
-            player_name == "Bruce Brown Jr" ~ "Bruce Brown",
-            player_name == "Alperen Seng?n" ~ "Alperen Sengun",
-            player_name == "Franz Wagnr" ~ "Franz Wagner",
-            player_name == "Fred Vanvleet" ~ "Fred VanVleet",
+              player_name == "Matthew Roberts" ~ "Matt Roberts",
+              player_name == "Samuel Wicks" ~ "Sam Wicks",
             .default = player_name)) |>
     left_join(player_names[, c("player_full_name", "team_name")], by = c("player_name" = "player_full_name")) |>
     relocate(match, .before = player_name) |> 
-    separate(match, into = c("away_team", "home_team"), sep = " v ", remove = FALSE) |> 
     rename(player_team = team_name) |> 
     mutate(opposition_team = if_else(player_team == home_team, away_team, home_team))
 
 # Get Unders
 player_disposals_lines_unders <-
     player_disposals_lines |> 
-    select(-line) |> 
     filter(str_detect(Selection, "Under")) |>
-    rename(under_price = over_price) |> 
     separate(Selection, into = c("player_name", "line"), sep = " Under ") |> 
+    mutate(player_name = str_remove(player_name, " \\(.*\\)$")) |>
     mutate(line = as.numeric(line)) |>
+    separate(match, into = c("home_team", "away_team"), sep = " v ", remove = FALSE) |> 
+    mutate(away_team = fix_team_names(away_team)) |>
+    mutate(home_team = fix_team_names(home_team)) |>
+    mutate(match = paste(home_team, "v", away_team)) |>
+    rename(under_price = over_price) |>
     mutate(
         player_name =
           case_when(
             player_name == "PJ Washington" ~ "P.J. Washington",
-            player_name == "Lebron James" ~ "LeBron James",
-            player_name == "Michael Porter Jr" ~ "Michael Porter Jr.",
-            player_name == "Dangelo Russell" ~ "D'Angelo Russell",
-            player_name == "Kentavious Caldwell Pope" ~ "Kentavious Caldwell-Pope",
-            player_name == "Wendell Carter Jr" ~ "Wendell Carter Jr.",
-            player_name == "Cj Mccollum" ~ "CJ McCollum",
-            player_name ==  "Shai Gilgeous Alexander" ~ "Shai Gilgeous-Alexander",
-            player_name == "Jaren Jackson Jr" ~ "Jaren Jackson Jr.",
-            player_name == "Xavier Tillman Sr" ~ "Xavier Tillman",
-            player_name == "Deandre Hunter" ~ "De'Andre Hunter",
-            player_name == "DeAndre Ayton" ~ "Deandre Ayton",
-            player_name == "Dereck Lively" ~ "Dereck Lively II",
-            player_name == "Karl Anthony Towns" ~ "Karl-Anthony Towns",
-            player_name == "Jimmy Butler III" ~ "Jimmy Butler",
-            player_name == "Talen Horton Tucker" ~ "Talen Horton-Tucker",
-            player_name == "Anthony Davis Jr" ~ "Anthony Davis",
-            player_name == "De'andre Hunter" ~ "De'Andre Hunter",
-            player_name == "Lamelo Ball" ~ "LaMelo Ball",
-            player_name == "Rj Barrett" ~ "RJ Barrett",
-            player_name == "Bruce Brown Jr" ~ "Bruce Brown",
-            player_name == "Alperen Seng?n" ~ "Alperen Sengun",
-            player_name == "Franz Wagnr" ~ "Franz Wagner",
-            player_name == "Fred Vanvleet" ~ "Fred VanVleet",
             .default = player_name)) |>
     left_join(player_names[, c("player_full_name", "team_name")], by = c("player_name" = "player_full_name")) |>
     relocate(match, .before = player_name) |> 
-    separate(match, into = c("away_team", "home_team"), sep = " v ", remove = FALSE) |> 
     rename(player_team = team_name) |> 
     mutate(opposition_team = if_else(player_team == home_team, away_team, home_team))
 
@@ -297,6 +244,328 @@ player_disposals_lines <-
     left_join(player_disposals_lines_unders) |> 
     mutate(market_name = "Player Disposals") |> 
     mutate(agency = "TopSport") }
+
+#===============================================================================
+# Player Goals
+#===============================================================================
+
+# Function to read the html of a given url
+read_topsport_html_goals <- function(url) {
+    
+    # Get market name from url
+    market_name <- str_extract(url, "(?<=Aussie_Rules/).*")
+    market_name <- str_remove(market_name, "\\/.*$")
+    
+    market_name <- str_replace(market_name, "Anytime", "1")
+    
+    # Get line from market name
+    line <- str_extract(market_name, "\\d+")
+    
+    # Get match name from html
+    match_name_html <-    
+        url |> 
+        read_html() |>
+        html_nodes("h1") |>
+        html_text() |> 
+        paste(collapse = " ")
+    
+    match_name_html <- strsplit(match_name_html, split = " - ")
+    match_name <- match_name_html[[1]][length(match_name_html[[1]])]
+    player_name <- match_name_html[[1]][length(match_name_html[[1]]) - 1]
+    
+    # Get data from html
+    result <-    
+        url |> 
+        read_html() |>
+        html_nodes(".marketTable") |> 
+        html_table()
+    
+    # Get tibble
+    result[[1]] |>
+        mutate(line = ifelse(!is.na(line), line, str_extract(Selection, "\\d+\\.\\d+"))) |>
+        mutate(match = match_name) |>
+        mutate(Selection = if_else(str_detect(Selection, "(Over)|(Under)"), paste(player_name, Selection), Selection))
+}
+
+# Get data for pick your own player goals--------------------------------------
+
+# Get URLs
+pick_your_own_goals_markets <- 
+    topsport_other_markets[str_detect(topsport_other_markets, "(To_Score_[0-9]{1,2}_Goals)|(Anytime_Goal_Scorer)")]
+
+# Get Unique URLs
+pick_your_own_goals_markets <- unique(pick_your_own_goals_markets)
+
+# Map function
+player_goals_alternate <-
+    map(pick_your_own_goals_markets, read_topsport_html_goals) |> 
+    bind_rows() |> 
+    mutate(line = as.numeric(line) - 0.5) |>
+    rename(over_price = Win) |> 
+    rename(player_name = Selection) |> 
+    separate(match, into = c("home_team", "away_team"), sep = " v ", remove = FALSE) |> 
+    mutate(away_team = fix_team_names(away_team)) |>
+    mutate(home_team = fix_team_names(home_team)) |>
+    mutate(match = paste(home_team, "v", away_team)) |>
+    mutate(player_name = str_remove(player_name, " \\(.*\\)$")) |>
+    mutate(
+        player_name =
+            case_when(
+                player_name == "Matthew Roberts" ~ "Matt Roberts",
+                player_name == "Samuel Wicks" ~ "Sam Wicks",
+                player_name == "Jacob Van Rooyen" ~  "Jacob van Rooyen",
+                player_name == "Matthew Rowell" ~ "Matt Rowell",
+                player_name == "Malcolm Rosas Jnr" ~ "Malcolm Rosas",
+                player_name == "Cameron Rayner" ~ "Cam Rayner",
+                player_name == "Callum M Brown" ~ "Callum M. Brown",
+                .default = player_name)) |>
+    left_join(player_names[, c("player_full_name", "team_name")], by = c("player_name" = "player_full_name")) |>
+    relocate(match, .before = player_name) |> 
+    rename(player_team = team_name) |> 
+    mutate(opposition_team = if_else(player_team == home_team, away_team, home_team))
+
+#===============================================================================
+# Player Fantasy Points
+#===============================================================================
+
+# Function to read the html of a given url
+read_topsport_html_fantasy_points <- function(url) {
+    
+    # Get market name from url
+    market_name <- str_extract(url, "(?<=Aussie_Rules/).*")
+    market_name <- str_remove(market_name, "\\/.*$")
+    
+    market_name <- str_replace(market_name, "Anytime", "1")
+    
+    # Get line from market name
+    line <- str_extract(market_name, "\\d+")
+    
+    # Get match name from html
+    match_name_html <-    
+        url |> 
+        read_html() |>
+        html_nodes("h1") |>
+        html_text() |> 
+        paste(collapse = " ")
+    
+    match_name_html <- strsplit(match_name_html, split = " - ")
+    match_name <- match_name_html[[1]][length(match_name_html[[1]])]
+    player_name <- match_name_html[[1]][length(match_name_html[[1]]) - 1]
+    
+    # Get data from html
+    result <-    
+        url |> 
+        read_html() |>
+        html_nodes(".marketTable") |> 
+        html_table()
+    
+    # Get tibble
+    result[[1]] |>
+        mutate(line = ifelse(!is.na(line), line, str_extract(Selection, "\\d+\\.\\d+"))) |>
+        mutate(match = match_name) |>
+        mutate(Selection = if_else(str_detect(Selection, "(Over)|(Under)"), paste(player_name, Selection), Selection))
+}
+
+# Get data for pick your own player fantasy_points--------------------------------------
+
+# Get URLs
+pick_your_own_fantasy_points_markets <- 
+    topsport_other_markets[str_detect(topsport_other_markets, "Fantasy")]
+
+# Get Unique URLs
+pick_your_own_fantasy_points_markets <- unique(pick_your_own_fantasy_points_markets)
+
+# Map function
+player_fantasy_points_alternate <-
+    map(pick_your_own_fantasy_points_markets, read_topsport_html_fantasy_points) |> 
+    map(mutate, Win = as.numeric(Win)) |>
+    bind_rows() |> 
+    filter(!is.na(Win)) |>
+    mutate(line = as.numeric(line) - 0.5) |>
+    rename(over_price = Win) |> 
+    rename(player_name = Selection) |> 
+    separate(match, into = c("home_team", "away_team"), sep = " v ", remove = FALSE) |> 
+    mutate(away_team = fix_team_names(away_team)) |>
+    mutate(home_team = fix_team_names(home_team)) |>
+    mutate(match = paste(home_team, "v", away_team)) |>
+    mutate(player_name = str_remove(player_name, " \\(.*\\)$")) |>
+    mutate(
+        player_name =
+            case_when(
+                player_name == "Matthew Roberts" ~ "Matt Roberts",
+                player_name == "Samuel Wicks" ~ "Sam Wicks",
+                player_name == "Jacob Van Rooyen" ~  "Jacob van Rooyen",
+                player_name == "Matthew Rowell" ~ "Matt Rowell",
+                player_name == "Malcolm Rosas Jnr" ~ "Malcolm Rosas",
+                player_name == "Cameron Rayner" ~ "Cam Rayner",
+                player_name == "Callum M Brown" ~ "Callum M. Brown",
+                .default = player_name)) |>
+    left_join(player_names[, c("player_full_name", "team_name")], by = c("player_name" = "player_full_name")) |>
+    relocate(match, .before = player_name) |> 
+    rename(player_team = team_name) |> 
+    mutate(opposition_team = if_else(player_team == home_team, away_team, home_team))
+
+#===============================================================================
+# Player Marks
+#===============================================================================
+
+# Function to read the html of a given url
+read_topsport_html_marks <- function(url) {
+    
+    # Get market name from url
+    market_name <- str_extract(url, "(?<=Aussie_Rules/).*")
+    market_name <- str_remove(market_name, "\\/.*$")
+    
+    market_name <- str_replace(market_name, "Anytime", "1")
+    
+    # Get line from market name
+    line <- str_extract(market_name, "\\d+")
+    
+    # Get match name from html
+    match_name_html <-    
+        url |> 
+        read_html() |>
+        html_nodes("h1") |>
+        html_text() |> 
+        paste(collapse = " ")
+    
+    match_name_html <- strsplit(match_name_html, split = " - ")
+    match_name <- match_name_html[[1]][length(match_name_html[[1]])]
+    player_name <- match_name_html[[1]][length(match_name_html[[1]]) - 1]
+    
+    # Get data from html
+    result <-    
+        url |> 
+        read_html() |>
+        html_nodes(".marketTable") |> 
+        html_table()
+    
+    # Get tibble
+    result[[1]] |>
+        mutate(line = ifelse(!is.na(line), line, str_extract(Selection, "\\d+\\.\\d+"))) |>
+        mutate(match = match_name) |>
+        mutate(Selection = if_else(str_detect(Selection, "(Over)|(Under)"), paste(player_name, Selection), Selection))
+}
+
+# Get data for pick your own player marks--------------------------------------
+
+# Get URLs
+pick_your_own_marks_markets <- 
+    topsport_other_markets[str_detect(topsport_other_markets, "Marks")]
+
+# Get Unique URLs
+pick_your_own_marks_markets <- unique(pick_your_own_marks_markets)
+
+# Map function
+player_marks_alternate <-
+    map(pick_your_own_marks_markets, read_topsport_html_marks) |> 
+    map(mutate, Win = as.numeric(Win)) |>
+    bind_rows() |> 
+    filter(!is.na(Win)) |>
+    mutate(line = as.numeric(line) - 0.5) |>
+    rename(over_price = Win) |> 
+    rename(player_name = Selection) |> 
+    separate(match, into = c("home_team", "away_team"), sep = " v ", remove = FALSE) |> 
+    mutate(away_team = fix_team_names(away_team)) |>
+    mutate(home_team = fix_team_names(home_team)) |>
+    mutate(match = paste(home_team, "v", away_team)) |>
+    mutate(player_name = str_remove(player_name, " \\(.*\\)$")) |>
+    mutate(
+        player_name =
+            case_when(
+                player_name == "Matthew Roberts" ~ "Matt Roberts",
+                player_name == "Samuel Wicks" ~ "Sam Wicks",
+                player_name == "Jacob Van Rooyen" ~  "Jacob van Rooyen",
+                player_name == "Matthew Rowell" ~ "Matt Rowell",
+                player_name == "Malcolm Rosas Jnr" ~ "Malcolm Rosas",
+                player_name == "Cameron Rayner" ~ "Cam Rayner",
+                player_name == "Callum M Brown" ~ "Callum M. Brown",
+                .default = player_name)) |>
+    left_join(player_names[, c("player_full_name", "team_name")], by = c("player_name" = "player_full_name")) |>
+    relocate(match, .before = player_name) |> 
+    rename(player_team = team_name) |> 
+    mutate(opposition_team = if_else(player_team == home_team, away_team, home_team))
+
+#===============================================================================
+# Player Tackles
+#===============================================================================
+
+# Function to read the html of a given url
+read_topsport_html_tackles <- function(url) {
+    
+    # Get market name from url
+    market_name <- str_extract(url, "(?<=Aussie_Rules/).*")
+    market_name <- str_remove(market_name, "\\/.*$")
+    
+    market_name <- str_replace(market_name, "Anytime", "1")
+    
+    # Get line from market name
+    line <- str_extract(market_name, "\\d+")
+    
+    # Get match name from html
+    match_name_html <-    
+        url |> 
+        read_html() |>
+        html_nodes("h1") |>
+        html_text() |> 
+        paste(collapse = " ")
+    
+    match_name_html <- strsplit(match_name_html, split = " - ")
+    match_name <- match_name_html[[1]][length(match_name_html[[1]])]
+    player_name <- match_name_html[[1]][length(match_name_html[[1]]) - 1]
+    
+    # Get data from html
+    result <-    
+        url |> 
+        read_html() |>
+        html_nodes(".marketTable") |> 
+        html_table()
+    
+    # Get tibble
+    result[[1]] |>
+        mutate(line = ifelse(!is.na(line), line, str_extract(Selection, "\\d+\\.\\d+"))) |>
+        mutate(match = match_name) |>
+        mutate(Selection = if_else(str_detect(Selection, "(Over)|(Under)"), paste(player_name, Selection), Selection))
+}
+
+# Get data for pick your own player tackles--------------------------------------
+
+# Get URLs
+pick_your_own_tackles_markets <- 
+    topsport_other_markets[str_detect(topsport_other_markets, "Tackles")]
+
+# Get Unique URLs
+pick_your_own_tackles_markets <- unique(pick_your_own_tackles_markets)
+
+# Map function
+player_tackles_alternate <-
+    map(pick_your_own_tackles_markets, read_topsport_html_tackles) |> 
+    map(mutate, Win = as.numeric(Win)) |>
+    bind_rows() |> 
+    filter(!is.na(Win)) |>
+    mutate(line = as.numeric(line) - 0.5) |>
+    rename(over_price = Win) |> 
+    rename(player_name = Selection) |> 
+    separate(match, into = c("home_team", "away_team"), sep = " v ", remove = FALSE) |> 
+    mutate(away_team = fix_team_names(away_team)) |>
+    mutate(home_team = fix_team_names(home_team)) |>
+    mutate(match = paste(home_team, "v", away_team)) |>
+    mutate(player_name = str_remove(player_name, " \\(.*\\)$")) |>
+    mutate(
+        player_name =
+            case_when(
+                player_name == "Matthew Roberts" ~ "Matt Roberts",
+                player_name == "Samuel Wicks" ~ "Sam Wicks",
+                player_name == "Jacob Van Rooyen" ~  "Jacob van Rooyen",
+                player_name == "Matthew Rowell" ~ "Matt Rowell",
+                player_name == "Malcolm Rosas Jnr" ~ "Malcolm Rosas",
+                player_name == "Cameron Rayner" ~ "Cam Rayner",
+                player_name == "Callum M Brown" ~ "Callum M. Brown",
+                .default = player_name)) |>
+    left_join(player_names[, c("player_full_name", "team_name")], by = c("player_name" = "player_full_name")) |>
+    relocate(match, .before = player_name) |> 
+    rename(player_team = team_name) |> 
+    mutate(opposition_team = if_else(player_team == home_team, away_team, home_team))
 
 #===============================================================================
 # Write to CSV
@@ -326,6 +595,85 @@ player_disposals_alternate |>
     mutate(agency = "TopSport") |> 
     write_csv("Data/scraped_odds/topsport_player_disposals.csv")
 
+# Goals
+player_goals_alternate |>
+    mutate(match = paste(home_team, away_team, sep = " v ")) |>
+    select(any_of(
+        c(
+        "match",
+        "home_team",
+        "away_team",
+        "market_name",
+        "player_name",
+        "player_team",
+        "line",
+        "over_price",
+        "under_price",
+        "agency",
+        "opposition_team"))) |>
+    mutate(market_name = "Player Goals") |>
+    mutate(agency = "TopSport") |> 
+    write_csv("Data/scraped_odds/topsport_player_goals.csv")
+
+# Tackles
+player_tackles_alternate |>
+    mutate(match = paste(home_team, away_team, sep = " v ")) |>
+    select(any_of(
+        c(
+        "match",
+        "home_team",
+        "away_team",
+        "market_name",
+        "player_name",
+        "player_team",
+        "line",
+        "over_price",
+        "under_price",
+        "agency",
+        "opposition_team"))) |>
+    mutate(market_name = "Player Tackles") |>
+    mutate(agency = "TopSport") |> 
+    write_csv("Data/scraped_odds/topsport_player_tackles.csv")
+
+# Marks
+player_marks_alternate |>
+    mutate(match = paste(home_team, away_team, sep = " v ")) |>
+    select(any_of(
+        c(
+        "match",
+        "home_team",
+        "away_team",
+        "market_name",
+        "player_name",
+        "player_team",
+        "line",
+        "over_price",
+        "under_price",
+        "agency",
+        "opposition_team"))) |>
+    mutate(market_name = "Player Marks") |>
+    mutate(agency = "TopSport") |> 
+    write_csv("Data/scraped_odds/topsport_player_marks.csv")
+
+# Fantasy Points
+player_fantasy_points_alternate |>
+    mutate(match = paste(home_team, away_team, sep = " v ")) |>
+    select(any_of(
+        c(
+        "match",
+        "home_team",
+        "away_team",
+        "market_name",
+        "player_name",
+        "player_team",
+        "line",
+        "over_price",
+        "under_price",
+        "agency",
+        "opposition_team"))) |>
+    mutate(market_name = "Player Fantasy Points") |>
+    mutate(agency = "TopSport") |> 
+    write_csv("Data/scraped_odds/topsport_player_fantasy_points.csv")
 }
 
 # Make Safe Version
