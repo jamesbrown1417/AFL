@@ -26,15 +26,15 @@ async def main():
         for index, url in enumerate(url_df, start=1): # Start counting from 1 for match_n
             try:
                 await driver.get(url)
-                await driver.sleep(1)
-        
+                await driver.sleep(5)
+                
                 # Scroll into view of disposal button and click
-                disposal_button = await driver.find_element(By.XPATH, "//div[contains(@class, 'gl-MarketGroupButton_Text ') and contains(text(), 'Disposals')]")
+                disposal_button = await driver.find_element(By.XPATH, "//div[contains(@class, 'gl-MarketGroupButton_Text') and text()='Disposals']")
                 await driver.execute_script("arguments[0].scrollIntoView(true);", disposal_button)
                 await driver.execute_script("window.scrollBy(0, -150)")
                 await disposal_button.click()
                     
-                await driver.sleep(1)
+                await driver.sleep(5)
                 
                 # Get all elements with class 'bbl-ShowMoreForHScroll ' that has text 'Show more'
                 button_elements = await driver.find_elements(By.XPATH, "//div[contains(@class, 'bbl-ShowMoreForHScroll ') and contains(text(), 'Show more')]")

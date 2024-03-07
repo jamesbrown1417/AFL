@@ -172,6 +172,8 @@ map(pick_your_own_disposals_markets, read_topsport_html) |>
             case_when(
                 player_name == "Matthew Roberts" ~ "Matt Roberts",
                 player_name == "Samuel Wicks" ~ "Sam Wicks",
+                player_name == "Harrison Himmelberg" ~ "Harry Himmelberg",
+                player_name == "Jordan de Goey" ~ "Jordan De Goey",
                 .default = player_name)) |>
     left_join(player_names[, c("player_full_name", "team_name")], by = c("player_name" = "player_full_name")) |>
     relocate(match, .before = player_name) |> 
@@ -210,6 +212,8 @@ player_disposals_lines_overs <-
           case_when(
               player_name == "Matthew Roberts" ~ "Matt Roberts",
               player_name == "Samuel Wicks" ~ "Sam Wicks",
+              player_name == "Harrison Himmelberg" ~ "Harry Himmelberg",
+              player_name == "Jordan de Goey" ~ "Jordan De Goey",
             .default = player_name)) |>
     left_join(player_names[, c("player_full_name", "team_name")], by = c("player_name" = "player_full_name")) |>
     relocate(match, .before = player_name) |> 
@@ -231,7 +235,8 @@ player_disposals_lines_unders <-
     mutate(
         player_name =
           case_when(
-            player_name == "PJ Washington" ~ "P.J. Washington",
+              player_name == "Harrison Himmelberg" ~ "Harry Himmelberg",
+              player_name == "Jordan de Goey" ~ "Jordan De Goey",
             .default = player_name)) |>
     left_join(player_names[, c("player_full_name", "team_name")], by = c("player_name" = "player_full_name")) |>
     relocate(match, .before = player_name) |> 

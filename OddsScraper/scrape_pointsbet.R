@@ -281,6 +281,7 @@ pointsbet_h2h_main <- function() {
   pointsbet_player_disposals_lines <-
     pointsbet_data_player_props |>
     filter(str_detect(market, "Disposals")) |>
+    filter(str_detect(market, "To Get")) |>
     mutate(line = str_extract(market, "[0-9]{1,2}")) |>
     mutate(line = as.numeric(line) - 0.5) |>
     separate(

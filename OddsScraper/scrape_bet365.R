@@ -383,6 +383,39 @@ read_bet365_goals_html <- function(html_path) {
     }
 }
 
+# Function to read disposal lines
+read_bet365_disposals_html <- function(html_path) {
+    
+    # Read in the txt data as html
+    bet365 <- read_html(html_path)
+    
+    # Get match name
+    bet365_match_name <-
+        bet365 |>
+        html_nodes(".sph-FixturePodHeader_TeamName ") |>
+        html_text()
+    
+    bet365_match_name <- glue_collapse(bet365_match_name,sep = " v ")
+    
+    # Get the disposals table
+    bet365_disposals_lines <-
+        bet365 |>
+        html_nodes(".gl-MarketGroupContainer")
+    
+    # Player names
+    bet365_disposals_player_names <-
+        bet365_disposals_lines[[6]] |>
+        html_nodes(".bbl-BetBuilderParticipantLabel") |>
+        html_text()
+    
+    # Odds
+    bet365_disposals_odds <-
+        bet365_disposals_lines[[8]] |>
+        html_nodes(".bbl-BetBuilderParticipant") |>
+        html_text()
+}
+   
+
 # Map Over the Files------------------------------------------------------------
 goals_list <- list.files("Data/BET365_HTML", pattern = "players_a", full.names = TRUE)
 disposals_list <- list.files("Data/BET365_HTML", pattern = "players", full.names = TRUE)

@@ -186,8 +186,9 @@ h2h_data <-
 # Filter to only include player disposals markets
 player_disposals_data <-
 market_df |> 
-    filter(str_detect(market_name, "(Player Disposals O/U)|(To Have \\d+\\+ Disposals)"))
-
+    filter(str_detect(market_name, "(Player Disposals O/U)|(To Have \\d+\\+ Disposals)")) |> 
+  filter(str_detect(market_name, "(Duos)|(Trios)", negate = TRUE))
+         
 # Overs
 disposals_overs <-
     player_disposals_data |>
@@ -285,7 +286,9 @@ player_disposals_data <-
 player_goals_data <-
   market_df |> 
   mutate(market_name = if_else(market_name == "Player Goals - Anytime Goal Kicker", "Player Goals - To Kick 1+ Goals", market_name)) |> 
-  filter(str_detect(market_name, "(Player Goals O/U)|(To Kick)"))
+  filter(str_detect(market_name, "(Player Goals O/U)|(To Kick)")) |> 
+  filter(str_detect(market_name, "(Duos)|(Trios)", negate = TRUE)) |> 
+  filter(str_detect(market_name, "(Quarter)|(Halves)", negate = TRUE))
 
 # Overs
 goals_overs <-
