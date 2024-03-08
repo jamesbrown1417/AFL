@@ -33,8 +33,27 @@ async def main():
                 await driver.execute_script("arguments[0].scrollIntoView(true);", disposal_button)
                 await driver.execute_script("window.scrollBy(0, -150)")
                 await disposal_button.click()
-                    
                 await driver.sleep(5)
+                
+                # If there is a button that says Player Disposals, click it
+                try:
+                    player_disposals_button = await driver.find_element(By.XPATH, "//div[contains(@class, 'gl-MarketGroupButton_Text') and text()='Player Disposals']")
+                    await driver.execute_script("arguments[0].scrollIntoView(true);", player_disposals_button)
+                    await driver.execute_script("window.scrollBy(0, -150)")
+                    await player_disposals_button.click()
+                    await driver.sleep(5)
+                except:
+                    pass
+                
+                # If there is a button that says Disposal Specials, click it
+                try:
+                    disposal_specials_button = await driver.find_element(By.XPATH, "//div[contains(@class, 'gl-MarketGroupButton_Text') and text()='Disposal Specials']")
+                    await driver.execute_script("arguments[0].scrollIntoView(true);", disposal_specials_button)
+                    await driver.execute_script("window.scrollBy(0, -150)")
+                    await disposal_specials_button.click()
+                    await driver.sleep(5)
+                except:
+                    pass
                 
                 # Get all elements with class 'bbl-ShowMoreForHScroll ' that has text 'Show more'
                 button_elements = await driver.find_elements(By.XPATH, "//div[contains(@class, 'bbl-ShowMoreForHScroll ') and contains(text(), 'Show more')]")
