@@ -71,6 +71,18 @@ async def main():
                 await button_elements[1].click()
                     
                 await driver.sleep(1)
+                
+                # Scroll into view of the third button
+                try:
+                    await driver.execute_script("arguments[0].scrollIntoView(true);", button_elements[2])
+                    await driver.execute_script("window.scrollBy(0, -150)")
+                    
+                    # Click on the third button
+                    await button_elements[2].click()
+                    
+                    await driver.sleep(1)
+                except:
+                    pass
                     
                 # Write out html to file------------------------------------------------
                     

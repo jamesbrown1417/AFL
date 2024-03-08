@@ -534,7 +534,7 @@ disposals_list <- list.files("Data/BET365_HTML", pattern = "players", full.names
 # Get all goals data
 bet365_goals <- map_dfr(goals_list, read_bet365_goals_html)
 bet365_disposals <- map_dfr(disposals_list, read_bet365_disposals_html)
-bet365_disposals_lines <- map_dfr(disposals_list, read_bet365_disposal_lines_html)
+# bet365_disposals_lines <- map_dfr(disposals_list, read_bet365_disposal_lines_html)
 
 # Add match info
 bet365_goals <-

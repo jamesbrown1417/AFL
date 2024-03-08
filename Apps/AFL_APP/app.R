@@ -16,6 +16,11 @@ library(googledrive)
 # Determine the operating system
 os_type <- Sys.info()["sysname"]
 
+# # Google sheets authentification -----------------------------------------------
+# options(gargle_oauth_cache = ".secrets")
+# drive_auth(cache = ".secrets", email = "cuzzy.punting@gmail.com")
+# gs4_auth(token = drive_token())
+
 # Read in data
 all_player_stats <- read_rds("../../Data/afl_fantasy_2015_2023_data.rds")
 
@@ -30,7 +35,10 @@ agencies = c("TAB", "Pointsbet", "Neds", "Sportsbet", "Bet365", "Unibet", "BlueB
 #===============================================================================
 
 # Conditional logic for loading data based on OS
-if (os_type == "Windows") {
+if (
+  # os_type == "Windows"
+  TRUE
+  ) {
   # Read RDS Data for Windows
   h2h_data <- read_rds("../../Data/processed_odds/all_h2h.rds")
   line_data <- read_rds("../../Data/processed_odds/all_line.rds")
