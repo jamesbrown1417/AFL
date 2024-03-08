@@ -1,0 +1,80 @@
+---
+title: "Top Players By Position - Last Season"
+execute:
+  echo: false
+  message: false
+  warning: false
+author: "James Brown"
+date: "2024-02-12"
+format:
+  html:
+    df-print: kable
+    theme: cosmo
+    self-contained: true
+    toc: true
+    toc-depth: 3
+    fig-width: 8
+    fig-height: 6
+editor: visual
+---
+
+```{r setup, include=FALSE}
+library(tidyverse)
+
+# Load data
+  h2h_data <- read_rds("../Data/processed_odds/all_h2h.rds")
+  line_data <- read_rds("../Data/processed_odds/all_line.rds")
+  player_disposals_data <- read_rds("../Data/processed_odds/all_player_disposals.rds")
+  player_goals_data <- read_rds("../Data/processed_odds/all_player_goals.rds")
+  player_fantasy_data <- read_rds("../Data/processed_odds/all_player_fantasy_points.rds")
+```
+
+```{r}
+# Get all markets together
+  all_markets <- bind_rows(
+    player_disposals_data,
+    player_goals_data,
+    player_fantasy_data
+  )
+
+# Arrange in order
+all_markets <-
+all_markets |>
+  select(
+    match,
+    player_name,
+    player_team,
+    opposition_team,
+    market_name,
+    over_price,
+    implied_prob_over,
+    under_price,
+    implied_prob_under,
+    line,
+    agency,
+    diff_over_2023,
+    diff_under_2023
+  ) |>
+  arrange(match, player_name, market_name, line, desc(over_price))
+```
+
+```{r}
+# Get biggest differences from second best odds available
+  biggest_diffs <-
+  all_markets |>
+    group_by(match, player_name, market_name, line) |> 
+    distinct(match, player_name, market_name, line, agency, .keep_all = TRUE) |> 
+    mutate(number_of_odds = n()) |>
+    mutate(best_implied_prob_over = implied_prob_over,
+           second_best_implied_prob_over = lead(implied_prob_over, 1)) |>
+  slice_head(n = 1) |> 
+  ungroup() |> 
+  filter(number_of_odds > 2) |>
+  mutate(diff_over = second_best_implied_prob_over - best_implied_prob_over) |>
+  select(-number_of_odds, -best_implied_prob_over, -second_best_implied_prob_over) |>
+  arrange(desc(diff_over), match, player_name, market_name, line)
+
+```
+
+```{r}
+```
