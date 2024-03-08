@@ -301,6 +301,10 @@ pick_your_own_goals_markets <-
 # Get Unique URLs
 pick_your_own_goals_markets <- unique(pick_your_own_goals_markets)
 
+# Remove Quarter Markets
+pick_your_own_goals_markets <- 
+    pick_your_own_goals_markets[str_detect(pick_your_own_goals_markets, "(Quarter)|(Half)", negate = TRUE)]
+
 # Map function
 player_goals_alternate <-
     map(pick_your_own_goals_markets, read_topsport_html_goals) |> 
