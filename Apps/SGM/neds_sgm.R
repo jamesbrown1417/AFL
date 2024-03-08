@@ -100,8 +100,8 @@ call_sgm_neds <- function(data, player_names, disposal_counts) {
   
 }
 
-call_sgm_neds(
-  data = neds_sgm,
-  player_names = c("Oliver Florent", "Clayton Oliver"),
-  disposal_counts = c("19.5", "19.5")
-)
+# call_sgm_neds(
+#   data = neds_sgm,
+#   player_names = c("Oliver Florent", "Clayton Oliver"),
+#   disposal_counts = c("19.5", "19.5")
+# )

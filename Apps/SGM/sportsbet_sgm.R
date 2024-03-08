@@ -114,8 +114,8 @@ call_sgm_sportsbet <- function(data, player_names, disposal_counts) {
   return(output_data)
 }
 
-call_sgm_sportsbet(
-  data = sportsbet_sgm,
-  player_names = c("Nick Daicos", "Tom Green"),
-  disposal_counts = c(29.5, 29.5)
-)
+# call_sgm_sportsbet(
+#   data = sportsbet_sgm,
+#   player_names = c("Nick Daicos", "Tom Green"),
+#   disposal_counts = c(29.5, 29.5)
+# )

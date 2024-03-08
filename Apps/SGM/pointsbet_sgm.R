@@ -107,9 +107,9 @@ call_sgm_pointsbet <- function(data, player_names, disposal_counts) {
   return(output_data)
 }
 
-call_sgm_pointsbet(
-  data = pointsbet_sgm,
-  player_names = c("Clayton Oliver", "Errol Gulden"),
-  disposal_counts = c(24.5, 29.5)
-)
+# call_sgm_pointsbet(
+#   data = pointsbet_sgm,
+#   player_names = c("Clayton Oliver", "Errol Gulden"),
+#   disposal_counts = c(24.5, 29.5)
+# )
 
