@@ -74,13 +74,16 @@ async def main():
                 
                 # Scroll into view of the third button
                 try:
-                    await driver.execute_script("arguments[0].scrollIntoView(true);", button_elements[2])
+                    
+                    specials_button_element = await driver.find_element(By.XPATH, "//div[contains(@class, 'bbl-ShowMore ') and text()='Show more']")
+                    await driver.execute_script("arguments[0].scrollIntoView(true);", specials_button_element)
                     await driver.execute_script("window.scrollBy(0, -150)")
                     
                     # Click on the third button
-                    await button_elements[2].click()
+                    await specials_button_element.click()
+                    print('pressed third button')
+                    await driver.sleep(5)
                     
-                    await driver.sleep(1)
                 except:
                     pass
                     
