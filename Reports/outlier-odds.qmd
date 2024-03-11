@@ -20,6 +20,7 @@ editor: visual
 
 ```{r setup, include=FALSE}
 library(tidyverse)
+library(qreport)
 
 # Load data
   h2h_data <- read_rds("../Data/processed_odds/all_h2h.rds")
@@ -53,6 +54,7 @@ all_markets |>
     line,
     agency,
     diff_over_2023,
+    diff_over_last_10,
     diff_under_2023
   ) |>
   arrange(match, player_name, market_name, line, desc(over_price))
@@ -66,15 +68,39 @@ all_markets |>
     distinct(match, player_name, market_name, line, agency, .keep_all = TRUE) |> 
     mutate(number_of_odds = n()) |>
     mutate(best_implied_prob_over = implied_prob_over,
-           second_best_implied_prob_over = lead(implied_prob_over, 1)) |>
+           second_best_implied_prob_over = lead(implied_prob_over, 1),
+           second_best_odds = lead(over_price, 1)) |>
   slice_head(n = 1) |> 
   ungroup() |> 
   filter(number_of_odds > 2) |>
   mutate(diff_over = second_best_implied_prob_over - best_implied_prob_over) |>
   select(-number_of_odds, -best_implied_prob_over, -second_best_implied_prob_over) |>
-  arrange(desc(diff_over), match, player_name, market_name, line)
-
+  arrange(desc(diff_over), match, player_name, market_name, line) |> 
+  relocate(second_best_odds, .after = over_price)
 ```
 
+# Biggest Outliers By Agency
+
 ```{r}
+#| results: asis
+
+# Outlier List
+biggest_diffs_outliers <-
+  biggest_diffs |>
+  filter(diff_over > 0.1)
+
+# Function to take list, filter to agency and return
+filter_agency <- function(df, agency) {
+  df |>
+    filter(agency == !!agency)
+}
+
+# Unique list of agencies
+agencies <- biggest_diffs_outliers$agency |> unique()
+
+# Make list of dataframes
+agency_list <- map(agencies, ~filter_agency(biggest_diffs_outliers, .x)) |> set_names(agencies)
+
+# Make tabset with each team's CBAs
+maketabs(agency_list, wide = TRUE)
 ```

@@ -535,14 +535,37 @@ disposal_specials_list <- list.files("Data/BET365_HTML", pattern = "players_b", 
 # Create safe versions of each function
 read_bet365_goals_html <- safely(read_bet365_goals_html)
 read_bet365_disposals_html <- safely(read_bet365_disposals_html)
-read_bet365_disposal_lines_html <- safely(read_bet365_disposal_lines_html)
-read_bet365_disposal_specials_html <- safely(read_bet365_disposal_specials_html)
+read_bet365_disposal_lines_html <- safely(read_bet365_disposal_lines_html, otherwise = NULL)
+read_bet365_disposal_specials_html <- safely(read_bet365_disposal_specials_html, otherwise = NULL)
 
 # Get all data
 bet365_goals <- map(goals_list, read_bet365_goals_html) |> map_dfr(~.x$result)
 bet365_disposals <- map(disposals_list, read_bet365_disposals_html) |> map_dfr(~.x$result)
 bet365_disposals_lines <- map(disposal_specials_list, read_bet365_disposal_lines_html) |> map_dfr(~.x$result)
 bet365_disposal_specials <- map(disposal_specials_list, read_bet365_disposal_specials_html) |> map_dfr(~.x$result)
+
+# If empty give columns
+if (nrow(bet365_disposals_lines) == 0) {
+  bet365_disposals_lines <- tibble(
+    match = character(),
+    player_name = character(),
+    opposition_team = character(),
+    number_of_disposals = character(),
+    over_price = numeric(),
+    under_price = numeric()
+  )
+}
+
+if (nrow(bet365_disposal_specials) == 0) {
+  bet365_disposal_specials <- tibble(
+    match = character(),
+    player_name = character(),
+    opposition_team = character(),
+    number_of_disposals = character(),
+    over_price = numeric(),
+    under_price = numeric()
+  )
+}
 
 # Add match info
 bet365_goals <-
@@ -664,6 +687,17 @@ bet365_disposal_specials <-
             over_price,
             under_price,
             agency = "Bet365")
+
+# Fix opposition team if table is null
+if (nrow(bet365_disposals_lines) == 0) {
+  bet365_disposals_lines <- 
+    bet365_disposal_specials |> 
+    mutate(opposition_team = "")}
+
+if (nrow(bet365_disposal_specials) == 0) {
+  bet365_disposal_specials <- 
+    bet365_disposal_specials |> 
+    mutate(opposition_team = "")}
 
 # Combine
 bet365_disposals <-

@@ -13,6 +13,10 @@ library(zoo)
 combined_stats <-
   read_rds("Data/afl_fantasy_2015_2023_data.rds")
 
+current_season_stats <- read_rds("Data/afl_fantasy_2024_data.rds")
+
+combined_stats <- bind_rows(combined_stats, current_season_stats)
+
 #===============================================================================
 # Create a function that takes a player name + line and returns their hit rate
 #===============================================================================
@@ -44,8 +48,10 @@ get_empirical_prob <- function(player_full_name, line, stat) {
       emp_prob_last_10 = rollapply(above_line, width = 10, FUN = function(x) mean(x, na.rm = TRUE), partial = TRUE, align = "left")
     ) |> 
     tidytable::slice_head(n = 1) |> 
+    tidytable::mutate(line = line) |> 
     tidytable::select(
       player_full_name,
+      line,
       emp_prob_last_3,
       emp_prob_last_5,
       emp_prob_last_7,

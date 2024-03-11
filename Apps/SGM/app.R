@@ -20,6 +20,7 @@ source("tab_sgm.R")
 source("sportsbet_sgm.R")
 source("pointsbet_sgm.R")
 source("neds_sgm.R")
+source("bet365_sgm.R")
 
 #===============================================================================
 # Create compare sgm function
@@ -42,9 +43,10 @@ compare_sgm <- function(player_names, disposal_counts) {
   tab_data <- handle_call_sgm(call_sgm_tab, tab_sgm, player_names, disposal_counts)
   betright_data <- handle_call_sgm(call_sgm_betright, betright_sgm, player_names, disposal_counts)
   neds_data <- handle_call_sgm(call_sgm_neds, neds_sgm, player_names, disposal_counts)
+  bet365_data <- handle_call_sgm(call_sgm_bet365, bet365_sgm, player_names, disposal_counts)
   
   # Bind together and return
-  bind_rows(pointsbet_data, sportsbet_data, tab_data, betright_data, neds_data) |>
+  bind_rows(pointsbet_data, sportsbet_data, tab_data, betright_data, neds_data, bet365_data) |>
     mutate(Adjusted_Price = round(Adjusted_Price, 2),
            Unadjusted_Price = round(Unadjusted_Price, 2),
            Adjustment_Factor = round(Adjustment_Factor, 2)

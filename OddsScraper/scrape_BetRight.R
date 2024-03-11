@@ -170,9 +170,25 @@ write_csv(betright_line_markets, "Data/scraped_odds/betright_line.csv")
 player_disposals_links <-
   glue("https://next-api.betright.com.au/Sports/MasterEvent?masterEventId={unique(all_betright_markets$match_id)}&groupTypeCode=G312&format=json")
 
+# Player Disposal Over/Under
+player_disposal_ou_links <-
+  glue("https://next-api.betright.com.au/Sports/MasterEvent?masterEventId={unique(all_betright_markets$match_id)}&groupTypeCode=G669&format=json")
+
 # Player Goals
 player_goals_links <-
   glue("https://next-api.betright.com.au/Sports/MasterEvent?masterEventId={unique(all_betright_markets$match_id)}&groupTypeCode=G311&format=json")
+
+# Afl Fantasy
+player_fantasy_links <-
+  glue("https://next-api.betright.com.au/Sports/MasterEvent?masterEventId={unique(all_betright_markets$match_id)}&groupTypeCode=G513&format=json")
+
+# Marks
+player_marks_links <-
+  glue("https://next-api.betright.com.au/Sports/MasterEvent?masterEventId={unique(all_betright_markets$match_id)}&groupTypeCode=G592&format=json")
+
+# Tackles
+player_tackles_links <-
+  glue("https://next-api.betright.com.au/Sports/MasterEvent?masterEventId={unique(all_betright_markets$match_id)}&groupTypeCode=G593&format=json")
 
 # Function to extract prop data from links--------------------------------------
 
@@ -246,7 +262,8 @@ betright_player_disposals_alternate <-
 # Disposals O/U
 betright_player_disposals_over_under_all <- tryCatch({
   
-  map(player_disposals_over_under_links, safe_get_prop_data) |>
+  betright_player_disposals_over_under_all <-
+  map(player_disposal_ou_links, safe_get_prop_data) |>
     map("result") |>
     bind_rows() |>
     rename(match_id = link) |>
@@ -332,6 +349,8 @@ betright_player_disposals <-
     player_name = case_when(
       str_detect(player_name, "Nicholas Daicos") ~ "Nick Daicos",
       str_detect(player_name, "Lachlan Schultz") ~ "Lachie Schultz",
+      str_detect(player_name, "Callum Brown") ~ "Callum M. Brown",
+      str_detect(player_name, "Harrison Himmelberg") ~ "Harry Himmelberg",
       .default = player_name
     )
   ) |>
@@ -466,6 +485,8 @@ betright_player_goals <-
     player_name = case_when(
       str_detect(player_name, "Nicholas Daicos") ~ "Nick Daicos",
       str_detect(player_name, "Lachlan Schultz") ~ "Lachie Schultz",
+      str_detect(player_name, "Callum Brown") ~ "Callum M. Brown",
+      str_detect(player_name, "Harrison Himmelberg") ~ "Harry Himmelberg",
       .default = player_name
     )
   ) |>
@@ -498,9 +519,226 @@ betright_player_goals <-
     fixed_market_id_under
   )
 
+# Get player fantasy_points data--------------------------------------------------------
+
+# Fantasy Points
+betright_player_fantasy_points_alternate <-
+  map(player_fantasy_links, safe_get_prop_data) |> 
+  map("result") |>
+  bind_rows() |> 
+  filter(str_detect(outcome_title, "(Quarter)|(Half)", negate = TRUE)) |> 
+  rename(match_id = link) |> 
+  mutate(match_id = as.integer(str_extract(match_id, "[0-9]{4,7}"))) |> 
+  left_join(match_names) |> 
+  filter(!is.na(outcome_name))
+
+# Combine
+betright_player_fantasy_points_all <- betright_player_fantasy_points_alternate
+  
+# Get alternate player fantasy_points markets
+betright_alternate_fantasy_points <-
+  betright_player_fantasy_points_all |>
+  filter(str_detect(outcome_title, "Over/Under", negate = TRUE)) |> 
+  mutate(player_name = str_remove(outcome_title, "Fantasy Points - ")) |> 
+  mutate(line = str_extract(outcome_name, "\\d+")) |>
+  mutate(line = as.integer(line) - 0.5) |> 
+  rename(over_price = price) |> 
+  select(match, player_name, line, over_price, group_by_header, event_id, outcome_name, outcome_id, fixed_market_id)
+
+# Combine
+betright_player_fantasy_points <-
+  betright_alternate_fantasy_points |>
+  mutate(agency = "BetRight") |>
+  mutate(market_type = "Player Fantasy Points") |>
+  separate(match,
+           into = c("home_team", "away_team"),
+           sep = " v ") |>
+  mutate(home_team = fix_team_names(home_team),
+         away_team = fix_team_names(away_team)) |>
+  mutate(
+    player_name = case_when(
+      str_detect(player_name, "Nicholas Daicos") ~ "Nick Daicos",
+      str_detect(player_name, "Lachlan Schultz") ~ "Lachie Schultz",
+      str_detect(player_name, "Callum Brown") ~ "Callum M. Brown",
+      str_detect(player_name, "Harrison Himmelberg") ~ "Harry Himmelberg",
+      .default = player_name
+    )
+  ) |>
+  left_join(player_names[, c("player_full_name", "team_name")], by = c("player_name" = "player_full_name")) |>
+  mutate(
+    opposition_team = case_when(
+      team_name == away_team ~ home_team,
+      team_name == home_team ~ away_team
+    )
+  ) |>
+  transmute(
+    match = paste0(home_team, " v ", away_team),
+    home_team,
+    away_team,
+    market_name = "Player Fantasy Points",
+    player_name,
+    player_team = team_name,
+    line,
+    over_price,
+    agency = "BetRight",
+    opposition_team,
+    group_by_header,
+    event_id,
+    outcome_name,
+    outcome_id,
+    fixed_market_id
+  )
+
+# Get player marks data--------------------------------------------------------
+
+# Marks
+betright_player_marks_alternate <-
+  map(player_marks_links, safe_get_prop_data) |> 
+  map("result") |>
+  bind_rows() |> 
+  filter(str_detect(outcome_title, "(Quarter)|(Half)", negate = TRUE)) |> 
+  rename(match_id = link) |> 
+  mutate(match_id = as.integer(str_extract(match_id, "[0-9]{4,7}"))) |> 
+  left_join(match_names) |> 
+  filter(!is.na(outcome_name))
+
+# Combine
+betright_player_marks_all <- betright_player_marks_alternate
+
+# Get alternate player marks markets
+betright_alternate_marks <-
+  betright_player_marks_all |>
+  filter(str_detect(outcome_title, "Over/Under", negate = TRUE)) |> 
+  mutate(player_name = str_remove(outcome_name, " \\d+\\+$")) |> 
+  mutate(line = str_extract(outcome_name, "\\d+\\+$")) |>
+  mutate(line = str_remove(line, "\\+$")) |>
+  mutate(line = as.integer(line) - 0.5) |> 
+  rename(over_price = price) |> 
+  select(match, player_name, line, over_price, group_by_header, event_id, outcome_name, outcome_id, fixed_market_id)
+
+# Combine
+betright_player_marks <-
+  betright_alternate_marks |>
+  mutate(agency = "BetRight") |>
+  mutate(market_type = "Player Marks") |>
+  separate(match,
+           into = c("home_team", "away_team"),
+           sep = " v ") |>
+  mutate(home_team = fix_team_names(home_team),
+         away_team = fix_team_names(away_team)) |>
+  mutate(
+    player_name = case_when(
+      str_detect(player_name, "Nicholas Daicos") ~ "Nick Daicos",
+      str_detect(player_name, "Lachlan Schultz") ~ "Lachie Schultz",
+      str_detect(player_name, "Callum Brown") ~ "Callum M. Brown",
+      str_detect(player_name, "Ashley Johnson") ~ "Ash Johnson",
+      .default = player_name
+    )
+  ) |>
+  left_join(player_names[, c("player_full_name", "team_name")], by = c("player_name" = "player_full_name")) |>
+  mutate(
+    opposition_team = case_when(
+      team_name == away_team ~ home_team,
+      team_name == home_team ~ away_team
+    )
+  ) |>
+  transmute(
+    match = paste0(home_team, " v ", away_team),
+    home_team,
+    away_team,
+    market_name = "Player Marks",
+    player_name,
+    player_team = team_name,
+    line,
+    over_price,
+    agency = "BetRight",
+    opposition_team,
+    group_by_header,
+    event_id,
+    outcome_name,
+    outcome_id,
+    fixed_market_id
+  )
+
+
+# Get player tackles data--------------------------------------------------------
+
+# Tackles
+betright_player_tackles_alternate <-
+  map(player_tackles_links, safe_get_prop_data) |> 
+  map("result") |>
+  bind_rows() |> 
+  filter(str_detect(outcome_title, "(Quarter)|(Half)", negate = TRUE)) |> 
+  rename(match_id = link) |> 
+  mutate(match_id = as.integer(str_extract(match_id, "[0-9]{4,7}"))) |> 
+  left_join(match_names) |> 
+  filter(!is.na(outcome_name))
+
+# Combine
+betright_player_tackles_all <- betright_player_tackles_alternate
+
+# Get alternate player tackles markets
+betright_alternate_tackles <-
+  betright_player_tackles_all |>
+  filter(str_detect(outcome_title, "Over/Under", negate = TRUE)) |> 
+  mutate(player_name = str_remove(outcome_name, " \\d+\\+$")) |> 
+  mutate(line = str_extract(outcome_name, "\\d+\\+$")) |>
+  mutate(line = str_remove(line, "\\+$")) |>
+  mutate(line = as.integer(line) - 0.5) |> 
+  rename(over_price = price) |> 
+  select(match, player_name, line, over_price, group_by_header, event_id, outcome_name, outcome_id, fixed_market_id)
+
+# Combine
+betright_player_tackles <-
+  betright_alternate_tackles |>
+  mutate(agency = "BetRight") |>
+  mutate(market_type = "Player Tackles") |>
+  separate(match,
+           into = c("home_team", "away_team"),
+           sep = " v ") |>
+  mutate(home_team = fix_team_names(home_team),
+         away_team = fix_team_names(away_team)) |>
+  mutate(
+    player_name = case_when(
+      str_detect(player_name, "Nicholas Daicos") ~ "Nick Daicos",
+      str_detect(player_name, "Lachlan Schultz") ~ "Lachie Schultz",
+      str_detect(player_name, "Callum Brown") ~ "Callum M. Brown",
+      str_detect(player_name, "Harrison Himmelberg") ~ "Harry Himmelberg",
+      .default = player_name
+    )
+  ) |>
+  left_join(player_names[, c("player_full_name", "team_name")], by = c("player_name" = "player_full_name")) |>
+  mutate(
+    opposition_team = case_when(
+      team_name == away_team ~ home_team,
+      team_name == home_team ~ away_team
+    )
+  ) |>
+  transmute(
+    match = paste0(home_team, " v ", away_team),
+    home_team,
+    away_team,
+    market_name = "Player Tackles",
+    player_name,
+    player_team = team_name,
+    line,
+    over_price,
+    agency = "BetRight",
+    opposition_team,
+    group_by_header,
+    event_id,
+    outcome_name,
+    outcome_id,
+    fixed_market_id
+  )
+
 #===============================================================================
 # Write to CSV
 #===============================================================================
 
 betright_player_disposals |> write_csv("Data/scraped_odds/betright_player_disposals.csv")
 betright_player_goals |> write_csv("Data/scraped_odds/betright_player_goals.csv")
+betright_player_marks |> write_csv("Data/scraped_odds/betright_player_marks.csv")
+betright_player_tackles |> write_csv("Data/scraped_odds/betright_player_tackles.csv")
+betright_player_fantasy_points |> write_csv("Data/scraped_odds/betright_player_fantasy_points.csv")
+

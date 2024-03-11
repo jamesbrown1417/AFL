@@ -2,9 +2,14 @@
 library(tidyverse)
 library(googlesheets4)
 library(googledrive)
+library(future)
+library(furrr)
+
+# Set up parallel processing
+plan(multisession)
 
 # Get empirical probability function
-# source("Scripts/get_empirical_probabilities_2023.R")
+source("Functions/get_empirical_probabilities_last_n.R")
 
 # Read in 2023 empirical probabilities
 empirical_probabilities_2023 <- read_rds("Data/empirical_probabilities_2023.rds")
@@ -140,9 +145,11 @@ all_player_disposals <-
 # Add empirical probabilities---------------------------------------------------
 
 # Disposals
-distinct_point_combos <-
+distinct_disposal_combos <-
   all_player_disposals |>
-  distinct(player_name, line)
+  distinct(player_name, line) |> 
+  rename(player_full_name = player_name) |> 
+  mutate(stat = "disposals")
 
 player_emp_probs_2023 <-
   empirical_probabilities_2023 |>
@@ -151,10 +158,10 @@ player_emp_probs_2023 <-
   rename(player_name = player_full_name,
          empirical_prob_over_2023 = emp_prob_2023)
   
-# player_emp_probs_2024 <-
-#   pmap(distinct_point_combos, get_empirical_prob, "Disposals", "2024", .progress = TRUE) |>
-#   bind_rows() |>
-#   select(player_name, line, games_played_2024 = games_played, empirical_prob_2024, empirical_prob_last_10)
+player_emp_probs_2024 <-
+  future_pmap(distinct_disposal_combos, get_empirical_prob, .progress = TRUE) |>
+  bind_rows() |>
+  select(player_name = player_full_name, line, contains("emp_prob"))
 
 all_player_disposals <-
   all_player_disposals |>
@@ -163,11 +170,23 @@ all_player_disposals <-
     implied_prob_under = 1 / under_price
   ) |>
   left_join(player_emp_probs_2023, by = c("player_name", "line")) |>
-  # left_join(player_emp_probs_2024, by = c("player_name", "line")) |>
+  left_join(player_emp_probs_2024, by = c("player_name", "line")) |>
   mutate(empirical_prob_under_2023 = 1 - empirical_prob_over_2023) |> 
+  mutate(empirical_prop_under_last_3 = 1 - emp_prob_last_3,
+         empirical_prop_under_last_5 = 1 - emp_prob_last_5,
+         empirical_prop_under_last_7 = 1 - emp_prob_last_7,
+         empirical_prop_under_last_10 = 1 - emp_prob_last_10) |> 
   mutate(
     diff_over_2023 = empirical_prob_over_2023 - implied_prob_over,
-    diff_under_2023 = empirical_prob_under_2023 - implied_prob_under) |> 
+    diff_over_last_3 = emp_prob_last_3 - implied_prob_over,
+    diff_over_last_5 = emp_prob_last_5 - implied_prob_over,
+    diff_over_last_7 = emp_prob_last_7 - implied_prob_over,
+    diff_over_last_10 = emp_prob_last_10 - implied_prob_over,
+    diff_under_2023 = empirical_prob_under_2023 - implied_prob_under,
+    diff_under_last_3 = empirical_prop_under_last_3 - implied_prob_under,
+    diff_under_last_5 = empirical_prop_under_last_5 - implied_prob_under,
+    diff_under_last_7 = empirical_prop_under_last_7 - implied_prob_under,
+    diff_under_last_10 = empirical_prop_under_last_10 - implied_prob_under) |> 
   mutate_if(is.double, round, 2) |>
   group_by(player_name, line) |>
   mutate(
@@ -206,9 +225,11 @@ all_player_goals <-
 # Add empirical probabilities---------------------------------------------------
 
 # goals
-distinct_point_combos <-
+distinct_goal_combos <-
   all_player_goals |>
-  distinct(player_name, line)
+  distinct(player_name, line) |> 
+  rename(player_full_name = player_name) |> 
+  mutate(stat = "goals")
 
 player_emp_probs_2023 <-
   empirical_probabilities_2023 |>
@@ -217,10 +238,10 @@ player_emp_probs_2023 <-
   rename(player_name = player_full_name,
          empirical_prob_over_2023 = emp_prob_2023)
 
-# player_emp_probs_2024 <-
-#   pmap(distinct_point_combos, get_empirical_prob, "goals", "2024", .progress = TRUE) |>
-#   bind_rows() |>
-#   select(player_name, line, games_played_2024 = games_played, empirical_prob_2024, empirical_prob_last_10)
+player_emp_probs_2024 <-
+  future_pmap(distinct_goal_combos, get_empirical_prob, .progress = TRUE) |>
+  bind_rows() |>
+  select(player_name = player_full_name, line, contains("emp_prob"))
 
 all_player_goals <-
   all_player_goals |>
@@ -229,11 +250,23 @@ all_player_goals <-
     implied_prob_under = 1 / under_price
   ) |>
   left_join(player_emp_probs_2023, by = c("player_name", "line")) |>
-  # left_join(player_emp_probs_2024, by = c("player_name", "line")) |>
-  mutate(empirical_prob_under_2023 = 1 - empirical_prob_over_2023) |> 
+  left_join(player_emp_probs_2024, by = c("player_name", "line")) |>
+  mutate(empirical_prob_under_2023 = 1 - empirical_prob_over_2023) |>
+  mutate(empirical_prop_under_last_3 = 1 - emp_prob_last_3,
+         empirical_prop_under_last_5 = 1 - emp_prob_last_5,
+         empirical_prop_under_last_7 = 1 - emp_prob_last_7,
+         empirical_prop_under_last_10 = 1 - emp_prob_last_10) |> 
   mutate(
     diff_over_2023 = empirical_prob_over_2023 - implied_prob_over,
-    diff_under_2023 = empirical_prob_under_2023 - implied_prob_under) |> 
+    diff_over_last_3 = emp_prob_last_3 - implied_prob_over,
+    diff_over_last_5 = emp_prob_last_5 - implied_prob_over,
+    diff_over_last_7 = emp_prob_last_7 - implied_prob_over,
+    diff_over_last_10 = emp_prob_last_10 - implied_prob_over,
+    diff_under_2023 = empirical_prob_under_2023 - implied_prob_under,
+    diff_under_last_3 = empirical_prop_under_last_3 - implied_prob_under,
+    diff_under_last_5 = empirical_prop_under_last_5 - implied_prob_under,
+    diff_under_last_7 = empirical_prop_under_last_7 - implied_prob_under,
+    diff_under_last_10 = empirical_prop_under_last_10 - implied_prob_under) |>
   mutate_if(is.double, round, 2) |>
   group_by(player_name, line) |>
   mutate(
@@ -274,7 +307,9 @@ all_player_fantasy_points <-
 # fantasy_points
 distinct_point_combos <-
   all_player_fantasy_points |>
-  distinct(player_name, line)
+  distinct(player_name, line) |>
+  rename(player_full_name = player_name) |>
+  mutate(stat = "fantasy_points")
 
 player_emp_probs_2023 <-
   empirical_probabilities_2023 |>
@@ -283,10 +318,10 @@ player_emp_probs_2023 <-
   rename(player_name = player_full_name,
          empirical_prob_over_2023 = emp_prob_2023)
 
-# player_emp_probs_2024 <-
-#   pmap(distinct_point_combos, get_empirical_prob, "fantasy_points", "2024", .progress = TRUE) |>
-#   bind_rows() |>
-#   select(player_name, line, games_played_2024 = games_played, empirical_prob_2024, empirical_prob_last_10)
+player_emp_probs_2024 <-
+  future_pmap(distinct_point_combos, get_empirical_prob, .progress = TRUE) |>
+  bind_rows() |>
+  select(player_name = player_full_name, line, contains("emp_prob"))
 
 all_player_fantasy_points <-
   all_player_fantasy_points |>
@@ -295,11 +330,23 @@ all_player_fantasy_points <-
     implied_prob_under = 1 / under_price
   ) |>
   left_join(player_emp_probs_2023, by = c("player_name", "line")) |>
-  # left_join(player_emp_probs_2024, by = c("player_name", "line")) |>
-  mutate(empirical_prob_under_2023 = 1 - empirical_prob_over_2023) |> 
+  left_join(player_emp_probs_2024, by = c("player_name", "line")) |>
+  mutate(empirical_prob_under_2023 = 1 - empirical_prob_over_2023) |>
+  mutate(empirical_prop_under_last_3 = 1 - emp_prob_last_3,
+         empirical_prop_under_last_5 = 1 - emp_prob_last_5,
+         empirical_prop_under_last_7 = 1 - emp_prob_last_7,
+         empirical_prop_under_last_10 = 1 - emp_prob_last_10) |>
   mutate(
     diff_over_2023 = empirical_prob_over_2023 - implied_prob_over,
-    diff_under_2023 = empirical_prob_under_2023 - implied_prob_under) |> 
+    diff_over_last_3 = emp_prob_last_3 - implied_prob_over,
+    diff_over_last_5 = emp_prob_last_5 - implied_prob_over,
+    diff_over_last_7 = emp_prob_last_7 - implied_prob_over,
+    diff_over_last_10 = emp_prob_last_10 - implied_prob_over,
+    diff_under_2023 = empirical_prob_under_2023 - implied_prob_under,
+    diff_under_last_3 = empirical_prop_under_last_3 - implied_prob_under,
+    diff_under_last_5 = empirical_prop_under_last_5 - implied_prob_under,
+    diff_under_last_7 = empirical_prop_under_last_7 - implied_prob_under,
+    diff_under_last_10 = empirical_prop_under_last_10 - implied_prob_under) |>
   mutate_if(is.double, round, 2) |>
   group_by(player_name, line) |>
   mutate(
