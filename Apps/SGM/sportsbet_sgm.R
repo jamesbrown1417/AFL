@@ -7,8 +7,8 @@ library(mongolite)
 # Sportsbet SGM-----------------------------------------------------------------
 sportsbet_sgm <-
   read_csv("../../Data/scraped_odds/sportsbet_player_disposals.csv") |> 
-  rename(price = over_price,
-         number_of_disposals = line) |> 
+  bind_rows(read_csv("../../Data/scraped_odds/sportsbet_player_goals.csv")) |> 
+  rename(price = over_price) |> 
   select(-contains("under"))
 
 sportsbet_sgm <-
@@ -25,8 +25,8 @@ sportsbet_sgm <-
 # Function to get SGM data
 #=-=============================================================================
 
-get_sgm_sportsbet <- function(data, player_names, disposal_counts) {
-  if (length(player_names) != length(disposal_counts)) {
+get_sgm_sportsbet <- function(data, player_names, stat_counts, markets) {
+  if (length(player_names) != length(stat_counts)) {
     stop("Both lists should have the same length")
   }
   
@@ -34,7 +34,8 @@ get_sgm_sportsbet <- function(data, player_names, disposal_counts) {
   for (i in seq_along(player_names)) {
     temp_df <- data %>%
       filter(player_name == player_names[i],
-             number_of_disposals == disposal_counts[i])
+             line == stat_counts[i],
+             market_name == markets[i])
     filtered_df <- bind_rows(filtered_df, temp_df)
   }
   
@@ -57,8 +58,8 @@ get_sgm_sportsbet <- function(data, player_names, disposal_counts) {
 # Make Post Request
 #==============================================================================
 
-call_sgm_sportsbet <- function(data, player_names, disposal_counts) {
-  if (length(player_names) != length(disposal_counts)) {
+call_sgm_sportsbet <- function(data, player_names, stat_counts, markets) {
+  if (length(player_names) != length(stat_counts)) {
     stop("Both lists should have the same length")
   }
   
@@ -66,7 +67,8 @@ call_sgm_sportsbet <- function(data, player_names, disposal_counts) {
   for (i in seq_along(player_names)) {
     temp_df <- data %>%
       filter(player_name == player_names[i],
-             number_of_disposals == disposal_counts[i])
+             line == stat_counts[i],
+             market_name == markets[i])
     filtered_df <- bind_rows(filtered_df, temp_df)
   }
   
@@ -76,7 +78,7 @@ call_sgm_sportsbet <- function(data, player_names, disposal_counts) {
   
   unadjusted_price <- prod(filtered_df$price)
   
-  payload <- get_sgm_sportsbet(data, player_names, disposal_counts)
+  payload <- get_sgm_sportsbet(data, player_names, stat_counts, markets)
   
   url <- 'https://www.sportsbet.com.au/apigw/multi-pricer/combinations/price'
   
@@ -100,11 +102,13 @@ call_sgm_sportsbet <- function(data, player_names, disposal_counts) {
   adjusted_price <- 1 + (response_content$price$numerator / response_content$price$denominator)
   adjustment_factor <- adjusted_price / unadjusted_price
   
-  combined_list <- paste(player_names, disposal_counts, sep = ": ")
+  combined_list <- paste(player_names, stat_counts, sep = ": ")
   player_string <- paste(combined_list, collapse = ", ")
+  market_string <- paste(markets, collapse = ", ")
   
   output_data <- data.frame(
     Selections = player_string,
+    Markets = market_string,
     Unadjusted_Price = unadjusted_price,
     Adjusted_Price = adjusted_price,
     Adjustment_Factor = adjustment_factor,
@@ -116,6 +120,7 @@ call_sgm_sportsbet <- function(data, player_names, disposal_counts) {
 
 # call_sgm_sportsbet(
 #   data = sportsbet_sgm,
-#   player_names = c("Nick Daicos", "Tom Green"),
-#   disposal_counts = c(29.5, 29.5)
+#   player_names = c("Charlie Curnow", "Blake Acres"),
+#   stat_counts = c(2.5, 19.5),
+#   markets = c("Player Goals", "Player Disposals")
 # )

@@ -7,8 +7,8 @@ library(purrr)
 # Neds SGM-----------------------------------------------------------------
 neds_sgm <-
   read_csv("../../Data/scraped_odds/neds_player_disposals.csv") |> 
-  rename(price = over_price,
-         number_of_disposals = line) |> 
+  bind_rows(read_csv("../../Data/scraped_odds/neds_player_goals.csv")) |> 
+  rename(price = over_price) |> 
   select(-contains("under"))
 
 #===============================================================================
@@ -47,8 +47,8 @@ create_api_url <- function(event_id, market_ids, entrant_ids) {
 # Function to get SGM Price
 #===============================================================================
 
-call_sgm_neds <- function(data, player_names, disposal_counts) {
-  if (length(player_names) != length(disposal_counts)) {
+call_sgm_neds <- function(data, player_names, stat_counts, markets) {
+  if (length(player_names) != length(stat_counts)) {
     stop("Both lists should have the same length")
   }
   
@@ -56,7 +56,8 @@ call_sgm_neds <- function(data, player_names, disposal_counts) {
   for (i in seq_along(player_names)) {
     temp_df <- data %>%
       filter(player_name == player_names[i],
-             number_of_disposals == disposal_counts[i])
+             line == stat_counts[i],
+             market_name == markets[i])
     filtered_df <- bind_rows(filtered_df, temp_df)
   }
   
@@ -85,11 +86,13 @@ call_sgm_neds <- function(data, player_names, disposal_counts) {
   
   adjustment_factor <- adjusted_price / unadjusted_price
   
-  combined_list <- paste(player_names, disposal_counts, sep = ": ")
+  combined_list <- paste(player_names, stat_counts, sep = ": ")
   player_string <- paste(combined_list, collapse = ", ")
+  market_string <- paste(markets, collapse = ", ")
   
   output_data <- data.frame(
     Selections = player_string,
+    Markets = market_string,
     Unadjusted_Price = unadjusted_price,
     Adjusted_Price = adjusted_price,
     Adjustment_Factor = adjustment_factor,
@@ -102,6 +105,7 @@ call_sgm_neds <- function(data, player_names, disposal_counts) {
 
 # call_sgm_neds(
 #   data = neds_sgm,
-#   player_names = c("Oliver Florent", "Clayton Oliver"),
-#   disposal_counts = c("19.5", "19.5")
+#   player_names = c("Charlie Curnow", "Blake Acres"),
+#   stat_counts = c(2.5, 19.5),
+#   markets = c("Player Goals", "Player Disposals")
 # )

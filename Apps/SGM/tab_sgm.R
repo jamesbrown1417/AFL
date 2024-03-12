@@ -1,13 +1,13 @@
 library(httr)
 library(jsonlite)
-library(dplyr)
+library(tidyverse)
 library(purrr)
 
 # TAB SGM-----------------------------------------------------------------------
 tab_sgm <-
   read_csv("../../Data/scraped_odds/tab_player_disposals.csv") |> 
-  rename(price = over_price,
-         number_of_disposals = line) |> 
+  bind_rows(read_csv("../../Data/scraped_odds/tab_player_goals.csv")) |> 
+  rename(price = over_price) |>  
   select(-contains("under"))
 
 #==============================================================================
@@ -15,8 +15,8 @@ tab_sgm <-
 #===============================================================================
 
 # Function to get SGM data
-get_sgm_tab <- function(data, player_names, disposal_counts) {
-  if (length(player_names) != length(disposal_counts)) {
+get_sgm_tab <- function(data, player_names, stat_counts, markets) {
+  if (length(player_names) != length(stat_counts)) {
     stop("Both lists should have the same length")
   }
   
@@ -24,7 +24,8 @@ get_sgm_tab <- function(data, player_names, disposal_counts) {
   for (i in seq_along(player_names)) {
     temp_df <- data %>% 
       filter(player_name == player_names[i] &
-               number_of_disposals == disposal_counts[i])
+               line == stat_counts[i] &
+               market_name == markets[i])
     filtered_df <- bind_rows(filtered_df, temp_df)
   }
   
@@ -42,9 +43,9 @@ get_sgm_tab <- function(data, player_names, disposal_counts) {
 #==============================================================================
 
 # Make Post Request
-call_sgm_tab <- function(data, player_names, disposal_counts) {
+call_sgm_tab <- function(data, player_names, stat_counts, markets) {
   tryCatch({
-    if (length(player_names) != length(disposal_counts)) {
+    if (length(player_names) != length(stat_counts)) {
       stop("Both lists should have the same length")
     }
     
@@ -52,7 +53,8 @@ call_sgm_tab <- function(data, player_names, disposal_counts) {
     for (i in seq_along(player_names)) {
       temp_df <- data %>% 
         filter(player_name == player_names[i] &
-                 number_of_disposals == disposal_counts[i])
+                 line == stat_counts[i] &
+                 market_name == markets[i])
       filtered_df <- bind_rows(filtered_df, temp_df)
     }
     
@@ -64,7 +66,7 @@ call_sgm_tab <- function(data, player_names, disposal_counts) {
     unadjusted_price <- prod(filtered_df$price)
     
     # Get propositions
-    propositions <- get_sgm_tab(data, player_names, disposal_counts)
+    propositions <- get_sgm_tab(data, player_names, stat_counts, markets)
     
     url <- "https://api.beta.tab.com.au/v1/pricing-service/enquiry"
     
@@ -94,12 +96,14 @@ call_sgm_tab <- function(data, player_names, disposal_counts) {
     response_content <- content(response, "parsed")
     adjusted_price <- as.numeric(response_content$bets[[1]]$legs[[1]]$odds$decimal)
     adjustment_factor <- adjusted_price / unadjusted_price
-    combined_list <- paste(player_names, disposal_counts, sep = ": ")
+    combined_list <- paste(player_names, stat_counts, sep = ": ")
+    market_string <- paste(markets, collapse = ", ")
     player_string <- paste(combined_list, collapse = ", ")
     
     output_data <- tryCatch({
       data.frame(
         Selections = player_string,
+        Markets = market_string,
         Unadjusted_Price = unadjusted_price,
         Adjusted_Price = adjusted_price,
         Adjustment_Factor = adjustment_factor,
@@ -108,6 +112,7 @@ call_sgm_tab <- function(data, player_names, disposal_counts) {
     }, error = function(e) {
       data.frame(
         Selections = NA_character_,
+        Markets = NA_character_,
         Unadjusted_Price = NA_real_,
         Adjusted_Price = NA_real_,
         Adjustment_Factor = NA_real_,
@@ -124,6 +129,7 @@ call_sgm_tab <- function(data, player_names, disposal_counts) {
 
 # call_sgm_tab(
 #   data = tab_sgm,
-#   player_names = c("Nick Daicos", "Tom Green"),
-#   disposal_counts = c(24.5, 24.5)
+#   player_names = c("Charlie Curnow", "Blake Acres"),
+#   stat_counts = c(2.5, 19.5),
+#   markets = c("Player Goals", "Player Disposals")
 # )

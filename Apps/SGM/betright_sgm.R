@@ -1,13 +1,13 @@
 library(httr)
 library(jsonlite)
-library(dplyr)
+library(tidyverse)
 library(purrr)
 
 # BetRight SGM------------------------------------------------------------------
 betright_sgm <-
   read_csv("../../Data/scraped_odds/betright_player_disposals.csv") |> 
-  rename(price = over_price,
-         number_of_disposals = line) |> 
+  bind_rows(read_csv("../../Data/scraped_odds/betright_player_goals.csv")) |> 
+  rename(price = over_price) |> 
   select(-contains("under"))
 
 #===============================================================================
@@ -15,18 +15,19 @@ betright_sgm <-
 #===============================================================================
 
 # Function to get SGM data
-get_sgm_betright <- function(data, player_names, disposal_counts) {
+get_sgm_betright <- function(data, player_names, stat_counts, markets) {
   
-  if (length(player_names) != length(disposal_counts)) {
+  if (length(player_names) != length(stat_counts)) {
     stop("Both lists should have the same length")
   }
   
   filtered_df <- data.frame()
   for (i in 1:length(player_names)) {
     temp_df <- data[data$player_name == player_names[i] & 
-                      data$number_of_disposals == disposal_counts[i], ]
+                      data$line == stat_counts[i] &
+                      data$market_name == markets[i], ]
     if (nrow(temp_df) == 0) {
-      stop(paste("No data found for", player_names[i], "with", disposal_counts[i], "disposals."))
+      stop(paste("No data found for", player_names[i], "with", stat_counts[i], "disposals."))
     }
     filtered_df <- rbind(filtered_df, temp_df)
   }
@@ -62,17 +63,18 @@ get_sgm_betright <- function(data, player_names, disposal_counts) {
 #==============================================================================
 
 # Make POST request
-call_sgm_betright <- function(data, player_names, disposal_counts) {
-  if (length(player_names) != length(disposal_counts)) {
+call_sgm_betright <- function(data, player_names, stat_counts, markets) {
+  if (length(player_names) != length(stat_counts)) {
     stop("Both lists should have the same length")
   }
   
   filtered_df <- data.frame()
   for (i in 1:length(player_names)) {
     temp_df <- data[data$player_name == player_names[i] & 
-                      data$number_of_disposals == disposal_counts[i], ]
+                      data$line == stat_counts[i] &
+                      data$market_name == markets[i], ]
     if (nrow(temp_df) == 0) {
-      stop(paste("No data found for", player_names[i], "with", disposal_counts[i], "disposals."))
+      stop(paste("No data found for", player_names[i], "with", stat_counts[i], "disposals."))
     }
     filtered_df <- rbind(filtered_df, temp_df)
   }
@@ -83,7 +85,7 @@ call_sgm_betright <- function(data, player_names, disposal_counts) {
   
   unadjusted_price <- prod(filtered_df$price)
   
-  payload <- get_sgm_betright(data, player_names, disposal_counts)
+  payload <- get_sgm_betright(data, player_names, stat_counts, markets)
   
   url <- "https://sgm-api.betright.com.au/Pricing/SgmPrice?"
   
@@ -106,10 +108,12 @@ call_sgm_betright <- function(data, player_names, disposal_counts) {
   
   adjusted_price <- as.numeric(response_content$price)
   adjustment_factor <- adjusted_price / unadjusted_price
-  player_string <- paste(paste(player_names, disposal_counts, sep = ": "), collapse = ", ")
+  player_string <- paste(paste(player_names, stat_counts, sep = ": "), collapse = ", ")
+  market_string <- paste(markets, collapse = ", ")
   
   output_data <- data.frame(
     Selections = player_string,
+    Markets = market_string,
     Unadjusted_Price = unadjusted_price,
     Adjusted_Price = adjusted_price,
     Adjustment_Factor = adjustment_factor,
@@ -121,6 +125,7 @@ call_sgm_betright <- function(data, player_names, disposal_counts) {
 
 # call_sgm_betright(
 #   data = betright_sgm,
-#   player_names = c("Nick Daicos", "Tom Green"),
-#   disposal_counts = c(29.5, 29.5)
+#   player_names = c("Charlie Curnow", "Blake Acres"),
+#   stat_counts = c(2.5, 19.5),
+#   markets = c("Player Goals", "Player Disposals")
 # )

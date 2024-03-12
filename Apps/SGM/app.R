@@ -26,24 +26,24 @@ source("bet365_sgm.R")
 # Create compare sgm function
 #===============================================================================
 
-compare_sgm <- function(player_names, disposal_counts) {
+compare_sgm <- function(player_names, stat_counts, markets) {
   # Function to handle errors in the call_sgm functions
-  handle_call_sgm <- function(func, sgm, player_names, disposal_counts) {
+  handle_call_sgm <- function(func, sgm, player_names, stat_counts, markets) {
     tryCatch({
-      func(sgm, player_names, disposal_counts)
+      func(sgm, player_names, stat_counts, markets)
     }, error = function(e) {
       # Return a dataframe with NA values if an error occurs
-      data.frame(Selections=NA, Unadjusted_Price=NA, Adjusted_Price=NA, Adjustment_Factor=NA, Agency=NA)
+      data.frame(Selections=NA, Markets = NA, Unadjusted_Price=NA, Adjusted_Price=NA, Adjustment_Factor=NA, Agency=NA)
     })
   }
   
   # Get individual dataframes
-  pointsbet_data <- handle_call_sgm(call_sgm_pointsbet, pointsbet_sgm, player_names, disposal_counts)
-  sportsbet_data <- handle_call_sgm(call_sgm_sportsbet, sportsbet_sgm, player_names, disposal_counts)
-  tab_data <- handle_call_sgm(call_sgm_tab, tab_sgm, player_names, disposal_counts)
-  betright_data <- handle_call_sgm(call_sgm_betright, betright_sgm, player_names, disposal_counts)
-  neds_data <- handle_call_sgm(call_sgm_neds, neds_sgm, player_names, disposal_counts)
-  bet365_data <- handle_call_sgm(call_sgm_bet365, bet365_sgm, player_names, disposal_counts)
+  pointsbet_data <- handle_call_sgm(call_sgm_pointsbet, pointsbet_sgm, player_names, stat_counts, markets)
+  sportsbet_data <- handle_call_sgm(call_sgm_sportsbet, sportsbet_sgm, player_names, stat_counts, markets)
+  tab_data <- handle_call_sgm(call_sgm_tab, tab_sgm, player_names, stat_counts, markets)
+  betright_data <- handle_call_sgm(call_sgm_betright, betright_sgm, player_names, stat_counts, markets)
+  neds_data <- handle_call_sgm(call_sgm_neds, neds_sgm, player_names, stat_counts, markets)
+  bet365_data <- handle_call_sgm(call_sgm_bet365, bet365_sgm, player_names, stat_counts, markets)
   
   # Bind together and return
   bind_rows(pointsbet_data, sportsbet_data, tab_data, betright_data, neds_data, bet365_data) |>
@@ -58,10 +58,10 @@ compare_sgm <- function(player_names, disposal_counts) {
 # # Function to get all combinations and get SGM prices
 # #===============================================================================
 # 
-# sgm_combinations <- function(player_names, disposal_counts) {
+# sgm_combinations <- function(player_names, stat_counts) {
 #   
 #   # Creat tibble out of output
-#   input_dat <- tibble(player_names, disposal_counts)
+#   input_dat <- tibble(player_names, stat_counts)
 #   
 #   # Get all row combinations
 #   row_combinations_2 <- combn(nrow(input_dat), 2, simplify = FALSE)
@@ -99,10 +99,10 @@ compare_sgm <- function(player_names, disposal_counts) {
 #     
 #     # Get input cols
 #     player_names_tib <- input_tibble$player_names
-#     disposal_counts_tib <- input_tibble$disposal_counts
+#     stat_counts_tib <- input_tibble$stat_counts
 #     
 #     # Apply compare SGM
-#     compare_sgm(player_names_tib, disposal_counts_tib)
+#     compare_sgm(player_names_tib, stat_counts_tib)
 #   }
 #   
 #   # Get list of every combination
@@ -141,13 +141,20 @@ disposals <-
   read_rds("../../Data/processed_odds/all_player_disposals.rds") |> 
   rename(price = over_price,
          empirical_probability_2023 = empirical_prob_over_2023,
-         diff_2023 = diff_over_2023,
-         number_of_disposals = line)
+         diff_2023 = diff_over_2023)
+
+goals <-
+  read_rds("../../Data/processed_odds/all_player_goals.rds") |> 
+  rename(price = over_price,
+         empirical_probability_2023 = empirical_prob_over_2023,
+         diff_2023 = diff_over_2023)
+
+disposals <- disposals |> bind_rows(goals)
 
 # Create market best
 disposals <-
   disposals |>
-  group_by(match, player_name, number_of_disposals) |>
+  group_by(match, player_name, market_name, line) |>
   mutate(max_player_diff = max(diff_2023, na.rm = TRUE)) |>
   ungroup()
 
@@ -166,13 +173,14 @@ agencies <-
 # Create disposals dataframe to display
 disposals_display <-
   disposals |>
-  group_by(player_name, match, number_of_disposals) |>
+  group_by(player_name, match, line, market_name) |>
   mutate(market_best = max_player_diff == diff_2023) |>
   ungroup() |>
   arrange(desc(max_player_diff)) |> 
   transmute(match,
          player_name,
-         number_of_disposals,
+         market_name,
+         line,
          price,
          agency,
          prob_2023 = round(empirical_probability_2023, 2),
@@ -201,11 +209,28 @@ ui <- fluidPage(
     tabPanel("SGM",
              sidebarLayout(
                sidebarPanel(
-                 selectInput("match", "Select Match", choices = matches, selected = NULL),
-                 selectInput("agency", "Select Agency", choices = agencies, selected = NULL),
+                 selectInput(
+                   "match",
+                   "Select Match",
+                   choices = matches,
+                   selected = NULL
+                 ),
+                 selectInput(
+                   "agency",
+                   "Select Agency",
+                   choices = agencies,
+                   selected = NULL
+                 ),
+                 selectInput(
+                   "market",
+                   "Select Market",
+                   choices = c("Player Disposals", "Player Goals"),
+                   selected = c("Player Disposals", "Player Goals"),
+                   multiple = TRUE
+                 ),
                  checkboxInput("best_odds", "Only Show Best Market Odds?", value = FALSE),
-                 h3("Selections"),  
-                 DT::dataTableOutput("selected"), 
+                 h3("Selections"),
+                 DT::dataTableOutput("selected"),
                  h3("Pairwise Correlations"),
                  DT::dataTableOutput("correlations"),
                  h3("SGM Information"),
@@ -229,10 +254,22 @@ ui <- fluidPage(
     tabPanel("Cross Game Multi",
              sidebarLayout(
                sidebarPanel(
-                 selectInput("agency_cross", "Select Agency", choices = agencies, selected = NULL),
+                 selectInput(
+                   "agency_cross",
+                   "Select Agency",
+                   choices = agencies,
+                   selected = NULL
+                 ),
+                 selectInput(
+                   "market_cross",
+                   "Select Market",
+                   choices = c("Player Disposals", "Player Goals"),
+                   selected = c("Player Disposals", "Player Goals"),
+                   multiple = TRUE
+                 ),
                  checkboxInput("best_odds_cross", "Only Show Best Market Odds?", value = FALSE),
-                 h3("Selections"),  
-                 DT::dataTableOutput("selected_cross"), 
+                 h3("Selections"),
+                 DT::dataTableOutput("selected_cross"),
                  h3("Multi Information"),
                  uiOutput("summary_cross")
                ),
@@ -255,7 +292,10 @@ server <- function(input, output, session) {
   
   # For the "SGM" panel
   output$table <- renderDT({
-    filtered_data <- disposals_display[disposals_display$match == input$match & disposals_display$agency == input$agency,]
+    filtered_data <-
+      disposals_display[disposals_display$match == input$match &
+                          disposals_display$agency == input$agency &
+                          disposals_display$market_name %in% input$market,]
     
     if (input$best_odds) {filtered_data <- filtered_data |> filter(market_best) |> select(-market_best)}
     
@@ -265,9 +305,12 @@ server <- function(input, output, session) {
   observeEvent(input$table_rows_selected,{
     output$selected <- renderDT({
       if(!is.null(input$table_rows_selected)){
-        filtered_data <- disposals_display[disposals_display$match == input$match & disposals_display$agency == input$agency,]
+        filtered_data <-
+          disposals_display[disposals_display$match == input$match &
+                              disposals_display$agency == input$agency &
+                              disposals_display$market_name %in% input$market,]
         if (input$best_odds) {filtered_data <- filtered_data |> filter(market_best) |> select(-market_best)}
-        selected_data <- filtered_data[input$table_rows_selected, c("player_name", "number_of_disposals", "price")]
+        selected_data <- filtered_data[input$table_rows_selected, c("player_name", "line", "market_name", "price")]
         datatable(selected_data)
       }
     })
@@ -276,7 +319,7 @@ server <- function(input, output, session) {
   output$correlations <- renderDT({
     filtered_data <- disposals_display[disposals_display$match == input$match & disposals_display$agency == input$agency,]
     if (input$best_odds) {filtered_data <- filtered_data |> filter(market_best) |> select(-market_best)}
-    selected_data <- filtered_data[input$table_rows_selected, c("player_name", "number_of_disposals", "price")]
+    selected_data <- filtered_data[input$table_rows_selected, c("player_name", "line", "market_name", "price")]
     
     correlations_table <- correlations_2023 |> filter(player_a %in% selected_data$player_name & player_b %in% selected_data$player_name)
     datatable(correlations_table)
@@ -284,15 +327,21 @@ server <- function(input, output, session) {
   
   observeEvent(input$get_comparison, {
     # Get selected data
-    filtered_data <- disposals_display[disposals_display$match == input$match & disposals_display$agency == input$agency,]
+    filtered_data <- disposals_display[disposals_display$match == input$match &
+                                         disposals_display$agency == input$agency &
+                                         disposals_display$market_name %in% input$market,]
     if (input$best_odds) {filtered_data <- filtered_data |> filter(market_best) |> select(-market_best)}
-    selected_data <- filtered_data[input$table_rows_selected, c("player_name", "number_of_disposals", "price")]
+    selected_data <- filtered_data[input$table_rows_selected, c("player_name", "line", "market_name", "price")]
     
     player_names = selected_data$player_name
-    number_of_disposals = selected_data$number_of_disposals
+    lines = selected_data$line
+    market_names = selected_data$market_name
     
     # Call function
-    comparison_df <- compare_sgm(player_names, number_of_disposals)
+    comparison_df <- compare_sgm(
+      player_names = player_names,
+      stat_counts = lines,
+      markets = market_names)
     
     # populate DTOutput
     output$odds_compare <- renderDT({
@@ -300,27 +349,29 @@ server <- function(input, output, session) {
     })
   })
   
-  observeEvent(input$get_combos, {
-    # Get selected data
-    filtered_data <- disposals_display[disposals_display$match == input$match & disposals_display$agency == input$agency,]
-    if (input$best_odds) {filtered_data <- filtered_data |> filter(market_best) |> select(-market_best)}
-    selected_data <- filtered_data[input$table_rows_selected, c("player_name", "number_of_disposals", "price")]
-    
-    player_names = selected_data$player_name
-    number_of_disposals = selected_data$number_of_disposals
-    
-    # Call function
-    combo_df <- sgm_combinations(player_names, number_of_disposals)
-    
-    # populate DTOutput
-    output$all_selected_combinations <- renderDT({
-      datatable(combo_df, extensions = "Buttons", options = list(buttons = c('copy', 'csv', 'excel')))
-    })
-  })
-  
+  # observeEvent(input$get_combos, {
+  #   # Get selected data
+  #   filtered_data <- disposals_display[disposals_display$match == input$match & disposals_display$agency == input$agency,]
+  #   if (input$best_odds) {filtered_data <- filtered_data |> filter(market_best) |> select(-market_best)}
+  #   selected_data <- filtered_data[input$table_rows_selected, c("player_name", "number_of_disposals", "price")]
+  #   
+  #   player_names = selected_data$player_name
+  #   number_of_disposals = selected_data$number_of_disposals
+  #   
+  #   # Call function
+  #   combo_df <- sgm_combinations(player_names, number_of_disposals)
+  #   
+  #   # populate DTOutput
+  #   output$all_selected_combinations <- renderDT({
+  #     datatable(combo_df, extensions = "Buttons", options = list(buttons = c('copy', 'csv', 'excel')))
+  #   })
+  # })
+  # 
   output$summary <- renderUI({
     if(!is.null(input$table_rows_selected)){
-      filtered_data <- disposals_display[disposals_display$match == input$match & disposals_display$agency == input$agency,]
+      filtered_data <- disposals_display[disposals_display$match == input$match &
+                                           disposals_display$agency == input$agency &
+                                           disposals_display$market_name %in% input$market,]
       if (input$best_odds) {filtered_data <- filtered_data |> filter(market_best) |> select(-market_best)}
       selected_data <- filtered_data[input$table_rows_selected, ]
       uncorrelated_price <- prod(selected_data$price)
@@ -332,7 +383,8 @@ server <- function(input, output, session) {
   
   # For the "Cross Game Multi" panel
   output$table_cross <- renderDT({
-    filtered_data_cross <- disposals_display[disposals_display$agency == input$agency_cross,]
+    filtered_data_cross <- disposals_display[disposals_display$agency == input$agency_cross &
+                                             disposals_display$market_name %in% input$market_cross,]
     
     if (input$best_odds_cross) {filtered_data_cross <- filtered_data_cross |> filter(market_best) |> select(-market_best)}
     
@@ -342,11 +394,12 @@ server <- function(input, output, session) {
   observeEvent(input$table_cross_rows_selected,{
     output$selected_cross <- renderDT({
       if(!is.null(input$table_cross_rows_selected)){
-        filtered_data_cross <- disposals_display[disposals_display$agency == input$agency_cross,]
+        filtered_data_cross <- disposals_display[disposals_display$agency == input$agency_cross &
+                                                 disposals_display$market_name %in% input$market_cross,]
         
         if (input$best_odds_cross) {filtered_data_cross <- filtered_data_cross |> filter(market_best) |> select(-market_best)}
         
-        selected_data_cross <- filtered_data_cross[input$table_cross_rows_selected, c("player_name", "number_of_disposals", "price")]
+        selected_data_cross <- filtered_data_cross[input$table_cross_rows_selected, c("player_name", "line", "market_name", "price")]
         datatable(selected_data_cross)
       }
     })
@@ -354,7 +407,8 @@ server <- function(input, output, session) {
   
   output$summary_cross <- renderUI({
     if(!is.null(input$table_cross_rows_selected)){
-      filtered_data_cross <- disposals_display[disposals_display$agency == input$agency_cross,]
+      filtered_data_cross <- disposals_display[disposals_display$agency == input$agency_cross &
+                                               disposals_display$market_name %in% input$market_cross,]
       
       if (input$best_odds_cross) {filtered_data_cross <- filtered_data_cross |> filter(market_best) |> select(-market_best)}
       
@@ -368,7 +422,6 @@ server <- function(input, output, session) {
     }
   })
 }
-
 
 ##%######################################################%##
 #                                                          #
