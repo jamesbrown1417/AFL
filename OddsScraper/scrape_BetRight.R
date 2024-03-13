@@ -525,7 +525,20 @@ betright_player_goals <-
 betright_player_fantasy_points_alternate <-
   map(player_fantasy_links, safe_get_prop_data) |> 
   map("result") |>
-  bind_rows() |> 
+  bind_rows()
+
+if (ncol(betright_player_fantasy_points_alternate) < 2) {
+  betright_player_fantasy_points_alternate$outcome_title <- NA
+  betright_player_fantasy_points_alternate$outcome_name <- NA
+  betright_player_fantasy_points_alternate$outcome_id <- NA
+  betright_player_fantasy_points_alternate$fixed_market_id <- NA
+  betright_player_fantasy_points_alternate$price <- NA
+  betright_player_fantasy_points_alternate$group_by_header <- NA
+  betright_player_fantasy_points_alternate$event_id <- NA
+}
+
+betright_player_fantasy_points_alternate <-
+  betright_player_fantasy_points_alternate |> 
   filter(str_detect(outcome_title, "(Quarter)|(Half)", negate = TRUE)) |> 
   rename(match_id = link) |> 
   mutate(match_id = as.integer(str_extract(match_id, "[0-9]{4,7}"))) |> 
@@ -595,7 +608,20 @@ betright_player_fantasy_points <-
 betright_player_marks_alternate <-
   map(player_marks_links, safe_get_prop_data) |> 
   map("result") |>
-  bind_rows() |> 
+  bind_rows()
+
+if (ncol(betright_player_marks_alternate) < 2) {
+  betright_player_marks_alternate$outcome_title <- NA
+  betright_player_marks_alternate$outcome_name <- NA
+  betright_player_marks_alternate$outcome_id <- NA
+  betright_player_marks_alternate$fixed_market_id <- NA
+  betright_player_marks_alternate$price <- NA
+  betright_player_marks_alternate$group_by_header <- NA
+  betright_player_marks_alternate$event_id <- NA
+}
+
+betright_player_marks_alternate <-
+  betright_player_marks_alternate |> 
   filter(str_detect(outcome_title, "(Quarter)|(Half)", negate = TRUE)) |> 
   rename(match_id = link) |> 
   mutate(match_id = as.integer(str_extract(match_id, "[0-9]{4,7}"))) |> 
@@ -667,7 +693,20 @@ betright_player_marks <-
 betright_player_tackles_alternate <-
   map(player_tackles_links, safe_get_prop_data) |> 
   map("result") |>
-  bind_rows() |> 
+  bind_rows()
+
+if (ncol(betright_player_tackles_alternate) < 2) {
+  betright_player_tackles_alternate$outcome_title <- NA
+  betright_player_tackles_alternate$outcome_name <- NA
+  betright_player_tackles_alternate$outcome_id <- NA
+  betright_player_tackles_alternate$fixed_market_id <- NA
+  betright_player_tackles_alternate$price <- NA
+  betright_player_tackles_alternate$group_by_header <- NA
+  betright_player_tackles_alternate$event_id <- NA
+}
+
+betright_player_tackles_alternate <-
+  betright_player_tackles_alternate |> 
   filter(str_detect(outcome_title, "(Quarter)|(Half)", negate = TRUE)) |> 
   rename(match_id = link) |> 
   mutate(match_id = as.integer(str_extract(match_id, "[0-9]{4,7}"))) |> 

@@ -22,7 +22,7 @@ options(gargle_oauth_cache = ".secrets")
 drive_auth(cache = ".secrets", email = "cuzzy.punting@gmail.com")
 gs4_auth(token = drive_token())
 
-# # Run all odds scraping scripts-----------------------------------------------
+# Run all odds scraping scripts-------------------------------------------------
 run_scraping <- function(script_name) {
   tryCatch({
     source(script_name)
@@ -88,7 +88,8 @@ all_odds_h2h <-
 
 # Google Sheets-----------------------------------------------------
 sheet <- gs4_find("AFL Data")
-sheet_write(sheet, data = all_odds_h2h, sheet = "H2H")
+
+write_sheet(sheet, data = all_odds_h2h, sheet = "H2H")
 
 # Write as RDS
 all_odds_h2h |> write_rds("Data/processed_odds/all_h2h.rds")
@@ -119,7 +120,7 @@ all_odds_line <-
   select(-min_home_line, -max_home_line)
 
 # Google Sheets-----------------------------------------------------
-sheet_write(sheet, data = all_odds_line, sheet = "Line")
+write_sheet(sheet, data = all_odds_line, sheet = "Line")
 
 # Write as RDS
 all_odds_line |> write_rds("Data/processed_odds/all_line.rds")
@@ -199,7 +200,7 @@ all_player_disposals <-
   arrange(desc(variation), player_name, desc(over_price), line)
 
 # Add to google sheets
-sheet_write(sheet, data = all_player_disposals, sheet = "Player Disposals")
+write_sheet(sheet, data = all_player_disposals, sheet = "Player Disposals")
 
 # Write as RDS
 all_player_disposals |> write_rds("Data/processed_odds/all_player_disposals.rds")
@@ -279,7 +280,7 @@ all_player_goals <-
   arrange(desc(variation), player_name, desc(over_price), line)
 
 # Add to google sheets
-sheet_write(sheet, data = all_player_goals, sheet = "Player Goals")
+write_sheet(sheet, data = all_player_goals, sheet = "Player Goals")
 
 # Write as RDS
 all_player_goals |> write_rds("Data/processed_odds/all_player_goals.rds")
@@ -359,7 +360,7 @@ all_player_fantasy_points <-
   arrange(desc(variation), player_name, desc(over_price), line)
 
 # Add to google sheets
-sheet_write(sheet, data = all_player_fantasy_points, sheet = "Player Fantasy Points")
+write_sheet(sheet, data = all_player_fantasy_points, sheet = "Player Fantasy Points")
 
 # Write as RDS
 all_player_fantasy_points |> write_rds("Data/processed_odds/all_player_fantasy_points.rds")

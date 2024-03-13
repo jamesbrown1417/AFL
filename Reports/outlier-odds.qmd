@@ -1,11 +1,11 @@
 ---
-title: "Top Players By Position - Last Season"
+title: "Outlier Odds"
 execute:
   echo: false
   message: false
   warning: false
 author: "James Brown"
-date: "2024-02-12"
+date: "2024-03-12"
 format:
   html:
     df-print: kable
@@ -15,7 +15,7 @@ format:
     toc-depth: 3
     fig-width: 8
     fig-height: 6
-editor: visual
+editor: source
 ---
 
 ```{r setup, include=FALSE}
@@ -87,7 +87,8 @@ all_markets |>
 # Outlier List
 biggest_diffs_outliers <-
   biggest_diffs |>
-  filter(diff_over > 0.1)
+  filter(diff_over > 0.05) |> 
+  arrange(desc(diff_over_last_10))
 
 # Function to take list, filter to agency and return
 filter_agency <- function(df, agency) {

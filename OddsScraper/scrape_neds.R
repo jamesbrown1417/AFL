@@ -64,6 +64,7 @@ event_json_list <- list()
 # Loop through each event URL and get the event card JSON data
 for (url in event_json) {
   tryCatch({
+    # Perform the request
     response2 <-
       request(url) |>
       req_headers(
@@ -73,11 +74,23 @@ for (url in event_json) {
       ) |>
       req_perform() |>
       resp_body_json()
+    
+    # If successful, append the response to the list
     event_json_list <- append(event_json_list, list(response2))
   }, error = function(e) {
     cat("Error:", url, "\n", e$message, "\n")
+    # Append NULL to the list in case of an error
+    event_json_list <<- append(event_json_list, list(NULL))
   })
 }
+
+# Null elements
+index_to_remove <- which(sapply(event_json_list, is.null))
+
+# Remove null elements from all applicable objects
+event_json_list <- event_json_list[-index_to_remove]
+event_ids_df <- event_ids_df[-index_to_remove, ]
+df <- df[-index_to_remove, ]
 
 #===============================================================================
 # Get the market information for each match

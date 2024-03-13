@@ -26,14 +26,14 @@ async def main():
         for index, url in enumerate(url_df, start=1): # Start counting from 1 for match_n
             try:
                 await driver.get(url)
-                await driver.sleep(5)
+                await driver.sleep(2)
                 
                 # Scroll into view of disposal button and click
                 disposal_button = await driver.find_element(By.XPATH, "//div[contains(@class, 'gl-MarketGroupButton_Text') and text()='Disposals']")
                 await driver.execute_script("arguments[0].scrollIntoView(true);", disposal_button)
                 await driver.execute_script("window.scrollBy(0, -150)")
                 await disposal_button.click()
-                await driver.sleep(5)
+                await driver.sleep(2)
                 
                 # If there is a button that says Player Disposals, click it
                 try:
@@ -41,7 +41,7 @@ async def main():
                     await driver.execute_script("arguments[0].scrollIntoView(true);", player_disposals_button)
                     await driver.execute_script("window.scrollBy(0, -150)")
                     await player_disposals_button.click()
-                    await driver.sleep(5)
+                    await driver.sleep(2)
                 except:
                     pass
                 
@@ -51,7 +51,7 @@ async def main():
                     await driver.execute_script("arguments[0].scrollIntoView(true);", disposal_specials_button)
                     await driver.execute_script("window.scrollBy(0, -150)")
                     await disposal_specials_button.click()
-                    await driver.sleep(5)
+                    await driver.sleep(2)
                 except:
                     pass
                 
@@ -70,7 +70,7 @@ async def main():
                 # Click on the second button
                 await button_elements[1].click()
                     
-                await driver.sleep(1)
+                await driver.sleep(2)
                 
                 # Scroll into view of the third button
                 try:
@@ -82,7 +82,7 @@ async def main():
                     # Click on the third button
                     await specials_button_element.click()
                     print('pressed third button')
-                    await driver.sleep(5)
+                    await driver.sleep(2)
                     
                 except:
                     pass
@@ -103,19 +103,19 @@ async def main():
                 await driver.execute_script("window.scrollBy(0, -150)")
                 await tab_elements[3].click()
                     
-                await driver.sleep(1)
+                await driver.sleep(2)
                     
                 # Get all elements with class 'bbl-ShowMoreForHScroll ' that has text 'Show more'
                 button_elements_2 = await driver.find_elements(By.XPATH, "//div[contains(@class, 'bbl-ShowMoreForHScroll ') and contains(text(), 'Show more')]")
                     
-                await driver.sleep(1)
+                await driver.sleep(2)
                     
                 # Click on the first button after scrolling into view
                 await driver.execute_script("arguments[0].scrollIntoView(true);", button_elements_2[0])
                 await driver.execute_script("window.scrollBy(0, -150)")
                 await button_elements_2[0].click()
                     
-                await driver.sleep(1)
+                await driver.sleep(2)
                     
                 # Write out html to file------------------------------------------------
                 # wait for elem to exist
