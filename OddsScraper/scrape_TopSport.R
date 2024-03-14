@@ -12,7 +12,7 @@ player_names <- player_names |> select(player_full_name, team_name)
 source("Functions/fix_team_names.R")
 
 # URL of website
-topsport_url = "https://www.topsport.com.au/Sport/Aussie_Rules/AFL_-_Opening_Round/Matches"
+topsport_url = "https://www.topsport.com.au/Sport/Aussie_Rules/AFL_-_Round_1/Matches"
 
 #===============================================================================
 # Use rvest to get main market information-------------------------------------#
@@ -384,6 +384,9 @@ pick_your_own_fantasy_points_markets <-
 # Get Unique URLs
 pick_your_own_fantasy_points_markets <- unique(pick_your_own_fantasy_points_markets)
 
+# Only proceed if markets have been picked up above
+if (length(pick_your_own_fantasy_points_markets) > 0) {
+
 # Map function
 player_fantasy_points_alternate <-
     map(pick_your_own_fantasy_points_markets, read_topsport_html_fantasy_points) |> 
@@ -413,6 +416,7 @@ player_fantasy_points_alternate <-
     relocate(match, .before = player_name) |> 
     rename(player_team = team_name) |> 
     mutate(opposition_team = if_else(player_team == home_team, away_team, home_team))
+}
 
 #===============================================================================
 # Player Marks
@@ -465,6 +469,9 @@ pick_your_own_marks_markets <-
 # Get Unique URLs
 pick_your_own_marks_markets <- unique(pick_your_own_marks_markets)
 
+# Only proceed if markets have been picked up above
+if (length(pick_your_own_marks_markets) > 0) {
+
 # Map function
 player_marks_alternate <-
     map(pick_your_own_marks_markets, read_topsport_html_marks) |> 
@@ -494,7 +501,7 @@ player_marks_alternate <-
     relocate(match, .before = player_name) |> 
     rename(player_team = team_name) |> 
     mutate(opposition_team = if_else(player_team == home_team, away_team, home_team))
-
+}
 #===============================================================================
 # Player Tackles
 #===============================================================================
@@ -546,6 +553,9 @@ pick_your_own_tackles_markets <-
 # Get Unique URLs
 pick_your_own_tackles_markets <- unique(pick_your_own_tackles_markets)
 
+# Only proceed if markets have been picked up above
+if (length(pick_your_own_tackles_markets) > 0) {
+
 # Map function
 player_tackles_alternate <-
     map(pick_your_own_tackles_markets, read_topsport_html_tackles) |> 
@@ -575,6 +585,7 @@ player_tackles_alternate <-
     relocate(match, .before = player_name) |> 
     rename(player_team = team_name) |> 
     mutate(opposition_team = if_else(player_team == home_team, away_team, home_team))
+}
 
 #===============================================================================
 # Write to CSV
@@ -625,6 +636,9 @@ player_goals_alternate |>
     write_csv("Data/scraped_odds/topsport_player_goals.csv")
 
 # Tackles
+
+if (exists("player_tackles_alternate")) {
+
 player_tackles_alternate |>
     mutate(match = paste(home_team, away_team, sep = " v ")) |>
     select(any_of(
@@ -642,9 +656,12 @@ player_tackles_alternate |>
         "opposition_team"))) |>
     mutate(market_name = "Player Tackles") |>
     mutate(agency = "TopSport") |> 
-    write_csv("Data/scraped_odds/topsport_player_tackles.csv")
+    write_csv("Data/scraped_odds/topsport_player_tackles.csv")}
 
 # Marks
+
+if (exists("player_marks_alternate")) {
+
 player_marks_alternate |>
     mutate(match = paste(home_team, away_team, sep = " v ")) |>
     select(any_of(
@@ -662,9 +679,12 @@ player_marks_alternate |>
         "opposition_team"))) |>
     mutate(market_name = "Player Marks") |>
     mutate(agency = "TopSport") |> 
-    write_csv("Data/scraped_odds/topsport_player_marks.csv")
+    write_csv("Data/scraped_odds/topsport_player_marks.csv")}
 
 # Fantasy Points
+
+if (exists("player_fantasy_points_alternate")) {
+    
 player_fantasy_points_alternate |>
     mutate(match = paste(home_team, away_team, sep = " v ")) |>
     select(any_of(
@@ -682,7 +702,7 @@ player_fantasy_points_alternate |>
         "opposition_team"))) |>
     mutate(market_name = "Player Fantasy Points") |>
     mutate(agency = "TopSport") |> 
-    write_csv("Data/scraped_odds/topsport_player_fantasy_points.csv")
+    write_csv("Data/scraped_odds/topsport_player_fantasy_points.csv")}
 }
 
 # Make Safe Version
