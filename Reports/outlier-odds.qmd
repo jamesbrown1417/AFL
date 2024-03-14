@@ -72,7 +72,7 @@ all_markets |>
            second_best_odds = lead(over_price, 1)) |>
   slice_head(n = 1) |> 
   ungroup() |> 
-  filter(number_of_odds > 2) |>
+  filter(number_of_odds > 1) |>
   mutate(diff_over = second_best_implied_prob_over - best_implied_prob_over) |>
   select(-number_of_odds, -best_implied_prob_over, -second_best_implied_prob_over) |>
   arrange(desc(diff_over), match, player_name, market_name, line) |> 
@@ -87,7 +87,7 @@ all_markets |>
 # Outlier List
 biggest_diffs_outliers <-
   biggest_diffs |>
-  filter(diff_over > 0.05) |> 
+  filter(diff_over > 0.04) |> 
   arrange(desc(diff_over_last_10))
 
 # Function to take list, filter to agency and return
