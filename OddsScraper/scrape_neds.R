@@ -88,9 +88,10 @@ for (url in event_json) {
 index_to_remove <- which(sapply(event_json_list, is.null))
 
 # Remove null elements from all applicable objects
+if (length(index_to_remove) > 0) {
 event_json_list <- event_json_list[-index_to_remove]
 event_ids_df <- event_ids_df[-index_to_remove, ]
-df <- df[-index_to_remove, ]
+df <- df[-index_to_remove, ]}
 
 #===============================================================================
 # Get the market information for each match
