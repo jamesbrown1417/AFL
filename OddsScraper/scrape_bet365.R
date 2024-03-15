@@ -699,6 +699,14 @@ if (nrow(bet365_disposal_specials) == 0) {
     bet365_disposal_specials |> 
     mutate(opposition_team = "")}
 
+bet365_disposal_specials <-
+  bet365_disposal_specials |> 
+  mutate(over_price = as.numeric(over_price), under_price = as.numeric(under_price))
+
+bet365_disposals_lines <-
+  bet365_disposals_lines |> 
+  mutate(over_price = as.numeric(over_price), under_price = as.numeric(under_price))
+
 # Combine
 bet365_disposals <-
   bet365_disposals |> 

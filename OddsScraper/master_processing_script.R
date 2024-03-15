@@ -86,10 +86,10 @@ all_odds_h2h <-
   left_join(current_season_fixture) |>
   relocate(round, start_time, venue, .after = match)
 
-# Google Sheets-----------------------------------------------------
-sheet <- gs4_find("AFL Data")
-
-write_sheet(sheet, data = all_odds_h2h, sheet = "H2H")
+# # Google Sheets-----------------------------------------------------
+# sheet <- gs4_find("AFL Data")
+# 
+# write_sheet(sheet, data = all_odds_h2h, sheet = "H2H")
 
 # Write as RDS
 all_odds_h2h |> write_rds("Data/processed_odds/all_h2h.rds")
@@ -118,9 +118,9 @@ all_odds_line <-
   ungroup() |>
   arrange(desc(diff), match, desc(home_line)) |> 
   select(-min_home_line, -max_home_line)
-
-# Google Sheets-----------------------------------------------------
-write_sheet(sheet, data = all_odds_line, sheet = "Line")
+# 
+# # Google Sheets-----------------------------------------------------
+# write_sheet(sheet, data = all_odds_line, sheet = "Line")
 
 # Write as RDS
 all_odds_line |> write_rds("Data/processed_odds/all_line.rds")
@@ -199,8 +199,8 @@ all_player_disposals <-
   select(-min_implied_prob,-max_implied_prob) |>
   arrange(desc(variation), player_name, desc(over_price), line)
 
-# Add to google sheets
-write_sheet(sheet, data = all_player_disposals, sheet = "Player Disposals")
+# # Add to google sheets
+# write_sheet(sheet, data = all_player_disposals, sheet = "Player Disposals")
 
 # Write as RDS
 all_player_disposals |> write_rds("Data/processed_odds/all_player_disposals.rds")
@@ -279,8 +279,8 @@ all_player_goals <-
   select(-min_implied_prob,-max_implied_prob) |>
   arrange(desc(variation), player_name, desc(over_price), line)
 
-# Add to google sheets
-write_sheet(sheet, data = all_player_goals, sheet = "Player Goals")
+# # Add to google sheets
+# write_sheet(sheet, data = all_player_goals, sheet = "Player Goals")
 
 # Write as RDS
 all_player_goals |> write_rds("Data/processed_odds/all_player_goals.rds")
@@ -359,8 +359,8 @@ all_player_fantasy_points <-
   select(-min_implied_prob,-max_implied_prob) |>
   arrange(desc(variation), player_name, desc(over_price), line)
 
-# Add to google sheets
-write_sheet(sheet, data = all_player_fantasy_points, sheet = "Player Fantasy Points")
+# # Add to google sheets
+# write_sheet(sheet, data = all_player_fantasy_points, sheet = "Player Fantasy Points")
 
 # Write as RDS
 all_player_fantasy_points |> write_rds("Data/processed_odds/all_player_fantasy_points.rds")
