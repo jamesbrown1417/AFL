@@ -500,14 +500,33 @@ read_bet365_disposal_specials_html <- function(html_path) {
     html_nodes(".bbl-BetBuilderParticipantLabel_Name ") |>
     html_text()
   
+  # Get all over prices---------------------------------------------------------
+  
+  # Calculate the number of complete cycles of 'take 5, skip 5' in the vector
+  num_cycles <- length(bet365_disposals_odds) / 10
+  
+  # Generate an index sequence dynamically based on the length of my_vector
+  index <- unlist(lapply(1:ceiling(num_cycles), function(i) {
+    start <- (i - 1) * 10 + 1
+    end <- start + 4
+    seq(start, min(end, length(bet365_disposals_odds)))
+  }))
+  
+  # Subset the original vector with the dynamic index
+  bet365_disposals_odds_overs <- bet365_disposals_odds[index]
+  
   # Create data frame for Overs
   bet365_disposal_lines_odds_df_overs <-
     tibble(
       match = bet365_match_name,
       player_name = rep(bet365_disposals_player_names, each = 5),
       number_of_disposals = bet365_disposals_lines,
-      over_price = bet365_disposals_odds[1:(length(bet365_disposals_odds) / 2)],
+      over_price = bet365_disposals_odds_overs,
     )
+  
+  # Get all under prices--------------------------------------------------------
+  
+  bet365_disposals_odds_unders <- bet365_disposals_odds[-index]
   
   # Create data frame for Unders
   bet365_disposal_lines_odds_df_unders <-
@@ -515,7 +534,7 @@ read_bet365_disposal_specials_html <- function(html_path) {
       match = bet365_match_name,
       player_name = rep(bet365_disposals_player_names, each = 5),
       number_of_disposals = bet365_disposals_lines,
-      under_price = bet365_disposals_odds[(length(bet365_disposals_odds) / 2 + 1):length(bet365_disposals_odds)],
+      under_price = bet365_disposals_odds_unders
     )
   
   # Merge the two data frames
