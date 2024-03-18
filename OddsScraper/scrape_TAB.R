@@ -2,6 +2,7 @@
 library(tidyverse)
 library(rvest)
 library(httr2)
+library(jsonlite)
 
 # URL to get responses
 tab_url = "https://api.beta.tab.com.au/v1/recommendation-service/AFL%20Football/featured?jurisdiction=SA"
@@ -205,44 +206,47 @@ write_csv(tab_line_markets, "Data/scraped_odds/tab_line.csv")
 #===============================================================================
 # Alt Line markets
 #===============================================================================
-
+# 
 # # Home teams
-# home_team_lines <-
+# home_team_alt_lines <-
 #   all_tab_markets |>
 #   separate(match, into = c("home_team", "away_team"), sep = " v ", remove = FALSE) |>
-#   filter(market_name == "Line") |> 
-#   group_by(match) |> 
-#   filter(row_number() == 1) |> 
-#   rename(home_win = price) |> 
+#   filter(market_name == "Line") |>
+#   group_by(match) |>
+#   filter(row_number() == 1) |>
+#   rename(home_win = price) |>
 #   mutate(home_line = as.numeric(str_extract(prop_name, "-?\\d+\\.?\\d*"))) |>
 #   select(-prop_name, -prop_id)
 # 
 # # Away teams
-# away_team_lines <-
+# away_team_alt_lines <-
 #   all_tab_markets |>
 #   separate(match, into = c("home_team", "away_team"), sep = " v ", remove = FALSE) |>
-#   filter(market_name == "Line") |> 
-#   group_by(match) |> 
-#   filter(row_number() == 2) |> 
-#   rename(away_win = price) |> 
+#   filter(market_name == "Line") |>
+#   group_by(match) |>
+#   filter(row_number() == 2) |>
+#   rename(away_win = price) |>
 #   mutate(away_line = as.numeric(str_extract(prop_name, "-?\\d+\\.?\\d*"))) |>
 #   select(-prop_name, -prop_id)
 # 
 # # Combine
-# tab_line_markets <-
-#   home_team_lines |>
-#   left_join(away_team_lines) |> 
-#   select(match, start_time, market_name, home_team, home_line, home_win, away_team, away_line, away_win) |> 
-#   mutate(margin = round((1/home_win + 1/away_win), digits = 3)) |> 
+# tab_alt_line_markets <-
+#   home_team_alt_lines |>
+#   left_join(away_team_alt_lines) |>
+#   select(match, start_time, market_name, home_team, home_line, home_win, away_team, away_line, away_win) |>
+#   mutate(margin = round((1/home_win + 1/away_win), digits = 3)) |>
 #   mutate(agency = "TAB")
 # 
 # # Fix team names
-# tab_line_markets <-
-#   tab_line_markets |> 
+# tab_alt_line_markets <-
+#   tab_alt_line_markets |>
 #   mutate(home_team = fix_team_names(home_team)) |>
 #   mutate(away_team = fix_team_names(away_team)) |>
 #   mutate(match = paste(home_team, "v", away_team))
 # 
+# # Combine all line information together
+
+
 # # Write to csv
 # write_csv(tab_line_markets, "Data/scraped_odds/tab_line.csv")
 
