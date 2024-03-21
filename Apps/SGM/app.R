@@ -185,7 +185,7 @@ disposals_display <-
          agency,
          prob_2023 = round(empirical_probability_2023, 2),
          diff_2023 = round(diff_2023, 2),
-         # diff_last_10 = round(diff_last_10, 2),
+         diff_last_10 = round(diff_over_last_10, 2),
          market_best)
 
 # Get correlations
@@ -237,6 +237,7 @@ ui <- fluidPage(
                  uiOutput("summary"),
                  h3("Odds Comparison"),
                  actionButton("get_comparison", label = "Compare Odds"),
+                 actionButton("clear_comparison", label = "Clear Selections"),
                  DT::dataTableOutput("odds_compare")
                ),
                
@@ -302,6 +303,7 @@ server <- function(input, output, session) {
     datatable(filtered_data, selection = "multiple")
   }, server = FALSE) # We are setting this as FALSE for client-side processing of the DataTable
   
+  
   observeEvent(input$table_rows_selected,{
     output$selected <- renderDT({
       if(!is.null(input$table_rows_selected)){
@@ -315,6 +317,9 @@ server <- function(input, output, session) {
       }
     })
   })
+  
+  # Get the table proxy
+  proxy <- dataTableProxy("table")
   
   output$correlations <- renderDT({
     filtered_data <- disposals_display[disposals_display$match == input$match & disposals_display$agency == input$agency,]
@@ -347,6 +352,12 @@ server <- function(input, output, session) {
     output$odds_compare <- renderDT({
       datatable(comparison_df)
     })
+  })
+  
+  # Observe the click event on the "clear_rows" button
+  observeEvent(input$clear_comparison, {
+    # Deselect all rows in the table
+    selectRows(proxy, NULL)
   })
   
   # observeEvent(input$get_combos, {

@@ -311,6 +311,13 @@ tab_player_disposals_markets <-
     mutate(home_team = fix_team_names(home_team)) |>
     mutate(away_team = fix_team_names(away_team)) |>
     mutate(match = paste(home_team, "v", away_team)) |> 
+  mutate(player_name = case_when(
+    player_name == "Nasiah W-Milera" ~ "Nasiah Wanganeen-Milera",
+    player_name == "Mark OConnor" ~ "Mark O'Connor",
+    player_name == "Massimo DAmbrosio" ~ "Massimo D'Ambrosio",
+    player_name == "Xavier OHalloran" ~ "Xavier O'Halloran",
+    .default = player_name
+  )) |> 
     left_join(player_names, by = c("player_name" = "player_full_name")) |> 
     rename(player_team = team_name) |> 
     mutate(opposition_team = ifelse(home_team == player_team, away_team, home_team)) |>
@@ -382,7 +389,14 @@ tab_player_goals_markets <-
   mutate(home_team = fix_team_names(home_team)) |>
   mutate(away_team = fix_team_names(away_team)) |>
   mutate(match = paste(home_team, "v", away_team)) |> 
-  mutate(player_name = ifelse(player_name == "Matt Cottrell", "Matthew Cottrell", player_name)) |>
+  mutate(player_name = case_when(
+    player_name == "Nasiah W-Milera" ~ "Nasiah Wanganeen-Milera",
+    player_name == "Matt Cottrell" ~ "Matthew Cottrell",
+    player_name == "Mark OConnor" ~ "Mark O'Connor",
+    player_name == "Massimo DAmbrosio" ~ "Massimo D'Ambrosio",
+    player_name == "Xavier OHalloran" ~ "Xavier O'Halloran",
+    .default = player_name
+  )) |> 
   left_join(player_names, by = c("player_name" = "player_full_name")) |> 
   rename(player_team = team_name) |> 
   mutate(opposition_team = ifelse(home_team == player_team, away_team, home_team)) |>

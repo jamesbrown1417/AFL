@@ -9,6 +9,7 @@ pointsbet_sgm <-
   read_csv("../../Data/scraped_odds/pointsbet_player_disposals.csv") |> 
   bind_rows(read_csv("../../Data/scraped_odds/pointsbet_player_goals.csv")) |> 
   rename(price = over_price) |> 
+  distinct(match, player_name, line, market_name, agency, .keep_all = TRUE) |> 
   select(-contains("under"))
 
 #===============================================================================
