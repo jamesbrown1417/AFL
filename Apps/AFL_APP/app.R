@@ -192,7 +192,7 @@ compare_performance_table <- function(data, seasons = NULL, name, teammate_name)
     filter(Season %in% seasons) %>%
     filter(Player == teammate_name) %>% pull(gameId)
   
-  # Label each game as 'With Teammate' or 'Without Teammate'
+  # Label each game as 'With Teammate' or 'Without Teammate'   
   df_player <- df_player %>% 
     mutate(Teammate = if_else(gameId %in% games_with_teammate, 'With Teammate', 'Without Teammate'))
   
