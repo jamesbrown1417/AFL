@@ -9,28 +9,20 @@ library(tidyverse)
 #===============================================================================
 
 # Get Data
-source("Sportsbet/sportsbet_sgm.R")
-player_points_data <- read_rds("../../Data/processed_odds/all_player_points.rds")
-player_assists_data <- read_rds("../../Data/processed_odds/all_player_assists.rds")
-player_rebounds_data <- read_rds("../../Data/processed_odds/all_player_rebounds.rds")
-player_pras_data <- read_rds("../../Data/processed_odds/all_player_pras.rds")
-player_steals_data <- read_rds("../../Data/processed_odds/all_player_steals.rds")
-player_threes_data <- read_rds("../../Data/processed_odds/all_player_threes.rds")
-player_blocks_data <- read_rds("../../Data/processed_odds/all_player_blocks.rds")
+source("SGM/Sportsbet/sportsbet_sgm.R")
+player_disposals_data <- read_rds("Data/processed_odds/all_player_disposals.rds")
+player_fantasy_points_data <- read_rds("Data/processed_odds/all_player_fantasy_points.rds")
+player_goals_data <- read_rds("Data/processed_odds/all_player_goals.rds")
 
 # Get those markets where sportsbet has the best odds in the market
 sportsbet_best <-
-  player_points_data |>
-  bind_rows(player_assists_data) |>
-  bind_rows(player_rebounds_data) |>
-  bind_rows(player_pras_data) |>
-  bind_rows(player_steals_data) |>
-  bind_rows(player_threes_data) |>
-  bind_rows(player_blocks_data) |>
+  player_disposals_data |>
+  bind_rows(player_fantasy_points_data) |>
+  bind_rows(player_goals_data) |>
   arrange(player_name, market_name, line, desc(over_price)) |>
-  group_by(player_name, market_name, line) |>
-  slice_head(n = 1) |>
-  ungroup() |>
+  # group_by(player_name, market_name, line) |>
+  # slice_head(n = 1) |>
+  # ungroup() |>
   filter(agency == "Sportsbet") |>
   transmute(match,
             player_name,
@@ -39,9 +31,10 @@ sportsbet_best <-
             line,
             price = over_price,
             type = "Overs",
-            diff_over_2023_24,
+            diff_over_2023,
             diff_over_last_10) |> 
   select(-price)
+# filter(market_name == "Player Fantasy Points")
 
 #===============================================================================
 # Get all 2 way combinations
@@ -50,7 +43,7 @@ sportsbet_best <-
 # All bets
 sportsbet_sgm_bets <-
   sportsbet_sgm |> 
-  select(match, player_name, player_team, market_name, line, price,type, contains("id")) |> 
+  select(match, player_name, player_team, market_name, line, price, contains("id")) |> 
   left_join(sportsbet_best) |>
   filter(!is.na(diff_over_last_10))
 
@@ -59,7 +52,8 @@ sportsbet_sgm_bets <-
   sportsbet_sgm_bets |> 
   filter(type == "Overs") |> 
   distinct(match, player_name, market_name, line, .keep_all = TRUE) |> 
-  filter(!is.na(player_name))
+  filter(!is.na(player_name)) |> 
+  filter(diff_over_last_10 > 0.05)
 
 # Generate all combinations of two rows
 row_combinations <- combn(nrow(sportsbet_sgm_bets), 2)
@@ -74,12 +68,12 @@ list_of_dataframes <-
     }
   )
 
-# Keep only those where the match is the same, player name is the same and market name is not the same
+# Keep only those where the match is the same
 retained_combinations <-
   list_of_dataframes |> 
   # Keep only dataframes where first and second row match are equal
   keep(~.x$match[1] == .x$match[2]) |> 
-  keep(~prod(.x$price) >= 2.15 & prod(.x$price) <= 2.25)
+  keep(~prod(.x$price) >= 1.2 & prod(.x$price) <= 3)
 
 #===============================================================================
 # Call function
@@ -93,11 +87,10 @@ apply_sgm_function <- function(tibble) {
   
   # Call function
   call_sgm_sportsbet(
-    data = tibble,
+    data = sportsbet_sgm,
     player_names = tibble$player_name,
-    prop_line = tibble$line,
-    prop_type = tibble$market_name,
-    over_under = tibble$type
+    stat_counts = tibble$line,
+    markets = tibble$market_name
   )
 }
 
@@ -108,7 +101,7 @@ apply_sgm_function_safe <- safely(apply_sgm_function, otherwise = NA)
 results <- map(retained_combinations, apply_sgm_function_safe, .progress = TRUE)
 
 # Bind all results together
-results <-
+results_table <-
   results |>
   # keep only first part of list
   map(1) |>

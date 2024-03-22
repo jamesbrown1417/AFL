@@ -9,6 +9,7 @@ date: "2024-03-12"
 format:
   html:
     df-print: kable
+    max-width: 100%
     theme: cosmo
     self-contained: true
     toc: true
@@ -21,6 +22,7 @@ editor: source
 ```{r setup, include=FALSE}
 library(tidyverse)
 library(qreport)
+library(DT)
 
 # Load data
   h2h_data <- read_rds("../Data/processed_odds/all_h2h.rds")
@@ -102,6 +104,12 @@ agencies <- biggest_diffs_outliers$agency |> unique()
 
 # Make list of dataframes
 agency_list <- map(agencies, ~filter_agency(biggest_diffs_outliers, .x)) |> set_names(agencies)
+
+# # For each element of the list, make a DT table
+# agency_list <-
+#   map(agency_list, ~ datatable(.x, options = list(
+#     pageLength = 10, scrollX = TRUE, width = "100%"
+#   )))
 
 # Make tabset with each team's CBAs
 maketabs(agency_list, wide = TRUE)

@@ -1,43 +1,16 @@
 library(httr)
 library(jsonlite)
-library(tidyverse)
+library(dplyr)
 library(purrr)
-
+library(mongolite)
 
 # Sportsbet SGM-----------------------------------------------------------------
-# Read in all odds
-all_files <-
-  list.files("Data/scraped_odds", pattern = "sportsbet_player")
-
-# Read in a loop
 sportsbet_sgm <-
-  map(all_files, function(x) {
-    read_csv(paste0("Data/scraped_odds/", x))
-  }) |> 
-  bind_rows()
-
-# Split overs and unders into separate rows
-sportsbet_sgm_overs <-
-  sportsbet_sgm |> 
-  filter(!is.na(over_price)) |> 
-  select(-player_id_unders) |> 
+  read_csv("Data/scraped_odds/sportsbet_player_disposals.csv") |> 
+  bind_rows(read_csv("Data/scraped_odds/sportsbet_player_goals.csv")) |> 
   rename(price = over_price) |> 
-  mutate(type = "Overs") |> 
-  select(-under_price) |> 
-  distinct(player_name, market_name, line, type, .keep_all = TRUE)
-
-sportsbet_sgm_unders <-
-  sportsbet_sgm |> 
-  filter(!is.na(under_price)) |> 
-  select(-player_id) |> 
-  rename(player_id = player_id_unders) |> 
-  rename(price = under_price) |> 
-  mutate(type = "Unders") |> 
-  select(-over_price) |> 
-  distinct(player_name, market_name, line, type, .keep_all = TRUE)
-
-sportsbet_sgm <-
-  bind_rows(sportsbet_sgm_overs, sportsbet_sgm_unders)
+  distinct(match, player_name, line, market_name, agency, .keep_all = TRUE) |> 
+  select(-contains("under"))
 
 sportsbet_sgm <-
   rename(
@@ -53,8 +26,8 @@ sportsbet_sgm <-
 # Function to get SGM data
 #=-=============================================================================
 
-get_sgm_sportsbet <- function(data, player_names, prop_line, prop_type, over_under) {
-  if (length(player_names) != length(prop_line)) {
+get_sgm_sportsbet <- function(data, player_names, stat_counts, markets) {
+  if (length(player_names) != length(stat_counts)) {
     stop("Both lists should have the same length")
   }
   
@@ -62,9 +35,8 @@ get_sgm_sportsbet <- function(data, player_names, prop_line, prop_type, over_und
   for (i in seq_along(player_names)) {
     temp_df <- data %>%
       filter(player_name == player_names[i],
-             market_name == prop_type[i],
-             type == over_under[i],
-             line == prop_line[i])
+             line == stat_counts[i],
+             market_name == markets[i])
     filtered_df <- bind_rows(filtered_df, temp_df)
   }
   
@@ -87,8 +59,8 @@ get_sgm_sportsbet <- function(data, player_names, prop_line, prop_type, over_und
 # Make Post Request
 #==============================================================================
 
-call_sgm_sportsbet <- function(data, player_names, prop_line, prop_type, over_under) {
-  if (length(player_names) != length(prop_line)) {
+call_sgm_sportsbet <- function(data, player_names, stat_counts, markets) {
+  if (length(player_names) != length(stat_counts)) {
     stop("Both lists should have the same length")
   }
   
@@ -96,15 +68,18 @@ call_sgm_sportsbet <- function(data, player_names, prop_line, prop_type, over_un
   for (i in seq_along(player_names)) {
     temp_df <- data %>%
       filter(player_name == player_names[i],
-             market_name == prop_type[i],
-             type == over_under[i],
-             line == prop_line[i])
+             line == stat_counts[i],
+             market_name == markets[i])
     filtered_df <- bind_rows(filtered_df, temp_df)
+  }
+  
+  if (nrow(filtered_df) != length(player_names)) {
+    return(NULL)
   }
   
   unadjusted_price <- prod(filtered_df$price)
   
-  payload <- get_sgm_sportsbet(data, player_names, prop_line, prop_type, over_under)
+  payload <- get_sgm_sportsbet(data, player_names, stat_counts, markets)
   
   url <- 'https://www.sportsbet.com.au/apigw/multi-pricer/combinations/price'
   
@@ -128,12 +103,13 @@ call_sgm_sportsbet <- function(data, player_names, prop_line, prop_type, over_un
   adjusted_price <- 1 + (response_content$price$numerator / response_content$price$denominator)
   adjustment_factor <- adjusted_price / unadjusted_price
   
-  combined_list <- paste(player_names, prop_line, sep = ": ")
+  combined_list <- paste(player_names, stat_counts, sep = ": ")
   player_string <- paste(combined_list, collapse = ", ")
+  market_string <- paste(markets, collapse = ", ")
   
   output_data <- data.frame(
     Selections = player_string,
-    Markets = paste(prop_type, sep = ": ", collapse = ", "),
+    Markets = market_string,
     Unadjusted_Price = unadjusted_price,
     Adjusted_Price = adjusted_price,
     Adjustment_Factor = adjustment_factor,
@@ -143,4 +119,9 @@ call_sgm_sportsbet <- function(data, player_names, prop_line, prop_type, over_un
   return(output_data)
 }
 
-# call_sgm_sportsbet(data = sportsbet_sgm, player_names = c("Paul George", "Paul George"), prop_line = c("19.5", "5.5"), prop_type = c("Player Points", "Player Rebounds"), over_under = c("Overs", "Overs"))
+# call_sgm_sportsbet(
+#   data = sportsbet_sgm,
+#   player_names = c("Charlie Curnow", "Blake Acres"),
+#   stat_counts = c(2.5, 19.5),
+#   markets = c("Player Goals", "Player Disposals")
+# )
