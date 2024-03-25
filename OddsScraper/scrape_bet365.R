@@ -52,8 +52,10 @@ bet365_handicap_price <-
 bet365_handicap_price <- bet365_handicap_price[!bet365_handicap_price == ""]
 
 # Remove Totals Indices
-bet365_handicap <- bet365_handicap[-totals_indices]
-bet365_handicap_price <- bet365_handicap_price[-totals_indices]
+if (length(totals_indices) > 0) {
+  bet365_handicap <- bet365_handicap[-totals_indices]
+  bet365_handicap_price <- bet365_handicap_price[-totals_indices]
+}
 
 # Get Start Time
 bet365_start_time <-
