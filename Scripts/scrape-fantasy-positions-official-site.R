@@ -93,3 +93,5 @@ afl_player_api_data <-
 
 # Write out as starting data for 2024 season
 write_rds(afl_player_api_data, "Data/2024_start_positions_and_prices.rds")
+
+afl_player_api_data |> openxlsx::write.xlsx("players.xlsx")

@@ -11,6 +11,74 @@ library(mongolite)
 `%notin%` <- Negate(`%in%`)
 
 #===============================================================================
+# Read in and normalise DVP Data
+#===============================================================================
+
+# Read in data
+dvp_data <-
+  read_csv("../../DVP/dvp_data.csv")
+
+# Read in position data---------------------------------------------------------
+player_positions <-
+  read_excel("../../DVP/AFL-Players-Positions-2024.xlsx") |>
+  select(
+    player_full_name,
+    player_team = team_name,
+    pos_1 = `position 1`,
+    pos_2 = `position 2`
+  ) |>
+  mutate(pos_1_factor = factor(
+    pos_1,
+    levels = 1:11,
+    labels = c(
+      "Key Defender",
+      "Small Defender",
+      "Offensive Defender",
+      "CBA > 50%",
+      "CBA < 50%",
+      "Wing",
+      "Contested",
+      "Uncontested",
+      "Ruck",
+      "Key Forward",
+      "Small Forward"
+    )
+  )) |> 
+  mutate(pos_2_factor = factor(
+    pos_2,
+    levels = 1:11,
+    labels = c(
+      "Key Defender",
+      "Small Defender",
+      "Offensive Defender",
+      "CBA > 50%",
+      "CBA < 50%",
+      "Wing",
+      "Contested",
+      "Uncontested",
+      "Ruck",
+      "Key Forward",
+      "Small Forward"
+    )
+  )) |> 
+  select(player_name = player_full_name, player_team, Position = pos_1_factor)
+
+
+dvp_data <-
+  dvp_data %>%
+  group_by(market_name) %>%
+  mutate(
+    DVP_Category = cut(
+      dvp,
+      breaks = quantile(dvp, probs = 0:5/5, na.rm = TRUE),
+      include.lowest = TRUE,
+      labels = c("Terrible", "Bad", "Neutral", "Good", "Excellent")
+    )
+  ) %>%
+  ungroup() %>%
+  select(Position = Pos, opposition_team = Opponent, market_name, DVP_Category)
+
+#===============================================================================
 # Create compare sgm function
 #===============================================================================
 
@@ -149,7 +217,12 @@ goals <-
          empirical_probability_2023 = empirical_prob_over_2023,
          diff_2023 = diff_over_2023)
 
-disposals <- disposals |> bind_rows(goals)
+disposals <-
+  disposals |>
+  bind_rows(goals) |> 
+  left_join(player_positions, relationship = "many-to-one") |>
+  left_join(dvp_data, by = c("opposition_team", "Position", "market_name"), relationship = "many-to-one") |> 
+  relocate(Position, DVP_Category, .after = player_name)
 
 # Create market best
 disposals <-
@@ -179,12 +252,15 @@ disposals_display <-
   arrange(desc(max_player_diff)) |> 
   transmute(match,
          player_name,
+         Position,
+         Matchup = DVP_Category,
          market_name,
          line,
          price,
          agency,
          prob_2023 = round(empirical_probability_2023, 2),
          diff_2023 = round(diff_2023, 2),
+         prob_last_10 = round(emp_prob_last_10, 2),
          diff_last_10 = round(diff_over_last_10, 2),
          market_best)
 
@@ -228,6 +304,13 @@ ui <- fluidPage(
                    selected = c("Player Disposals", "Player Goals"),
                    multiple = TRUE
                  ),
+                 selectInput(
+                   "matchup",
+                   "Select Difficulty",
+                   choices = c("Terrible", "Bad", "Neutral", "Good", "Excellent"),
+                   selected = c("Neutral", "Good", "Excellent"),
+                   multiple = TRUE
+                 ),
                  checkboxInput("best_odds", "Only Show Best Market Odds?", value = FALSE),
                  h3("Selections"),
                  DT::dataTableOutput("selected"),
@@ -268,6 +351,13 @@ ui <- fluidPage(
                    selected = c("Player Disposals", "Player Goals"),
                    multiple = TRUE
                  ),
+                 selectInput(
+                   "matchup_cross",
+                   "Select Difficulty",
+                   choices = c("Terrible", "Bad", "Neutral", "Good", "Excellent"),
+                   selected = c("Neutral", "Good", "Excellent"),
+                   multiple = TRUE
+                 ),
                  checkboxInput("best_odds_cross", "Only Show Best Market Odds?", value = FALSE),
                  h3("Selections"),
                  DT::dataTableOutput("selected_cross"),
@@ -296,6 +386,7 @@ server <- function(input, output, session) {
     filtered_data <-
       disposals_display[disposals_display$match == input$match &
                           disposals_display$agency == input$agency &
+                          disposals_display$Matchup %in% input$matchup &
                           disposals_display$market_name %in% input$market,]
     
     if (input$best_odds) {filtered_data <- filtered_data |> filter(market_best) |> select(-market_best)}
@@ -310,6 +401,7 @@ server <- function(input, output, session) {
         filtered_data <-
           disposals_display[disposals_display$match == input$match &
                               disposals_display$agency == input$agency &
+                              disposals_display$Matchup %in% input$matchup &
                               disposals_display$market_name %in% input$market,]
         if (input$best_odds) {filtered_data <- filtered_data |> filter(market_best) |> select(-market_best)}
         selected_data <- filtered_data[input$table_rows_selected, c("player_name", "line", "market_name", "price")]
@@ -334,6 +426,7 @@ server <- function(input, output, session) {
     # Get selected data
     filtered_data <- disposals_display[disposals_display$match == input$match &
                                          disposals_display$agency == input$agency &
+                                         disposals_display$Matchup %in% input$matchup &
                                          disposals_display$market_name %in% input$market,]
     if (input$best_odds) {filtered_data <- filtered_data |> filter(market_best) |> select(-market_best)}
     selected_data <- filtered_data[input$table_rows_selected, c("player_name", "line", "market_name", "price")]
@@ -382,6 +475,7 @@ server <- function(input, output, session) {
     if(!is.null(input$table_rows_selected)){
       filtered_data <- disposals_display[disposals_display$match == input$match &
                                            disposals_display$agency == input$agency &
+                                           disposals_display$Matchup %in% input$matchup &
                                            disposals_display$market_name %in% input$market,]
       if (input$best_odds) {filtered_data <- filtered_data |> filter(market_best) |> select(-market_best)}
       selected_data <- filtered_data[input$table_rows_selected, ]
@@ -395,6 +489,7 @@ server <- function(input, output, session) {
   # For the "Cross Game Multi" panel
   output$table_cross <- renderDT({
     filtered_data_cross <- disposals_display[disposals_display$agency == input$agency_cross &
+                                               disposals_display$Matchup %in% input$matchup_cross &
                                              disposals_display$market_name %in% input$market_cross,]
     
     if (input$best_odds_cross) {filtered_data_cross <- filtered_data_cross |> filter(market_best) |> select(-market_best)}
@@ -406,6 +501,7 @@ server <- function(input, output, session) {
     output$selected_cross <- renderDT({
       if(!is.null(input$table_cross_rows_selected)){
         filtered_data_cross <- disposals_display[disposals_display$agency == input$agency_cross &
+                                                 disposals_display$Matchup %in% input$matchup_cross &
                                                  disposals_display$market_name %in% input$market_cross,]
         
         if (input$best_odds_cross) {filtered_data_cross <- filtered_data_cross |> filter(market_best) |> select(-market_best)}
@@ -419,6 +515,7 @@ server <- function(input, output, session) {
   output$summary_cross <- renderUI({
     if(!is.null(input$table_cross_rows_selected)){
       filtered_data_cross <- disposals_display[disposals_display$agency == input$agency_cross &
+                                               disposals_display$Matchup %in% input$matchup_cross &
                                                disposals_display$market_name %in% input$market_cross,]
       
       if (input$best_odds_cross) {filtered_data_cross <- filtered_data_cross |> filter(market_best) |> select(-market_best)}
@@ -426,10 +523,13 @@ server <- function(input, output, session) {
       selected_data_cross <- filtered_data_cross[input$table_cross_rows_selected, ]
       uncorrelated_price_cross <- prod(selected_data_cross$price)
       empirical_price_cross <- 1 / prod(selected_data_cross$prob_2023)
+      empirical_price_cross_l10 <- 1 / prod(selected_data_cross$prob_last_10)
       diff = 1/empirical_price_cross - 1/uncorrelated_price_cross
+      diff_l10 = 1/empirical_price_cross_l10 - 1/uncorrelated_price_cross
       HTML(paste0("<strong>Multi Price:</strong>", " $", round(uncorrelated_price_cross, 2), "<br/>",
                   " <strong>Theoretical Multi Price:</strong>", " $", round(empirical_price_cross, 2), "<br/>",
-                  " <strong>Edge:</strong>", " ", round(100*diff, 3), "%"))
+                  " <strong>Edge L10:</strong>", " ", round(100*diff_l10, 3), "%"), "<br/>",
+                  " <strong>Edge 2023:</strong>", " ", round(100*diff, 3), "%")
     }
   })
 }
