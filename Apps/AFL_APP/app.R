@@ -48,6 +48,8 @@ if (
   player_disposals_data <- read_rds("../../Data/processed_odds/all_player_disposals.rds")
   player_goals_data <- read_rds("../../Data/processed_odds/all_player_goals.rds")
   player_fantasy_data <- read_rds("../../Data/processed_odds/all_player_fantasy_points.rds")
+  player_marks_data <- read_rds("../../Data/processed_odds/all_player_marks.rds")
+  player_tackles_data <- read_rds("../../Data/processed_odds/all_player_tackles.rds")
 } else {
   # Google Sheets Data for other OS
   ss_name <- gs4_find("AFL Data")
@@ -977,6 +979,49 @@ server <- function(input, output) {
           )
         ))
     }
+    
+    # Marks
+    if (input$market_input == "Marks") {
+      odds <-
+        player_marks_data |>
+        mutate(variation = round(variation, 2)) |>
+        filter(agency %in% input$agency_input) |>
+        filter(match %in% input$match_input) |>
+        select(-any_of(
+          c(
+            "match",
+            "group_by_header",
+            "outcome_name",
+            "outcome_name_under",
+            "EventKey",
+            "MarketKey",
+            "OutcomeKey",
+            "OutcomeKey_unders"
+          )
+        ))
+    }
+    
+    # Tackles
+    if (input$market_input == "Tackles") {
+      odds <-
+        player_tackles_data |>
+        mutate(variation = round(variation, 2)) |>
+        filter(agency %in% input$agency_input) |>
+        filter(match %in% input$match_input) |>
+        select(-any_of(
+          c(
+            "match",
+            "group_by_header",
+            "outcome_name",
+            "outcome_name_under",
+            "EventKey",
+            "MarketKey",
+            "OutcomeKey",
+            "OutcomeKey_unders"
+          )
+        ))
+    }
+    
 
     if (input$only_best == TRUE) {
       odds <-

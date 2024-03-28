@@ -352,6 +352,13 @@ player_disposals_alternate <-
             case_when(
                 player_name == "Matthew Roberts" ~ "Matt Roberts",
                 player_name == "Samuel Wicks" ~ "Sam Wicks",
+                player_name == "Nathan Fyfe" ~ "Nat Fyfe",
+                player_name == "Tom J. Lynch" ~ "Tom Lynch",
+                player_name == "Brad Hill" ~ "Bradley Hill",
+                player_name == "Mitch Hinge" ~ "Mitchell Hinge",
+                player_name == "Minairo Frederick" ~ "Michael Frederick",
+                player_name == "Bailey Williams (WB)" ~ "Bailey Williams",
+                player_name == "Bailey J. Williams (WCE)" ~ "Bailey J. Williams",
                 .default = player_name)) |>
     rename(over_price = prop_market_price) |>
     left_join(player_names[, c("player_full_name", "team_name")], by = c("player_name" = "player_full_name")) |>
@@ -392,6 +399,13 @@ player_disposals_over <-
             case_when(
               player_name == "Matthew Roberts" ~ "Matt Roberts",
               player_name == "Samuel Wicks" ~ "Sam Wicks",
+              player_name == "Nathan Fyfe" ~ "Nat Fyfe",
+              player_name == "Tom J. Lynch" ~ "Tom Lynch",
+              player_name == "Brad Hill" ~ "Bradley Hill",
+              player_name == "Mitch Hinge" ~ "Mitchell Hinge",
+              player_name == "Minairo Frederick" ~ "Michael Frederick",
+              player_name == "Bailey Williams (WB)" ~ "Bailey Williams",
+              player_name == "Bailey J. Williams (WCE)" ~ "Bailey J. Williams",
                 .default = player_name)) |>
     rename(over_price = prop_market_price) |>
     left_join(player_names[, c("player_full_name", "team_name")], by = c("player_name" = "player_full_name")) |>
@@ -430,6 +444,13 @@ player_disposals_under <-
             case_when(
               player_name == "Matthew Roberts" ~ "Matt Roberts",
               player_name == "Samuel Wicks" ~ "Sam Wicks",
+              player_name == "Nathan Fyfe" ~ "Nat Fyfe",
+              player_name == "Tom J. Lynch" ~ "Tom Lynch",
+              player_name == "Brad Hill" ~ "Bradley Hill",
+              player_name == "Mitch Hinge" ~ "Mitchell Hinge",
+              player_name == "Minairo Frederick" ~ "Michael Frederick",
+              player_name == "Bailey Williams (WB)" ~ "Bailey Williams",
+              player_name == "Bailey J. Williams (WCE)" ~ "Bailey J. Williams",
                 .default = player_name)) |>
     rename(under_price = prop_market_price) |>
     left_join(player_names[, c("player_full_name", "team_name")], by = c("player_name" = "player_full_name")) |>
@@ -507,7 +528,15 @@ player_goals_alternate <-
       case_when(
         player_name == "Matthew Roberts" ~ "Matt Roberts",
         player_name == "Samuel Wicks" ~ "Sam Wicks",
+        player_name == "Nathan Fyfe" ~ "Nat Fyfe",
+        player_name == "Tom J. Lynch" ~ "Tom Lynch",
+        player_name == "Brad Hill" ~ "Bradley Hill",
+        player_name == "Mitch Hinge" ~ "Mitchell Hinge",
+        player_name == "Minairo Frederick" ~ "Michael Frederick",
+        player_name == "Bailey Williams (WB)" ~ "Bailey Williams",
+        player_name == "Bailey J. Williams (WCE)" ~ "Bailey J. Williams",
         player_name == "Lachlan Fogarty" ~ "Lachie Fogarty",
+        player_name == "Matthew Taberner" ~ "Matt Taberner",
         .default = player_name)) |>
   rename(over_price = prop_market_price) |>
   left_join(player_names[, c("player_full_name", "team_name")], by = c("player_name" = "player_full_name")) |>
@@ -548,7 +577,15 @@ player_goals_over <-
       case_when(
         player_name == "Matthew Roberts" ~ "Matt Roberts",
         player_name == "Samuel Wicks" ~ "Sam Wicks",
+        player_name == "Nathan Fyfe" ~ "Nat Fyfe",
+        player_name == "Tom J. Lynch" ~ "Tom Lynch",
+        player_name == "Brad Hill" ~ "Bradley Hill",
+        player_name == "Mitch Hinge" ~ "Mitchell Hinge",
+        player_name == "Minairo Frederick" ~ "Michael Frederick",
+        player_name == "Bailey Williams (WB)" ~ "Bailey Williams",
+        player_name == "Bailey J. Williams (WCE)" ~ "Bailey J. Williams",
         player_name == "Lachlan Fogarty" ~ "Lachie Fogarty",
+        player_name == "Matthew Taberner" ~ "Matt Taberner",
         .default = player_name)) |>
   rename(over_price = prop_market_price) |>
   left_join(player_names[, c("player_full_name", "team_name")], by = c("player_name" = "player_full_name")) |>
@@ -587,7 +624,15 @@ player_goals_under <-
       case_when(
         player_name == "Matthew Roberts" ~ "Matt Roberts",
         player_name == "Samuel Wicks" ~ "Sam Wicks",
+        player_name == "Nathan Fyfe" ~ "Nat Fyfe",
+        player_name == "Tom J. Lynch" ~ "Tom Lynch",
+        player_name == "Brad Hill" ~ "Bradley Hill",
+        player_name == "Mitch Hinge" ~ "Mitchell Hinge",
+        player_name == "Minairo Frederick" ~ "Michael Frederick",
+        player_name == "Bailey Williams (WB)" ~ "Bailey Williams",
+        player_name == "Bailey J. Williams (WCE)" ~ "Bailey J. Williams",
         player_name == "Lachlan Fogarty" ~ "Lachie Fogarty",
+        player_name == "Matthew Taberner" ~ "Matt Taberner",
         .default = player_name)) |>
   rename(under_price = prop_market_price) |>
   left_join(player_names[, c("player_full_name", "team_name")], by = c("player_name" = "player_full_name")) |>

@@ -729,6 +729,90 @@ pointsbet_h2h_main <- function() {
     )
   
   #===============================================================================
+  # Player Marks
+  #===============================================================================
+  
+  # Player marks alternative totals----------------------------------------------
+  
+  # Filter list to player marks
+  pointsbet_player_marks_lines <-
+    pointsbet_data_player_props |>
+    filter(str_detect(market, "Pick Your Own Marks")) |>
+    separate(outcome,
+             into = c("player_name", "line"),
+             sep = " To Take ") |> 
+    mutate(line = str_extract(line, "[0-9]{1,2}")) |>
+    mutate(line = as.numeric(line) - 0.5) |>
+    separate(
+      match,
+      into = c("home_team", "away_team"),
+      sep = " v ",
+      remove = FALSE
+    ) |>
+    mutate(home_team = fix_team_names(home_team),
+           away_team = fix_team_names(away_team)) |>
+    mutate(match = paste(home_team, "v", away_team)) |>
+    left_join(player_names[, c("player_full_name", "team_name")], by = c("player_name" = "player_full_name")) |>
+    mutate(opposition_team = if_else(home_team == team_name, away_team, home_team)) |>
+    transmute(
+      match,
+      home_team,
+      away_team,
+      market_name = "Player Marks",
+      player_name,
+      player_team = team_name,
+      opposition_team,
+      line,
+      over_price = price,
+      agency = "Pointsbet",
+      EventKey,
+      MarketKey,
+      OutcomeKey
+    )
+  
+  #===============================================================================
+  # Player Tackles
+  #===============================================================================
+  
+  # Player tackles alternative totals----------------------------------------------
+  
+  # Filter list to player tackles
+  pointsbet_player_tackles_lines <-
+    pointsbet_data_player_props |>
+    filter(str_detect(market, "Pick Your Own Tackles")) |>
+    separate(outcome,
+             into = c("player_name", "line"),
+             sep = " To Record ") |> 
+    mutate(line = str_extract(line, "[0-9]{1,2}")) |>
+    mutate(line = as.numeric(line) - 0.5) |>
+    separate(
+      match,
+      into = c("home_team", "away_team"),
+      sep = " v ",
+      remove = FALSE
+    ) |>
+    mutate(home_team = fix_team_names(home_team),
+           away_team = fix_team_names(away_team)) |>
+    mutate(match = paste(home_team, "v", away_team)) |>
+    left_join(player_names[, c("player_full_name", "team_name")], by = c("player_name" = "player_full_name")) |>
+    mutate(opposition_team = if_else(home_team == team_name, away_team, home_team)) |>
+    transmute(
+      match,
+      home_team,
+      away_team,
+      market_name = "Player Tackles",
+      player_name,
+      player_team = team_name,
+      opposition_team,
+      line,
+      over_price = price,
+      agency = "Pointsbet",
+      EventKey,
+      MarketKey,
+      OutcomeKey
+    )
+  
+  #===============================================================================
   # Write to CSV
   #===============================================================================
   
@@ -808,6 +892,50 @@ pointsbet_h2h_main <- function() {
     mutate(market_name = "Player Fantasy Points") |>
     mutate(agency = "Pointsbet") |>
     write_csv("Data/scraped_odds/pointsbet_player_fantasy_points.csv")
+  
+  # Tackles
+  pointsbet_player_tackles_lines |>
+    mutate(match = paste(home_team, away_team, sep = " v ")) |>
+    select(
+      "match",
+      "home_team",
+      "away_team",
+      "market_name",
+      "player_name",
+      "player_team",
+      "line",
+      "over_price",
+      "agency",
+      "opposition_team",
+      "EventKey",
+      "MarketKey",
+      "OutcomeKey",
+    ) |>
+    mutate(market_name = "Player Tackles") |>
+    mutate(agency = "Pointsbet") |>
+    write_csv("Data/scraped_odds/pointsbet_player_tackles.csv")
+  
+  # Marks
+  pointsbet_player_marks_lines |>
+    mutate(match = paste(home_team, away_team, sep = " v ")) |>
+    select(
+      "match",
+      "home_team",
+      "away_team",
+      "market_name",
+      "player_name",
+      "player_team",
+      "line",
+      "over_price",
+      "agency",
+      "opposition_team",
+      "EventKey",
+      "MarketKey",
+      "OutcomeKey",
+    ) |>
+    mutate(market_name = "Player Marks") |>
+    mutate(agency = "Pointsbet") |>
+    write_csv("Data/scraped_odds/pointsbet_player_marks.csv")
 }
 
 ##%######################################################%##

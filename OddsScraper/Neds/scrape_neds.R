@@ -3,15 +3,6 @@ library(tidyverse)
 library(rvest)
 library(httr2)
 
-# URL to get responses
-neds_url = "https://api.neds.com.au/v2/sport/event-request?category_ids=%5B%2223d497e6-8aab-4309-905b-9421f42c9bc5%22%5D&competition_id=ccff2e9a-5347-41aa-902a-bb6b1886d817&include_any_team_vs_any_team_events=true"
-
-# Make request and get response
-neds_response <-
-    request(neds_url) |>
-    req_perform() |> 
-    resp_body_json()
-
 # Function to fix team names
 source("Functions/fix_team_names.R")
 
@@ -19,79 +10,17 @@ source("Functions/fix_team_names.R")
 player_names <- read_rds("Data/2024_start_positions_and_prices.rds")
 player_names <- player_names |> select(player_full_name, team_name)
 
-# Initialize empty lists to store data
-event_name <- character()
-event_id <- character()
-competition_name <- character()
-
-# Extract event IDs and names from JSON response
-for (value in neds_response$events) {
-    event_name <- c(event_name, value$name)
-    event_id <- c(event_id, value$id)
-    competition_name <- c(competition_name, value$competition$name)
-}
-
-# Create a data frame from the vectors
-df <- data.frame(event_name, event_id, competition_name)
-
-# Filter the data frame to only include matches with ' vs ' in the event name
-df <- df |> filter(str_detect(event_name, ' vs '))
-
-# Only get AFL Games
-df <- df |> filter(str_detect(competition_name, 'AFL'))
-
-# Event IDs list
-event_ids_df <-
-  df |>
-  separate(event_name, into = c("home_team", "away_team"), sep = " vs ", remove = FALSE) |>
-  mutate(home_team = fix_team_names(home_team), away_team = fix_team_names(away_team)) |>
-  mutate(match = paste(home_team, "v", away_team)) |> 
-  select(match, event_id)
-
 #===============================================================================
-# Get event card data for each match
+# Get JSON for each match
 #===============================================================================
 
-# Base URL for event card
-event_url <- "https://api.neds.com.au/v2/sport/event-card?id="
+# Read in df
+df <- read_csv("OddsScraper/Neds/neds_afl_match_urls.csv")
 
-# List of event URLs
-event_json <- paste0(event_url, df$event_id)
+# Get match json files
+json_match_files <- list.files("OddsScraper/Neds/", pattern = "^data_.*.json", full.names = TRUE)
 
-# Initialize an empty list to store event JSON data
-event_json_list <- list()
-
-# Loop through each event URL and get the event card JSON data
-for (url in event_json) {
-  tryCatch({
-    # Perform the request
-    response2 <-
-      request(url) |>
-      req_headers(
-        accept = "*/*",
-        `User-Agent` = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.150 Safari/537.36",
-        `Accept-Language` = "en-US,en;q=0.9"
-      ) |>
-      req_perform() |>
-      resp_body_json()
-    
-    # If successful, append the response to the list
-    event_json_list <- append(event_json_list, list(response2))
-  }, error = function(e) {
-    cat("Error:", url, "\n", e$message, "\n")
-    # Append NULL to the list in case of an error
-    event_json_list <<- append(event_json_list, list(NULL))
-  })
-}
-
-# Null elements
-index_to_remove <- which(sapply(event_json_list, is.null))
-
-# Remove null elements from all applicable objects
-if (length(index_to_remove) > 0) {
-event_json_list <- event_json_list[-index_to_remove]
-event_ids_df <- event_ids_df[-index_to_remove, ]
-df <- df[-index_to_remove, ]}
+event_json_list <- map(json_match_files, ~fromJSON(.x))
 
 #===============================================================================
 # Get the market information for each match
@@ -102,8 +31,9 @@ market_lookup_name <- character()
 market_lookup_id <- character()
 
 # Initialize empty vectors to store data
+event_ids <- character()
 entrants <- character()
-entrant_id <- character()
+entrant_ids <- character()
 market_id <- character()
 match_names <- character()
 handicaps <- numeric()
@@ -111,47 +41,55 @@ prices <- numeric()
 
 # Loop through the entrants
 for (i in seq_along(event_json_list)) {
-    match_name <- df$event_name[i]
-    match <- event_json_list[[i]]
+  match <- event_json_list[[i]] 
+  
+  for (entrant in match$entrants) {
+    entrants <- c(entrants, entrant$name)
+    market_id <- c(market_id, entrant$market_id)
+    event_ids <- c(event_ids,  event_json_list[[i]]$events[[1]]$id)
+    entrant_ids <- c(entrant_ids, entrant$id)
+  } 
+  
+  
+  # Loop through the markets
+  for (market in match$markets) {
+    market_lookup_name <- c(market_lookup_name, market$name)
+    market_lookup_id <- c(market_lookup_id, market$id)
     
-    for (entrant in match$entrants) {
-        entrants <- c(entrants, entrant$name)
-        entrant_id <- c(entrant_id, entrant$id)
-        market_id <- c(market_id, entrant$market_id)
-        match_names <- c(match_names, match_name)
+    if (is.null(market$handicap)) {
+      handicaps <- c(handicaps, NA)
+    } else {
+      handicaps <- c(handicaps, market$handicap)
     }
-    
-    # Loop through the markets
-    for (market in match$markets) {
-        market_lookup_name <- c(market_lookup_name, market$name)
-        market_lookup_id <- c(market_lookup_id, market$id)
-        
-        if (is.null(market$handicap)) {
-            handicaps <- c(handicaps, NA)
-        } else {
-            handicaps <- c(handicaps, market$handicap)
-        }
-    }
-    
-    # Loop through the prices
-    for (price in match$prices) {
-        fractional_odds <- price$odds$numerator / price$odds$denominator
-        decimal_odds <- fractional_odds + 1
-        prices <- c(prices, decimal_odds)
-    }
+  }
+  
+  # Loop through the prices
+  for (price in match$prices) {
+    fractional_odds <- price$odds$numerator / price$odds$denominator
+    decimal_odds <- fractional_odds + 1
+    prices <- c(prices, decimal_odds)
+  }
 }
 
 # Create market lookup dataframe
 market_lookup_df <- data.frame(market_id = market_lookup_id, market_name = market_lookup_name, handicaps = handicaps)
 
 # Create market dataframe
-market_df <- data.frame(match_name = match_names, market_id = market_id, entrants = entrants, price = prices, entrant_id = entrant_id)
+market_df <- data.frame(event_id = event_ids, market_id = market_id, entrants = entrants, entrant_id = entrant_ids, price = prices)
 
 # Merge market lookup dataframe with market dataframe
 market_df <- merge(market_df, market_lookup_df, by = 'market_id', all.x = TRUE)
 
 # Reorder columns in market_df
-market_df <- market_df |> select(match_name, market_name, market_id, entrants, entrant_id, handicaps, price)
+market_df <- market_df |> select(event_id, market_id, market_name, entrants, entrant_id, handicaps, price)
+
+# Add match names
+market_df <-
+  market_df |> 
+  left_join(df[,c("event_name", "event_id")], by = c("event_id" = "event_id")) |> 
+  relocate(event_name, .before = event_id) |> 
+  rename(match_name = event_name) |> 
+  select(-event_id)
 
 ##%######################################################%##
 #                                                          #

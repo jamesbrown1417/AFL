@@ -7,9 +7,6 @@ library(readxl)
 # Set up parallel processing----------------------------------------------------
 plan(multisession)
 
-# Function to fix team names
-source("Functions/fix_team_names.R")
-
 # Read in position data---------------------------------------------------------
 player_positions <-
   read_excel("DVP/AFL-Players-Positions-2024.xlsx") |>
@@ -200,11 +197,6 @@ get_dvp <- function(team, stat) {
     arrange(desc(median_diff))
 }
 
-# Fix stats table
-all_player_stats_last_10 <-
-all_player_stats_last_10 |> 
-  mutate(opposition_team = fix_team_names(opposition_team)) |>
-  mutate(player_team = fix_team_names(player_team))
 
 # Get team list
 team_list <-

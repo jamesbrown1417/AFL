@@ -12,7 +12,7 @@ player_names <- player_names |> select(player_full_name, team_name)
 source("Functions/fix_team_names.R")
 
 # URL of website
-topsport_url = "https://www.topsport.com.au/Sport/Aussie_Rules/AFL_-_Round_2/Matches"
+topsport_url = "https://www.topsport.com.au/Sport/Aussie_Rules/AFL_-_Round_3/Matches"
 
 #===============================================================================
 # Use rvest to get main market information-------------------------------------#
@@ -406,6 +406,7 @@ player_fantasy_points_alternate <-
             case_when(
                 player_name == "Matthew Roberts" ~ "Matt Roberts",
                 player_name == "Samuel Wicks" ~ "Sam Wicks",
+                player_name == "Jordan de Goey" ~ "Jordan De Goey",
                 player_name == "Jacob Van Rooyen" ~  "Jacob van Rooyen",
                 player_name == "Matthew Rowell" ~ "Matt Rowell",
                 player_name == "Malcolm Rosas Jnr" ~ "Malcolm Rosas",
@@ -493,6 +494,7 @@ player_marks_alternate <-
                 player_name == "Samuel Wicks" ~ "Sam Wicks",
                 player_name == "Jacob Van Rooyen" ~  "Jacob van Rooyen",
                 player_name == "Matthew Rowell" ~ "Matt Rowell",
+                player_name == "Jordan de Goey" ~ "Jordan De Goey",
                 player_name == "Malcolm Rosas Jnr" ~ "Malcolm Rosas",
                 player_name == "Cameron Rayner" ~ "Cam Rayner",
                 player_name == "Callum M Brown" ~ "Callum M. Brown",
@@ -575,6 +577,7 @@ player_tackles_alternate <-
             case_when(
                 player_name == "Matthew Roberts" ~ "Matt Roberts",
                 player_name == "Samuel Wicks" ~ "Sam Wicks",
+                player_name == "Jordan de Goey" ~ "Jordan De Goey",
                 player_name == "Jacob Van Rooyen" ~  "Jacob van Rooyen",
                 player_name == "Matthew Rowell" ~ "Matt Rowell",
                 player_name == "Malcolm Rosas Jnr" ~ "Malcolm Rosas",
