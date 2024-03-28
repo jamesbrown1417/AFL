@@ -66,6 +66,7 @@ player_positions <-
 
 dvp_data <-
   dvp_data %>%
+  mutate(dvp = ifelse(market_name == "Player Goals", rnorm(nrow(dvp_data)), dvp)) |> 
   group_by(market_name) %>%
   mutate(
     DVP_Category = cut(
@@ -75,6 +76,8 @@ dvp_data <-
       labels = c("Terrible", "Bad", "Neutral", "Good", "Excellent")
     )
   ) %>%
+    mutate(DVP_Category = as.character(DVP_Category)) |> 
+    mutate(DVP_Category = ifelse(market_name == "Player Goals", "Neutral", DVP_Category)) |> 
   ungroup() %>%
   select(Position = Pos, opposition_team = Opponent, market_name, DVP_Category)
 
