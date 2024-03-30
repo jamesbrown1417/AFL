@@ -2,6 +2,7 @@
 library(tidyverse)
 library(rvest)
 library(httr2)
+library(jsonlite)
 
 # Function to fix team names
 source("Functions/fix_team_names.R")
@@ -90,6 +91,17 @@ market_df <-
   relocate(event_name, .before = event_id) |> 
   rename(match_name = event_name) |> 
   select(-event_id)
+
+# Create event ID df
+event_ids_df <-
+  df |>
+  select(event_name, event_id) |> 
+  rename(match_name = event_name) |> 
+  separate(match_name, c("home_team", "away_team"), sep = " vs ", remove = FALSE) |>
+  mutate(home_team = fix_team_names(home_team)) |>
+  mutate(away_team = fix_team_names(away_team)) |> 
+  mutate(match_name = paste(home_team, "v", away_team, sep = " ")) |> 
+  select(match = match_name, event_id)
 
 ##%######################################################%##
 #                                                          #

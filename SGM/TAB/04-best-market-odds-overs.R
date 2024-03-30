@@ -9,24 +9,14 @@ library(tidyverse)
 #===============================================================================
 
 # Get Data
-source("TAB/tab_sgm.R")
-player_points_data <- read_rds("../../Data/processed_odds/all_player_points.rds")
-player_assists_data <- read_rds("../../Data/processed_odds/all_player_assists.rds")
-player_rebounds_data <- read_rds("../../Data/processed_odds/all_player_rebounds.rds")
-player_pras_data <- read_rds("../../Data/processed_odds/all_player_pras.rds")
-player_steals_data <- read_rds("../../Data/processed_odds/all_player_steals.rds")
-player_threes_data <- read_rds("../../Data/processed_odds/all_player_threes.rds")
-player_blocks_data <- read_rds("../../Data/processed_odds/all_player_blocks.rds")
+source("SGM/TAB/tab_sgm.R")
+player_disposals_data <- read_rds("Data/processed_odds/all_player_disposals.rds")
+player_goals_data <- read_rds("Data/processed_odds/all_player_goals.rds")
 
 # Get those markets where tab has the best odds in the market
 tab_best <-
-  player_points_data |>
-  bind_rows(player_assists_data) |>
-  bind_rows(player_rebounds_data) |>
-  bind_rows(player_pras_data) |>
-  bind_rows(player_steals_data) |>
-  bind_rows(player_threes_data) |>
-  bind_rows(player_blocks_data) |>
+  player_disposals_data |>
+  bind_rows(player_goals_data) |>
   arrange(player_name, market_name, line, desc(over_price)) |>
   group_by(player_name, market_name, line) |>
   slice_head(n = 1) |>
@@ -39,9 +29,10 @@ tab_best <-
             line,
             price = over_price,
             type = "Overs",
-            diff_over_2023_24,
+            diff_over_2023,
             diff_over_last_10) |> 
   select(-price)
+# filter(market_name == "Player Fantasy Points")
 
 #===============================================================================
 # Get all 2 way combinations
@@ -50,7 +41,7 @@ tab_best <-
 # All bets
 tab_sgm_bets <-
   tab_sgm |> 
-  select(match, player_name, player_team, market_name, line, price,type, contains("id")) |> 
+  select(match, player_name, player_team, market_name, line, price, contains("id")) |> 
   left_join(tab_best) |>
   filter(!is.na(diff_over_last_10))
 
@@ -59,7 +50,8 @@ tab_sgm_bets <-
   tab_sgm_bets |> 
   filter(type == "Overs") |> 
   distinct(match, player_name, market_name, line, .keep_all = TRUE) |> 
-  filter(!is.na(player_name))
+  filter(!is.na(player_name)) |> 
+  filter(diff_over_last_10 > 0.05)
 
 # Generate all combinations of two rows
 row_combinations <- combn(nrow(tab_sgm_bets), 2)
@@ -74,12 +66,12 @@ list_of_dataframes <-
     }
   )
 
-# Keep only those where the match is the same, player name is the same and market name is not the same
+# Keep only those where the match is the same
 retained_combinations <-
   list_of_dataframes |> 
   # Keep only dataframes where first and second row match are equal
-  keep(~.x$match[1] == .x$match[2]) |>
-  keep(~prod(.x$price) >= 1.90 & prod(.x$price) <= 2.3)
+  keep(~.x$match[1] == .x$match[2]) |> 
+  keep(~prod(.x$price) >= 1.5 & prod(.x$price) <= 3)
 
 #===============================================================================
 # Call function
@@ -88,16 +80,15 @@ retained_combinations <-
 # Custom function to apply call_sgm_tab to a tibble
 apply_sgm_function <- function(tibble) {
   
-  # Random Pause between 0.4 and 0.8 seconds
-  Sys.sleep(runif(1, 0.4, 0.6))
+  # Random Pause between 0.5 and 0.7 seconds
+  Sys.sleep(runif(1, 0.5, 0.8))
   
   # Call function
   call_sgm_tab(
-    data = tibble,
+    data = tab_sgm,
     player_names = tibble$player_name,
-    prop_line = tibble$line,
-    prop_type = tibble$market_name,
-    over_under = tibble$type
+    stat_counts = tibble$line,
+    markets = tibble$market_name
   )
 }
 
@@ -108,7 +99,7 @@ apply_sgm_function_safe <- safely(apply_sgm_function, otherwise = NA)
 results <- map(retained_combinations, apply_sgm_function_safe, .progress = TRUE)
 
 # Bind all results together
-results <-
+results_table <-
   results |>
   # keep only first part of list
   map(1) |>
@@ -118,3 +109,4 @@ results <-
   mutate(Diff = 1/Unadjusted_Price - 1/Adjusted_Price) |> 
   mutate(Diff = round(Diff, 2)) |>
   arrange(desc(Diff))
+

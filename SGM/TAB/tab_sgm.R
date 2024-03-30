@@ -13,6 +13,8 @@ tab_sgm <-
   map(all_files, function(x) {
     read_csv(paste0("Data/scraped_odds/", x))
   }) |> 
+  # Keep if rows > 0
+  keep(~ nrow(.x) > 0) |>
   bind_rows()
 
 # Split overs and unders into separate rows
@@ -44,8 +46,8 @@ tab_sgm <-
 #===============================================================================
 
 # Function to get SGM data
-get_sgm_tab <- function(data, player_names, prop_line, prop_type, over_under) {
-  if (length(player_names) != length(prop_line)) {
+get_sgm_tab <- function(data, player_names, stat_counts, markets) {
+  if (length(player_names) != length(stat_counts)) {
     stop("Both lists should have the same length")
   }
   
@@ -53,9 +55,8 @@ get_sgm_tab <- function(data, player_names, prop_line, prop_type, over_under) {
   for (i in seq_along(player_names)) {
     temp_df <- data %>% 
       filter(player_name == player_names[i],
-             market_name == prop_type[i],
-             type == over_under[i],
-             line == prop_line[i])
+             market_name == markets[i],
+             line == stat_counts[i])
     filtered_df <- bind_rows(filtered_df, temp_df)
   }
   
@@ -73,9 +74,9 @@ get_sgm_tab <- function(data, player_names, prop_line, prop_type, over_under) {
 #==============================================================================
 
 # Make Post Request
-call_sgm_tab <- function(data, player_names, prop_line, prop_type, over_under) {
+call_sgm_tab <- function(data, player_names, stat_counts, markets) {
   tryCatch({
-    if (length(player_names) != length(prop_line)) {
+    if (length(player_names) != length(stat_counts)) {
       stop("Both lists should have the same length")
     }
     
@@ -83,9 +84,8 @@ call_sgm_tab <- function(data, player_names, prop_line, prop_type, over_under) {
     for (i in seq_along(player_names)) {
       temp_df <- data %>% 
         filter(player_name == player_names[i],
-               market_name == prop_type[i],
-               type == over_under[i],
-               line == prop_line[i])
+               market_name == markets[i],
+               line == stat_counts[i])
       filtered_df <- bind_rows(filtered_df, temp_df)
     }
     
@@ -93,7 +93,7 @@ call_sgm_tab <- function(data, player_names, prop_line, prop_type, over_under) {
     unadjusted_price <- prod(filtered_df$price)
     
     # Get propositions
-    propositions <- get_sgm_tab(data, player_names, prop_line, prop_type, over_under)
+    propositions <- get_sgm_tab(data, player_names, stat_counts, markets)
     
     url <- "https://api.beta.tab.com.au/v1/pricing-service/enquiry"
     
@@ -123,13 +123,13 @@ call_sgm_tab <- function(data, player_names, prop_line, prop_type, over_under) {
     response_content <- content(response, "parsed")
     adjusted_price <- as.numeric(response_content$bets[[1]]$legs[[1]]$odds$decimal)
     adjustment_factor <- adjusted_price / unadjusted_price
-    combined_list <- paste(player_names, prop_line, sep = ": ")
+    combined_list <- paste(player_names, stat_counts, sep = ": ")
     player_string <- paste(combined_list, collapse = ", ")
     
     output_data <- tryCatch({
       data.frame(
         Selections = player_string,
-        Markets = paste(prop_type, sep = ": ", collapse = ", "),
+        Markets = paste(markets, sep = ": ", collapse = ", "),
         Unadjusted_Price = unadjusted_price,
         Adjusted_Price = adjusted_price,
         Adjustment_Factor = adjustment_factor,
@@ -153,10 +153,9 @@ call_sgm_tab <- function(data, player_names, prop_line, prop_type, over_under) {
   })
 }
 
-# call_sgm_tab(
-#   data = tab_sgm,
-#   player_names = c("Nick Daicos", "Tom Green"),
-#   prop_line = c("24.5", "24.5"),
-#   prop_type = c("Player Disposals", "Player Disposals"),
-#   over_under = c("Overs", "Overs")
-# )
+call_sgm_tab(
+  data = tab_sgm,
+  player_names = c("Chad Warner", "Isaac Heeney"),
+  stat_counts = c("24.5", "24.5"),
+  markets = c("Player Disposals", "Player Disposals")
+)
