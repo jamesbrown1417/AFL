@@ -1,4 +1,4 @@
-# Get all afl fantasy data since 2015 and save as an RDS file:
+# Get all afl fantasy in current season and save as an RDS file:
 
 # Libraries and functions
 library(purrr)
