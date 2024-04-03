@@ -18,3 +18,13 @@ Remove-Item -Path "C:\Users\james\R_Projects\AFL-2024\Data\BET365_HTML\*.txt"
 
 # Publish report using Quarto
 echo "1" | & "quarto" "publish" "quarto-pub" "Reports\outlier-odds.qmd"
+
+# Automatically stage all changes
+git add .
+
+# Commit changes with a message including "automated commit" and the current timestamp
+$commitMessage = "automated commit and timestamp " + (Get-Date -Format "yyyy-MM-dd HH:mm:ss")
+git commit -m $commitMessage
+
+# Push the commit to the 'main' branch on 'origin'
+git push origin main

@@ -89,7 +89,7 @@ all_markets |>
 # Outlier List
 biggest_diffs_outliers <-
   biggest_diffs |>
-  filter(diff_over > 0.05) |> 
+  filter(diff_over >= 0.03) |> 
   arrange(desc(diff_over_last_10)) |> 
   rename(gap = diff_over) 
 
