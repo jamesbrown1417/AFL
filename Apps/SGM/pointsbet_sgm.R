@@ -3,6 +3,7 @@ library(jsonlite)
 library(dplyr)
 library(purrr)
 library(mongolite)
+library(tidyverse)
 
 # Pointsbet SGM-----------------------------------------------------------------
 pointsbet_sgm <-
@@ -112,9 +113,9 @@ call_sgm_pointsbet <- function(data, player_names, stat_counts, markets) {
   return(output_data)
 }
 
-# call_sgm_pointsbet(
-#   data = pointsbet_sgm,
-# player_names = c("Charlie Curnow", "Blake Acres"),
-# stat_counts = c(2.5, 19.5),
-# markets = c("Player Goals", "Player Disposals")
-# )
+call_sgm_pointsbet(
+  data = pointsbet_sgm,
+player_names = c("Charlie Curnow", "Blake Acres"),
+stat_counts = c(2.5, 19.5),
+markets = c("Player Goals", "Player Disposals")
+)
