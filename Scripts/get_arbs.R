@@ -5,29 +5,6 @@ library(tidyverse)
 # Read in Data
 #===============================================================================
 
-# # Run all odds scraping scripts-----------------------------------------------
-run_scraping <- function(script_name) {
-  tryCatch({
-    source(script_name)
-  }, error = function(e) {
-    cat("Odds not released yet for:", script_name, "\n")
-  })
-}
-
-# Run all odds scraping scripts
-run_scraping("OddsScraper/scrape_betr.R")
-run_scraping("OddsScraper/scrape_BetRight.R")
-# run_scraping("OddsScraper/scrape_Palmerbet.R")
-run_scraping("OddsScraper/scrape_pointsbet.R")
-run_scraping("OddsScraper/scrape_sportsbet.R")
-run_scraping("OddsScraper/scrape_TAB.R")
-run_scraping("OddsScraper/scrape_TopSport.R")
-run_scraping("OddsScraper/scrape_bet365.R")
-# run_scraping("OddsScraper/scrape_bluebet.R")
-run_scraping("OddsScraper/scrape_neds.R")
-run_scraping("OddsScraper/scrape_unibet.R")
-run_scraping("OddsScraper/scrape_dabble.R")
-
 ##%######################################################%##
 #                                                          #
 ####                    Head to Head                    ####
@@ -170,7 +147,7 @@ disposals_arbs <-
   arrange(margin) |>
   mutate(margin = (1 - margin)) |>
   mutate(margin = 100 * margin) |>
-  filter(margin > 0) |>
+  # filter(margin > 0) |>
   distinct(match, player_name, line, over_agency, under_agency, .keep_all = TRUE) |>
   relocate(over_price, over_agency, under_price, under_agency, .after = opposition_team)
 
@@ -226,7 +203,7 @@ fantasy_points_arbs <-
   arrange(margin) |>
   mutate(margin = (1 - margin)) |>
   mutate(margin = 100 * margin) |>
-  filter(margin > 0) |>
+  # filter(margin > 0) |>
   distinct(match, player_name, line, over_agency, under_agency, .keep_all = TRUE) |>
   relocate(over_price, over_agency, under_price, under_agency, .after = opposition_team)
 
