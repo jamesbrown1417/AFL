@@ -251,26 +251,31 @@ goals_dvp <-
 disposals_dvp_combine <-
   disposals_dvp |> 
   rename(dvp = median_diff) |> 
+  mutate(dvp = 0.8*dvp) |> 
   mutate(market_name = "Player Disposals")
 
 marks_dvp_combine <-
   marks_dvp |> 
   rename(dvp = median_diff) |> 
+  mutate(dvp = 0.8*dvp) |> 
   mutate(market_name = "Player Marks")
 
 tackles_dvp_combine <-
   tackles_dvp |> 
   rename(dvp = median_diff) |> 
+  mutate(dvp = 0.8*dvp) |> 
   mutate(market_name = "Player Tackles")
 
 fantasy_points_dvp_combine <-
   fantasy_points_dvp |> 
   rename(dvp = median_diff) |> 
+  mutate(dvp = 0.8*dvp) |> 
   mutate(market_name = "Player Fantasy Points")
 
 goals_dvp_combine <-
   goals_dvp |> 
   rename(dvp = median_diff) |> 
+  mutate(dvp = 0.8*dvp) |> 
   mutate(market_name = "Player Goals")
 
 # Combine
