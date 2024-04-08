@@ -24,14 +24,19 @@ library(kableExtra)
 library(fitzRoy)
 
 # Load data processing functions
-source("../../Functions/data_processing_functions.R")
+source("../Functions/data_processing_functions.R")
+
+# Load Current Season Data
+current_season_data <- get_fantasy_data(season = 2024)
+
+# Fix Round
+current_season_data <-
+  current_season_data |> 
+  mutate(round = str_replace(round, "Opening Round", "Round 0"))
 ```
 
 ```{r}
 #| results: asis
-
-# Get Data
-current_season_data <- get_fantasy_data(season = Sys.Date() |> year())
 
 # Get only players with at least one CBA
 current_season_cbas <-
