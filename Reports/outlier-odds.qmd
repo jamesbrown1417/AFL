@@ -111,6 +111,6 @@ agency_list <- map(agencies, ~filter_agency(biggest_diffs_outliers, .x)) |> set_
 #     pageLength = 10, scrollX = TRUE, width = "100%"
 #   )))
 
-# Make tabset with each team's CBAs
+# Make tabset with each
 maketabs(agency_list, wide = TRUE)
 ```
