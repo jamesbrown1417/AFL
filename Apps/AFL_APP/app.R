@@ -329,7 +329,7 @@ ui <- page_navbar(
             choices = all_player_stats$season_name |> unique(),
             multiple = TRUE,
             selectize = TRUE,
-            selected = c("2023")
+            selected = c("2024","2023")
           ),
           selectInput(
             inputId = "stat_input_a",
@@ -617,7 +617,7 @@ ui <- page_navbar(
             choices = all_player_stats$season_name |> unique(),
             multiple = TRUE,
             selectize = TRUE,
-            selected = c("2023")
+            selected = c("2024","2023")
           )
         )
       ),
