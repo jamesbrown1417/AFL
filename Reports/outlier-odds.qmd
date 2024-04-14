@@ -30,6 +30,8 @@ library(DT)
   player_disposals_data <- read_rds("../Data/processed_odds/all_player_disposals.rds")
   player_goals_data <- read_rds("../Data/processed_odds/all_player_goals.rds")
   player_fantasy_data <- read_rds("../Data/processed_odds/all_player_fantasy_points.rds")
+  player_marks_data <- read_rds("../Data/processed_odds/all_player_marks.rds")
+  player_tackles_data <- read_rds("../Data/processed_odds/all_player_tackles.rds")
 ```
 
 ```{r}
@@ -37,7 +39,9 @@ library(DT)
   all_markets <- bind_rows(
     player_disposals_data,
     player_goals_data,
-    player_fantasy_data
+    player_fantasy_data,
+    player_marks_data,
+    player_tackles_data
   )
 
 # Arrange in order
@@ -74,7 +78,7 @@ all_markets |>
            second_best_odds = lead(over_price, 1)) |>
   slice_head(n = 1) |> 
   ungroup() |> 
-  filter(number_of_odds > 1) |>
+  # filter(number_of_odds > 1) |>
   mutate(diff_over = second_best_implied_prob_over - best_implied_prob_over) |>
   select(-number_of_odds, -best_implied_prob_over, -second_best_implied_prob_over) |>
   arrange(desc(diff_over), match, player_name, market_name, line) |> 
