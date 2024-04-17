@@ -1,49 +1,49 @@
 {
     "entrants": {
-        "83a2919b-6086-4cf5-9c5d-29b45a0c8185": {
-            "id": "83a2919b-6086-4cf5-9c5d-29b45a0c8185",
-            "name": "Essendon",
-            "home_away": "HOME",
-            "visible": true,
-            "sort_order": 10,
-            "market_id": "e7536ac6-a346-4149-a7ac-94950e413e27"
-        },
-        "a3ff4f58-2e2e-4aa4-8362-3fc7bab66048": {
-            "id": "a3ff4f58-2e2e-4aa4-8362-3fc7bab66048",
-            "name": "Collingwood",
+        "d7a1b032-fab5-421e-9486-0bf6bc84fc56": {
+            "id": "d7a1b032-fab5-421e-9486-0bf6bc84fc56",
+            "name": "Brisbane Lions",
             "home_away": "AWAY",
             "visible": true,
             "sort_order": 20,
-            "market_id": "e7536ac6-a346-4149-a7ac-94950e413e27"
+            "market_id": "2b334ae2-99bd-4170-a255-c2a46f3aef86"
+        },
+        "ed6bbed9-3af7-4ea1-95d7-e9f696199a44": {
+            "id": "ed6bbed9-3af7-4ea1-95d7-e9f696199a44",
+            "name": "GWS Giants",
+            "home_away": "HOME",
+            "visible": true,
+            "sort_order": 10,
+            "market_id": "2b334ae2-99bd-4170-a255-c2a46f3aef86"
         }
     },
     "event_participants": {
-        "34c828a0-5784-4546-946e-1c2b3381ff93": {
-            "id": "34c828a0-5784-4546-946e-1c2b3381ff93",
-            "event_id": "21f7909c-26d5-4d65-b4fd-dcff9777be15",
-            "name": "Essendon",
+        "78bf0658-2a4f-4ea7-a528-9887a9175ac1": {
+            "id": "78bf0658-2a4f-4ea7-a528-9887a9175ac1",
+            "event_id": "9276ae4d-a186-4ba1-a8e0-118d05984c65",
+            "name": "GWS Giants",
             "home_away": "HOME"
         },
-        "bf9c6c05-7f7f-4aef-9032-55c7e76df909": {
-            "id": "bf9c6c05-7f7f-4aef-9032-55c7e76df909",
-            "event_id": "21f7909c-26d5-4d65-b4fd-dcff9777be15",
-            "name": "Collingwood",
+        "fe9425c4-6240-4d26-a886-f0b268259015": {
+            "id": "fe9425c4-6240-4d26-a886-f0b268259015",
+            "event_id": "9276ae4d-a186-4ba1-a8e0-118d05984c65",
+            "name": "Brisbane Lions",
             "home_away": "AWAY"
         }
     },
     "events": {
-        "21f7909c-26d5-4d65-b4fd-dcff9777be15": {
-            "id": "21f7909c-26d5-4d65-b4fd-dcff9777be15",
-            "name": "Essendon vs Collingwood",
+        "9276ae4d-a186-4ba1-a8e0-118d05984c65": {
+            "id": "9276ae4d-a186-4ba1-a8e0-118d05984c65",
+            "name": "GWS Giants vs Brisbane Lions",
             "event_type": {
                 "id": "6bfa0efc-05df-4ae1-9b1e-152365290cfd",
                 "name": "Match"
             },
             "match_status": "BettingOpen",
-            "advertised_start": "2024-04-25T05:20:00Z",
-            "actual_start": "2024-04-25T05:20:00Z",
+            "advertised_start": "2024-04-25T09:30:00Z",
+            "actual_start": "2024-04-25T09:30:00Z",
             "visible": true,
-            "slug": "essendon-vs-collingwood",
+            "slug": "gws-giants-vs-brisbane-lions",
             "competition": {
                 "id": "ccff2e9a-5347-41aa-902a-bb6b1886d817",
                 "name": "AFL",
@@ -58,22 +58,22 @@
                 {
                     "market_type_group_id": "29edb5e1-a717-4769-8bcd-2d43ec38d828",
                     "market_ids": [
-                        "e7536ac6-a346-4149-a7ac-94950e413e27"
+                        "2b334ae2-99bd-4170-a255-c2a46f3aef86"
                     ]
                 }
             ],
             "market_count": 1,
             "main_markets": [
-                "e7536ac6-a346-4149-a7ac-94950e413e27"
+                "2b334ae2-99bd-4170-a255-c2a46f3aef86"
             ],
             "market_ids": [
-                "e7536ac6-a346-4149-a7ac-94950e413e27"
+                "2b334ae2-99bd-4170-a255-c2a46f3aef86"
             ],
             "category_id": "23d497e6-8aab-4309-905b-9421f42c9bc5",
             "round_id": "2749a03c-128f-4d5a-a0ff-e44403bbc719",
             "participant_ids": [
-                "34c828a0-5784-4546-946e-1c2b3381ff93",
-                "bf9c6c05-7f7f-4aef-9032-55c7e76df909"
+                "78bf0658-2a4f-4ea7-a528-9887a9175ac1",
+                "fe9425c4-6240-4d26-a886-f0b268259015"
             ]
         }
     },
@@ -86,40 +86,40 @@
         }
     },
     "markets": {
-        "e7536ac6-a346-4149-a7ac-94950e413e27": {
-            "id": "e7536ac6-a346-4149-a7ac-94950e413e27",
-            "event_id": "21f7909c-26d5-4d65-b4fd-dcff9777be15",
+        "2b334ae2-99bd-4170-a255-c2a46f3aef86": {
+            "id": "2b334ae2-99bd-4170-a255-c2a46f3aef86",
+            "event_id": "9276ae4d-a186-4ba1-a8e0-118d05984c65",
             "market_type_id": "be25c37a-71ff-47f6-a1e2-02a494eb5a4d",
             "market_status_id": "4bc8fe96-296b-4b4c-aea4-85c94f63b9c6",
             "name": "Match Betting",
             "advertised_start": {
-                "seconds": 1714022400
+                "seconds": 1714037400
             },
             "actual_start": {
-                "seconds": 1714022400
+                "seconds": 1714037400
             },
             "is_primary": true,
             "visible": true,
             "entrant_ids": [
-                "83a2919b-6086-4cf5-9c5d-29b45a0c8185",
-                "a3ff4f58-2e2e-4aa4-8362-3fc7bab66048"
+                "ed6bbed9-3af7-4ea1-95d7-e9f696199a44",
+                "d7a1b032-fab5-421e-9486-0bf6bc84fc56"
             ],
             "num_winners": 1
         }
     },
     "markets_allow_cashout": {
-        "e7536ac6-a346-4149-a7ac-94950e413e27": true
+        "2b334ae2-99bd-4170-a255-c2a46f3aef86": true
     },
     "prices": {
-        "83a2919b-6086-4cf5-9c5d-29b45a0c8185:940b8704-e497-4a76-b390-00918ff7d282:": {
+        "d7a1b032-fab5-421e-9486-0bf6bc84fc56:940b8704-e497-4a76-b390-00918ff7d282:": {
             "odds": {
-                "numerator": 8,
-                "denominator": 5
+                "numerator": 5,
+                "denominator": 4
             }
         },
-        "a3ff4f58-2e2e-4aa4-8362-3fc7bab66048:940b8704-e497-4a76-b390-00918ff7d282:": {
+        "ed6bbed9-3af7-4ea1-95d7-e9f696199a44:940b8704-e497-4a76-b390-00918ff7d282:": {
             "odds": {
-                "numerator": 12,
+                "numerator": 16,
                 "denominator": 25
             }
         }
