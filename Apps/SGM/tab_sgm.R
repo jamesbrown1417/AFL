@@ -2,6 +2,7 @@ library(httr)
 library(jsonlite)
 library(tidyverse)
 library(purrr)
+library(R.utils)
 
 # TAB SGM-----------------------------------------------------------------------
 tab_sgm <-
@@ -88,10 +89,22 @@ call_sgm_tab <- function(data, player_names, stat_counts, markets) {
       )
     )
     
-    response <- POST(url, body = toJSON(payload), add_headers(.headers = headers), encode = "json")
+    # Try response, if nothing in 5 seconds, make it null
+    response <- tryCatch({
+      POST(url, body = toJSON(payload), add_headers(.headers = headers), encode = "json", timeout(3))
+    }, error = function(e) {
+      return(NULL)
+    })
     
-    if (http_error(response)) {
-      stop("HTTP request failed. Please check your URL or network connection.")
+    if(is.null(response)) {
+      return(data.frame(
+        Selections = NA_character_,
+        Markets = NA_character_,
+        Unadjusted_Price = NA_real_,
+        Adjusted_Price = NA_real_,
+        Adjustment_Factor = NA_real_,
+        Agency = NA_character_
+      ))
     }
     
     response_content <- content(response, "parsed")
