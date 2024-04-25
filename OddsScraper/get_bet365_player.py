@@ -26,7 +26,8 @@ async def main():
         for index, url in enumerate(url_df, start=1): # Start counting from 1 for match_n
             try:
                 await driver.get(url)
-                await driver.sleep(2)
+                await driver.sleep(5)
+                
                 
                 # Scroll into view of disposal button and click
                 disposal_button = await driver.find_element(By.XPATH, "//div[contains(@class, 'gl-MarketGroupButton_Text') and text()='Disposals']")
@@ -34,6 +35,8 @@ async def main():
                 await driver.execute_script("window.scrollBy(0, -150)")
                 await disposal_button.click()
                 await driver.sleep(2)
+                
+                print("timepoint 2")
                 
                 # If there is a button that says Player Disposals, click it
                 try:
@@ -126,6 +129,7 @@ async def main():
                         
             except Exception as e:
                 print(f"An error occurred with URL {url}: {e}. Moving to the next URL.")
+                print(f"The specific error was: {e}")
                 continue  # Proceed to the next iteration of the loop
 
 asyncio.run(main())
