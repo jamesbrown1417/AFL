@@ -1,5 +1,5 @@
 ---
-title: "ARBs"
+title: "Arbs"
 execute:
   echo: false
   message: false
@@ -21,8 +21,9 @@ editor: source
 
 **Last Updated: `r format(Sys.time(), "%I:%M %p")`**
 
+## Arbs
+
 ```{r}
-# library(shiny)
 library(tidyverse)
 
 #===============================================================================
@@ -245,5 +246,63 @@ all_arbs <-
 
 # H2H Arbs
 all_arbs
+```
+
+## Middles
+
+```{r}
+# Disposals
+disposals_middles <-
+  disposals_unders |>
+  rename(under_line = line) |> 
+  inner_join(
+    (disposals_overs |> rename(over_line = line)),
+    by = c(
+      "match",
+      "market_name",
+      "player_name",
+      "player_team",
+      "opposition_team"
+    ),
+    relationship = "many-to-many"
+  ) |>
+  relocate(under_price, .after = over_price) |>
+  relocate(under_line, .after = over_line) |> 
+  mutate(margin = 1 / under_price + 1 / over_price) |>
+  mutate(middle = under_line - over_line) |> 
+  filter(middle >= 0) |> 
+  arrange(margin) |>
+  mutate(margin = (1 - margin)) |>
+  mutate(margin = 100 * margin) |>
+  # filter(margin > 0) |>
+  distinct(match, player_name, over_agency, under_agency, .keep_all = TRUE) |>
+  relocate(over_price, over_agency, under_price, under_agency, .after = opposition_team)
+
+# Fantasy
+fantasy_points_middles <-
+  fantasy_points_unders |>
+  rename(under_line = line) |> 
+  inner_join(
+    (fantasy_points_overs |> rename(over_line = line)),
+    by = c(
+      "match",
+      "market_name",
+      "player_name",
+      "player_team",
+      "opposition_team"
+    ),
+    relationship = "many-to-many"
+  ) |>
+  relocate(under_price, .after = over_price) |>
+  relocate(under_line, .after = over_line) |> 
+  mutate(margin = 1 / under_price + 1 / over_price) |>
+  mutate(middle = under_line - over_line) |> 
+  filter(middle >= 0) |> 
+  arrange(margin) |>
+  mutate(margin = (1 - margin)) |>
+  mutate(margin = 100 * margin) |>
+  # filter(margin > 0) |>
+  distinct(match, player_name, over_agency, under_agency, .keep_all = TRUE) |>
+  relocate(over_price, over_agency, under_price, under_agency, .after = opposition_team)
 ```
 
