@@ -282,7 +282,7 @@ disposals_middles <-
 fantasy_points_middles <-
   fantasy_points_unders |>
   rename(under_line = line) |> 
-  inner_join(
+  full_join(
     (fantasy_points_overs |> rename(over_line = line)),
     by = c(
       "match",

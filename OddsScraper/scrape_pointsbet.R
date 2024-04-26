@@ -340,6 +340,9 @@ pointsbet_h2h_main <- function() {
       sep = " v ",
       remove = FALSE
     ) |>
+    mutate(home_team = fix_team_names(home_team),
+           away_team = fix_team_names(away_team)) |>
+    mutate(match = paste(home_team, "v", away_team)) |>
     mutate(
       player_name = case_when(
         player_name == "Lebron James" ~ "LeBron James",
@@ -380,6 +383,9 @@ pointsbet_h2h_main <- function() {
       sep = " v ",
       remove = FALSE
     ) |>
+    mutate(home_team = fix_team_names(home_team),
+           away_team = fix_team_names(away_team)) |>
+    mutate(match = paste(home_team, "v", away_team)) |>
     mutate(
       player_name = case_when(
         player_name == "Lebron James" ~ "LeBron James",
@@ -492,6 +498,9 @@ pointsbet_h2h_main <- function() {
       sep = " v ",
       remove = FALSE
     ) |>
+    mutate(home_team = fix_team_names(home_team),
+           away_team = fix_team_names(away_team)) |>
+    mutate(match = paste(home_team, "v", away_team)) |>
     mutate(
       player_name = case_when(
         player_name == "Lebron James" ~ "LeBron James",
@@ -532,6 +541,9 @@ pointsbet_h2h_main <- function() {
       sep = " v ",
       remove = FALSE
     ) |>
+    mutate(home_team = fix_team_names(home_team),
+           away_team = fix_team_names(away_team)) |>
+    mutate(match = paste(home_team, "v", away_team)) |>
     mutate(
       player_name = case_when(
         player_name == "Lebron James" ~ "LeBron James",
@@ -574,7 +586,6 @@ pointsbet_h2h_main <- function() {
       agency,
       contains("Key")
     )
-  
   
   #===============================================================================
   # Player Goals

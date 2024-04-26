@@ -18,6 +18,7 @@ Remove-Item -Path "C:\Users\james\R_Projects\AFL-2024\Data\BET365_HTML\*.txt"
 
 # Publish report using Quarto
 echo "1" | & "quarto" "publish" "quarto-pub" "Reports\outlier-odds.qmd"
+echo "1" | & "quarto" "publish" "quarto-pub" "Reports\arbs.qmd"
 
 # Automatically stage all changes
 git add .
