@@ -5,7 +5,7 @@ execute:
   message: false
   warning: false
 author: "James Brown"
-date: "2024-03-12"
+date: "`r Sys.Date()`"
 format:
   html:
     df-print: kable
@@ -18,6 +18,8 @@ format:
     fig-height: 6
 editor: source
 ---
+
+**Last Updated: `r format(Sys.time(), "%I:%M %p")`**
 
 ```{r setup, include=FALSE}
 library(tidyverse)
@@ -85,6 +87,41 @@ all_markets |>
   relocate(second_best_odds, .after = over_price)
 ```
 
+# +EV Bets
+
+```{r}
+#| results: asis
+
+# Outlier List
+biggest_diffs_outliers <-
+  biggest_diffs |>
+  filter(diff_over_last_10 >= 0) |>
+  arrange(desc(diff_over_last_10)) |> 
+  rename(gap = diff_over) |> 
+  filter(gap > 0)
+
+# Function to take list, filter to agency and return
+filter_agency <- function(df, agency) {
+  df |>
+    filter(agency == !!agency)
+}
+
+# Unique list of agencies
+agencies <- biggest_diffs_outliers$agency |> unique()
+
+# Make list of dataframes
+agency_list <- map(agencies, ~filter_agency(biggest_diffs_outliers, .x)) |> set_names(agencies)
+
+# # For each element of the list, make a DT table
+# agency_list <-
+#   map(agency_list, ~ datatable(.x, options = list(
+#     pageLength = 10, scrollX = TRUE, width = "100%"
+#   )))
+
+# Make tabset with each
+maketabs(agency_list, wide = TRUE)
+```
+
 # Biggest Outliers By Agency
 
 ```{r}
@@ -93,9 +130,9 @@ all_markets |>
 # Outlier List
 biggest_diffs_outliers <-
   biggest_diffs |>
-  filter(diff_over >= 0.03) |> 
-  arrange(desc(diff_over_last_10)) |> 
-  rename(gap = diff_over) 
+  filter(diff_over >= 0.03) |>
+  arrange(desc(diff_over)) |> 
+  rename(gap = diff_over)
 
 # Function to take list, filter to agency and return
 filter_agency <- function(df, agency) {
