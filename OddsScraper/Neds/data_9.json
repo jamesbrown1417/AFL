@@ -1,80 +1,102 @@
 {
     "entrants": {
-        "7086e31d-1fb5-4de3-a5b0-7d312c2b7114": {
-            "id": "7086e31d-1fb5-4de3-a5b0-7d312c2b7114",
-            "name": "Collingwood",
+        "096c9210-82d5-45f4-ab0c-0f1e0bbd549c": {
+            "id": "096c9210-82d5-45f4-ab0c-0f1e0bbd549c",
+            "name": "South Fremantle",
             "home_away": "AWAY",
             "visible": true,
             "sort_order": 20,
-            "market_id": "4624782e-01e8-464d-9e24-27a23aa5d346"
+            "market_id": "c880fdd9-afb9-40b5-aa93-cf451a81dbd0"
         },
-        "c6fac08b-f01d-4252-a0fd-0e6d0a84739b": {
-            "id": "c6fac08b-f01d-4252-a0fd-0e6d0a84739b",
-            "name": "Carlton",
+        "347c789c-0015-4bee-ab21-c84e1641f327": {
+            "id": "347c789c-0015-4bee-ab21-c84e1641f327",
+            "name": "West Perth",
             "home_away": "HOME",
             "visible": true,
             "sort_order": 10,
-            "market_id": "4624782e-01e8-464d-9e24-27a23aa5d346"
-        }
-    },
-    "event_participants": {
-        "006295a6-a5cf-4d76-8cd3-9012014a8ca7": {
-            "id": "006295a6-a5cf-4d76-8cd3-9012014a8ca7",
-            "event_id": "66fe5b02-3543-4d9c-9764-63ca16d9803c",
-            "name": "Carlton",
-            "home_away": "HOME"
+            "market_id": "c880fdd9-afb9-40b5-aa93-cf451a81dbd0"
         },
-        "1d4e3700-e6c9-4a96-9cfa-dd8c67f9bc78": {
-            "id": "1d4e3700-e6c9-4a96-9cfa-dd8c67f9bc78",
-            "event_id": "66fe5b02-3543-4d9c-9764-63ca16d9803c",
-            "name": "Collingwood",
-            "home_away": "AWAY"
+        "36b12990-63aa-4318-a86d-35db800ba824": {
+            "id": "36b12990-63aa-4318-a86d-35db800ba824",
+            "name": "Under",
+            "visible": true,
+            "sort_order": 20,
+            "market_id": "8f84c86e-f092-4e28-9f17-84693fc50600"
+        },
+        "c00348c2-da4d-4f0e-9c41-e754ab646372": {
+            "id": "c00348c2-da4d-4f0e-9c41-e754ab646372",
+            "name": "South Fremantle",
+            "home_away": "AWAY",
+            "visible": true,
+            "sort_order": 20,
+            "market_id": "ba3de57d-bf43-4734-a7e6-fe9d834de79a"
+        },
+        "ddcee70b-16e2-4785-80d7-df87a68627f2": {
+            "id": "ddcee70b-16e2-4785-80d7-df87a68627f2",
+            "name": "West Perth",
+            "home_away": "HOME",
+            "visible": true,
+            "sort_order": 10,
+            "market_id": "ba3de57d-bf43-4734-a7e6-fe9d834de79a"
+        },
+        "f835f922-598e-4978-b000-5c94f75ca332": {
+            "id": "f835f922-598e-4978-b000-5c94f75ca332",
+            "name": "Over",
+            "visible": true,
+            "sort_order": 10,
+            "market_id": "8f84c86e-f092-4e28-9f17-84693fc50600"
         }
     },
     "events": {
-        "66fe5b02-3543-4d9c-9764-63ca16d9803c": {
-            "id": "66fe5b02-3543-4d9c-9764-63ca16d9803c",
-            "name": "Carlton vs Collingwood",
+        "85aa136a-137f-42ef-88e9-464e628b7a3a": {
+            "id": "85aa136a-137f-42ef-88e9-464e628b7a3a",
+            "name": "West Perth vs South Fremantle",
             "event_type": {
                 "id": "6bfa0efc-05df-4ae1-9b1e-152365290cfd",
                 "name": "Match"
             },
             "match_status": "BettingOpen",
-            "advertised_start": "2024-05-03T09:40:00Z",
-            "actual_start": "2024-05-03T09:40:00Z",
+            "advertised_start": "2024-04-27T08:10:00Z",
+            "actual_start": "2024-04-27T08:10:00Z",
             "visible": true,
-            "slug": "carlton-vs-collingwood",
+            "slug": "west-perth-vs-south-fremantle",
             "competition": {
-                "id": "ccff2e9a-5347-41aa-902a-bb6b1886d817",
-                "name": "AFL",
-                "sort_order": 1,
-                "region": "Australia"
+                "id": "95553dad-b992-4773-b6fe-4b1572dc13df",
+                "name": "WAFL",
+                "sort_order": 7,
+                "region": "Aus"
             },
-            "competition_id": "ccff2e9a-5347-41aa-902a-bb6b1886d817",
+            "competition_id": "95553dad-b992-4773-b6fe-4b1572dc13df",
             "market_type_group_ids": [
-                "29edb5e1-a717-4769-8bcd-2d43ec38d828"
+                "29edb5e1-a717-4769-8bcd-2d43ec38d828",
+                "68b6bfcc-f17e-42e9-ae36-300a4d98ba5f"
             ],
             "market_type_group_markets": [
                 {
                     "market_type_group_id": "29edb5e1-a717-4769-8bcd-2d43ec38d828",
                     "market_ids": [
-                        "4624782e-01e8-464d-9e24-27a23aa5d346"
+                        "c880fdd9-afb9-40b5-aa93-cf451a81dbd0",
+                        "ba3de57d-bf43-4734-a7e6-fe9d834de79a",
+                        "8f84c86e-f092-4e28-9f17-84693fc50600"
+                    ]
+                },
+                {
+                    "market_type_group_id": "68b6bfcc-f17e-42e9-ae36-300a4d98ba5f",
+                    "market_ids": [
+                        "8f84c86e-f092-4e28-9f17-84693fc50600"
                     ]
                 }
             ],
-            "market_count": 1,
+            "market_count": 3,
             "main_markets": [
-                "4624782e-01e8-464d-9e24-27a23aa5d346"
+                "c880fdd9-afb9-40b5-aa93-cf451a81dbd0"
             ],
             "market_ids": [
-                "4624782e-01e8-464d-9e24-27a23aa5d346"
+                "c880fdd9-afb9-40b5-aa93-cf451a81dbd0",
+                "ba3de57d-bf43-4734-a7e6-fe9d834de79a",
+                "8f84c86e-f092-4e28-9f17-84693fc50600"
             ],
-            "category_id": "23d497e6-8aab-4309-905b-9421f42c9bc5",
-            "round_id": "23c01f5e-abc2-46ee-83a8-a0e0d9e93307",
-            "participant_ids": [
-                "006295a6-a5cf-4d76-8cd3-9012014a8ca7",
-                "1d4e3700-e6c9-4a96-9cfa-dd8c67f9bc78"
-            ]
+            "category_id": "23d497e6-8aab-4309-905b-9421f42c9bc5"
         }
     },
     "market_type_groups": {
@@ -83,44 +105,116 @@
             "category_id": "23d497e6-8aab-4309-905b-9421f42c9bc5",
             "name": "Top Markets",
             "priority": 340
+        },
+        "68b6bfcc-f17e-42e9-ae36-300a4d98ba5f": {
+            "id": "68b6bfcc-f17e-42e9-ae36-300a4d98ba5f",
+            "category_id": "23d497e6-8aab-4309-905b-9421f42c9bc5",
+            "name": "Total Markets",
+            "priority": 160
         }
     },
     "markets": {
-        "4624782e-01e8-464d-9e24-27a23aa5d346": {
-            "id": "4624782e-01e8-464d-9e24-27a23aa5d346",
-            "event_id": "66fe5b02-3543-4d9c-9764-63ca16d9803c",
+        "8f84c86e-f092-4e28-9f17-84693fc50600": {
+            "id": "8f84c86e-f092-4e28-9f17-84693fc50600",
+            "event_id": "85aa136a-137f-42ef-88e9-464e628b7a3a",
+            "market_type_id": "9cc10db4-c9bb-49f2-bba6-e4ea6eabcb4a",
+            "market_status_id": "4bc8fe96-296b-4b4c-aea4-85c94f63b9c6",
+            "name": "Total Points",
+            "advertised_start": {
+                "seconds": 1714205400
+            },
+            "actual_start": {
+                "seconds": 1714205400
+            },
+            "handicap": 141.5,
+            "visible": true,
+            "entrant_ids": [
+                "f835f922-598e-4978-b000-5c94f75ca332",
+                "36b12990-63aa-4318-a86d-35db800ba824"
+            ],
+            "num_winners": 1
+        },
+        "ba3de57d-bf43-4734-a7e6-fe9d834de79a": {
+            "id": "ba3de57d-bf43-4734-a7e6-fe9d834de79a",
+            "event_id": "85aa136a-137f-42ef-88e9-464e628b7a3a",
+            "market_type_id": "d04cddcd-5f42-4d17-ae1c-950dfdaa2c98",
+            "market_status_id": "4bc8fe96-296b-4b4c-aea4-85c94f63b9c6",
+            "name": "Line",
+            "advertised_start": {
+                "seconds": 1714205400
+            },
+            "actual_start": {
+                "seconds": 1714205400
+            },
+            "handicap": 9.5,
+            "visible": true,
+            "entrant_ids": [
+                "ddcee70b-16e2-4785-80d7-df87a68627f2",
+                "c00348c2-da4d-4f0e-9c41-e754ab646372"
+            ],
+            "num_winners": 1
+        },
+        "c880fdd9-afb9-40b5-aa93-cf451a81dbd0": {
+            "id": "c880fdd9-afb9-40b5-aa93-cf451a81dbd0",
+            "event_id": "85aa136a-137f-42ef-88e9-464e628b7a3a",
             "market_type_id": "be25c37a-71ff-47f6-a1e2-02a494eb5a4d",
             "market_status_id": "4bc8fe96-296b-4b4c-aea4-85c94f63b9c6",
             "name": "Match Betting",
             "advertised_start": {
-                "seconds": 1714729200
+                "seconds": 1714205400
             },
             "actual_start": {
-                "seconds": 1714729200
+                "seconds": 1714205400
             },
             "is_primary": true,
             "visible": true,
             "entrant_ids": [
-                "c6fac08b-f01d-4252-a0fd-0e6d0a84739b",
-                "7086e31d-1fb5-4de3-a5b0-7d312c2b7114"
+                "347c789c-0015-4bee-ab21-c84e1641f327",
+                "096c9210-82d5-45f4-ab0c-0f1e0bbd549c"
             ],
             "num_winners": 1
         }
     },
     "markets_allow_cashout": {
-        "4624782e-01e8-464d-9e24-27a23aa5d346": true
+        "8f84c86e-f092-4e28-9f17-84693fc50600": false,
+        "ba3de57d-bf43-4734-a7e6-fe9d834de79a": false,
+        "c880fdd9-afb9-40b5-aa93-cf451a81dbd0": true
     },
     "prices": {
-        "7086e31d-1fb5-4de3-a5b0-7d312c2b7114:940b8704-e497-4a76-b390-00918ff7d282:": {
+        "096c9210-82d5-45f4-ab0c-0f1e0bbd549c:940b8704-e497-4a76-b390-00918ff7d282:": {
             "odds": {
-                "numerator": 19,
+                "numerator": 27,
                 "denominator": 20
             }
         },
-        "c6fac08b-f01d-4252-a0fd-0e6d0a84739b:940b8704-e497-4a76-b390-00918ff7d282:": {
+        "347c789c-0015-4bee-ab21-c84e1641f327:940b8704-e497-4a76-b390-00918ff7d282:": {
             "odds": {
-                "numerator": 43,
+                "numerator": 29,
                 "denominator": 50
+            }
+        },
+        "36b12990-63aa-4318-a86d-35db800ba824:940b8704-e497-4a76-b390-00918ff7d282:": {
+            "odds": {
+                "numerator": 22,
+                "denominator": 25
+            }
+        },
+        "c00348c2-da4d-4f0e-9c41-e754ab646372:940b8704-e497-4a76-b390-00918ff7d282:": {
+            "odds": {
+                "numerator": 22,
+                "denominator": 25
+            }
+        },
+        "ddcee70b-16e2-4785-80d7-df87a68627f2:940b8704-e497-4a76-b390-00918ff7d282:": {
+            "odds": {
+                "numerator": 22,
+                "denominator": 25
+            }
+        },
+        "f835f922-598e-4978-b000-5c94f75ca332:940b8704-e497-4a76-b390-00918ff7d282:": {
+            "odds": {
+                "numerator": 22,
+                "denominator": 25
             }
         }
     }
