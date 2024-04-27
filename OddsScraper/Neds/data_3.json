@@ -1,49 +1,49 @@
 {
     "entrants": {
-        "7d13c2e9-a71e-4459-a626-14e1596d88e0": {
-            "id": "7d13c2e9-a71e-4459-a626-14e1596d88e0",
-            "name": "Port Adelaide",
+        "de18f7c3-253d-4ca4-9db6-afa872aad3d0": {
+            "id": "de18f7c3-253d-4ca4-9db6-afa872aad3d0",
+            "name": "Essendon",
             "home_away": "AWAY",
             "visible": true,
             "sort_order": 20,
-            "market_id": "85e48614-59c5-4d77-99e3-1463d527e364"
+            "market_id": "b3a27295-ccd6-40f7-89d3-5d46c2c647dd"
         },
-        "d0baa39c-282c-42dc-9188-57a54b948df1": {
-            "id": "d0baa39c-282c-42dc-9188-57a54b948df1",
-            "name": "Adelaide Crows",
+        "e6dc0c37-01fb-438e-b697-08b4cef0dcb6": {
+            "id": "e6dc0c37-01fb-438e-b697-08b4cef0dcb6",
+            "name": "West Coast Eagles",
             "home_away": "HOME",
             "visible": true,
             "sort_order": 10,
-            "market_id": "85e48614-59c5-4d77-99e3-1463d527e364"
+            "market_id": "b3a27295-ccd6-40f7-89d3-5d46c2c647dd"
         }
     },
     "event_participants": {
-        "13bcf92c-a2f1-42f1-8b2e-16e07ac16202": {
-            "id": "13bcf92c-a2f1-42f1-8b2e-16e07ac16202",
-            "event_id": "2b54b629-0771-42ae-87db-9071ef00a60f",
-            "name": "Port Adelaide",
-            "home_away": "AWAY"
-        },
-        "99bb1c10-0795-4b1f-a588-5d46c7d2a48e": {
-            "id": "99bb1c10-0795-4b1f-a588-5d46c7d2a48e",
-            "event_id": "2b54b629-0771-42ae-87db-9071ef00a60f",
-            "name": "Adelaide Crows",
+        "65914afd-406e-4453-8fa8-c7d9d7748b0b": {
+            "id": "65914afd-406e-4453-8fa8-c7d9d7748b0b",
+            "event_id": "2bf54539-8df7-4979-93e8-87cc8d943410",
+            "name": "West Coast Eagles",
             "home_away": "HOME"
+        },
+        "98a35247-aa60-4702-8df8-21153da406c3": {
+            "id": "98a35247-aa60-4702-8df8-21153da406c3",
+            "event_id": "2bf54539-8df7-4979-93e8-87cc8d943410",
+            "name": "Essendon",
+            "home_away": "AWAY"
         }
     },
     "events": {
-        "2b54b629-0771-42ae-87db-9071ef00a60f": {
-            "id": "2b54b629-0771-42ae-87db-9071ef00a60f",
-            "name": "Adelaide Crows vs Port Adelaide",
+        "2bf54539-8df7-4979-93e8-87cc8d943410": {
+            "id": "2bf54539-8df7-4979-93e8-87cc8d943410",
+            "name": "West Coast Eagles vs Essendon",
             "event_type": {
                 "id": "6bfa0efc-05df-4ae1-9b1e-152365290cfd",
                 "name": "Match"
             },
             "match_status": "BettingOpen",
-            "advertised_start": "2024-05-02T09:30:00Z",
-            "actual_start": "2024-05-02T09:30:00Z",
+            "advertised_start": "2024-05-04T10:10:00Z",
+            "actual_start": "2024-05-04T10:10:00Z",
             "visible": true,
-            "slug": "adelaide-crows-vs-port-adelaide",
+            "slug": "west-coast-eagles-vs-essendon",
             "competition": {
                 "id": "ccff2e9a-5347-41aa-902a-bb6b1886d817",
                 "name": "AFL",
@@ -58,22 +58,22 @@
                 {
                     "market_type_group_id": "29edb5e1-a717-4769-8bcd-2d43ec38d828",
                     "market_ids": [
-                        "85e48614-59c5-4d77-99e3-1463d527e364"
+                        "b3a27295-ccd6-40f7-89d3-5d46c2c647dd"
                     ]
                 }
             ],
             "market_count": 1,
             "main_markets": [
-                "85e48614-59c5-4d77-99e3-1463d527e364"
+                "b3a27295-ccd6-40f7-89d3-5d46c2c647dd"
             ],
             "market_ids": [
-                "85e48614-59c5-4d77-99e3-1463d527e364"
+                "b3a27295-ccd6-40f7-89d3-5d46c2c647dd"
             ],
             "category_id": "23d497e6-8aab-4309-905b-9421f42c9bc5",
             "round_id": "23c01f5e-abc2-46ee-83a8-a0e0d9e93307",
             "participant_ids": [
-                "13bcf92c-a2f1-42f1-8b2e-16e07ac16202",
-                "99bb1c10-0795-4b1f-a588-5d46c7d2a48e"
+                "65914afd-406e-4453-8fa8-c7d9d7748b0b",
+                "98a35247-aa60-4702-8df8-21153da406c3"
             ]
         }
     },
@@ -86,41 +86,41 @@
         }
     },
     "markets": {
-        "85e48614-59c5-4d77-99e3-1463d527e364": {
-            "id": "85e48614-59c5-4d77-99e3-1463d527e364",
-            "event_id": "2b54b629-0771-42ae-87db-9071ef00a60f",
+        "b3a27295-ccd6-40f7-89d3-5d46c2c647dd": {
+            "id": "b3a27295-ccd6-40f7-89d3-5d46c2c647dd",
+            "event_id": "2bf54539-8df7-4979-93e8-87cc8d943410",
             "market_type_id": "be25c37a-71ff-47f6-a1e2-02a494eb5a4d",
             "market_status_id": "4bc8fe96-296b-4b4c-aea4-85c94f63b9c6",
             "name": "Match Betting",
             "advertised_start": {
-                "seconds": 1714642200
+                "seconds": 1714817400
             },
             "actual_start": {
-                "seconds": 1714642200
+                "seconds": 1714817400
             },
             "is_primary": true,
             "visible": true,
             "entrant_ids": [
-                "d0baa39c-282c-42dc-9188-57a54b948df1",
-                "7d13c2e9-a71e-4459-a626-14e1596d88e0"
+                "e6dc0c37-01fb-438e-b697-08b4cef0dcb6",
+                "de18f7c3-253d-4ca4-9db6-afa872aad3d0"
             ],
             "num_winners": 1
         }
     },
     "markets_allow_cashout": {
-        "85e48614-59c5-4d77-99e3-1463d527e364": true
+        "b3a27295-ccd6-40f7-89d3-5d46c2c647dd": true
     },
     "prices": {
-        "7d13c2e9-a71e-4459-a626-14e1596d88e0:940b8704-e497-4a76-b390-00918ff7d282:": {
+        "de18f7c3-253d-4ca4-9db6-afa872aad3d0:940b8704-e497-4a76-b390-00918ff7d282:": {
             "odds": {
-                "numerator": 31,
-                "denominator": 50
+                "numerator": 9,
+                "denominator": 20
             }
         },
-        "d0baa39c-282c-42dc-9188-57a54b948df1:940b8704-e497-4a76-b390-00918ff7d282:": {
+        "e6dc0c37-01fb-438e-b697-08b4cef0dcb6:940b8704-e497-4a76-b390-00918ff7d282:": {
             "odds": {
-                "numerator": 13,
-                "denominator": 10
+                "numerator": 33,
+                "denominator": 20
             }
         }
     }

@@ -1,49 +1,49 @@
 {
     "entrants": {
-        "5f07e284-4db8-48e1-b560-06380b8f00d0": {
-            "id": "5f07e284-4db8-48e1-b560-06380b8f00d0",
-            "name": "North Melbourne",
+        "7086e31d-1fb5-4de3-a5b0-7d312c2b7114": {
+            "id": "7086e31d-1fb5-4de3-a5b0-7d312c2b7114",
+            "name": "Collingwood",
             "home_away": "AWAY",
             "visible": true,
             "sort_order": 20,
-            "market_id": "455ee05f-3490-4805-902f-40c6fd079d6f"
+            "market_id": "4624782e-01e8-464d-9e24-27a23aa5d346"
         },
-        "c5c52d6d-fdb3-47fc-8411-c619ccc86670": {
-            "id": "c5c52d6d-fdb3-47fc-8411-c619ccc86670",
-            "name": "St Kilda",
+        "c6fac08b-f01d-4252-a0fd-0e6d0a84739b": {
+            "id": "c6fac08b-f01d-4252-a0fd-0e6d0a84739b",
+            "name": "Carlton",
             "home_away": "HOME",
             "visible": true,
             "sort_order": 10,
-            "market_id": "455ee05f-3490-4805-902f-40c6fd079d6f"
+            "market_id": "4624782e-01e8-464d-9e24-27a23aa5d346"
         }
     },
     "event_participants": {
-        "754a0dac-69ed-4f5a-b544-786af95867be": {
-            "id": "754a0dac-69ed-4f5a-b544-786af95867be",
-            "event_id": "45f9a068-c391-42d1-b3ab-5f2841dd24d9",
-            "name": "North Melbourne",
-            "home_away": "AWAY"
-        },
-        "c7b495c7-4e2e-4eed-8a40-2ea989d34c18": {
-            "id": "c7b495c7-4e2e-4eed-8a40-2ea989d34c18",
-            "event_id": "45f9a068-c391-42d1-b3ab-5f2841dd24d9",
-            "name": "St Kilda",
+        "006295a6-a5cf-4d76-8cd3-9012014a8ca7": {
+            "id": "006295a6-a5cf-4d76-8cd3-9012014a8ca7",
+            "event_id": "66fe5b02-3543-4d9c-9764-63ca16d9803c",
+            "name": "Carlton",
             "home_away": "HOME"
+        },
+        "1d4e3700-e6c9-4a96-9cfa-dd8c67f9bc78": {
+            "id": "1d4e3700-e6c9-4a96-9cfa-dd8c67f9bc78",
+            "event_id": "66fe5b02-3543-4d9c-9764-63ca16d9803c",
+            "name": "Collingwood",
+            "home_away": "AWAY"
         }
     },
     "events": {
-        "45f9a068-c391-42d1-b3ab-5f2841dd24d9": {
-            "id": "45f9a068-c391-42d1-b3ab-5f2841dd24d9",
-            "name": "St Kilda vs North Melbourne",
+        "66fe5b02-3543-4d9c-9764-63ca16d9803c": {
+            "id": "66fe5b02-3543-4d9c-9764-63ca16d9803c",
+            "name": "Carlton vs Collingwood",
             "event_type": {
                 "id": "6bfa0efc-05df-4ae1-9b1e-152365290cfd",
                 "name": "Match"
             },
             "match_status": "BettingOpen",
-            "advertised_start": "2024-05-04T06:35:00Z",
-            "actual_start": "2024-05-04T06:35:00Z",
+            "advertised_start": "2024-05-03T09:40:00Z",
+            "actual_start": "2024-05-03T09:40:00Z",
             "visible": true,
-            "slug": "st-kilda-vs-north-melbourne",
+            "slug": "carlton-vs-collingwood",
             "competition": {
                 "id": "ccff2e9a-5347-41aa-902a-bb6b1886d817",
                 "name": "AFL",
@@ -58,22 +58,22 @@
                 {
                     "market_type_group_id": "29edb5e1-a717-4769-8bcd-2d43ec38d828",
                     "market_ids": [
-                        "455ee05f-3490-4805-902f-40c6fd079d6f"
+                        "4624782e-01e8-464d-9e24-27a23aa5d346"
                     ]
                 }
             ],
             "market_count": 1,
             "main_markets": [
-                "455ee05f-3490-4805-902f-40c6fd079d6f"
+                "4624782e-01e8-464d-9e24-27a23aa5d346"
             ],
             "market_ids": [
-                "455ee05f-3490-4805-902f-40c6fd079d6f"
+                "4624782e-01e8-464d-9e24-27a23aa5d346"
             ],
             "category_id": "23d497e6-8aab-4309-905b-9421f42c9bc5",
             "round_id": "23c01f5e-abc2-46ee-83a8-a0e0d9e93307",
             "participant_ids": [
-                "754a0dac-69ed-4f5a-b544-786af95867be",
-                "c7b495c7-4e2e-4eed-8a40-2ea989d34c18"
+                "006295a6-a5cf-4d76-8cd3-9012014a8ca7",
+                "1d4e3700-e6c9-4a96-9cfa-dd8c67f9bc78"
             ]
         }
     },
@@ -86,41 +86,41 @@
         }
     },
     "markets": {
-        "455ee05f-3490-4805-902f-40c6fd079d6f": {
-            "id": "455ee05f-3490-4805-902f-40c6fd079d6f",
-            "event_id": "45f9a068-c391-42d1-b3ab-5f2841dd24d9",
+        "4624782e-01e8-464d-9e24-27a23aa5d346": {
+            "id": "4624782e-01e8-464d-9e24-27a23aa5d346",
+            "event_id": "66fe5b02-3543-4d9c-9764-63ca16d9803c",
             "market_type_id": "be25c37a-71ff-47f6-a1e2-02a494eb5a4d",
             "market_status_id": "4bc8fe96-296b-4b4c-aea4-85c94f63b9c6",
             "name": "Match Betting",
             "advertised_start": {
-                "seconds": 1714804500
+                "seconds": 1714729200
             },
             "actual_start": {
-                "seconds": 1714804500
+                "seconds": 1714729200
             },
             "is_primary": true,
             "visible": true,
             "entrant_ids": [
-                "c5c52d6d-fdb3-47fc-8411-c619ccc86670",
-                "5f07e284-4db8-48e1-b560-06380b8f00d0"
+                "c6fac08b-f01d-4252-a0fd-0e6d0a84739b",
+                "7086e31d-1fb5-4de3-a5b0-7d312c2b7114"
             ],
             "num_winners": 1
         }
     },
     "markets_allow_cashout": {
-        "455ee05f-3490-4805-902f-40c6fd079d6f": true
+        "4624782e-01e8-464d-9e24-27a23aa5d346": true
     },
     "prices": {
-        "5f07e284-4db8-48e1-b560-06380b8f00d0:940b8704-e497-4a76-b390-00918ff7d282:": {
+        "7086e31d-1fb5-4de3-a5b0-7d312c2b7114:940b8704-e497-4a76-b390-00918ff7d282:": {
             "odds": {
-                "numerator": 51,
-                "denominator": 10
+                "numerator": 19,
+                "denominator": 20
             }
         },
-        "c5c52d6d-fdb3-47fc-8411-c619ccc86670:940b8704-e497-4a76-b390-00918ff7d282:": {
+        "c6fac08b-f01d-4252-a0fd-0e6d0a84739b:940b8704-e497-4a76-b390-00918ff7d282:": {
             "odds": {
-                "numerator": 3,
-                "denominator": 25
+                "numerator": 43,
+                "denominator": 50
             }
         }
     }
