@@ -12,6 +12,7 @@ library(gridlayout)
 library(DT)
 library(googlesheets4)
 library(googledrive)
+library(readxl)
 
 # Determine the operating system
 os_type <- Sys.info()["sysname"]
@@ -32,6 +33,76 @@ all_player_stats$cba_percentage <- round(all_player_stats$cba_percentage, 3)
 
 # Agencies List
 agencies = c("TAB", "Pointsbet", "Neds", "Sportsbet", "Bet365", "Unibet", "BlueBet", "TopSport", "BetRight", "Betr", "Dabble")
+
+#===============================================================================
+# Read in and normalise DVP Data
+#===============================================================================
+
+# Read in data
+dvp_data <-
+  read_csv("../../DVP/dvp_data.csv")
+
+# Read in position data---------------------------------------------------------
+player_positions <-
+  read_excel("../../DVP/AFL-Players-Positions-2024.xlsx") |>
+  select(
+    player_full_name,
+    player_team = team_name,
+    pos_1 = `position 1`,
+    pos_2 = `position 2`
+  ) |>
+  mutate(pos_1_factor = factor(
+    pos_1,
+    levels = 1:11,
+    labels = c(
+      "Key Defender",
+      "Small Defender",
+      "Offensive Defender",
+      "CBA > 50%",
+      "CBA < 50%",
+      "Wing",
+      "Contested",
+      "Uncontested",
+      "Ruck",
+      "Key Forward",
+      "Small Forward"
+    )
+  )) |> 
+  mutate(pos_2_factor = factor(
+    pos_2,
+    levels = 1:11,
+    labels = c(
+      "Key Defender",
+      "Small Defender",
+      "Offensive Defender",
+      "CBA > 50%",
+      "CBA < 50%",
+      "Wing",
+      "Contested",
+      "Uncontested",
+      "Ruck",
+      "Key Forward",
+      "Small Forward"
+    )
+  )) |> 
+  select(player_name = player_full_name, player_team, Position = pos_1_factor)
+
+dvp_data <-
+  dvp_data %>%
+  mutate(dvp = ifelse(market_name == "Player Goals", rnorm(nrow(dvp_data)), dvp)) |> 
+  group_by(market_name) %>%
+  mutate(
+    DVP_Category = cut(
+      dvp,
+      breaks = quantile(dvp, probs = 0:5/5, na.rm = TRUE),
+      include.lowest = TRUE,
+      labels = c("Terrible", "Bad", "Neutral", "Good", "Excellent")
+    )
+  ) %>%
+  mutate(DVP_Category = as.character(DVP_Category)) |> 
+  mutate(DVP_Category = ifelse(market_name == "Player Goals", "Neutral", DVP_Category)) |> 
+  ungroup() %>%
+  select(Position = Pos, opposition_team = Opponent, market_name, DVP_Category)
 
 #===============================================================================
 # Read in odds data
@@ -60,6 +131,38 @@ if (
   player_fantasy_data <- read_sheet(ss = ss_name, sheet = "Player Fantasy Points")
 }
 
+# Add DVP Data------------------------------------------------------------------
+
+player_disposals_data <-
+  player_disposals_data |> 
+  left_join(player_positions, relationship = "many-to-one") |>
+  left_join(dvp_data, by = c("opposition_team", "Position", "market_name"), relationship = "many-to-one") |> 
+  relocate(Position, DVP_Category, .after = player_name)
+
+player_goals_data <-
+  player_goals_data |> 
+  left_join(player_positions, relationship = "many-to-one") |>
+  left_join(dvp_data, by = c("opposition_team", "Position", "market_name"), relationship = "many-to-one") |> 
+  relocate(Position, DVP_Category, .after = player_name)
+
+player_fantasy_data <-
+  player_fantasy_data |> 
+  left_join(player_positions, relationship = "many-to-one") |>
+  left_join(dvp_data, by = c("opposition_team", "Position", "market_name"), relationship = "many-to-one") |> 
+  relocate(Position, DVP_Category, .after = player_name)
+
+player_marks_data <-
+  player_marks_data |> 
+  left_join(player_positions, relationship = "many-to-one") |>
+  left_join(dvp_data, by = c("opposition_team", "Position", "market_name"), relationship = "many-to-one") |> 
+  relocate(Position, DVP_Category, .after = player_name)
+
+player_tackles_data <-
+  player_tackles_data |> 
+  left_join(player_positions, relationship = "many-to-one") |>
+  left_join(dvp_data, by = c("opposition_team", "Position", "market_name"), relationship = "many-to-one") |> 
+  relocate(Position, DVP_Category, .after = player_name)
+
 # Add home_away variable
 all_player_stats <-
   all_player_stats |>
@@ -72,8 +175,7 @@ all_player_stats <-
                             home_away == "Home") |
                            (match_result == "Home Win" &
                               home_away == "Away"),-margin,
-                         margin
-  ))
+                         margin))
   
 
 # Make weather category Indoors if at Marvel Stadium
@@ -480,6 +582,14 @@ ui <- page_navbar(
                             multiple = TRUE,
                             selectize = FALSE,
                             selected = h2h_data$match |> unique()
+                          ),
+                          selectInput(
+                            inputId = "matchup_input",
+                            label = "Select Difficulty:",
+                            choices = player_disposals_data$DVP_Category |> unique(),
+                            multiple = TRUE,
+                            selectize = FALSE,
+                            selected = player_disposals_data$DVP_Category |> unique()
                           ),
                           textInput(
                             inputId = "player_name_input_b",
@@ -924,6 +1034,7 @@ server <- function(input, output) {
         mutate(variation = round(variation, 2)) |>
         filter(agency %in% input$agency_input) |>
         filter(match %in% input$match_input) |>
+        filter(DVP_Category  %in% input$matchup_input) |>
         select(-any_of(
           c(
             "match",
@@ -945,6 +1056,7 @@ server <- function(input, output) {
         mutate(variation = round(variation, 2)) |>
         filter(agency %in% input$agency_input) |>
         filter(match %in% input$match_input) |>
+        filter(DVP_Category  %in% input$matchup_input) |>
         select(-any_of(
           c(
             "match",
@@ -966,6 +1078,7 @@ server <- function(input, output) {
         mutate(variation = round(variation, 2)) |>
         filter(agency %in% input$agency_input) |>
         filter(match %in% input$match_input) |>
+        filter(DVP_Category  %in% input$matchup_input) |>
         select(-any_of(
           c(
             "match",
@@ -987,6 +1100,7 @@ server <- function(input, output) {
         mutate(variation = round(variation, 2)) |>
         filter(agency %in% input$agency_input) |>
         filter(match %in% input$match_input) |>
+        filter(DVP_Category  %in% input$matchup_input) |>
         select(-any_of(
           c(
             "match",
@@ -1008,6 +1122,7 @@ server <- function(input, output) {
         mutate(variation = round(variation, 2)) |>
         filter(agency %in% input$agency_input) |>
         filter(match %in% input$match_input) |>
+        filter(DVP_Category  %in% input$matchup_input) |>
         select(-any_of(
           c(
             "match",
