@@ -107,7 +107,6 @@ dvp_data <-
   select(Position = Pos, opposition_team = Opponent, market_name, DVP_Category)
 ```
 
-
 ```{r}
 # Get all markets together
   all_markets <- bind_rows(
@@ -166,8 +165,7 @@ left_join(player_positions, relationship = "many-to-one") |>
   relocate(second_best_odds, .after = over_price)
 ```
 
-::: {.panel-tabset}
-
+::: panel-tabset
 ## +EV Bets
 
 ```{r}
@@ -236,5 +234,4 @@ agency_list <- map(agencies, ~filter_agency(biggest_diffs_outliers, .x)) |> set_
 # Make tabset with each
 maketabs(agency_list, wide = TRUE)
 ```
-
 :::

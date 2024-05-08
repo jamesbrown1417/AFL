@@ -47,6 +47,14 @@ get_empirical_prob <- function(player_full_name, line, stat) {
       emp_prob_last_7 = rollapply(above_line, width = 7, FUN = function(x) mean(x, na.rm = TRUE), partial = TRUE, align = "left"),
       emp_prob_last_10 = rollapply(above_line, width = 10, FUN = function(x) mean(x, na.rm = TRUE), partial = TRUE, align = "left")
     ) |> 
+    mutate(sample_size = n()) |>
+    tidytable::mutate(
+      emp_prob_last_3 = ifelse(sample_size < 3, NA, emp_prob_last_3),
+      emp_prob_last_5 = ifelse(sample_size < 5, NA, emp_prob_last_5),
+      emp_prob_last_7 = ifelse(sample_size < 7, NA, emp_prob_last_7),
+      emp_prob_last_10 = ifelse(sample_size < 10, NA, emp_prob_last_10)
+    ) |>
+    tidytable::select(-sample_size) |>
     tidytable::slice_head(n = 1) |> 
     tidytable::mutate(line = line) |> 
     tidytable::select(
