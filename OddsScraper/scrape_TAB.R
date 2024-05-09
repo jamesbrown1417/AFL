@@ -204,6 +204,45 @@ tab_line_markets <-
 write_csv(tab_line_markets, "Data/scraped_odds/tab_line.csv")
 
 #===============================================================================
+# Totals
+#===============================================================================
+
+# Total Overs
+totals_overs <-
+all_tab_markets |>
+  separate(match, into = c("home_team", "away_team"), sep = " v ", remove = FALSE) |>
+  filter(market_name == "Total Points Over/Under" |
+           market_name == "Pick Your Own Total") |> 
+  filter(str_detect(prop_name, "Over")) |>
+  mutate(line = as.numeric(str_extract(prop_name, "-?\\d+\\.?\\d*"))) |> 
+  mutate(market_name = "Total Points") |>
+  select(match, start_time, market_name, home_team, away_team, line, over_price = price)
+
+# Total Unders
+totals_unders <-
+all_tab_markets |>
+  separate(match, into = c("home_team", "away_team"), sep = " v ", remove = FALSE) |>
+  filter(market_name == "Total Points Over/Under" |
+           market_name == "Pick Your Own Total") |> 
+  filter(str_detect(prop_name, "Under")) |>
+  mutate(line = as.numeric(str_extract(prop_name, "-?\\d+\\.?\\d*"))) |> 
+  mutate(market_name = "Total Points") |>
+  select(match, start_time, market_name, home_team, away_team, line, under_price = price)
+
+# Combine
+tab_totals_markets <-
+  totals_overs |>
+  left_join(totals_unders) |> 
+  mutate(home_team = fix_team_names(home_team)) |>
+  mutate(away_team = fix_team_names(away_team)) |>
+  mutate(match = paste(home_team, "v", away_team)) |>
+  select(match, start_time, market_name, home_team, away_team, line, over_price, under_price) |> 
+  mutate(margin = round((1/over_price + 1/under_price), digits = 3)) |> 
+  mutate(agency = "TAB") |> 
+  arrange(start_time, match, line)
+
+
+#===============================================================================
 # Alt Line markets
 #===============================================================================
 # 
