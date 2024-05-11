@@ -1,40 +1,40 @@
 {
     "entrants": {
-        "2e81d535-e018-4326-aac3-4d708a3df106": {
-            "id": "2e81d535-e018-4326-aac3-4d708a3df106",
-            "name": "Richmond",
-            "home_away": "AWAY",
-            "visible": true,
-            "sort_order": 20,
-            "market_id": "79528ed6-932f-427d-a297-448dd7982453"
-        },
-        "fb68fd14-ed67-403f-b23c-c10872ba6f7a": {
-            "id": "fb68fd14-ed67-403f-b23c-c10872ba6f7a",
-            "name": "Brisbane Lions",
+        "0d841c47-781d-4435-8ba8-f965011673b4": {
+            "id": "0d841c47-781d-4435-8ba8-f965011673b4",
+            "name": "St Kilda",
             "home_away": "HOME",
             "visible": true,
             "sort_order": 10,
-            "market_id": "79528ed6-932f-427d-a297-448dd7982453"
+            "market_id": "851705d3-0fff-4e0b-9301-11c350e96418"
+        },
+        "c0f0cf89-88cb-48af-aeed-18c22de99270": {
+            "id": "c0f0cf89-88cb-48af-aeed-18c22de99270",
+            "name": "Fremantle",
+            "home_away": "AWAY",
+            "visible": true,
+            "sort_order": 20,
+            "market_id": "851705d3-0fff-4e0b-9301-11c350e96418"
         }
     },
     "event_participants": {
-        "c4fbaf43-d228-4563-b0f6-0a222ccab63d": {
-            "id": "c4fbaf43-d228-4563-b0f6-0a222ccab63d",
-            "event_id": "2d48207f-89ae-4d99-a3db-d61f4408fdbe",
-            "name": "Richmond",
+        "1476b198-fa9a-4069-9520-7778dba63f12": {
+            "id": "1476b198-fa9a-4069-9520-7778dba63f12",
+            "event_id": "1f6ad27b-20df-41eb-99e7-79e03e50949c",
+            "name": "Fremantle",
             "home_away": "AWAY"
         },
-        "e77010c1-3d61-45c3-bb0a-27775cb90f3a": {
-            "id": "e77010c1-3d61-45c3-bb0a-27775cb90f3a",
-            "event_id": "2d48207f-89ae-4d99-a3db-d61f4408fdbe",
-            "name": "Brisbane Lions",
+        "bebd3e06-d402-4ab5-9b9c-574d289b5c03": {
+            "id": "bebd3e06-d402-4ab5-9b9c-574d289b5c03",
+            "event_id": "1f6ad27b-20df-41eb-99e7-79e03e50949c",
+            "name": "St Kilda",
             "home_away": "HOME"
         }
     },
     "events": {
-        "2d48207f-89ae-4d99-a3db-d61f4408fdbe": {
-            "id": "2d48207f-89ae-4d99-a3db-d61f4408fdbe",
-            "name": "Brisbane Lions vs Richmond",
+        "1f6ad27b-20df-41eb-99e7-79e03e50949c": {
+            "id": "1f6ad27b-20df-41eb-99e7-79e03e50949c",
+            "name": "St Kilda vs Fremantle",
             "event_type": {
                 "id": "6bfa0efc-05df-4ae1-9b1e-152365290cfd",
                 "name": "Match"
@@ -43,7 +43,7 @@
             "advertised_start": "2024-05-18T09:30:00Z",
             "actual_start": "2024-05-18T09:30:00Z",
             "visible": true,
-            "slug": "brisbane-lions-vs-richmond",
+            "slug": "st-kilda-vs-fremantle",
             "competition": {
                 "id": "ccff2e9a-5347-41aa-902a-bb6b1886d817",
                 "name": "AFL",
@@ -58,22 +58,22 @@
                 {
                     "market_type_group_id": "29edb5e1-a717-4769-8bcd-2d43ec38d828",
                     "market_ids": [
-                        "79528ed6-932f-427d-a297-448dd7982453"
+                        "851705d3-0fff-4e0b-9301-11c350e96418"
                     ]
                 }
             ],
             "market_count": 1,
             "main_markets": [
-                "79528ed6-932f-427d-a297-448dd7982453"
+                "851705d3-0fff-4e0b-9301-11c350e96418"
             ],
             "market_ids": [
-                "79528ed6-932f-427d-a297-448dd7982453"
+                "851705d3-0fff-4e0b-9301-11c350e96418"
             ],
             "category_id": "23d497e6-8aab-4309-905b-9421f42c9bc5",
             "round_id": "f8bf92b7-4dc0-4d2f-87c3-f5c0c660400b",
             "participant_ids": [
-                "c4fbaf43-d228-4563-b0f6-0a222ccab63d",
-                "e77010c1-3d61-45c3-bb0a-27775cb90f3a"
+                "1476b198-fa9a-4069-9520-7778dba63f12",
+                "bebd3e06-d402-4ab5-9b9c-574d289b5c03"
             ]
         }
     },
@@ -86,9 +86,9 @@
         }
     },
     "markets": {
-        "79528ed6-932f-427d-a297-448dd7982453": {
-            "id": "79528ed6-932f-427d-a297-448dd7982453",
-            "event_id": "2d48207f-89ae-4d99-a3db-d61f4408fdbe",
+        "851705d3-0fff-4e0b-9301-11c350e96418": {
+            "id": "851705d3-0fff-4e0b-9301-11c350e96418",
+            "event_id": "1f6ad27b-20df-41eb-99e7-79e03e50949c",
             "market_type_id": "be25c37a-71ff-47f6-a1e2-02a494eb5a4d",
             "market_status_id": "4bc8fe96-296b-4b4c-aea4-85c94f63b9c6",
             "name": "Match Betting",
@@ -101,26 +101,26 @@
             "is_primary": true,
             "visible": true,
             "entrant_ids": [
-                "fb68fd14-ed67-403f-b23c-c10872ba6f7a",
-                "2e81d535-e018-4326-aac3-4d708a3df106"
+                "0d841c47-781d-4435-8ba8-f965011673b4",
+                "c0f0cf89-88cb-48af-aeed-18c22de99270"
             ],
             "num_winners": 1
         }
     },
     "markets_allow_cashout": {
-        "79528ed6-932f-427d-a297-448dd7982453": true
+        "851705d3-0fff-4e0b-9301-11c350e96418": true
     },
     "prices": {
-        "2e81d535-e018-4326-aac3-4d708a3df106:940b8704-e497-4a76-b390-00918ff7d282:": {
+        "0d841c47-781d-4435-8ba8-f965011673b4:940b8704-e497-4a76-b390-00918ff7d282:": {
             "odds": {
-                "numerator": 13,
-                "denominator": 2
+                "numerator": 73,
+                "denominator": 100
             }
         },
-        "fb68fd14-ed67-403f-b23c-c10872ba6f7a:940b8704-e497-4a76-b390-00918ff7d282:": {
+        "c0f0cf89-88cb-48af-aeed-18c22de99270:940b8704-e497-4a76-b390-00918ff7d282:": {
             "odds": {
-                "numerator": 2,
-                "denominator": 25
+                "numerator": 11,
+                "denominator": 10
             }
         }
     }
