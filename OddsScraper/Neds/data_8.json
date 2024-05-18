@@ -1,49 +1,49 @@
 {
     "entrants": {
-        "27a1accc-e4f1-47e0-9657-f1903bb43496": {
-            "id": "27a1accc-e4f1-47e0-9657-f1903bb43496",
-            "name": "Fremantle",
+        "b31b6e38-25a8-4344-9f66-6fd95d479299": {
+            "id": "b31b6e38-25a8-4344-9f66-6fd95d479299",
+            "name": "Melbourne",
             "home_away": "HOME",
             "visible": true,
             "sort_order": 10,
-            "market_id": "2a0e5e3b-dec6-4ff0-8ae8-680e8542b10a"
+            "market_id": "0f105cb6-9fbb-4d56-aa1f-dc6bb2763eaa"
         },
-        "29201150-20a7-45fb-8a8a-78014949aa4f": {
-            "id": "29201150-20a7-45fb-8a8a-78014949aa4f",
-            "name": "Collingwood",
+        "f04cb23a-3c0b-4f50-a0cf-155a445a965b": {
+            "id": "f04cb23a-3c0b-4f50-a0cf-155a445a965b",
+            "name": "St Kilda",
             "home_away": "AWAY",
             "visible": true,
             "sort_order": 20,
-            "market_id": "2a0e5e3b-dec6-4ff0-8ae8-680e8542b10a"
+            "market_id": "0f105cb6-9fbb-4d56-aa1f-dc6bb2763eaa"
         }
     },
     "event_participants": {
-        "41c70ab2-b136-4063-acac-de1866ba351d": {
-            "id": "41c70ab2-b136-4063-acac-de1866ba351d",
-            "event_id": "8f3f6f42-7e35-42d8-b49f-63a848da1be6",
-            "name": "Fremantle",
+        "9ea168d2-b3b0-4f65-ac26-91f0b9726ad0": {
+            "id": "9ea168d2-b3b0-4f65-ac26-91f0b9726ad0",
+            "event_id": "a569f805-fb91-46ef-8941-a587c81fcb3c",
+            "name": "Melbourne",
             "home_away": "HOME"
         },
-        "51c864c3-77e3-4a8b-bc77-3f5d251d498d": {
-            "id": "51c864c3-77e3-4a8b-bc77-3f5d251d498d",
-            "event_id": "8f3f6f42-7e35-42d8-b49f-63a848da1be6",
-            "name": "Collingwood",
+        "b8952ad6-6dfe-4bc7-ad9d-cdf673ab2330": {
+            "id": "b8952ad6-6dfe-4bc7-ad9d-cdf673ab2330",
+            "event_id": "a569f805-fb91-46ef-8941-a587c81fcb3c",
+            "name": "St Kilda",
             "home_away": "AWAY"
         }
     },
     "events": {
-        "8f3f6f42-7e35-42d8-b49f-63a848da1be6": {
-            "id": "8f3f6f42-7e35-42d8-b49f-63a848da1be6",
-            "name": "Fremantle vs Collingwood",
+        "a569f805-fb91-46ef-8941-a587c81fcb3c": {
+            "id": "a569f805-fb91-46ef-8941-a587c81fcb3c",
+            "name": "Melbourne vs St Kilda",
             "event_type": {
                 "id": "6bfa0efc-05df-4ae1-9b1e-152365290cfd",
                 "name": "Match"
             },
             "match_status": "BettingOpen",
-            "advertised_start": "2024-05-24T10:10:00Z",
-            "actual_start": "2024-05-24T10:10:00Z",
+            "advertised_start": "2024-05-26T05:20:00Z",
+            "actual_start": "2024-05-26T05:20:00Z",
             "visible": true,
-            "slug": "fremantle-vs-collingwood",
+            "slug": "melbourne-vs-st-kilda",
             "competition": {
                 "id": "ccff2e9a-5347-41aa-902a-bb6b1886d817",
                 "name": "AFL",
@@ -58,22 +58,22 @@
                 {
                     "market_type_group_id": "29edb5e1-a717-4769-8bcd-2d43ec38d828",
                     "market_ids": [
-                        "2a0e5e3b-dec6-4ff0-8ae8-680e8542b10a"
+                        "0f105cb6-9fbb-4d56-aa1f-dc6bb2763eaa"
                     ]
                 }
             ],
             "market_count": 1,
             "main_markets": [
-                "2a0e5e3b-dec6-4ff0-8ae8-680e8542b10a"
+                "0f105cb6-9fbb-4d56-aa1f-dc6bb2763eaa"
             ],
             "market_ids": [
-                "2a0e5e3b-dec6-4ff0-8ae8-680e8542b10a"
+                "0f105cb6-9fbb-4d56-aa1f-dc6bb2763eaa"
             ],
             "category_id": "23d497e6-8aab-4309-905b-9421f42c9bc5",
             "round_id": "b9cdae13-9def-4557-9665-fa0c51d5bc7b",
             "participant_ids": [
-                "41c70ab2-b136-4063-acac-de1866ba351d",
-                "51c864c3-77e3-4a8b-bc77-3f5d251d498d"
+                "9ea168d2-b3b0-4f65-ac26-91f0b9726ad0",
+                "b8952ad6-6dfe-4bc7-ad9d-cdf673ab2330"
             ]
         }
     },
@@ -86,41 +86,41 @@
         }
     },
     "markets": {
-        "2a0e5e3b-dec6-4ff0-8ae8-680e8542b10a": {
-            "id": "2a0e5e3b-dec6-4ff0-8ae8-680e8542b10a",
-            "event_id": "8f3f6f42-7e35-42d8-b49f-63a848da1be6",
+        "0f105cb6-9fbb-4d56-aa1f-dc6bb2763eaa": {
+            "id": "0f105cb6-9fbb-4d56-aa1f-dc6bb2763eaa",
+            "event_id": "a569f805-fb91-46ef-8941-a587c81fcb3c",
             "market_type_id": "be25c37a-71ff-47f6-a1e2-02a494eb5a4d",
             "market_status_id": "4bc8fe96-296b-4b4c-aea4-85c94f63b9c6",
             "name": "Match Betting",
             "advertised_start": {
-                "seconds": 1716545400
+                "seconds": 1716700800
             },
             "actual_start": {
-                "seconds": 1716545400
+                "seconds": 1716700800
             },
             "is_primary": true,
             "visible": true,
             "entrant_ids": [
-                "27a1accc-e4f1-47e0-9657-f1903bb43496",
-                "29201150-20a7-45fb-8a8a-78014949aa4f"
+                "b31b6e38-25a8-4344-9f66-6fd95d479299",
+                "f04cb23a-3c0b-4f50-a0cf-155a445a965b"
             ],
             "num_winners": 1
         }
     },
     "markets_allow_cashout": {
-        "2a0e5e3b-dec6-4ff0-8ae8-680e8542b10a": true
+        "0f105cb6-9fbb-4d56-aa1f-dc6bb2763eaa": true
     },
     "prices": {
-        "27a1accc-e4f1-47e0-9657-f1903bb43496:940b8704-e497-4a76-b390-00918ff7d282:": {
+        "b31b6e38-25a8-4344-9f66-6fd95d479299:940b8704-e497-4a76-b390-00918ff7d282:": {
             "odds": {
-                "numerator": 51,
-                "denominator": 50
+                "numerator": 7,
+                "denominator": 20
             }
         },
-        "29201150-20a7-45fb-8a8a-78014949aa4f:940b8704-e497-4a76-b390-00918ff7d282:": {
+        "f04cb23a-3c0b-4f50-a0cf-155a445a965b:940b8704-e497-4a76-b390-00918ff7d282:": {
             "odds": {
-                "numerator": 4,
-                "denominator": 5
+                "numerator": 43,
+                "denominator": 20
             }
         }
     }
