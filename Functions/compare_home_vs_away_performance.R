@@ -11,11 +11,12 @@ library(tidyverse)
 
 combined_stats <-
   read_rds("Data/afl_fantasy_2015_2023_data.rds") |> 
+  bind_rows(read_rds("Data/afl_fantasy_2024_data.rds")) |>
   mutate(home_away = if_else(home_team == player_team, "home", "away"))
 
 combined_stats_2023 <-
   combined_stats |> 
-  tidytable::filter(season_name == "2023")
+  tidytable::filter(season_name %in% c("2023", "2024"))
 
 #===============================================================================
 # Function to compare home vs away performance

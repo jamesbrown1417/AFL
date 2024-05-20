@@ -16,6 +16,10 @@ warning: false
 message: false
 ---
 
+\# Load Current Season Data
+
+current_season_data \<- get_fantasy_data(season = 2024)
+
 ```{r}
 # Libraries and functions
 library(tidyverse)

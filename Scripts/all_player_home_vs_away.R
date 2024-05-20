@@ -21,7 +21,8 @@ source("Functions/compare_home_vs_away_performance.R")
 #===============================================================================
 
 all_players <-
-combined_stats_2023 |> 
+combined_stats |> 
+  filter(season_name %in% c("2023", "2024")) |> 
   group_by(player_full_name, player_id) |> 
   summarise(games_played = n()) |>
   filter(games_played >= 16) |>
