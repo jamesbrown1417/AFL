@@ -80,7 +80,7 @@ disposal_correlations <-
 future_pmap(pairwise_medians_disposals, get_binary_correlations, .progress = TRUE) |> 
   map_dfr("result") |> 
   mutate(across(where(is.numeric), ~round(., 3))) |> 
-  arrange(desc(phi)) |> 
+  arrange(desc(correlation)) |> 
   filter(n_games >= 10)
 
 # Fantasy-----------------------------------------------------------------------
@@ -88,5 +88,5 @@ fantasy_correlations <-
 future_pmap(pairwise_medians_fantasy_points, get_binary_correlations, .progress = TRUE) |> 
   map_dfr("result") |> 
   mutate(across(where(is.numeric), ~round(., 3))) |> 
-  arrange(desc(phi)) |> 
+  arrange(desc(correlation)) |> 
   filter(n_games >= 10)

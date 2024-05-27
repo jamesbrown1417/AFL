@@ -14,7 +14,7 @@ combined_stats <-
 
 combined_stats_2023 <-
   combined_stats |> 
-  tidytable::filter(season_name == "2023")
+  tidytable::filter(season_name == "2023" | season_name == "2024")
 
 #===============================================================================
 # Create Function
