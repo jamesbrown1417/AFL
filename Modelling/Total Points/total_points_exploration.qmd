@@ -106,8 +106,8 @@ total_points |>
 
 ```{r}
 # Plot temperature vs total total_points
-team_total_points |>
-  ggplot(aes(x = temperature, y = home_team_total_total_points + away_team_total_total_points)) +
+total_points |>
+  ggplot(aes(x = temperature, y = total_points)) +
   geom_point() +
   geom_smooth(method = "lm", se = TRUE) +
   labs(title = "Temperature vs Total Total Points",
