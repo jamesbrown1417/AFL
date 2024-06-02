@@ -1,49 +1,49 @@
 {
     "entrants": {
-        "0dc74d63-ca4e-41c6-92ef-2262a19fb864": {
-            "id": "0dc74d63-ca4e-41c6-92ef-2262a19fb864",
-            "name": "Hawthorn",
-            "home_away": "HOME",
-            "visible": true,
-            "sort_order": 10,
-            "market_id": "d1852296-0ace-4874-8814-400eb08349c5"
-        },
-        "94778f26-8cab-4f1f-b83b-516a2671e1e7": {
-            "id": "94778f26-8cab-4f1f-b83b-516a2671e1e7",
-            "name": "GWS Giants",
+        "3e830569-2b8b-4d97-b7c3-35848b1d00df": {
+            "id": "3e830569-2b8b-4d97-b7c3-35848b1d00df",
+            "name": "Richmond",
             "home_away": "AWAY",
             "visible": true,
             "sort_order": 20,
-            "market_id": "d1852296-0ace-4874-8814-400eb08349c5"
+            "market_id": "fae7a1fa-01a5-41ba-89a3-f108695018eb"
+        },
+        "d8138fe9-8f7a-48ae-b414-a49a282d7c8e": {
+            "id": "d8138fe9-8f7a-48ae-b414-a49a282d7c8e",
+            "name": "Adelaide Crows",
+            "home_away": "HOME",
+            "visible": true,
+            "sort_order": 10,
+            "market_id": "fae7a1fa-01a5-41ba-89a3-f108695018eb"
         }
     },
     "event_participants": {
-        "4f95c289-8381-4994-90c3-82e0404dfaba": {
-            "id": "4f95c289-8381-4994-90c3-82e0404dfaba",
-            "event_id": "23f221eb-455c-4334-b707-974401dc9165",
-            "name": "GWS Giants",
+        "d16c072d-a617-450f-8ece-189003e6b630": {
+            "id": "d16c072d-a617-450f-8ece-189003e6b630",
+            "event_id": "5887a047-4f23-48fd-a8b4-de64eea59ef7",
+            "name": "Richmond",
             "home_away": "AWAY"
         },
-        "ee7dff9b-d93c-4113-b7c4-1c13eea7a983": {
-            "id": "ee7dff9b-d93c-4113-b7c4-1c13eea7a983",
-            "event_id": "23f221eb-455c-4334-b707-974401dc9165",
-            "name": "Hawthorn",
+        "d9d072c2-5134-4f34-ad8c-8a7f583d36dc": {
+            "id": "d9d072c2-5134-4f34-ad8c-8a7f583d36dc",
+            "event_id": "5887a047-4f23-48fd-a8b4-de64eea59ef7",
+            "name": "Adelaide Crows",
             "home_away": "HOME"
         }
     },
     "events": {
-        "23f221eb-455c-4334-b707-974401dc9165": {
-            "id": "23f221eb-455c-4334-b707-974401dc9165",
-            "name": "Hawthorn vs GWS Giants",
+        "5887a047-4f23-48fd-a8b4-de64eea59ef7": {
+            "id": "5887a047-4f23-48fd-a8b4-de64eea59ef7",
+            "name": "Adelaide Crows vs Richmond",
             "event_type": {
                 "id": "6bfa0efc-05df-4ae1-9b1e-152365290cfd",
                 "name": "Match"
             },
             "match_status": "BettingOpen",
-            "advertised_start": "2024-06-08T03:45:00Z",
-            "actual_start": "2024-06-08T03:45:00Z",
+            "advertised_start": "2024-06-06T09:30:00Z",
+            "actual_start": "2024-06-06T09:30:00Z",
             "visible": true,
-            "slug": "hawthorn-vs-gws-giants",
+            "slug": "adelaide-crows-vs-richmond",
             "competition": {
                 "id": "ccff2e9a-5347-41aa-902a-bb6b1886d817",
                 "name": "AFL",
@@ -58,22 +58,22 @@
                 {
                     "market_type_group_id": "29edb5e1-a717-4769-8bcd-2d43ec38d828",
                     "market_ids": [
-                        "d1852296-0ace-4874-8814-400eb08349c5"
+                        "fae7a1fa-01a5-41ba-89a3-f108695018eb"
                     ]
                 }
             ],
             "market_count": 1,
             "main_markets": [
-                "d1852296-0ace-4874-8814-400eb08349c5"
+                "fae7a1fa-01a5-41ba-89a3-f108695018eb"
             ],
             "market_ids": [
-                "d1852296-0ace-4874-8814-400eb08349c5"
+                "fae7a1fa-01a5-41ba-89a3-f108695018eb"
             ],
             "category_id": "23d497e6-8aab-4309-905b-9421f42c9bc5",
             "round_id": "24aa9b74-d866-412a-a7f4-735b8264a70b",
             "participant_ids": [
-                "4f95c289-8381-4994-90c3-82e0404dfaba",
-                "ee7dff9b-d93c-4113-b7c4-1c13eea7a983"
+                "d16c072d-a617-450f-8ece-189003e6b630",
+                "d9d072c2-5134-4f34-ad8c-8a7f583d36dc"
             ]
         }
     },
@@ -86,41 +86,41 @@
         }
     },
     "markets": {
-        "d1852296-0ace-4874-8814-400eb08349c5": {
-            "id": "d1852296-0ace-4874-8814-400eb08349c5",
-            "event_id": "23f221eb-455c-4334-b707-974401dc9165",
+        "fae7a1fa-01a5-41ba-89a3-f108695018eb": {
+            "id": "fae7a1fa-01a5-41ba-89a3-f108695018eb",
+            "event_id": "5887a047-4f23-48fd-a8b4-de64eea59ef7",
             "market_type_id": "be25c37a-71ff-47f6-a1e2-02a494eb5a4d",
             "market_status_id": "4bc8fe96-296b-4b4c-aea4-85c94f63b9c6",
             "name": "Match Betting",
             "advertised_start": {
-                "seconds": 1717818300
+                "seconds": 1717666200
             },
             "actual_start": {
-                "seconds": 1717818300
+                "seconds": 1717666200
             },
             "is_primary": true,
             "visible": true,
             "entrant_ids": [
-                "0dc74d63-ca4e-41c6-92ef-2262a19fb864",
-                "94778f26-8cab-4f1f-b83b-516a2671e1e7"
+                "d8138fe9-8f7a-48ae-b414-a49a282d7c8e",
+                "3e830569-2b8b-4d97-b7c3-35848b1d00df"
             ],
             "num_winners": 1
         }
     },
     "markets_allow_cashout": {
-        "d1852296-0ace-4874-8814-400eb08349c5": true
+        "fae7a1fa-01a5-41ba-89a3-f108695018eb": true
     },
     "prices": {
-        "0dc74d63-ca4e-41c6-92ef-2262a19fb864:940b8704-e497-4a76-b390-00918ff7d282:": {
+        "3e830569-2b8b-4d97-b7c3-35848b1d00df:940b8704-e497-4a76-b390-00918ff7d282:": {
             "odds": {
                 "numerator": 13,
-                "denominator": 10
+                "denominator": 2
             }
         },
-        "94778f26-8cab-4f1f-b83b-516a2671e1e7:940b8704-e497-4a76-b390-00918ff7d282:": {
+        "d8138fe9-8f7a-48ae-b414-a49a282d7c8e:940b8704-e497-4a76-b390-00918ff7d282:": {
             "odds": {
-                "numerator": 3,
-                "denominator": 5
+                "numerator": 2,
+                "denominator": 25
             }
         }
     }
