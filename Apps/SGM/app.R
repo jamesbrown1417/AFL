@@ -252,7 +252,7 @@ disposals <-
 disposals <-
   disposals |>
   group_by(match, player_name, market_name, line) |>
-  mutate(max_player_diff = max(diff_2023, na.rm = TRUE)) |>
+  mutate(max_player_diff = max(diff_over_last_10, na.rm = TRUE)) |>
   ungroup()
 
 # Unique matches
@@ -271,7 +271,7 @@ agencies <-
 disposals_display <-
   disposals |>
   group_by(player_name, match, line, market_name) |>
-  mutate(market_best = max_player_diff == diff_2023) |>
+  mutate(market_best = max_player_diff == diff_over_last_10) |>
   ungroup() |>
   arrange(desc(max_player_diff)) |> 
   transmute(match,
@@ -324,8 +324,8 @@ ui <- fluidPage(
                  selectInput(
                    "market",
                    "Select Market",
-                   choices = c("Player Disposals", "Player Goals"),
-                   selected = c("Player Disposals", "Player Goals"),
+                   choices = c("Player Disposals", "Player Goals", "Player Marks", "Player Tackles", "Player Fantasy Points"),
+                   selected = c("Player Disposals", "Player Goals", "Player Marks", "Player Tackles", "Player Fantasy Points"),
                    multiple = TRUE
                  ),
                  selectInput(

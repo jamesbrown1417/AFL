@@ -8,6 +8,7 @@ library(purrr)
 neds_sgm <-
   read_csv("../../Data/scraped_odds/neds_player_disposals.csv") |> 
   bind_rows(read_csv("../../Data/scraped_odds/neds_player_goals.csv")) |> 
+  bind_rows(read_csv("../../Data/scraped_odds/neds_player_fantasy_points.csv")) |>
   rename(price = over_price) |> 
   distinct(match, player_name, line, market_name, agency, .keep_all = TRUE) |> 
   select(-contains("under"))
