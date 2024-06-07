@@ -220,9 +220,30 @@ goals <-
          empirical_probability_2023 = empirical_prob_over_2023,
          diff_2023 = diff_over_2023)
 
+marks <- 
+  read_rds("../../Data/processed_odds/all_player_marks.rds") |> 
+  rename(price = over_price,
+         empirical_probability_2023 = empirical_prob_over_2023,
+         diff_2023 = diff_over_2023)
+
+tackles <- 
+  read_rds("../../Data/processed_odds/all_player_tackles.rds") |> 
+  rename(price = over_price,
+         empirical_probability_2023 = empirical_prob_over_2023,
+         diff_2023 = diff_over_2023)
+
+fantasy_points <- 
+  read_rds("../../Data/processed_odds/all_player_fantasy_points.rds") |> 
+  rename(price = over_price,
+         empirical_probability_2023 = empirical_prob_over_2023,
+         diff_2023 = diff_over_2023)
+
 disposals <-
   disposals |>
   bind_rows(goals) |> 
+  bind_rows(marks) |>
+  bind_rows(tackles) |>
+  bind_rows(fantasy_points) |>
   left_join(player_positions, relationship = "many-to-one") |>
   left_join(dvp_data, by = c("opposition_team", "Position", "market_name"), relationship = "many-to-one") |> 
   relocate(Position, DVP_Category, .after = player_name)
