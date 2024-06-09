@@ -371,8 +371,8 @@ ui <- fluidPage(
                  selectInput(
                    "market_cross",
                    "Select Market",
-                   choices = c("Player Disposals", "Player Goals"),
-                   selected = c("Player Disposals", "Player Goals"),
+                   choices = c("Player Disposals", "Player Goals", "Player Marks", "Player Tackles", "Player Fantasy Points"),
+                   selected = c("Player Disposals", "Player Goals", "Player Marks", "Player Tackles", "Player Fantasy Points"),
                    multiple = TRUE
                  ),
                  selectInput(
