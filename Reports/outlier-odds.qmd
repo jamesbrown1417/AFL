@@ -284,7 +284,11 @@ agency_list <- map(agencies, ~filter_agency(biggest_diffs_outliers, .x)) |> set_
 #   )))
 
 # Make tabset with each
-maketabs(agency_list, wide = TRUE)
+tryCatch({
+  maketabs(agency_list, wide = TRUE)
+}, error = function(e) {
+  print(e)
+})
 ```
 
 :::
