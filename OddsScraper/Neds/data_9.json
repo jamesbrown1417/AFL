@@ -1,58 +1,56 @@
 {
     "entrants": {
-        "67d60f7a-0690-4d02-8a57-a1dc93d3c3fb": {
-            "id": "67d60f7a-0690-4d02-8a57-a1dc93d3c3fb",
-            "name": "East Perth",
-            "home_away": "AWAY",
-            "visible": true,
-            "sort_order": 20,
-            "market_id": "bab8f304-0333-4ddc-8eb9-caf006cc7fca"
-        },
-        "a768f597-f367-450c-93b9-6498a335273f": {
-            "id": "a768f597-f367-450c-93b9-6498a335273f",
-            "name": "East Perth",
-            "home_away": "AWAY",
-            "visible": true,
-            "sort_order": 20,
-            "market_id": "a4afbaa4-9cb7-4f09-8833-78556dd0042b"
-        },
-        "b3962176-5817-4d5a-bcc1-848a3c48d25e": {
-            "id": "b3962176-5817-4d5a-bcc1-848a3c48d25e",
-            "name": "Swan Districts",
+        "072acbfc-d1ef-4e74-80a0-c5ad18ae3c6a": {
+            "id": "072acbfc-d1ef-4e74-80a0-c5ad18ae3c6a",
+            "name": "Sydney Swans",
             "home_away": "HOME",
             "visible": true,
             "sort_order": 10,
-            "market_id": "bab8f304-0333-4ddc-8eb9-caf006cc7fca"
+            "market_id": "923ceda8-a9b0-4933-8a30-d4a9b5039459"
         },
-        "ef8183ac-fa45-4f27-b9c3-93d8398f851b": {
-            "id": "ef8183ac-fa45-4f27-b9c3-93d8398f851b",
-            "name": "Swan Districts",
-            "home_away": "HOME",
+        "693cb144-c0f5-4672-9df5-449207382f69": {
+            "id": "693cb144-c0f5-4672-9df5-449207382f69",
+            "name": "Fremantle",
+            "home_away": "AWAY",
             "visible": true,
-            "sort_order": 10,
-            "market_id": "a4afbaa4-9cb7-4f09-8833-78556dd0042b"
+            "sort_order": 20,
+            "market_id": "923ceda8-a9b0-4933-8a30-d4a9b5039459"
+        }
+    },
+    "event_participants": {
+        "66adde86-6213-4301-a724-e58e268d8d55": {
+            "id": "66adde86-6213-4301-a724-e58e268d8d55",
+            "event_id": "b4023082-d4c7-440d-87cd-a750d56ae911",
+            "name": "Sydney Swans",
+            "home_away": "HOME"
+        },
+        "8645118f-2de4-4278-a5a2-ff5f170f5439": {
+            "id": "8645118f-2de4-4278-a5a2-ff5f170f5439",
+            "event_id": "b4023082-d4c7-440d-87cd-a750d56ae911",
+            "name": "Fremantle",
+            "home_away": "AWAY"
         }
     },
     "events": {
-        "5ad669c9-f068-49e8-acd2-fbfc11a4f940": {
-            "id": "5ad669c9-f068-49e8-acd2-fbfc11a4f940",
-            "name": "Swan Districts vs East Perth",
+        "b4023082-d4c7-440d-87cd-a750d56ae911": {
+            "id": "b4023082-d4c7-440d-87cd-a750d56ae911",
+            "name": "Sydney Swans vs Fremantle",
             "event_type": {
                 "id": "6bfa0efc-05df-4ae1-9b1e-152365290cfd",
                 "name": "Match"
             },
             "match_status": "BettingOpen",
-            "advertised_start": "2024-06-22T06:10:00Z",
-            "actual_start": "2024-06-22T06:10:00Z",
+            "advertised_start": "2024-06-29T03:45:00Z",
+            "actual_start": "2024-06-29T03:45:00Z",
             "visible": true,
-            "slug": "swan-districts-vs-east-perth",
+            "slug": "sydney-swans-vs-fremantle",
             "competition": {
-                "id": "95553dad-b992-4773-b6fe-4b1572dc13df",
-                "name": "WAFL",
-                "sort_order": 5,
-                "region": "Aus"
+                "id": "ccff2e9a-5347-41aa-902a-bb6b1886d817",
+                "name": "AFL",
+                "sort_order": 1,
+                "region": "Australia"
             },
-            "competition_id": "95553dad-b992-4773-b6fe-4b1572dc13df",
+            "competition_id": "ccff2e9a-5347-41aa-902a-bb6b1886d817",
             "market_type_group_ids": [
                 "29edb5e1-a717-4769-8bcd-2d43ec38d828"
             ],
@@ -60,20 +58,23 @@
                 {
                     "market_type_group_id": "29edb5e1-a717-4769-8bcd-2d43ec38d828",
                     "market_ids": [
-                        "bab8f304-0333-4ddc-8eb9-caf006cc7fca",
-                        "a4afbaa4-9cb7-4f09-8833-78556dd0042b"
+                        "923ceda8-a9b0-4933-8a30-d4a9b5039459"
                     ]
                 }
             ],
-            "market_count": 2,
+            "market_count": 1,
             "main_markets": [
-                "bab8f304-0333-4ddc-8eb9-caf006cc7fca"
+                "923ceda8-a9b0-4933-8a30-d4a9b5039459"
             ],
             "market_ids": [
-                "bab8f304-0333-4ddc-8eb9-caf006cc7fca",
-                "a4afbaa4-9cb7-4f09-8833-78556dd0042b"
+                "923ceda8-a9b0-4933-8a30-d4a9b5039459"
             ],
-            "category_id": "23d497e6-8aab-4309-905b-9421f42c9bc5"
+            "category_id": "23d497e6-8aab-4309-905b-9421f42c9bc5",
+            "round_id": "6832eddd-21e0-4243-a975-5dadad86e1ac",
+            "participant_ids": [
+                "66adde86-6213-4301-a724-e58e268d8d55",
+                "8645118f-2de4-4278-a5a2-ff5f170f5439"
+            ]
         }
     },
     "market_type_groups": {
@@ -85,74 +86,41 @@
         }
     },
     "markets": {
-        "a4afbaa4-9cb7-4f09-8833-78556dd0042b": {
-            "id": "a4afbaa4-9cb7-4f09-8833-78556dd0042b",
-            "event_id": "5ad669c9-f068-49e8-acd2-fbfc11a4f940",
-            "market_type_id": "d04cddcd-5f42-4d17-ae1c-950dfdaa2c98",
-            "market_status_id": "4bc8fe96-296b-4b4c-aea4-85c94f63b9c6",
-            "name": "Line",
-            "advertised_start": {
-                "seconds": 1719036600
-            },
-            "actual_start": {
-                "seconds": 1719036600
-            },
-            "handicap": -7.5,
-            "visible": true,
-            "entrant_ids": [
-                "ef8183ac-fa45-4f27-b9c3-93d8398f851b",
-                "a768f597-f367-450c-93b9-6498a335273f"
-            ],
-            "num_winners": 1
-        },
-        "bab8f304-0333-4ddc-8eb9-caf006cc7fca": {
-            "id": "bab8f304-0333-4ddc-8eb9-caf006cc7fca",
-            "event_id": "5ad669c9-f068-49e8-acd2-fbfc11a4f940",
+        "923ceda8-a9b0-4933-8a30-d4a9b5039459": {
+            "id": "923ceda8-a9b0-4933-8a30-d4a9b5039459",
+            "event_id": "b4023082-d4c7-440d-87cd-a750d56ae911",
             "market_type_id": "be25c37a-71ff-47f6-a1e2-02a494eb5a4d",
             "market_status_id": "4bc8fe96-296b-4b4c-aea4-85c94f63b9c6",
             "name": "Match Betting",
             "advertised_start": {
-                "seconds": 1719036600
+                "seconds": 1719632700
             },
             "actual_start": {
-                "seconds": 1719036600
+                "seconds": 1719632700
             },
             "is_primary": true,
             "visible": true,
             "entrant_ids": [
-                "b3962176-5817-4d5a-bcc1-848a3c48d25e",
-                "67d60f7a-0690-4d02-8a57-a1dc93d3c3fb"
+                "072acbfc-d1ef-4e74-80a0-c5ad18ae3c6a",
+                "693cb144-c0f5-4672-9df5-449207382f69"
             ],
             "num_winners": 1
         }
     },
     "markets_allow_cashout": {
-        "a4afbaa4-9cb7-4f09-8833-78556dd0042b": false,
-        "bab8f304-0333-4ddc-8eb9-caf006cc7fca": true
+        "923ceda8-a9b0-4933-8a30-d4a9b5039459": true
     },
     "prices": {
-        "67d60f7a-0690-4d02-8a57-a1dc93d3c3fb:940b8704-e497-4a76-b390-00918ff7d282:": {
+        "072acbfc-d1ef-4e74-80a0-c5ad18ae3c6a:940b8704-e497-4a76-b390-00918ff7d282:": {
             "odds": {
-                "numerator": 31,
-                "denominator": 50
-            }
-        },
-        "a768f597-f367-450c-93b9-6498a335273f:940b8704-e497-4a76-b390-00918ff7d282:": {
-            "odds": {
-                "numerator": 22,
+                "numerator": 6,
                 "denominator": 25
             }
         },
-        "b3962176-5817-4d5a-bcc1-848a3c48d25e:940b8704-e497-4a76-b390-00918ff7d282:": {
+        "693cb144-c0f5-4672-9df5-449207382f69:940b8704-e497-4a76-b390-00918ff7d282:": {
             "odds": {
-                "numerator": 5,
-                "denominator": 4
-            }
-        },
-        "ef8183ac-fa45-4f27-b9c3-93d8398f851b:940b8704-e497-4a76-b390-00918ff7d282:": {
-            "odds": {
-                "numerator": 22,
-                "denominator": 25
+                "numerator": 3,
+                "denominator": 1
             }
         }
     }
