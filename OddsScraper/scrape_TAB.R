@@ -240,8 +240,7 @@ tab_totals_markets <-
   mutate(margin = round((1/over_price + 1/under_price), digits = 3)) |> 
   mutate(agency = "TAB") |> 
   arrange(start_time, match, line)
-
-
+ 
 #===============================================================================
 # Alt Line markets
 #===============================================================================
