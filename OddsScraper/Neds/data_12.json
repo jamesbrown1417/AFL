@@ -1,49 +1,49 @@
 {
     "entrants": {
-        "043e35c9-46fb-40bb-a7eb-7f1b9171d94c": {
-            "id": "043e35c9-46fb-40bb-a7eb-7f1b9171d94c",
-            "name": "Hawthorn",
+        "14e40529-7709-467e-b15c-963dc516d18a": {
+            "id": "14e40529-7709-467e-b15c-963dc516d18a",
+            "name": "Sydney Swans",
             "home_away": "AWAY",
             "visible": true,
             "sort_order": 20,
-            "market_id": "212550d6-ac07-4c5b-9bb9-2a6aeda2d052"
+            "market_id": "eabfd256-745e-4a9d-8b7f-3c4c3fa0ef1e"
         },
-        "637e58c3-482e-4a29-9a82-69d1c4db16f4": {
-            "id": "637e58c3-482e-4a29-9a82-69d1c4db16f4",
-            "name": "Geelong Cats",
+        "56259883-ea2f-474e-b0f0-fdff7d432f9a": {
+            "id": "56259883-ea2f-474e-b0f0-fdff7d432f9a",
+            "name": "St Kilda",
             "home_away": "HOME",
             "visible": true,
             "sort_order": 10,
-            "market_id": "212550d6-ac07-4c5b-9bb9-2a6aeda2d052"
+            "market_id": "eabfd256-745e-4a9d-8b7f-3c4c3fa0ef1e"
         }
     },
     "event_participants": {
-        "2d75dffd-3616-4dff-9620-4e44996cd3d5": {
-            "id": "2d75dffd-3616-4dff-9620-4e44996cd3d5",
-            "event_id": "a4963197-8c44-4a3b-928d-9b7edd40d7d3",
-            "name": "Geelong Cats",
+        "2238a76b-152b-4675-b696-902057ff4d6e": {
+            "id": "2238a76b-152b-4675-b696-902057ff4d6e",
+            "event_id": "b0de1ddb-a6d2-4f4b-8a25-ea5b922bc6ed",
+            "name": "St Kilda",
             "home_away": "HOME"
         },
-        "c9336ae2-d841-4c40-8b8e-e2cc477b929c": {
-            "id": "c9336ae2-d841-4c40-8b8e-e2cc477b929c",
-            "event_id": "a4963197-8c44-4a3b-928d-9b7edd40d7d3",
-            "name": "Hawthorn",
+        "22cba482-9c6e-4aed-afda-d325ebe7e699": {
+            "id": "22cba482-9c6e-4aed-afda-d325ebe7e699",
+            "event_id": "b0de1ddb-a6d2-4f4b-8a25-ea5b922bc6ed",
+            "name": "Sydney Swans",
             "home_away": "AWAY"
         }
     },
     "events": {
-        "a4963197-8c44-4a3b-928d-9b7edd40d7d3": {
-            "id": "a4963197-8c44-4a3b-928d-9b7edd40d7d3",
-            "name": "Geelong Cats vs Hawthorn",
+        "b0de1ddb-a6d2-4f4b-8a25-ea5b922bc6ed": {
+            "id": "b0de1ddb-a6d2-4f4b-8a25-ea5b922bc6ed",
+            "name": "St Kilda vs Sydney Swans",
             "event_type": {
                 "id": "6bfa0efc-05df-4ae1-9b1e-152365290cfd",
                 "name": "Match"
             },
             "match_status": "BettingOpen",
-            "advertised_start": "2024-07-06T06:35:00Z",
-            "actual_start": "2024-07-06T06:35:00Z",
+            "advertised_start": "2024-07-07T05:20:00Z",
+            "actual_start": "2024-07-07T05:20:00Z",
             "visible": true,
-            "slug": "geelong-cats-vs-hawthorn",
+            "slug": "st-kilda-vs-sydney-swans",
             "competition": {
                 "id": "ccff2e9a-5347-41aa-902a-bb6b1886d817",
                 "name": "AFL",
@@ -58,22 +58,22 @@
                 {
                     "market_type_group_id": "29edb5e1-a717-4769-8bcd-2d43ec38d828",
                     "market_ids": [
-                        "212550d6-ac07-4c5b-9bb9-2a6aeda2d052"
+                        "eabfd256-745e-4a9d-8b7f-3c4c3fa0ef1e"
                     ]
                 }
             ],
             "market_count": 1,
             "main_markets": [
-                "212550d6-ac07-4c5b-9bb9-2a6aeda2d052"
+                "eabfd256-745e-4a9d-8b7f-3c4c3fa0ef1e"
             ],
             "market_ids": [
-                "212550d6-ac07-4c5b-9bb9-2a6aeda2d052"
+                "eabfd256-745e-4a9d-8b7f-3c4c3fa0ef1e"
             ],
             "category_id": "23d497e6-8aab-4309-905b-9421f42c9bc5",
             "round_id": "cecad5a7-e5b1-4af2-8fd5-54ade7d1c6f3",
             "participant_ids": [
-                "2d75dffd-3616-4dff-9620-4e44996cd3d5",
-                "c9336ae2-d841-4c40-8b8e-e2cc477b929c"
+                "2238a76b-152b-4675-b696-902057ff4d6e",
+                "22cba482-9c6e-4aed-afda-d325ebe7e699"
             ]
         }
     },
@@ -86,41 +86,41 @@
         }
     },
     "markets": {
-        "212550d6-ac07-4c5b-9bb9-2a6aeda2d052": {
-            "id": "212550d6-ac07-4c5b-9bb9-2a6aeda2d052",
-            "event_id": "a4963197-8c44-4a3b-928d-9b7edd40d7d3",
+        "eabfd256-745e-4a9d-8b7f-3c4c3fa0ef1e": {
+            "id": "eabfd256-745e-4a9d-8b7f-3c4c3fa0ef1e",
+            "event_id": "b0de1ddb-a6d2-4f4b-8a25-ea5b922bc6ed",
             "market_type_id": "be25c37a-71ff-47f6-a1e2-02a494eb5a4d",
             "market_status_id": "4bc8fe96-296b-4b4c-aea4-85c94f63b9c6",
             "name": "Match Betting",
             "advertised_start": {
-                "seconds": 1720247700
+                "seconds": 1720329600
             },
             "actual_start": {
-                "seconds": 1720247700
+                "seconds": 1720329600
             },
             "is_primary": true,
             "visible": true,
             "entrant_ids": [
-                "637e58c3-482e-4a29-9a82-69d1c4db16f4",
-                "043e35c9-46fb-40bb-a7eb-7f1b9171d94c"
+                "56259883-ea2f-474e-b0f0-fdff7d432f9a",
+                "14e40529-7709-467e-b15c-963dc516d18a"
             ],
             "num_winners": 1
         }
     },
     "markets_allow_cashout": {
-        "212550d6-ac07-4c5b-9bb9-2a6aeda2d052": true
+        "eabfd256-745e-4a9d-8b7f-3c4c3fa0ef1e": true
     },
     "prices": {
-        "043e35c9-46fb-40bb-a7eb-7f1b9171d94c:940b8704-e497-4a76-b390-00918ff7d282:": {
+        "14e40529-7709-467e-b15c-963dc516d18a:940b8704-e497-4a76-b390-00918ff7d282:": {
             "odds": {
-                "numerator": 29,
-                "denominator": 20
+                "numerator": 8,
+                "denominator": 25
             }
         },
-        "637e58c3-482e-4a29-9a82-69d1c4db16f4:940b8704-e497-4a76-b390-00918ff7d282:": {
+        "56259883-ea2f-474e-b0f0-fdff7d432f9a:940b8704-e497-4a76-b390-00918ff7d282:": {
             "odds": {
-                "numerator": 11,
-                "denominator": 20
+                "numerator": 12,
+                "denominator": 5
             }
         }
     }
