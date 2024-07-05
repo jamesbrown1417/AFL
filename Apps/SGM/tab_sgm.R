@@ -74,7 +74,20 @@ call_sgm_tab <- function(data, player_names, stat_counts, markets) {
     
     url <- "https://api.beta.tab.com.au/v1/pricing-service/enquiry"
     
-    headers <- c("Content-Type" = "application/json")
+    headers <- c(
+      "accept" = "application/json, text/plain, */*",
+      "accept-language" = "en-US,en;q=0.9",
+      "content-type" = "application/json;charset=UTF-8",
+      "origin" = "https://www.tab.com.au",
+      "referer" = "https://www.tab.com.au/",
+      "sec-ch-ua" = '"Not/A)Brand";v="8", "Chromium";v="126", "Google Chrome";v="126"',
+      "sec-ch-ua-mobile" = "?0",
+      "sec-ch-ua-platform" = '"Windows"',
+      "sec-fetch-dest" = "empty",
+      "sec-fetch-mode" = "cors",
+      "sec-fetch-site" = "same-site",
+      "user-agent" = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36"
+    )
     
     payload <- list(
       clientDetails = list(jurisdiction = unbox("SA"), channel = unbox("web")),
@@ -91,7 +104,7 @@ call_sgm_tab <- function(data, player_names, stat_counts, markets) {
       )
     )
     
-    # Try response, if nothing in 5 seconds, make it null
+    # Try response, if nothing in 3 seconds, make it null
     response <- tryCatch({
       POST(url, body = toJSON(payload), add_headers(.headers = headers), encode = "json", timeout(3))
     }, error = function(e) {
