@@ -600,7 +600,9 @@ betright_player_fantasy_points <-
     outcome_name,
     outcome_id,
     fixed_market_id
-  )
+  ) |> 
+  # Convert anything logical to numeric
+  mutate_if(is.logical, as.numeric)
 
 # Get player marks data--------------------------------------------------------
 
@@ -684,7 +686,9 @@ betright_player_marks <-
     outcome_name,
     outcome_id,
     fixed_market_id
-  )
+  ) |> 
+  # Convert anything logical to numeric
+  mutate_if(is.logical, as.numeric)
 
 
 # Get player tackles data--------------------------------------------------------
@@ -768,8 +772,9 @@ betright_player_tackles <-
     event_id,
     outcome_name,
     outcome_id,
-    fixed_market_id
-  )
+  ) |> 
+  # Convert anything logical to numeric
+  mutate_if(is.logical, as.numeric)
 
 #===============================================================================
 # Write to CSV

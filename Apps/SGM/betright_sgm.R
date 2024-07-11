@@ -4,12 +4,18 @@ library(tidyverse)
 library(purrr)
 
 # BetRight SGM------------------------------------------------------------------
+betright_sgm_list <- list(
+  read_csv("../../Data/scraped_odds/betright_player_disposals.csv"),
+  read_csv("../../Data/scraped_odds/betright_player_goals.csv"),
+  read_csv("../../Data/scraped_odds/betright_player_tackles.csv"),
+  read_csv("../../Data/scraped_odds/betright_player_marks.csv"),
+  read_csv("../../Data/scraped_odds/betright_player_fantasy_points.csv")
+)
+
 betright_sgm <-
-  read_csv("../../Data/scraped_odds/betright_player_disposals.csv") |> 
-  bind_rows(read_csv("../../Data/scraped_odds/betright_player_goals.csv")) |> 
-  bind_rows(read_csv("../../Data/scraped_odds/betright_player_tackles.csv")) |>
-  bind_rows(read_csv("../../Data/scraped_odds/betright_player_marks.csv")) |>
-  bind_rows(read_csv("../../Data/scraped_odds/betright_player_fantasy_points.csv")) |>
+  betright_sgm_list |> 
+  keep(~nrow(.x) > 0) |>
+  bind_rows() |> 
   rename(price = over_price) |> 
   distinct(match, player_name, line, market_name, agency, .keep_all = TRUE) |> 
   select(-contains("under"))

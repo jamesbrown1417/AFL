@@ -5,11 +5,18 @@ library(purrr)
 library(R.utils)
 
 # TAB SGM-----------------------------------------------------------------------
+tab_sgm_list <-
+  list(
+  read_csv("../../Data/scraped_odds/tab_player_disposals.csv"),
+  read_csv("../../Data/scraped_odds/tab_player_goals.csv"),
+  read_csv("../../Data/scraped_odds/tab_player_tackles.csv"),
+  read_csv("../../Data/scraped_odds/tab_player_marks.csv")
+)
+
 tab_sgm <-
-  read_csv("../../Data/scraped_odds/tab_player_disposals.csv") |> 
-  bind_rows(read_csv("../../Data/scraped_odds/tab_player_goals.csv")) |> 
-  bind_rows(read_csv("../../Data/scraped_odds/tab_player_tackles.csv")) |>
-  bind_rows(read_csv("../../Data/scraped_odds/tab_player_marks.csv")) |>
+  tab_sgm_list |> 
+  keep(~nrow(.x) > 0) |>
+  bind_rows() |>
   rename(price = over_price) |>  
   distinct(match, player_name, line, market_name, agency, .keep_all = TRUE) |>
   select(-contains("under"))

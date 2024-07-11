@@ -125,6 +125,69 @@ compare_sgm <- function(player_names, stat_counts, markets) {
     arrange(desc(Adjusted_Price))
 }
 
+#===============================================================================
+# Call CGM function
+#===============================================================================
+
+compare_cgm <- function(player_names_cross, lines_cross, market_names_cross) {
+  # List of each agency data
+  all_data <- list(pointsbet_sgm, sportsbet_sgm, tab_sgm, betright_sgm, neds_sgm, bet365_sgm)
+  
+  # Function to get cross game multi data
+  get_cgm <- function(data, player_names_cross, lines_cross, market_names_cross) {
+    if (length(player_names_cross) != length(lines_cross) || length(lines_cross) != length(market_names_cross)) {
+      stop("All lists should have the same length")
+    }
+    
+    filtered_df <- data.frame()
+    for (i in seq_along(player_names_cross)) {
+      temp_df <- data %>%
+        filter(player_name == player_names_cross[i],
+               line == lines_cross[i],
+               market_name == market_names_cross[i])
+      filtered_df <- bind_rows(filtered_df, temp_df)
+    }
+    
+    if (nrow(filtered_df) != length(player_names_cross)) {
+      return(NULL)
+    }
+    
+    price <- prod(filtered_df$price)
+    
+    combined_list <- paste(player_names_cross, lines_cross, sep = ": ")
+    player_string <- paste(combined_list, collapse = ", ")
+    market_string <- paste(market_names_cross, collapse = ", ")
+    match_string <- paste(filtered_df$match, collapse = ", ")
+    
+    output_data <- data.frame(
+      Selections = player_string,
+      Matches = match_string,
+      Markets = market_string,
+      Price = round(price, 2),
+      Agency = first(data$agency)
+    )
+    
+    return(output_data)
+  }
+  
+  # Function to handle errors in the get_cgm function
+  handle_get_cgm <- function(data, player_names_cross, lines_cross, market_names_cross) {
+    tryCatch({
+      get_cgm(data, player_names_cross, lines_cross, market_names_cross)
+    }, error = function(e) {
+      # Return a dataframe with NA values if an error occurs
+      data.frame(Selections = NA, Matches = NA, Markets = NA, Price = NA, Agency = NA)
+    })
+  }
+  
+  # Map over list of dataframes
+  cgm_all <- map_dfr(all_data, handle_get_cgm, player_names_cross, lines_cross, market_names_cross) %>%
+    arrange(desc(Price))
+  
+  return(cgm_all)
+}
+
+  
 # #===============================================================================
 # # Function to get all combinations and get SGM prices
 # #===============================================================================
@@ -332,7 +395,7 @@ ui <- fluidPage(
                    "matchup",
                    "Select Difficulty",
                    choices = c("Terrible", "Bad", "Neutral", "Good", "Excellent"),
-                   selected = c("Neutral", "Good", "Excellent"),
+                   selected = c("Terrible", "Bad", "Neutral", "Good", "Excellent"),
                    multiple = TRUE
                  ),
                  checkboxInput("best_odds", "Only Show Best Market Odds?", value = FALSE),
@@ -379,14 +442,17 @@ ui <- fluidPage(
                    "matchup_cross",
                    "Select Difficulty",
                    choices = c("Terrible", "Bad", "Neutral", "Good", "Excellent"),
-                   selected = c("Neutral", "Good", "Excellent"),
+                   selected = c("Terrible", "Bad", "Neutral", "Good", "Excellent"),
                    multiple = TRUE
                  ),
                  checkboxInput("best_odds_cross", "Only Show Best Market Odds?", value = FALSE),
                  h3("Selections"),
                  DT::dataTableOutput("selected_cross"),
                  h3("Multi Information"),
-                 uiOutput("summary_cross")
+                 uiOutput("summary_cross"),
+                 actionButton("get_comparison_cross", label = "Compare Odds"),
+                 actionButton("clear_comparison_cross", label = "Clear Selections"),
+                 DT::dataTableOutput("odds_compare_cross")
                ),
                
                mainPanel(
@@ -437,6 +503,9 @@ server <- function(input, output, session) {
   # Get the table proxy
   proxy <- dataTableProxy("table")
   
+  # Get the table proxy for the cross game multi
+  proxy_cross <- dataTableProxy("table_cross")
+  
   output$correlations <- renderDT({
     filtered_data <- disposals_display[disposals_display$match == input$match & disposals_display$agency == input$agency,]
     if (input$best_odds) {filtered_data <- filtered_data |> filter(market_best) |> select(-market_best)}
@@ -446,6 +515,7 @@ server <- function(input, output, session) {
     datatable(correlations_table)
   })
   
+  # SGM Comparison
   observeEvent(input$get_comparison, {
     # Get selected data
     filtered_data <- disposals_display[disposals_display$match == input$match &
@@ -477,6 +547,11 @@ server <- function(input, output, session) {
     selectRows(proxy, NULL)
   })
   
+  observeEvent(input$clear_comparison_cross, {
+    # Deselect all rows in the table
+    selectRows(proxy_cross, NULL)
+  })
+  
   # observeEvent(input$get_combos, {
   #   # Get selected data
   #   filtered_data <- disposals_display[disposals_display$match == input$match & disposals_display$agency == input$agency,]
@@ -504,7 +579,7 @@ server <- function(input, output, session) {
       if (input$best_odds) {filtered_data <- filtered_data |> filter(market_best) |> select(-market_best)}
       selected_data <- filtered_data[input$table_rows_selected, ]
       uncorrelated_price <- prod(selected_data$price)
-      empirical_price <- 1 / prod(selected_data$prob_2023)
+      empirical_price <- 1 / prod(selected_data$prob_last_10)
       HTML(paste0("<strong>Uncorrelated Price:</strong>", " $", round(uncorrelated_price, 2), "<br/>",
                   " <strong>Theoretical Uncorrelated Price:</strong>", " $", round(empirical_price, 2)))
     }
@@ -533,6 +608,30 @@ server <- function(input, output, session) {
         selected_data_cross <- filtered_data_cross[input$table_cross_rows_selected, c("player_name", "line", "market_name", "price")]
         datatable(selected_data_cross)
       }
+    })
+  })
+  
+  # Cross Game Comparison
+  observeEvent(input$get_comparison_cross, {
+    # Get selected data
+    filtered_data_cross <- disposals_display[disposals_display$agency == input$agency_cross &
+                                               disposals_display$Matchup %in% input$matchup_cross &
+                                               disposals_display$market_name %in% input$market_cross,]
+    
+    if (input$best_odds_cross) {filtered_data_cross <- filtered_data_cross |> filter(market_best) |> select(-market_best)}
+    
+    selected_data_cross <- filtered_data_cross[input$table_cross_rows_selected, c("player_name", "line", "market_name", "price", "agency")]
+    
+    player_names_cross = selected_data_cross$player_name
+    lines_cross = selected_data_cross$line
+    market_names_cross = selected_data_cross$market_name
+    
+    # Call function
+    comparison_df_cross <- compare_cgm(market_names_cross, player_names_cross, lines_cross)
+    
+    # populate DTOutput
+    output$odds_compare_cross <- renderDT({
+      datatable(comparison_df_cross)
     })
   })
   
