@@ -126,7 +126,7 @@ compare_sgm <- function(player_names, stat_counts, markets) {
 }
 
 #===============================================================================
-# Call CGM function
+# Compare CGM function
 #===============================================================================
 
 compare_cgm <- function(player_names_cross, lines_cross, market_names_cross) {
@@ -627,7 +627,10 @@ server <- function(input, output, session) {
     market_names_cross = selected_data_cross$market_name
     
     # Call function
-    comparison_df_cross <- compare_cgm(market_names_cross, player_names_cross, lines_cross)
+    comparison_df_cross <-
+      compare_cgm(market_names_cross = market_names_cross,
+                  player_names_cross = player_names_cross,
+                  lines_cross = lines_cross)
     
     # populate DTOutput
     output$odds_compare_cross <- renderDT({
