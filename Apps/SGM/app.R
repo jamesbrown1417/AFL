@@ -81,6 +81,15 @@ dvp_data <-
   ungroup() %>%
   select(Position = Pos, opposition_team = Opponent, market_name, DVP_Category)
 
+# Head to head data
+h2h <- read_csv("../../Data/scraped_odds/sportsbet_h2h.csv")
+
+# Matches in order
+matches_in_order <-
+  h2h %>%
+  distinct(match) |> 
+  pull()
+
 #===============================================================================
 # Create compare sgm function
 #===============================================================================
@@ -92,6 +101,52 @@ source("sportsbet_sgm.R")
 source("pointsbet_sgm.R")
 source("neds_sgm.R")
 source("bet365_sgm.R")
+
+# Dabble------------------------------------------------------------------
+dabble_sgm_list <- list(
+  read_csv("../../Data/scraped_odds/dabble_player_disposals.csv"),
+  read_csv("../../Data/scraped_odds/dabble_player_goals.csv"),
+  read_csv("../../Data/scraped_odds/dabble_player_fantasy_points.csv")
+)
+
+dabble_sgm <-
+  dabble_sgm_list |> 
+  keep(~nrow(.x) > 0) |>
+  bind_rows() |> 
+  rename(price = over_price) |> 
+  distinct(match, player_name, line, market_name, agency, .keep_all = TRUE) |> 
+  select(-contains("under"))
+
+# TopSport SGM------------------------------------------------------------------
+topsport_sgm_list <- list(
+  read_csv("../../Data/scraped_odds/topsport_player_disposals.csv"),
+  read_csv("../../Data/scraped_odds/topsport_player_goals.csv"),
+  read_csv("../../Data/scraped_odds/topsport_player_tackles.csv"),
+  read_csv("../../Data/scraped_odds/topsport_player_marks.csv"),
+  read_csv("../../Data/scraped_odds/topsport_player_fantasy_points.csv")
+)
+
+topsport_sgm <-
+  topsport_sgm_list |> 
+  keep(~nrow(.x) > 0) |>
+  bind_rows() |> 
+  rename(price = over_price) |> 
+  distinct(match, player_name, line, market_name, agency, .keep_all = TRUE) |> 
+  select(-contains("under"))
+
+# Unibet SGM------------------------------------------------------------------
+unibet_sgm_list <- list(
+  read_csv("../../Data/scraped_odds/unibet_player_disposals.csv"),
+  read_csv("../../Data/scraped_odds/unibet_player_goals.csv")
+)
+
+unibet_sgm <-
+  unibet_sgm_list |> 
+  keep(~nrow(.x) > 0) |>
+  bind_rows() |> 
+  rename(price = over_price) |> 
+  distinct(match, player_name, line, market_name, agency, .keep_all = TRUE) |> 
+  select(-contains("under"))
 
 #===============================================================================
 # Create compare sgm function
@@ -131,7 +186,7 @@ compare_sgm <- function(player_names, stat_counts, markets) {
 
 compare_cgm <- function(player_names_cross, lines_cross, market_names_cross) {
   # List of each agency data
-  all_data <- list(pointsbet_sgm, sportsbet_sgm, tab_sgm, betright_sgm, neds_sgm, bet365_sgm)
+  all_data <- list(pointsbet_sgm, sportsbet_sgm, tab_sgm, betright_sgm, neds_sgm, bet365_sgm, dabble_sgm, topsport_sgm, unibet_sgm)
   
   # Function to get cross game multi data
   get_cgm <- function(data, player_names_cross, lines_cross, market_names_cross) {
@@ -319,11 +374,8 @@ disposals <-
   ungroup()
 
 # Unique matches
-matches <-
-  disposals |>
-  distinct(match) |>
-  pull()
-  
+matches <- matches_in_order
+
 # Unique agencies
 agencies <-
   disposals |>
