@@ -1,40 +1,40 @@
 {
     "entrants": {
-        "0e99a814-1632-49b0-9f46-187b8bcd412f": {
-            "id": "0e99a814-1632-49b0-9f46-187b8bcd412f",
-            "name": "Richmond",
-            "home_away": "AWAY",
-            "visible": true,
-            "sort_order": 20,
-            "market_id": "10ae979c-7546-474d-8497-5ebf002c8394"
-        },
-        "d2689c4b-d8d2-4921-81ed-6c97c24e6e1d": {
-            "id": "d2689c4b-d8d2-4921-81ed-6c97c24e6e1d",
-            "name": "Port Adelaide",
+        "2e617fa9-52f6-48c2-a9bc-f8d7ec1eee4d": {
+            "id": "2e617fa9-52f6-48c2-a9bc-f8d7ec1eee4d",
+            "name": "Geelong Cats",
             "home_away": "HOME",
             "visible": true,
             "sort_order": 10,
-            "market_id": "10ae979c-7546-474d-8497-5ebf002c8394"
+            "market_id": "f0dce7cf-6d27-49ca-8636-92816c42ed9c"
+        },
+        "fe652bb9-35aa-46a1-8f74-5dbf84c9517a": {
+            "id": "fe652bb9-35aa-46a1-8f74-5dbf84c9517a",
+            "name": "Western Bulldogs",
+            "home_away": "AWAY",
+            "visible": true,
+            "sort_order": 20,
+            "market_id": "f0dce7cf-6d27-49ca-8636-92816c42ed9c"
         }
     },
     "event_participants": {
-        "08127466-4e00-47f8-90de-566bc3301208": {
-            "id": "08127466-4e00-47f8-90de-566bc3301208",
-            "event_id": "827b2e29-1035-4108-a76b-624aa1e1cab6",
-            "name": "Port Adelaide",
-            "home_away": "HOME"
-        },
-        "85556742-c9a0-4514-9cd1-e1096434bea9": {
-            "id": "85556742-c9a0-4514-9cd1-e1096434bea9",
-            "event_id": "827b2e29-1035-4108-a76b-624aa1e1cab6",
-            "name": "Richmond",
+        "b471514d-45d5-45b0-8a1b-6d481085e804": {
+            "id": "b471514d-45d5-45b0-8a1b-6d481085e804",
+            "event_id": "65665dce-2984-4921-88ed-088561f5d16c",
+            "name": "Western Bulldogs",
             "home_away": "AWAY"
+        },
+        "e7900080-6530-431e-bda3-04dabdf3c5ee": {
+            "id": "e7900080-6530-431e-bda3-04dabdf3c5ee",
+            "event_id": "65665dce-2984-4921-88ed-088561f5d16c",
+            "name": "Geelong Cats",
+            "home_away": "HOME"
         }
     },
     "events": {
-        "827b2e29-1035-4108-a76b-624aa1e1cab6": {
-            "id": "827b2e29-1035-4108-a76b-624aa1e1cab6",
-            "name": "Port Adelaide vs Richmond",
+        "65665dce-2984-4921-88ed-088561f5d16c": {
+            "id": "65665dce-2984-4921-88ed-088561f5d16c",
+            "name": "Geelong Cats vs Western Bulldogs",
             "event_type": {
                 "id": "6bfa0efc-05df-4ae1-9b1e-152365290cfd",
                 "name": "Match"
@@ -43,7 +43,7 @@
             "advertised_start": "2024-07-20T09:30:00Z",
             "actual_start": "2024-07-20T09:30:00Z",
             "visible": true,
-            "slug": "port-adelaide-vs-richmond",
+            "slug": "geelong-cats-vs-western-bulldogs",
             "competition": {
                 "id": "ccff2e9a-5347-41aa-902a-bb6b1886d817",
                 "name": "AFL",
@@ -58,22 +58,22 @@
                 {
                     "market_type_group_id": "29edb5e1-a717-4769-8bcd-2d43ec38d828",
                     "market_ids": [
-                        "10ae979c-7546-474d-8497-5ebf002c8394"
+                        "f0dce7cf-6d27-49ca-8636-92816c42ed9c"
                     ]
                 }
             ],
             "market_count": 1,
             "main_markets": [
-                "10ae979c-7546-474d-8497-5ebf002c8394"
+                "f0dce7cf-6d27-49ca-8636-92816c42ed9c"
             ],
             "market_ids": [
-                "10ae979c-7546-474d-8497-5ebf002c8394"
+                "f0dce7cf-6d27-49ca-8636-92816c42ed9c"
             ],
             "category_id": "23d497e6-8aab-4309-905b-9421f42c9bc5",
             "round_id": "13403bae-bb76-4ac5-8e2f-6344c148b003",
             "participant_ids": [
-                "08127466-4e00-47f8-90de-566bc3301208",
-                "85556742-c9a0-4514-9cd1-e1096434bea9"
+                "b471514d-45d5-45b0-8a1b-6d481085e804",
+                "e7900080-6530-431e-bda3-04dabdf3c5ee"
             ]
         }
     },
@@ -86,9 +86,9 @@
         }
     },
     "markets": {
-        "10ae979c-7546-474d-8497-5ebf002c8394": {
-            "id": "10ae979c-7546-474d-8497-5ebf002c8394",
-            "event_id": "827b2e29-1035-4108-a76b-624aa1e1cab6",
+        "f0dce7cf-6d27-49ca-8636-92816c42ed9c": {
+            "id": "f0dce7cf-6d27-49ca-8636-92816c42ed9c",
+            "event_id": "65665dce-2984-4921-88ed-088561f5d16c",
             "market_type_id": "be25c37a-71ff-47f6-a1e2-02a494eb5a4d",
             "market_status_id": "4bc8fe96-296b-4b4c-aea4-85c94f63b9c6",
             "name": "Match Betting",
@@ -101,26 +101,26 @@
             "is_primary": true,
             "visible": true,
             "entrant_ids": [
-                "d2689c4b-d8d2-4921-81ed-6c97c24e6e1d",
-                "0e99a814-1632-49b0-9f46-187b8bcd412f"
+                "2e617fa9-52f6-48c2-a9bc-f8d7ec1eee4d",
+                "fe652bb9-35aa-46a1-8f74-5dbf84c9517a"
             ],
             "num_winners": 1
         }
     },
     "markets_allow_cashout": {
-        "10ae979c-7546-474d-8497-5ebf002c8394": true
+        "f0dce7cf-6d27-49ca-8636-92816c42ed9c": true
     },
     "prices": {
-        "0e99a814-1632-49b0-9f46-187b8bcd412f:940b8704-e497-4a76-b390-00918ff7d282:": {
+        "2e617fa9-52f6-48c2-a9bc-f8d7ec1eee4d:940b8704-e497-4a76-b390-00918ff7d282:": {
             "odds": {
-                "numerator": 23,
-                "denominator": 4
+                "numerator": 19,
+                "denominator": 50
             }
         },
-        "d2689c4b-d8d2-4921-81ed-6c97c24e6e1d:940b8704-e497-4a76-b390-00918ff7d282:": {
+        "fe652bb9-35aa-46a1-8f74-5dbf84c9517a:940b8704-e497-4a76-b390-00918ff7d282:": {
             "odds": {
-                "numerator": 1,
-                "denominator": 10
+                "numerator": 41,
+                "denominator": 20
             }
         }
     }
