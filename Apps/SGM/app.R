@@ -533,7 +533,7 @@ server <- function(input, output, session) {
     
     if (input$best_odds) {filtered_data <- filtered_data |> filter(market_best) |> select(-market_best)}
     
-    datatable(filtered_data, selection = "multiple")
+    datatable(filtered_data, selection = "multiple", filter = "top")
   }, server = FALSE) # We are setting this as FALSE for client-side processing of the DataTable
   
   
@@ -645,7 +645,7 @@ server <- function(input, output, session) {
     
     if (input$best_odds_cross) {filtered_data_cross <- filtered_data_cross |> filter(market_best) |> select(-market_best)}
     
-    datatable(filtered_data_cross, selection = "multiple")
+    datatable(filtered_data_cross, selection = "multiple", filter = "top")
   }, server = FALSE) 
   
   observeEvent(input$table_cross_rows_selected,{
