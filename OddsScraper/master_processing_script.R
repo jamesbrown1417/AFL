@@ -17,10 +17,10 @@ empirical_probabilities_2023 <- read_rds("Data/empirical_probabilities_2023.rds"
 # Get fixtures data
 current_season_fixture <- read_rds("Data/current_fixture.rds")
 
-# Google sheets authentification -----------------------------------------------
-options(gargle_oauth_cache = ".secrets")
-drive_auth(cache = ".secrets", email = "cuzzy.punting@gmail.com")
-gs4_auth(token = drive_token())
+# # Google sheets authentification -----------------------------------------------
+# options(gargle_oauth_cache = ".secrets")
+# drive_auth(cache = ".secrets", email = "cuzzy.punting@gmail.com")
+# gs4_auth(token = drive_token())
 
 # Run all odds scraping scripts-------------------------------------------------
 run_scraping <- function(script_name) {
