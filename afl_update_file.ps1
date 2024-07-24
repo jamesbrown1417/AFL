@@ -1,17 +1,17 @@
 # Set the current directory to your project folder
-Set-Location -Path "C:\Users\james\R_Projects\AFL-2024"
+Set-Location -Path "C:\Users\james\OneDrive\Desktop\Projects\AFL-2024"
 
 # Remove .json and .txt files in specific directories
-Remove-Item -Path "C:\Users\james\R_Projects\AFL-2024\OddsScraper\Neds\*.json"
-Remove-Item -Path "C:\Users\james\R_Projects\AFL-2024\Data\BET365_HTML\*.txt"
+Remove-Item -Path "C:\Users\james\OneDrive\Desktop\Projects\AFL-2024\OddsScraper\Neds\*.json"
+Remove-Item -Path "C:\Users\james\OneDrive\Desktop\Projects\AFL-2024\Data\BET365_HTML\*.txt"
 
 # Execute Python and R scripts
-& "C:/Python311/python.exe" "c:/Users/james/R_Projects/AFL-2024/OddsScraper/get_bet365_html.py"
-& "C:/Python311/python.exe" "c:/Users/james/R_Projects/AFL-2024/OddsScraper/get_bet365_player.py"
+& "C:/Python311/python.exe" "c:/Users/james/OneDrive/Desktop/Projects/AFL-2024/OddsScraper/get_bet365_html.py"
+& "C:/Python311/python.exe" "c:/Users/james/OneDrive/Desktop/Projects/AFL-2024/OddsScraper/get_bet365_player.py"
 
-& "C:/Python312/python.exe" "c:/Users/james/R_Projects/AFL-2024/OddsScraper/Neds/get_neds_urls.py"
+& "C:/Python312/python.exe" "c:/Users/james/OneDrive/Desktop/Projects/AFL-2024/OddsScraper/Neds/get_neds_urls.py"
 & "Rscript" "OddsScraper\Neds\get_neds_match_urls.R"
-& "C:/Python312/python.exe" "c:/Users/james/R_Projects/AFL-2024/OddsScraper/Neds/get_match_json.py"
+& "C:/Python312/python.exe" "c:/Users/james/OneDrive/Desktop/Projects/AFL-2024/OddsScraper/Neds/get_match_json.py"
 
 # Execute R script for getting arbs
 & "Rscript" "OddsScraper\master_processing_script.R"
