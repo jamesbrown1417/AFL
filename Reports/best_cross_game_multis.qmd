@@ -201,12 +201,98 @@ combination_list <-
   mutate(subset_tibble = list(biggest_diffs_outliers[c(row1, row2), ])) %>%
   pull(subset_tibble)
 
-# Create function to synthesise information from the two rows
-synthesise_rows <- function(tibble) {
-  # Get the two rows
+# Filter to instances where the two rows are for different matches and same agency
+combination_list <- combination_list %>%
+  keep(~ .x$match[1] != .x$match[2]) %>%
+  keep(~ .x$agency[1] == .x$agency[2])
 
-  
+# Filter to where the combined prices are greater than 1.5 and less than 3
+combination_list <- combination_list %>%
+  keep(~ prod(.x$over_price) > 1.5 & prod(.x$over_price) < 3)
+
+# Map a function that takes the tibble with 2 rows and returns a tibble with 1 row
+
+process_function <-
+  function(tibble) {
+  tibble %>%
+    summarise(
+      match = paste(match, collapse = " & "),
+      player_name = paste(player_name, collapse = " & "),
+      market_name = paste(market_name, collapse = " & "),
+      line = paste(line, collapse = " & "),
+      individual_prices = paste(over_price, collapse = " & "),
+      over_price = prod(over_price),
+      implied_prob_over = prod(implied_prob_over),
+      diff_over_last_10 = paste(diff_over_last_10, collapse = " & "), 
+      agency = first(agency),
+      DVP_Category = paste(DVP_Category, collapse = " & "),
+      second_best_odds = prod(second_best_odds)
+    )
+  }
+
+candidate_2_leg_cgms <-
+  map_dfr(combination_list, process_function, .progress = TRUE) |> 
+  mutate(price_gap = over_price - second_best_odds) |>
+  arrange(desc(price_gap))
 
 ```
 
+# 3 Leg Multis
 
+```{r}
+#| results: asis
+
+# Get all 3 leg multis----------------------------------------------------------
+
+# Get the number of rows in the tibble
+n <- nrow(biggest_diffs_outliers)
+
+# Generate all combinations of three numbers between 1 and n
+combinations <- combn(1:n, 3)
+
+# Convert the combinations matrix to a tibble for better readability
+combinations_tibble <- as_tibble(t(combinations), .name_repair = "minimal") %>%
+  set_names(c("row1", "row2", "row3"))
+
+# Create a list where each element is a tibble with the subset of the original tibble for the three rows of interest
+combination_list <-
+  combinations_tibble %>%
+  rowwise() %>%
+  mutate(subset_tibble = list(biggest_diffs_outliers[c(row1, row2, row3), ])) %>%
+  pull(subset_tibble)
+
+# Filter to instances where the three rows are for different matches and same agency
+combination_list <- combination_list %>%
+  keep(~ .x$match[1] != .x$match[2] & .x$match[1] != .x$match[3] & .x$match[2] != .x$match[3]) %>%
+  keep(~ .x$agency[1] == .x$agency[2] & .x$agency[1] == .x$agency[3])
+
+# Filter to where the combined prices are greater than 2 and less than 5
+combination_list <- combination_list %>%
+  keep(~ prod(.x$over_price) > 1.5 & prod(.x$over_price) < 3)
+
+# Map a function that takes the tibble with 3 rows and returns a tibble with 1 row
+
+process_function <-
+  function(tibble) {
+  tibble %>%
+    summarise(
+      match = paste(match, collapse = " & "),
+      player_name = paste(player_name, collapse = " & "),
+      market_name = paste(market_name, collapse = " & "),
+      line = paste(line, collapse = " & "),
+      individual_prices = paste(over_price, collapse = " & "),
+      over_price = prod(over_price),
+      implied_prob_over = prod(implied_prob_over),
+      diff_over_last_10 = paste(diff_over_last_10, collapse = " & "), 
+      agency = first(agency),
+      DVP_Category = paste(DVP_Category, collapse = " & "),
+      second_best_odds = prod(second_best_odds)
+    )
+  }
+
+candidate_3_leg_cgms <-
+  map_dfr(combination_list, process_function, .progress = TRUE) |> 
+  mutate(price_gap = over_price - second_best_odds) |>
+  arrange(desc(price_gap))
+
+```
