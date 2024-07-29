@@ -236,6 +236,41 @@ agency_list <- map(agencies, ~filter_agency(biggest_diffs_outliers, .x)) |> set_
 maketabs(agency_list, wide = TRUE)
 ```
 
+## Biggest Outliers +EV
+
+```{r}
+#| results: asis
+
+# Outlier List
+biggest_diffs_outliers <-
+  biggest_diffs |>
+  filter(diff_over_last_10 >= 0) |>
+  filter(diff_over >= 0.03) |>
+  arrange(desc(diff_over)) |> 
+  rename(gap = diff_over)
+
+# Function to take list, filter to agency and return
+filter_agency <- function(df, agency) {
+  df |>
+    filter(agency == !!agency)
+}
+
+# Unique list of agencies
+agencies <- biggest_diffs_outliers$agency |> unique()
+
+# Make list of dataframes
+agency_list <- map(agencies, ~filter_agency(biggest_diffs_outliers, .x)) |> set_names(agencies)
+
+# # For each element of the list, make a DT table
+# agency_list <-
+#   map(agency_list, ~ datatable(.x, options = list(
+#     pageLength = 10, scrollX = TRUE, width = "100%"
+#   )))
+
+# Make tabset with each
+maketabs(agency_list, wide = TRUE)
+```
+
 ## Unders
 
 ```{r}
