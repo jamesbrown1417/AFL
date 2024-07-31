@@ -4,15 +4,11 @@ import pandas as pd
 import json
 import os
 
-# Read in the URL list from the file
-match_urls = pd.read_csv("OddsScraper\\Neds\\neds_afl_match_urls.csv")
-
-# Get the urls as a list
-urls = match_urls["url"].tolist()
-
 async def main():
     # Load URLs from the CSV file
     match_urls = pd.read_csv("OddsScraper\\Neds\\neds_afl_match_urls.csv")
+    if "url" not in match_urls.columns:
+        raise ValueError("CSV file must contain 'url' column")
     urls = match_urls["url"].tolist()
 
     # Ensure the directory exists
@@ -20,7 +16,7 @@ async def main():
     os.makedirs(output_dir, exist_ok=True)
 
     async with async_playwright() as p:
-        browser = await p.chromium.launch(headless=True)
+        browser = await p.chromium.launch(headless=False)
         page = await browser.new_page()
 
         # Counter to generate unique file names
@@ -46,10 +42,13 @@ async def main():
 
         # Process each URL
         for url in urls:
-            await page.goto(url)
-            # Add any necessary waits here to ensure the page loads completely
+            try:
+                await page.goto(url)
+                # Wait for the specific element to be visible
+                await page.wait_for_selector('[data-testid="market-title"]', state='visible')
+            except Exception as e:
+                print(f"Error navigating to {url}: {e}")
 
         await browser.close()
 
 asyncio.run(main())
-
