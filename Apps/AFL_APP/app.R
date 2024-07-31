@@ -32,7 +32,7 @@ all_player_stats <- bind_rows(all_player_stats, data_2024)
 all_player_stats$cba_percentage <- round(all_player_stats$cba_percentage, 3)
 
 # Agencies List
-agencies = c("TAB", "Pointsbet", "Neds", "Sportsbet", "Bet365", "Unibet", "BlueBet", "TopSport", "BetRight", "Betr", "Dabble")
+agencies = c("TAB", "Pointsbet", "Neds", "Sportsbet", "Bet365", "Unibet", "BlueBet", "TopSport", "BetRight", "Betr", "Dabble", "Betfair")
 
 #===============================================================================
 # Read in and normalise DVP Data
