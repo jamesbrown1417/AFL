@@ -167,28 +167,34 @@ write_csv(tab_head_to_head_markets, "Data/scraped_odds/tab_h2h.csv")
 home_team_lines <-
   all_tab_markets |>
   separate(match, into = c("home_team", "away_team"), sep = " v ", remove = FALSE) |>
-  filter(market_name == "Line") |> 
-  group_by(match) |> 
-  filter(row_number() == 1) |> 
-  rename(home_win = price) |> 
+  filter(market_name == "Line" | market_name == "Pick Your Own Line") |> 
+  rename(home_win = price) |>
+  mutate(team = str_remove(prop_name, " [\\+\\-].*$")) |>
+  filter(team == home_team) |>
   mutate(home_line = as.numeric(str_extract(prop_name, "-?\\d+\\.?\\d*"))) |>
-  select(-prop_name, -prop_id)
+  select(-prop_name, -prop_id, -team) |> 
+  mutate(line = abs(home_line)) |> 
+  distinct(match, home_line, home_win, .keep_all = TRUE)
 
 # Away teams
 away_team_lines <-
   all_tab_markets |>
   separate(match, into = c("home_team", "away_team"), sep = " v ", remove = FALSE) |>
-  filter(market_name == "Line") |> 
-  group_by(match) |> 
-  filter(row_number() == 2) |> 
-  rename(away_win = price) |> 
+  filter(market_name == "Line" | market_name == "Pick Your Own Line") |> 
+  rename(away_win = price) |>
+  mutate(team = str_remove(prop_name, " [\\+\\-].*$")) |>
+  filter(team == away_team) |>
   mutate(away_line = as.numeric(str_extract(prop_name, "-?\\d+\\.?\\d*"))) |>
-  select(-prop_name, -prop_id)
+  select(-prop_name, -prop_id, -team) |> 
+  mutate(line = abs(away_line)) |> 
+  distinct(match, away_line, away_win, .keep_all = TRUE)
 
 # Combine
 tab_line_markets <-
   home_team_lines |>
-  left_join(away_team_lines) |> 
+  left_join(away_team_lines, relationship = "many-to-many") |> 
+  mutate(market_name = "Line") |> 
+  filter(home_line != away_line) |> 
   select(match, start_time, market_name, home_team, home_line, home_win, away_team, away_line, away_win) |> 
   mutate(margin = round((1/home_win + 1/away_win), digits = 3)) |> 
   mutate(agency = "TAB")
@@ -216,7 +222,8 @@ all_tab_markets |>
   filter(str_detect(prop_name, "Over")) |>
   mutate(line = as.numeric(str_extract(prop_name, "-?\\d+\\.?\\d*"))) |> 
   mutate(market_name = "Total Points") |>
-  select(match, start_time, market_name, home_team, away_team, line, over_price = price)
+  select(match, start_time, market_name, home_team, away_team, line, over_price = price) |> 
+  distinct(match, line, over_price, .keep_all = TRUE)
 
 # Total Unders
 totals_unders <-
@@ -227,7 +234,8 @@ all_tab_markets |>
   filter(str_detect(prop_name, "Under")) |>
   mutate(line = as.numeric(str_extract(prop_name, "-?\\d+\\.?\\d*"))) |> 
   mutate(market_name = "Total Points") |>
-  select(match, start_time, market_name, home_team, away_team, line, under_price = price)
+  select(match, start_time, market_name, home_team, away_team, line, under_price = price) |> 
+  distinct(match, line, under_price, .keep_all = TRUE)
 
 # Combine
 tab_totals_markets <-
@@ -240,54 +248,10 @@ tab_totals_markets <-
   mutate(margin = round((1/over_price + 1/under_price), digits = 3)) |> 
   mutate(agency = "TAB") |> 
   arrange(start_time, match, line)
+
+# Write to csv
+write_csv(tab_totals_markets, "Data/scraped_odds/tab_totals.csv")
  
-#===============================================================================
-# Alt Line markets
-#===============================================================================
-# 
-# # Home teams
-# home_team_alt_lines <-
-#   all_tab_markets |>
-#   separate(match, into = c("home_team", "away_team"), sep = " v ", remove = FALSE) |>
-#   filter(market_name == "Line") |>
-#   group_by(match) |>
-#   filter(row_number() == 1) |>
-#   rename(home_win = price) |>
-#   mutate(home_line = as.numeric(str_extract(prop_name, "-?\\d+\\.?\\d*"))) |>
-#   select(-prop_name, -prop_id)
-# 
-# # Away teams
-# away_team_alt_lines <-
-#   all_tab_markets |>
-#   separate(match, into = c("home_team", "away_team"), sep = " v ", remove = FALSE) |>
-#   filter(market_name == "Line") |>
-#   group_by(match) |>
-#   filter(row_number() == 2) |>
-#   rename(away_win = price) |>
-#   mutate(away_line = as.numeric(str_extract(prop_name, "-?\\d+\\.?\\d*"))) |>
-#   select(-prop_name, -prop_id)
-# 
-# # Combine
-# tab_alt_line_markets <-
-#   home_team_alt_lines |>
-#   left_join(away_team_alt_lines) |>
-#   select(match, start_time, market_name, home_team, home_line, home_win, away_team, away_line, away_win) |>
-#   mutate(margin = round((1/home_win + 1/away_win), digits = 3)) |>
-#   mutate(agency = "TAB")
-# 
-# # Fix team names
-# tab_alt_line_markets <-
-#   tab_alt_line_markets |>
-#   mutate(home_team = fix_team_names(home_team)) |>
-#   mutate(away_team = fix_team_names(away_team)) |>
-#   mutate(match = paste(home_team, "v", away_team))
-# 
-# # Combine all line information together
-
-
-# # Write to csv
-# write_csv(tab_line_markets, "Data/scraped_odds/tab_line.csv")
-
 #===============================================================================
 # Player Disposals
 #===============================================================================
