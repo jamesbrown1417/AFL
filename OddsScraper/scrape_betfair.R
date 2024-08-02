@@ -175,3 +175,75 @@ all_head_to_head_odds <-
 
 # Write to CSV
 write_csv(all_head_to_head_odds, "Data/scraped_odds/betfair_h2h.csv")
+
+#===============================================================================
+# Get Disposal Lines
+#===============================================================================
+
+# Define the function to get head-to-head odds for a given market ID
+get_disposal_odds <- function(market_id, all_afl_market_codes) {
+  # Get the market book for the given market ID
+  disposal_odds <- listMarketBook(marketIds = market_id, priceData = "EX_BEST_OFFERS") |>
+    pull(runners) |>
+    bind_rows() |>
+    as_tibble() |>
+    unnest(6) |>
+    unnest(6) |>
+    select(runnerId = selectionId, price, size) |> 
+    mutate(market_id = market_id) |> 
+    left_join(all_afl_market_codes, by = c("market_id", "runnerId"))
+  
+  # Get over odds
+  over_odds <-
+    disposal_odds |>
+    separate(
+      event_name,
+      into = c("home_team", "away_team"),
+      sep = " v ",
+      remove = FALSE
+    ) |>
+    filter(str_detect(runnerName, "Over")) |>
+    mutate(home_team = fix_team_names(home_team),
+           away_team = fix_team_names(away_team),
+           runnerName = fix_team_names(runnerName)) |>
+    mutate(event_name = paste(home_team, "v", away_team)) |>
+    mutate(market_name = "Player Disposals") |> 
+    mutate(player_name = str_remove(market_name, "Player Disposals - ")) |>
+    mutate(line = str_remove(runnerName, "Over ")) |>
+    mutate(line = str_remove(line, " Disposals")) |>
+    mutate(line = as.numeric(line)) |>
+    select(
+      match = event_name,
+      home_team,
+      away_team,
+      home_win = price,
+      home_liquidity = size,
+      market_name
+    ) |>
+    arrange(desc(home_win)) |>
+    slice_head(n = 1)
+  
+  # Join home and away odds
+  disposal_odds <- home_odds |>
+    left_join(away_odds, by = c("match", "home_team", "away_team", "market_name")) |>
+    mutate(home_win = convert_odds(home_win),
+           away_win = convert_odds(away_win)) |> 
+    mutate(agency = "Betfair")
+  
+  return(disposal_odds)
+}
+
+# Get all MATCH_ODDS codes
+disposal_codes <-
+  all_afl_market_codes |>
+  filter(str_detect(market_name, "Player Disposals")) |>
+  pull(market_id) |> 
+  unique()
+
+# Get head to head odds for all MATCH_ODDS codes
+all_head_to_head_odds <-
+  map(match_odds_codes, get_head_to_head_odds, all_afl_market_codes, .progress = TRUE) |> 
+  bind_rows()
+
+# Write to CSV
+write_csv(all_head_to_head_odds, "Data/scraped_odds/betfair_h2h.csv")
