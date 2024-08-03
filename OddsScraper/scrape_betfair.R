@@ -4,6 +4,10 @@ library(httr2)
 library(jsonlite)
 library(abettor)
 
+# Player names file
+player_names <- read_rds("Data/2024_start_positions_and_prices.rds")
+player_names <- player_names |> select(player_full_name, team_name)
+
 # Function to convert betfair odds
 convert_odds <- function(listed_odds, commission = 0.05) {
   # Calculate the actual odds
@@ -214,8 +218,8 @@ get_disposal_odds <- function(market_id, all_afl_market_codes) {
            away_team = fix_team_names(away_team),
            runnerName = fix_team_names(runnerName)) |>
     mutate(event_name = paste(home_team, "v", away_team)) |>
-    mutate(market_name = "Player Disposals") |> 
     mutate(player_name = str_remove(market_name, "Player Disposals - ")) |>
+    mutate(market_name = "Player Disposals") |> 
     mutate(line = str_remove(runnerName, "Over ")) |>
     mutate(line = str_remove(line, " Disposals")) |>
     mutate(line = as.numeric(line)) |>
@@ -223,21 +227,55 @@ get_disposal_odds <- function(market_id, all_afl_market_codes) {
       match = event_name,
       home_team,
       away_team,
-      home_win = price,
-      home_liquidity = size,
+      player_name,
+      line,
+      over_price = price,
+      over_liquidity = size,
       market_name
     ) |>
-    arrange(desc(home_win)) |>
+    arrange(desc(over_price)) |>
     slice_head(n = 1)
   
-  # Join home and away odds
-  disposal_odds <- home_odds |>
-    left_join(away_odds, by = c("match", "home_team", "away_team", "market_name")) |>
-    mutate(home_win = convert_odds(home_win),
-           away_win = convert_odds(away_win)) |> 
+  # Get under odds
+  under_odds <- disposal_odds |>
+    separate(
+      event_name,
+      into = c("home_team", "away_team"),
+      sep = " v ",
+      remove = FALSE
+    ) |>
+    filter(str_detect(runnerName, "Under")) |>
+    mutate(home_team = fix_team_names(home_team),
+           away_team = fix_team_names(away_team),
+           runnerName = fix_team_names(runnerName)) |>
+    mutate(event_name = paste(home_team, "v", away_team)) |>
+    mutate(player_name = str_remove(market_name, "Player Disposals - ")) |>
+    mutate(market_name = "Player Disposals") |> 
+    mutate(line = str_remove(runnerName, "Under ")) |>
+    mutate(line = str_remove(line, " Disposals")) |>
+    mutate(line = as.numeric(line)) |>
+    select(
+      match = event_name,
+      home_team,
+      away_team,
+      player_name,
+      line,
+      under_price = price,
+      under_liquidity = size,
+      market_name
+    ) |>
+    arrange(desc(under_price)) |>
+    slice_head(n = 1)
+  
+  # Join over and under odds
+  disposal_odds_combined <-
+    over_odds |>
+    left_join(under_odds) |> 
+    mutate(over_price = convert_odds(over_price),
+           under_price = convert_odds(under_price)) |> 
     mutate(agency = "Betfair")
   
-  return(disposal_odds)
+  return(disposal_odds_combined)
 }
 
 # Get all MATCH_ODDS codes
@@ -247,10 +285,25 @@ disposal_codes <-
   pull(market_id) |> 
   unique()
 
-# Get head to head odds for all MATCH_ODDS codes
-all_head_to_head_odds <-
-  map(match_odds_codes, get_head_to_head_odds, all_afl_market_codes, .progress = TRUE) |> 
+# Get safe version of function
+safe_get_disposal_odds <- safely(get_disposal_odds)
+
+# Get disposal odds for all MATCH_ODDS codes
+all_disposal_odds <-
+  map(disposal_codes, safe_get_disposal_odds, all_afl_market_codes, .progress = TRUE) |> 
+  # Get result part
+  map("result") |>
+  # Keep only non null
+  keep(~ !is.null(.x)) |>
   bind_rows()
 
+# Add player teams to disposals
+all_disposal_odds <-
+  all_disposal_odds |> 
+left_join(player_names, by = c("player_name" = "player_full_name")) |> 
+  rename(player_team = team_name) |> 
+  mutate(opposition_team = ifelse(home_team == player_team, away_team, home_team)) |>
+  relocate(player_team, opposition_team, .after = player_name)
+
 # Write to CSV
-write_csv(all_head_to_head_odds, "Data/scraped_odds/betfair_h2h.csv")
+write_csv(all_disposal_odds, "Data/scraped_odds/betfair_player_disposals.csv")
