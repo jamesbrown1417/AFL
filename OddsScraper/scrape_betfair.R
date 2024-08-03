@@ -168,9 +168,16 @@ match_odds_codes <-
   pull(market_id) |> 
   unique()
 
+# Get safe version of function
+safe_get_head_to_head_odds <- safely(get_head_to_head_odds)
+
 # Get head to head odds for all MATCH_ODDS codes
 all_head_to_head_odds <-
-  map(match_odds_codes, get_head_to_head_odds, all_afl_market_codes, .progress = TRUE) |> 
+  map(match_odds_codes, safe_get_head_to_head_odds, all_afl_market_codes, .progress = TRUE) |> 
+  # Get result part
+  map("result") |>
+  # Keep only non null
+  keep(~ !is.null(.x)) |>
   bind_rows()
 
 # Write to CSV

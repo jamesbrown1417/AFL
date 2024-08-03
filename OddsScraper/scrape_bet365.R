@@ -346,7 +346,7 @@ read_bet365_goals_html <- function(html_path) {
     bet365_goal_odds_5plus <-
         bet365_goal_odds[bet365_indices + length(bet365_goals_player_names) * 4]
     
-    # Get 6+ disposals odds
+    # Get 6+ goals odds
     bet365_goal_odds_6plus <-
         bet365_goal_odds[bet365_indices + length(bet365_goals_player_names) * 5]
     
@@ -483,21 +483,21 @@ read_bet365_disposal_specials_html <- function(html_path) {
   
   # Player names
   bet365_disposals_player_names <-
-    bet365_disposal_specials[[2]] |>
+    bet365_disposal_specials[[1]] |>
     html_nodes(".gl-Market_General-columnheader") |> 
     html_nodes(".bbl-MarketColumnHeaderLeftAlign_Label ") |>
     html_text()
   
   # Odds
   bet365_disposals_odds <-
-    bet365_disposal_specials[[2]] |>
+    bet365_disposal_specials[[1]] |>
     html_nodes(".gl-Market_General-columnheader") |> 
     html_nodes(".bbl-BetBuilderParticipant_Odds ") |>
     html_text()
   
   # Lines
   bet365_disposals_lines <-
-    bet365_disposal_specials[[2]] |>
+    bet365_disposal_specials[[1]] |>
     html_nodes(".gl-Market_General-columnheader") |> 
     html_nodes(".bbl-BetBuilderParticipantLabel_Name ") |>
     html_text()
@@ -731,7 +731,7 @@ bet365_disposals_lines <-
 # Combine
 bet365_disposals <-
   bet365_disposals |> 
-  bind_rows(bet365_disposals_lines) |> 
+  # bind_rows(bet365_disposals_lines) |> 
   bind_rows(bet365_disposal_specials)
 
 # Write to rds
