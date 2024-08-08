@@ -9,24 +9,14 @@ library(tidyverse)
 #===============================================================================
 
 # Get Data
-source("Sportsbet/sportsbet_sgm.R")
-player_points_data <- read_rds("../../Data/processed_odds/all_player_points.rds")
-player_assists_data <- read_rds("../../Data/processed_odds/all_player_assists.rds")
-player_rebounds_data <- read_rds("../../Data/processed_odds/all_player_rebounds.rds")
-player_pras_data <- read_rds("../../Data/processed_odds/all_player_pras.rds")
-player_steals_data <- read_rds("../../Data/processed_odds/all_player_steals.rds")
-player_threes_data <- read_rds("../../Data/processed_odds/all_player_threes.rds")
-player_blocks_data <- read_rds("../../Data/processed_odds/all_player_blocks.rds")
+source("SGM/Sportsbet/sportsbet_sgm.R")
+player_disposals_data <- read_rds("Data/processed_odds/all_player_disposals.rds")
+player_goals_data <- read_rds("Data/processed_odds/all_player_goals.rds")
 
 # Get those where the sportsbet Odds diff for the season is greater than 0
 sportsbet_positive <-
-  player_points_data |>
-  bind_rows(player_assists_data) |>
-  bind_rows(player_rebounds_data) |>
-  bind_rows(player_pras_data) |>
-  bind_rows(player_steals_data) |>
-  bind_rows(player_threes_data) |>
-  bind_rows(player_blocks_data) |>
+  player_disposals_data |>
+  bind_rows(player_goals_data) |>
   arrange(player_name, market_name, line, desc(over_price)) |>
   filter(agency == "Sportsbet") |>
   transmute(match,
@@ -35,10 +25,8 @@ sportsbet_positive <-
             market_name,
             line,
             price = over_price,
-            type = "Overs",
-            diff_over_2023_24,
             diff_over_last_10) |> 
-  filter(diff_over_2023_24 > 0.05 & diff_over_last_10 > 0.05) |> 
+  filter(diff_over_last_10 > 0) |> 
   select(-price)
 
 #===============================================================================
@@ -48,14 +36,13 @@ sportsbet_positive <-
 # All bets
 sportsbet_sgm_bets <-
   sportsbet_sgm |> 
-  select(match, player_name, player_team, market_name, line, price,type, contains("id")) |> 
+  select(match, player_name, player_team, market_name, line, price, contains("id")) |> 
   left_join(sportsbet_positive) |> 
   filter(!is.na(diff_over_last_10))
 
 # Filter to only Overs
 sportsbet_sgm_bets <-
   sportsbet_sgm_bets |> 
-  filter(type == "Overs") |> 
   distinct(match, player_name, market_name, line, .keep_all = TRUE)
 
 # Generate all combinations of two rows
@@ -68,7 +55,7 @@ list_of_dataframes <-
     .f = function(i) {
       sportsbet_sgm_bets[row_combinations[, i], ] |> 
         mutate(combination = i)
-    }
+    }, .progress = TRUE
   )
 
 # Keep only those where the match is the same, player name is the same and market name is not the same

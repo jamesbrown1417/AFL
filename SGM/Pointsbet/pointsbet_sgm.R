@@ -2,15 +2,24 @@ library(httr)
 library(jsonlite)
 library(dplyr)
 library(purrr)
-library(mongolite)
+library(tidyverse)
 
 # Pointsbet SGM-----------------------------------------------------------------
+pointsbet_sgm_list <-
+  list(
+    read_csv("Data/scraped_odds/pointsbet_player_disposals.csv"),
+    read_csv("Data/scraped_odds/pointsbet_player_fantasy_points.csv"),
+    read_csv("Data/scraped_odds/pointsbet_player_goals.csv"),
+    read_csv("Data/scraped_odds/pointsbet_player_tackles.csv"),
+    read_csv("Data/scraped_odds/pointsbet_player_marks.csv")
+  )
+
 pointsbet_sgm <-
-  read_csv("Data/scraped_odds/pointsbet_player_disposals.csv") |> 
-  bind_rows(read_csv("Data/scraped_odds/pointsbet_player_goals.csv")) |> 
-  bind_rows(read_csv("Data/scraped_odds/pointsbet_player_fantasy_points.csv")) |> 
-  rename(price = over_price) |> 
-  distinct(match, player_name, line, market_name, agency, .keep_all = TRUE) |> 
+  pointsbet_sgm_list |> 
+  keep(~nrow(.x) > 0) |>
+  bind_rows() |>
+  rename(price = over_price) |>  
+  distinct(match, player_name, line, market_name, agency, .keep_all = TRUE) |>
   select(-contains("under"))
 
 #===============================================================================
@@ -115,7 +124,7 @@ call_sgm_pointsbet <- function(data, player_names, stat_counts, markets) {
 
 # call_sgm_pointsbet(
 #   data = pointsbet_sgm,
-# player_names = c("Rory Laird", "Chayce Jones"),
-# stat_counts = c(69.5, 69.5),
-# markets = c("Player Fantasy Points", "Player Fantasy Points")
+# player_names = c("Charlie Curnow", "Blake Acres"),
+# stat_counts = c(2.5, 19.5),
+# markets = c("Player Goals", "Player Disposals")
 # )

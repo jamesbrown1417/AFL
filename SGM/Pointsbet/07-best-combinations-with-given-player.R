@@ -9,7 +9,7 @@ library(tidyverse)
 #===============================================================================
 
 # Get Data
-source("Pointsbet/pointsbet_sgm.R")
+source("SGM/Pointsbet/pointsbet_sgm.R")
 
 #===============================================================================
 # Get all 2 way combinations
@@ -18,13 +18,8 @@ source("Pointsbet/pointsbet_sgm.R")
 # All bets
 pointsbet_sgm_bets <-
   pointsbet_sgm |> 
-  select(match, player_name, player_team, market_name, line, price,type, contains("key"))
-
-# Filter to only Overs
-pointsbet_sgm_bets <-
-  pointsbet_sgm_bets |> 
-  # filter(type == "Overs") |> 
-  distinct(match, player_name, market_name, line, type, .keep_all = TRUE)
+  select(match, player_name, player_team, market_name, line, price, contains("key")) |> 
+  distinct(match, player_name, market_name, line, .keep_all = TRUE)
 
 # Odds below 1.2
 pointsbet_sgm_bets_combine <-
@@ -32,10 +27,9 @@ pointsbet_sgm_bets_combine <-
   filter(price < 1.2)
 
 # Get Desired Player, line and Market
-desired_player <- "Luke Kennard"
-desired_market <- "Player Rebounds"
-desired_line <- 3.5
-desired_type <- "Unders"
+desired_player <- "Darcy Cameron"
+desired_market <- "Player Disposals"
+desired_line <- 14.5
 
 # Get row number of desired player
 desired_player_row <-
@@ -43,8 +37,7 @@ desired_player_row <-
   mutate(rn = row_number()) |> 
   filter(player_name == desired_player,
          market_name == desired_market,
-         line == desired_line,
-         type == desired_type)
+         line == desired_line)
 
 # Add to odds below 1.2
 pointsbet_sgm_bets_combine <-
@@ -90,11 +83,10 @@ apply_sgm_function <- function(tibble) {
   
   # Call function
   call_sgm_pointsbet(
-    data = tibble,
+    data = pointsbet_sgm,
     player_names = tibble$player_name,
-    prop_line = tibble$line,
-    prop_type = tibble$market_name,
-    over_under = tibble$type
+    stat_counts = tibble$line,
+    markets = tibble$market_name
   )
 }
 

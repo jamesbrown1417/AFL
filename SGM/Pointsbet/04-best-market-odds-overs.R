@@ -10,7 +10,10 @@ library(tidyverse)
 
 # Get Data
 source("SGM/Pointsbet/pointsbet_sgm.R")
+
 player_disposals_data <- read_rds("Data/processed_odds/all_player_disposals.rds")
+player_marks_data <- read_rds("Data/processed_odds/all_player_marks.rds")
+player_tackles_data <- read_rds("Data/processed_odds/all_player_tackles.rds")
 player_fantasy_points_data <- read_rds("Data/processed_odds/all_player_fantasy_points.rds")
 player_goals_data <- read_rds("Data/processed_odds/all_player_goals.rds")
 
@@ -19,6 +22,8 @@ pointsbet_best <-
   player_disposals_data |>
   bind_rows(player_fantasy_points_data) |>
   bind_rows(player_goals_data) |>
+  bind_rows(player_marks_data) |>
+  bind_rows(player_tackles_data) |>
   arrange(player_name, market_name, line, desc(over_price)) |>
   group_by(player_name, market_name, line) |>
   slice_head(n = 1) |>
@@ -50,10 +55,9 @@ pointsbet_sgm_bets <-
 # Filter to only Overs
 pointsbet_sgm_bets <-
   pointsbet_sgm_bets |> 
-  filter(type == "Overs") |> 
   distinct(match, player_name, market_name, line, .keep_all = TRUE) |> 
   filter(!is.na(player_name)) |> 
-  filter(diff_over_last_10 > 0.1)
+  filter(diff_over_last_10 > 0)
 
 # Generate all combinations of two rows
 row_combinations <- combn(nrow(pointsbet_sgm_bets), 2)
@@ -73,7 +77,9 @@ retained_combinations <-
   list_of_dataframes |> 
   # Keep only dataframes where first and second row match are equal
   keep(~.x$match[1] == .x$match[2]) |> 
-  keep(~prod(.x$price) >= 1.5 & prod(.x$price) <= 5)
+  # Keep only dataframes where first and second row player_name are not equal
+  keep(~.x$player_name[1] != .x$player_name[2]) |>
+  keep(~prod(.x$price) >= 1.1 & prod(.x$price) <= 20)
 
 #===============================================================================
 # Call function
@@ -83,7 +89,7 @@ retained_combinations <-
 apply_sgm_function <- function(tibble) {
   
   # Random Pause between 0.5 and 0.7 seconds
-  Sys.sleep(runif(1, 0.5, 0.8))
+  Sys.sleep(runif(1, 0.5, 0.7))
   
   # Call function
   call_sgm_pointsbet(
@@ -111,4 +117,3 @@ results_table <-
   mutate(Diff = 1/Unadjusted_Price - 1/Adjusted_Price) |> 
   mutate(Diff = round(Diff, 2)) |>
   arrange(desc(Diff))
-
