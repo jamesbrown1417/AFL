@@ -17,11 +17,6 @@ empirical_probabilities_2023 <- read_rds("Data/empirical_probabilities_2023.rds"
 # Get fixtures data
 current_season_fixture <- read_rds("Data/current_fixture.rds")
 
-# # Google sheets authentification -----------------------------------------------
-# options(gargle_oauth_cache = ".secrets")
-# drive_auth(cache = ".secrets", email = "cuzzy.punting@gmail.com")
-# gs4_auth(token = drive_token())
-
 # Run all odds scraping scripts-------------------------------------------------
 run_scraping <- function(script_name) {
   tryCatch({
@@ -31,21 +26,26 @@ run_scraping <- function(script_name) {
   })
 }
 
-# Run all odds scraping scripts
-run_scraping("OddsScraper/scrape_betr.R")
-run_scraping("OddsScraper/scrape_BetRight.R")
-# run_scraping("OddsScraper/scrape_Palmerbet.R")
-run_scraping("OddsScraper/scrape_pointsbet.R")
-run_scraping("OddsScraper/scrape_sportsbet.R")
-run_scraping("OddsScraper/scrape_TAB.R")
-run_scraping("OddsScraper/scrape_TopSport.R")
-run_scraping("OddsScraper/scrape_bet365.R")
-# run_scraping("OddsScraper/scrape_bluebet.R")
-run_scraping("OddsScraper/Neds/scrape_neds.R")
-# run_scraping("OddsScraper/scrape_unibet.R")
-run_scraping("OddsScraper/scrape_dabble.R")
-run_scraping("OddsScraper/scrape_unibet.R")
-run_scraping("OddsScraper/scrape_betfair.R")
+# List of scripts to run
+scraping_scripts <- c(
+  "OddsScraper/scrape_betr.R",
+  "OddsScraper/scrape_BetRight.R",
+  # "OddsScraper/scrape_Palmerbet.R",
+  "OddsScraper/scrape_pointsbet.R",
+  "OddsScraper/scrape_sportsbet.R",
+  "OddsScraper/scrape_TAB.R",
+  "OddsScraper/scrape_TopSport.R",
+  "OddsScraper/scrape_bet365.R",
+  # "OddsScraper/scrape_bluebet.R",
+  "OddsScraper/Neds/scrape_neds.R",
+  # "OddsScraper/scrape_unibet.R",
+  "OddsScraper/scrape_dabble.R",
+  "OddsScraper/scrape_unibet.R",
+  "OddsScraper/scrape_betfair.R"
+)
+
+# Run all odds scraping scripts in parallel
+future_map(scraping_scripts, run_scraping)
 
 ##%######################################################%##
 #                                                          #
