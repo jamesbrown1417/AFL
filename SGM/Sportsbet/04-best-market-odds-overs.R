@@ -10,19 +10,18 @@ library(tidyverse)
 
 # Get Data
 source("SGM/Sportsbet/sportsbet_sgm.R")
+
 player_disposals_data <- read_rds("Data/processed_odds/all_player_disposals.rds")
-player_fantasy_points_data <- read_rds("Data/processed_odds/all_player_fantasy_points.rds")
 player_goals_data <- read_rds("Data/processed_odds/all_player_goals.rds")
 
 # Get those markets where sportsbet has the best odds in the market
 sportsbet_best <-
   player_disposals_data |>
-  bind_rows(player_fantasy_points_data) |>
   bind_rows(player_goals_data) |>
   arrange(player_name, market_name, line, desc(over_price)) |>
-  # group_by(player_name, market_name, line) |>
-  # slice_head(n = 1) |>
-  # ungroup() |>
+  group_by(player_name, market_name, line) |>
+  slice_head(n = 1) |>
+  ungroup() |>
   filter(agency == "Sportsbet") |>
   transmute(match,
             player_name,
@@ -34,7 +33,7 @@ sportsbet_best <-
             diff_over_2023,
             diff_over_last_10) |> 
   select(-price)
-# filter(market_name == "Player Fantasy Points")
+  # filter(market_name == "Player Fantasy Points")
 
 #===============================================================================
 # Get all 2 way combinations
@@ -50,10 +49,9 @@ sportsbet_sgm_bets <-
 # Filter to only Overs
 sportsbet_sgm_bets <-
   sportsbet_sgm_bets |> 
-  filter(type == "Overs") |> 
   distinct(match, player_name, market_name, line, .keep_all = TRUE) |> 
   filter(!is.na(player_name)) |> 
-  filter(diff_over_last_10 > 0.05)
+  filter(diff_over_last_10 > 0)
 
 # Generate all combinations of two rows
 row_combinations <- combn(nrow(sportsbet_sgm_bets), 2)
@@ -73,7 +71,9 @@ retained_combinations <-
   list_of_dataframes |> 
   # Keep only dataframes where first and second row match are equal
   keep(~.x$match[1] == .x$match[2]) |> 
-  keep(~prod(.x$price) >= 1.5 & prod(.x$price) <= 3)
+  # Keep only dataframes where first and second row player_name are not equal
+  keep(~.x$player_name[1] != .x$player_name[2]) |>
+  keep(~prod(.x$price) >= 1.1 & prod(.x$price) <= 20)
 
 #===============================================================================
 # Call function
@@ -83,7 +83,7 @@ retained_combinations <-
 apply_sgm_function <- function(tibble) {
   
   # Random Pause between 0.5 and 0.7 seconds
-  Sys.sleep(runif(1, 0.5, 0.8))
+  Sys.sleep(runif(1, 0.5, 0.7))
   
   # Call function
   call_sgm_sportsbet(
@@ -111,4 +111,3 @@ results_table <-
   mutate(Diff = 1/Unadjusted_Price - 1/Adjusted_Price) |> 
   mutate(Diff = round(Diff, 2)) |>
   arrange(desc(Diff))
-

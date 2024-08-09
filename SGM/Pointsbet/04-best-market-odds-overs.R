@@ -57,8 +57,7 @@ pointsbet_sgm_bets <-
   pointsbet_sgm_bets |> 
   distinct(match, player_name, market_name, line, .keep_all = TRUE) |> 
   filter(!is.na(player_name)) |> 
-  filter(diff_over_last_10 > 0) |> 
-  filter(match == "Sydney Swans v Collingwood Magpies")
+  filter(diff_over_last_10 > 0)
 
 # Generate all combinations of two rows
 row_combinations <- combn(nrow(pointsbet_sgm_bets), 2)
