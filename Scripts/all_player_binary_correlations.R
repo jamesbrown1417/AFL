@@ -16,6 +16,13 @@ plan(multisession)
 
 source("Functions/get_binary_correlations.R")
 
+# Read in Current Season Data
+afl_fantasy_2015_2023_data <- read_rds("../Data/afl_fantasy_2015_2023_data.rds")
+afl_fantasy_2024_data <- read_rds("../Data/afl_fantasy_2024_data.rds")
+
+# Combine
+all_data <- bind_rows(afl_fantasy_2015_2023_data, afl_fantasy_2024_data)
+
 #===============================================================================
 # Get pairwise tibble of players and their medians
 #===============================================================================
