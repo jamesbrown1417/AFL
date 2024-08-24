@@ -20,7 +20,7 @@ fetch_player_stats_afl(season=2024)
 player_attributes_2024 <-
 fetch_player_details_afl(season = 2024)
 
-# Perform One Hot Encoding of position column
+# Perform One Hot Encoding of position column 
 player_attributes_2024_onehot <-
   player_attributes_2024 |>
   mutate(position = factor(position)) |>
