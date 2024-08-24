@@ -3,23 +3,26 @@ library(tidyverse)
 library(rvest)
 library(httr2)
 library(jsonlite)
+library(tidyjson)
 
-# Function to fix team names
-source("Functions/fix_team_names.R")
+# Get Squads
+epl_squads <- read_rds("Data/epl_squads.rds")
 
-# Player names file
-player_names <- read_rds("Data/2024_start_positions_and_prices.rds")
-player_names <- player_names |> select(player_full_name, team_name)
+# Get Fix Team Names Function
+source("Scripts/fix_team_names.r")
+
+# Get Fix Player Names Function
+source("Scripts/fix_player_names.r")
 
 #===============================================================================
 # Get JSON for each match
 #===============================================================================
 
 # Read in df
-df <- read_csv("OddsScraper/Neds/neds_afl_match_urls.csv")
+df <- read_csv("OddsScraper/EPL/Neds/neds_epl_match_urls.csv")
 
 # Get match json files
-json_match_files <- list.files("OddsScraper/Neds/", pattern = "^data_.*.json", full.names = TRUE)
+json_match_files <- list.files("OddsScraper/EPL/Neds/", pattern = "^data_.*.json", full.names = TRUE)
 
 event_json_list <- map(json_match_files, ~fromJSON(.x))
 
@@ -112,7 +115,7 @@ event_ids_df <-
 # Filter to only include head to head markets
 h2h_data <-
 market_df |> 
-    filter(market_name == "Match Betting") |> 
+    filter(market_name == "Match Result") |> 
     select(-market_name)
 
 # Home teams
@@ -122,6 +125,13 @@ home_teams <-
     filter(entrants == home_team) |> 
     select(match = match_name, home_team, home_win = price) |> 
     mutate(home_team = fix_team_names(home_team))
+
+# Draw
+draws <-
+    h2h_data |> 
+    separate(match_name, c("home_team", "away_team"), sep = " vs ", remove = FALSE) |> 
+    filter(entrants == "Draw") |> 
+    select(match = match_name, draw = price)
 
 # Away teams
 away_teams <-
@@ -134,12 +144,13 @@ away_teams <-
 # Merge home and away teams
 h2h_data <-
     home_teams |> 
+    left_join(draws, by = "match") |>
     left_join(away_teams, by = c("match")) |> 
     mutate(match = paste(home_team, "v", away_team, sep = " ")) |>
-    mutate(margin = round(1 / home_win + 1 / away_win, digits = 2)) |>
+    mutate(margin = round(1 / home_win + 1/draw + 1 / away_win, digits = 2)) |>
     mutate(agency = "Neds") |>
     mutate(market_name = "Head To Head") |> 
-    select(match, market_name, home_team, away_team, home_win, away_win, margin, agency)
+    select(match, market_name, home_team, away_team, home_win, draw, away_win, margin, agency)
 
 ##%######################################################%##
 #                                                          #
@@ -334,7 +345,7 @@ player_goals_data <-
 # Filter to only include player fantasy markets
 player_fantasy_data <-
   market_df |> 
-  filter(str_detect(market_name, "(Player Fantasy O/U)|(To Have \\d+\\+ AFL Fantasy Points)"))
+  filter(str_detect(market_name, "(Player Fantasy O/U)|(To Have \\d+\\+ EPL Fantasy Points)"))
 
 # Overs
 fantasy_overs <-
