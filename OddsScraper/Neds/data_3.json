@@ -16,6 +16,13 @@
             "sort_order": 10,
             "market_id": "4e00bd7b-680a-410c-a541-b818b82bda39"
         },
+        "89da3618-c72f-480b-b7c5-9a4685f3a5d8": {
+            "id": "89da3618-c72f-480b-b7c5-9a4685f3a5d8",
+            "name": "Under",
+            "visible": true,
+            "sort_order": 20,
+            "market_id": "ef679212-91dc-4fce-a128-6269b9569112"
+        },
         "8ecebf7b-4cd3-4d10-b473-52d0a661bb0b": {
             "id": "8ecebf7b-4cd3-4d10-b473-52d0a661bb0b",
             "name": "Subiaco",
@@ -31,6 +38,13 @@
             "visible": true,
             "sort_order": 20,
             "market_id": "4e00bd7b-680a-410c-a541-b818b82bda39"
+        },
+        "ccacf3b7-5d07-4867-b054-0b3677b43039": {
+            "id": "ccacf3b7-5d07-4867-b054-0b3677b43039",
+            "name": "Over",
+            "visible": true,
+            "sort_order": 10,
+            "market_id": "ef679212-91dc-4fce-a128-6269b9569112"
         }
     },
     "events": {
@@ -54,24 +68,33 @@
             },
             "competition_id": "95553dad-b992-4773-b6fe-4b1572dc13df",
             "market_type_group_ids": [
-                "29edb5e1-a717-4769-8bcd-2d43ec38d828"
+                "29edb5e1-a717-4769-8bcd-2d43ec38d828",
+                "68b6bfcc-f17e-42e9-ae36-300a4d98ba5f"
             ],
             "market_type_group_markets": [
                 {
                     "market_type_group_id": "29edb5e1-a717-4769-8bcd-2d43ec38d828",
                     "market_ids": [
                         "4e00bd7b-680a-410c-a541-b818b82bda39",
-                        "a79f9c87-b533-4860-82af-dcc79375fcca"
+                        "a79f9c87-b533-4860-82af-dcc79375fcca",
+                        "ef679212-91dc-4fce-a128-6269b9569112"
+                    ]
+                },
+                {
+                    "market_type_group_id": "68b6bfcc-f17e-42e9-ae36-300a4d98ba5f",
+                    "market_ids": [
+                        "ef679212-91dc-4fce-a128-6269b9569112"
                     ]
                 }
             ],
-            "market_count": 2,
+            "market_count": 3,
             "main_markets": [
                 "4e00bd7b-680a-410c-a541-b818b82bda39"
             ],
             "market_ids": [
                 "4e00bd7b-680a-410c-a541-b818b82bda39",
-                "a79f9c87-b533-4860-82af-dcc79375fcca"
+                "a79f9c87-b533-4860-82af-dcc79375fcca",
+                "ef679212-91dc-4fce-a128-6269b9569112"
             ],
             "category_id": "23d497e6-8aab-4309-905b-9421f42c9bc5"
         }
@@ -82,6 +105,12 @@
             "category_id": "23d497e6-8aab-4309-905b-9421f42c9bc5",
             "name": "Top Markets",
             "priority": 340
+        },
+        "68b6bfcc-f17e-42e9-ae36-300a4d98ba5f": {
+            "id": "68b6bfcc-f17e-42e9-ae36-300a4d98ba5f",
+            "category_id": "23d497e6-8aab-4309-905b-9421f42c9bc5",
+            "name": "Total Markets",
+            "priority": 160
         }
     },
     "markets": {
@@ -124,11 +153,32 @@
                 "36a0d07a-6473-4577-b6be-a5a574612e52"
             ],
             "num_winners": 1
+        },
+        "ef679212-91dc-4fce-a128-6269b9569112": {
+            "id": "ef679212-91dc-4fce-a128-6269b9569112",
+            "event_id": "6b304421-8397-43d5-a593-c3fcd2b85579",
+            "market_type_id": "9cc10db4-c9bb-49f2-bba6-e4ea6eabcb4a",
+            "market_status_id": "4bc8fe96-296b-4b4c-aea4-85c94f63b9c6",
+            "name": "Total Points",
+            "advertised_start": {
+                "seconds": 1724560200
+            },
+            "actual_start": {
+                "seconds": 1724560200
+            },
+            "handicap": 155.5,
+            "visible": true,
+            "entrant_ids": [
+                "ccacf3b7-5d07-4867-b054-0b3677b43039",
+                "89da3618-c72f-480b-b7c5-9a4685f3a5d8"
+            ],
+            "num_winners": 1
         }
     },
     "markets_allow_cashout": {
         "4e00bd7b-680a-410c-a541-b818b82bda39": true,
-        "a79f9c87-b533-4860-82af-dcc79375fcca": false
+        "a79f9c87-b533-4860-82af-dcc79375fcca": false,
+        "ef679212-91dc-4fce-a128-6269b9569112": false
     },
     "prices": {
         "36a0d07a-6473-4577-b6be-a5a574612e52:940b8704-e497-4a76-b390-00918ff7d282:": {
@@ -143,6 +193,12 @@
                 "denominator": 5
             }
         },
+        "89da3618-c72f-480b-b7c5-9a4685f3a5d8:940b8704-e497-4a76-b390-00918ff7d282:": {
+            "odds": {
+                "numerator": 22,
+                "denominator": 25
+            }
+        },
         "8ecebf7b-4cd3-4d10-b473-52d0a661bb0b:940b8704-e497-4a76-b390-00918ff7d282:": {
             "odds": {
                 "numerator": 22,
@@ -151,7 +207,13 @@
         },
         "aa896e82-73c1-4658-b5c8-4dd9d4f59296:940b8704-e497-4a76-b390-00918ff7d282:": {
             "odds": {
-                "numerator": 12,
+                "numerator": 47,
+                "denominator": 100
+            }
+        },
+        "ccacf3b7-5d07-4867-b054-0b3677b43039:940b8704-e497-4a76-b390-00918ff7d282:": {
+            "odds": {
+                "numerator": 22,
                 "denominator": 25
             }
         }
