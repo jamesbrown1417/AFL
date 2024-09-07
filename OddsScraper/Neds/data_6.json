@@ -1,58 +1,42 @@
 {
     "entrants": {
-        "401f9306-b502-43c2-8361-8cd1380feed7": {
-            "id": "401f9306-b502-43c2-8361-8cd1380feed7",
-            "name": "East Perth",
-            "home_away": "HOME",
-            "visible": true,
-            "sort_order": 10,
-            "market_id": "0b972bcb-7cfd-4ee3-880c-837ce8b6a0f7"
-        },
-        "b287f307-fd72-400d-82b6-6f4c55ae38ac": {
-            "id": "b287f307-fd72-400d-82b6-6f4c55ae38ac",
-            "name": "Swan Districts",
+        "2076aee0-0d51-457c-9f67-544a2678f4d3": {
+            "id": "2076aee0-0d51-457c-9f67-544a2678f4d3",
+            "name": "Hawthorn",
             "home_away": "AWAY",
             "visible": true,
-            "sort_order": 20,
-            "market_id": "0b972bcb-7cfd-4ee3-880c-837ce8b6a0f7"
+            "sort_order": 2,
+            "market_id": "71aedbe8-3368-48a1-8972-4f7b79b73fb3"
         },
-        "d0d7ffae-b91b-4007-b4d7-4c38e56fa691": {
-            "id": "d0d7ffae-b91b-4007-b4d7-4c38e56fa691",
-            "name": "East Perth",
+        "6e92d8d9-5d60-43f8-95df-43ecf37b5ef7": {
+            "id": "6e92d8d9-5d60-43f8-95df-43ecf37b5ef7",
+            "name": "Port Adelaide",
             "home_away": "HOME",
             "visible": true,
-            "sort_order": 10,
-            "market_id": "87263eb7-56d7-402f-acc7-e452cf14a730"
-        },
-        "d2049183-d3b2-4c1a-9772-1e77d0dc73e9": {
-            "id": "d2049183-d3b2-4c1a-9772-1e77d0dc73e9",
-            "name": "Swan Districts",
-            "home_away": "AWAY",
-            "visible": true,
-            "sort_order": 20,
-            "market_id": "87263eb7-56d7-402f-acc7-e452cf14a730"
+            "sort_order": 1,
+            "market_id": "71aedbe8-3368-48a1-8972-4f7b79b73fb3"
         }
     },
     "events": {
-        "a23aa2db-a307-4fda-8384-fced8ec1120b": {
-            "id": "a23aa2db-a307-4fda-8384-fced8ec1120b",
-            "name": "East Perth vs Swan Districts",
+        "7dbb2c82-79cf-487d-ab7c-84c4f9864087": {
+            "id": "7dbb2c82-79cf-487d-ab7c-84c4f9864087",
+            "name": "Port Adelaide vs Hawthorn",
             "event_type": {
                 "id": "6bfa0efc-05df-4ae1-9b1e-152365290cfd",
                 "name": "Match"
             },
             "match_status": "BettingOpen",
-            "advertised_start": "2024-09-07T06:30:00Z",
-            "actual_start": "2024-09-07T06:30:00Z",
+            "advertised_start": "2024-09-13T09:40:00Z",
+            "actual_start": "2024-09-13T09:40:00Z",
             "visible": true,
-            "slug": "east-perth-vs-swan-districts",
+            "slug": "port-adelaide-vs-hawthorn",
             "competition": {
-                "id": "95553dad-b992-4773-b6fe-4b1572dc13df",
-                "name": "WAFL",
-                "sort_order": 8,
-                "region": "Aus"
+                "id": "ccff2e9a-5347-41aa-902a-bb6b1886d817",
+                "name": "AFL",
+                "sort_order": 1,
+                "region": "Australia"
             },
-            "competition_id": "95553dad-b992-4773-b6fe-4b1572dc13df",
+            "competition_id": "ccff2e9a-5347-41aa-902a-bb6b1886d817",
             "market_type_group_ids": [
                 "29edb5e1-a717-4769-8bcd-2d43ec38d828"
             ],
@@ -60,18 +44,16 @@
                 {
                     "market_type_group_id": "29edb5e1-a717-4769-8bcd-2d43ec38d828",
                     "market_ids": [
-                        "0b972bcb-7cfd-4ee3-880c-837ce8b6a0f7",
-                        "87263eb7-56d7-402f-acc7-e452cf14a730"
+                        "71aedbe8-3368-48a1-8972-4f7b79b73fb3"
                     ]
                 }
             ],
-            "market_count": 2,
+            "market_count": 1,
             "main_markets": [
-                "0b972bcb-7cfd-4ee3-880c-837ce8b6a0f7"
+                "71aedbe8-3368-48a1-8972-4f7b79b73fb3"
             ],
             "market_ids": [
-                "0b972bcb-7cfd-4ee3-880c-837ce8b6a0f7",
-                "87263eb7-56d7-402f-acc7-e452cf14a730"
+                "71aedbe8-3368-48a1-8972-4f7b79b73fb3"
             ],
             "category_id": "23d497e6-8aab-4309-905b-9421f42c9bc5"
         }
@@ -85,74 +67,41 @@
         }
     },
     "markets": {
-        "0b972bcb-7cfd-4ee3-880c-837ce8b6a0f7": {
-            "id": "0b972bcb-7cfd-4ee3-880c-837ce8b6a0f7",
-            "event_id": "a23aa2db-a307-4fda-8384-fced8ec1120b",
+        "71aedbe8-3368-48a1-8972-4f7b79b73fb3": {
+            "id": "71aedbe8-3368-48a1-8972-4f7b79b73fb3",
+            "event_id": "7dbb2c82-79cf-487d-ab7c-84c4f9864087",
             "market_type_id": "be25c37a-71ff-47f6-a1e2-02a494eb5a4d",
             "market_status_id": "4bc8fe96-296b-4b4c-aea4-85c94f63b9c6",
             "name": "Match Betting",
             "advertised_start": {
-                "seconds": 1725690600
+                "seconds": 1726220400
             },
             "actual_start": {
-                "seconds": 1725690600
+                "seconds": 1726220400
             },
             "is_primary": true,
             "visible": true,
             "entrant_ids": [
-                "401f9306-b502-43c2-8361-8cd1380feed7",
-                "b287f307-fd72-400d-82b6-6f4c55ae38ac"
-            ],
-            "num_winners": 1
-        },
-        "87263eb7-56d7-402f-acc7-e452cf14a730": {
-            "id": "87263eb7-56d7-402f-acc7-e452cf14a730",
-            "event_id": "a23aa2db-a307-4fda-8384-fced8ec1120b",
-            "market_type_id": "d04cddcd-5f42-4d17-ae1c-950dfdaa2c98",
-            "market_status_id": "4bc8fe96-296b-4b4c-aea4-85c94f63b9c6",
-            "name": "Line",
-            "advertised_start": {
-                "seconds": 1725690600
-            },
-            "actual_start": {
-                "seconds": 1725690600
-            },
-            "handicap": 13.5,
-            "visible": true,
-            "entrant_ids": [
-                "d0d7ffae-b91b-4007-b4d7-4c38e56fa691",
-                "d2049183-d3b2-4c1a-9772-1e77d0dc73e9"
+                "6e92d8d9-5d60-43f8-95df-43ecf37b5ef7",
+                "2076aee0-0d51-457c-9f67-544a2678f4d3"
             ],
             "num_winners": 1
         }
     },
     "markets_allow_cashout": {
-        "0b972bcb-7cfd-4ee3-880c-837ce8b6a0f7": true,
-        "87263eb7-56d7-402f-acc7-e452cf14a730": false
+        "71aedbe8-3368-48a1-8972-4f7b79b73fb3": true
     },
     "prices": {
-        "401f9306-b502-43c2-8361-8cd1380feed7:940b8704-e497-4a76-b390-00918ff7d282:": {
+        "2076aee0-0d51-457c-9f67-544a2678f4d3:940b8704-e497-4a76-b390-00918ff7d282:": {
             "odds": {
-                "numerator": 9,
+                "numerator": 13,
                 "denominator": 20
             }
         },
-        "b287f307-fd72-400d-82b6-6f4c55ae38ac:940b8704-e497-4a76-b390-00918ff7d282:": {
+        "6e92d8d9-5d60-43f8-95df-43ecf37b5ef7:940b8704-e497-4a76-b390-00918ff7d282:": {
             "odds": {
-                "numerator": 17,
-                "denominator": 10
-            }
-        },
-        "d0d7ffae-b91b-4007-b4d7-4c38e56fa691:940b8704-e497-4a76-b390-00918ff7d282:": {
-            "odds": {
-                "numerator": 22,
-                "denominator": 25
-            }
-        },
-        "d2049183-d3b2-4c1a-9772-1e77d0dc73e9:940b8704-e497-4a76-b390-00918ff7d282:": {
-            "odds": {
-                "numerator": 22,
-                "denominator": 25
+                "numerator": 5,
+                "denominator": 4
             }
         }
     }
