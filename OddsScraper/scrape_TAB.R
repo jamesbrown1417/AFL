@@ -313,11 +313,11 @@ player_goals_markets <-
 # Alternate Player Goals
 alternate_player_goals_markets <-
     all_tab_markets |> 
-    filter(str_detect(market_name, "(\\d+\\+ Goals$)|(A Goal)")) |> 
+    filter(str_detect(market_name, "(\\d+\\+ Goals$)|(A Goal$)")) |> 
     filter(!str_detect(market_name, "Quarter|Qtr")) |>
     filter(!str_detect(market_name, "Half")) |>
     filter(!str_detect(market_name, "Disposals")) |>
-    mutate(market_name = if_else(str_detect(market_name, "A Goal"), "1+ Goals", market_name))
+    mutate(market_name = if_else(str_detect(market_name, "A Goal$"), "1+ Goals", market_name))
 
 # Extract player names
 player_goals_markets <-
