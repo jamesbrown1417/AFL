@@ -308,3 +308,52 @@ fantasy_points_middles <-
 disposals_middles
 ```
 
+## Tab Miss By One
+```{r}
+# All Tab Overs
+all_tab_overs <-
+  all_player_disposals |>
+  filter(market_name == "Player Disposals") |>
+  select(
+    match,
+    market_name,
+    player_name,
+    player_team,
+    line,
+    over_price,
+    opposition_team,
+    agency
+  ) |> 
+  filter(agency == "TAB") |> 
+  filter(over_price |> between(1.5, 3)) |> 
+  rename(over_agency = agency)
+
+# All Unders
+all_unders <-
+  all_player_disposals |>
+  filter(!is.na(under_price)) |>
+  filter(market_name == "Player Disposals") |>
+  select(
+    match,
+    market_name,
+    player_name,
+    player_team,
+    line,
+    under_price,
+    opposition_team,
+    agency
+  ) |> 
+  rename(under_agency = agency)
+
+# Join
+tab_miss_by_one <-
+  all_tab_overs |>
+  inner_join(
+    all_unders) |>
+  relocate(under_price, .after = over_price) |>
+  mutate(margin = 1 / under_price + 1 / over_price) |>
+  arrange(margin) |>
+  mutate(margin = (1 - margin)) |>
+  mutate(margin = 100 * margin) |>
+  relocate(over_price, over_agency, under_price, under_agency, .after = opposition_team)
+```
