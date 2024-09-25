@@ -12,11 +12,7 @@ player_names <- player_names |> select(player_full_name, team_name)
 source("Functions/fix_team_names.R")
 
 # URL of website
-<<<<<<< HEAD
 topsport_url = "https://www.topsport.com.au/Sport/Aussie_Rules/AFL_-_Grand_Final/Matches"
-=======
-topsport_url = "https://www.topsport.com.au/Sport/Aussie_Rules/AFL_-_Preliminary_Finals/Matches"
->>>>>>> a3fca6d1f49fdcc1297f356772215256a936fda9
 
 #===============================================================================
 # Use rvest to get main market information-------------------------------------#
@@ -162,7 +158,15 @@ pick_your_own_disposals_markets <- unique(pick_your_own_disposals_markets)
 # Map function
 player_disposals_alternate <-
 map(pick_your_own_disposals_markets, read_topsport_html) |> 
-    bind_rows() |> 
+    bind_rows()
+
+# If no data, return empty tibble
+if (nrow(player_disposals_alternate) == 0) {
+  player_disposals_alternate <- tibble(Selection = character(), line = character(), Win = numeric(), match = character(), market_name = character(), agency = character())
+}
+
+player_disposals_alternate <-
+  player_disposals_alternate |> 
     mutate(line = as.numeric(line) - 0.5) |>
     rename(over_price = Win) |> 
     rename(player_name = Selection) |> 
@@ -195,7 +199,7 @@ if (length(player_disposals_markets) > 0) {
 
 # Map function
 player_disposals_lines <-
-    map(player_disposals_markets, read_topsport_html) |> 
+    map(player_disposals_markets, read_topsport_html, .progress = TRUE) |> 
     bind_rows() |> 
     mutate(line = as.numeric(line)) |>
     rename(over_price = Win)
@@ -241,6 +245,7 @@ player_disposals_lines_unders <-
           case_when(
               player_name == "Harrison Himmelberg" ~ "Harry Himmelberg",
               player_name == "Jordan de Goey" ~ "Jordan De Goey",
+              player_name == "Cameron Rayner" ~ "Cam Rayner",
             .default = player_name)) |>
     left_join(player_names[, c("player_full_name", "team_name")], by = c("player_name" = "player_full_name")) |>
     relocate(match, .before = player_name) |> 
