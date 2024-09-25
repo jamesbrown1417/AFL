@@ -12,7 +12,7 @@ player_names <- player_names |> select(player_full_name, team_name)
 source("Functions/fix_team_names.R")
 
 # URL of website
-topsport_url = "https://www.topsport.com.au/Sport/Aussie_Rules/AFL_-_Semi_Finals/Matches"
+topsport_url = "https://www.topsport.com.au/Sport/Aussie_Rules/AFL_-_Grand_Final/Matches"
 
 #===============================================================================
 # Use rvest to get main market information-------------------------------------#
