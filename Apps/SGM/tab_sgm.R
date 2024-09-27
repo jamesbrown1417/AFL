@@ -165,7 +165,7 @@ call_sgm_tab <- function(data, player_names, stat_counts, markets) {
 
 # call_sgm_tab(
 #   data = tab_sgm,
-#   player_names = c("Charlie Curnow", "Blake Acres"),
-#   stat_counts = c(2.5, 19.5),
-#   markets = c("Player Goals", "Player Disposals")
+#   player_names = c("James Jordon", "Joe Daniher"),
+#   stat_counts = c(14.5, 14.5),
+#   markets = c("Player Disposals", "Player Disposals")
 # )
