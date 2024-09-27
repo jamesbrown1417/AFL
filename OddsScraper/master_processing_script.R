@@ -33,7 +33,7 @@ scraping_scripts <- c(
   # "OddsScraper/scrape_Palmerbet.R",
   "OddsScraper/scrape_pointsbet.R",
   "OddsScraper/scrape_sportsbet.R",
-  "OddsScraper/scrape_TAB.R",
+  "OddsScraper/TAB/scrape_TAB.R",
   "OddsScraper/scrape_TopSport.R",
   "OddsScraper/scrape_bet365.R",
   # "OddsScraper/scrape_bluebet.R",

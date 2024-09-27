@@ -305,10 +305,15 @@ fantasy_points_middles <-
   distinct(match, player_name, over_agency, under_agency, .keep_all = TRUE) |>
   relocate(over_price, over_agency, under_price, under_agency, .after = opposition_team)
 
+disposals_middles <-
+disposals_middles |> 
+  filter(over_price > 1.10 & under_price > 1.10)
+
 disposals_middles
+
 ```
 
-## Tab Miss By One
+## Tab Miss By One Middles
 ```{r}
 # All Tab Overs
 all_tab_overs <-
@@ -325,7 +330,7 @@ all_tab_overs <-
     agency
   ) |> 
   filter(agency == "TAB") |> 
-  filter(over_price |> between(1.5, 3)) |> 
+  filter(over_price |> between(1.1, 8)) |> 
   rename(over_agency = agency)
 
 # All Unders
@@ -356,4 +361,58 @@ tab_miss_by_one <-
   mutate(margin = (1 - margin)) |>
   mutate(margin = 100 * margin) |>
   relocate(over_price, over_agency, under_price, under_agency, .after = opposition_team)
+
+tab_miss_by_one
+```
+
+## Tab Miss By One Arbs
+```{r}
+# All Tab Overs
+all_tab_overs <-
+  all_player_disposals |>
+  filter(market_name == "Player Disposals") |>
+  select(
+    match,
+    market_name,
+    player_name,
+    player_team,
+    line,
+    over_price,
+    opposition_team,
+    agency
+  ) |> 
+  filter(agency == "TAB") |> 
+  rename(over_agency = agency) |> 
+  mutate(line = line - 1)
+
+# All Unders
+all_unders <-
+  all_player_disposals |>
+  filter(!is.na(under_price)) |>
+  filter(market_name == "Player Disposals") |>
+  select(
+    match,
+    market_name,
+    player_name,
+    player_team,
+    line,
+    under_price,
+    opposition_team,
+    agency
+  ) |> 
+  rename(under_agency = agency)
+
+# Join
+tab_miss_by_one <-
+  all_tab_overs |>
+  inner_join(
+    all_unders) |>
+  relocate(under_price, .after = over_price) |>
+  mutate(margin = 1 / under_price + 1 / over_price) |>
+  arrange(margin) |>
+  mutate(margin = (1 - margin)) |>
+  mutate(margin = 100 * margin) |>
+  relocate(over_price, over_agency, under_price, under_agency, .after = opposition_team)
+
+tab_miss_by_one
 ```
