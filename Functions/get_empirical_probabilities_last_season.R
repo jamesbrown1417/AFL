@@ -11,7 +11,7 @@ library(zoo)
 #===============================================================================
 
 combined_stats <-
-  read_rds("Data/afl_fantasy_2015_2023_data.rds")
+  read_rds("Data/afl_fantasy_2015_2024_data.rds")
 
 #===============================================================================
 # Create a function that takes a player name + line and returns their hit rate
@@ -40,8 +40,8 @@ get_empirical_prob_season <- function(player_full_name, line, stat) {
     tidytable::mutate(
       above_line = as.numeric(!!sym(stat) > line)) |> 
     summarise(
-      n_games_2023 = n(),
-      emp_prob_2023 = mean(above_line, na.rm = TRUE)
+      n_games_2024 = n(),
+      emp_prob_2024 = mean(above_line, na.rm = TRUE)
     )
   
   return(last_season_stats)

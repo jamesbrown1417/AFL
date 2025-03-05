@@ -8,7 +8,7 @@ library(jsonlite)
 source("Functions/fix_team_names.R")
 
 # Player names file
-player_names <- read_rds("Data/2024_start_positions_and_prices.rds")
+player_names <- read_rds("Data/2025_start_positions_and_prices.rds")
 player_names <- player_names |> select(player_full_name, team_name)
 
 #===============================================================================

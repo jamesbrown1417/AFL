@@ -8,7 +8,8 @@
 # libraries and functions
 library(tidyverse)
 library(request)
-
+library(openxlsx)
+library(readxl)
 # Get URL of data from API
 url = "https://fantasy.afl.com.au/data/afl/players.json?_=1677977794603"
 
@@ -90,8 +91,68 @@ afl_player_api_data <-
   )) |>
   relocate(player_full_name, team_name, .after = last_name)
 
+# Write out as starting data for 2025 season
+write_rds(afl_player_api_data, "Data/2025_start_positions_and_prices.rds")
 
-# Write out as starting data for 2024 season
-write_rds(afl_player_api_data, "Data/2024_start_positions_and_prices.rds")
 
-afl_player_api_data |> openxlsx::write.xlsx("players.xlsx")
+afl_player_api_data$position <- apply(afl_player_api_data[, c("midfield_status", "defender_status", "ruck_status", "forward_status")], 1, function(row) {
+  # Get the positions that are TRUE
+  positions <- c()
+  if(row["midfield_status"]) positions <- c(positions, "Mid")
+  if(row["defender_status"]) positions <- c(positions, "Def")
+  if(row["ruck_status"]) positions <- c(positions, "Ruc")
+  if(row["forward_status"]) positions <- c(positions, "Fwd")
+  
+  # Combine them in the order specified
+  paste(positions, collapse = "/")
+})
+
+# Define position hierarchy and their priority
+position_priority <- c("forward_status", "defender_status", "ruck_status", "midfield_status")
+position_names <- c("Forward", "Defender", "Ruck", "Midfield")
+
+# Ensure position columns exist in the dataset
+missing_columns <- setdiff(position_priority, names(afl_player_api_data))
+if (length(missing_columns) > 0) stop("Error: Missing columns - ", paste(missing_columns, collapse = ", "))
+
+# Convert position columns to numeric (if necessary)
+afl_player_api_data <- afl_player_api_data %>%
+  mutate(across(all_of(position_priority), ~as.numeric(.)))
+
+# Function to determine the primary position
+get_primary_position <- function(forward_status, defender_status, ruck_status, midfield_status) {
+  positions <- c(forward_status, defender_status, ruck_status, midfield_status)
+  position_index <- which(positions == 1)
+  
+  if (length(position_index) > 0) {
+    return(position_names[position_index[1]])
+  } else {
+    return(NA_character_)
+  }
+}
+
+# Assign primary position using pmap_chr() with explicit argument names
+afl_player_api_data <- afl_player_api_data %>%
+  mutate(Primary_Position = pmap_chr(select(., all_of(position_priority)), 
+                                     ~get_primary_position(..1, ..2, ..3, ..4)))
+
+# Remove players with no valid position
+afl_player_api_data <- afl_player_api_data %>% filter(!is.na(Primary_Position))
+
+# Split data by position
+position_dfs <- split(afl_player_api_data, afl_player_api_data$Primary_Position)
+
+# Write to an Excel file
+output_file <- "players_by_position.xlsx"
+wb <- createWorkbook()
+
+for (pos in names(position_dfs)) {
+  addWorksheet(wb, pos)
+  writeData(wb, sheet = pos, position_dfs[[pos]])
+}
+
+saveWorkbook(wb, output_file, overwrite = TRUE)
+
+cat("Excel file saved as", output_file)
+
+# afl_player_api_data |> openxlsx::write.xlsx("players.xlsx")

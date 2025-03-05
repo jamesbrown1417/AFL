@@ -15,11 +15,11 @@ async def main():
     # options.add_argument("--headless=True")
 
     async with webdriver.Chrome(options=options) as driver:
-        await driver.get('https://www.bet365.com.au/#/AC/B36/C20925848/D48/E360013/F48/')
+        await driver.get('https://www.bet365.com.au/#/AC/B36/C21011844/D48/E360013/F48')
         await driver.sleep(0.1)
         
         # wait 100s for elem to exist
-        elem = await driver.find_element(By.XPATH, "//div[contains(@class, 'src-MarketGroup')]", timeout=100)
+        elem = await driver.find_element(By.XPATH, "//div[contains(@class, 'gl-MarketGroup_Wrapper ')]", timeout=100)
         body_html = await elem.get_attribute('outerHTML')
         
         # Write html to file - overwrite existing file

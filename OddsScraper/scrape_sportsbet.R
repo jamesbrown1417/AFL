@@ -9,7 +9,7 @@ library(glue)
 sportsbet_url = "https://www.sportsbet.com.au/betting/australian-rules"
 
 # Player names file
-player_names <- read_rds("Data/2024_start_positions_and_prices.rds")
+player_names <- read_rds("Data/2025_start_positions_and_prices.rds")
 player_names <- player_names |> select(player_full_name, team_name)
 
 # Function to fix team names
@@ -171,8 +171,10 @@ read_prop_url_metadata <- function(url) {
     # Make request and get response
     sb_response <-
         request(url) |>
-        req_perform() |>
-        resp_body_json()
+          req_user_agent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.77 Safari/537.36") |> 
+          req_headers("Referer" = "https://www.sportsbet.com.au") |>
+          req_perform() |> 
+          resp_body_json()
 
     # Empty vectors to append to
     class_external_id = c()
@@ -214,8 +216,10 @@ read_prop_url <- function(url) {
     # Make request and get response
     sb_response <-
         request(url) |>
-        req_perform() |>
-        resp_body_json()
+          req_user_agent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.77 Safari/537.36") |> 
+          req_headers("Referer" = "https://www.sportsbet.com.au") |>
+          req_perform() |> 
+          resp_body_json()
 
     # Empty vectors to append to
     prop_market_name = c()

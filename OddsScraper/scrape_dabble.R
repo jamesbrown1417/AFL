@@ -8,7 +8,7 @@ library(jsonlite)
 competitions_api_url = "https://api.dabble.com.au/competitions/ad4c78ec-e39d-45ee-8cec-ff5d485a3205/sport-fixtures"
 
 # Player names file
-player_names <- read_rds("Data/2024_start_positions_and_prices.rds")
+player_names <- read_rds("Data/2025_start_positions_and_prices.rds")
 player_names <- player_names |> select(player_full_name, team_name)
 
 # Function to fix team names

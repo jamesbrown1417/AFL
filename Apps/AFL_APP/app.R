@@ -23,9 +23,9 @@ os_type <- Sys.info()["sysname"]
 # gs4_auth(token = drive_token())
 
 # Read in data
-all_player_stats <- read_rds("../../Data/afl_fantasy_2015_2023_data.rds")
-data_2024 <- read_rds("../../Data/afl_fantasy_2024_data.rds")
-all_player_stats <- bind_rows(all_player_stats, data_2024)
+all_player_stats <- read_rds("../../Data/afl_fantasy_2015_2024_data.rds")
+# data_2025 <- read_rds("../../Data/afl_fantasy_2025_data.rds")
+# all_player_stats <- bind_rows(all_player_stats, data_2025)
 
 # Fix CBA Percentage
 all_player_stats$cba_percentage <- round(all_player_stats$cba_percentage, 3)

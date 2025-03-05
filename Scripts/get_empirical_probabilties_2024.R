@@ -13,13 +13,13 @@ plan(multisession)
 # Read in function
 source("Functions/get_empirical_probabilities_last_season.R")
 
-# Get 2023 players
-players_2023 <- combined_stats |> filter(season_name == "2023")
+# Get 2024 players
+players_2024 <- combined_stats |> filter(season_name == "2024")
 
 # Get list of all players this year
 players_this_year <-
   read_rds("Data/2024_start_positions_and_prices.rds") |> 
-  filter(player_full_name %in% players_2023$player_full_name) |>
+  filter(player_full_name %in% players_2024$player_full_name) |>
   pull(player_full_name) |> 
   unique()
 
@@ -101,4 +101,4 @@ combined_table <-
   bind_rows(disposals_table, fantasy_table, goal_table)
 
 # Save as RDS
-write_rds(combined_table, "Data/empirical_probabilities_2023.rds")
+write_rds(combined_table, "Data/empirical_probabilities_2024.rds")

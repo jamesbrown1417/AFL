@@ -6,7 +6,7 @@ library(jsonlite)
 library(glue)
 
 # Player names file
-player_names <- read_rds("Data/2024_start_positions_and_prices.rds")
+player_names <- read_rds("Data/2025_start_positions_and_prices.rds")
 player_names <- player_names |> select(player_full_name, team_name)
 
 # Function to fix team names
@@ -64,27 +64,6 @@ bet365_start_time <-
     html_nodes(".rcl-MarketHeaderLabel-isdate, .src-ParticipantFixtureDetailsHigher_BookCloses ") |> 
     html_text()
 
-# Get indices that contain a number surrounded by spaces
-start_time_indices <- which(str_detect(bet365_start_time, " \\d+ "))
-
-# Empty list
-result_list <- list()
-
-# Split into chunks from each index to the next and from the last to the end of the vector
-for (i in 1:length(start_time_indices)) {
-    if (i != length(start_time_indices)) {
-        result = (bet365_start_time[start_time_indices[i]:start_time_indices[i + 1]])
-        result = result[-length(result)]
-    } else {
-        result = (bet365_start_time[start_time_indices[i]:length(bet365_start_time)])
-    }
-    result_list[[i]] <- result
-}
-
-# Turn each vector into a tibble
-start_dates <- map(result_list, ~ expand_grid(.x[1], .x[2:length(.x)])) |> bind_rows()
-names(start_dates) <- c("start_date", "start_time")
-
 #===============================================================================
 # Create head to head table----------------------------------------------------#
 #===============================================================================
@@ -93,33 +72,27 @@ names(start_dates) <- c("start_date", "start_time")
 home_teams <- bet365_teams[seq(1, length(bet365_teams), 2)]
 home_odds <- bet365_h2h_odds[seq(1, length(bet365_h2h_odds), 2)]
 
-home_h2h <- tibble(home_teams, home_odds) |>
-    bind_cols(start_dates)
+home_h2h <- tibble(home_teams, home_odds)
 
 # Get Away teams - Even elements
 away_teams <- bet365_teams[seq(2, length(bet365_teams), 2)]
 away_odds <- bet365_h2h_odds[seq(2, length(bet365_h2h_odds), 2)]
 
-away_h2h <- tibble(away_teams, away_odds) |>
-    bind_cols(start_dates)
-
+away_h2h <- tibble(away_teams, away_odds)
+  
 # Combine together into one table
 bet365_h2h <-
     bind_cols(home_h2h, away_h2h) |>
     mutate(home_teams = fix_team_names(home_teams),
            away_teams = fix_team_names(away_teams)) |>
     transmute(match = paste(home_teams, away_teams, sep = " v "),
-              start_date = `start_date...3`,
-              start_time = `start_time...4`, 
               market_name = "Head To Head",
               home_team = home_teams,
               home_win = as.numeric(home_odds),
               away_team = away_teams,
               away_win = as.numeric(away_odds)) |>
-    mutate(start_time = dmy_hm(paste(start_date, "2023", start_time))) |> 
     mutate(margin = round((1/home_win + 1/away_win), digits = 3)) |> 
-    mutate(agency = "Bet365") |> 
-    select(-start_date)
+    mutate(agency = "Bet365")
 
 # Write to csv
 write_csv(bet365_h2h, "Data/scraped_odds/bet365_h2h.csv")
@@ -131,27 +104,28 @@ write_csv(bet365_h2h, "Data/scraped_odds/bet365_h2h.csv")
 # Get Home teams - Odd elements
 home_teams <- bet365_teams[seq(1, length(bet365_teams), 2)]
 home_handicap <- bet365_handicap[seq(1, length(bet365_handicap), 2)]
+# Remove empty strings
+home_handicap <- home_handicap[!home_handicap == " "]
+  
 home_handicap_price <- bet365_handicap_price[seq(1, length(bet365_handicap_price), 2)]
 
-home_handicap <- tibble(home_teams, home_handicap, home_handicap_price) |>
-    bind_cols(start_dates)
-
+home_handicap <- tibble(home_teams, home_handicap, home_handicap_price)
+  
 # Get Away teams - Even elements
 away_teams <- bet365_teams[seq(2, length(bet365_teams), 2)]
 away_handicap <- bet365_handicap[seq(2, length(bet365_handicap), 2)]
+# Remove empty strings
+away_handicap <- away_handicap[!away_handicap == " "]
 away_handicap_price <- bet365_handicap_price[seq(2, length(bet365_handicap_price), 2)]
 
-away_handicap <- tibble(away_teams, away_handicap, away_handicap_price) |>
-    bind_cols(start_dates)
-
+away_handicap <- tibble(away_teams, away_handicap, away_handicap_price)
+  
 # Combine together into one table
 bet365_handicap <-
     bind_cols(home_handicap, away_handicap) |>
     mutate(home_teams = fix_team_names(home_teams),
            away_teams = fix_team_names(away_teams)) |>
     transmute(match = paste(home_teams, away_teams, sep = " v "),
-              start_date = `start_date...4`,
-              start_time = `start_time...5`, 
               market_name = "Line",
               home_team = home_teams,
               home_line = as.numeric(home_handicap),
@@ -159,10 +133,8 @@ bet365_handicap <-
               away_team = away_teams,
               away_line = as.numeric(away_handicap),
               away_win = as.numeric(away_handicap_price)) |>
-    mutate(start_time = dmy_hm(paste(start_date, "2023", start_time))) |> 
     mutate(margin = round((1/home_win + 1/away_win), digits = 3)) |> 
-    mutate(agency = "Bet365") |> 
-    select(-start_date)
+    mutate(agency = "Bet365")
 
 # Write to csv
 write_csv(bet365_handicap, "Data/scraped_odds/bet365_line.csv")
@@ -700,6 +672,7 @@ bet365_disposal_specials <-
     )
   ) |>
   left_join(player_names, by = c("player_name" = "player_full_name")) |>
+  mutate(line = as.numeric(number_of_disposals)) |> 
   rename(player_team = team_name) |> 
   mutate(opposition_team = ifelse(home_team == player_team, away_team, home_team)) |> 
   transmute(match,
@@ -735,8 +708,8 @@ bet365_disposals_lines <-
 
 # Combine
 bet365_disposals <-
-  bet365_disposals |> 
-  # bind_rows(bet365_disposals_lines) |> 
+  bet365_disposals
+  bind_rows(bet365_disposals_lines) |> 
   bind_rows(bet365_disposal_specials)
 
 # Write to rds
