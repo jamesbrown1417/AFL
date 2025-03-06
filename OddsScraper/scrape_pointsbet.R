@@ -76,7 +76,10 @@ pointsbet_h2h_main <- function() {
   # Filter to head to head markets
   pointsbet_data_h2h <-
     pointsbet_data |>
-    filter(event == "Match Result")
+    filter(event == "Match Result") |> 
+    mutate(outcome = fix_team_names(outcome)) |> 
+    mutate(home_team = fix_team_names(home_team)) |> 
+    mutate(away_team = fix_team_names(away_team))
   
   # Home Teams
   pointsbet_data_h2h_home <-
@@ -86,8 +89,7 @@ pointsbet_h2h_main <- function() {
            start_time,
            market = event,
            home_team,
-           home_win = price) |> 
-    mutate(home_team = fix_team_names(home_team))
+           home_win = price)
   
   # Away Teams
   pointsbet_data_h2h_away <-
@@ -97,8 +99,7 @@ pointsbet_h2h_main <- function() {
            start_time,
            market = event,
            away_team,
-           away_win = price) |> 
-    mutate(away_team = fix_team_names(away_team))
+           away_win = price)
   
   # Combine
   pointsbet_h2h <-

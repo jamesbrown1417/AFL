@@ -65,7 +65,13 @@ all_odds_files <-
 all_home <-
   all_odds_files |>
   arrange(match, start_time, desc(home_win)) |>
-  select(match, start_time, market_name, home_team, home_win, home_liquidity, home_agency = agency) |> 
+  select(match,
+         start_time,
+         market_name,
+         home_team,
+         home_win,
+         #home_liquidity,
+         home_agency = agency) |> 
   mutate(start_time = date(start_time)) |> 
   select(-start_time)
 
@@ -73,8 +79,14 @@ all_home <-
 all_away <-
   all_odds_files |>
   arrange(match, start_time, desc(away_win)) |>
-  select(match, start_time, market_name, away_team, away_win, away_liquidity, away_agency = agency) |> 
-  mutate(start_time = date(start_time)) |> 
+  select(match,
+         start_time,
+         market_name,
+         away_team,
+         away_win,
+         # away_liquidity,
+         away_agency = agency) |>
+  mutate(start_time = date(start_time)) |>
   select(-start_time)
 
 # Combine
