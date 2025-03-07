@@ -33,8 +33,8 @@ library(readxl)
   player_disposals_data <- read_rds("../Data/processed_odds/all_player_disposals.rds")
   player_goals_data <- read_rds("../Data/processed_odds/all_player_goals.rds")
   player_fantasy_data <- read_rds("../Data/processed_odds/all_player_fantasy_points.rds")
-  player_marks_data <- read_rds("../Data/processed_odds/all_player_marks.rds")
-  player_tackles_data <- read_rds("../Data/processed_odds/all_player_tackles.rds")
+  # player_marks_data <- read_rds("../Data/processed_odds/all_player_marks.rds")
+  # player_tackles_data <- read_rds("../Data/processed_odds/all_player_tackles.rds")
 ```
 
 ```{r}
@@ -113,8 +113,8 @@ dvp_data <-
     player_disposals_data,
     player_goals_data,
     player_fantasy_data,
-    player_marks_data,
-    player_tackles_data
+    # player_marks_data,
+    # player_tackles_data
   )
 
 # Arrange in order
@@ -132,9 +132,9 @@ all_markets |>
     implied_prob_under,
     line,
     agency,
-    diff_over_2023,
+    diff_over_2024,
     diff_over_last_10,
-    diff_under_2023,
+    diff_under_2024,
     diff_under_last_10
   ) |>
   arrange(match, player_name, market_name, line, desc(over_price))
@@ -167,6 +167,17 @@ left_join(player_positions, relationship = "many-to-one") |>
 ```
 
 ::: panel-tabset
+
+## H2H
+
+```{r}
+#| results: asis
+
+h2h_data |> 
+  arrange(start_time, margin)
+
+```
+
 ## +EV Bets
 
 ```{r}
