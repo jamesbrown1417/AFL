@@ -26,6 +26,7 @@ library(tidyverse)
 library(qreport)
 library(DT)
 library(readxl)
+library(gt)
 
 # Load data
   h2h_data <- read_rds("../Data/processed_odds/all_h2h.rds")
@@ -173,9 +174,85 @@ left_join(player_positions, relationship = "many-to-one") |>
 ```{r}
 #| results: asis
 
-h2h_data |> 
-  arrange(start_time, margin)
+# Process data - home teams
+home_df <- h2h_data %>%
+  select(match, round, start_time, venue, home_team, home_win, home_agency) %>%
+  rename(team = home_team, win_odds = home_win, agency = home_agency) |> 
+  distinct(match, team, win_odds, agency, .keep_all = TRUE)
 
+# Process data - away teams
+away_df <- h2h_data %>%
+  select(match, round, start_time, venue, away_team, away_win, away_agency) %>%
+  rename(team = away_team, win_odds = away_win, agency = away_agency) |> 
+    distinct(match, team, win_odds, agency, .keep_all = TRUE)
+
+# Combine and reshape data
+combined_df <- bind_rows(home_df, away_df)
+
+# Pivot to create columns for each agency
+odds_table <-
+  combined_df %>%
+  pivot_wider(
+    id_cols = c(match, round, start_time, venue, team),
+    names_from = agency,
+    values_from = win_odds
+  ) %>%
+  arrange(start_time, match)
+
+# Create a more elegant and beautiful gt table
+odds_gt <-
+  odds_table %>%
+  gt(groupname_col = "match") %>%
+  # Enhanced header styling
+  tab_header(
+    title = md("**Head-to-Head Betting Odds**"),
+    subtitle = md(paste("*Updated: ", format(Sys.Date(), "%d %B %Y"), "*"))
+  ) %>%
+  # Better column labels
+  cols_label(
+    team = md("**Team**"),
+    start_time = md("**Date**"),
+    venue = md("**Venue**"),
+    round = md("**Round**"),
+    Pointsbet = md("**Pointsbet**"),
+    TAB = md("**TAB**"),
+    Dabble = md("**Dabble**"),
+    BetRight = md("**BetRight**"),
+    Sportsbet = md("**Sportsbet**"),
+    Bet365 = md("**Bet365**")
+  ) %>%
+  # Format numbers with two decimal places
+  fmt_number(
+    columns = c(Pointsbet, TAB, Dabble, BetRight, Sportsbet, Bet365),
+    decimals = 2
+  ) %>%
+  tab_style(
+    style = list(
+      cell_fill(color = "#34495e"),
+      cell_text(color = "white", weight = "bold"),
+      cell_borders(sides = c("top", "bottom"), color = "#2c3e50", weight = px(2))
+    ),
+    locations = cells_row_groups()
+  ) %>%
+  # Style for column headers
+  tab_style(
+    style = list(
+      cell_borders(sides = "bottom", color = "#2c3e50", weight = px(2))
+    ),
+    locations = cells_column_labels()
+  ) %>%
+  # Make team names stand out
+  tab_style(
+    style = list(
+      cell_text(weight = "bold")
+    ),
+    locations = cells_body(columns = team)
+  ) |> 
+  sub_missing(missing_text = "-") |> 
+  fmt_date(columns = start_time, date_style = "wday_month_day_year") |> 
+  cols_align(align = "center")
+
+odds_gt
 ```
 
 ## +EV Bets
