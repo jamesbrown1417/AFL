@@ -13,6 +13,7 @@ rm Data/BET365_HTML/*.txt
 # Execute Python and R scripts
 /Users/jamesbrown/.pyenv/versions/3.12.5/bin/python3 OddsScraper/get_bet365_html.py
 /Users/jamesbrown/.pyenv/versions/3.12.5/bin/python3 OddsScraper/get_bet365_player.py
+/Users/jamesbrown/.pyenv/versions/3.12.5/bin/python3 OddsScraper/TAB/get-TAB-response.py
 
 /Users/jamesbrown/.pyenv/versions/3.12.5/bin/python3 OddsScraper/Neds/get_neds_urls.py
 Rscript OddsScraper/Neds/get_neds_match_urls.R

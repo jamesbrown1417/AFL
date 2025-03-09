@@ -255,6 +255,37 @@ odds_gt <-
 odds_gt
 ```
 
+## Line
+
+```{r}
+#| results: asis
+
+# Process data - home teams
+home_df <- line_data %>%
+  select(match, home_team, home_line, home_win, agency) %>%
+  rename(team = home_team, line = home_line, win_odds = home_win) |> 
+  distinct(match, team, line, win_odds, agency, .keep_all = TRUE)
+
+# Process data - away teams
+away_df <- line_data %>%
+  select(match, away_team, away_line, away_win, agency) %>%
+  rename(team = away_team, line = away_line, win_odds = away_win) |> 
+  distinct(match, team, line, win_odds, agency, .keep_all = TRUE)
+
+# Combine and reshape data
+combined_df <- bind_rows(home_df, away_df)
+
+# Pivot to create columns for each agency
+odds_table <-
+  combined_df %>%
+  pivot_wider(
+    id_cols = c(match, team, line),
+    names_from = agency,
+    values_from = win_odds
+  ) %>%
+  arrange(match)
+```
+
 ## +EV Bets
 
 ```{r}
