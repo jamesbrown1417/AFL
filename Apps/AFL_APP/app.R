@@ -24,8 +24,8 @@ os_type <- Sys.info()["sysname"]
 
 # Read in data
 all_player_stats <- read_rds("../../Data/afl_fantasy_2015_2024_data.rds")
-# data_2025 <- read_rds("../../Data/afl_fantasy_2025_data.rds")
-# all_player_stats <- bind_rows(all_player_stats, data_2025)
+data_2025 <- read_rds("../../Data/afl_fantasy_2025_data.rds")
+all_player_stats <- bind_rows(all_player_stats, data_2025)
 
 # Fix CBA Percentage
 all_player_stats$cba_percentage <- round(all_player_stats$cba_percentage, 3)
@@ -430,7 +430,7 @@ ui <- page_navbar(
             choices = all_player_stats$season_name |> unique(),
             multiple = TRUE,
             selectize = TRUE,
-            selected = c("2024","2023")
+            selected = c("2025","2024")
           ),
           selectInput(
             inputId = "stat_input_a",
@@ -655,7 +655,7 @@ ui <- page_navbar(
             choices = all_player_stats$season_name |> unique(),
             multiple = TRUE,
             selectize = TRUE,
-            selected = c("2023")
+            selected = c("2024")
           ),
           selectInput(
             inputId = "metric_input",
@@ -726,7 +726,7 @@ ui <- page_navbar(
             choices = all_player_stats$season_name |> unique(),
             multiple = TRUE,
             selectize = TRUE,
-            selected = c("2024","2023")
+            selected = c("2025","2024")
           )
         )
       ),
