@@ -531,6 +531,7 @@ read_bet365_disposal_specials_html <- function(html_path) {
 goals_list <- list.files("Data/BET365_HTML", pattern = "players_a", full.names = TRUE)
 disposals_list <- list.files("Data/BET365_HTML", pattern = "players", full.names = TRUE)
 disposal_specials_list <- list.files("Data/BET365_HTML", pattern = "players_b", full.names = TRUE)
+disposal_lines_list <- list.files("Data/BET365_HTML", pattern = "players_b", full.names = TRUE)
 
 # Create safe versions of each function
 read_bet365_goals_html <- safely(read_bet365_goals_html)
@@ -541,7 +542,7 @@ read_bet365_disposal_specials_html <- safely(read_bet365_disposal_specials_html,
 # Get all data
 bet365_goals <- map(goals_list, read_bet365_goals_html) |> map_dfr(~.x$result)
 bet365_disposals <- map(disposals_list, read_bet365_disposals_html) |> map_dfr(~.x$result)
-bet365_disposals_lines <- map(disposal_specials_list, read_bet365_disposal_lines_html) |> map_dfr(~.x$result)
+bet365_disposals_lines <- map(disposal_lines_list, read_bet365_disposal_lines_html) |> map_dfr(~.x$result)
 bet365_disposal_specials <- map(disposal_specials_list, read_bet365_disposal_specials_html) |> map_dfr(~.x$result)
 
 # If empty give columns
@@ -672,7 +673,7 @@ bet365_disposal_specials <-
     )
   ) |>
   left_join(player_names, by = c("player_name" = "player_full_name")) |>
-  mutate(line = as.numeric(number_of_disposals)) |> 
+  mutate(line = as.numeric(line)) |> 
   rename(player_team = team_name) |> 
   mutate(opposition_team = ifelse(home_team == player_team, away_team, home_team)) |> 
   transmute(match,
@@ -701,15 +702,14 @@ if (nrow(bet365_disposal_specials) == 0) {
 bet365_disposal_specials <-
   bet365_disposal_specials |> 
   mutate(over_price = as.numeric(over_price), under_price = as.numeric(under_price))
-
-bet365_disposals_lines <-
-  bet365_disposals_lines |> 
-  mutate(over_price = as.numeric(over_price), under_price = as.numeric(under_price))
+# 
+# bet365_disposals_lines <-
+#   bet365_disposals_lines |> 
+#   mutate(over_price = as.numeric(over_price), under_price = as.numeric(under_price))
 
 # Combine
 bet365_disposals <-
-  bet365_disposals
-  bind_rows(bet365_disposals_lines) |> 
+  bet365_disposals |>
   bind_rows(bet365_disposal_specials)
 
 # Write to rds
