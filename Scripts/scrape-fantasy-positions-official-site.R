@@ -10,6 +10,7 @@ library(tidyverse)
 library(request)
 library(openxlsx)
 library(readxl)
+
 # Get URL of data from API
 url = "https://fantasy.afl.com.au/data/afl/players.json?_=1677977794603"
 
