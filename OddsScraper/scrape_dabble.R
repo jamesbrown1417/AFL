@@ -182,7 +182,9 @@ prop_data <-
 # Filter to player disposals markets
 player_disposals_markets <-
   prop_data |> 
-  filter(str_detect(market_name, "Disposals O/U"))
+  filter(str_detect(market_name, "disposals")) |> 
+  filter(str_detect(selection_name, "Over|Under")) |> 
+  mutate(price = round(sqrt(3.2), digits = 2))
 
 # Alternate Player Disposals
 alternate_player_disposals_markets <-
@@ -195,6 +197,7 @@ player_disposals_markets <-
   filter(str_detect(selection_name, "Over|Under")) |>
   mutate(player_name = str_extract(selection_name, "^.*(?=\\s(\\d+))")) |> 
   mutate(player_name = str_remove_all(player_name, "( Over)|( Under)")) |> 
+  mutate(player_name = str_remove_all(player_name, " disposals")) |> 
   mutate(line = str_extract(selection_name, "[0-9]{1}[0-9\\.]{1,4}")) |> 
   mutate(line = as.numeric(line)) |>
   mutate(type = str_detect(selection_name, "Over|\\+")) |> 
@@ -236,112 +239,235 @@ dabble_player_disposals_markets <-
 
 # Filter to player goals markets
 player_goals_markets <-
-  prop_data |> 
-  filter(str_detect(market_name, "Goals O/U"))
+  prop_data |>
+  filter(str_detect(market_name, "goals")) |>
+  filter(str_detect(selection_name, "Over|Under")) |>
+  mutate(price = round(sqrt(3.2), digits = 2))
 
 # Alternate Player Goals
 alternate_player_goals_markets <-
   prop_data |>
-  mutate(market_name = if_else(market_name == "Anytime Goal Scorer", "To Kick 1+ Goals", market_name)) |>
-  mutate(market_name = if_else(market_name == "Anytime Goalscorer", "To Kick 1+ Goals", market_name)) |>
-  filter(str_detect(market_name, "To Kick")) |> 
+  mutate(market_name = if_else(market_name %in% c("Anytime Goal Scorer", "Anytime Goalscorer"), "To Kick 1+ Goals", market_name)) |>
+  filter(str_detect(market_name, "To Kick")) |>
   filter(str_detect(market_name, "(Half$)|(Quarter$)", negate = TRUE))
 
-# Extract player names
+# Extract player names etc from standard markets
 player_goals_markets <-
-  player_goals_markets |> 
-  filter(str_detect(selection_name, "Over|Under")) |>
-  mutate(player_name = str_extract(selection_name, "^.*(?=\\s(\\d+))")) |> 
-  mutate(player_name = str_remove_all(player_name, "( Over)|( Under)")) |> 
-  mutate(line = str_extract(selection_name, "[0-9]{1}[0-9\\.]{1,4}")) |> 
+  player_goals_markets |>
+  mutate(player_name = str_remove(selection_name, "\\s(Over|Under).*$")) |>
+  mutate(player_name = str_remove_all(player_name, " goals.*$")) |> 
+  mutate(line = str_extract(selection_name, "[0-9]+(?:\\.[0-9]+)?")) |>
   mutate(line = as.numeric(line)) |>
-  mutate(type = str_detect(selection_name, "Over|\\+")) |> 
-  mutate(type = ifelse(type, "Over", "Under"))
+  mutate(type = ifelse(str_detect(selection_name, "Over|\\+"), "Over", "Under")) |>
+  mutate(player_name = str_trim(player_name))
 
+# Process Alternate Player Goals Markets
 alternate_player_goals_markets <-
   alternate_player_goals_markets |>
-  mutate(player_name = str_remove(selection_name, " \\(.*\\)")) |>
-  mutate(line = str_extract(market_name, "\\d+")) |> 
-  mutate(line = as.numeric(line) - 0.5) |> 
-  transmute(match, market_name = "Player Goals", player_name, line, over_price = price)
+  mutate(player_name = str_remove(selection_name, "\\s\\(.*\\)")) |>
+  mutate(line = str_extract(market_name, "\\d+")) |>
+  mutate(line = as.numeric(line) - 0.5) |>
+  transmute(match, market_name = "Player Goals", player_name, line, over_price = price) |>
+  mutate(player_name = str_trim(player_name))
 
 # Over lines
 over_lines <-
-  player_goals_markets |> 
-  filter(type == "Over") |> 
+  player_goals_markets |>
+  filter(type == "Over") |>
   mutate(market_name = "Player Goals") |>
-  select(match, market_name, player_name, line, over_price = price) |> 
+  select(match, market_name, player_name, line, over_price = price) |>
   bind_rows(alternate_player_goals_markets)
 
 # Under lines
 under_lines <-
-  player_goals_markets |> 
-  filter(type == "Under") |> 
+  player_goals_markets |>
+  filter(type == "Under") |>
   mutate(market_name = "Player Goals") |>
   select(match, market_name, player_name, line, under_price = price)
 
 # Combine
 dabble_player_goals_markets <-
   over_lines |>
-  full_join(under_lines) |> 
-  select(match, market_name, player_name, line, over_price, under_price) |> 
-  mutate(agency = "Dabble") |> 
+  full_join(under_lines, by = c("match", "market_name", "player_name", "line")) |>
+  select(match, market_name, player_name, line, over_price, under_price) |>
+  mutate(agency = "Dabble") |>
   distinct(match, market_name, player_name, line, .keep_all = TRUE)
 
-
 #===============================================================================
-# Get Player Fantasy
+# Get Player Fantasy Points
 #===============================================================================
 
 # Filter to player fantasy_points markets
 player_fantasy_points_markets <-
-  prop_data |> 
-  filter(str_detect(market_name, "Fantasy Points"))
+  prop_data |>
+  filter(str_detect(market_name, "fantasy")) |>
+  filter(str_detect(selection_name, "Over|Under")) |>
+  mutate(price = round(sqrt(3.2), digits = 2))
 
 # Alternate Player Fantasy
 alternate_player_fantasy_points_markets <-
   prop_data |>
-  filter(str_detect(market_name, "Fantasy Points"))
+  filter(str_detect(market_name, "To Get \\d+\\+ Fantasy Points")) |> # Adjust regex if needed
+  filter(str_detect(market_name, "(Half$)|(Quarter$)", negate = TRUE))
 
 # Extract player names
 player_fantasy_points_markets <-
-  player_fantasy_points_markets |> 
-  filter(str_detect(selection_name, "Over|Under")) |>
-  mutate(player_name = str_extract(selection_name, "^.*(?=\\s(\\d+))")) |> 
-  mutate(player_name = str_remove_all(player_name, "( Over)|( Under)")) |> 
-  mutate(line = str_extract(selection_name, "[0-9]{1}[0-9\\.]{1,4}")) |> 
+  player_fantasy_points_markets |>
+  mutate(player_name = str_remove(selection_name, "\\s(Over|Under).*$")) |>
+  mutate(player_name = str_remove_all(player_name, " fantasy.*$")) |>
+  mutate(line = str_extract(selection_name, "[0-9]+(?:\\.[0-9]+)?")) |>
   mutate(line = as.numeric(line)) |>
-  mutate(type = str_detect(selection_name, "Over|\\+")) |> 
-  mutate(type = ifelse(type, "Over", "Under"))
+  mutate(type = ifelse(str_detect(selection_name, "Over|\\+"), "Over", "Under")) |>
+  mutate(player_name = str_trim(player_name))
 
+# Process Alternate Player Fantasy Markets
 alternate_player_fantasy_points_markets <-
   alternate_player_fantasy_points_markets |>
-  mutate(player_name = str_remove(selection_name, " \\(.*\\)")) |>
-  mutate(line = str_extract(market_name, "\\d+")) |> 
-  mutate(line = as.numeric(line) - 0.5) |> 
-  transmute(match, market_name = "Player Fantasy Points", player_name, line, over_price = price)
+  mutate(player_name = str_remove(selection_name, "\\s\\(.*\\)")) |>
+  mutate(line = str_extract(market_name, "\\d+")) |>
+  mutate(line = as.numeric(line) - 0.5) |>
+  transmute(match, market_name = "Player Fantasy Points", player_name, line, over_price = price) |>
+  mutate(player_name = str_trim(player_name))
 
 # Over lines
 over_lines <-
-  player_fantasy_points_markets |> 
-  filter(type == "Over") |> 
+  player_fantasy_points_markets |>
+  filter(type == "Over") |>
   mutate(market_name = "Player Fantasy Points") |>
-  select(match, market_name, player_name, line, over_price = price) |> 
+  select(match, market_name, player_name, line, over_price = price) |>
   bind_rows(alternate_player_fantasy_points_markets)
 
 # Under lines
 under_lines <-
-  player_fantasy_points_markets |> 
-  filter(type == "Under") |> 
+  player_fantasy_points_markets |>
+  filter(type == "Under") |>
   mutate(market_name = "Player Fantasy Points") |>
   select(match, market_name, player_name, line, under_price = price)
 
 # Combine
 dabble_player_fantasy_points_markets <-
   over_lines |>
-  full_join(under_lines) |> 
-  select(match, market_name, player_name, line, over_price, under_price) |> 
-  mutate(agency = "Dabble") |> 
+  full_join(under_lines, by = c("match", "market_name", "player_name", "line")) |>
+  select(match, market_name, player_name, line, over_price, under_price) |>
+  mutate(agency = "Dabble") |>
+  distinct(match, market_name, player_name, line, .keep_all = TRUE)
+
+#===============================================================================
+# Get Player Marks
+#===============================================================================
+
+# Filter to player marks markets
+player_marks_markets <-
+  prop_data |>
+  filter(str_detect(market_name, "marks")) |>
+  filter(str_detect(selection_name, "Over|Under")) |>
+  mutate(price = round(sqrt(3.2), digits = 2))
+
+# Alternate Player Marks
+alternate_player_marks_markets <-
+  prop_data |>
+  filter(str_detect(market_name, "To Get \\d+\\+ Marks")) |> # Adjust regex if needed (e.g., "To Get")
+  filter(str_detect(market_name, "(Half$)|(Quarter$)", negate = TRUE))
+
+# Extract player names
+player_marks_markets <-
+  player_marks_markets |>
+  mutate(player_name = str_remove(selection_name, "\\s(Over|Under).*$")) |>
+  mutate(player_name = str_remove_all(player_name, " marks.*$")) |>
+  mutate(line = str_extract(selection_name, "[0-9]+(?:\\.[0-9]+)?")) |>
+  mutate(line = as.numeric(line)) |>
+  mutate(type = ifelse(str_detect(selection_name, "Over|\\+"), "Over", "Under")) |>
+  mutate(player_name = str_trim(player_name))
+
+# Process Alternate Player Marks Markets
+alternate_player_marks_markets <-
+  alternate_player_marks_markets |>
+  mutate(player_name = str_remove(selection_name, "\\s\\(.*\\)")) |>
+  mutate(line = str_extract(market_name, "\\d+")) |>
+  mutate(line = as.numeric(line) - 0.5) |>
+  transmute(match, market_name = "Player Marks", player_name, line, over_price = price) |>
+  mutate(player_name = str_trim(player_name))
+
+# Over lines
+over_lines <-
+  player_marks_markets |>
+  filter(type == "Over") |>
+  mutate(market_name = "Player Marks") |>
+  select(match, market_name, player_name, line, over_price = price) |>
+  bind_rows(alternate_player_marks_markets)
+
+# Under lines
+under_lines <-
+  player_marks_markets |>
+  filter(type == "Under") |>
+  mutate(market_name = "Player Marks") |>
+  select(match, market_name, player_name, line, under_price = price)
+
+# Combine
+dabble_player_marks_markets <-
+  over_lines |>
+  full_join(under_lines, by = c("match", "market_name", "player_name", "line")) |>
+  select(match, market_name, player_name, line, over_price, under_price) |>
+  mutate(agency = "Dabble") |>
+  distinct(match, market_name, player_name, line, .keep_all = TRUE)
+
+#===============================================================================
+# Get Player Tackles
+#===============================================================================
+
+# Filter to player tackles markets
+player_tackles_markets <-
+  prop_data |>
+  filter(str_detect(market_name, "tackles")) |>
+  filter(str_detect(selection_name, "Over|Under")) |>
+  mutate(price = round(sqrt(3.2), digits = 2))
+
+# Alternate Player Tackles
+alternate_player_tackles_markets <-
+  prop_data |>
+  filter(str_detect(market_name, "To Get \\d+\\+ Tackles")) |> # Adjust regex if needed (e.g., "To Lay")
+  filter(str_detect(market_name, "(Half$)|(Quarter$)", negate = TRUE))
+
+# Extract player names
+player_tackles_markets <-
+  player_tackles_markets |>
+  mutate(player_name = str_remove(selection_name, "\\s(Over|Under).*$")) |>
+  mutate(player_name = str_remove_all(player_name, " tackles.*$")) |>
+  mutate(line = str_extract(selection_name, "[0-9]+(?:\\.[0-9]+)?")) |>
+  mutate(line = as.numeric(line)) |>
+  mutate(type = ifelse(str_detect(selection_name, "Over|\\+"), "Over", "Under")) |>
+  mutate(player_name = str_trim(player_name))
+
+# Process Alternate Player Tackles Markets
+alternate_player_tackles_markets <-
+  alternate_player_tackles_markets |>
+  mutate(player_name = str_remove(selection_name, "\\s\\(.*\\)")) |>
+  mutate(line = str_extract(market_name, "\\d+")) |>
+  mutate(line = as.numeric(line) - 0.5) |>
+  transmute(match, market_name = "Player Tackles", player_name, line, over_price = price) |>
+  mutate(player_name = str_trim(player_name))
+
+# Over lines
+over_lines <-
+  player_tackles_markets |>
+  filter(type == "Over") |>
+  mutate(market_name = "Player Tackles") |>
+  select(match, market_name, player_name, line, over_price = price) |>
+  bind_rows(alternate_player_tackles_markets)
+
+# Under lines
+under_lines <-
+  player_tackles_markets |>
+  filter(type == "Under") |>
+  mutate(market_name = "Player Tackles") |>
+  select(match, market_name, player_name, line, under_price = price)
+
+# Combine
+dabble_player_tackles_markets <-
+  over_lines |>
+  full_join(under_lines, by = c("match", "market_name", "player_name", "line")) |>
+  select(match, market_name, player_name, line, over_price, under_price) |>
+  mutate(agency = "Dabble") |>
   distinct(match, market_name, player_name, line, .keep_all = TRUE)
 
 #===============================================================================
@@ -390,6 +516,42 @@ dabble_player_goals_markets <-
 # Fantasy Points
 dabble_player_fantasy_points_markets <-
   dabble_player_fantasy_points_markets |>
+  mutate(player_name = case_when(
+    str_detect(player_name, "Cameron Rayner") ~ "Cam Rayner",
+    str_detect(player_name, "Lachlan Ash") ~ "Lachie Ash",
+    str_detect(player_name, "Matt Cottrell") ~ "Matthew Cottrell",
+    str_detect(player_name, "Tom Berry") ~ "Thomas Berry",
+    str_detect(player_name, "Callum Brown") ~ "Callum M. Brown",
+    str_detect(player_name, "Mitch Hinge") ~ "Mitchell Hinge",
+    str_detect(player_name, "Matthew Roberts") ~ "Matt Roberts",
+    str_detect(player_name, "Connor MacDonald") ~ "Connor Macdonald",
+    str_detect(player_name, "Cameron Mackenzie") ~ "Cam Mackenzie",
+    .default = player_name
+  )) |>
+  left_join(player_names,
+            by = c("player_name" = "player_full_name"))
+
+# Marks
+dabble_player_marks_markets <-
+  dabble_player_marks_markets |>
+  mutate(player_name = case_when(
+    str_detect(player_name, "Cameron Rayner") ~ "Cam Rayner",
+    str_detect(player_name, "Lachlan Ash") ~ "Lachie Ash",
+    str_detect(player_name, "Matt Cottrell") ~ "Matthew Cottrell",
+    str_detect(player_name, "Tom Berry") ~ "Thomas Berry",
+    str_detect(player_name, "Callum Brown") ~ "Callum M. Brown",
+    str_detect(player_name, "Mitch Hinge") ~ "Mitchell Hinge",
+    str_detect(player_name, "Matthew Roberts") ~ "Matt Roberts",
+    str_detect(player_name, "Connor MacDonald") ~ "Connor Macdonald",
+    str_detect(player_name, "Cameron Mackenzie") ~ "Cam Mackenzie",
+    .default = player_name
+  )) |>
+  left_join(player_names,
+            by = c("player_name" = "player_full_name"))
+
+# Tackles
+dabble_player_tackles_markets <-
+  dabble_player_tackles_markets |>
   mutate(player_name = case_when(
     str_detect(player_name, "Cameron Rayner") ~ "Cam Rayner",
     str_detect(player_name, "Lachlan Ash") ~ "Lachie Ash",
@@ -485,6 +647,58 @@ dabble_player_fantasy_points_markets <-
     agency
   )
 
+# Marks
+dabble_player_marks_markets <-
+  dabble_player_marks_markets |>
+  rename(player_team = team_name) |>
+  separate(match, c("home_team", "away_team"), sep = " v ") |>
+  mutate(home_team = fix_team_names(home_team)) |>
+  mutate(away_team = fix_team_names(away_team)) |>
+  mutate(match = paste(home_team, away_team, sep = " v ")) |>
+  mutate(opposition_team = case_when(
+    player_team == home_team ~ away_team,
+    player_team == away_team ~ home_team
+  )) |>
+  select(
+    match,
+    home_team,
+    away_team,
+    player_name,
+    player_team,
+    opposition_team,
+    market_name,
+    line,
+    over_price,
+    under_price,
+    agency
+  )
+
+# Tackles
+dabble_player_tackles_markets <-
+  dabble_player_tackles_markets |>
+  rename(player_team = team_name) |>
+  separate(match, c("home_team", "away_team"), sep = " v ") |>
+  mutate(home_team = fix_team_names(home_team)) |>
+  mutate(away_team = fix_team_names(away_team)) |>
+  mutate(match = paste(home_team, away_team, sep = " v ")) |>
+  mutate(opposition_team = case_when(
+    player_team == home_team ~ away_team,
+    player_team == away_team ~ home_team
+  )) |>
+  select(
+    match,
+    home_team,
+    away_team,
+    player_name,
+    player_team,
+    opposition_team,
+    market_name,
+    line,
+    over_price,
+    under_price,
+    agency
+  )
+
 #===============================================================================
 # Write to CSV------------------------------------------------------------------
 #===============================================================================
@@ -492,3 +706,6 @@ dabble_player_fantasy_points_markets <-
 dabble_player_disposals_markets |> write_csv("Data/scraped_odds/dabble_player_disposals.csv")
 dabble_player_goals_markets |> write_csv("Data/scraped_odds/dabble_player_goals.csv")
 dabble_player_fantasy_points_markets |> write_csv("Data/scraped_odds/dabble_player_fantasy_points.csv")
+dabble_player_marks_markets |> write_csv("Data/scraped_odds/dabble_player_marks.csv")
+dabble_player_tackles_markets |> write_csv("Data/scraped_odds/dabble_player_tackles.csv")
+
