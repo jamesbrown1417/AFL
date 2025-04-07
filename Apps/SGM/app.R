@@ -7,7 +7,6 @@ library(shiny)
 library(shinythemes)
 library(DT)
 library(readxl)  
-library(mongolite)
 `%notin%` <- Negate(`%in%`)
 
 #===============================================================================
@@ -117,37 +116,6 @@ dabble_sgm <-
   distinct(match, player_name, line, market_name, agency, .keep_all = TRUE) |> 
   select(-contains("under"))
 
-# TopSport SGM------------------------------------------------------------------
-topsport_sgm_list <- list(
-  read_csv("../../Data/scraped_odds/topsport_player_disposals.csv"),
-  read_csv("../../Data/scraped_odds/topsport_player_goals.csv"),
-  read_csv("../../Data/scraped_odds/topsport_player_tackles.csv"),
-  read_csv("../../Data/scraped_odds/topsport_player_marks.csv"),
-  read_csv("../../Data/scraped_odds/topsport_player_fantasy_points.csv")
-)
-
-topsport_sgm <-
-  topsport_sgm_list |> 
-  keep(~nrow(.x) > 0) |>
-  bind_rows() |> 
-  rename(price = over_price) |> 
-  distinct(match, player_name, line, market_name, agency, .keep_all = TRUE) |> 
-  select(-contains("under"))
-
-# Unibet SGM------------------------------------------------------------------
-unibet_sgm_list <- list(
-  read_csv("../../Data/scraped_odds/unibet_player_disposals.csv"),
-  read_csv("../../Data/scraped_odds/unibet_player_goals.csv")
-)
-
-unibet_sgm <-
-  unibet_sgm_list |> 
-  keep(~nrow(.x) > 0) |>
-  bind_rows() |> 
-  rename(price = over_price) |> 
-  distinct(match, player_name, line, market_name, agency, .keep_all = TRUE) |> 
-  select(-contains("under"))
-
 #===============================================================================
 # Create compare sgm function
 #===============================================================================
@@ -186,7 +154,7 @@ compare_sgm <- function(player_names, stat_counts, markets) {
 
 compare_cgm <- function(player_names_cross, lines_cross, market_names_cross) {
   # List of each agency data
-  all_data <- list(pointsbet_sgm, sportsbet_sgm, tab_sgm, betright_sgm, neds_sgm, bet365_sgm, dabble_sgm, topsport_sgm, unibet_sgm)
+  all_data <- list(pointsbet_sgm, sportsbet_sgm, tab_sgm, betright_sgm, neds_sgm, bet365_sgm, dabble_sgm)
   
   # Function to get cross game multi data
   get_cgm <- function(data, player_names_cross, lines_cross, market_names_cross) {
@@ -246,32 +214,32 @@ compare_cgm <- function(player_names_cross, lines_cross, market_names_cross) {
 disposals <-
   read_rds("../../Data/processed_odds/all_player_disposals.rds") |> 
   rename(price = over_price,
-         empirical_probability_2023 = empirical_prob_over_2023,
-         diff_2023 = diff_over_2023)
+         empirical_probability_2024 = empirical_prob_over_2024,
+         diff_2024 = diff_over_2024)
 
 goals <-
   read_rds("../../Data/processed_odds/all_player_goals.rds") |> 
   rename(price = over_price,
-         empirical_probability_2023 = empirical_prob_over_2023,
-         diff_2023 = diff_over_2023)
+         empirical_probability_2024 = empirical_prob_over_2024,
+         diff_2024 = diff_over_2024)
 
 marks <- 
   read_rds("../../Data/processed_odds/all_player_marks.rds") |> 
   rename(price = over_price,
-         empirical_probability_2023 = empirical_prob_over_2023,
-         diff_2023 = diff_over_2023)
+         empirical_probability_2024 = empirical_prob_over_2024,
+         diff_2024 = diff_over_2024)
 
 tackles <- 
   read_rds("../../Data/processed_odds/all_player_tackles.rds") |> 
   rename(price = over_price,
-         empirical_probability_2023 = empirical_prob_over_2023,
-         diff_2023 = diff_over_2023)
+         empirical_probability_2024 = empirical_prob_over_2024,
+         diff_2024 = diff_over_2024)
 
 fantasy_points <- 
   read_rds("../../Data/processed_odds/all_player_fantasy_points.rds") |> 
   rename(price = over_price,
-         empirical_probability_2023 = empirical_prob_over_2023,
-         diff_2023 = diff_over_2023)
+         empirical_probability_2024 = empirical_prob_over_2024,
+         diff_2024 = diff_over_2024)
 
 disposals <-
   disposals |>
@@ -314,14 +282,14 @@ disposals_display <-
          line,
          price,
          agency,
-         prob_2023 = round(empirical_probability_2023, 2),
-         diff_2023 = round(diff_2023, 2),
+         prob_2024 = round(empirical_probability_2024, 2),
+         diff_2024 = round(diff_2024, 2),
          prob_last_10 = round(emp_prob_last_10, 2),
          diff_last_10 = round(diff_over_last_10, 2),
          market_best)
 
 # Get correlations
-correlations_2023 <-
+correlations_2024 <-
   read_rds("../../Data/player_correlations_disposals_23.rds") |>
   mutate_if(is.numeric, round, digits = 2)
 
@@ -480,7 +448,7 @@ server <- function(input, output, session) {
     if (input$best_odds) {filtered_data <- filtered_data |> filter(market_best) |> select(-market_best)}
     selected_data <- filtered_data[input$table_rows_selected, c("player_name", "line", "market_name", "price")]
     
-    correlations_table <- correlations_2023 |> filter(player_a %in% selected_data$player_name & player_b %in% selected_data$player_name)
+    correlations_table <- correlations_2024 |> filter(player_a %in% selected_data$player_name & player_b %in% selected_data$player_name)
     datatable(correlations_table)
   })
   
@@ -618,14 +586,14 @@ server <- function(input, output, session) {
       
       selected_data_cross <- filtered_data_cross[input$table_cross_rows_selected, ]
       uncorrelated_price_cross <- prod(selected_data_cross$price)
-      empirical_price_cross <- 1 / prod(selected_data_cross$prob_2023)
+      empirical_price_cross <- 1 / prod(selected_data_cross$prob_2024)
       empirical_price_cross_l10 <- 1 / prod(selected_data_cross$prob_last_10)
       diff = 1/empirical_price_cross - 1/uncorrelated_price_cross
       diff_l10 = 1/empirical_price_cross_l10 - 1/uncorrelated_price_cross
       HTML(paste0("<strong>Multi Price:</strong>", " $", round(uncorrelated_price_cross, 2), "<br/>",
                   " <strong>Theoretical Multi Price:</strong>", " $", round(empirical_price_cross, 2), "<br/>",
                   " <strong>Edge L10:</strong>", " ", round(100*diff_l10, 3), "%"), "<br/>",
-                  " <strong>Edge 2023:</strong>", " ", round(100*diff, 3), "%")
+                  " <strong>Edge 2024:</strong>", " ", round(100*diff, 3), "%")
     }
   })
 }
