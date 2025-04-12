@@ -1,0 +1,130 @@
+{
+    "entrants": {
+        "7dc41d4c-2fac-4cec-8747-e42cb357de20": {
+            "id": "7dc41d4c-2fac-4cec-8747-e42cb357de20",
+            "name": "Port Adelaide",
+            "home_away": "AWAY",
+            "visible": true,
+            "sort_order": 20,
+            "market_id": "47ccc5b7-ff9b-4936-922b-8bbd0dcea062"
+        },
+        "a4d4e163-e721-475b-a2e8-52d0edcd928e": {
+            "id": "a4d4e163-e721-475b-a2e8-52d0edcd928e",
+            "name": "Sydney Swans",
+            "home_away": "HOME",
+            "visible": true,
+            "sort_order": 10,
+            "market_id": "47ccc5b7-ff9b-4936-922b-8bbd0dcea062"
+        }
+    },
+    "event_participants": {
+        "99cc181a-6bb2-404c-a016-fd4601ec8019": {
+            "id": "99cc181a-6bb2-404c-a016-fd4601ec8019",
+            "event_id": "ecf060e2-572b-4607-bb7e-249c42a9ba21",
+            "name": "Sydney Swans",
+            "home_away": "HOME",
+            "colour": "#ed171f"
+        },
+        "ba1201bc-ac4e-4844-bac6-4b2c6ab77f00": {
+            "id": "ba1201bc-ac4e-4844-bac6-4b2c6ab77f00",
+            "event_id": "ecf060e2-572b-4607-bb7e-249c42a9ba21",
+            "name": "Port Adelaide",
+            "home_away": "AWAY",
+            "colour": "#000000"
+        }
+    },
+    "events": {
+        "ecf060e2-572b-4607-bb7e-249c42a9ba21": {
+            "id": "ecf060e2-572b-4607-bb7e-249c42a9ba21",
+            "name": "Sydney Swans vs Port Adelaide",
+            "event_type": {
+                "id": "6bfa0efc-05df-4ae1-9b1e-152365290cfd",
+                "name": "Match"
+            },
+            "match_status": "BettingOpen",
+            "advertised_start": "2025-04-20T05:20:00Z",
+            "actual_start": "2025-04-20T05:20:00Z",
+            "visible": true,
+            "slug": "sydney-swans-vs-port-adelaide",
+            "competition": {
+                "id": "ccff2e9a-5347-41aa-902a-bb6b1886d817",
+                "name": "AFL",
+                "sort_order": 1,
+                "region": "Australia"
+            },
+            "competition_id": "ccff2e9a-5347-41aa-902a-bb6b1886d817",
+            "market_type_group_ids": [
+                "29edb5e1-a717-4769-8bcd-2d43ec38d828"
+            ],
+            "market_type_group_markets": [
+                {
+                    "market_type_group_id": "29edb5e1-a717-4769-8bcd-2d43ec38d828",
+                    "market_ids": [
+                        "47ccc5b7-ff9b-4936-922b-8bbd0dcea062"
+                    ]
+                }
+            ],
+            "market_count": 1,
+            "main_markets": [
+                "47ccc5b7-ff9b-4936-922b-8bbd0dcea062"
+            ],
+            "market_ids": [
+                "47ccc5b7-ff9b-4936-922b-8bbd0dcea062"
+            ],
+            "category_id": "23d497e6-8aab-4309-905b-9421f42c9bc5",
+            "round_id": "3d44c0ac-cd9a-4ba4-ae28-b1cbd43c364a",
+            "participant_ids": [
+                "99cc181a-6bb2-404c-a016-fd4601ec8019",
+                "ba1201bc-ac4e-4844-bac6-4b2c6ab77f00"
+            ]
+        }
+    },
+    "market_type_groups": {
+        "29edb5e1-a717-4769-8bcd-2d43ec38d828": {
+            "id": "29edb5e1-a717-4769-8bcd-2d43ec38d828",
+            "category_id": "23d497e6-8aab-4309-905b-9421f42c9bc5",
+            "name": "Top Markets",
+            "priority": 340,
+            "type": "MARKET_TYPE_GROUP_TYPE_EVENT"
+        }
+    },
+    "markets": {
+        "47ccc5b7-ff9b-4936-922b-8bbd0dcea062": {
+            "id": "47ccc5b7-ff9b-4936-922b-8bbd0dcea062",
+            "event_id": "ecf060e2-572b-4607-bb7e-249c42a9ba21",
+            "market_type_id": "be25c37a-71ff-47f6-a1e2-02a494eb5a4d",
+            "market_status_id": "4bc8fe96-296b-4b4c-aea4-85c94f63b9c6",
+            "name": "Match Betting",
+            "advertised_start": {
+                "seconds": 1745126400
+            },
+            "actual_start": {
+                "seconds": 1745126400
+            },
+            "is_primary": true,
+            "visible": true,
+            "entrant_ids": [
+                "a4d4e163-e721-475b-a2e8-52d0edcd928e",
+                "7dc41d4c-2fac-4cec-8747-e42cb357de20"
+            ],
+            "num_winners": 1
+        }
+    },
+    "markets_allow_cashout": {
+        "47ccc5b7-ff9b-4936-922b-8bbd0dcea062": true
+    },
+    "prices": {
+        "7dc41d4c-2fac-4cec-8747-e42cb357de20:940b8704-e497-4a76-b390-00918ff7d282:": {
+            "odds": {
+                "numerator": 49,
+                "denominator": 20
+            }
+        },
+        "a4d4e163-e721-475b-a2e8-52d0edcd928e:940b8704-e497-4a76-b390-00918ff7d282:": {
+            "odds": {
+                "numerator": 3,
+                "denominator": 10
+            }
+        }
+    }
+}
