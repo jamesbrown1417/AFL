@@ -251,6 +251,11 @@ read_bet365_disposals_html <- function(html_path) {
         ) |>
         mutate(implied_probability = 1 / price)
     
+    # Remove any numbers from player_name
+    bet365_disposals_odds_df <-
+        bet365_disposals_odds_df |>
+        mutate(player_name = str_remove(player_name, "\\d+"))
+  
     # Return table
     bet365_disposals_odds_df
 }
@@ -357,6 +362,11 @@ read_bet365_goals_html <- function(html_path) {
         ) |>
         mutate(implied_probability = 1 / price)
     
+    # Remove any numbers from player_name
+    bet365_goal_odds_df <-
+        bet365_goal_odds_df |>
+        mutate(player_name = str_remove(player_name, "\\d+"))
+  
     # Return table if multi_scorer is selected, else return NULL
     if (multi_scorer) {
         return(bet365_goal_odds_df)
@@ -426,139 +436,33 @@ read_bet365_disposal_lines_html <- function(html_path) {
     bet365_disposal_lines_odds_df_overs |>
     left_join(bet365_disposal_lines_odds_df_unders, by = c("match", "player_name", "number_of_disposals"))
   
-  # Return table
-  bet365_disposal_lines_odds_df
-}
-
-#===============================================================================
-# Function to read disposal specials
-#===============================================================================
-
-read_bet365_disposal_specials_html <- function(html_path) {
-  
-  # Read in the txt data as html
-  bet365 <- read_html(html_path)
-  
-  # Get match name
-  bet365_match_name <-
-    bet365 |>
-    html_nodes(".sph-FixturePodHeader_TeamName ") |>
-    html_text()
-  
-  bet365_match_name <- glue_collapse(bet365_match_name,sep = " v ")
-  
-  # Extract the disposals data table----------------------------------------------
-  # Get the disposals table
-  bet365_disposal_specials <-
-    bet365 |>
-    html_nodes(".bbl-BetBuilderMarketGroupContainer ")
-  
-  # Player names
-  bet365_disposals_player_names <-
-    bet365_disposal_specials[[1]] |>
-    html_nodes(".gl-Market_General-columnheader") |> 
-    html_nodes(".bbl-MarketColumnHeaderLeftAlign_Label ") |>
-    html_text()
-  
-  # All Market Nodes
-  bet365_disposals_nodes <-
-    bet365_disposal_specials[[1]] |>
-    html_nodes(".gl-Market_General-columnheader")
-  
-  # Every Third Starting from element 1 is names and lines
-  bet365_disposals_line_elements <-
-    bet365_disposals_nodes[seq(1, length(bet365_disposals_nodes), 3)]
-  
-  # Every Third Starting from element 2 is Yes Odds
-  bet365_yes_elements <-
-    bet365_disposals_nodes[seq(2, length(bet365_disposals_nodes), 3)]
-  
-  # Every Third Starting from element 3 is No Odds
-  bet365_no_elements <-
-    bet365_disposals_nodes[seq(3, length(bet365_disposals_nodes), 3)]
-  
-  # Map a function to get html_node(".bbl-BetBuilderParticipant_Odds ") |> html_text() for yes elements
-  disposal_yes_odds <-
-  map(bet365_yes_elements, ~.x |>
-  html_nodes(".bbl-BetBuilderParticipant_Odds ") |>
-    html_text()) |> 
-    set_names(bet365_disposals_player_names)
-  
-  # Map a function to get html_node(".bbl-BetBuilderParticipant_Odds ") |> html_text() for no elements
-  disposal_no_odds <-
-  map(bet365_no_elements, ~.x |>
-        html_nodes(".bbl-BetBuilderParticipant_Odds ") |>
-        html_text()) |>
-    set_names(bet365_disposals_player_names)
-
-  # Map a function to get html_node(".bbl-BetBuilderParticipantLabel_Name ") |> html_text()
-  disposal_lines <-
-  map(bet365_disposals_line_elements, ~.x |>
-        html_nodes(".bbl-BetBuilderParticipantLabel_Name ") |>
-        html_text()) |> 
-    set_names(bet365_disposals_player_names)
-  
-  # Get disposal lines
-  disposal_lines <-
-    enframe(disposal_lines, name = "player_name", value = "stats") %>%
-    unnest(stats)
-  
-  # Get disposal yes odds
-  disposal_yes_odds <-
-    enframe(disposal_yes_odds, name = "player_name", value = "yes_odds") %>%
-    unnest(yes_odds)
-  
-  # Get disposal no odds
-  disposal_no_odds <-
-    enframe(disposal_no_odds, name = "player_name", value = "no_odds") %>%
-    unnest(no_odds)
-  
-  # Join the data frames
+  # Remove any numbers from player_name
   bet365_disposal_lines_odds_df <-
-    disposal_lines |>
-    bind_cols(disposal_yes_odds) |>
-    bind_cols(disposal_no_odds) |>
-    mutate(match = bet365_match_name) |> 
-    select(match, player_name = player_name...1, line = stats, over_price = yes_odds, under_price = no_odds) |> 
-    mutate(line = str_extract(line, "\\d+")) |> 
-    mutate(line = as.numeric(line) - 0.5)
-  
+    bet365_disposal_lines_odds_df |>
+    mutate(player_name = str_remove(player_name, "\\d+"))
+
   # Return table
   bet365_disposal_lines_odds_df
 }
-   
+
 # Map Over the Files------------------------------------------------------------
 goals_list <- list.files("Data/BET365_HTML", pattern = "players_a", full.names = TRUE)
 disposals_list <- list.files("Data/BET365_HTML", pattern = "players", full.names = TRUE)
-disposal_specials_list <- list.files("Data/BET365_HTML", pattern = "players_b", full.names = TRUE)
 disposal_lines_list <- list.files("Data/BET365_HTML", pattern = "players_b", full.names = TRUE)
 
 # Create safe versions of each function
 read_bet365_goals_html <- safely(read_bet365_goals_html)
 read_bet365_disposals_html <- safely(read_bet365_disposals_html)
 read_bet365_disposal_lines_html <- safely(read_bet365_disposal_lines_html, otherwise = NULL)
-read_bet365_disposal_specials_html <- safely(read_bet365_disposal_specials_html, otherwise = NULL)
 
 # Get all data
 bet365_goals <- map(goals_list, read_bet365_goals_html) |> map_dfr(~.x$result)
 bet365_disposals <- map(disposals_list, read_bet365_disposals_html) |> map_dfr(~.x$result)
 bet365_disposals_lines <- map(disposal_lines_list, read_bet365_disposal_lines_html) |> map_dfr(~.x$result)
-bet365_disposal_specials <- map(disposal_specials_list, read_bet365_disposal_specials_html) |> map_dfr(~.x$result)
 
 # If empty give columns
 if (nrow(bet365_disposals_lines) == 0) {
   bet365_disposals_lines <- tibble(
-    match = character(),
-    player_name = character(),
-    opposition_team = character(),
-    number_of_disposals = character(),
-    over_price = numeric(),
-    under_price = numeric()
-  )
-}
-
-if (nrow(bet365_disposal_specials) == 0) {
-  bet365_disposal_specials <- tibble(
     match = character(),
     player_name = character(),
     opposition_team = character(),
@@ -646,36 +550,8 @@ bet365_disposals_lines <-
   mutate(line = as.numeric(number_of_disposals)) |> 
   rename(player_team = team_name) |> 
   mutate(opposition_team = ifelse(home_team == player_team, away_team, home_team)) |> 
-  transmute(match,
-            home_team,
-            away_team,
-            player_team,
-            opposition_team,
-            market_name = "Player Disposals",
-            player_name,
-            line,
-            over_price,
-            under_price,
-            agency = "Bet365")
-
-# Add match info - Disposal specials
-bet365_disposal_specials <-
-  bet365_disposal_specials |> 
-  separate(match, c("home_team", "away_team"), sep = " v ", remove = FALSE) |>
-  mutate(home_team = fix_team_names(home_team), away_team = fix_team_names(away_team)) |>
-  mutate(match = paste(home_team, "v", away_team)) |>
-  mutate(
-    player_name = case_when(
-      player_name == "Matthew Roberts" ~ "Matt Roberts",
-      player_name == "Jacob Van Rooyen" ~ "Jacob van Rooyen",
-      player_name == "Kamdyn Mcintosh" ~ "Kamdyn McIntosh",
-      .default = player_name
-    )
-  ) |>
-  left_join(player_names, by = c("player_name" = "player_full_name")) |>
-  mutate(line = as.numeric(line)) |> 
-  rename(player_team = team_name) |> 
-  mutate(opposition_team = ifelse(home_team == player_team, away_team, home_team)) |> 
+  mutate(over_price = as.numeric(over_price),
+ under_price = as.numeric(under_price)) |>
   transmute(match,
             home_team,
             away_team,
@@ -691,26 +567,13 @@ bet365_disposal_specials <-
 # Fix opposition team if table is null
 if (nrow(bet365_disposals_lines) == 0) {
   bet365_disposals_lines <- 
-    bet365_disposal_specials |> 
+    bet365_disposals_lines |> 
     mutate(opposition_team = "")}
-
-if (nrow(bet365_disposal_specials) == 0) {
-  bet365_disposal_specials <- 
-    bet365_disposal_specials |> 
-    mutate(opposition_team = "")}
-
-bet365_disposal_specials <-
-  bet365_disposal_specials |> 
-  mutate(over_price = as.numeric(over_price), under_price = as.numeric(under_price))
-# 
-# bet365_disposals_lines <-
-#   bet365_disposals_lines |> 
-#   mutate(over_price = as.numeric(over_price), under_price = as.numeric(under_price))
 
 # Combine
 bet365_disposals <-
   bet365_disposals |>
-  bind_rows(bet365_disposal_specials)
+  bind_rows(bet365_disposals_lines)
 
 # Write to rds
 write_csv(bet365_disposals, "Data/scraped_odds/bet365_player_disposals.csv")
