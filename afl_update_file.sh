@@ -21,6 +21,7 @@ Rscript OddsScraper/Neds/get_neds_match_urls.R
 
 # Execute R script for getting arbs
 Rscript OddsScraper/master_processing_script.R
+Rscript Scripts/get_arbs.R
 
 # Publish reports using Quarto
 echo "1" | quarto publish quarto-pub Reports/afl-odds.qmd
