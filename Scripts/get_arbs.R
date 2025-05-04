@@ -444,3 +444,6 @@ all_arbs <-
 # H2H Arbs
 h2h_arbs
 all_arbs
+
+# Save all arbs
+write_csv(all_arbs, "Data/all_arbs.csv")

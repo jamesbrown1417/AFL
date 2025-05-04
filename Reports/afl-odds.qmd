@@ -499,4 +499,13 @@ tryCatch({
 })
 ```
 
+## Arbs
+
+```{r}
+#| results: asis
+
+arbs <- read_csv("../Data/all_arbs.csv")
+arbs
+```
+
 :::
