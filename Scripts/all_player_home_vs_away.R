@@ -22,7 +22,7 @@ source("Functions/compare_home_vs_away_performance.R")
 
 all_players <-
 combined_stats |> 
-  filter(season_name %in% c("2023", "2024")) |> 
+  filter(season_name %in% c("2024", "2025")) |> 
   group_by(player_full_name, player_id) |> 
   summarise(games_played = n()) |>
   filter(games_played >= 16) |>
@@ -62,4 +62,3 @@ tackles_home_vs_away <-
   future_pmap(all_players, compare_home_vs_away_performance, stat = "tackles", .progress = TRUE) |> 
   bind_rows() |> 
   arrange(desc(diff))
-
