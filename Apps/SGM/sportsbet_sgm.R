@@ -3,6 +3,7 @@ library(jsonlite)
 library(dplyr)
 library(purrr)
 library(mongolite)
+library(tidyverse)
 
 # Sportsbet SGM-----------------------------------------------------------------
 sportsbet_sgm <-
@@ -41,14 +42,14 @@ get_sgm_sportsbet <- function(data, player_names, stat_counts, markets) {
   }
   
   outcomes_list <- lapply(1:nrow(filtered_df), function(i) {
-    list(marketExternalId = as.integer(filtered_df$marketExternalId[i]),
-         outcomeExternalId = as.integer(filtered_df$outcomeExternalId[i]))
+    list(marketExternalId = as.numeric(filtered_df$marketExternalId[i]),
+         outcomeExternalId = as.numeric(filtered_df$outcomeExternalId[i]))
   })
   
   payload <- list(
-    classExternalId = as.integer(filtered_df$classExternalId[1]),
-    competitionExternalId = as.integer(filtered_df$competitionExternalId[1]),
-    eventExternalId = as.integer(filtered_df$eventExternalId[1]),
+    classExternalId = as.numeric(filtered_df$classExternalId[1]),
+    competitionExternalId = as.numeric(filtered_df$competitionExternalId[1]),
+    eventExternalId = as.numeric(filtered_df$eventExternalId[1]),
     outcomesExternalIds = outcomes_list
   )
   
@@ -121,7 +122,7 @@ call_sgm_sportsbet <- function(data, player_names, stat_counts, markets) {
 
 # call_sgm_sportsbet(
 #   data = sportsbet_sgm,
-#   player_names = c("Charlie Curnow", "Blake Acres"),
-#   stat_counts = c(2.5, 19.5),
-#   markets = c("Player Goals", "Player Disposals")
+#   player_names = c("Lachie Neale", "Dayne Zorko"),
+#   stat_counts = c(24.5, 24.5),
+#   markets = c("Player Disposals", "Player Disposals")
 # )
