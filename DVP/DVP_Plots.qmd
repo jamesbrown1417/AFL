@@ -24,22 +24,6 @@ library(tidyverse)
 # Read in data
 dvp_data <- read_csv("dvp_data.csv")
 
-# Make Pos a factor with order
-dvp_data$Pos <-
-  factor(
-    dvp_data$Pos,
-    levels = c(
-      "Key Defender",
-      "Small Defender",
-      "Offensive Defender",
-      "CBA < 50%",
-      "CBA > 50%",
-      "Wing",
-      "Ruck",
-      "Small Forward",
-      "Key Forward"
-    ), ordered = TRUE)
-
 disposals_dvp <- 
   dvp_data |> 
   filter(market_name == "Player Disposals")

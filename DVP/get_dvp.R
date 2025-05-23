@@ -9,59 +9,24 @@ plan(multisession)
 
 # Read in position data---------------------------------------------------------
 player_positions <-
-  read_excel("DVP/AFL-Players-Positions-2024.xlsx") |>
-  select(
-    player_full_name,
-    player_team = team_name,
-    pos_1 = `position 1`,
-    pos_2 = `position 2`
-  ) |>
-  mutate(pos_1_factor = factor(
-    pos_1,
-    levels = 1:11,
-    labels = c(
-      "Key Defender",
-      "Small Defender",
-      "Offensive Defender",
-      "CBA > 50%",
-      "CBA < 50%",
-      "Wing",
-      "Contested",
-      "Uncontested",
-      "Ruck",
-      "Key Forward",
-      "Small Forward"
-    )
-  )) |> 
-  mutate(pos_2_factor = factor(
-    pos_2,
-    levels = 1:11,
-    labels = c(
-      "Key Defender",
-      "Small Defender",
-      "Offensive Defender",
-      "CBA > 50%",
-      "CBA < 50%",
-      "Wing",
-      "Contested",
-      "Uncontested",
-      "Ruck",
-      "Key Forward",
-      "Small Forward"
-    )
-  ))
-  
+  fitzRoy::fetch_player_details_afl(season = 2025)
+
+player_positions <-
+player_positions |> 
+  transmute(player_full_name = paste(firstName, surname),
+            position = factor(position))
 
 # Read in player stats----------------------------------------------------------
-all_player_stats_2015_2024 <-
-  read_rds("Data/afl_fantasy_2015_2023_data.rds") |> 
-  bind_rows(read_rds("Data/afl_fantasy_2024_data.rds"))
+all_player_stats_2015_2025 <-
+  read_rds("Data/afl_fantasy_2015_2024_data.rds") |> 
+  bind_rows(read_rds("Data/afl_fantasy_2025_data.rds"))
 
 # Select only the columns we need-----------------------------------------------
-all_player_stats_2015_2024 <-
-  all_player_stats_2015_2024 |>
+all_player_stats_2015_2025 <-
+  all_player_stats_2015_2025 |>
   select(
     player_full_name,
+    player_team,
     season_name,
     round,
     match_name,
@@ -81,12 +46,12 @@ all_player_stats_2015_2024 <-
 
 # Get each team's last 10 games-------------------------------------------------
 home_team_last_10_games <-
-  all_player_stats_2015_2024 |> 
+  all_player_stats_2015_2025 |> 
   distinct(match_name, round, season_name, start_time_utc, home_team) |> 
   rename(team = home_team)
 
 away_team_last_10_games <-
-  all_player_stats_2015_2024 |> 
+  all_player_stats_2015_2025 |> 
   distinct(match_name, round, season_name, start_time_utc, away_team) |> 
   rename(team = away_team)
 
@@ -100,7 +65,7 @@ last_10_games <-
 
 # Filter player stats to only include last 10 games-----------------------------
 all_player_stats_last_10 <-
-  all_player_stats_2015_2024 |> 
+  all_player_stats_2015_2025 |> 
   mutate(match_id = paste(match_name, round, season_name, sep = "_")) |>
   filter(match_id %in% last_10_games$match_id)
 
@@ -108,8 +73,9 @@ all_player_stats_last_10 <-
 all_player_stats_last_10 <-
   all_player_stats_last_10 |> 
   left_join(player_positions) |> 
-  filter(!is.na(player_team)) |> 
-  arrange(desc(start_time_utc), opposition_team, desc(disposals))
+  filter(!is.na(position)) |> 
+  arrange(desc(start_time_utc), opposition_team, desc(disposals)) |> 
+  rename(pos_1_factor = position)
 
 #===============================================================================
 # Function to get DVP for a position
@@ -288,3 +254,4 @@ dvp_data <-
 
 # Write out
 write_csv(dvp_data, "DVP/dvp_data.csv")
+write_csv(player_positions, "DVP/AFL-Players-Positions-2025.csv")

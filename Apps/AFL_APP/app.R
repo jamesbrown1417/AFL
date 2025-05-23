@@ -43,48 +43,8 @@ dvp_data <-
 
 # Read in position data---------------------------------------------------------
 player_positions <-
-  read_excel("../../DVP/AFL-Players-Positions-2024.xlsx") |>
-  select(
-    player_full_name,
-    player_team = team_name,
-    pos_1 = `position 1`,
-    pos_2 = `position 2`
-  ) |>
-  mutate(pos_1_factor = factor(
-    pos_1,
-    levels = 1:11,
-    labels = c(
-      "Key Defender",
-      "Small Defender",
-      "Offensive Defender",
-      "CBA > 50%",
-      "CBA < 50%",
-      "Wing",
-      "Contested",
-      "Uncontested",
-      "Ruck",
-      "Key Forward",
-      "Small Forward"
-    )
-  )) |> 
-  mutate(pos_2_factor = factor(
-    pos_2,
-    levels = 1:11,
-    labels = c(
-      "Key Defender",
-      "Small Defender",
-      "Offensive Defender",
-      "CBA > 50%",
-      "CBA < 50%",
-      "Wing",
-      "Contested",
-      "Uncontested",
-      "Ruck",
-      "Key Forward",
-      "Small Forward"
-    )
-  )) |> 
-  select(player_name = player_full_name, player_team, Position = pos_1_factor)
+  read_csv("../../DVP/AFL-Players-Positions-2025.csv") |> 
+  rename(Position = position, player_name = player_full_name)
 
 dvp_data <-
   dvp_data %>%
