@@ -46,7 +46,7 @@ dvp_data <-
 
 # Read in position data---------------------------------------------------------
 player_positions <-
-  read_csv("../../DVP/AFL-Players-Positions-2025.csv") |> 
+  read_csv("../DVP/AFL-Players-Positions-2025.csv") |> 
   rename(Position = position, player_name = player_full_name)
 
 dvp_data <-
