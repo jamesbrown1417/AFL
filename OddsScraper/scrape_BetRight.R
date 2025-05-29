@@ -168,27 +168,11 @@ write_csv(betright_line_markets, "Data/scraped_odds/betright_line.csv")
 
 # Player Disposals
 player_disposals_links <-
-  glue("https://next-api.betright.com.au/Sports/MasterEvent?masterEventId={unique(all_betright_markets$match_id)}&groupTypeCode=G312&format=json")
-
-# Player Disposal Over/Under
-player_disposal_ou_links <-
-  glue("https://next-api.betright.com.au/Sports/MasterEvent?masterEventId={unique(all_betright_markets$match_id)}&groupTypeCode=G669&format=json")
-
-# Player Goals
-player_goals_links <-
-  glue("https://next-api.betright.com.au/Sports/MasterEvent?masterEventId={unique(all_betright_markets$match_id)}&groupTypeCode=G311&format=json")
+  glue("https://next-api.betright.com.au/Sports/MasterEvent?masterEventId={unique(all_betright_markets$match_id)}&groupTypeCode=G761&format=json")
 
 # Afl Fantasy
 player_fantasy_links <-
   glue("https://next-api.betright.com.au/Sports/MasterEvent?masterEventId={unique(all_betright_markets$match_id)}&groupTypeCode=G513&format=json")
-
-# Marks
-player_marks_links <-
-  glue("https://next-api.betright.com.au/Sports/MasterEvent?masterEventId={unique(all_betright_markets$match_id)}&groupTypeCode=G592&format=json")
-
-# Tackles
-player_tackles_links <-
-  glue("https://next-api.betright.com.au/Sports/MasterEvent?masterEventId={unique(all_betright_markets$match_id)}&groupTypeCode=G593&format=json")
 
 # Function to extract prop data from links--------------------------------------
 
@@ -250,7 +234,7 @@ match_names <-
 # All Data
 
 # Disposals
-betright_player_disposals_alternate <-
+betright_player_stats <-
   map(player_disposals_links, safe_get_prop_data) |> 
   map("result") |>
   bind_rows() |> 
@@ -259,67 +243,14 @@ betright_player_disposals_alternate <-
   left_join(match_names) |> 
   filter(!is.na(outcome_name))
 
-# Disposals O/U
-betright_player_disposals_over_under_all <- tryCatch({
+betright_player_disposals_alternate <-
+  betright_player_stats |> 
+  filter(str_detect(outcome_title, "Player Disposals"))
   
-  betright_player_disposals_over_under_all <-
-  map(player_disposal_ou_links, safe_get_prop_data) |>
-    map("result") |>
-    bind_rows() |>
-    rename(match_id = link) |>
-    mutate(match_id = as.integer(str_extract(match_id, "[0-9]{4,7}"))) |>
-    left_join(match_names) |>
-    filter(!is.na(outcome_name))
-  
-}, error = function(e) {
-  NULL  # This will assign NULL to 'betright_player_disposals_over_under_all' if an error occurs
-})
-
 # Combine
 betright_player_disposals_all <-
   bind_rows(
-    betright_player_disposals_alternate,
-    betright_player_disposals_over_under_all
-  )
-
-# Get Overs (over under markets)
-betright_player_disposals_overs <-
-  betright_player_disposals_all |>
-  filter(str_detect(outcome_title, "Over/Under")) |>
-  filter(str_detect(outcome_name, "Over")) |> 
-  separate(outcome_name, into = c("player_name", "line"), sep = " Over ", remove = FALSE) |> 
-  mutate(line = as.numeric(line)) |> 
-  rename(over_price = price) |> 
-  select(
-    match,
-    player_name,
-    line,
-    over_price,
-    group_by_header,
-    event_id,
-    outcome_name,
-    outcome_id,
-    fixed_market_id
-  )
-
-# Get Unders (over under markets)
-betright_player_disposals_unders <-
-  betright_player_disposals_all |>
-  filter(str_detect(outcome_title, "Over/Under")) |>
-  filter(str_detect(outcome_name, "Under")) |> 
-  separate(outcome_name, into = c("player_name", "line"), sep = " Under ", remove = FALSE) |> 
-  mutate(line = as.numeric(line)) |> 
-  rename(under_price = price) |> 
-  select(
-    match,
-    player_name,
-    line,
-    under_price,
-    group_by_header,
-    event_id,
-    outcome_name_under = outcome_name,
-    outcome_id_under = outcome_id,
-    fixed_market_id_under = fixed_market_id
+    betright_player_disposals_alternate
   )
 
 # Get alternate player disposals markets
@@ -335,9 +266,7 @@ betright_alternate_disposals <-
 
 # Combine
 betright_player_disposals <-
-  betright_player_disposals_overs |>
-  bind_rows(betright_alternate_disposals) |>
-  left_join(betright_player_disposals_unders) |>
+  betright_alternate_disposals |>
   mutate(agency = "BetRight") |>
   mutate(market_type = "Player Disposals") |>
   separate(match,
@@ -370,31 +299,21 @@ betright_player_disposals <-
     player_team = team_name,
     line,
     over_price,
-    under_price,
     agency = "BetRight",
     opposition_team,
     group_by_header,
     event_id,
     outcome_name,
-    outcome_name_under,
     outcome_id,
-    outcome_id_under,
-    fixed_market_id,
-    fixed_market_id_under
+    fixed_market_id
   )
 
 # Get player goals data--------------------------------------------------------
 
 # Goals
 betright_player_goals_alternate <-
-  map(player_goals_links, safe_get_prop_data) |> 
-  map("result") |>
-  bind_rows() |> 
-  filter(str_detect(outcome_title, "(Quarter)|(Half)", negate = TRUE)) |> 
-  rename(match_id = link) |> 
-  mutate(match_id = as.integer(str_extract(match_id, "[0-9]{4,7}"))) |> 
-  left_join(match_names) |> 
-  filter(!is.na(outcome_name))
+  betright_player_stats |>
+  filter(str_detect(outcome_title, "Player Goals"))
 
 # Goals O/U
 betright_player_goals_over_under_all <- tryCatch({
@@ -608,27 +527,8 @@ betright_player_fantasy_points <-
 
 # Marks
 betright_player_marks_alternate <-
-  map(player_marks_links, safe_get_prop_data) |> 
-  map("result") |>
-  bind_rows()
-
-if (ncol(betright_player_marks_alternate) < 2) {
-  betright_player_marks_alternate$outcome_title <- NA
-  betright_player_marks_alternate$outcome_name <- NA
-  betright_player_marks_alternate$outcome_id <- NA
-  betright_player_marks_alternate$fixed_market_id <- NA
-  betright_player_marks_alternate$price <- NA
-  betright_player_marks_alternate$group_by_header <- NA
-  betright_player_marks_alternate$event_id <- NA
-}
-
-betright_player_marks_alternate <-
-  betright_player_marks_alternate |> 
-  filter(str_detect(outcome_title, "(Quarter)|(Half)", negate = TRUE)) |> 
-  rename(match_id = link) |> 
-  mutate(match_id = as.integer(str_extract(match_id, "[0-9]{4,7}"))) |> 
-  left_join(match_names) |> 
-  filter(!is.na(outcome_name))
+  betright_player_stats |>
+  filter(str_detect(outcome_title, "Player Marks"))
 
 # Combine
 betright_player_marks_all <- betright_player_marks_alternate
@@ -695,27 +595,8 @@ betright_player_marks <-
 
 # Tackles
 betright_player_tackles_alternate <-
-  map(player_tackles_links, safe_get_prop_data) |> 
-  map("result") |>
-  bind_rows()
-
-if (ncol(betright_player_tackles_alternate) < 2) {
-  betright_player_tackles_alternate$outcome_title <- NA
-  betright_player_tackles_alternate$outcome_name <- NA
-  betright_player_tackles_alternate$outcome_id <- NA
-  betright_player_tackles_alternate$fixed_market_id <- NA
-  betright_player_tackles_alternate$price <- NA
-  betright_player_tackles_alternate$group_by_header <- NA
-  betright_player_tackles_alternate$event_id <- NA
-}
-
-betright_player_tackles_alternate <-
-  betright_player_tackles_alternate |> 
-  filter(str_detect(outcome_title, "(Quarter)|(Half)", negate = TRUE)) |> 
-  rename(match_id = link) |> 
-  mutate(match_id = as.integer(str_extract(match_id, "[0-9]{4,7}"))) |> 
-  left_join(match_names) |> 
-  filter(!is.na(outcome_name))
+  betright_player_stats |>
+  filter(str_detect(outcome_title, "Player Tackles"))
 
 # Combine
 betright_player_tackles_all <- betright_player_tackles_alternate
@@ -785,4 +666,3 @@ betright_player_goals |> write_csv("Data/scraped_odds/betright_player_goals.csv"
 betright_player_marks |> write_csv("Data/scraped_odds/betright_player_marks.csv")
 betright_player_tackles |> write_csv("Data/scraped_odds/betright_player_tackles.csv")
 betright_player_fantasy_points |> write_csv("Data/scraped_odds/betright_player_fantasy_points.csv")
-

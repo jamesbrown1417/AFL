@@ -7,7 +7,7 @@ import logging  # Optional: for better feedback
 # Page to navigate to
 NAVIGATE_URL = "https://www.neds.com.au/sports/australian-rules/afl"
 # The exact URL whose response we want to capture
-TARGET_RESPONSE_URL = "https://api.neds.com.au/v2/sport/event-request?category_ids=%5B%2223d497e6-8aab-4309-905b-9421f42c9bc5%22%5D&include_any_team_vs_any_team_events=true"
+TARGET_RESPONSE_URL = "https://api.neds.com.au/v2/sport/event-request?category_ids=%5B%2223d497e6-8aab-4309-905b-9421f42c9bc5%22%5D"
 # Output file path using pathlib
 OUTPUT_FILE = pathlib.Path("OddsScraper/Neds/neds_response.json")
 # Timeouts (in milliseconds for Playwright, seconds for asyncio.wait_for)
