@@ -435,7 +435,7 @@ discrepant_lines <-
   filter(diff > 0) |> 
   mutate(margin = 1/over_price + 1/under_price) |>
   mutate(margin = 100*(margin - 1)) |>
-  arrange(desc(diff), match, player_name, market_name, margin)
+  arrange(desc(diff), match, margin, player_name, market_name)
 
 discrepant_lines
 ```
