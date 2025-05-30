@@ -687,6 +687,20 @@ player_marks_tackles_data <-
   map("result") |>
   map_df(bind_rows)
 
+# Make empty tibble if no rows returned
+if (nrow(player_marks_tackles_data) == 0) {
+  player_marks_tackles_data <- tibble(
+    prop_market_name = character(),
+    selection_name_prop = character(),
+    prop_market_selection = character(),
+    prop_market_price = numeric(),
+    player_id = character(),
+    market_id = character(),
+    handicap = numeric(),
+    url = character()
+  )
+}
+
 # Add market name
 player_marks_tackles_data <-
   player_marks_tackles_data |>
@@ -911,6 +925,20 @@ total_points_data <-
   total_points_data |>
   map("result") |>
   map_df(bind_rows)
+
+# Make empty tibble if no rows returned
+if (nrow(total_points_data) == 0) {
+  total_points_data <- tibble(
+    prop_market_name = character(),
+    selection_name_prop = character(),
+    prop_market_selection = character(),
+    prop_market_price = numeric(),
+    player_id = character(),
+    market_id = character(),
+    handicap = numeric(),
+    url = character()
+  )
+}
 
 # Get mainline totals
 total_points_main_line <-
