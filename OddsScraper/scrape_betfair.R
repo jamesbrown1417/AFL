@@ -297,6 +297,23 @@ all_disposal_odds <-
   keep(~ !is.null(.x)) |>
   bind_rows()
 
+# If no disposal odds were found, create empty tibble
+if (nrow(all_disposal_odds) == 0) {
+  all_disposal_odds <- tibble(
+    match = character(),
+    home_team = character(),
+    away_team = character(),
+    player_name = character(),
+    line = numeric(),
+    over_price = numeric(),
+    over_liquidity = numeric(),
+    under_price = numeric(),
+    under_liquidity = numeric(),
+    market_name = character(),
+    agency = character()
+  )
+}
+
 # Add player teams to disposals
 all_disposal_odds <-
   all_disposal_odds |> 
