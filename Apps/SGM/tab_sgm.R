@@ -82,18 +82,17 @@ call_sgm_tab <- function(data, player_names, stat_counts, markets) {
     url <- "https://api.beta.tab.com.au/v1/pricing-service/enquiry"
     
     headers <- c(
-      "accept" = "application/json, text/plain, */*",
-      "accept-language" = "en-US,en;q=0.9",
-      "content-type" = "application/json;charset=UTF-8",
-      "origin" = "https://www.tab.com.au",
-      "referer" = "https://www.tab.com.au/",
-      "sec-ch-ua" = '"Not/A)Brand";v="8", "Chromium";v="126", "Google Chrome";v="126"',
+      "Accept" = "application/json, text/plain, */*",
+      "Accept-Encoding" = "gzip, deflate, br, zstd",
+      "Accept-Language" = "en-US,en;q=0.9",
+      "Content-Type" = "application/json;charset=UTF-8",
+      "Origin" = "https://www.tab.com.au",
+      "Referer" = "https://www.tab.com.au/",
+      "User-Agent" = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36",
+      "sec-ch-ua" = '"Chromium";v="136", "Google Chrome";v="136", "Not.A/Brand";v="99"',
       "sec-ch-ua-mobile" = "?0",
-      "sec-ch-ua-platform" = '"Windows"',
-      "sec-fetch-dest" = "empty",
-      "sec-fetch-mode" = "cors",
-      "sec-fetch-site" = "same-site",
-      "user-agent" = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36"
+      "sec-ch-ua-platform" = '"macOS"',
+      "Cookie" = "YOUR_COOKIE_STRING_HERE"  # You'll need to add the full cookie string
     )
     
     payload <- list(
@@ -108,12 +107,18 @@ call_sgm_tab <- function(data, player_names, stat_counts, markets) {
             )
           )
         )
-      )
+      ),
+      returnValidationMatrix = unbox(TRUE)  # Added this line
     )
     
     # Try response, if nothing in 3 seconds, make it null
     response <- tryCatch({
-      POST(url, body = toJSON(payload), add_headers(.headers = headers), encode = "json", timeout(3))
+      POST(url, 
+           body = toJSON(payload), 
+           add_headers(.headers = headers), 
+           encode = "json", 
+           timeout(5),
+           config = config(http_version = 1.1))  # Force HTTP/1.1
     }, error = function(e) {
       return(NULL)
     })
@@ -166,6 +171,6 @@ call_sgm_tab <- function(data, player_names, stat_counts, markets) {
 # call_sgm_tab(
 #   data = tab_sgm,
 #   player_names = c("Zach Guthrie", "Gryan Miers"),
-#   stat_counts = c(14.5, 14.5),
+#   stat_counts = c(14.5, 19.5),
 #   markets = c("Player Disposals", "Player Disposals")
 # )
