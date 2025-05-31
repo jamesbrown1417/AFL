@@ -1,0 +1,130 @@
+{
+    "entrants": {
+        "79a5bebe-809e-4969-a7c0-1bdb9025e7b2": {
+            "id": "79a5bebe-809e-4969-a7c0-1bdb9025e7b2",
+            "name": "Melbourne",
+            "home_away": "HOME",
+            "visible": true,
+            "sort_order": 10,
+            "market_id": "24a112f2-1859-42fd-804c-59b128f35bb8"
+        },
+        "c0b0ae71-d1d9-43b4-80a4-d3dbf634781c": {
+            "id": "c0b0ae71-d1d9-43b4-80a4-d3dbf634781c",
+            "name": "Collingwood",
+            "home_away": "AWAY",
+            "visible": true,
+            "sort_order": 20,
+            "market_id": "24a112f2-1859-42fd-804c-59b128f35bb8"
+        }
+    },
+    "event_participants": {
+        "1472673a-b5f8-41af-a1b4-45a4848c0cf3": {
+            "id": "1472673a-b5f8-41af-a1b4-45a4848c0cf3",
+            "event_id": "ea55cd82-1ffb-489c-bc5e-7d44b5530046",
+            "name": "Collingwood",
+            "home_away": "AWAY",
+            "colour": "#ffffff"
+        },
+        "d54a63a7-4218-4fb5-855c-65946d196998": {
+            "id": "d54a63a7-4218-4fb5-855c-65946d196998",
+            "event_id": "ea55cd82-1ffb-489c-bc5e-7d44b5530046",
+            "name": "Melbourne",
+            "home_away": "HOME",
+            "colour": "#0f1131"
+        }
+    },
+    "events": {
+        "ea55cd82-1ffb-489c-bc5e-7d44b5530046": {
+            "id": "ea55cd82-1ffb-489c-bc5e-7d44b5530046",
+            "name": "Melbourne vs Collingwood",
+            "event_type": {
+                "id": "6bfa0efc-05df-4ae1-9b1e-152365290cfd",
+                "name": "Match"
+            },
+            "match_status": "BettingOpen",
+            "advertised_start": "2025-06-09T05:20:00Z",
+            "actual_start": "2025-06-09T05:20:00Z",
+            "visible": true,
+            "slug": "melbourne-vs-collingwood",
+            "competition": {
+                "id": "ccff2e9a-5347-41aa-902a-bb6b1886d817",
+                "name": "AFL",
+                "sort_order": 1,
+                "region": "Australia"
+            },
+            "competition_id": "ccff2e9a-5347-41aa-902a-bb6b1886d817",
+            "market_type_group_ids": [
+                "29edb5e1-a717-4769-8bcd-2d43ec38d828"
+            ],
+            "market_type_group_markets": [
+                {
+                    "market_type_group_id": "29edb5e1-a717-4769-8bcd-2d43ec38d828",
+                    "market_ids": [
+                        "24a112f2-1859-42fd-804c-59b128f35bb8"
+                    ]
+                }
+            ],
+            "market_count": 1,
+            "main_markets": [
+                "24a112f2-1859-42fd-804c-59b128f35bb8"
+            ],
+            "market_ids": [
+                "24a112f2-1859-42fd-804c-59b128f35bb8"
+            ],
+            "category_id": "23d497e6-8aab-4309-905b-9421f42c9bc5",
+            "round_id": "24aa9b74-d866-412a-a7f4-735b8264a70b",
+            "participant_ids": [
+                "1472673a-b5f8-41af-a1b4-45a4848c0cf3",
+                "d54a63a7-4218-4fb5-855c-65946d196998"
+            ]
+        }
+    },
+    "market_type_groups": {
+        "29edb5e1-a717-4769-8bcd-2d43ec38d828": {
+            "id": "29edb5e1-a717-4769-8bcd-2d43ec38d828",
+            "category_id": "23d497e6-8aab-4309-905b-9421f42c9bc5",
+            "name": "Top Markets",
+            "priority": 340,
+            "type": "MARKET_TYPE_GROUP_TYPE_EVENT"
+        }
+    },
+    "markets": {
+        "24a112f2-1859-42fd-804c-59b128f35bb8": {
+            "id": "24a112f2-1859-42fd-804c-59b128f35bb8",
+            "event_id": "ea55cd82-1ffb-489c-bc5e-7d44b5530046",
+            "market_type_id": "be25c37a-71ff-47f6-a1e2-02a494eb5a4d",
+            "market_status_id": "4bc8fe96-296b-4b4c-aea4-85c94f63b9c6",
+            "name": "Match Betting",
+            "advertised_start": {
+                "seconds": 1749446400
+            },
+            "actual_start": {
+                "seconds": 1749446400
+            },
+            "is_primary": true,
+            "visible": true,
+            "entrant_ids": [
+                "79a5bebe-809e-4969-a7c0-1bdb9025e7b2",
+                "c0b0ae71-d1d9-43b4-80a4-d3dbf634781c"
+            ],
+            "num_winners": 1
+        }
+    },
+    "markets_allow_cashout": {
+        "24a112f2-1859-42fd-804c-59b128f35bb8": true
+    },
+    "prices": {
+        "79a5bebe-809e-4969-a7c0-1bdb9025e7b2:940b8704-e497-4a76-b390-00918ff7d282:": {
+            "odds": {
+                "numerator": 5,
+                "denominator": 2
+            }
+        },
+        "c0b0ae71-d1d9-43b4-80a4-d3dbf634781c:940b8704-e497-4a76-b390-00918ff7d282:": {
+            "odds": {
+                "numerator": 3,
+                "denominator": 10
+            }
+        }
+    }
+}
