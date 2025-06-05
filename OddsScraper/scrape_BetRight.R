@@ -313,7 +313,8 @@ betright_player_disposals <-
 # Goals
 betright_player_goals_alternate <-
   betright_player_stats |>
-  filter(str_detect(outcome_title, "Player Goals"))
+  filter(str_detect(outcome_title, "Player Goals")) |> 
+  filter(str_detect(outcome_title, "Quarter|Half", negate = TRUE))
 
 # Goals O/U
 betright_player_goals_over_under_all <- tryCatch({

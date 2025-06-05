@@ -184,7 +184,7 @@ player_disposals_markets <-
   prop_data |> 
   filter(str_detect(market_name, "disposals")) |> 
   filter(str_detect(selection_name, "Over|Under")) |> 
-  mutate(price = round(sqrt(3.5), digits = 2))
+  mutate(price = round(sqrt(3.2), digits = 2))
 
 # Alternate Player Disposals
 alternate_player_disposals_markets <-
@@ -242,7 +242,7 @@ player_goals_markets <-
   prop_data |>
   filter(str_detect(market_name, "goals")) |>
   filter(str_detect(selection_name, "Over|Under")) |>
-  mutate(price = round(sqrt(3.5), digits = 2))
+  mutate(price = round(sqrt(3.2), digits = 2))
 
 # Alternate Player Goals
 alternate_player_goals_markets <-
@@ -302,7 +302,7 @@ player_fantasy_points_markets <-
   prop_data |>
   filter(str_detect(market_name, "fantasy")) |>
   filter(str_detect(selection_name, "Over|Under")) |>
-  mutate(price = round(sqrt(3.5), digits = 2))
+  mutate(price = round(sqrt(3.2), digits = 2))
 
 # Alternate Player Fantasy
 alternate_player_fantasy_points_markets <-
@@ -361,7 +361,7 @@ player_marks_markets <-
   prop_data |>
   filter(str_detect(market_name, "marks")) |>
   filter(str_detect(selection_name, "Over|Under")) |>
-  mutate(price = round(sqrt(3.5), digits = 2))
+  mutate(price = round(sqrt(3.2), digits = 2))
 
 # Alternate Player Marks
 alternate_player_marks_markets <-
@@ -420,7 +420,7 @@ player_tackles_markets <-
   prop_data |>
   filter(str_detect(market_name, "tackles")) |>
   filter(str_detect(selection_name, "Over|Under")) |>
-  mutate(price = round(sqrt(3.5), digits = 2))
+  mutate(price = round(sqrt(3.2), digits = 2))
 
 # Alternate Player Tackles
 alternate_player_tackles_markets <-
