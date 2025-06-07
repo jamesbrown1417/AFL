@@ -353,348 +353,165 @@ filtered_player_stats_2 <-
 #===============================================================================
 
 ui <- page_navbar(
-  title = "AFL",
+  title = "AFL Analytics",
   selected = "Player Stats",
   collapsible = TRUE,
-  theme = bslib::bs_theme(),
+  theme = bslib::bs_theme(version = 5),
+  # Use fillPage to allow content to fill the screen vertically
+  fillable = TRUE, 
+  
+  # Add a meta tag to ensure proper scaling on mobile devices
   tags$head(
+    tags$meta(name = "viewport", content = "width=device-width, initial-scale=1.0"),
     tags$style(HTML("
-      .tab-content, .tab-pane {
-        height: 1250px;
-        overflow-y: auto;
-      }
+      /* Ensure DataTables are fully scrollable horizontally */
       .dataTables_wrapper {
         overflow-x: auto;
       }
+      /* Give plots and tables a bit of breathing room */
+       .shiny-plot-output, .shiny-data-table-output {
+        margin-top: 15px;
+      }
     "))
   ),
+  
   nav_panel(
     title = "Player Stats",
-    grid_container(
-      layout = c("afl_stats player_stat_plot"),
-      row_sizes = c("1fr"),
-      col_sizes = c("250px", "1fr"),
-      gap_size = "10px",
-      grid_card(
-        area = "afl_stats",
-        card_header("Settings"),
-        card_body(
-          textInput(
-            inputId = "player_name_input_a",
-            label = "Select Player:",
-            value = "Tim English"
-          ),
-          selectInput(
-            inputId = "season_input_a",
-            label = "Select Season:",
-            choices = all_player_stats$season_name |> unique(),
-            multiple = TRUE,
-            selectize = TRUE,
-            selected = c("2025","2024")
-          ),
-          selectInput(
-            inputId = "stat_input_a",
-            label = "Select Statistic:",
-            choices = c("Disposals",
-                        "Fantasy",
-                        "Tackles",
-                        "Marks",
-                        "Goals"),
-            multiple = FALSE,
-            selected = "Disposals"
-          ),
-          selectInput(
-            inputId = "opp_input_a",
-            label = "Select Opposition:",
-            choices = c(all_player_stats$opposition_team |> unique() |> sort()),
-            multiple = TRUE
-          ),
-          selectInput(
-            inputId = "venue_input_a",
-            label = "Select Venue:",
-            choices = c(all_player_stats$venue |> unique() |> sort()),
-            multiple = TRUE
-          ),
-          selectInput(
-            inputId = "weather_input_a",
-            label = "Select Weather:",
-            choices = c(all_player_stats$weather_category |> unique() |> sort()),
-            multiple = TRUE
-          ),
-          checkboxGroupInput(
-            inputId = "home_status",
-            label = "Home / Away Games",
-            choices = list("Home" = "Home", "Away" = "Away"),
-            selected = c("Home", "Away")
-          ),
-          markdown(mds = c("__Select Margin Range:__")),
-          numericInput(
-            inputId = "margin_min",
-            label = "Minimum",
-            value = -200
-          ),
-          numericInput(
-            inputId = "margin_max",
-            label = "Maximum",
-            value = 200
-          ),
-          markdown(mds = c("__Select Only Last n Games:__")),
-          numericInput(
-            inputId = "last_games",
-            label = "Number of Games",
-            value = NA
-          ),
-          markdown(mds = c("__Select Reference Line:__")),
-          numericInput(
-            inputId = "reference_line",
-            label = "Line Value",
-            value = 19.5
-          ),
-          markdown(mds = c("__Select TOG Range:__")),
-          numericInput(
-            inputId = "minutes_minimum",
-            label = "Min TOG %",
-            value = 0
+    # Use sidebarLayout for a responsive sidebar and main content area
+    sidebarLayout(
+      sidebarPanel(
+        width = 3, # Use grid units (1-12) instead of pixels
+        h4("Settings"),
+        textInput("player_name_input_a", "Select Player:", value = "Tim English"),
+        selectInput("season_input_a", "Select Season:", choices = unique(all_player_stats$season_name), multiple = TRUE, selectize = TRUE, selected = c("2025", "2024")),
+        selectInput("stat_input_a", "Select Statistic:", choices = c("Disposals", "Fantasy", "Tackles", "Marks", "Goals"), selected = "Disposals"),
+        selectInput("opp_input_a", "Select Opposition:", choices = sort(unique(all_player_stats$opposition_team)), multiple = TRUE),
+        selectInput("venue_input_a", "Select Venue:", choices = sort(unique(all_player_stats$venue)), multiple = TRUE),
+        selectInput("weather_input_a", "Select Weather:", choices = sort(unique(all_player_stats$weather_category)), multiple = TRUE),
+        checkboxGroupInput("home_status", "Home / Away Games", choices = list("Home" = "Home", "Away" = "Away"), selected = c("Home", "Away")),
+        numericInput("margin_min", "Minimum Margin", value = -200),
+        numericInput("margin_max", "Maximum Margin", value = 200),
+        numericInput("last_games", "Select Only Last n Games:", value = NA, min = 1),
+        numericInput("reference_line", "Select Reference Line:", value = 19.5),
+        numericInput("minutes_minimum", "Min TOG %", value = 0, min = 0, max = 100)
+      ),
+      mainPanel(
+        width = 9,
+        # Use cards for a modern look and feel
+        card(
+          full_screen = TRUE,
+          card_body(
+            tabsetPanel(
+              id = "stat_tabs",
+              tabPanel("Plot", plotOutput(outputId = "plot", height = "75vh")), # Use viewport height for responsive height
+              tabPanel("Table", DTOutput(outputId = "player_stat_table"))
+            )
           )
         )
-      ),
-      grid_card(area = "player_stat_plot",
-                card_body(
-                  tabsetPanel(
-                    id = "stat_tabs",
-                    tabPanel(
-                      "Plot",
-                      plotOutput(outputId = "plot", height = "800px")
-                    ),
-                    tabPanel(
-                      "Table",
-                      DTOutput(
-                        outputId = "player_stat_table",
-                        width = "100%",
-                        height = "800px"
-                      )
-                    )
-                  )
-                ))
+      )
     )
   ),
   nav_panel(
     title = "Team Stats",
-    grid_container(
-      layout = c("afl_team_stats team_stat_table"),
-      row_sizes = c("1fr"),
-      col_sizes = c("250px",
-                    "1fr"),
-      gap_size = "10px",
-      grid_card(area = "afl_team_stats",
-                card_header("Settings"),
-                card_body(
-                  selectInput(
-                    inputId = "season_input_b",
-                    label = "Select Season:",
-                    choices = all_player_stats$season_name |> unique(),
-                    multiple = TRUE,
-                    selectize = TRUE,
-                    selected = all_player_stats$season_name |> unique()
-                  ),
-                  markdown(mds = c("__Select Only Last n Games:__")),
-                  numericInput(
-                    inputId = "last_games_team",
-                    label = "Number of Games",
-                    value = NA
-                  ),
-                )),
-      grid_card(area = "team_stat_table",
-                card_body(
-                  DTOutput(outputId = "team_metric_table", width = "100%")
-                ))
+    sidebarLayout(
+      sidebarPanel(
+        width = 3,
+        h4("Settings"),
+        selectInput("season_input_b", "Select Season:", choices = unique(all_player_stats$season_name), multiple = TRUE, selectize = TRUE, selected = unique(all_player_stats$season_name)),
+        numericInput("last_games_team", "Select Only Last n Games:", value = NA, min = 1)
+      ),
+      mainPanel(
+        width = 9,
+        card(
+          card_body(
+            DTOutput(outputId = "team_metric_table")
+          )
+        )
+      )
     )
   ),
-  nav_panel(title = "Odds Screen",
-            grid_container(
-              layout = c("odds_screen odds_table"),
-              row_sizes = c("1fr"),
-              col_sizes = c("250px",
-                            "1fr"),
-              gap_size = "10px",
-              grid_card(area = "odds_screen",
-                        card_header("Settings"),
-                        card_body(
-                          selectInput(
-                            inputId = "agency_input",
-                            label = "Select Agencies:",
-                            choices = agencies,
-                            multiple = TRUE,
-                            selectize = TRUE,
-                            selected = agencies
-                          ),
-                          selectInput(
-                            inputId = "market_input",
-                            label = "Select Market:",
-                            choices = c("H2H", "Total","Line", "Disposals", "Fantasy", "Goals", "Marks", "Tackles"),
-                            multiple = FALSE
-                          ),
-                          selectInput(
-                            inputId = "match_input",
-                            label = "Select Matches:",
-                            choices = h2h_data$match |> unique(),
-                            multiple = TRUE,
-                            selectize = FALSE,
-                            selected = h2h_data$match |> unique()
-                          ),
-                          selectInput(
-                            inputId = "matchup_input",
-                            label = "Select Difficulty:",
-                            choices = player_disposals_data$DVP_Category |> unique(),
-                            multiple = TRUE,
-                            selectize = FALSE,
-                            selected = player_disposals_data$DVP_Category |> unique()
-                          ),
-                          textInput(
-                            inputId = "player_name_input_b",
-                            label = "Select Player:",
-                            value = NA
-                          ),
-                          checkboxInput(
-                            inputId = "only_unders",
-                            label = "Only Show Markets With Unders",
-                            value = FALSE
-                          ),
-                          checkboxInput(
-                            inputId = "only_best",
-                            label = "Only Show Best Market Odds - Overs",
-                            value = FALSE
-                          ),
-                          checkboxInput(
-                            inputId = "only_best_unders",
-                            label = "Only Show Best Market Odds - Unders",
-                            value = FALSE
-                          ),
-                          markdown(mds = c("__Select Odds Range:__")),
-                          numericInput(
-                            inputId = "odds_minimum",
-                            label = "Min Odds",
-                            value = NA
-                          ),
-                          numericInput(
-                            inputId = "odds_maximum",
-                            label = "Max Odds",
-                            value = NA
-                          )
-                        )),
-              grid_card(area = "odds_table",
-                        card_body(
-                          DTOutput(outputId = "scraped_odds_table", height = "1000px")
-                        ))
-            )),
+  nav_panel(
+    title = "Odds Screen",
+    sidebarLayout(
+      sidebarPanel(
+        width = 3,
+        h4("Settings"),
+        selectInput("agency_input", "Select Agencies:", choices = agencies, multiple = TRUE, selectize = TRUE, selected = agencies),
+        selectInput("market_input", "Select Market:", choices = c("H2H", "Total", "Line", "Disposals", "Fantasy", "Goals", "Marks", "Tackles")),
+        selectInput("match_input", "Select Matches:", choices = unique(h2h_data$match), multiple = TRUE, selected = unique(h2h_data$match)),
+        selectInput("matchup_input", "Select Difficulty:", choices = unique(player_disposals_data$DVP_Category), multiple = TRUE, selected = unique(player_disposals_data$DVP_Category)),
+        textInput("player_name_input_b", "Select Player:", value = NA),
+        checkboxInput("only_unders", "Only Show Markets With Unders", value = FALSE),
+        checkboxInput("only_best", "Only Show Best Market Odds - Overs", value = FALSE),
+        checkboxInput("only_best_unders", "Only Show Best Market Odds - Unders", value = FALSE),
+        numericInput("odds_minimum", "Min Odds", value = NA),
+        numericInput("odds_maximum", "Max Odds", value = NA)
+      ),
+      mainPanel(
+        width = 9,
+        card(
+          card_body(
+            DTOutput(outputId = "scraped_odds_table")
+          )
+        )
+      )
+    )
+  ),
   nav_panel(
     title = "With / Without Teammate",
-    grid_container(
-      layout = c("with_without_settings with_without_plot"),
-      row_sizes = c("1fr"),
-      col_sizes = c("500px", "1fr"),
-      gap_size = "10px",
-      
-      grid_card(
-        area = "with_without_settings",
-        card_header("Settings"),
-        card_body(
-          textInput(
-            inputId = "player_name",
-            label = "Select Player:",
-            value = "Christian Petracca"
-          ),
-          textInput(
-            inputId = "teammate_name",
-            label = "Select Teammate:",
-            value = "Clayton Oliver"
-          ),
-          selectInput(
-            inputId = "season_input",
-            label = "Select Season:",
-            choices = all_player_stats$season_name |> unique(),
-            multiple = TRUE,
-            selectize = TRUE,
-            selected = c("2024")
-          ),
-          selectInput(
-            inputId = "metric_input",
-            label = "Select Statistic:",
-            choices = c("Disposals", "Fantasy", "Goals", "Marks", "Tackles"),
-            multiple = FALSE,
-            selected = "Fantasy"
+    # Use fluidRow and column for responsive two-column layouts
+    fluidRow(
+      column(
+        width = 4, # On large screens, this takes 1/3 of the width
+        card(
+          card_header("Settings"),
+          card_body(
+            textInput("player_name", "Select Player:", value = "Christian Petracca"),
+            textInput("teammate_name", "Select Teammate:", value = "Clayton Oliver"),
+            selectInput("season_input", "Select Season:", choices = unique(all_player_stats$season_name), multiple = TRUE, selectize = TRUE, selected = "2024"),
+            selectInput("metric_input", "Select Statistic:", choices = c("Disposals", "Fantasy", "Goals", "Marks", "Tackles"), selected = "Fantasy")
           )
         )
       ),
-      grid_card(area = "with_without_plot",
-                card_body(tabsetPanel(
-                  id = "with_without_tabs",
-                  tabPanel(
-                    "Plot",
-                    plotOutput(outputId = "with_without_plot_output", height = "800px")
-                  ),
-                  tabPanel(
-                    "Table",
-                    DTOutput(
-                      outputId = "with_without_table_output",
-                      width = "100%",
-                      height = "800px"
-                    )
-                  )
-                )))
+      column(
+        width = 8, # On large screens, this takes 2/3 of the width
+        # On small screens, this column will stack below the previous one
+        card(
+          card_body(
+            tabsetPanel(
+              id = "with_without_tabs",
+              tabPanel("Plot", plotOutput(outputId = "with_without_plot_output", height = "75vh")),
+              tabPanel("Table", DTOutput(outputId = "with_without_table_output"))
+            )
+          )
+        )
+      )
     )
-  ), 
+  ),
   nav_panel(
     title = "Player Correlations",
-    grid_container(
-      layout = c("corr_settings corr_plot"),
-      row_sizes = c("1fr"),
-      col_sizes = c("500px", "1fr"),
-      gap_size = "10px",
-      
-      grid_card(
-        area = "corr_settings",
-        card_header("Settings"),
-        card_body(
-          textInput(
-            inputId = "player_name_corr",
-            label = "Select Player 1:",
-            value = "Adam Treloar"
-          ),
-          selectInput(
-            inputId = "metric_input_corr_a",
-            label = "Select Statistic:",
-            choices = c("Disposals", "Fantasy", "Goals", "Marks", "Tackles"),
-            multiple = FALSE,
-            selected = "Disposals"
-          ),
-          textInput(
-            inputId = "teammate_name_corr",
-            label = "Select Player 2:",
-            value = "Tim English"
-          ),
-          selectInput(
-            inputId = "metric_input_corr_b",
-            label = "Select Statistic:",
-            choices = c("Disposals", "Fantasy", "Goals", "Marks", "Tackles"),
-            multiple = FALSE,
-            selected = "Disposals"
-          ),
-          selectInput(
-            inputId = "season_input_corr",
-            label = "Select Season:",
-            choices = all_player_stats$season_name |> unique(),
-            multiple = TRUE,
-            selectize = TRUE,
-            selected = c("2025","2024")
+    fluidRow(
+      column(
+        width = 4,
+        card(
+          card_header("Settings"),
+          card_body(
+            textInput("player_name_corr", "Select Player 1:", value = "Adam Treloar"),
+            selectInput("metric_input_corr_a", "Select Statistic:", choices = c("Disposals", "Fantasy", "Goals", "Marks", "Tackles"), selected = "Disposals"),
+            textInput("teammate_name_corr", "Select Player 2:", value = "Tim English"),
+            selectInput("metric_input_corr_b", "Select Statistic:", choices = c("Disposals", "Fantasy", "Goals", "Marks", "Tackles"), selected = "Disposals"),
+            selectInput("season_input_corr", "Select Season:", choices = unique(all_player_stats$season_name), multiple = TRUE, selectize = TRUE, selected = c("2025", "2024"))
           )
         )
       ),
-      
-      grid_card(area = "corr_plot",
-                card_body(
-                  plotOutput(outputId = "corr_plot_output", height = "800px", width = "50%")
-                ))
+      column(
+        width = 8,
+        card(
+          card_body(
+            plotOutput(outputId = "corr_plot_output", height = "75vh")
+          )
+        )
+      )
     )
   )
 )
