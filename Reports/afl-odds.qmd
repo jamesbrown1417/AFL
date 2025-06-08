@@ -9,7 +9,7 @@ date: "`r Sys.Date()`"
 format:
   html:
     df-print: kable
-    max-width: 100%
+    page-layout: full
     theme: cosmo
     self-contained: true
     toc: true
@@ -22,35 +22,38 @@ editor: source
 **Last Updated: `r format(Sys.time(), "%I:%M %p")`**
 
 ```{r setup, include=FALSE}
+# Load necessary libraries for data manipulation, reporting, and interactive tables
 library(tidyverse)
-library(qreport)
-library(DT)
+library(qreport) # Assuming this is a custom package with the maketabs function
+library(DT) # Used for creating interactive HTML tables
 library(readxl)
-library(gt)
+library(gt) # Kept in case any legacy gt tables are needed
 
-# Load data
-  h2h_data <- read_rds("../Data/processed_odds/all_h2h.rds")
-  line_data <- read_rds("../Data/processed_odds/all_line.rds")
-  player_disposals_data <- read_rds("../Data/processed_odds/all_player_disposals.rds")
-  player_goals_data <- read_rds("../Data/processed_odds/all_player_goals.rds")
-  player_fantasy_data <- read_rds("../Data/processed_odds/all_player_fantasy_points.rds")
-  player_marks_data <- read_rds("../Data/processed_odds/all_player_marks.rds")
-  player_tackles_data <- read_rds("../Data/processed_odds/all_player_tackles.rds")
+# Load data from RDS files
+h2h_data <- read_rds("../Data/processed_odds/all_h2h.rds")
+line_data <- read_rds("../Data/processed_odds/all_line.rds")
+player_disposals_data <- read_rds("../Data/processed_odds/all_player_disposals.rds")
+player_goals_data <- read_rds("../Data/processed_odds/all_player_goals.rds")
+player_fantasy_data <- read_rds("../Data/processed_odds/all_player_fantasy_points.rds")
+player_marks_data <- read_rds("../Data/processed_odds/all_player_marks.rds")
+player_tackles_data <- read_rds("../Data/processed_odds/all_player_tackles.rds")
+
 ```
 
-```{r}
-
-# Read in data
+```{r data-prep-dvp}
+# Read in DVP (Defense vs. Position) data
 dvp_data <-
   read_csv("../DVP/dvp_data.csv")
 
-# Read in position data---------------------------------------------------------
+# Read in player position data
 player_positions <-
   read_csv("../DVP/AFL-Players-Positions-2025.csv") |> 
   rename(Position = position, player_name = player_full_name)
 
+# Process DVP data to create categories
 dvp_data <-
   dvp_data %>%
+  # Adding random noise to goals for categorization example; can be adjusted
   mutate(dvp = ifelse(market_name == "Player Goals", rnorm(nrow(dvp_data)), dvp)) |> 
   group_by(market_name) %>%
   mutate(
@@ -65,11 +68,12 @@ dvp_data <-
     mutate(DVP_Category = ifelse(market_name == "Player Goals", "Neutral", DVP_Category)) |> 
   ungroup() %>%
   select(Position = Pos, opposition_team = Opponent, market_name, DVP_Category)
+
 ```
 
-```{r}
-# Get all markets together
-  all_markets <- bind_rows(
+```{r data-prep-markets}
+# Combine all player market data into a single data frame
+all_markets <- bind_rows(
     player_disposals_data,
     player_goals_data,
     player_fantasy_data,
@@ -77,7 +81,7 @@ dvp_data <-
     player_tackles_data
   )
 
-# Arrange in order
+# Select, arrange, and round columns for consistency and readability
 all_markets <-
 all_markets |>
   select(
@@ -97,9 +101,11 @@ all_markets |>
     diff_under_2024,
     diff_under_last_10
   ) |>
+  # Round decimal values to 3 places
+  mutate(across(where(is.numeric) & !c(line), ~round(.x, 3))) |>
   arrange(match, player_name, market_name, line, desc(over_price))
 
-# Add positions and DVP
+# Join with position and DVP data
 all_markets <-
 all_markets |>
 left_join(player_positions, relationship = "many-to-one") |>
@@ -107,20 +113,20 @@ left_join(player_positions, relationship = "many-to-one") |>
   relocate(Position, DVP_Category, .after = player_name)
 ```
 
-```{r}
-# Get biggest differences from second best odds available
-  biggest_diffs <-
+```{r data-prep-diffs}
+# Calculate the biggest differences between the best and second-best odds available
+biggest_diffs <-
   all_markets |>
-    group_by(match, player_name, market_name, line) |> 
-    distinct(match, player_name, market_name, line, agency, .keep_all = TRUE) |> 
-    mutate(number_of_odds = n()) |>
-    mutate(best_implied_prob_over = implied_prob_over,
-           second_best_implied_prob_over = lead(implied_prob_over, 1),
-           second_best_odds = lead(over_price, 1)) |>
+  group_by(match, player_name, market_name, line) |> 
+  distinct(match, player_name, market_name, line, agency, .keep_all = TRUE) |> 
+  mutate(number_of_odds = n()) |>
+  mutate(best_implied_prob_over = implied_prob_over,
+         second_best_implied_prob_over = lead(implied_prob_over, 1),
+         second_best_odds = lead(over_price, 1)) |>
   slice_head(n = 1) |> 
   ungroup() |> 
-  # filter(number_of_odds > 1) |>
-  mutate(diff_over = second_best_implied_prob_over - best_implied_prob_over) |>
+  # Calculate and round the difference
+  mutate(diff_over = round(second_best_implied_prob_over - best_implied_prob_over, 3)) |>
   select(-number_of_odds, -best_implied_prob_over, -second_best_implied_prob_over) |>
   arrange(desc(diff_over), match, player_name, market_name, line) |> 
   relocate(second_best_odds, .after = over_price)
@@ -130,7 +136,7 @@ left_join(player_positions, relationship = "many-to-one") |>
 
 ## H2H
 
-```{r}
+```{r h2h-table}
 #| results: asis
 
 # Process data - home teams
@@ -143,7 +149,7 @@ home_df <- h2h_data %>%
 away_df <- h2h_data %>%
   select(match, round, start_time, venue, away_team, away_win, away_agency) %>%
   rename(team = away_team, win_odds = away_win, agency = away_agency) |> 
-    distinct(match, team, win_odds, agency, .keep_all = TRUE)
+  distinct(match, team, win_odds, agency, .keep_all = TRUE)
 
 # Combine and reshape data
 combined_df <- bind_rows(home_df, away_df)
@@ -156,67 +162,34 @@ odds_table <-
     names_from = agency,
     values_from = win_odds
   ) %>%
-  arrange(start_time, match)
+  arrange(start_time, match) |>
+  # Format date for better display
+  mutate(start_time = format(as.Date(start_time), "%A, %B %d, %Y"))
 
-# Create a more elegant and beautiful gt table
-odds_gt <-
-  odds_table %>%
-  gt(groupname_col = "match") %>%
-  # Enhanced header styling
-  tab_header(
-    title = md("**Head-to-Head Betting Odds**"),
-    subtitle = md(paste("*Updated: ", format(Sys.Date(), "%d %B %Y"), "*"))
-  ) %>%
-  # Better column labels
-  cols_label(
-    team = md("**Team**"),
-    start_time = md("**Date**"),
-    venue = md("**Venue**"),
-    round = md("**Round**"),
-    Pointsbet = md("**Pointsbet**"),
-    TAB = md("**TAB**"),
-    Dabble = md("**Dabble**"),
-    BetRight = md("**BetRight**"),
-    Sportsbet = md("**Sportsbet**"),
-    Bet365 = md("**Bet365**")
-  ) %>%
-  # Format numbers with two decimal places
-  fmt_number(
-    columns = c(Pointsbet, TAB, Dabble, BetRight, Sportsbet, Bet365),
-    decimals = 2
-  ) %>%
-  tab_style(
-    style = list(
-      cell_fill(color = "#34495e"),
-      cell_text(color = "white", weight = "bold"),
-      cell_borders(sides = c("top", "bottom"), color = "#2c3e50", weight = px(2))
-    ),
-    locations = cells_row_groups()
-  ) %>%
-  # Style for column headers
-  tab_style(
-    style = list(
-      cell_borders(sides = "bottom", color = "#2c3e50", weight = px(2))
-    ),
-    locations = cells_column_labels()
-  ) %>%
-  # Make team names stand out
-  tab_style(
-    style = list(
-      cell_text(weight = "bold")
-    ),
-    locations = cells_body(columns = team)
-  ) |> 
-  sub_missing(missing_text = "-") |> 
-  fmt_date(columns = start_time, date_style = "wday_month_day_year") |> 
-  cols_align(align = "center")
-
-odds_gt
+# Create an interactive DT table without export buttons
+datatable(
+  odds_table,
+  rownames = FALSE,
+  filter = 'top',
+  extensions = 'RowGroup',
+  width = "100%",
+  options = list(
+    pageLength = 20,
+    dom = 'frtip', # Removed 'B' to hide buttons
+    autoWidth = FALSE,
+    # Group rows by match (column index 1)
+    rowGroup = list(dataSrc = 0),
+    # Hide the match column as it's used for grouping
+    columnDefs = list(list(visible = FALSE, targets = 0)),
+    order = list(list(0, 'asc')) # Order by the hidden match column
+  ),
+  class = 'display cell-border stripe compact'
+)
 ```
 
 ## Line
 
-```{r}
+```{r line-table}
 #| results: asis
 
 # Process data - home teams
@@ -244,67 +217,33 @@ odds_table <-
   ) %>%
   arrange(match)
 
-# Create a more elegant and beautiful gt table
-odds_gt <-
-  odds_table %>%
-  gt(groupname_col = "match") %>%
-  # Enhanced header styling
-  tab_header(
-    title = md("**Line Betting Odds**"),
-    subtitle = md(paste("*Updated: ", format(Sys.Date(), "%d %B %Y"), "*"))
-  ) %>%
-  # Better column labels
-  cols_label(
-    team = md("**Team**"),
-    # start_time = md("**Date**"),
-    # venue = md("**Venue**"),
-    # round = md("**Round**"),
-    Pointsbet = md("**Pointsbet**"),
-    TAB = md("**TAB**"),
-    # Dabble = md("**Dabble**"),
-    BetRight = md("**BetRight**"),
-    Sportsbet = md("**Sportsbet**"),
-    Bet365 = md("**Bet365**")
-  ) %>%
-  # Format numbers with two decimal places
-  fmt_number(
-    columns = c(Pointsbet, TAB, BetRight, Sportsbet, Bet365),
-    decimals = 2
-  ) %>%
-  tab_style(
-    style = list(
-      cell_fill(color = "#34495e"),
-      cell_text(color = "white", weight = "bold"),
-      cell_borders(sides = c("top", "bottom"), color = "#2c3e50", weight = px(2))
-    ),
-    locations = cells_row_groups()
-  ) %>%
-  # Style for column headers
-  tab_style(
-    style = list(
-      cell_borders(sides = "bottom", color = "#2c3e50", weight = px(2))
-    ),
-    locations = cells_column_labels()
-  ) %>%
-  # Make team names stand out
-  tab_style(
-    style = list(
-      cell_text(weight = "bold")
-    ),
-    locations = cells_body(columns = team)
-  ) |>
-  sub_missing(missing_text = "-") |>
-  cols_align(align = "center")
-
-odds_gt
+# Create an interactive DT table for Line odds without export buttons
+datatable(
+  odds_table,
+  rownames = FALSE,
+  filter = 'top',
+  extensions = 'RowGroup',
+  width = "100%",
+  options = list(
+    pageLength = 20,
+    dom = 'frtip', # Removed 'B'
+    autoWidth = FALSE,
+    # Group rows by match (column index 1)
+    rowGroup = list(dataSrc = 0),
+    # Hide the match column as it's used for grouping
+    columnDefs = list(list(visible = FALSE, targets = 0)),
+    order = list(list(0, 'asc'))
+  ),
+  class = 'display cell-border stripe compact'
+)
 ```
 
 ## +EV Bets
 
-```{r}
+```{r ev-bets-table}
 #| results: asis
 
-# Outlier List
+# Filter for bets with a positive expected value based on last 10 games
 biggest_diffs_outliers <-
   biggest_diffs |>
   filter(diff_over_last_10 >= 0) |>
@@ -312,68 +251,88 @@ biggest_diffs_outliers <-
   rename(gap = diff_over) |> 
   filter(gap > 0)
 
-# Function to take list, filter to agency and return
-filter_agency <- function(df, agency) {
+# Function to filter data frame by agency
+filter_agency <- function(df, agency_name) {
   df |>
-    filter(agency == !!agency)
+    filter(agency == !!agency_name)
 }
 
-# Unique list of agencies
+# Get a unique list of agencies present in the filtered data
 agencies <- biggest_diffs_outliers$agency |> unique()
 
-# Make list of dataframes
+# Create a named list of dataframes, one for each agency
 agency_list <- map(agencies, ~filter_agency(biggest_diffs_outliers, .x)) |> set_names(agencies)
 
-# # For each element of the list, make a DT table
-# agency_list <-
-#   map(agency_list, ~ datatable(.x, options = list(
-#     pageLength = 10, scrollX = TRUE, width = "100%"
-#   )))
+# For each element of the list, make an interactive DT table
+agency_list_dt <-
+  map(agency_list, ~ datatable(
+    .x,
+    rownames = FALSE,
+    filter = 'top',
+    options = list(
+      pageLength = 10,
+      autoWidth = FALSE,
+      scrollX = TRUE,
+      width = "100%",
+      dom = 'frtip' # Removed 'B'
+    ),
+    class = 'display cell-border stripe compact'
+  ))
 
-# Make tabset with each
-maketabs(agency_list, wide = TRUE)
+# Make tabset with each interactive table
+maketabs(agency_list_dt, wide = TRUE)
 ```
 
 ## Biggest Outliers By Agency
 
-```{r}
+```{r outliers-table}
 #| results: asis
 
-# Outlier List
+# Filter for significant outliers (implied probability diff > 3%)
 biggest_diffs_outliers <-
   biggest_diffs |>
   filter(diff_over >= 0.03) |>
   arrange(desc(diff_over)) |> 
   rename(gap = diff_over)
 
-# Function to take list, filter to agency and return
-filter_agency <- function(df, agency) {
+# Function to filter data frame by agency
+filter_agency <- function(df, agency_name) {
   df |>
-    filter(agency == !!agency)
+    filter(agency == !!agency_name)
 }
 
-# Unique list of agencies
+# Get a unique list of agencies
 agencies <- biggest_diffs_outliers$agency |> unique()
 
-# Make list of dataframes
+# Create a named list of dataframes
 agency_list <- map(agencies, ~filter_agency(biggest_diffs_outliers, .x)) |> set_names(agencies)
 
-# # For each element of the list, make a DT table
-# agency_list <-
-#   map(agency_list, ~ datatable(.x, options = list(
-#     pageLength = 10, scrollX = TRUE, width = "100%"
-#   )))
+# For each element of the list, make an interactive DT table
+agency_list_dt <-
+  map(agency_list, ~ datatable(
+    .x,
+    rownames = FALSE,
+    filter = 'top',
+    options = list(
+      pageLength = 10,
+      autoWidth = FALSE,
+      scrollX = TRUE,
+      width = "100%",
+      dom = 'frtip' # Removed 'B'
+    ),
+    class = 'display cell-border stripe compact'
+  ))
 
-# Make tabset with each
-maketabs(agency_list, wide = TRUE)
+# Make tabset with each interactive table
+maketabs(agency_list_dt, wide = TRUE)
 ```
 
 ## Biggest Outliers +EV
 
-```{r}
+```{r outliers-ev-table}
 #| results: asis
 
-# Outlier List
+# Filter for bets that are both outliers AND have positive EV
 biggest_diffs_outliers <-
   biggest_diffs |>
   filter(diff_over_last_10 >= 0) |>
@@ -381,117 +340,151 @@ biggest_diffs_outliers <-
   arrange(desc(diff_over)) |> 
   rename(gap = diff_over)
 
-# Function to take list, filter to agency and return
-filter_agency <- function(df, agency) {
+# Function to filter data frame by agency
+filter_agency <- function(df, agency_name) {
   df |>
-    filter(agency == !!agency)
+    filter(agency == !!agency_name)
 }
 
-# Unique list of agencies
+# Get a unique list of agencies
 agencies <- biggest_diffs_outliers$agency |> unique()
 
-# Make list of dataframes
+# Create a named list of dataframes
 agency_list <- map(agencies, ~filter_agency(biggest_diffs_outliers, .x)) |> set_names(agencies)
 
-# # For each element of the list, make a DT table
-# agency_list <-
-#   map(agency_list, ~ datatable(.x, options = list(
-#     pageLength = 10, scrollX = TRUE, width = "100%"
-#   )))
+# For each element of the list, make an interactive DT table
+agency_list_dt <-
+  map(agency_list, ~ datatable(
+    .x,
+    rownames = FALSE,
+    filter = 'top',
+    options = list(
+      pageLength = 10,
+      autoWidth = FALSE,
+      scrollX = TRUE,
+      width = "100%",
+      dom = 'frtip' # Removed 'B'
+    ),
+    class = 'display cell-border stripe compact'
+  ))
 
-# Make tabset with each
-maketabs(agency_list, wide = TRUE)
+# Make tabset with each interactive table
+maketabs(agency_list_dt, wide = TRUE)
 ```
 
 ## Discrepant Lines
 
-```{r}
+```{r discrepant-lines-table}
 #| results: asis
 
 # Get all lines
-all_lines <-
-all_markets
+all_lines <- all_markets
 
-# Get Overs
+# Get Overs data
 over_lines <-
   all_lines |> 
   filter(!is.na(over_price)) |>
   select(match, player_name, player_team, opposition_team, market_name, over_price, over_line = line, over_agency = agency) |> 
+  # Specific adjustment for TAB's disposal lines
   mutate(over_line = ifelse(over_agency == "TAB" & market_name == "Player Disposals", over_line - 1, over_line))
 
-# Get Unders
+# Get Unders data
 under_lines <-
   all_lines |> 
   filter(!is.na(under_price)) |>
   select(match, player_name, player_team, opposition_team, market_name, under_price, under_line = line, under_agency = agency)
 
-# Combine
+# Combine and find discrepancies
 discrepant_lines <-
   over_lines |>
   left_join(under_lines, by = c("match", "player_name", "player_team", "opposition_team", "market_name"), relationship = "many-to-many") |>
-  mutate(
-    diff = (under_line - over_line)
-  ) |> 
+  mutate(diff = (under_line - over_line)) |> 
   filter(diff > 0) |> 
   mutate(margin = 1/over_price + 1/under_price) |>
-  mutate(margin = 100*(margin - 1)) |>
+  # Calculate and round margin
+  mutate(margin = round(100*(margin - 1), 2)) |>
   arrange(desc(diff), margin, match, player_name, market_name) |> 
   filter(margin <= 15)
 
-discrepant_lines
+# Display as an interactive table
+datatable(
+  discrepant_lines,
+  rownames = FALSE,
+  filter = 'top',
+  width = "100%",
+  options = list(
+    pageLength = 25,
+    scrollX = TRUE,
+    autoWidth = FALSE, # Prevent automatic column width calculation
+    dom = 'frtip'
+  ),
+  class = 'display cell-border stripe compact'
+)
 ```
 
 ## Unders
 
-```{r}
+```{r unders-table}
 #| results: asis
 
-# Get biggest differences from second best odds available
-  biggest_diffs <-
+# Get biggest differences for "under" bets
+biggest_diffs_under <-
   all_markets |>
     filter(!is.na(under_price)) |> 
+    arrange(match, player_name, market_name, line, desc(under_price)) |>
     group_by(match, player_name, market_name, line) |> 
     distinct(match, player_name, market_name, line, agency, .keep_all = TRUE) |> 
     mutate(number_of_odds = n()) |>
     mutate(best_implied_prob_under = implied_prob_under,
            second_best_implied_prob_under = lead(implied_prob_under, 1),
            second_best_odds = lead(under_price, 1)) |>
-  slice_head(n = 1) |> 
-  ungroup() |> 
-  # filter(number_of_odds > 1) |>
-  mutate(diff_under = second_best_implied_prob_under - best_implied_prob_under) |>
-  select(-number_of_odds, -best_implied_prob_under, -second_best_implied_prob_under) |>
-  arrange(desc(diff_under), match, player_name, market_name, line) |> 
-  relocate(second_best_odds, .after = under_price)
+    slice_head(n = 1) |> 
+    ungroup() |> 
+    # Calculate and round difference
+    mutate(diff_under = round(second_best_implied_prob_under - best_implied_prob_under, 3)) |>
+    select(-number_of_odds, -best_implied_prob_under, -second_best_implied_prob_under) |>
+    arrange(desc(diff_under), match, player_name, market_name, line) |> 
+    relocate(second_best_odds, .after = under_price)
 
-# Outlier List
+# Filter for +EV unders
 biggest_diffs_outliers <-
-  biggest_diffs |>
+  biggest_diffs_under |>
   filter(diff_under_last_10 >= 0) |>
   arrange(desc(diff_under_last_10))
 
-# Function to take list, filter to agency and return
-filter_agency <- function(df, agency) {
+# Function to filter data frame by agency
+filter_agency <- function(df, agency_name) {
   df |>
-    filter(agency == !!agency)
+    filter(agency == !!agency_name)
 }
 
-# Unique list of agencies
+# Get a unique list of agencies
 agencies <- biggest_diffs_outliers$agency |> unique()
 
-# Make list of dataframes
+# Create a named list of dataframes
 agency_list <- map(agencies, ~filter_agency(biggest_diffs_outliers, .x)) |> set_names(agencies)
 
-# # For each element of the list, make a DT table
-# agency_list <-
-#   map(agency_list, ~ datatable(.x, options = list(
-#     pageLength = 10, scrollX = TRUE, width = "100%"
-#   )))
+# For each element of the list, make an interactive DT table
+agency_list_dt <-
+  map(agency_list, ~ datatable(
+    .x,
+    rownames = FALSE,
+    filter = 'top',
+    options = list(
+      pageLength = 10,
+      autoWidth = FALSE,
+      scrollX = TRUE,
+      width = "100%",
+      dom = 'frtip' # Removed 'B'
+    ),
+    class = 'display cell-border stripe compact'
+  ))
 
-# Make tabset with each
+# Make tabset with each, with error handling
 tryCatch({
-  maketabs(agency_list, wide = TRUE)
+  maketabs(agency_list_dt, wide = TRUE)
 }, error = function(e) {
+  print("No 'Under' opportunities found to display.")
   print(e)
 })
 ```
@@ -502,23 +495,53 @@ tryCatch({
 
 ## Dabble
 
-```{r}
+```{r dabble-arbs-table}
 #| results: asis
 
+# Read arbitrage data
 arbs <- read_csv("../Data/all_arbs.csv")
+
+# Process and display Dabble arbs in an interactive table
 arbs |> 
+  filter(over_agency == "Dabble" | under_agency == "Dabble") |>
   relocate(over_line, .before = over_agency) |> 
-  relocate(under_line, .after = under_agency)
+  relocate(under_line, .after = under_agency) |>
+  datatable(
+    rownames = FALSE,
+    filter = 'top',
+    width = "100%",
+    options = list(
+      pageLength = 25,
+      autoWidth = FALSE,
+      scrollX = TRUE,
+      dom = 'frtip' # Removed 'B'
+    ),
+    class = 'display cell-border stripe compact'
+  )
 ```
 
 ## Others
 
-```{r}
+```{r other-arbs-table}
 #| results: asis
+
+# Process and display other arbs in an interactive table
 arbs |> 
   filter(over_agency != "Dabble" & under_agency != "Dabble") |> 
   relocate(over_line, .before = over_agency) |> 
-  relocate(under_line, .after = under_agency)
+  relocate(under_line, .after = under_agency) |>
+  datatable(
+    rownames = FALSE,
+    filter = 'top',
+    width = "100%",
+    options = list(
+      pageLength = 25,
+      autoWidth = FALSE,
+      scrollX = TRUE,
+      dom = 'frtip' # Removed 'B'
+    ),
+    class = 'display cell-border stripe compact'
+  )
 ```
 
 :::
