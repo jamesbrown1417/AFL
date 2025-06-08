@@ -435,7 +435,7 @@ discrepant_lines <-
   filter(diff > 0) |> 
   mutate(margin = 1/over_price + 1/under_price) |>
   mutate(margin = 100*(margin - 1)) |>
-  arrange(desc(diff), match, margin, player_name, market_name)
+  arrange(desc(diff), margin, match, player_name, market_name)
 
 discrepant_lines
 ```
@@ -497,11 +497,29 @@ tryCatch({
 
 ## Arbs
 
+::: panel-tabset
+
+## Dabble
+
 ```{r}
 #| results: asis
 
 arbs <- read_csv("../Data/all_arbs.csv")
-arbs
+arbs |> 
+  relocate(over_line, .before = over_agency) |> 
+  relocate(under_line, .after = under_agency)
 ```
+
+## Others
+
+```{r}
+#| results: asis
+arbs |> 
+  filter(over_agency != "Dabble" & under_agency != "Dabble") |> 
+  relocate(over_line, .before = over_agency) |> 
+  relocate(under_line, .after = under_agency)
+```
+
+:::
 
 :::

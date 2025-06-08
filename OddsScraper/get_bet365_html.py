@@ -1,11 +1,32 @@
 # Import Modules=============================================================
 from selenium_driverless import webdriver
 from selenium_driverless.types.by import By
-from datetime import datetime
+from datetime import datetime,  timezone
+import pandas as pd
 
 # Get current timestamp=======================================================
 now = datetime.now()
 time_stamp = now.strftime("%Y-%m-%d_%H-%M-%S")
+
+# Read in schedule=============================================================
+
+# Read csv (no header col)
+schedule_df = pd.read_csv("Data/current_fixture.csv")
+
+# Convert to datetime (keeps UTC timezone)
+schedule_df['start_time'] = pd.to_datetime(schedule_df['start_time'])
+
+# Get games that have not started
+schedule_df = schedule_df[schedule_df['start_time'] > datetime.now(timezone.utc)]
+
+# Get next or current round
+current_round = schedule_df.iloc[0]['round']
+
+# Get schedule for current round
+schedule_df_current = schedule_df[schedule_df['round'] == current_round]
+
+# Get number of remaining games
+remaining_games = len(schedule_df_current)
 
 # Get H2H HTML===============================================================
 import asyncio
@@ -36,7 +57,7 @@ async def main():
         # URL List
         url_list = []
         
-        for index in range(len(team_elements)):
+        for index in range(len(schedule_df_current)):
             # Get the team elements again as the page has been refreshed
             team_elements = await driver.find_elements(By.XPATH, "//div[contains(@class, 'src-ParticipantFixtureDetailsHigher_TeamNames')]")
             

@@ -40,3 +40,4 @@ current_fixture$start_time <- with_tz(current_fixture$start_time, tzone = "Austr
 
 # Save as RDS file
 write_rds(current_fixture, "Data/current_fixture.rds")
+write_csv(current_fixture, "Data/current_fixture.csv")
