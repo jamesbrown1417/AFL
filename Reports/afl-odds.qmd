@@ -410,14 +410,14 @@ maketabs(agency_list, wide = TRUE)
 
 # Get all lines
 all_lines <-
-all_markets |> 
-  filter(!is.na(under_price))
+all_markets
 
 # Get Overs
 over_lines <-
   all_lines |> 
   filter(!is.na(over_price)) |>
-  select(match, player_name, player_team, opposition_team, market_name, over_price, over_line = line, over_agency = agency)
+  select(match, player_name, player_team, opposition_team, market_name, over_price, over_line = line, over_agency = agency) |> 
+  mutate(over_line = ifelse(over_agency == "TAB" & market_name == "Player Disposals", over_line - 1, over_line))
 
 # Get Unders
 under_lines <-
@@ -435,7 +435,8 @@ discrepant_lines <-
   filter(diff > 0) |> 
   mutate(margin = 1/over_price + 1/under_price) |>
   mutate(margin = 100*(margin - 1)) |>
-  arrange(desc(diff), margin, match, player_name, market_name)
+  arrange(desc(diff), margin, match, player_name, market_name) |> 
+  filter(margin <= 15)
 
 discrepant_lines
 ```
