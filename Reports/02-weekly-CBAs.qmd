@@ -1,6 +1,6 @@
 ---
 title: "Weekly CBA Report"
-subtitle: "2024 Season"
+subtitle: "2025 Season"
 format:
   html:
       df-print: paged
@@ -34,7 +34,8 @@ source("../Functions/data_processing_functions.R")
 current_round <- fetch_fixture()$compSeason.currentRoundNumber[[1]]
 
 # Get Data
-current_round_data <- get_fantasy_data(season = 2024, round_number = current_round - 1)
+current_round_data <- get_fantasy_data(season = 2025, round_number = current_round - 1)
+
 
 # Get only players with at least one CBA
 current_round_cbas <-

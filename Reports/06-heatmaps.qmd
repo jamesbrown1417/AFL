@@ -16,10 +16,6 @@ warning: false
 message: false
 ---
 
-\# Load Current Season Data
-
-current_season_data \<- get_fantasy_data(season = 2024)
-
 ```{r}
 # Libraries and functions
 library(tidyverse)
@@ -31,7 +27,7 @@ library(fitzRoy)
 source("../Functions/data_processing_functions.R")
 
 # Load Current Season Data
-current_season_data <- get_fantasy_data(season = 2024)
+current_season_data <- get_fantasy_data(season = 2025)
 
 # Fix Round
 current_season_data <-
