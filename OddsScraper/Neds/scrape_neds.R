@@ -350,7 +350,7 @@ fantasy_overs <-
   mutate(player_name = coalesce(player_name_1, player_name_2)) |>
   transmute(
     match = match_name,
-    market_name = "Player Fantasy",
+    market_name = "Player Fantasy Points",
     market_id,
     player_name,
     entrant_id,
@@ -371,7 +371,7 @@ fantasy_unders <-
   mutate(player_name = coalesce(player_name_1, player_name_2)) |>
   transmute(
     match = match_name,
-    market_name = "Player Fantasy",
+    market_name = "Player Fantasy Points",
     market_id,
     player_name,
     entrant_id,
