@@ -1,7 +1,7 @@
 from playwright.async_api import async_playwright
 import asyncio
-import pathlib  # Use pathlib for path handling
-import logging  # Optional: for better feedback
+import pathlib
+import logging
 
 # --- Configuration ---
 # Page to navigate to
