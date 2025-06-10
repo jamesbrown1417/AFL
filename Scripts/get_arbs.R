@@ -79,8 +79,11 @@ all_player_fantasy_points <-
              full.names = TRUE,
              pattern = "player_fantasy_points") |>
   map(read_csv, num_threads = 12 ) |>
+  # Make line and over_price numeric
+  map(~mutate(.x, line = as.numeric(line),
+              over_price = as.numeric(over_price))) |>
   # Ignore null elements
-  keep( ~ nrow(.x) > 0) |>
+  # keep( ~ nrow(.x) > 0) |>
   map(~select(.x, -matches("id"))) |>
   reduce(bind_rows)
 
@@ -115,7 +118,7 @@ all_player_marks <-
              pattern = "player_marks") |>
   map(read_csv) |>
   # Ignore null elements
-  keep( ~ nrow(.x) > 0) |>
+  # keep( ~ nrow(.x) > 0) |>
   map(~select(.x, -matches("id"))) |>
   reduce(bind_rows) |>
   arrange(player_name, line, desc(over_price))
@@ -133,7 +136,7 @@ all_player_tackles <-
              pattern = "player_tackles") |>
   map(read_csv) |>
   # Ignore null elements
-  keep( ~ nrow(.x) > 0) |>
+  # keep( ~ nrow(.x) > 0) |>
   map(~select(.x, -matches("id"))) |>
   reduce(bind_rows) |>
   arrange(player_name, line, desc(over_price))
@@ -253,6 +256,8 @@ fantasy_points_arbs <-
   ) |>
   filter(under_line >= over_line) |>
   relocate(under_price, .after = over_price) |>
+  mutate(under_price = as.numeric(under_price)) |>
+  mutate(over_price = as.numeric(over_price)) |>
   mutate(margin = 1 / under_price + 1 / over_price) |>
   arrange(margin) |>
   mutate(margin = (1 - margin)) |>
@@ -308,6 +313,8 @@ goals_arbs <-
   ) |>
   filter(under_line >= over_line) |>
   relocate(under_price, .after = over_price) |>
+  mutate(under_price = as.numeric(under_price)) |>
+  mutate(over_price = as.numeric(over_price)) |>
   mutate(margin = 1 / under_price + 1 / over_price) |>
   arrange(margin) |>
   mutate(margin = (1 - margin)) |>
@@ -363,6 +370,8 @@ marks_arbs <-
   ) |>
   filter(under_line >= over_line) |> 
   relocate(under_price, .after = over_price) |>
+  mutate(under_price = as.numeric(under_price)) |>
+  mutate(over_price = as.numeric(over_price)) |>
   mutate(margin = 1 / under_price + 1 / over_price) |>
   arrange(margin) |>
   mutate(margin = (1 - margin)) |>
@@ -418,6 +427,8 @@ tackles_arbs <-
   ) |>
   filter(under_line >= over_line) |>
   relocate(under_price, .after = over_price) |>
+  mutate(under_price = as.numeric(under_price)) |>
+  mutate(over_price = as.numeric(over_price)) |>
   mutate(margin = 1 / under_price + 1 / over_price) |>
   arrange(margin) |>
   mutate(margin = (1 - margin)) |>
@@ -431,13 +442,16 @@ tackles_arbs <-
 #===============================================================================
 
 all_arbs <-
-  bind_rows(
+  list(
     disposals_arbs,
     fantasy_points_arbs,
     goals_arbs,
     marks_arbs,
     tackles_arbs
   ) |>
+  # Keep if nrow of dataframe greater than 0
+  keep(~nrow(.x) > 0) |>
+  reduce(bind_rows) |>
   arrange(desc(margin)) |> 
   filter(!is.na(player_name))
 
