@@ -198,9 +198,9 @@ get_disposal_odds <- function(market_id, all_afl_market_codes) {
     pull(runners) |>
     bind_rows() |>
     as_tibble() |>
-    unnest(6) |>
-    unnest(6) |>
-    select(runnerId = selectionId, price, size) |> 
+    unnest(ex) |>
+    unnest(availableToBack) |>
+    select(runnerId = selectionId, any_of(c("price", "size"))) |> 
     mutate(market_id = market_id) |> 
     left_join(all_afl_market_codes, by = c("market_id", "runnerId"))
   
@@ -324,3 +324,141 @@ left_join(player_names, by = c("player_name" = "player_full_name")) |>
 
 # Write to CSV
 write_csv(all_disposal_odds, "Data/scraped_odds/betfair_player_disposals.csv")
+
+#===============================================================================
+# Get Goal Lines
+#===============================================================================
+
+# Define the function to get head-to-head odds for a given market ID
+get_goal_odds <- function(market_id, all_afl_market_codes) {
+  # Get the market book for the given market ID
+  goal_odds <- listMarketBook(marketIds = market_id, priceData = "EX_BEST_OFFERS") |>
+    pull(runners) |>
+    bind_rows() |>
+    as_tibble() |>
+    unnest(ex) |>
+    unnest(availableToBack) |>
+    select(runnerId = selectionId, any_of(c("price", "size"))) |> 
+    mutate(market_id = market_id) |> 
+    left_join(all_afl_market_codes, by = c("market_id", "runnerId"))
+  
+  # Get over odds
+  over_odds <-
+    goal_odds |>
+    separate(
+      event_name,
+      into = c("home_team", "away_team"),
+      sep = " v ",
+      remove = FALSE
+    ) |>
+    filter(str_detect(runnerName, "Over")) |>
+    mutate(home_team = fix_team_names(home_team),
+           away_team = fix_team_names(away_team),
+           runnerName = fix_team_names(runnerName)) |>
+    mutate(event_name = paste(home_team, "v", away_team)) |>
+    mutate(player_name = str_remove(market_name, "Goals - ")) |>
+    mutate(market_name = "Player Goals") |> 
+    mutate(line = str_remove(runnerName, "Over ")) |>
+    mutate(line = str_remove(line, " Goals")) |>
+    mutate(line = as.numeric(line)) |>
+    select(
+      match = event_name,
+      home_team,
+      away_team,
+      player_name,
+      line,
+      over_price = price,
+      over_liquidity = size,
+      market_name
+    ) |>
+    arrange(desc(over_price)) |>
+    slice_head(n = 1)
+  
+  # Get under odds
+  under_odds <- goal_odds |>
+    separate(
+      event_name,
+      into = c("home_team", "away_team"),
+      sep = " v ",
+      remove = FALSE
+    ) |>
+    filter(str_detect(runnerName, "Under")) |>
+    mutate(home_team = fix_team_names(home_team),
+           away_team = fix_team_names(away_team),
+           runnerName = fix_team_names(runnerName)) |>
+    mutate(event_name = paste(home_team, "v", away_team)) |>
+    mutate(player_name = str_remove(market_name, "Goals - ")) |>
+    mutate(market_name = "Player Goals") |> 
+    mutate(line = str_remove(runnerName, "Under ")) |>
+    mutate(line = str_remove(line, " Goals")) |>
+    mutate(line = as.numeric(line)) |>
+    select(
+      match = event_name,
+      home_team,
+      away_team,
+      player_name,
+      line,
+      under_price = price,
+      under_liquidity = size,
+      market_name
+    ) |>
+    arrange(desc(under_price)) |>
+    slice_head(n = 1)
+  
+  # Join over and under odds
+  goal_odds_combined <-
+    over_odds |>
+    left_join(under_odds) |> 
+    mutate(over_price = convert_odds(over_price),
+           under_price = convert_odds(under_price)) |> 
+    mutate(agency = "Betfair")
+  
+  return(goal_odds_combined)
+}
+
+# Get all MATCH_ODDS codes
+goal_codes <-
+  all_afl_market_codes |>
+  filter(str_detect(market_name, "Goals \\-")) |>
+  pull(market_id) |> 
+  unique()
+
+# Get safe version of function
+safe_get_goal_odds <- safely(get_goal_odds)
+
+# Get goal odds for all MATCH_ODDS codes
+all_goal_odds <-
+  map(goal_codes, safe_get_goal_odds, all_afl_market_codes, .progress = TRUE) |> 
+  # Get result part
+  map("result") |>
+  # Keep only non null
+  keep(~ !is.null(.x)) |>
+  bind_rows()
+
+# If no goal odds were found, create empty tibble
+if (nrow(all_goal_odds) == 0) {
+  all_goal_odds <- tibble(
+    match = character(),
+    home_team = character(),
+    away_team = character(),
+    player_name = character(),
+    line = numeric(),
+    over_price = numeric(),
+    over_liquidity = numeric(),
+    under_price = numeric(),
+    under_liquidity = numeric(),
+    market_name = character(),
+    agency = character()
+  )
+}
+
+# Add player teams to goals
+all_goal_odds <-
+  all_goal_odds |> 
+  left_join(player_names, by = c("player_name" = "player_full_name")) |> 
+  rename(player_team = team_name) |> 
+  mutate(opposition_team = ifelse(home_team == player_team, away_team, home_team)) |>
+  relocate(player_team, opposition_team, .after = player_name)
+
+# Write to CSV
+write_csv(all_goal_odds, "Data/scraped_odds/betfair_player_goals.csv")
