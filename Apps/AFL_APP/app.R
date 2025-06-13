@@ -73,7 +73,7 @@ if (
   TRUE
   ) {
   # Read RDS Data for Windows
-  h2h_data <- read_rds("../../Data/processed_odds/all_h2h.rds")
+  h2h_data <- read_rds("../../Data/processed_odds/all_h2h.rds") |> arrange(start_time)
   line_data <- read_rds("../../Data/processed_odds/all_line.rds")
   player_disposals_data <- read_rds("../../Data/processed_odds/all_player_disposals.rds")
   player_goals_data <- read_rds("../../Data/processed_odds/all_player_goals.rds")
