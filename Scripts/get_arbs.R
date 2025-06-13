@@ -116,7 +116,10 @@ all_player_marks <-
   list.files("Data/scraped_odds",
              full.names = TRUE,
              pattern = "player_marks") |>
+  # Keep files more than 200 bytes in size
+  keep(~file.info(.x)$size > 200) |>
   map(read_csv) |>
+  
   # Ignore null elements
   # keep( ~ nrow(.x) > 0) |>
   map(~select(.x, -matches("id"))) |>
@@ -134,6 +137,8 @@ all_player_tackles <-
   list.files("Data/scraped_odds",
              full.names = TRUE,
              pattern = "player_tackles") |>
+  # Keep files more than 200 bytes in size
+  keep(~file.info(.x)$size > 200) |>
   map(read_csv) |>
   # Ignore null elements
   # keep( ~ nrow(.x) > 0) |>

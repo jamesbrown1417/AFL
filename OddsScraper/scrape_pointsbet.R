@@ -750,11 +750,9 @@ pointsbet_h2h_main <- function() {
   pointsbet_player_marks_lines <-
     pointsbet_data_player_props |>
     filter(str_detect(market, "Pick Your Own Marks")) |>
-    separate(outcome,
-             into = c("player_name", "line"),
-             sep = " To Take ") |> 
-    mutate(line = str_extract(line, "[0-9]{1,2}")) |>
+    mutate(line = str_extract(outcome, "[0-9]{1,2}")) |>
     mutate(line = as.numeric(line) - 0.5) |>
+    mutate(player_name = str_remove(outcome, " \\d+.*$")) |>
     separate(
       match,
       into = c("home_team", "away_team"),
@@ -792,11 +790,9 @@ pointsbet_h2h_main <- function() {
   pointsbet_player_tackles_lines <-
     pointsbet_data_player_props |>
     filter(str_detect(market, "Pick Your Own Tackles")) |>
-    separate(outcome,
-             into = c("player_name", "line"),
-             sep = " To Record ") |> 
-    mutate(line = str_extract(line, "[0-9]{1,2}")) |>
+    mutate(line = str_extract(outcome, "[0-9]{1,2}")) |>
     mutate(line = as.numeric(line) - 0.5) |>
+    mutate(player_name = str_remove(outcome, " \\d+.*$")) |>
     separate(
       match,
       into = c("home_team", "away_team"),
