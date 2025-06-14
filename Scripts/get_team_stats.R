@@ -2,10 +2,17 @@ library(tidyverse)
 
 # Read in current fantasy data table
 afl_fantasy_2025_data <- read_rds("Data/afl_fantasy_2025_data.rds")
+afl_fantasy_2015_2024_data <- read_rds("Data/afl_fantasy_2015_2024_data.rds")
+afl_fantasy_data <- bind_rows(afl_fantasy_2015_2024_data, afl_fantasy_2025_data)
+
+# Get just since 2021
+afl_fantasy_data <-
+  afl_fantasy_data |>
+  filter(season_name %in% c("2021", "2022", "2023", "2024", "2025"))
 
 # Get team variables
 afl_team_data <-
-afl_fantasy_2025_data |> 
+  afl_fantasy_data |> 
   select(
     match_name,
     home_team,
@@ -125,4 +132,4 @@ all_team_stats <-
     fantasy_points = home_team_fantasy_points + away_team_fantasy_points,
     .keep = "none"
   ) |> 
-  arrange(start_time_utc)
+  arrange(desc(start_time_utc))
