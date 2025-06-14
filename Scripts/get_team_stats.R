@@ -133,3 +133,6 @@ all_team_stats <-
     .keep = "none"
   ) |> 
   arrange(desc(start_time_utc))
+
+# Save the team stats
+write_rds(all_team_stats, "Data/afl_team_stats_2021_2025.rds")

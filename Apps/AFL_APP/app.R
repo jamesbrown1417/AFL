@@ -13,6 +13,7 @@ library(DT)
 library(googlesheets4)
 library(googledrive)
 library(readxl)
+library(zoo)
 
 # Determine the operating system
 os_type <- Sys.info()["sysname"]
@@ -26,6 +27,7 @@ os_type <- Sys.info()["sysname"]
 all_player_stats <- read_rds("../../Data/afl_fantasy_2015_2024_data.rds")
 data_2025 <- read_rds("../../Data/afl_fantasy_2025_data.rds")
 all_player_stats <- bind_rows(all_player_stats, data_2025)
+team_stats <- read_rds("../../Data/afl_team_stats_2021_2025.rds")
 
 # Fix CBA Percentage
 all_player_stats$cba_percentage <- round(all_player_stats$cba_percentage, 3)
@@ -424,14 +426,132 @@ ui <- page_navbar(
     sidebarLayout(
       sidebarPanel(
         width = 3,
-        h4("Settings"),
-        selectInput("season_input_b", "Select Season:", choices = all_player_stats$season_name |> unique(), multiple = TRUE, selectize = TRUE, selected = all_player_stats$season_name |> unique()),
+        h4("General Settings"),
+        selectInput("season_input_b", "Select Season:", 
+                    choices = team_stats$season_name |> unique() |> sort(decreasing = TRUE), 
+                    multiple = TRUE, 
+                    selectize = TRUE, 
+                    selected = team_stats$season_name |> unique()),
         markdown(mds = c("__Select Only Last n Games:__")),
-        numericInput("last_games_team", "Number of Games", value = NA)
+        numericInput("last_games_team", "Number of Games per Team", value = NA),
+        hr(),
+        h4("Analysis Settings"),
+        conditionalPanel(
+          condition = "input.team_tabs == 'Head-to-Head'",
+          selectInput("team_a", "Select Team A:", 
+                      choices = c("", sort(unique(c(team_stats$home_team, team_stats$away_team)))),
+                      selected = ""),
+          selectInput("team_b", "Select Team B:", 
+                      choices = c("", sort(unique(c(team_stats$home_team, team_stats$away_team)))),
+                      selected = "")
+        ),
+        conditionalPanel(
+          condition = "input.team_tabs == 'Opposition Analysis'",
+          selectInput("selected_opposition", "Filter by Opposition (optional):", 
+                      choices = c("All" = "", sort(unique(c(team_stats$home_team, team_stats$away_team)))),
+                      selected = ""),
+          numericInput("min_games_opp", "Minimum Games vs Opposition", value = 2, min = 1)
+        ),
+        checkboxInput("aggregate_opp",
+                      label = "Show league aggregate (all teams)",
+                      value = FALSE),
+        conditionalPanel(
+          condition = "input.team_tabs == 'Venue Stats'",
+          selectInput("selected_venue", "Filter by Venue (optional):", 
+                      choices = c("All" = "", sort(unique(team_stats$venue))),
+                      selected = ""),
+          numericInput("min_games_venue", "Minimum Games at Venue", value = 3, min = 1)
+        ),
+        checkboxInput("aggregate_venue",
+                      label = "Show league aggregate (all teams)",
+                      value = FALSE),
+        conditionalPanel(
+          condition = "input.team_tabs == 'Performance Trends'",
+          radioButtons("team_metric", "Performance Metric:",
+                       choices = list("Score" = "Score", "Fantasy Points" = "Fantasy"),
+                       selected = "Score")
+        )
       ),
       mainPanel(
         width = 9,
-        card(card_body(div(class = "dt-fill-container", DTOutput(outputId = "team_metric_table"))))
+        tabsetPanel(
+          id = "team_tabs",
+          tabPanel(
+            "Team Summary",
+            card(
+              full_screen = TRUE,
+              card_body(
+                div(class = "dt-fill-container", DTOutput(outputId = "team_summary_table"))
+              )
+            )
+          ),
+          tabPanel(
+            "Home/Away Splits",
+            card(
+              full_screen = TRUE,
+              card_body(
+                div(class = "dt-fill-container", DTOutput(outputId = "home_away_table"))
+              )
+            )
+          ),
+          tabPanel(
+            "Opposition Analysis",
+            card(
+              full_screen = TRUE,
+              card_header("Team Performance vs Opposition - Disposals, Marks & Tackles"),
+              card_body(
+                div(class = "dt-fill-container", DTOutput(outputId = "opposition_table"))
+              )
+            )
+          ),
+          tabPanel(
+            "Venue Stats",
+            card(
+              full_screen = TRUE,
+              card_header("Team Performance by Venue - Disposals, Marks & Tackles"),
+              card_body(
+                div(class = "dt-fill-container", DTOutput(outputId = "venue_specific_table"))
+              )
+            )
+          ),
+          tabPanel(
+            "Performance Trends",
+            card(
+              full_screen = TRUE,
+              card_body(
+                plotOutput(outputId = "team_performance_plot", height = "75vh")
+              )
+            )
+          ),
+          tabPanel(
+            "Head-to-Head",
+            card(
+              full_screen = TRUE,
+              card_body(
+                plotOutput(outputId = "h2h_comparison_plot", height = "75vh")
+              )
+            )
+          ),
+          tabPanel(
+            "Venue Performance",
+            card(
+              full_screen = TRUE,
+              card_header("Win Rate & Scoring by Venue"),
+              card_body(
+                div(class = "dt-fill-container", DTOutput(outputId = "venue_table"))
+              )
+            )
+          ),
+          tabPanel(
+            "Weather Impact",
+            card(
+              full_screen = TRUE,
+              card_body(
+                div(class = "dt-fill-container", DTOutput(outputId = "weather_table"))
+              )
+            )
+          )
+        )
       )
     )
   ),
@@ -714,67 +834,570 @@ server <- function(input, output) {
     )
   })
   
-  #=============================================================================
+#=============================================================================
+# Filter team stats
+#=============================================================================
+
+# Reactive function to filter team stats
+filtered_team_stats <- reactive({
+  
   # Filter team stats
-  #=============================================================================
+  filtered_team_stats <-
+    team_stats |>
+    filter(season_name %in% input$season_input_b)
   
-  # # Reactive function to filter team stats
-  # filtered_team_stats <- reactive({
-  #   
-  #   # Filter team stats
-  #   filtered_team_stats <-
-  #     all_team_stats |>
-  #     filter(season %in% input$season_input_b)
-  #   
-  #   # Filter by last n games
-  #   if (!is.na(input$last_games_team)) {
-  #     filtered_team_stats <-
-  #       filtered_team_stats |>
-  #       group_by(teamId) |> 
-  #       slice_head(n = input$last_games_team) |> 
-  #       ungroup()
-  #   }
-  #   
-  #   # Summarise stats
-  #   filtered_team_stats <-
-  #     filtered_team_stats |>
-  #     select(
-  #       teamName,
-  #       possessions,
-  #       pacePer40,
-  #       offensiveRating,
-  #       defensiveRating,
-  #       netRating,
-  #       assistPercentage,
-  #       defensiveReboundPercentage,
-  #       offensiveReboundPercentage,
-  #       reboundPercentage,
-  #       trueShootingPercentage,
-  #       effectiveFieldGoalPercentage
-  #     ) |> 
-  #     group_by(teamName) |>
-  #     summarise(across(.cols = where(is.numeric),
-  #                      .fns = list(mean = mean))) |> 
-  #     mutate(across(.cols = where(is.numeric), .fns = round, 2))
-  #   
-  #   # Return filtered team stats
-  #   return(filtered_team_stats)
-  #   
-  # })
+  # Filter by last n games if specified
+  if (!is.na(input$last_games_team)) {
+    filtered_team_stats <-
+      filtered_team_stats |>
+      arrange(desc(start_time_utc)) |>
+      group_by(home_team) |> 
+      slice_head(n = input$last_games_team) |> 
+      ungroup()
+  }
   
-  #=============================================================================
-  # Table team stats
-  #=============================================================================
+  return(filtered_team_stats)
+})
+
+# Reactive function for team summary statistics
+team_summary_stats <- reactive({
   
-  # output$team_metric_table <- renderDT({
-  #   datatable(
-  #     filtered_team_stats(),
-  #     options = list(pageLength = 15, autoWidth = TRUE),
-  #     width = "100%",
-  #     height = "800px"
-  #   )
-  # })
+  # Get filtered data
+  data <- filtered_team_stats()
   
+  # Create home team stats
+  home_stats <- data |>
+    select(
+      team = home_team,
+      goals = home_team_goals,
+      behinds = home_team_behinds,
+      score = home_team_score,
+      disposals = home_team_disposals,
+      tackles = home_team_tackles,
+      marks = home_team_marks,
+      fantasy_points = home_team_fantasy_points,
+      opponent_score = away_team_score
+    ) |>
+    mutate(
+      win = score > opponent_score,
+      margin = score - opponent_score,
+      location = "Home"
+    )
+  
+  # Create away team stats
+  away_stats <- data |>
+    select(
+      team = away_team,
+      goals = away_team_goals,
+      behinds = away_team_behinds,
+      score = away_team_score,
+      disposals = away_team_disposals,
+      tackles = away_team_tackles,
+      marks = away_team_marks,
+      fantasy_points = away_team_fantasy_points,
+      opponent_score = home_team_score
+    ) |>
+    mutate(
+      win = score > opponent_score,
+      margin = score - opponent_score,
+      location = "Away"
+    )
+  
+  # Combine and summarize
+  combined_stats <- bind_rows(home_stats, away_stats) |>
+    group_by(team) |>
+    summarise(
+      Games = n(),
+      Wins = sum(win),
+      `Win %` = round(mean(win) * 100, 1),
+      `Avg Score` = round(mean(score), 1),
+      `Avg Opp Score` = round(mean(opponent_score), 1),
+      `Avg Margin` = round(mean(margin), 1),
+      `Avg Goals` = round(mean(goals), 1),
+      `Avg Behinds` = round(mean(behinds), 1),
+      `Goal Accuracy %` = round(mean(goals / (goals + behinds)) * 100, 1),
+      `Avg Disposals` = round(mean(disposals), 0),
+      `Avg Tackles` = round(mean(tackles), 1),
+      `Avg Marks` = round(mean(marks), 1),
+      `Avg Fantasy` = round(mean(fantasy_points), 0)
+    ) |>
+    arrange(desc(`Win %`))
+  
+  return(combined_stats)
+})
+
+# Reactive function for home/away splits
+home_away_splits <- reactive({
+  
+  data <- filtered_team_stats()
+  
+  # Home performance
+  home_perf <- data |>
+    group_by(team = home_team) |>
+    summarise(
+      `Home Games` = n(),
+      `Home Wins` = sum(home_team_score > away_team_score),
+      `Home Win %` = round(mean(home_team_score > away_team_score) * 100, 1),
+      `Home Avg Score` = round(mean(home_team_score), 1),
+      `Home Avg Fantasy` = round(mean(home_team_fantasy_points), 0)
+    )
+  
+  # Away performance
+  away_perf <- data |>
+    group_by(team = away_team) |>
+    summarise(
+      `Away Games` = n(),
+      `Away Wins` = sum(away_team_score > home_team_score),
+      `Away Win %` = round(mean(away_team_score > home_team_score) * 100, 1),
+      `Away Avg Score` = round(mean(away_team_score), 1),
+      `Away Avg Fantasy` = round(mean(away_team_fantasy_points), 0)
+    )
+  
+  # Combine
+  combined <- home_perf |>
+    full_join(away_perf, by = "team") |>
+    mutate(
+      `H/A Win % Diff` = `Home Win %` - `Away Win %`,
+      `H/A Score Diff` = `Home Avg Score` - `Away Avg Score`
+    ) |>
+    arrange(desc(`Home Win %`))
+  
+  return(combined)
+})
+
+# Reactive function for venue performance
+venue_performance <- reactive({
+  
+  data <- filtered_team_stats()
+  
+  venue_stats <- data |>
+    pivot_longer(
+      cols = c(home_team, away_team),
+      names_to = "home_away",
+      values_to = "team"
+    ) |>
+    mutate(
+      score = ifelse(home_away == "home_team", home_team_score, away_team_score),
+      opponent_score = ifelse(home_away == "home_team", away_team_score, home_team_score),
+      win = score > opponent_score
+    ) |>
+    group_by(team, venue) |>
+    summarise(
+      Games = n(),
+      Wins = sum(win),
+      `Win %` = round(mean(win) * 100, 1),
+      `Avg Score` = round(mean(score), 1),
+      .groups = "drop"
+    ) |>
+    filter(Games >= 3) |>  # Only show venues with 3+ games
+    arrange(team, desc(`Win %`))
+  
+  return(venue_stats)
+})
+
+# Reactive function for weather impact
+weather_impact <- reactive({
+  
+  data <- filtered_team_stats()
+  
+  weather_stats <- data |>
+    pivot_longer(
+      cols = c(home_team, away_team),
+      names_to = "home_away",
+      values_to = "team"
+    ) |>
+    mutate(
+      score = ifelse(home_away == "home_team", home_team_score, away_team_score),
+      disposals = ifelse(home_away == "home_team", home_team_disposals, away_team_disposals),
+      marks = ifelse(home_away == "home_team", home_team_marks, away_team_marks)
+    ) |>
+    group_by(team, weather_category) |>
+    summarise(
+      Games = n(),
+      `Avg Score` = round(mean(score), 1),
+      `Avg Disposals` = round(mean(disposals), 0),
+      `Avg Marks` = round(mean(marks), 1),
+      .groups = "drop"
+    ) |>
+    filter(Games >= 2) |>
+    arrange(team, weather_category)
+  
+  return(weather_stats)
+})
+
+# Reactive function for opposition analysis
+opposition_analysis <- reactive({
+  data <- filtered_team_stats()
+  
+  # create a long form of every team’s performance vs its opponent -------------
+  home_vs_opp <- data |>
+    transmute(team        = home_team,
+              opposition  = away_team,
+              disposals   = home_team_disposals,
+              marks       = home_team_marks,
+              tackles     = home_team_tackles,
+              score       = home_team_score,
+              opp_score   = away_team_score)
+  
+  away_vs_opp <- data |>
+    transmute(team        = away_team,
+              opposition  = home_team,
+              disposals   = away_team_disposals,
+              marks       = away_team_marks,
+              tackles     = away_team_tackles,
+              score       = away_team_score,
+              opp_score   = home_team_score)
+  
+  opp_stats <- bind_rows(home_vs_opp, away_vs_opp)
+  
+  # optional filter by the selected opposition ---------------------------------
+  if (!is.null(input$selected_opposition) && input$selected_opposition != "")
+    opp_stats <- opp_stats |> filter(opposition == input$selected_opposition)
+  
+  ## ── NEW: league-wide aggregate toggle ──────────────────────────────────────
+  if (isTRUE(input$aggregate_opp)) {
+    opp_stats |>
+      summarise(
+        Games            = n(),
+        Wins             = sum(score > opp_score),
+        `Win %`          = round(mean(score > opp_score) * 100, 1),
+        `Avg Disposals`  = round(mean(disposals), 0),
+        `Total Disposals`= sum(disposals),
+        `Avg Marks`      = round(mean(marks), 1),
+        `Total Marks`    = sum(marks),
+        `Avg Tackles`    = round(mean(tackles), 1),
+        `Total Tackles`  = sum(tackles),
+        `Avg Score`      = round(mean(score), 1),
+        `Avg Margin`     = round(mean(score - opp_score), 1)
+      ) |>
+      mutate(team = "All Teams") |>
+      relocate(team)
+  } else {
+    opp_stats |>
+      group_by(team, opposition) |>
+      summarise(
+        Games            = n(),
+        Wins             = sum(score > opp_score),
+        `Win %`          = round(mean(score > opp_score) * 100, 1),
+        `Avg Disposals`  = round(mean(disposals), 0),
+        `Total Disposals`= sum(disposals),
+        `Avg Marks`      = round(mean(marks), 1),
+        `Total Marks`    = sum(marks),
+        `Avg Tackles`    = round(mean(tackles), 1),
+        `Total Tackles`  = sum(tackles),
+        `Avg Score`      = round(mean(score), 1),
+        `Avg Margin`     = round(mean(score - opp_score), 1),
+        .groups = "drop"
+      ) |>
+      filter(Games >= input$min_games_opp) |>
+      arrange(desc(`Win %`))
+  }
+})
+
+# Reactive function for venue-specific stats
+venue_specific_stats <- reactive({
+  data <- filtered_team_stats()
+  
+  # long form for every team at every venue ------------------------------------
+  home_venue <- data |>
+    transmute(team        = home_team,
+              venue,
+              disposals   = home_team_disposals,
+              marks       = home_team_marks,
+              tackles     = home_team_tackles,
+              score       = home_team_score,
+              opp_score   = away_team_score)
+  
+  away_venue <- data |>
+    transmute(team        = away_team,
+              venue,
+              disposals   = away_team_disposals,
+              marks       = away_team_marks,
+              tackles     = away_team_tackles,
+              score       = away_team_score,
+              opp_score   = home_team_score)
+  
+  venue_stats <- bind_rows(home_venue, away_venue)
+  
+  # optional filter by the chosen venue ----------------------------------------
+  if (!is.null(input$selected_venue) && input$selected_venue != "")
+    venue_stats <- venue_stats |> filter(venue == input$selected_venue)
+  
+  ## ── NEW: league-wide aggregate toggle ──────────────────────────────────────
+  if (isTRUE(input$aggregate_venue)) {
+    venue_stats |>
+      summarise(
+        Games            = n(),
+        Wins             = sum(score > opp_score),
+        `Win %`          = round(mean(score > opp_score) * 100, 1),
+        `Avg Disposals`  = round(mean(disposals), 0),
+        `Total Disposals`= sum(disposals),
+        `Avg Marks`      = round(mean(marks), 1),
+        `Total Marks`    = sum(marks),
+        `Avg Tackles`    = round(mean(tackles), 1),
+        `Total Tackles`  = sum(tackles),
+        `Avg Score`      = round(mean(score), 1)
+      ) |>
+      mutate(team = "All Teams") |>
+      relocate(team)
+  } else {
+    venue_stats |>
+      group_by(team, venue) |>
+      summarise(
+        Games            = n(),
+        Wins             = sum(score > opp_score),
+        `Win %`          = round(mean(score > opp_score) * 100, 1),
+        `Avg Disposals`  = round(mean(disposals), 0),
+        `Total Disposals`= sum(disposals),
+        `Avg Marks`      = round(mean(marks), 1),
+        `Total Marks`    = sum(marks),
+        `Avg Tackles`    = round(mean(tackles), 1),
+        `Total Tackles`  = sum(tackles),
+        `Avg Score`      = round(mean(score), 1),
+        .groups = "drop"
+      ) |>
+      filter(Games >= input$min_games_venue) |>
+      arrange(team, desc(Games))
+  }
+})
+
+#=============================================================================
+# Plots for team stats
+#=============================================================================
+
+# Team performance over time plot
+output$team_performance_plot <- renderPlot({
+  
+  data <- filtered_team_stats()
+  
+  # Calculate rolling averages for each team
+  team_rolling <- data |>
+    pivot_longer(
+      cols = c(home_team, away_team),
+      names_to = "home_away",
+      values_to = "team"
+    ) |>
+    mutate(
+      score = ifelse(home_away == "home_team", home_team_score, away_team_score),
+      fantasy = ifelse(home_away == "home_team", home_team_fantasy_points, away_team_fantasy_points)
+    ) |>
+    arrange(team, start_time_utc) |>
+    group_by(team) |>
+    mutate(
+      game_number = row_number(),
+      rolling_avg_score = zoo::rollmean(score, k = 5, fill = NA, align = "right"),
+      rolling_avg_fantasy = zoo::rollmean(fantasy, k = 5, fill = NA, align = "right")
+    )
+  
+  # Create plot based on selected metric
+  if (input$team_metric == "Score") {
+    p <- team_rolling |>
+      ggplot(aes(x = start_time_utc, y = rolling_avg_score, color = team)) +
+      geom_line(size = 1.2, alpha = 0.8) +
+      geom_point(aes(y = score), alpha = 0.3, size = 2) +
+      labs(
+        title = "Team Scoring Trends (5-Game Rolling Average)",
+        x = "Date",
+        y = "Score",
+        color = "Team"
+      )
+  } else {
+    p <- team_rolling |>
+      ggplot(aes(x = start_time_utc, y = rolling_avg_fantasy, color = team)) +
+      geom_line(size = 1.2, alpha = 0.8) +
+      geom_point(aes(y = fantasy), alpha = 0.3, size = 2) +
+      labs(
+        title = "Team Fantasy Points Trends (5-Game Rolling Average)",
+        x = "Date",
+        y = "Fantasy Points",
+        color = "Team"
+      )
+  }
+  
+  p + 
+    theme_minimal() +
+    theme(
+      legend.position = "bottom",
+      legend.title = element_blank(),
+      plot.title = element_text(hjust = 0.5, face = "bold"),
+      axis.text = element_text(size = 10)
+    ) +
+    guides(color = guide_legend(nrow = 3))
+})
+
+# Head-to-head comparison plot
+output$h2h_comparison_plot <- renderPlot({
+  
+  data <- filtered_team_stats()
+  
+  if (is.null(input$team_a) || is.null(input$team_b)) {
+    return(NULL)
+  }
+  
+  # Get head-to-head matches
+  h2h_matches <- data |>
+    filter(
+      (home_team == input$team_a & away_team == input$team_b) |
+      (home_team == input$team_b & away_team == input$team_a)
+    ) |>
+    mutate(
+      team_a_score = ifelse(home_team == input$team_a, home_team_score, away_team_score),
+      team_b_score = ifelse(home_team == input$team_b, home_team_score, away_team_score),
+      team_a_location = ifelse(home_team == input$team_a, "Home", "Away"),
+      winner = case_when(
+        team_a_score > team_b_score ~ input$team_a,
+        team_b_score > team_a_score ~ input$team_b,
+        TRUE ~ "Draw"
+      )
+    )
+  
+  if (nrow(h2h_matches) == 0) {
+    plot.new()
+    text(0.5, 0.5, "No head-to-head matches found", cex = 1.5)
+    return()
+  }
+  
+  # Create margin plot
+  h2h_matches |>
+    ggplot(aes(x = start_time_utc, y = team_a_score - team_b_score)) +
+    geom_hline(yintercept = 0, linetype = "dashed", color = "gray50") +
+    geom_line(color = "gray70") +
+    geom_point(aes(color = winner, shape = team_a_location), size = 4) +
+    scale_color_manual(values = c("red", "blue", "gray50")) +
+    labs(
+      title = paste("Head-to-Head:", input$team_a, "vs", input$team_b),
+      subtitle = paste("Total matches:", nrow(h2h_matches)),
+      x = "Date",
+      y = paste("Margin (", input$team_a, " perspective)", sep = ""),
+      color = "Winner",
+      shape = paste(input$team_a, "played")
+    ) +
+    theme_minimal() +
+    theme(
+      plot.title = element_text(hjust = 0.5, face = "bold"),
+      plot.subtitle = element_text(hjust = 0.5),
+      legend.position = "bottom"
+    )
+})
+
+#=============================================================================
+# Table outputs for team stats
+#=============================================================================
+
+output$team_summary_table <- renderDT({
+  datatable(
+    team_summary_stats(),
+    fillContainer = TRUE,
+    options = list(
+      pageLength = 18,
+      autoWidth = TRUE,
+      scrollX = TRUE,
+      scrollY = TRUE
+    )
+  ) |>
+    formatStyle(
+      "Win %",
+      background = styleColorBar(team_summary_stats()$`Win %`, "lightblue"),
+      backgroundSize = '100% 90%',
+      backgroundRepeat = 'no-repeat',
+      backgroundPosition = 'center'
+    )
+})
+
+output$home_away_table <- renderDT({
+  datatable(
+    home_away_splits(),
+    fillContainer = TRUE,
+    options = list(
+      pageLength = 18,
+      autoWidth = TRUE,
+      scrollX = TRUE,
+      scrollY = TRUE
+    )
+  ) |>
+    formatStyle(
+      "H/A Win % Diff",
+      color = styleInterval(c(-10, 10), c("red", "black", "green")),
+      fontWeight = "bold"
+    )
+})
+
+output$venue_table <- renderDT({
+  datatable(
+    venue_performance(),
+    fillContainer = TRUE,
+    filter = "top",
+    options = list(
+      pageLength = 15,
+      autoWidth = TRUE,
+      scrollX = TRUE,
+      scrollY = TRUE
+    )
+  )
+})
+
+output$weather_table <- renderDT({
+  datatable(
+    weather_impact(),
+    fillContainer = TRUE,
+    filter = "top",
+    options = list(
+      pageLength = 15,
+      autoWidth = TRUE,
+      scrollX = TRUE,
+      scrollY = TRUE
+    )
+  )
+})
+
+output$opposition_table <- renderDT({
+  datatable(
+    opposition_analysis(),
+    fillContainer = TRUE,
+    filter = "top",
+    options = list(
+      pageLength = 15,
+      autoWidth = TRUE,
+      scrollX = TRUE,
+      scrollY = TRUE
+    )
+  ) |>
+    formatStyle(
+      "Win %",
+      background = styleColorBar(opposition_analysis()$`Win %`, "lightgreen"),
+      backgroundSize = '100% 90%',
+      backgroundRepeat = 'no-repeat',
+      backgroundPosition = 'center'
+    ) |>
+    formatStyle(
+      "Avg Margin",
+      color = styleInterval(c(-20, 20), c("red", "black", "green")),
+      fontWeight = "bold"
+    )
+})
+
+output$venue_specific_table <- renderDT({
+  datatable(
+    venue_specific_stats(),
+    fillContainer = TRUE,
+    filter = "top",
+    options = list(
+      pageLength = 15,
+      autoWidth = TRUE,
+      scrollX = TRUE,
+      scrollY = TRUE,
+      order = list(list(0, 'asc'), list(2, 'desc'))  # Sort by team then games
+    )
+  ) |>
+    formatStyle(
+      "Win %",
+      background = styleColorBar(venue_specific_stats()$`Win %`, "lightblue"),
+      backgroundSize = '100% 90%',
+      backgroundRepeat = 'no-repeat',
+      backgroundPosition = 'center'
+    )
+})
+
   #=============================================================================
   # Table Odds
   #=============================================================================
