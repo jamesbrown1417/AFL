@@ -447,20 +447,62 @@ ui <- page_navbar(
         ),
         conditionalPanel(
           condition = "input.team_tabs == 'Opposition Analysis'",
-          selectInput("selected_opposition", "Filter by Opposition (optional):", 
-                      choices = c("All" = "", sort(unique(c(team_stats$home_team, team_stats$away_team)))),
-                      selected = ""),
-          numericInput("min_games_opp", "Minimum Games vs Opposition", value = 1, min = 1)
+          tagList(
+            
+            # league-wide toggle (you already added this earlier; keep it here)
+            checkboxInput(
+              "aggregate_league",
+              label = "Show league aggregate (one row per opposition)",
+              value = FALSE
+            ),
+            
+            # opponent selector – only visible when NOT in league-aggregate mode
+            conditionalPanel(
+              condition = "!input.aggregate_league",
+              selectInput(
+                "selected_opposition",
+                "Filter by Opposition (optional):",
+                choices  = c("All" = "", sort(unique(c(team_stats$home_team,
+                                                       team_stats$away_team)))),
+                selected = ""
+              )
+            ),
+            
+            numericInput("min_games_opp",
+                         "Minimum Games vs Opposition",
+                         value = 1,      # make single-season views work
+                         min   = 1)
+          )
         ),
         checkboxInput("aggregate_opp",
                       label = "Show league aggregate (all teams)",
                       value = FALSE),
         conditionalPanel(
           condition = "input.team_tabs == 'Venue Stats'",
-          selectInput("selected_venue", "Filter by Venue (optional):", 
-                      choices = c("All" = "", sort(unique(team_stats$venue))),
-                      selected = ""),
-          numericInput("min_games_venue", "Minimum Games at Venue", value = 1, min = 1)
+          tagList(
+            # league-wide toggle (shared with Opposition view)
+            checkboxInput(
+              "aggregate_league",
+              label = "Show league aggregate (one row per venue)",
+              value = FALSE
+            ),
+            
+            # venue selector — hidden when league aggregate is on
+            conditionalPanel(
+              condition = "!input.aggregate_league",
+              selectInput(
+                "selected_venue",
+                "Filter by Venue (optional):",
+                choices  = c("All" = "", sort(unique(team_stats$venue))),
+                selected = ""
+              )
+            ),
+            
+            numericInput("min_games_venue",
+                         "Minimum Games at Venue",
+                         value = 1,  # use 1 so single-season views never vanish
+                         min   = 1)
+          )
         ),
         conditionalPanel(
           condition = "input.team_tabs == 'Performance Trends'",
@@ -1024,9 +1066,10 @@ weather_impact <- reactive({
 
 # Reactive function for opposition analysis
 opposition_analysis <- reactive({
+  
   data <- filtered_team_stats()
   
-  # create a long form of every team’s performance vs its opponent -------------
+  # long form: every team’s performance vs its opponent ------------------------
   home_vs_opp <- data |>
     transmute(team        = home_team,
               opposition  = away_team,
@@ -1047,43 +1090,51 @@ opposition_analysis <- reactive({
   
   opp_stats <- bind_rows(home_vs_opp, away_vs_opp)
   
-  # optional filter by the selected opposition ---------------------------------
-  if (!is.null(input$selected_opposition) && input$selected_opposition != "")
-    opp_stats <- opp_stats |> filter(opposition == input$selected_opposition)
-  
-  ## ── NEW: league-wide aggregate toggle ──────────────────────────────────────
-  if (isTRUE(input$aggregate_opp)) {
+  # ---- league-wide aggregate branch -----------------------------------------
+  if (isTRUE(input$aggregate_league)) {
+    
     opp_stats |>
+      group_by(opposition) |>
       summarise(
-        Games            = n(),
-        Wins             = sum(score > opp_score),
-        `Win %`          = round(mean(score > opp_score) * 100, 1),
-        `Avg Disposals`  = round(mean(disposals), 0),
-        `Total Disposals`= sum(disposals),
-        `Avg Marks`      = round(mean(marks), 1),
-        `Total Marks`    = sum(marks),
-        `Avg Tackles`    = round(mean(tackles), 1),
-        `Total Tackles`  = sum(tackles),
-        `Avg Score`      = round(mean(score), 1),
-        `Avg Margin`     = round(mean(score - opp_score), 1)
+        Games             = n(),
+        Wins              = sum(score > opp_score),
+        `Win %`           = round(mean(score > opp_score) * 100, 1),
+        `Avg Disposals`   = round(mean(disposals), 0),
+        `Total Disposals` = sum(disposals),
+        `Avg Marks`       = round(mean(marks), 1),
+        `Total Marks`     = sum(marks),
+        `Avg Tackles`     = round(mean(tackles), 1),
+        `Total Tackles`   = sum(tackles),
+        `Avg Score`       = round(mean(score), 1),
+        `Avg Margin`      = round(mean(score - opp_score), 1),
+        .groups = "drop"
       ) |>
+      filter(Games >= input$min_games_opp) |>
       mutate(team = "All Teams") |>
-      relocate(team)
+      relocate(team, opposition) |>
+      arrange(desc(`Win %`))
+    
+    # ---- normal (per-team) branch ---------------------------------------------
   } else {
+    
+    # optionally filter to a single opposition
+    if (!is.null(input$selected_opposition) && input$selected_opposition != "")
+      opp_stats <- opp_stats |> filter(opposition == input$selected_opposition)
+    
     opp_stats |>
       group_by(team, opposition) |>
       summarise(
-        Games            = n(),
-        Wins             = sum(score > opp_score),
-        `Win %`          = round(mean(score > opp_score) * 100, 1),
-        `Avg Disposals`  = round(mean(disposals), 0),
-        `Total Disposals`= sum(disposals),
-        `Avg Marks`      = round(mean(marks), 1),
-        `Total Marks`    = sum(marks),
-        `Avg Tackles`    = round(mean(tackles), 1),
-        `Total Tackles`  = sum(tackles),
-        `Avg Score`      = round(mean(score), 1),
-        `Avg Margin`     = round(mean(score - opp_score), 1),
+        Games             = n(),
+        Wins              = sum(score > opp_score),
+        `Win %`           = round(mean(score > opp_score) * 100, 1),
+        `Avg Disposals`   = round(mean(disposals), 0),
+        `Total Disposals` = sum(disposals),
+        `Avg Marks`       = round(mean(marks), 1),
+        `Total Marks`     = sum(marks),
+        `Avg Tackles`     = round(mean(tackles), 1),
+        `Total Tackles`   = sum(tackles),
+        `Avg Score`       = round(mean(score), 1),
+        `Avg Margin`      = round(mean(score - opp_score), 1),
         .groups = "drop"
       ) |>
       filter(Games >= input$min_games_opp) |>
@@ -1093,6 +1144,7 @@ opposition_analysis <- reactive({
 
 # Reactive function for venue-specific stats
 venue_specific_stats <- reactive({
+  
   data <- filtered_team_stats()
   
   # long form for every team at every venue ------------------------------------
@@ -1116,41 +1168,49 @@ venue_specific_stats <- reactive({
   
   venue_stats <- bind_rows(home_venue, away_venue)
   
-  # optional filter by the chosen venue ----------------------------------------
-  if (!is.null(input$selected_venue) && input$selected_venue != "")
-    venue_stats <- venue_stats |> filter(venue == input$selected_venue)
-  
-  ## ── NEW: league-wide aggregate toggle ──────────────────────────────────────
-  if (isTRUE(input$aggregate_opp)) {
+  # ---- league-wide aggregate branch -----------------------------------------
+  if (isTRUE(input$aggregate_league)) {
+    
     venue_stats |>
+      group_by(venue) |>
       summarise(
-        Games            = n(),
-        Wins             = sum(score > opp_score),
-        `Win %`          = round(mean(score > opp_score) * 100, 1),
-        `Avg Disposals`  = round(mean(disposals), 0),
-        `Total Disposals`= sum(disposals),
-        `Avg Marks`      = round(mean(marks), 1),
-        `Total Marks`    = sum(marks),
-        `Avg Tackles`    = round(mean(tackles), 1),
-        `Total Tackles`  = sum(tackles),
-        `Avg Score`      = round(mean(score), 1)
+        Games             = n(),
+        Wins              = sum(score > opp_score),
+        `Win %`           = round(mean(score > opp_score) * 100, 1),
+        `Avg Disposals`   = round(mean(disposals), 0),
+        `Total Disposals` = sum(disposals),
+        `Avg Marks`       = round(mean(marks), 1),
+        `Total Marks`     = sum(marks),
+        `Avg Tackles`     = round(mean(tackles), 1),
+        `Total Tackles`   = sum(tackles),
+        `Avg Score`       = round(mean(score), 1),
+        .groups = "drop"
       ) |>
+      filter(Games >= input$min_games_venue) |>
       mutate(team = "All Teams") |>
-      relocate(team)
+      relocate(team, venue) |>
+      arrange(desc(`Win %`))
+    
+    # ---- normal (per-team) branch ---------------------------------------------
   } else {
+    
+    # optional filter to a single venue
+    if (!is.null(input$selected_venue) && input$selected_venue != "")
+      venue_stats <- venue_stats |> filter(venue == input$selected_venue)
+    
     venue_stats |>
       group_by(team, venue) |>
       summarise(
-        Games            = n(),
-        Wins             = sum(score > opp_score),
-        `Win %`          = round(mean(score > opp_score) * 100, 1),
-        `Avg Disposals`  = round(mean(disposals), 0),
-        `Total Disposals`= sum(disposals),
-        `Avg Marks`      = round(mean(marks), 1),
-        `Total Marks`    = sum(marks),
-        `Avg Tackles`    = round(mean(tackles), 1),
-        `Total Tackles`  = sum(tackles),
-        `Avg Score`      = round(mean(score), 1),
+        Games             = n(),
+        Wins              = sum(score > opp_score),
+        `Win %`           = round(mean(score > opp_score) * 100, 1),
+        `Avg Disposals`   = round(mean(disposals), 0),
+        `Total Disposals` = sum(disposals),
+        `Avg Marks`       = round(mean(marks), 1),
+        `Total Marks`     = sum(marks),
+        `Avg Tackles`     = round(mean(tackles), 1),
+        `Total Tackles`   = sum(tackles),
+        `Avg Score`       = round(mean(score), 1),
         .groups = "drop"
       ) |>
       filter(Games >= input$min_games_venue) |>
