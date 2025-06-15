@@ -450,7 +450,7 @@ ui <- page_navbar(
           selectInput("selected_opposition", "Filter by Opposition (optional):", 
                       choices = c("All" = "", sort(unique(c(team_stats$home_team, team_stats$away_team)))),
                       selected = ""),
-          numericInput("min_games_opp", "Minimum Games vs Opposition", value = 2, min = 1)
+          numericInput("min_games_opp", "Minimum Games vs Opposition", value = 1, min = 1)
         ),
         checkboxInput("aggregate_opp",
                       label = "Show league aggregate (all teams)",
@@ -460,11 +460,8 @@ ui <- page_navbar(
           selectInput("selected_venue", "Filter by Venue (optional):", 
                       choices = c("All" = "", sort(unique(team_stats$venue))),
                       selected = ""),
-          numericInput("min_games_venue", "Minimum Games at Venue", value = 3, min = 1)
+          numericInput("min_games_venue", "Minimum Games at Venue", value = 1, min = 1)
         ),
-        checkboxInput("aggregate_venue",
-                      label = "Show league aggregate (all teams)",
-                      value = FALSE),
         conditionalPanel(
           condition = "input.team_tabs == 'Performance Trends'",
           radioButtons("team_metric", "Performance Metric:",
@@ -1124,7 +1121,7 @@ venue_specific_stats <- reactive({
     venue_stats <- venue_stats |> filter(venue == input$selected_venue)
   
   ## ── NEW: league-wide aggregate toggle ──────────────────────────────────────
-  if (isTRUE(input$aggregate_venue)) {
+  if (isTRUE(input$aggregate_opp)) {
     venue_stats |>
       summarise(
         Games            = n(),
