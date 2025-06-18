@@ -1,0 +1,130 @@
+{
+    "entrants": {
+        "b8c46e02-b5d2-47ea-beee-65f90bb4e64d": {
+            "id": "b8c46e02-b5d2-47ea-beee-65f90bb4e64d",
+            "name": "Gold Coast Suns",
+            "home_away": "HOME",
+            "visible": true,
+            "sort_order": 10,
+            "market_id": "e660ec83-d14a-4d95-9a6a-c31da096ac1b"
+        },
+        "dc9e0113-eecc-4ccb-969b-25de25a459a5": {
+            "id": "dc9e0113-eecc-4ccb-969b-25de25a459a5",
+            "name": "Melbourne",
+            "home_away": "AWAY",
+            "visible": true,
+            "sort_order": 20,
+            "market_id": "e660ec83-d14a-4d95-9a6a-c31da096ac1b"
+        }
+    },
+    "event_participants": {
+        "0a037dd9-56b4-46f1-b985-a49fb9d0b296": {
+            "id": "0a037dd9-56b4-46f1-b985-a49fb9d0b296",
+            "event_id": "5e474b5e-c017-4444-bf84-6dbc3b5ae098",
+            "name": "Gold Coast Suns",
+            "home_away": "HOME",
+            "colour": "#ee3728"
+        },
+        "dacbb37a-311f-474d-895a-07a6128e3313": {
+            "id": "dacbb37a-311f-474d-895a-07a6128e3313",
+            "event_id": "5e474b5e-c017-4444-bf84-6dbc3b5ae098",
+            "name": "Melbourne",
+            "home_away": "AWAY",
+            "colour": "#0f1131"
+        }
+    },
+    "events": {
+        "5e474b5e-c017-4444-bf84-6dbc3b5ae098": {
+            "id": "5e474b5e-c017-4444-bf84-6dbc3b5ae098",
+            "name": "Gold Coast Suns vs Melbourne",
+            "event_type": {
+                "id": "6bfa0efc-05df-4ae1-9b1e-152365290cfd",
+                "name": "Match"
+            },
+            "match_status": "BettingOpen",
+            "advertised_start": "2025-06-28T03:20:00Z",
+            "actual_start": "2025-06-28T03:20:00Z",
+            "visible": true,
+            "slug": "gold-coast-suns-vs-melbourne",
+            "competition": {
+                "id": "ccff2e9a-5347-41aa-902a-bb6b1886d817",
+                "name": "AFL",
+                "sort_order": 1,
+                "region": "Australia"
+            },
+            "competition_id": "ccff2e9a-5347-41aa-902a-bb6b1886d817",
+            "market_type_group_ids": [
+                "29edb5e1-a717-4769-8bcd-2d43ec38d828"
+            ],
+            "market_type_group_markets": [
+                {
+                    "market_type_group_id": "29edb5e1-a717-4769-8bcd-2d43ec38d828",
+                    "market_ids": [
+                        "e660ec83-d14a-4d95-9a6a-c31da096ac1b"
+                    ]
+                }
+            ],
+            "market_count": 1,
+            "main_markets": [
+                "e660ec83-d14a-4d95-9a6a-c31da096ac1b"
+            ],
+            "market_ids": [
+                "e660ec83-d14a-4d95-9a6a-c31da096ac1b"
+            ],
+            "category_id": "23d497e6-8aab-4309-905b-9421f42c9bc5",
+            "round_id": "6832eddd-21e0-4243-a975-5dadad86e1ac",
+            "participant_ids": [
+                "0a037dd9-56b4-46f1-b985-a49fb9d0b296",
+                "dacbb37a-311f-474d-895a-07a6128e3313"
+            ]
+        }
+    },
+    "market_type_groups": {
+        "29edb5e1-a717-4769-8bcd-2d43ec38d828": {
+            "id": "29edb5e1-a717-4769-8bcd-2d43ec38d828",
+            "category_id": "23d497e6-8aab-4309-905b-9421f42c9bc5",
+            "name": "Top Markets",
+            "priority": 340,
+            "type": "MARKET_TYPE_GROUP_TYPE_EVENT"
+        }
+    },
+    "markets": {
+        "e660ec83-d14a-4d95-9a6a-c31da096ac1b": {
+            "id": "e660ec83-d14a-4d95-9a6a-c31da096ac1b",
+            "event_id": "5e474b5e-c017-4444-bf84-6dbc3b5ae098",
+            "market_type_id": "be25c37a-71ff-47f6-a1e2-02a494eb5a4d",
+            "market_status_id": "4bc8fe96-296b-4b4c-aea4-85c94f63b9c6",
+            "name": "Match Betting",
+            "advertised_start": {
+                "seconds": 1751080800
+            },
+            "actual_start": {
+                "seconds": 1751080800
+            },
+            "is_primary": true,
+            "visible": true,
+            "entrant_ids": [
+                "b8c46e02-b5d2-47ea-beee-65f90bb4e64d",
+                "dc9e0113-eecc-4ccb-969b-25de25a459a5"
+            ],
+            "num_winners": 1
+        }
+    },
+    "markets_allow_cashout": {
+        "e660ec83-d14a-4d95-9a6a-c31da096ac1b": false
+    },
+    "prices": {
+        "b8c46e02-b5d2-47ea-beee-65f90bb4e64d:940b8704-e497-4a76-b390-00918ff7d282:": {
+            "odds": {
+                "numerator": 8,
+                "denominator": 25
+            }
+        },
+        "dc9e0113-eecc-4ccb-969b-25de25a459a5:940b8704-e497-4a76-b390-00918ff7d282:": {
+            "odds": {
+                "numerator": 47,
+                "denominator": 20
+            }
+        }
+    }
+}
