@@ -27,6 +27,7 @@ os_type <- Sys.info()["sysname"]
 all_player_stats <- read_rds("../../Data/afl_fantasy_2015_2024_data.rds")
 data_2025 <- read_rds("../../Data/afl_fantasy_2025_data.rds")
 all_player_stats <- bind_rows(all_player_stats, data_2025)
+player_names <- sort(unique(all_player_stats$player_full_name))
 team_stats <- read_rds("../../Data/afl_team_stats_2021_2025.rds")
 
 # Fix CBA Percentage
@@ -119,10 +120,19 @@ player_marks_data <-
   relocate(Position, DVP_Category, .after = player_name)
 
 player_tackles_data <-
-  player_tackles_data |> 
+  player_tackles_data |>
   left_join(player_positions, relationship = "many-to-one") |>
-  left_join(dvp_data, by = c("opposition_team", "Position", "market_name"), relationship = "many-to-one") |> 
+  left_join(dvp_data, by = c("opposition_team", "Position", "market_name"), relationship = "many-to-one") |>
   relocate(Position, DVP_Category, .after = player_name)
+
+# List of players available in any odds dataset
+player_names_odds <- sort(unique(c(
+  player_disposals_data$player_name,
+  player_goals_data$player_name,
+  player_fantasy_data$player_name,
+  player_marks_data$player_name,
+  player_tackles_data$player_name
+)))
 
 # Add home_away variable
 all_player_stats <-
@@ -389,7 +399,13 @@ ui <- page_navbar(
       sidebarPanel(
         width = 3,
         h4("Settings"),
-        textInput("player_name_input_a", "Select Player:", value = "Tim English"),
+        selectInput(
+          "player_name_input_a",
+          "Select Player:",
+          choices = player_names,
+          selectize = TRUE,
+          selected = "Tim English"
+        ),
         selectInput("season_input_a", "Select Season:", choices = all_player_stats$season_name |> unique(), multiple = TRUE, selectize = TRUE, selected = c("2025","2024")),
         selectInput("stat_input_a", "Select Statistic:", choices = c("Disposals", "Fantasy", "Tackles", "Marks", "Goals"), selected = "Disposals"),
         selectInput("opp_input_a", "Select Opposition:", choices = c(all_player_stats$opposition_team |> unique() |> sort()), multiple = TRUE),
@@ -603,7 +619,13 @@ ui <- page_navbar(
                 selectInput("market_input", "Select Market:", choices = c("H2H", "Total","Line", "Disposals", "Fantasy", "Goals", "Marks", "Tackles"), multiple = FALSE),
                 selectInput("match_input", "Select Matches:", choices = h2h_data$match |> unique(), multiple = TRUE, selectize = FALSE, selected = h2h_data$match |> unique()),
                 selectInput("matchup_input", "Select Difficulty:", choices = player_disposals_data$DVP_Category |> unique(), multiple = TRUE, selectize = FALSE, selected = player_disposals_data$DVP_Category |> unique()),
-                textInput("player_name_input_b", "Select Player:", value = NA),
+                selectInput(
+                  "player_name_input_b",
+                  "Select Player:",
+                  choices = c("", player_names_odds),
+                  selectize = TRUE,
+                  selected = ""
+                ),
                 checkboxInput("only_unders", "Only Show Markets With Unders", value = FALSE),
                 checkboxInput("only_best", "Only Show Best Market Odds - Overs", value = FALSE),
                 checkboxInput("only_best_unders", "Only Show Best Market Odds - Unders", value = FALSE),
@@ -624,8 +646,20 @@ ui <- page_navbar(
              card(
                card_header("Settings"),
                card_body(
-                 textInput("player_name", "Select Player:", value = "Christian Petracca"),
-                 textInput("teammate_name", "Select Teammate:", value = "Clayton Oliver"),
+                 selectInput(
+                   "player_name",
+                   "Select Player:",
+                   choices = player_names,
+                   selectize = TRUE,
+                   selected = "Christian Petracca"
+                 ),
+                 selectInput(
+                   "teammate_name",
+                   "Select Teammate:",
+                   choices = player_names,
+                   selectize = TRUE,
+                   selected = "Clayton Oliver"
+                 ),
                  selectInput("season_input", "Select Season:", choices = all_player_stats$season_name |> unique(), multiple = TRUE, selectize = TRUE, selected = c("2024")),
                  selectInput("metric_input", "Select Statistic:", choices = c("Disposals", "Fantasy", "Goals", "Marks", "Tackles"), multiple = FALSE, selected = "Fantasy")
                )
@@ -651,9 +685,21 @@ ui <- page_navbar(
              card(
                card_header("Settings"),
                card_body(
-                 textInput("player_name_corr", "Select Player 1:", value = "Adam Treloar"),
+                 selectInput(
+                   "player_name_corr",
+                   "Select Player 1:",
+                   choices = player_names,
+                   selectize = TRUE,
+                   selected = "Adam Treloar"
+                 ),
                  selectInput("metric_input_corr_a", "Select Statistic:", choices = c("Disposals", "Fantasy", "Goals", "Marks", "Tackles"), selected = "Disposals"),
-                 textInput("teammate_name_corr", "Select Player 2:", value = "Tim English"),
+                 selectInput(
+                   "teammate_name_corr",
+                   "Select Player 2:",
+                   choices = player_names,
+                   selectize = TRUE,
+                   selected = "Tim English"
+                 ),
                  selectInput("metric_input_corr_b", "Select Statistic:", choices = c("Disposals", "Fantasy", "Goals", "Marks", "Tackles"), selected = "Disposals"),
                  selectInput("season_input_corr", "Select Season:", choices = all_player_stats$season_name |> unique(), multiple = TRUE, selectize = TRUE, selected = c("2025","2024"))
                )
