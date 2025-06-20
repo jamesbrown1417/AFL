@@ -216,10 +216,11 @@ disposals <-
 disposals <-
   disposals |>
   group_by(match, player_name, market_name, line) |>
-  arrange(desc(diff_over_last_10), .by_group = TRUE) |>
+  arrange(desc(price), .by_group = TRUE) |>
   mutate(
     max_player_diff = max(diff_over_last_10, na.rm = TRUE),
-    second_best_price = if_else(n() >= 2, nth(price, 2), NA_real_)
+    second_best_price = if_else(n() >= 2, nth(price, 2), NA_real_),
+    market_best = row_number() == 1
   ) |>
   ungroup()
 
@@ -237,9 +238,8 @@ disposals_display <-
   disposals |>
   group_by(player_name, match, line, market_name) |>
   mutate(
-    market_best = max_player_diff == diff_over_last_10,
     next_best_diff = if_else(market_best,
-                             1 / price - 1 / second_best_price,
+                             abs(1 / price - 1 / second_best_price),
                              NA_real_)
   ) |>
   ungroup() |>
@@ -256,7 +256,7 @@ disposals_display <-
          diff_2024 = round(diff_2024, 2),
          prob_last_10 = round(emp_prob_last_10, 2),
          diff_last_10 = round(diff_over_last_10, 2),
-         next_best_diff = round(next_best_diff, 4),
+         next_best_diff = round(100 * next_best_diff, 1),
          market_best)
 
 # Get correlations
