@@ -22,8 +22,6 @@ player_positions <-
   read_csv("../../DVP/AFL-Players-Positions-2025.csv") |> 
   rename(Position = position, player_name = player_full_name)
 
-
-
 dvp_data <-
   dvp_data %>%
   mutate(dvp = ifelse(market_name == "Player Goals", rnorm(nrow(dvp_data)), dvp)) |> 
@@ -239,6 +237,7 @@ disposals_display <-
   group_by(player_name, match, line, market_name) |>
   mutate(
     next_best_diff = if_else(market_best,
+                            ((1/second_best_price) - (1/price)),
                              NA_real_)
   ) |>
   ungroup() |>
