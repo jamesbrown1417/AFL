@@ -239,7 +239,6 @@ disposals_display <-
   group_by(player_name, match, line, market_name) |>
   mutate(
     next_best_diff = if_else(market_best,
-                             abs(1 / price - 1 / second_best_price),
                              NA_real_)
   ) |>
   ungroup() |>
