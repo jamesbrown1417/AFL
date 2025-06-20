@@ -216,7 +216,12 @@ disposals <-
 disposals <-
   disposals |>
   group_by(match, player_name, market_name, line) |>
-  mutate(max_player_diff = max(diff_over_last_10, na.rm = TRUE)) |>
+  arrange(desc(price), .by_group = TRUE) |>
+  mutate(
+    max_player_diff = max(diff_over_last_10, na.rm = TRUE),
+    second_best_price = if_else(n() >= 2, nth(price, 2), NA_real_),
+    market_best = row_number() == 1
+  ) |>
   ungroup()
 
 # Unique matches
@@ -232,9 +237,13 @@ agencies <-
 disposals_display <-
   disposals |>
   group_by(player_name, match, line, market_name) |>
-  mutate(market_best = max_player_diff == diff_over_last_10) |>
+  mutate(
+    next_best_diff = if_else(market_best,
+                             abs(1 / price - 1 / second_best_price),
+                             NA_real_)
+  ) |>
   ungroup() |>
-  arrange(desc(max_player_diff)) |> 
+  arrange(desc(max_player_diff)) |>
   transmute(match,
          player_name,
          Position,
@@ -247,6 +256,7 @@ disposals_display <-
          diff_2024 = round(diff_2024, 2),
          prob_last_10 = round(emp_prob_last_10, 2),
          diff_last_10 = round(diff_over_last_10, 2),
+         next_best_diff = round(100 * next_best_diff, 1),
          market_best)
 
 # Get correlations
@@ -377,7 +387,13 @@ server <- function(input, output, session) {
                           disposals_display$Matchup %in% input$matchup &
                           disposals_display$market_name %in% input$market,]
     
-    if (input$best_odds) {filtered_data <- filtered_data |> filter(market_best) |> select(-market_best)}
+    if (input$best_odds) {
+      filtered_data <- filtered_data |>
+        filter(market_best) |>
+        select(-market_best)
+    } else {
+      filtered_data <- filtered_data |> select(-next_best_diff)
+    }
     
     datatable(filtered_data, selection = "multiple", filter = "top")
   }, server = FALSE) # We are setting this as FALSE for client-side processing of the DataTable
