@@ -1,0 +1,160 @@
+{
+    "entrants": {
+        "761c7182-8da6-4c5c-b2da-146989c53369": {
+            "id": "761c7182-8da6-4c5c-b2da-146989c53369",
+            "name": "Peel Thunder",
+            "home_away": "HOME",
+            "visible": true,
+            "sort_order": 10,
+            "market_id": "cbe4c2c8-70d4-4b50-ac68-80f456a22ff5"
+        },
+        "b7155a8e-29db-40dc-8beb-efb1a3fad68c": {
+            "id": "b7155a8e-29db-40dc-8beb-efb1a3fad68c",
+            "name": "South Fremantle",
+            "home_away": "AWAY",
+            "visible": true,
+            "sort_order": 20,
+            "market_id": "cbe4c2c8-70d4-4b50-ac68-80f456a22ff5"
+        },
+        "e7eeffc9-b27d-4bed-8873-8b02c5b2c451": {
+            "id": "e7eeffc9-b27d-4bed-8873-8b02c5b2c451",
+            "name": "Peel Thunder",
+            "home_away": "HOME",
+            "visible": true,
+            "sort_order": 10,
+            "market_id": "1492dc97-c595-43bb-ae9e-507655036f86"
+        },
+        "fb3b1b43-efdc-4f9c-9c83-5abc753a5744": {
+            "id": "fb3b1b43-efdc-4f9c-9c83-5abc753a5744",
+            "name": "South Fremantle",
+            "home_away": "AWAY",
+            "visible": true,
+            "sort_order": 20,
+            "market_id": "1492dc97-c595-43bb-ae9e-507655036f86"
+        }
+    },
+    "events": {
+        "e18c7f19-8c7e-44ce-b08a-71e520a41ef0": {
+            "id": "e18c7f19-8c7e-44ce-b08a-71e520a41ef0",
+            "name": "Peel Thunder vs South Fremantle",
+            "event_type": {
+                "id": "6bfa0efc-05df-4ae1-9b1e-152365290cfd",
+                "name": "Match"
+            },
+            "match_status": "BettingOpen",
+            "advertised_start": "2025-06-21T06:30:00Z",
+            "actual_start": "2025-06-21T06:30:00Z",
+            "visible": true,
+            "slug": "peel-thunder-vs-south-fremantle",
+            "competition": {
+                "id": "95553dad-b992-4773-b6fe-4b1572dc13df",
+                "name": "WAFL",
+                "sort_order": 6,
+                "region": "Aus"
+            },
+            "competition_id": "95553dad-b992-4773-b6fe-4b1572dc13df",
+            "market_type_group_ids": [
+                "29edb5e1-a717-4769-8bcd-2d43ec38d828"
+            ],
+            "market_type_group_markets": [
+                {
+                    "market_type_group_id": "29edb5e1-a717-4769-8bcd-2d43ec38d828",
+                    "market_ids": [
+                        "1492dc97-c595-43bb-ae9e-507655036f86",
+                        "cbe4c2c8-70d4-4b50-ac68-80f456a22ff5"
+                    ]
+                }
+            ],
+            "market_count": 2,
+            "main_markets": [
+                "1492dc97-c595-43bb-ae9e-507655036f86"
+            ],
+            "market_ids": [
+                "1492dc97-c595-43bb-ae9e-507655036f86",
+                "cbe4c2c8-70d4-4b50-ac68-80f456a22ff5"
+            ],
+            "category_id": "23d497e6-8aab-4309-905b-9421f42c9bc5"
+        }
+    },
+    "market_type_groups": {
+        "29edb5e1-a717-4769-8bcd-2d43ec38d828": {
+            "id": "29edb5e1-a717-4769-8bcd-2d43ec38d828",
+            "category_id": "23d497e6-8aab-4309-905b-9421f42c9bc5",
+            "name": "Top Markets",
+            "priority": 340,
+            "type": "MARKET_TYPE_GROUP_TYPE_EVENT"
+        }
+    },
+    "markets": {
+        "1492dc97-c595-43bb-ae9e-507655036f86": {
+            "id": "1492dc97-c595-43bb-ae9e-507655036f86",
+            "event_id": "e18c7f19-8c7e-44ce-b08a-71e520a41ef0",
+            "market_type_id": "be25c37a-71ff-47f6-a1e2-02a494eb5a4d",
+            "market_status_id": "4bc8fe96-296b-4b4c-aea4-85c94f63b9c6",
+            "name": "Match Betting",
+            "advertised_start": {
+                "seconds": 1750487400
+            },
+            "actual_start": {
+                "seconds": 1750487400
+            },
+            "is_primary": true,
+            "visible": true,
+            "entrant_ids": [
+                "e7eeffc9-b27d-4bed-8873-8b02c5b2c451",
+                "fb3b1b43-efdc-4f9c-9c83-5abc753a5744"
+            ],
+            "num_winners": 1
+        },
+        "cbe4c2c8-70d4-4b50-ac68-80f456a22ff5": {
+            "id": "cbe4c2c8-70d4-4b50-ac68-80f456a22ff5",
+            "event_id": "e18c7f19-8c7e-44ce-b08a-71e520a41ef0",
+            "market_type_id": "d04cddcd-5f42-4d17-ae1c-950dfdaa2c98",
+            "market_status_id": "4bc8fe96-296b-4b4c-aea4-85c94f63b9c6",
+            "name": "Line",
+            "advertised_start": {
+                "seconds": 1750487400
+            },
+            "actual_start": {
+                "seconds": 1750487400
+            },
+            "handicap": -1.5,
+            "visible": true,
+            "entrant_ids": [
+                "761c7182-8da6-4c5c-b2da-146989c53369",
+                "b7155a8e-29db-40dc-8beb-efb1a3fad68c"
+            ],
+            "num_winners": 1
+        }
+    },
+    "markets_allow_cashout": {
+        "1492dc97-c595-43bb-ae9e-507655036f86": true,
+        "cbe4c2c8-70d4-4b50-ac68-80f456a22ff5": false
+    },
+    "prices": {
+        "761c7182-8da6-4c5c-b2da-146989c53369:940b8704-e497-4a76-b390-00918ff7d282:": {
+            "odds": {
+                "numerator": 22,
+                "denominator": 25
+            }
+        },
+        "b7155a8e-29db-40dc-8beb-efb1a3fad68c:940b8704-e497-4a76-b390-00918ff7d282:": {
+            "odds": {
+                "numerator": 22,
+                "denominator": 25
+            }
+        },
+        "e7eeffc9-b27d-4bed-8873-8b02c5b2c451:940b8704-e497-4a76-b390-00918ff7d282:": {
+            "odds": {
+                "numerator": 19,
+                "denominator": 20
+            }
+        },
+        "fb3b1b43-efdc-4f9c-9c83-5abc753a5744:940b8704-e497-4a76-b390-00918ff7d282:": {
+            "odds": {
+                "numerator": 17,
+                "denominator": 20
+            }
+        }
+    }
+}
