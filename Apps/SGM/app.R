@@ -59,6 +59,7 @@ source("sportsbet_sgm.R")
 source("pointsbet_sgm.R")
 source("neds_sgm.R")
 source("bet365_sgm.R")
+source("player_combos.R")
 
 # Dabble------------------------------------------------------------------
 dabble_sgm_list <- list(
@@ -365,6 +366,38 @@ ui <- fluidPage(
                  DT::dataTableOutput("table_cross")
                )
              )
+    ),
+    
+    # Player Combos Tab
+    tabPanel("Player Combos",
+             sidebarLayout(
+               sidebarPanel(
+                 selectInput(
+                   "match_combos",
+                   "Select Match",
+                   choices = matches,
+                   selected = NULL
+                 ),
+                 selectInput(
+                   "market_filter",
+                   "Filter by Market",
+                   choices = c("All", "Player Disposals", "Player Goals", "Player Marks", "Player Tackles", "Player Fantasy Points"),
+                   selected = "All"
+                 ),
+                 sliderInput(
+                   "price_range",
+                   "Price Range",
+                   min = 1,
+                   max = 1000,
+                   value = c(1, 1000)
+                 ),
+                 actionButton("get_combos", "Get Combinations")
+               ),
+               mainPanel(
+                 uiOutput("player_selection_ui"),
+                 DT::dataTableOutput("combos_table")
+               )
+             )
     )
   )
 )
@@ -570,6 +603,106 @@ server <- function(input, output, session) {
                   " <strong>Edge L10:</strong>", " ", round(100*diff_l10, 3), "%"), "<br/>",
                   " <strong>Edge 2024:</strong>", " ", round(100*diff, 3), "%")
     }
+  })
+  
+  # For the "Player Combos" panel
+  output$player_selection_ui <- renderUI({
+    DT::dataTableOutput("player_table_combos")
+  })
+  
+  output$player_table_combos <- renderDT({
+    filtered_data <- disposals_display |> 
+      filter(match == input$match_combos) |> 
+      distinct(player_name, .keep_all = TRUE) |> 
+      select(player_name, Position, Matchup)
+    
+    datatable(filtered_data, selection = 'multiple', options = list(pageLength = 10))
+  })
+  
+  observeEvent(input$get_combos, {
+    
+    # Get selected players
+    selected_rows <- input$player_table_combos_rows_selected
+    
+    if (is.null(selected_rows) || length(selected_rows) < 2 || length(selected_rows) > 3) {
+      output$combos_table <- renderDT({
+        datatable(data.frame(Message = "Please select 2 or 3 players."))
+      })
+      return()
+    }
+    
+    filtered_data <- disposals_display |> 
+      filter(match == input$match_combos) |> 
+      distinct(player_name, .keep_all = TRUE) |> 
+      select(player_name, Position, Matchup)
+      
+    selected_players <- filtered_data[selected_rows, ]$player_name
+    
+    # Get market filter
+    market_filter <- if (input$market_filter == "All") NULL else input$market_filter
+    
+    # Get player data
+    player_data <- disposals_display |> 
+      filter(match == input$match_combos)
+    
+    # Get combos
+    combos_df <- get_player_combos(player_data, selected_players, market_filter)
+    
+    # Filter by price range
+    if (nrow(combos_df) > 0 && "Message" %notin% names(combos_df)) {
+      # Find agency columns - they are the ones that are not Match or Selections
+      agency_cols <- setdiff(names(combos_df), c("Match", "Selections"))
+      
+      # Get max price across all agencies
+      combos_df$max_price <- do.call(pmax, c(combos_df[agency_cols], na.rm = TRUE))
+      
+      combos_df <- combos_df |> 
+        filter(max_price >= input$price_range[1] & max_price <= input$price_range[2]) |> 
+        select(-max_price)
+    }
+
+    # Display table
+    output$combos_table <- renderDT({
+      if (nrow(combos_df) > 0 && "Message" %notin% names(combos_df)) {
+        agency_cols <- setdiff(names(combos_df), c("Match", "Selections"))
+        agency_indices <- which(names(combos_df) %in% agency_cols)
+
+        datatable(
+          combos_df,
+          escape = FALSE,
+          options = list(
+            pageLength = 10,
+            columnDefs = list(list(targets = 1, render = JS(
+              "function(data, type, row, meta){",
+              "  if(type === 'display'){ return data.replace(/, /g, '<br/>'); }",
+              "  return data;",
+              "}"
+            ))),
+            rowCallback = JS(
+              "function(row, data) {",
+              sprintf("var agency_indices = [%s];", paste(agency_indices, collapse = ",")),
+              "var prices = [];",
+              "agency_indices.forEach(function(i) {",
+              "  var price = parseFloat(data[i-1]);",
+              "  if (!isNaN(price)) { prices.push(price); }",
+              "});",
+              "if (prices.length > 0) {",
+              "  var max_price = Math.max.apply(null, prices);",
+              "  agency_indices.forEach(function(i) {",
+              "    var cell_value = parseFloat(data[i-1]);",
+              "    if (cell_value === max_price) {",
+              "      $('td', row).eq(i-1).css('background-color', 'rgba(144, 238, 144, 0.5)');",
+              "    }",
+              "  });",
+              "}",
+              "}"
+            )
+          )
+        )
+      } else {
+        datatable(combos_df)
+      }
+    })
   })
 }
 
