@@ -59,22 +59,8 @@ source("sportsbet_sgm.R")
 source("pointsbet_sgm.R")
 source("neds_sgm.R")
 source("bet365_sgm.R")
+source("dabble_sgm.R")
 source("player_combos.R")
-
-# Dabble------------------------------------------------------------------
-dabble_sgm_list <- list(
-  read_csv("../../Data/scraped_odds/dabble_player_disposals.csv"),
-  read_csv("../../Data/scraped_odds/dabble_player_goals.csv"),
-  read_csv("../../Data/scraped_odds/dabble_player_fantasy_points.csv")
-)
-
-dabble_sgm <-
-  dabble_sgm_list |> 
-  keep(~nrow(.x) > 0) |>
-  bind_rows() |> 
-  rename(price = over_price) |> 
-  distinct(match, player_name, line, market_name, agency, .keep_all = TRUE) |> 
-  select(-contains("under"))
 
 #===============================================================================
 # Create compare sgm function
@@ -98,9 +84,10 @@ compare_sgm <- function(player_names, stat_counts, markets) {
   betright_data <- handle_call_sgm(call_sgm_betright, betright_sgm, player_names, stat_counts, markets)
   neds_data <- handle_call_sgm(call_sgm_neds, neds_sgm, player_names, stat_counts, markets)
   bet365_data <- handle_call_sgm(call_sgm_bet365, bet365_sgm, player_names, stat_counts, markets)
+  dabble_data <- handle_call_sgm(call_sgm_dabble, dabble_sgm, player_names, stat_counts, markets)
   
   # Bind together and return
-  bind_rows(pointsbet_data, sportsbet_data, tab_data, betright_data, neds_data, bet365_data) |>
+  bind_rows(pointsbet_data, sportsbet_data, tab_data, betright_data, neds_data, bet365_data, dabble_data) |>
     mutate(Adjusted_Price = round(Adjusted_Price, 2),
            Unadjusted_Price = round(Unadjusted_Price, 2),
            Adjustment_Factor = round(Adjustment_Factor, 2)
@@ -231,6 +218,9 @@ agencies <-
   disposals |>
   distinct(agency) |>
   pull()
+
+# Add Dabble to the agencies list
+agencies <- c(agencies, "Dabble") |> unique()
 
 # Create disposals dataframe to display
 disposals_display <-
@@ -418,6 +408,11 @@ server <- function(input, output, session) {
                           disposals_display$Matchup %in% input$matchup &
                           disposals_display$market_name %in% input$market,]
     
+    # Filter for Dabble's specific price requirement in the Player List
+    if (input$agency == "Dabble") {
+      filtered_data <- filtered_data |> filter(price == 1.79)
+    }
+
     if (input$best_odds) {
       filtered_data <- filtered_data |>
         filter(market_best) |>
@@ -438,6 +433,12 @@ server <- function(input, output, session) {
                               disposals_display$agency == input$agency &
                               disposals_display$Matchup %in% input$matchup &
                               disposals_display$market_name %in% input$market,]
+        
+        # Filter for Dabble's specific price requirement
+        if (input$agency == "Dabble") {
+          filtered_data <- filtered_data |> filter(price == 1.79)
+        }
+        
         if (input$best_odds) {filtered_data <- filtered_data |> filter(market_best) |> select(-market_best)}
         selected_data <- filtered_data[input$table_rows_selected, c("player_name", "line", "market_name", "price")]
         datatable(selected_data)
@@ -453,6 +454,12 @@ server <- function(input, output, session) {
   
   output$correlations <- renderDT({
     filtered_data <- disposals_display[disposals_display$match == input$match & disposals_display$agency == input$agency,]
+    
+    # Filter for Dabble's specific price requirement
+    if (input$agency == "Dabble") {
+      filtered_data <- filtered_data |> filter(price == 1.79)
+    }
+    
     if (input$best_odds) {filtered_data <- filtered_data |> filter(market_best) |> select(-market_best)}
     selected_data <- filtered_data[input$table_rows_selected, c("player_name", "line", "market_name", "price")]
     
@@ -467,6 +474,12 @@ server <- function(input, output, session) {
                                          disposals_display$agency == input$agency &
                                          disposals_display$Matchup %in% input$matchup &
                                          disposals_display$market_name %in% input$market,]
+    
+    # Filter for Dabble's specific price requirement
+    if (input$agency == "Dabble") {
+      filtered_data <- filtered_data |> filter(price == 1.79)
+    }
+    
     if (input$best_odds) {filtered_data <- filtered_data |> filter(market_best) |> select(-market_best)}
     selected_data <- filtered_data[input$table_rows_selected, c("player_name", "line", "market_name", "price")]
     
@@ -522,6 +535,12 @@ server <- function(input, output, session) {
                                            disposals_display$agency == input$agency &
                                            disposals_display$Matchup %in% input$matchup &
                                            disposals_display$market_name %in% input$market,]
+      
+      # Filter for Dabble's specific price requirement
+      if (input$agency == "Dabble") {
+        filtered_data <- filtered_data |> filter(price == 1.79)
+      }
+      
       if (input$best_odds) {filtered_data <- filtered_data |> filter(market_best) |> select(-market_best)}
       selected_data <- filtered_data[input$table_rows_selected, ]
       uncorrelated_price <- prod(selected_data$price)

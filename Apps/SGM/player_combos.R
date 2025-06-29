@@ -1,3 +1,4 @@
+
 # Function to get all market combinations for 2 or 3 players from the same match
 get_player_combos <- function(player_data, selected_players, market_filter = NULL) {
 
@@ -91,13 +92,14 @@ get_player_combos <- function(player_data, selected_players, market_filter = NUL
     return(data.frame(Message = "No combinations found for the selected players and market."))
   }
 
-  # Pivot to wide format
+  # Pivot to wide format, resolving duplicates by taking the max price
   wide_combos <- all_agency_combos |>
     pivot_wider(
       names_from = Agency,
       values_from = Multi_Price,
       id_cols = c(Match, Selections),
-      values_fill = NA
+      values_fn = max, # Use max to resolve duplicates
+      values_fill = NA # Still fill with NA if no value
     )
 
   return(wide_combos)
