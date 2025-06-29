@@ -397,14 +397,38 @@ under_lines <-
 # Combine and find discrepancies
 discrepant_lines <-
   over_lines |>
-  left_join(under_lines, by = c("match", "player_name", "player_team", "opposition_team", "market_name"), relationship = "many-to-many") |>
-  mutate(diff = (under_line - over_line)) |> 
-  filter(diff > 0) |> 
-  mutate(margin = 1/over_price + 1/under_price) |>
-  # Calculate and round margin
-  mutate(margin = round(100*(margin - 1), 2)) |>
-  arrange(desc(diff), margin, match, player_name, market_name) |> 
-  filter(margin <= 15)
+  left_join(
+    under_lines,
+    by = c("match", "player_name", "player_team",
+           "opposition_team", "market_name"),
+    relationship = "many-to-many"
+  ) |>
+  mutate(
+    diff   = under_line - over_line,
+    margin = round(100 * ((1 / over_price) + (1 / under_price) - 1), 2)
+  ) |>
+  # ----------------------------------------------------------------
+  mutate(
+    keep = case_when(
+      # ── Fantasy Points ───────────────────────────────────────────
+      market_name == "Player Fantasy Points" ~
+        (margin < 0 & diff > 0) |
+        (margin < 10 & diff >= 10),
+
+      # ── Disposals ────────────────────────────────────────────────
+      market_name == "Player Disposals" ~
+        (diff == 1 & margin <= 8)  |
+        (diff == 2 & margin <= 15) |
+        (diff == 3 & margin <= 17.5) |
+        (diff >= 4 & margin <= 20),
+
+      # ── All other markets ────────────────────────────────────────
+      TRUE ~ margin <= 5 & diff > 0
+    )
+  ) |>
+  filter(keep) |>
+  select(-keep) |>
+  arrange(desc(diff), margin, match, player_name, market_name)
 
 # Display as an interactive table
 datatable(

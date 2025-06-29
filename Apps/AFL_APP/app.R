@@ -418,7 +418,18 @@ ui <- page_navbar(
         markdown(mds = c("__Select Only Last n Games:__")),
         numericInput("last_games", "Number of Games", value = NA),
         markdown(mds = c("__Select Reference Line:__")),
-        numericInput("reference_line", "Line Value", value = 19.5),
+        radioButtons("line_mode", "Mode:", 
+                    choices = list("Single Line" = "single", "Interval" = "interval"), 
+                    selected = "single"),
+        conditionalPanel(
+          condition = "input.line_mode == 'single'",
+          numericInput("reference_line", "Line Value", value = 19.5)
+        ),
+        conditionalPanel(
+          condition = "input.line_mode == 'interval'",
+          numericInput("lower_bound", "Lower Bound", value = 19.5),
+          numericInput("upper_bound", "Upper Bound", value = 25.5)
+        ),
         markdown(mds = c("__Select TOG Range:__")),
         numericInput("minutes_minimum", "Min TOG %", value = 0)
       ),
@@ -800,30 +811,67 @@ server <- function(input, output) {
   #=============================================================================
   
   proportion_above_reference_line <- reactive({
-    # Get proportion above reference line
-    proportion_above_reference_line <-
-      filtered_player_stats() |>
-      filter(!!sym(input$stat_input_a) >= input$reference_line) |>
-      nrow() / nrow(filtered_player_stats())
     
-    # Get implied Odds
-    implied_odds <- 1 / proportion_above_reference_line
-    implied_odds_under <- 1 / (1 - proportion_above_reference_line)
-    
-    # Get string to output
-    output_string <- paste0(
-      "Proportion Above Reference Line: ",
-      round(proportion_above_reference_line, 2),
-      "\n",
-      "Implied Odds - Over: ",
-      round(implied_odds, 2),
-      "\n",
-      "Implied Odds - Under: ",
-      round(implied_odds_under, 2),
-      "\n",
-      "Sample Size: ",
-      nrow(filtered_player_stats())
-    )
+    if (input$line_mode == "single") {
+      # Single line mode - existing logic
+      proportion_above_reference_line <-
+        filtered_player_stats() |>
+        filter(!!sym(input$stat_input_a) >= input$reference_line) |>
+        nrow() / nrow(filtered_player_stats())
+      
+      # Get implied Odds
+      implied_odds <- 1 / proportion_above_reference_line
+      implied_odds_under <- 1 / (1 - proportion_above_reference_line)
+      
+      # Get string to output
+      output_string <- paste0(
+        "Proportion Above Reference Line: ",
+        round(proportion_above_reference_line, 2),
+        "\n",
+        "Implied Odds - Over: ",
+        round(implied_odds, 2),
+        "\n",
+        "Implied Odds - Under: ",
+        round(implied_odds_under, 2),
+        "\n",
+        "Sample Size: ",
+        nrow(filtered_player_stats())
+      )
+      
+    } else {
+      # Interval mode - new logic
+      req(input$lower_bound, input$upper_bound)
+      
+      # Get proportion within interval (between lower and upper bounds)
+      proportion_within_interval <-
+        filtered_player_stats() |>
+        filter(!!sym(input$stat_input_a) > input$lower_bound & 
+               !!sym(input$stat_input_a) < input$upper_bound) |>
+        nrow() / nrow(filtered_player_stats())
+      
+      # Get implied odds for interval bet
+      implied_odds_interval <- ifelse(proportion_within_interval > 0, 
+                                    1 / proportion_within_interval, 
+                                    Inf)
+      implied_odds_outside <- ifelse(proportion_within_interval < 1,
+                                   1 / (1 - proportion_within_interval),
+                                   Inf)
+      
+      # Get string to output
+      output_string <- paste0(
+        "Proportion Within Interval (", input$lower_bound, " - ", input$upper_bound, "): ",
+        round(proportion_within_interval, 2),
+        "\n",
+        "Implied Odds - Within Interval: ",
+        round(implied_odds_interval, 2),
+        "\n",
+        "Implied Odds - Outside Interval: ",
+        round(implied_odds_outside, 2),
+        "\n",
+        "Sample Size: ",
+        nrow(filtered_player_stats())
+      )
+    }
     
     return(output_string)
     
@@ -834,51 +882,120 @@ server <- function(input, output) {
   #=============================================================================
   
   output$plot <- renderPlot({
-    # Create a new variable that checks if the y-value is above the reference line
-    df_with_color <- filtered_player_stats() %>%
-      mutate(color_condition = ifelse(
-        !!sym(input$stat_input_a) >= input$reference_line,
-        "limegreen",
-        "red1"
-      ))
     
-    # Plot player stats
-    p <- df_with_color %>%
-      ggplot(aes(
-        x = game_number,
-        y = !!sym(input$stat_input_a),
-        color = color_condition
-      )) +
+    if (input$line_mode == "single") {
+      # Single line mode - existing logic
+      df_with_color <- filtered_player_stats() %>%
+        mutate(color_condition = ifelse(
+          !!sym(input$stat_input_a) >= input$reference_line,
+          "limegreen",
+          "red1"
+        ))
       
-      # Basic Elements
-      geom_point(size = 4) +
-      geom_smooth(
-        method = "loess",
-        se = FALSE,
-        inherit.aes = FALSE,
-        mapping = aes(x = game_number, y = !!sym(input$stat_input_a))
-      ) +
-      geom_hline(
-        yintercept = input$reference_line,
-        linetype = "dashed",
-        color = "grey4",
-        size = 1
-      )+
+      # Plot player stats
+      p <- df_with_color %>%
+        ggplot(aes(
+          x = game_number,
+          y = !!sym(input$stat_input_a),
+          color = color_condition
+        )) +
+        
+        # Basic Elements
+        geom_point(size = 4) +
+        geom_smooth(
+          method = "loess",
+          se = FALSE,
+          inherit.aes = FALSE,
+          mapping = aes(x = game_number, y = !!sym(input$stat_input_a))
+        ) +
+        geom_hline(
+          yintercept = input$reference_line,
+          linetype = "dashed",
+          color = "grey4",
+          size = 1
+        ) +
+        
+        # Add text
+        annotate(
+          geom = "text",
+          x = 1,
+          y = max(filtered_player_stats() %>% pull(!!sym(
+            input$stat_input_a
+          ))),
+          label = proportion_above_reference_line(),
+          hjust = 0,
+          vjust = 1,
+          color = "black",
+          size = 6
+        )
       
-      # Add text
-      annotate(
-        geom = "text",
-        x = 1,
-        y = max(filtered_player_stats() %>% pull(!!sym(
-          input$stat_input_a
-        ))),
-        label = proportion_above_reference_line(),
-        hjust = 0,
-        vjust = 1,
-        color = "black",
-        size = 6
-      ) +
+    } else {
+      # Interval mode - new logic
+      req(input$lower_bound, input$upper_bound)
       
+      df_with_color <- filtered_player_stats() %>%
+        mutate(color_condition = case_when(
+          !!sym(input$stat_input_a) > input$lower_bound & 
+          !!sym(input$stat_input_a) < input$upper_bound ~ "limegreen",
+          TRUE ~ "red1"
+        ))
+      
+      # Plot player stats with interval highlighting
+      p <- df_with_color %>%
+        ggplot(aes(
+          x = game_number,
+          y = !!sym(input$stat_input_a),
+          color = color_condition
+        )) +
+        
+        # Basic Elements
+        geom_point(size = 4) +
+        geom_smooth(
+          method = "loess",
+          se = FALSE,
+          inherit.aes = FALSE,
+          mapping = aes(x = game_number, y = !!sym(input$stat_input_a))
+        ) +
+        
+        # Add shaded rectangle for interval
+        annotate(
+          "rect",
+          xmin = -Inf, xmax = Inf,
+          ymin = input$lower_bound, ymax = input$upper_bound,
+          alpha = 0.2, fill = "limegreen"
+        ) +
+        
+        # Add boundary lines
+        geom_hline(
+          yintercept = input$lower_bound,
+          linetype = "dashed",
+          color = "darkgreen",
+          size = 1
+        ) +
+        geom_hline(
+          yintercept = input$upper_bound,
+          linetype = "dashed",
+          color = "darkgreen",
+          size = 1
+        ) +
+        
+        # Add text
+        annotate(
+          geom = "text",
+          x = 1,
+          y = max(filtered_player_stats() %>% pull(!!sym(
+            input$stat_input_a
+          ))),
+          label = proportion_above_reference_line(),
+          hjust = 0,
+          vjust = 1,
+          color = "black",
+          size = 6
+        )
+    }
+    
+    # Common plot elements
+    p <- p +
       # Aesthetics
       theme_bw() +
       theme(
