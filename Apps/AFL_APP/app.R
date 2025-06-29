@@ -160,7 +160,7 @@ all_player_stats <-
   mutate(gameId = paste0(season_name, round, match_name))
 
 # Function to get correlation between players-----------------------------------
-get_player_correlation <- function(data, seasons = NULL, name_a, name_b, metric_a, metric_b) {
+get_player_correlation <- function(data, seasons = NULL, name_a, name_b, metric_a, metric_b, line_a = NULL, line_b = NULL) {
   # Column names for later use
   col_name_a <- paste0(name_a, " ", metric_a)
   col_name_b <- paste0(name_b, " ", metric_b)
@@ -186,15 +186,73 @@ get_player_correlation <- function(data, seasons = NULL, name_a, name_b, metric_
   correlation <- cor(df_merged[[col_name_a]], df_merged[[col_name_b]], method = "pearson")
   cat(sprintf("The correlation between %s and %s is: %f\n", col_name_a, col_name_b, correlation))
   
-  # Create plot
-  ggplot(df_merged, aes(x = .data[[col_name_a]], y = .data[[col_name_b]])) +
+  # Calculate quadrant statistics if lines are provided
+  quadrant_stats <- NULL
+  plot_subtitle <- sprintf("Correlation between %s and %s", col_name_a, col_name_b)
+  
+  if (!is.null(line_a) && !is.null(line_b)) {
+    # Calculate individual probabilities for independence comparison
+    prob_a_under <- sum(df_merged[[col_name_a]] < line_a) / nrow(df_merged)
+    prob_a_over <- sum(df_merged[[col_name_a]] >= line_a) / nrow(df_merged)
+    prob_b_under <- sum(df_merged[[col_name_b]] < line_b) / nrow(df_merged)
+    prob_b_over <- sum(df_merged[[col_name_b]] >= line_b) / nrow(df_merged)
+    
+    # Expected probabilities under independence
+    expected_both_under <- prob_a_under * prob_b_under * 100
+    expected_both_over <- prob_a_over * prob_b_over * 100
+    expected_a_over_b_under <- prob_a_over * prob_b_under * 100
+    expected_a_under_b_over <- prob_a_under * prob_b_over * 100
+    
+    # Create quadrant categories
+    df_merged <- df_merged %>%
+      mutate(
+        quadrant = case_when(
+          .data[[col_name_a]] < line_a & .data[[col_name_b]] < line_b ~ "Both Under",
+          .data[[col_name_a]] >= line_a & .data[[col_name_b]] < line_b ~ "Player 1 Over, Player 2 Under",
+          .data[[col_name_a]] < line_a & .data[[col_name_b]] >= line_b ~ "Player 1 Under, Player 2 Over",
+          .data[[col_name_a]] >= line_a & .data[[col_name_b]] >= line_b ~ "Both Over"
+        )
+      )
+    
+    # Calculate actual quadrant statistics
+    quadrant_stats <- df_merged %>%
+      group_by(quadrant) %>%
+      summarise(count = n(), .groups = "drop") %>%
+      mutate(
+        actual_pct = round(count / sum(count) * 100, 1),
+        expected_pct = case_when(
+          quadrant == "Both Under" ~ round(expected_both_under, 1),
+          quadrant == "Both Over" ~ round(expected_both_over, 1),
+          quadrant == "Player 1 Over, Player 2 Under" ~ round(expected_a_over_b_under, 1),
+          quadrant == "Player 1 Under, Player 2 Over" ~ round(expected_a_under_b_over, 1)
+        ),
+        difference = actual_pct - expected_pct
+      )
+    
+    # Update subtitle with quadrant info
+    both_under_actual <- quadrant_stats$actual_pct[quadrant_stats$quadrant == "Both Under"]
+    both_over_actual <- quadrant_stats$actual_pct[quadrant_stats$quadrant == "Both Over"]
+    both_under_expected <- quadrant_stats$expected_pct[quadrant_stats$quadrant == "Both Under"]
+    both_over_expected <- quadrant_stats$expected_pct[quadrant_stats$quadrant == "Both Over"]
+    
+    if (length(both_under_actual) == 0) both_under_actual <- 0
+    if (length(both_over_actual) == 0) both_over_actual <- 0
+    if (length(both_under_expected) == 0) both_under_expected <- 0
+    if (length(both_over_expected) == 0) both_over_expected <- 0
+    
+    plot_subtitle <- sprintf("Both Under: %s%% (exp: %s%%) | Both Over: %s%% (exp: %s%%) | Lines: %s, %s", 
+                           both_under_actual, both_under_expected, both_over_actual, both_over_expected, line_a, line_b)
+  }
+  
+  # Create base plot
+  p <- ggplot(df_merged, aes(x = .data[[col_name_a]], y = .data[[col_name_b]])) +
     geom_point(color = "#3498db", alpha = 0.6, size = 3) +
     geom_smooth(method = "lm", se = FALSE, color = "#e74c3c", linetype = "dashed") +
     labs(
       x = col_name_a, 
       y = col_name_b,
       title = "Player Performance Correlation",
-      subtitle = sprintf("Correlation between %s and %s", col_name_a, col_name_b),
+      subtitle = plot_subtitle,
       caption = sprintf("Pearson's r: %.2f", correlation)
     ) +
     theme_minimal() +
@@ -211,6 +269,72 @@ get_player_correlation <- function(data, seasons = NULL, name_a, name_b, metric_
       label = sprintf("r = %.2f", correlation), 
       hjust = 1, vjust = 0, size = 5, color = "red1", fontface = "italic"
     )
+  
+  # Add quadrant lines and labels if lines are provided
+  if (!is.null(line_a) && !is.null(line_b)) {
+    p <- p +
+      geom_vline(xintercept = line_a, color = "darkgreen", linetype = "solid", alpha = 0.7, size = 1) +
+      geom_hline(yintercept = line_b, color = "darkgreen", linetype = "solid", alpha = 0.7, size = 1) +
+      annotate("text", x = line_a, y = max(df_merged[[col_name_b]]), 
+               label = paste("Line:", line_a), hjust = -0.1, vjust = 1, 
+               color = "darkgreen", fontface = "bold", size = 3.5) +
+      annotate("text", x = max(df_merged[[col_name_a]]), y = line_b, 
+               label = paste("Line:", line_b), hjust = 1, vjust = -0.1, 
+               color = "darkgreen", fontface = "bold", size = 3.5)
+    
+    # Add quadrant labels with actual vs expected probabilities
+    x_mid_left <- (min(df_merged[[col_name_a]]) + line_a) / 2
+    x_mid_right <- (line_a + max(df_merged[[col_name_a]])) / 2
+    y_mid_bottom <- (min(df_merged[[col_name_b]]) + line_b) / 2
+    y_mid_top <- (line_b + max(df_merged[[col_name_b]])) / 2
+    
+    # Get actual and expected percentages for each quadrant
+    both_under_stats <- quadrant_stats[quadrant_stats$quadrant == "Both Under", ]
+    both_over_stats <- quadrant_stats[quadrant_stats$quadrant == "Both Over", ]
+    p1_over_p2_under_stats <- quadrant_stats[quadrant_stats$quadrant == "Player 1 Over, Player 2 Under", ]
+    p1_under_p2_over_stats <- quadrant_stats[quadrant_stats$quadrant == "Player 1 Under, Player 2 Over", ]
+    
+    # Create labels with actual vs expected
+    both_under_label <- if(nrow(both_under_stats) > 0) {
+      sprintf("Both Under\n%s%% (exp: %s%%)", both_under_stats$actual_pct, both_under_stats$expected_pct)
+    } else {
+      "Both Under\n0% (exp: 0%)"
+    }
+    
+    both_over_label <- if(nrow(both_over_stats) > 0) {
+      sprintf("Both Over\n%s%% (exp: %s%%)", both_over_stats$actual_pct, both_over_stats$expected_pct)
+    } else {
+      "Both Over\n0% (exp: 0%)"
+    }
+    
+    p1_over_p2_under_label <- if(nrow(p1_over_p2_under_stats) > 0) {
+      sprintf("P1 Over, P2 Under\n%s%% (exp: %s%%)", p1_over_p2_under_stats$actual_pct, p1_over_p2_under_stats$expected_pct)
+    } else {
+      "P1 Over, P2 Under\n0% (exp: 0%)"
+    }
+    
+    p1_under_p2_over_label <- if(nrow(p1_under_p2_over_stats) > 0) {
+      sprintf("P1 Under, P2 Over\n%s%% (exp: %s%%)", p1_under_p2_over_stats$actual_pct, p1_under_p2_over_stats$expected_pct)
+    } else {
+      "P1 Under, P2 Over\n0% (exp: 0%)"
+    }
+    
+    p <- p +
+      annotate("text", x = x_mid_left, y = y_mid_bottom, 
+               label = both_under_label, hjust = 0.5, vjust = 0.5, 
+               color = "red", fontface = "bold", size = 3.5, alpha = 0.8) +
+      annotate("text", x = x_mid_right, y = y_mid_bottom, 
+               label = p1_over_p2_under_label, hjust = 0.5, vjust = 0.5, 
+               color = "orange", fontface = "bold", size = 3.5, alpha = 0.8) +
+      annotate("text", x = x_mid_left, y = y_mid_top, 
+               label = p1_under_p2_over_label, hjust = 0.5, vjust = 0.5, 
+               color = "orange", fontface = "bold", size = 3.5, alpha = 0.8) +
+      annotate("text", x = x_mid_right, y = y_mid_top, 
+               label = both_over_label, hjust = 0.5, vjust = 0.5, 
+               color = "green", fontface = "bold", size = 3.5, alpha = 0.8)
+  }
+  
+  return(p)
 }
 
 # Function to compare player performance w or w/o teammate----------------------
@@ -704,6 +828,7 @@ ui <- page_navbar(
                    selected = "Adam Treloar"
                  ),
                  selectInput("metric_input_corr_a", "Select Statistic:", choices = c("Disposals", "Fantasy", "Goals", "Marks", "Tackles"), selected = "Disposals"),
+                 numericInput("line_input_corr_a", "Player 1 Line:", value = 25, min = 0, max = 100, step = 0.5),
                  selectInput(
                    "teammate_name_corr",
                    "Select Player 2:",
@@ -712,6 +837,7 @@ ui <- page_navbar(
                    selected = "Tim English"
                  ),
                  selectInput("metric_input_corr_b", "Select Statistic:", choices = c("Disposals", "Fantasy", "Goals", "Marks", "Tackles"), selected = "Disposals"),
+                 numericInput("line_input_corr_b", "Player 2 Line:", value = 25, min = 0, max = 100, step = 0.5),
                  selectInput("season_input_corr", "Select Season:", choices = all_player_stats$season_name |> unique(), multiple = TRUE, selectize = TRUE, selected = c("2025","2024"))
                )
              )
@@ -1856,7 +1982,9 @@ output$venue_specific_table <- renderDT({
         name_a = input$player_name_corr,
         name_b = input$teammate_name_corr,
         metric_a = input$metric_input_corr_a,
-        metric_b = input$metric_input_corr_b
+        metric_b = input$metric_input_corr_b,
+        line_a = input$line_input_corr_a,
+        line_b = input$line_input_corr_b
       )
     
     return(plot)
