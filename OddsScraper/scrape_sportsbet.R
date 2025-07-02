@@ -15,6 +15,24 @@ player_names <- player_names |> select(player_full_name, team_name)
 # Function to fix team names
 source("Functions/fix_team_names.R")
 
+# Function to standardize player names
+standardize_player_names <- function(player_name) {
+  case_when(
+    player_name == "Matthew Roberts" ~ "Matt Roberts",
+    player_name == "Samuel Wicks" ~ "Sam Wicks",
+    player_name == "Nathan Fyfe" ~ "Nat Fyfe",
+    player_name == "Tom J. Lynch" ~ "Tom Lynch",
+    player_name == "Brad Hill" ~ "Bradley Hill",
+    player_name == "Mitch Hinge" ~ "Mitchell Hinge",
+    player_name == "Minairo Frederick" ~ "Michael Frederick",
+    player_name == "Bailey Williams (WB)" ~ "Bailey Williams",
+    player_name == "Bailey J. Williams (WCE)" ~ "Bailey J. Williams",
+    player_name == "Lachlan Fogarty" ~ "Lachie Fogarty",
+    player_name == "Matthew Taberner" ~ "Matt Taberner",
+    .default = player_name
+  )
+}
+
 # Get sportsbet html
 sportsbet_html <-
 sportsbet_url |> 
@@ -164,11 +182,23 @@ main_market_links <- glue("https://www.sportsbet.com.au/apigw/sportsbook-sports/
 # Player disposals links
 player_disposals_links <- glue("https://www.sportsbet.com.au/apigw/sportsbook-sports/Sportsbook/Sports/Events/{match_ids}/MarketGroupings/601/Markets")
 
+# Player pyo disposals links
+player_pyo_disposals_links <- glue("https://www.sportsbet.com.au/apigw/sportsbook-sports/Sportsbook/Sports/Events/{match_ids}/MarketGroupings/972/Markets")
+
 # Player goals links
 player_goals_links <- glue("https://www.sportsbet.com.au/apigw/sportsbook-sports/Sportsbook/Sports/Events/{match_ids}/MarketGroupings/148/Markets")
 
-# Player Marks and Tackles Links
-player_marks_tackles_links <- glue("https://www.sportsbet.com.au/apigw/sportsbook-sports/Sportsbook/Sports/Events/{match_ids}/MarketGroupings/856/Markets")
+# Player Marks Links
+player_marks_links <- glue("https://www.sportsbet.com.au/apigw/sportsbook-sports/Sportsbook/Sports/Events/{match_ids}/MarketGroupings/1029/Markets")
+
+# Player Tackles Links
+player_tackles_links <- glue("https://www.sportsbet.com.au/apigw/sportsbook-sports/Sportsbook/Sports/Events/{match_ids}/MarketGroupings/1030/Markets")
+
+# Kicks Links
+kicks_links <- glue("https://www.sportsbet.com.au/apigw/sportsbook-sports/Sportsbook/Sports/Events/{match_ids}/MarketGroupings/1032/Markets")
+
+# Handballs Links
+handballs_links <- glue("https://www.sportsbet.com.au/apigw/sportsbook-sports/Sportsbook/Sports/Events/{match_ids}/MarketGroupings/1033/Markets")
 
 # Total Points Links
 total_points_links <- glue("https://www.sportsbet.com.au/apigw/sportsbook-sports/Sportsbook/Sports/Events/9229216/MarketGroupings/162/Markets")
@@ -215,6 +245,7 @@ player_prop_metadata <-
 player_prop_metadata <-
     player_prop_metadata |>
     map("result") |>
+    discard(is.null) |>
     map_df(bind_rows)
 
 # Function to read a url and get the player props-------------------------------
@@ -286,6 +317,7 @@ main_market_data <-
 main_market_data <-
     main_market_data |>
     map("result") |>
+    discard(is.null) |>
     map_df(bind_rows)
 
 # Line Data---------------------------------------------------------------------
@@ -322,7 +354,6 @@ sportsbet_line_markets <-
     mutate(agency = "Sportsbet")
 
 # Write to csv
-write_csv(sportsbet_line_markets, "Data/scraped_odds/sportsbet_line.csv")
 
 
 #===============================================================================
@@ -337,13 +368,25 @@ player_disposals_data <-
 player_disposals_data <-
     player_disposals_data |>
     map("result") |>
+    discard(is.null) |>
+    map_df(bind_rows)
+
+# Also map function to player pyo disposals urls
+player_pyo_disposals_data <-
+    map(player_pyo_disposals_links, safe_read_prop_url)
+
+# Get just result part from output
+player_pyo_disposals_data <-
+    player_pyo_disposals_data |>
+    map("result") |>
+    discard(is.null) |>
     map_df(bind_rows)
 
 # Add market name
 player_disposals_data <-
     player_disposals_data |>
+    bind_rows(player_pyo_disposals_data) |>
     filter(str_detect(prop_market_name, "Qtr", negate = TRUE)) |>
-    mutate(market_name = "Player Disposals") |>
     mutate(url = str_extract(as.character(url), "[0-9]{6,8}")) |>
     rename(match_id = url) |>
     mutate(match_id = as.numeric(match_id)) |>
@@ -355,23 +398,11 @@ player_disposals_data <-
 
 player_disposals_alternate <-
     player_disposals_data |>
-    filter(str_detect(prop_market_name, "To Get")) |>
+    filter(str_detect(prop_market_name, regex("to get", ignore_case = TRUE))) |>
     mutate(line = str_extract(prop_market_name, "\\d{1,2}")) |>
     mutate(line = as.numeric(line) - 0.5) |>
     rename(player_name = selection_name_prop) |>
-    mutate(
-        player_name =
-            case_when(
-                player_name == "Matthew Roberts" ~ "Matt Roberts",
-                player_name == "Samuel Wicks" ~ "Sam Wicks",
-                player_name == "Nathan Fyfe" ~ "Nat Fyfe",
-                player_name == "Tom J. Lynch" ~ "Tom Lynch",
-                player_name == "Brad Hill" ~ "Bradley Hill",
-                player_name == "Mitch Hinge" ~ "Mitchell Hinge",
-                player_name == "Minairo Frederick" ~ "Michael Frederick",
-                player_name == "Bailey Williams (WB)" ~ "Bailey Williams",
-                player_name == "Bailey J. Williams (WCE)" ~ "Bailey J. Williams",
-                .default = player_name)) |>
+    mutate(player_name = standardize_player_names(player_name)) |>
     rename(over_price = prop_market_price) |>
     left_join(player_names[, c("player_full_name", "team_name")], by = c("player_name" = "player_full_name")) |>
     mutate(opposition_team = if_else(team_name == home_team, away_team, home_team)) |>
@@ -406,19 +437,7 @@ player_disposals_over <-
     mutate(player_name = str_remove(player_name, " Over")) |>
     mutate(player_name = str_remove(player_name, " \\d+\\.\\d+")) |>
     rename(line = handicap) |>
-    mutate(
-        player_name =
-            case_when(
-              player_name == "Matthew Roberts" ~ "Matt Roberts",
-              player_name == "Samuel Wicks" ~ "Sam Wicks",
-              player_name == "Nathan Fyfe" ~ "Nat Fyfe",
-              player_name == "Tom J. Lynch" ~ "Tom Lynch",
-              player_name == "Brad Hill" ~ "Bradley Hill",
-              player_name == "Mitch Hinge" ~ "Mitchell Hinge",
-              player_name == "Minairo Frederick" ~ "Michael Frederick",
-              player_name == "Bailey Williams (WB)" ~ "Bailey Williams",
-              player_name == "Bailey J. Williams (WCE)" ~ "Bailey J. Williams",
-                .default = player_name)) |>
+    mutate(player_name = standardize_player_names(player_name)) |>
     rename(over_price = prop_market_price) |>
     left_join(player_names[, c("player_full_name", "team_name")], by = c("player_name" = "player_full_name")) |>
     mutate(opposition_team = if_else(team_name == home_team, away_team, home_team)) |>
@@ -451,19 +470,7 @@ player_disposals_under <-
     mutate(player_name = str_remove(player_name, " Under")) |>
     mutate(player_name = str_remove(player_name, " \\d+\\.\\d+")) |>
     rename(line = handicap) |>
-    mutate(
-        player_name =
-            case_when(
-              player_name == "Matthew Roberts" ~ "Matt Roberts",
-              player_name == "Samuel Wicks" ~ "Sam Wicks",
-              player_name == "Nathan Fyfe" ~ "Nat Fyfe",
-              player_name == "Tom J. Lynch" ~ "Tom Lynch",
-              player_name == "Brad Hill" ~ "Bradley Hill",
-              player_name == "Mitch Hinge" ~ "Mitchell Hinge",
-              player_name == "Minairo Frederick" ~ "Michael Frederick",
-              player_name == "Bailey Williams (WB)" ~ "Bailey Williams",
-              player_name == "Bailey J. Williams (WCE)" ~ "Bailey J. Williams",
-                .default = player_name)) |>
+    mutate(player_name = standardize_player_names(player_name)) |>
     rename(under_price = prop_market_price) |>
     left_join(player_names[, c("player_full_name", "team_name")], by = c("player_name" = "player_full_name")) |>
     mutate(opposition_team = if_else(team_name == home_team, away_team, home_team)) |>
@@ -503,6 +510,7 @@ player_goals_data <-
 player_goals_data <-
   player_goals_data |>
   map("result") |>
+  discard(is.null) |>
   map_df(bind_rows)
 
 # Add market name
@@ -512,7 +520,6 @@ player_goals_data <-
   filter(str_detect(prop_market_name, "Quarter", negate = TRUE)) |>
   filter(str_detect(prop_market_name, "Half", negate = TRUE)) |>
   filter(str_detect(prop_market_name, "Early", negate = TRUE)) |>
-  mutate(market_name = "Player Goals") |>
   mutate(url = str_extract(as.character(url), "[0-9]{6,8}")) |>
   rename(match_id = url) |>
   mutate(match_id = as.numeric(match_id)) |>
@@ -535,21 +542,7 @@ player_goals_alternate <-
   mutate(line = str_extract(prop_market_name, "\\d{1,2}")) |>
   mutate(line = as.numeric(line) - 0.5) |>
   rename(player_name = selection_name_prop) |>
-  mutate(
-    player_name =
-      case_when(
-        player_name == "Matthew Roberts" ~ "Matt Roberts",
-        player_name == "Samuel Wicks" ~ "Sam Wicks",
-        player_name == "Nathan Fyfe" ~ "Nat Fyfe",
-        player_name == "Tom J. Lynch" ~ "Tom Lynch",
-        player_name == "Brad Hill" ~ "Bradley Hill",
-        player_name == "Mitch Hinge" ~ "Mitchell Hinge",
-        player_name == "Minairo Frederick" ~ "Michael Frederick",
-        player_name == "Bailey Williams (WB)" ~ "Bailey Williams",
-        player_name == "Bailey J. Williams (WCE)" ~ "Bailey J. Williams",
-        player_name == "Lachlan Fogarty" ~ "Lachie Fogarty",
-        player_name == "Matthew Taberner" ~ "Matt Taberner",
-        .default = player_name)) |>
+  mutate(player_name = standardize_player_names(player_name)) |>
   rename(over_price = prop_market_price) |>
   left_join(player_names[, c("player_full_name", "team_name")], by = c("player_name" = "player_full_name")) |>
   mutate(opposition_team = if_else(team_name == home_team, away_team, home_team)) |>
@@ -584,21 +577,7 @@ player_goals_over <-
   mutate(player_name = str_remove(player_name, " Over")) |>
   mutate(player_name = str_remove(player_name, " \\d+\\.\\d+")) |>
   rename(line = handicap) |>
-  mutate(
-    player_name =
-      case_when(
-        player_name == "Matthew Roberts" ~ "Matt Roberts",
-        player_name == "Samuel Wicks" ~ "Sam Wicks",
-        player_name == "Nathan Fyfe" ~ "Nat Fyfe",
-        player_name == "Tom J. Lynch" ~ "Tom Lynch",
-        player_name == "Brad Hill" ~ "Bradley Hill",
-        player_name == "Mitch Hinge" ~ "Mitchell Hinge",
-        player_name == "Minairo Frederick" ~ "Michael Frederick",
-        player_name == "Bailey Williams (WB)" ~ "Bailey Williams",
-        player_name == "Bailey J. Williams (WCE)" ~ "Bailey J. Williams",
-        player_name == "Lachlan Fogarty" ~ "Lachie Fogarty",
-        player_name == "Matthew Taberner" ~ "Matt Taberner",
-        .default = player_name)) |>
+  mutate(player_name = standardize_player_names(player_name)) |>
   rename(over_price = prop_market_price) |>
   left_join(player_names[, c("player_full_name", "team_name")], by = c("player_name" = "player_full_name")) |>
   mutate(opposition_team = if_else(team_name == home_team, away_team, home_team)) |>
@@ -631,21 +610,7 @@ player_goals_under <-
   mutate(player_name = str_remove(player_name, " Under")) |>
   mutate(player_name = str_remove(player_name, " \\d+\\.\\d+")) |>
   rename(line = handicap) |>
-  mutate(
-    player_name =
-      case_when(
-        player_name == "Matthew Roberts" ~ "Matt Roberts",
-        player_name == "Samuel Wicks" ~ "Sam Wicks",
-        player_name == "Nathan Fyfe" ~ "Nat Fyfe",
-        player_name == "Tom J. Lynch" ~ "Tom Lynch",
-        player_name == "Brad Hill" ~ "Bradley Hill",
-        player_name == "Mitch Hinge" ~ "Mitchell Hinge",
-        player_name == "Minairo Frederick" ~ "Michael Frederick",
-        player_name == "Bailey Williams (WB)" ~ "Bailey Williams",
-        player_name == "Bailey J. Williams (WCE)" ~ "Bailey J. Williams",
-        player_name == "Lachlan Fogarty" ~ "Lachie Fogarty",
-        player_name == "Matthew Taberner" ~ "Matt Taberner",
-        .default = player_name)) |>
+  mutate(player_name = standardize_player_names(player_name)) |>
   rename(under_price = prop_market_price) |>
   left_join(player_names[, c("player_full_name", "team_name")], by = c("player_name" = "player_full_name")) |>
   mutate(opposition_team = if_else(team_name == home_team, away_team, home_team)) |>
@@ -674,22 +639,23 @@ player_goals_over_under <-
   left_join(player_goals_under)
 
 #===============================================================================
-# Player Marks and Tackles
+# Player Marks
 #===============================================================================
 
 # Map function to player marks and tackles urls
-player_marks_tackles_data <-
-  map(player_marks_tackles_links, safe_read_prop_url)
+player_marks_data <-
+  map(player_marks_links, safe_read_prop_url)
 
 # Get just result part from output
-player_marks_tackles_data <-
-  player_marks_tackles_data |>
+player_marks_data <-
+  player_marks_data |>
   map("result") |>
+  discard(is.null) |>
   map_df(bind_rows)
 
 # Make empty tibble if no rows returned
-if (nrow(player_marks_tackles_data) == 0) {
-  player_marks_tackles_data <- tibble(
+if (nrow(player_marks_data) == 0) {
+  player_marks_data <- tibble(
     prop_market_name = character(),
     selection_name_prop = character(),
     prop_market_selection = character(),
@@ -702,12 +668,11 @@ if (nrow(player_marks_tackles_data) == 0) {
 }
 
 # Add market name
-player_marks_tackles_data <-
-  player_marks_tackles_data |>
+player_marks_data <-
+  player_marks_data |>
   filter(str_detect(prop_market_name, "Qtr", negate = TRUE)) |>
   filter(str_detect(prop_market_name, "Quarter", negate = TRUE)) |>
   filter(str_detect(prop_market_name, "Half", negate = TRUE)) |>
-  mutate(market_name = "Player Marks and Tackles") |>
   mutate(url = str_extract(as.character(url), "[0-9]{6,8}")) |>
   rename(match_id = url) |>
   mutate(match_id = as.numeric(match_id)) |>
@@ -717,35 +682,18 @@ player_marks_tackles_data <-
 
 # Marks
 player_marks_data <-
-  player_marks_tackles_data |> 
+  player_marks_data |> 
   filter(str_detect(prop_market_name, "Marks"))
 
-# Tackles
-player_tackles_data <-
-  player_marks_tackles_data |> 
-  filter(str_detect(prop_market_name, "Tackles"))
-
-# Get player marks and tackles alternate lines----------------------------------
+# Get player marks alternate lines----------------------------------------------
 player_marks_alternate <-
   player_marks_data |>
-  filter(str_detect(prop_market_name, "to take")) |>
+  filter(str_detect(prop_market_name, regex("to (take|get)", ignore_case = TRUE))) |>
   mutate(line = str_extract(prop_market_name, "\\d{1,2}")) |>
   mutate(line = as.numeric(line) - 0.5) |>
   rename(player_name = selection_name_prop) |>
-  mutate(player_name = str_remove(player_name, " to have.*")) |>
-  mutate(
-    player_name =
-      case_when(
-        player_name == "Matthew Roberts" ~ "Matt Roberts",
-        player_name == "Samuel Wicks" ~ "Sam Wicks",
-        player_name == "Nathan Fyfe" ~ "Nat Fyfe",
-        player_name == "Tom J. Lynch" ~ "Tom Lynch",
-        player_name == "Brad Hill" ~ "Bradley Hill",
-        player_name == "Mitch Hinge" ~ "Mitchell Hinge",
-        player_name == "Minairo Frederick" ~ "Michael Frederick",
-        player_name == "Bailey Williams (WB)" ~ "Bailey Williams",
-        player_name == "Bailey J. Williams (WCE)" ~ "Bailey J. Williams",
-        .default = player_name)) |>
+  mutate(player_name = str_remove(player_name, regex(" to (take|get).*", ignore_case = TRUE))) |>
+  mutate(player_name = standardize_player_names(player_name)) |>
   rename(over_price = prop_market_price) |>
   left_join(player_names[, c("player_full_name", "team_name")], by = c("player_name" = "player_full_name")) |>
   mutate(opposition_team = if_else(team_name == home_team, away_team, home_team)) |>
@@ -755,48 +703,6 @@ player_marks_alternate <-
     home_team,
     away_team,
     market_name = "Player Marks",
-    player_name,
-    player_team = team_name,
-    opposition_team,
-    line,
-    over_price,
-    agency = "Sportsbet",
-    class_external_id,
-    competition_external_id,
-    event_external_id,
-    market_id,
-    player_id
-  )
-
-player_tackles_alternate <-
-  player_tackles_data |>
-  filter(str_detect(prop_market_name, "to get")) |>
-  mutate(line = str_extract(prop_market_name, "\\d{1,2}")) |>
-  mutate(line = as.numeric(line) - 0.5) |>
-  rename(player_name = selection_name_prop) |>
-  mutate(player_name = str_remove(player_name, " to have.*")) |>
-  mutate(
-    player_name =
-      case_when(
-        player_name == "Matthew Roberts" ~ "Matt Roberts",
-        player_name == "Samuel Wicks" ~ "Sam Wicks",
-        player_name == "Nathan Fyfe" ~ "Nat Fyfe",
-        player_name == "Tom J. Lynch" ~ "Tom Lynch",
-        player_name == "Brad Hill" ~ "Bradley Hill",
-        player_name == "Mitch Hinge" ~ "Mitchell Hinge",
-        player_name == "Minairo Frederick" ~ "Michael Frederick",
-        player_name == "Bailey Williams (WB)" ~ "Bailey Williams",
-        player_name == "Bailey J. Williams (WCE)" ~ "Bailey J. Williams",
-        .default = player_name)) |>
-  rename(over_price = prop_market_price) |>
-  left_join(player_names[, c("player_full_name", "team_name")], by = c("player_name" = "player_full_name")) |>
-  mutate(opposition_team = if_else(team_name == home_team, away_team, home_team)) |>
-  relocate(match, .before = player_name) |>
-  transmute(
-    match,
-    home_team,
-    away_team,
-    market_name = "Player Tackles",
     player_name,
     player_team = team_name,
     opposition_team,
@@ -836,9 +742,9 @@ player_disposals_alternate |>
         "player_id",
         "player_id_unders"
     ) |>
+    distinct(player_name, market_name, line, over_price, under_price, .keep_all = TRUE) |>
     mutate(market_name = "Player Disposals") |>
-    mutate(agency = "Sportsbet") |>
-    write_csv("Data/scraped_odds/sportsbet_player_disposals.csv")
+    mutate(agency = "Sportsbet")
 
 # Goals
 player_goals_alternate |>
@@ -863,8 +769,7 @@ player_goals_alternate |>
     "player_id_unders"
   ) |>
   mutate(market_name = "Player Goals") |>
-  mutate(agency = "Sportsbet") |>
-  write_csv("Data/scraped_odds/sportsbet_player_goals.csv")
+  mutate(agency = "Sportsbet")
 
 # Marks
 player_marks_alternate |>
@@ -886,8 +791,241 @@ player_marks_alternate |>
     "player_id"
   ) |>
   mutate(market_name = "Player Marks") |>
-  mutate(agency = "Sportsbet") |>
-  write_csv("Data/scraped_odds/sportsbet_player_marks.csv")
+  mutate(agency = "Sportsbet")
+
+#===============================================================================
+# Player Tackles
+#===============================================================================
+
+# Map function to player tackles urls
+player_tackles_data <-
+  map(player_tackles_links, safe_read_prop_url)
+
+# Get just result part from output
+player_tackles_data <-
+  player_tackles_data |>
+  map("result") |>
+  discard(is.null) |>
+  map_df(bind_rows)
+
+# Make empty tibble if no rows returned
+if (nrow(player_tackles_data) == 0) {
+  player_tackles_data <- tibble(
+    prop_market_name = character(),
+    selection_name_prop = character(),
+    prop_market_selection = character(),
+    prop_market_price = numeric(),
+    player_id = character(),
+    market_id = character(),
+    handicap = numeric(),
+    url = character()
+  )
+}
+
+# Add market name
+player_tackles_data <-
+  player_tackles_data |>
+  filter(str_detect(prop_market_name, "Qtr", negate = TRUE)) |>
+  filter(str_detect(prop_market_name, "Quarter", negate = TRUE)) |>
+  filter(str_detect(prop_market_name, "Half", negate = TRUE)) |>
+  mutate(url = str_extract(as.character(url), "[0-9]{6,8}")) |>
+  rename(match_id = url) |>
+  mutate(match_id = as.numeric(match_id)) |>
+  left_join(team_names, by = "match_id") |>
+  mutate(match = paste(home_team, "v", away_team)) |>
+  left_join(player_prop_metadata)
+
+# Tackles
+player_tackles_data <-
+  player_tackles_data |> 
+  filter(str_detect(prop_market_name, "Tackles"))
+
+# Get player tackles alternate lines-------------------------------------------
+player_tackles_alternate <-
+  player_tackles_data |>
+  filter(str_detect(prop_market_name, regex("to (take|get)", ignore_case = TRUE))) |>
+  mutate(line = str_extract(prop_market_name, "\\d{1,2}")) |>
+  mutate(line = as.numeric(line) - 0.5) |>
+  rename(player_name = selection_name_prop) |>
+  mutate(player_name = str_remove(player_name, regex(" to (take|get).*", ignore_case = TRUE))) |>
+  mutate(player_name = standardize_player_names(player_name)) |>
+  rename(over_price = prop_market_price) |>
+  left_join(player_names[, c("player_full_name", "team_name")], by = c("player_name" = "player_full_name")) |>
+  mutate(opposition_team = if_else(team_name == home_team, away_team, home_team)) |>
+  relocate(match, .before = player_name) |>
+  transmute(
+    match,
+    home_team,
+    away_team,
+    market_name = "Player Tackles",
+    player_name,
+    player_team = team_name,
+    opposition_team,
+    line,
+    over_price,
+    agency = "Sportsbet",
+    class_external_id,
+    competition_external_id,
+    event_external_id,
+    market_id,
+    player_id
+  )
+
+#===============================================================================
+# Player Kicks
+#===============================================================================
+
+# Map function to player kicks urls
+player_kicks_data <-
+  map(kicks_links, safe_read_prop_url)
+
+# Get just result part from output
+player_kicks_data <-
+  player_kicks_data |>
+  map("result") |>
+  discard(is.null) |>
+  map_df(bind_rows)
+
+# Make empty tibble if no rows returned
+if (nrow(player_kicks_data) == 0) {
+  player_kicks_data <- tibble(
+    prop_market_name = character(),
+    selection_name_prop = character(),
+    prop_market_selection = character(),
+    prop_market_price = numeric(),
+    player_id = character(),
+    market_id = character(),
+    handicap = numeric(),
+    url = character()
+  )
+}
+
+# Add market name
+player_kicks_data <-
+  player_kicks_data |>
+  filter(str_detect(prop_market_name, "Qtr", negate = TRUE)) |>
+  filter(str_detect(prop_market_name, "Quarter", negate = TRUE)) |>
+  filter(str_detect(prop_market_name, "Half", negate = TRUE)) |>
+  mutate(url = str_extract(as.character(url), "[0-9]{6,8}")) |>
+  rename(match_id = url) |>
+  mutate(match_id = as.numeric(match_id)) |>
+  left_join(team_names, by = "match_id") |>
+  mutate(match = paste(home_team, "v", away_team)) |>
+  left_join(player_prop_metadata)
+
+# Kicks
+player_kicks_data <-
+  player_kicks_data |> 
+  filter(str_detect(prop_market_name, "Kicks"))
+
+# Get player kicks alternate lines---------------------------------------------
+player_kicks_alternate <-
+  player_kicks_data |>
+  filter(str_detect(prop_market_name, regex("to (take|get)", ignore_case = TRUE))) |>
+  mutate(line = str_extract(prop_market_name, "\\d{1,2}")) |>
+  mutate(line = as.numeric(line) - 0.5) |>
+  rename(player_name = selection_name_prop) |>
+  mutate(player_name = str_remove(player_name, regex(" to (take|get).*", ignore_case = TRUE))) |>
+  mutate(player_name = standardize_player_names(player_name)) |>
+  rename(over_price = prop_market_price) |>
+  left_join(player_names[, c("player_full_name", "team_name")], by = c("player_name" = "player_full_name")) |>
+  mutate(opposition_team = if_else(team_name == home_team, away_team, home_team)) |>
+  relocate(match, .before = player_name) |>
+  transmute(
+    match,
+    home_team,
+    away_team,
+    market_name = "Player Kicks",
+    player_name,
+    player_team = team_name,
+    opposition_team,
+    line,
+    over_price,
+    agency = "Sportsbet",
+    class_external_id,
+    competition_external_id,
+    event_external_id,
+    market_id,
+    player_id
+  )
+
+#===============================================================================
+# Player Handballs
+#===============================================================================
+
+# Map function to player handballs urls
+player_handballs_data <-
+  map(handballs_links, safe_read_prop_url)
+
+# Get just result part from output
+player_handballs_data <-
+  player_handballs_data |>
+  map("result") |>
+  discard(is.null) |>
+  map_df(bind_rows)
+
+# Make empty tibble if no rows returned
+if (nrow(player_handballs_data) == 0) {
+  player_handballs_data <- tibble(
+    prop_market_name = character(),
+    selection_name_prop = character(),
+    prop_market_selection = character(),
+    prop_market_price = numeric(),
+    player_id = character(),
+    market_id = character(),
+    handicap = numeric(),
+    url = character()
+  )
+}
+
+# Add market name
+player_handballs_data <-
+  player_handballs_data |>
+  filter(str_detect(prop_market_name, "Qtr", negate = TRUE)) |>
+  filter(str_detect(prop_market_name, "Quarter", negate = TRUE)) |>
+  filter(str_detect(prop_market_name, "Half", negate = TRUE)) |>
+  mutate(url = str_extract(as.character(url), "[0-9]{6,8}")) |>
+  rename(match_id = url) |>
+  mutate(match_id = as.numeric(match_id)) |>
+  left_join(team_names, by = "match_id") |>
+  mutate(match = paste(home_team, "v", away_team)) |>
+  left_join(player_prop_metadata)
+
+# Handballs
+player_handballs_data <-
+  player_handballs_data |> 
+  filter(str_detect(prop_market_name, "Handballs"))
+
+# Get player handballs alternate lines-----------------------------------------
+player_handballs_alternate <-
+  player_handballs_data |>
+  filter(str_detect(prop_market_name, regex("to (take|get)", ignore_case = TRUE))) |>
+  mutate(line = str_extract(prop_market_name, "\\d{1,2}")) |>
+  mutate(line = as.numeric(line) - 0.5) |>
+  rename(player_name = selection_name_prop) |>
+  mutate(player_name = str_remove(player_name, regex(" to (take|get).*", ignore_case = TRUE))) |>
+  mutate(player_name = standardize_player_names(player_name)) |>
+  rename(over_price = prop_market_price) |>
+  left_join(player_names[, c("player_full_name", "team_name")], by = c("player_name" = "player_full_name")) |>
+  mutate(opposition_team = if_else(team_name == home_team, away_team, home_team)) |>
+  relocate(match, .before = player_name) |>
+  transmute(
+    match,
+    home_team,
+    away_team,
+    market_name = "Player Handballs",
+    player_name,
+    player_team = team_name,
+    opposition_team,
+    line,
+    over_price,
+    agency = "Sportsbet",
+    class_external_id,
+    competition_external_id,
+    event_external_id,
+    market_id,
+    player_id
+  )
 
 # Tackles
 player_tackles_alternate |>
@@ -909,8 +1047,51 @@ player_tackles_alternate |>
     "player_id"
   ) |>
   mutate(market_name = "Player Tackles") |>
-  mutate(agency = "Sportsbet") |>
-  write_csv("Data/scraped_odds/sportsbet_player_tackles.csv")
+  mutate(agency = "Sportsbet")
+
+# Kicks
+player_kicks_alternate |>
+  select(
+    "match",
+    "home_team",
+    "away_team",
+    "market_name",
+    "player_name",
+    "player_team",
+    "line",
+    "over_price",
+    "agency",
+    "opposition_team",
+    "class_external_id",
+    "competition_external_id",
+    "event_external_id",
+    "market_id",
+    "player_id"
+  ) |>
+  mutate(market_name = "Player Kicks") |>
+  mutate(agency = "Sportsbet")
+
+# Handballs
+player_handballs_alternate |>
+  select(
+    "match",
+    "home_team",
+    "away_team",
+    "market_name",
+    "player_name",
+    "player_team",
+    "line",
+    "over_price",
+    "agency",
+    "opposition_team",
+    "class_external_id",
+    "competition_external_id",
+    "event_external_id",
+    "market_id",
+    "player_id"
+  ) |>
+  mutate(market_name = "Player Handballs") |>
+  mutate(agency = "Sportsbet")
 
 #===============================================================================
 # Total Points
@@ -924,6 +1105,7 @@ total_points_data <-
 total_points_data <-
   total_points_data |>
   map("result") |>
+  discard(is.null) |>
   map_df(bind_rows)
 
 # Make empty tibble if no rows returned
@@ -1023,7 +1205,148 @@ all_total_points <-
   group_by(match, line) |>
   slice_head(n = 1)
 
-# Write to csv
+
+#===============================================================================
+# Write All Data to CSV Files
+#===============================================================================
+
+# Line Markets  
+write_csv(sportsbet_line_markets, "Data/scraped_odds/sportsbet_line.csv")
+
+# Player Disposals
+player_disposals_alternate |>
+    bind_rows(player_disposals_over_under) |>
+    select(
+        "match",
+        "home_team",
+        "away_team",
+        "market_name",
+        "player_name",
+        "player_team",
+        "line",
+        "over_price",
+        "under_price",
+        "agency",
+        "opposition_team",
+        "class_external_id",
+        "competition_external_id",
+        "event_external_id",
+        "market_id",
+        "player_id",
+        "player_id_unders"
+    ) |>
+    distinct(player_name, market_name, line, over_price, under_price, .keep_all = TRUE) |>
+    write_csv("Data/scraped_odds/sportsbet_player_disposals.csv")
+
+# Player Goals
+player_goals_alternate |>
+  bind_rows(player_goals_over_under) |>
+  select(
+    "match",
+    "home_team",
+    "away_team",
+    "market_name",
+    "player_name",
+    "player_team",
+    "line",
+    "over_price",
+    "under_price",
+    "agency",
+    "opposition_team",
+    "class_external_id",
+    "competition_external_id",
+    "event_external_id",
+    "market_id",
+    "player_id",
+    "player_id_unders"
+  ) |>
+  write_csv("Data/scraped_odds/sportsbet_player_goals.csv")
+
+# Player Marks
+player_marks_alternate |>
+  select(
+    "match",
+    "home_team",
+    "away_team",
+    "market_name",
+    "player_name",
+    "player_team",
+    "line",
+    "over_price",
+    "agency",
+    "opposition_team",
+    "class_external_id",
+    "competition_external_id",
+    "event_external_id",
+    "market_id",
+    "player_id"
+  ) |>
+  write_csv("Data/scraped_odds/sportsbet_player_marks.csv")
+
+# Player Tackles
+player_tackles_alternate |>
+  select(
+    "match",
+    "home_team",
+    "away_team",
+    "market_name",
+    "player_name",
+    "player_team",
+    "line",
+    "over_price",
+    "agency",
+    "opposition_team",
+    "class_external_id",
+    "competition_external_id",
+    "event_external_id",
+    "market_id",
+    "player_id"
+  ) |>
+  write_csv("Data/scraped_odds/sportsbet_player_tackles.csv")
+
+# Player Kicks
+player_kicks_alternate |>
+  select(
+    "match",
+    "home_team",
+    "away_team",
+    "market_name",
+    "player_name",
+    "player_team",
+    "line",
+    "over_price",
+    "agency",
+    "opposition_team",
+    "class_external_id",
+    "competition_external_id",
+    "event_external_id",
+    "market_id",
+    "player_id"
+  ) |>
+  write_csv("Data/scraped_odds/sportsbet_player_kicks.csv")
+
+# Player Handballs
+player_handballs_alternate |>
+  select(
+    "match",
+    "home_team",
+    "away_team",
+    "market_name",
+    "player_name",
+    "player_team",
+    "line",
+    "over_price",
+    "agency",
+    "opposition_team",
+    "class_external_id",
+    "competition_external_id",
+    "event_external_id",
+    "market_id",
+    "player_id"
+  ) |>
+  write_csv("Data/scraped_odds/sportsbet_player_handballs.csv")
+
+# Total Points
 write_csv(all_total_points, "Data/scraped_odds/sportsbet_total_points.csv")
 
 }
