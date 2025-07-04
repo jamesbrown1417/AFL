@@ -8,6 +8,8 @@ library(mongolite)
 sportsbet_sgm <-
   read_csv("Data/scraped_odds/sportsbet_player_disposals.csv") |> 
   bind_rows(read_csv("Data/scraped_odds/sportsbet_player_goals.csv")) |> 
+  bind_rows(read_csv("Data/scraped_odds/sportsbet_player_tackles.csv")) |>
+  bind_rows(read_csv("Data/scraped_odds/sportsbet_player_marks.csv")) |>
   rename(price = over_price) |> 
   distinct(match, player_name, line, market_name, agency, .keep_all = TRUE) |> 
   select(-contains("under"))
