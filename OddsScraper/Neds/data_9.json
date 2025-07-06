@@ -1,21 +1,5 @@
 {
     "entrants": {
-        "1d215e63-58b5-414f-a737-85267b42c2c6": {
-            "id": "1d215e63-58b5-414f-a737-85267b42c2c6",
-            "name": "Carlton",
-            "home_away": "HOME",
-            "visible": true,
-            "sort_order": 10,
-            "market_id": "7dcf036a-5a57-433d-b178-c1ef1e793606"
-        },
-        "9d4f509a-cfde-4ee9-84d0-e5608526bcea": {
-            "id": "9d4f509a-cfde-4ee9-84d0-e5608526bcea",
-            "name": "Brisbane Lions",
-            "home_away": "AWAY",
-            "visible": true,
-            "sort_order": 20,
-            "market_id": "7dcf036a-5a57-433d-b178-c1ef1e793606"
-        },
         "df67e050-42cc-4197-a860-fe11d1ef12af": {
             "id": "df67e050-42cc-4197-a860-fe11d1ef12af",
             "name": "Carlton",
@@ -76,18 +60,16 @@
                 {
                     "market_type_group_id": "29edb5e1-a717-4769-8bcd-2d43ec38d828",
                     "market_ids": [
-                        "b16fa5a3-4548-4e09-965b-4f09090870c2",
-                        "7dcf036a-5a57-433d-b178-c1ef1e793606"
+                        "b16fa5a3-4548-4e09-965b-4f09090870c2"
                     ]
                 }
             ],
-            "market_count": 2,
+            "market_count": 1,
             "main_markets": [
                 "b16fa5a3-4548-4e09-965b-4f09090870c2"
             ],
             "market_ids": [
-                "b16fa5a3-4548-4e09-965b-4f09090870c2",
-                "7dcf036a-5a57-433d-b178-c1ef1e793606"
+                "b16fa5a3-4548-4e09-965b-4f09090870c2"
             ],
             "category_id": "23d497e6-8aab-4309-905b-9421f42c9bc5",
             "round_id": "7a5b30f0-1789-4b27-b17f-b3e8b96fa4bf",
@@ -107,26 +89,6 @@
         }
     },
     "markets": {
-        "7dcf036a-5a57-433d-b178-c1ef1e793606": {
-            "id": "7dcf036a-5a57-433d-b178-c1ef1e793606",
-            "event_id": "ca12bd56-5cbb-44fd-bd6f-523b6acf71fc",
-            "market_type_id": "d04cddcd-5f42-4d17-ae1c-950dfdaa2c98",
-            "market_status_id": "4bc8fe96-296b-4b4c-aea4-85c94f63b9c6",
-            "name": "Line",
-            "advertised_start": {
-                "seconds": 1752139800
-            },
-            "actual_start": {
-                "seconds": 1752139800
-            },
-            "handicap": -25.5,
-            "visible": true,
-            "entrant_ids": [
-                "1d215e63-58b5-414f-a737-85267b42c2c6",
-                "9d4f509a-cfde-4ee9-84d0-e5608526bcea"
-            ],
-            "num_winners": 1
-        },
         "b16fa5a3-4548-4e09-965b-4f09090870c2": {
             "id": "b16fa5a3-4548-4e09-965b-4f09090870c2",
             "event_id": "ca12bd56-5cbb-44fd-bd6f-523b6acf71fc",
@@ -149,22 +111,9 @@
         }
     },
     "markets_allow_cashout": {
-        "7dcf036a-5a57-433d-b178-c1ef1e793606": false,
         "b16fa5a3-4548-4e09-965b-4f09090870c2": true
     },
     "prices": {
-        "1d215e63-58b5-414f-a737-85267b42c2c6:940b8704-e497-4a76-b390-00918ff7d282:": {
-            "odds": {
-                "numerator": 87,
-                "denominator": 100
-            }
-        },
-        "9d4f509a-cfde-4ee9-84d0-e5608526bcea:940b8704-e497-4a76-b390-00918ff7d282:": {
-            "odds": {
-                "numerator": 87,
-                "denominator": 100
-            }
-        },
         "df67e050-42cc-4197-a860-fe11d1ef12af:940b8704-e497-4a76-b390-00918ff7d282:": {
             "odds": {
                 "numerator": 31,
