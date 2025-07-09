@@ -4,10 +4,20 @@ library(tidyverse)
 library(purrr)
 
 # Dabble SGM-----------------------------------------------------------------
+
+# Helper function to read CSV and return empty tibble if 0 rows
+safe_read <- function(file) {
+  if (!file.exists(file)) return(tibble())
+  df <- read_csv(file, show_col_types = FALSE)
+  if (nrow(df) == 0) return(tibble()) else return(df)
+}
+
 dabble_sgm <-
-  read_csv("../../Data/scraped_odds/dabble_player_disposals.csv") |> 
-  bind_rows(read_csv("../../Data/scraped_odds/dabble_player_goals.csv")) |> 
-  bind_rows(read_csv("../../Data/scraped_odds/dabble_player_fantasy_points.csv")) |>
+  safe_read("../../Data/scraped_odds/dabble_player_disposals.csv") |> 
+  bind_rows(safe_read("../../Data/scraped_odds/dabble_player_goals.csv")) |> 
+  bind_rows(safe_read("../../Data/scraped_odds/dabble_player_fantasy_points.csv")) |>
+  bind_rows(safe_read("../../Data/scraped_odds/dabble_player_tackles.csv")) |>
+  bind_rows(safe_read("../../Data/scraped_odds/dabble_player_marks.csv")) |>
   rename(price = over_price) |> 
   distinct(match, player_name, line, market_name, agency, .keep_all = TRUE) |> 
   select(-contains("under")) |> 

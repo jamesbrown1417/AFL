@@ -1,51 +1,51 @@
 {
     "entrants": {
-        "20ca471a-9d5e-4001-b547-bae15aeabba8": {
-            "id": "20ca471a-9d5e-4001-b547-bae15aeabba8",
-            "name": "Fremantle",
-            "home_away": "AWAY",
-            "visible": true,
-            "sort_order": 20,
-            "market_id": "79e90137-9271-4758-ba5f-8f005775ffee"
-        },
-        "dcda100b-7e58-4f6c-a57b-c463f48a6812": {
-            "id": "dcda100b-7e58-4f6c-a57b-c463f48a6812",
-            "name": "Collingwood",
+        "553daf19-eebf-41e7-ac89-4680deb2e0b5": {
+            "id": "553daf19-eebf-41e7-ac89-4680deb2e0b5",
+            "name": "Essendon",
             "home_away": "HOME",
             "visible": true,
             "sort_order": 10,
-            "market_id": "79e90137-9271-4758-ba5f-8f005775ffee"
+            "market_id": "32dc7b86-9c31-4629-b0e8-c32fea7e0553"
+        },
+        "916c01aa-e0e8-4acf-b33d-f9a29f060e9e": {
+            "id": "916c01aa-e0e8-4acf-b33d-f9a29f060e9e",
+            "name": "GWS Giants",
+            "home_away": "AWAY",
+            "visible": true,
+            "sort_order": 20,
+            "market_id": "32dc7b86-9c31-4629-b0e8-c32fea7e0553"
         }
     },
     "event_participants": {
-        "22d01c0a-b3f1-4915-a6ce-f1bf03e09b82": {
-            "id": "22d01c0a-b3f1-4915-a6ce-f1bf03e09b82",
-            "event_id": "95e720dc-a0f1-4bc5-bcd6-a7ebfba63c8f",
-            "name": "Collingwood",
+        "11f03930-4611-4fbf-a620-bb4a81b48043": {
+            "id": "11f03930-4611-4fbf-a620-bb4a81b48043",
+            "event_id": "a9bb9780-80bc-4f05-9369-af4aef66472e",
+            "name": "GWS Giants",
+            "home_away": "AWAY",
+            "colour": "#f47920"
+        },
+        "e0c4292c-898e-4609-9d78-4e41f3d74e34": {
+            "id": "e0c4292c-898e-4609-9d78-4e41f3d74e34",
+            "event_id": "a9bb9780-80bc-4f05-9369-af4aef66472e",
+            "name": "Essendon",
             "home_away": "HOME",
             "colour": "#000000"
-        },
-        "dec892a8-08ab-479c-93c1-d3b4418d0f9d": {
-            "id": "dec892a8-08ab-479c-93c1-d3b4418d0f9d",
-            "event_id": "95e720dc-a0f1-4bc5-bcd6-a7ebfba63c8f",
-            "name": "Fremantle",
-            "home_away": "AWAY",
-            "colour": "#ffffff"
         }
     },
     "events": {
-        "95e720dc-a0f1-4bc5-bcd6-a7ebfba63c8f": {
-            "id": "95e720dc-a0f1-4bc5-bcd6-a7ebfba63c8f",
-            "name": "Collingwood vs Fremantle",
+        "a9bb9780-80bc-4f05-9369-af4aef66472e": {
+            "id": "a9bb9780-80bc-4f05-9369-af4aef66472e",
+            "name": "Essendon vs GWS Giants",
             "event_type": {
                 "id": "6bfa0efc-05df-4ae1-9b1e-152365290cfd",
                 "name": "Match"
             },
             "match_status": "BettingOpen",
-            "advertised_start": "2025-07-20T05:15:00Z",
-            "actual_start": "2025-07-20T05:15:00Z",
+            "advertised_start": "2025-07-17T09:30:00Z",
+            "actual_start": "2025-07-17T09:30:00Z",
             "visible": true,
-            "slug": "collingwood-vs-fremantle",
+            "slug": "essendon-vs-gws-giants",
             "competition": {
                 "id": "ccff2e9a-5347-41aa-902a-bb6b1886d817",
                 "name": "AFL",
@@ -60,22 +60,22 @@
                 {
                     "market_type_group_id": "29edb5e1-a717-4769-8bcd-2d43ec38d828",
                     "market_ids": [
-                        "79e90137-9271-4758-ba5f-8f005775ffee"
+                        "32dc7b86-9c31-4629-b0e8-c32fea7e0553"
                     ]
                 }
             ],
             "market_count": 1,
             "main_markets": [
-                "79e90137-9271-4758-ba5f-8f005775ffee"
+                "32dc7b86-9c31-4629-b0e8-c32fea7e0553"
             ],
             "market_ids": [
-                "79e90137-9271-4758-ba5f-8f005775ffee"
+                "32dc7b86-9c31-4629-b0e8-c32fea7e0553"
             ],
             "category_id": "23d497e6-8aab-4309-905b-9421f42c9bc5",
             "round_id": "13403bae-bb76-4ac5-8e2f-6344c148b003",
             "participant_ids": [
-                "22d01c0a-b3f1-4915-a6ce-f1bf03e09b82",
-                "dec892a8-08ab-479c-93c1-d3b4418d0f9d"
+                "11f03930-4611-4fbf-a620-bb4a81b48043",
+                "e0c4292c-898e-4609-9d78-4e41f3d74e34"
             ]
         }
     },
@@ -89,41 +89,41 @@
         }
     },
     "markets": {
-        "79e90137-9271-4758-ba5f-8f005775ffee": {
-            "id": "79e90137-9271-4758-ba5f-8f005775ffee",
-            "event_id": "95e720dc-a0f1-4bc5-bcd6-a7ebfba63c8f",
+        "32dc7b86-9c31-4629-b0e8-c32fea7e0553": {
+            "id": "32dc7b86-9c31-4629-b0e8-c32fea7e0553",
+            "event_id": "a9bb9780-80bc-4f05-9369-af4aef66472e",
             "market_type_id": "be25c37a-71ff-47f6-a1e2-02a494eb5a4d",
             "market_status_id": "4bc8fe96-296b-4b4c-aea4-85c94f63b9c6",
             "name": "Match Betting",
             "advertised_start": {
-                "seconds": 1752988500
+                "seconds": 1752744600
             },
             "actual_start": {
-                "seconds": 1752988500
+                "seconds": 1752744600
             },
             "is_primary": true,
             "visible": true,
             "entrant_ids": [
-                "dcda100b-7e58-4f6c-a57b-c463f48a6812",
-                "20ca471a-9d5e-4001-b547-bae15aeabba8"
+                "553daf19-eebf-41e7-ac89-4680deb2e0b5",
+                "916c01aa-e0e8-4acf-b33d-f9a29f060e9e"
             ],
             "num_winners": 1
         }
     },
     "markets_allow_cashout": {
-        "79e90137-9271-4758-ba5f-8f005775ffee": true
+        "32dc7b86-9c31-4629-b0e8-c32fea7e0553": true
     },
     "prices": {
-        "20ca471a-9d5e-4001-b547-bae15aeabba8:940b8704-e497-4a76-b390-00918ff7d282:": {
+        "553daf19-eebf-41e7-ac89-4680deb2e0b5:940b8704-e497-4a76-b390-00918ff7d282:": {
             "odds": {
-                "numerator": 14,
-                "denominator": 5
+                "numerator": 5,
+                "denominator": 2
             }
         },
-        "dcda100b-7e58-4f6c-a57b-c463f48a6812:940b8704-e497-4a76-b390-00918ff7d282:": {
+        "916c01aa-e0e8-4acf-b33d-f9a29f060e9e:940b8704-e497-4a76-b390-00918ff7d282:": {
             "odds": {
-                "numerator": 27,
-                "denominator": 100
+                "numerator": 3,
+                "denominator": 10
             }
         }
     }
