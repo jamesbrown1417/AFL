@@ -304,33 +304,29 @@ goals_overs <-
   rename(over_agency = agency)
 
 goals_arbs <-
-  if (nrow(goals_unders) > 0 && nrow(goals_overs) > 0) {
-    goals_unders |>
-    inner_join(
-      goals_overs,
-      by = c(
-        "match",
-        "market_name",
-        "player_name",
-        "player_team",
-        "opposition_team"
-      ),
-      relationship = "many-to-many"
-    ) |>
-    filter(under_line >= over_line) |>
-    relocate(under_price, .after = over_price) |>
-    mutate(under_price = as.numeric(under_price)) |>
-    mutate(over_price = as.numeric(over_price)) |>
-    mutate(margin = 1 / under_price + 1 / over_price) |>
-    arrange(margin) |>
-    mutate(margin = (1 - margin)) |>
-    mutate(margin = 100 * margin) |>
-    # filter(margin > 0) |>
-    distinct(match, player_name, over_line, under_line, over_agency, under_agency, .keep_all = TRUE) |>
-    relocate(over_price, over_agency, under_price, under_agency, .after = opposition_team)
-  } else {
-    tibble()
-  }
+  goals_unders |>
+  inner_join(
+    goals_overs,
+    by = c(
+      "match",
+      "market_name",
+      "player_name",
+      "player_team",
+      "opposition_team"
+    ),
+    relationship = "many-to-many"
+  ) |>
+  filter(under_line >= over_line) |>
+  relocate(under_price, .after = over_price) |>
+  mutate(under_price = as.numeric(under_price)) |>
+  mutate(over_price = as.numeric(over_price)) |>
+  mutate(margin = 1 / under_price + 1 / over_price) |>
+  arrange(margin) |>
+  mutate(margin = (1 - margin)) |>
+  mutate(margin = 100 * margin) |>
+  # filter(margin > 0) |>
+  distinct(match, player_name, over_line, under_line, over_agency, under_agency, .keep_all = TRUE) |>
+  relocate(over_price, over_agency, under_price, under_agency, .after = opposition_team)
 
 # Marks-------------------------------------------------------------------------
 marks_unders <-
@@ -365,33 +361,29 @@ marks_overs <-
   rename(over_agency = agency)
 
 marks_arbs <-
-  if (nrow(marks_unders) > 0 && nrow(marks_overs) > 0) {
-    marks_unders |>
-    inner_join(
-      marks_overs,
-      by = c(
-        "match",
-        "market_name",
-        "player_name",
-        "player_team",
-        "opposition_team"
-      ),
-      relationship = "many-to-many"
-    ) |>
-    filter(under_line >= over_line) |> 
-    relocate(under_price, .after = over_price) |>
-    mutate(under_price = as.numeric(under_price)) |>
-    mutate(over_price = as.numeric(over_price)) |>
-    mutate(margin = 1 / under_price + 1 / over_price) |>
-    arrange(margin) |>
-    mutate(margin = (1 - margin)) |>
-    mutate(margin = 100 * margin) |>
-    # filter(margin > 0) |>
-    distinct(match, player_name, over_line, under_line, over_agency, under_agency, .keep_all = TRUE) |>
-    relocate(over_price, over_agency, under_price, under_agency, .after = opposition_team)
-  } else {
-    tibble()
-  }
+  marks_unders |>
+  inner_join(
+    marks_overs,
+    by = c(
+      "match",
+      "market_name",
+      "player_name",
+      "player_team",
+      "opposition_team"
+    ),
+    relationship = "many-to-many"
+  ) |>
+  filter(under_line >= over_line) |> 
+  relocate(under_price, .after = over_price) |>
+  mutate(under_price = as.numeric(under_price)) |>
+  mutate(over_price = as.numeric(over_price)) |>
+  mutate(margin = 1 / under_price + 1 / over_price) |>
+  arrange(margin) |>
+  mutate(margin = (1 - margin)) |>
+  mutate(margin = 100 * margin) |>
+  # filter(margin > 0) |>
+  distinct(match, player_name, over_line, under_line, over_agency, under_agency, .keep_all = TRUE) |>
+  relocate(over_price, over_agency, under_price, under_agency, .after = opposition_team)
 
 # Tackles------------------------------------------------------------------------
 tackles_unders <-
@@ -426,33 +418,29 @@ tackles_overs <-
   rename(over_agency = agency)
 
 tackles_arbs <-
-  if (nrow(tackles_unders) > 0 && nrow(tackles_overs) > 0) {
-    tackles_unders |>
-    inner_join(
-      tackles_overs,
-      by = c(
-        "match",
-        "market_name",
-        "player_name",
-        "player_team",
-        "opposition_team"
-      ),
-      relationship = "many-to-many"
-    ) |>
-    filter(under_line >= over_line) |>
-    relocate(under_price, .after = over_price) |>
-    mutate(under_price = as.numeric(under_price)) |>
-    mutate(over_price = as.numeric(over_price)) |>
-    mutate(margin = 1 / under_price + 1 / over_price) |>
-    arrange(margin) |>
-    mutate(margin = (1 - margin)) |>
-    mutate(margin = 100 * margin) |>
-    # filter(margin > 0) |>
-    distinct(match, player_name, over_line, under_line, over_agency, under_agency, .keep_all = TRUE) |>
-    relocate(over_price, over_agency, under_price, under_agency, .after = opposition_team)
-  } else {
-    tibble()
-  }
+  tackles_unders |>
+  inner_join(
+    tackles_overs,
+    by = c(
+      "match",
+      "market_name",
+      "player_name",
+      "player_team",
+      "opposition_team"
+    ),
+    relationship = "many-to-many"
+  ) |>
+  filter(under_line >= over_line) |>
+  relocate(under_price, .after = over_price) |>
+  mutate(under_price = as.numeric(under_price)) |>
+  mutate(over_price = as.numeric(over_price)) |>
+  mutate(margin = 1 / under_price + 1 / over_price) |>
+  arrange(margin) |>
+  mutate(margin = (1 - margin)) |>
+  mutate(margin = 100 * margin) |>
+  # filter(margin > 0) |>
+  distinct(match, player_name, over_line, under_line, over_agency, under_agency, .keep_all = TRUE) |>
+  relocate(over_price, over_agency, under_price, under_agency, .after = opposition_team)
 
 #===============================================================================
 # Get all ARBs together
