@@ -12,2655 +12,6 @@
     },
     "matches": [
         {
-            "id": "FrevHaw",
-            "name": "Fremantle v Hawthorn",
-            "spectrumId": "FrevHaw",
-            "spectrumUniqueId": 2926960,
-            "competitionSpectrumId": "102",
-            "round": "18",
-            "broadcastChannel": "Fox Footy",
-            "broadcastChannels": [
-                "Fox Footy"
-            ],
-            "startTime": "2025-07-12T10:11:00.000Z",
-            "_links": {
-                "self": "https://api.beta.tab.com.au/v1/tab-info-service/sports/AFL%20Football/competitions/AFL/matches/Fremantle%20v%20Hawthorn?jurisdiction=SA&homeState=SA",
-                "selfTemplate": "https://api.beta.tab.com.au/v1/tab-info-service/sports/AFL%20Football/competitions/AFL/matches/Fremantle%20v%20Hawthorn?jurisdiction={jurisdiction}{&returnPromo,returnOffers,returnMultiOnly,channelType,cashSales,homeState}",
-                "markets": "https://api.beta.tab.com.au/v1/tab-info-service/sports/AFL%20Football/competitions/AFL/matches/Fremantle%20v%20Hawthorn/markets?jurisdiction=SA&homeState=SA"
-            },
-            "contestants": [
-                {
-                    "name": "Fremantle",
-                    "position": "HOME",
-                    "isHome": true,
-                    "image": [
-                        {
-                            "size": "svg",
-                            "url": "https://metadata.beta.tab.com.au/icons/AFL/Fremantle%20Dockers.svg"
-                        },
-                        {
-                            "size": "xxhdpi",
-                            "url": "https://metadata.beta.tab.com.au/icons/AFL/Fremantle%20Dockers_xxhdpi.png"
-                        },
-                        {
-                            "size": "2x",
-                            "url": "https://metadata.beta.tab.com.au/icons/AFL/Fremantle%20Dockers%402x.png"
-                        }
-                    ]
-                },
-                {
-                    "name": "Hawthorn",
-                    "position": "AWAY",
-                    "isHome": false,
-                    "image": [
-                        {
-                            "size": "svg",
-                            "url": "https://metadata.beta.tab.com.au/icons/AFL/Hawthorn.svg"
-                        },
-                        {
-                            "size": "xxhdpi",
-                            "url": "https://metadata.beta.tab.com.au/icons/AFL/Hawthorn_xxhdpi.png"
-                        },
-                        {
-                            "size": "2x",
-                            "url": "https://metadata.beta.tab.com.au/icons/AFL/Hawthorn%402x.png"
-                        }
-                    ]
-                }
-            ],
-            "competitors": [
-                "Fremantle",
-                "Hawthorn"
-            ],
-            "openMarketCount": 22,
-            "futureMarketCount": 0,
-            "nonFutureMarketCount": 22,
-            "markets": [
-                {
-                    "id": "117906813",
-                    "name": "AFL Frem-Haw HeadHead",
-                    "shortName": "AFL Fre-Haw HeadHead",
-                    "betOption": "Head To Head",
-                    "betOptionSpectrumId": "72",
-                    "betOptionPriority": 445,
-                    "marketUniqueId": 117906813,
-                    "closeTime": "2025-07-12T10:11:00.000Z",
-                    "bettingStatus": "Open",
-                    "message": null,
-                    "informationMessage": null,
-                    "isFuture": false,
-                    "onlineBetting": false,
-                    "phoneBettingOnly": true,
-                    "inPlay": true,
-                    "goingInPlay": false,
-                    "allowWin": true,
-                    "allowPlace": false,
-                    "allowEachWay": false,
-                    "allowMulti": true,
-                    "allowMultiWin": true,
-                    "allowMultiPlace": false,
-                    "allowMultiEachWay": false,
-                    "numberOfPlaces": 0,
-                    "cashOutEligibility": "Enabled",
-                    "allowBundle": false,
-                    "propositions": [
-                        {
-                            "id": "1006",
-                            "name": "Fremantle",
-                            "returnWin": 1.7,
-                            "returnPlace": 0,
-                            "differential": null,
-                            "bettingStatus": "Open",
-                            "allowPlace": false,
-                            "number": 1006,
-                            "isOpen": true,
-                            "sortOrder": 1,
-                            "position": "HOME"
-                        },
-                        {
-                            "id": "1008",
-                            "name": "Hawthorn",
-                            "returnWin": 2.05,
-                            "returnPlace": 0,
-                            "differential": null,
-                            "bettingStatus": "Open",
-                            "allowPlace": false,
-                            "number": 1008,
-                            "isOpen": true,
-                            "sortOrder": 2,
-                            "position": "AWAY"
-                        }
-                    ]
-                },
-                {
-                    "id": "118111887",
-                    "name": "AFL Frem-Haw LiveLine +13.5",
-                    "shortName": "AFL Fre-Haw LveLne +13.5",
-                    "betOption": "Live Lines",
-                    "betOptionSpectrumId": "235",
-                    "betOptionPriority": 2470,
-                    "marketUniqueId": 118111887,
-                    "closeTime": "2025-07-12T10:11:00.000Z",
-                    "bettingStatus": "Open",
-                    "message": null,
-                    "informationMessage": null,
-                    "isFuture": false,
-                    "onlineBetting": false,
-                    "phoneBettingOnly": true,
-                    "inPlay": true,
-                    "goingInPlay": false,
-                    "allowWin": true,
-                    "allowPlace": false,
-                    "allowEachWay": false,
-                    "allowMulti": true,
-                    "allowMultiWin": true,
-                    "allowMultiPlace": false,
-                    "allowMultiEachWay": false,
-                    "numberOfPlaces": 0,
-                    "cashOutEligibility": "Disabled",
-                    "allowBundle": false,
-                    "propositions": [
-                        {
-                            "id": "28420",
-                            "name": "Fremantle +13.5",
-                            "returnWin": 1.18,
-                            "returnPlace": 0,
-                            "differential": null,
-                            "bettingStatus": "Open",
-                            "allowPlace": false,
-                            "number": 28420,
-                            "isOpen": true,
-                            "sortOrder": 1,
-                            "line": "+13.5"
-                        },
-                        {
-                            "id": "28421",
-                            "name": "Hawthorn -13.5",
-                            "returnWin": 4.5,
-                            "returnPlace": 0,
-                            "differential": null,
-                            "bettingStatus": "Open",
-                            "allowPlace": false,
-                            "number": 28421,
-                            "isOpen": true,
-                            "sortOrder": 2,
-                            "line": "-13.5"
-                        }
-                    ]
-                },
-                {
-                    "id": "118111827",
-                    "name": "AFL Frem-Haw LiveLine +4.5",
-                    "shortName": "AFL Fre-Haw LveLne +4.5",
-                    "betOption": "Live Lines",
-                    "betOptionSpectrumId": "235",
-                    "betOptionPriority": 2470,
-                    "marketUniqueId": 118111827,
-                    "closeTime": "2025-07-12T10:11:00.000Z",
-                    "bettingStatus": "Open",
-                    "message": null,
-                    "informationMessage": null,
-                    "isFuture": false,
-                    "onlineBetting": false,
-                    "phoneBettingOnly": true,
-                    "inPlay": true,
-                    "goingInPlay": false,
-                    "allowWin": true,
-                    "allowPlace": false,
-                    "allowEachWay": false,
-                    "allowMulti": true,
-                    "allowMultiWin": true,
-                    "allowMultiPlace": false,
-                    "allowMultiEachWay": false,
-                    "numberOfPlaces": 0,
-                    "cashOutEligibility": "Disabled",
-                    "allowBundle": false,
-                    "propositions": [
-                        {
-                            "id": "28287",
-                            "name": "Fremantle +4.5",
-                            "returnWin": 1.46,
-                            "returnPlace": 0,
-                            "differential": null,
-                            "bettingStatus": "Open",
-                            "allowPlace": false,
-                            "number": 28287,
-                            "isOpen": true,
-                            "sortOrder": 1,
-                            "line": "+4.5"
-                        },
-                        {
-                            "id": "28288",
-                            "name": "Hawthorn -4.5",
-                            "returnWin": 2.6,
-                            "returnPlace": 0,
-                            "differential": null,
-                            "bettingStatus": "Open",
-                            "allowPlace": false,
-                            "number": 28288,
-                            "isOpen": true,
-                            "sortOrder": 2,
-                            "line": "-4.5"
-                        }
-                    ]
-                },
-                {
-                    "id": "118111859",
-                    "name": "AFL Frem-Haw LiveLine -13.5",
-                    "shortName": "AFL Fre-Haw LveLne -13.5",
-                    "betOption": "Live Lines",
-                    "betOptionSpectrumId": "235",
-                    "betOptionPriority": 2470,
-                    "marketUniqueId": 118111859,
-                    "closeTime": "2025-07-12T10:11:00.000Z",
-                    "bettingStatus": "Open",
-                    "message": null,
-                    "informationMessage": null,
-                    "isFuture": false,
-                    "onlineBetting": false,
-                    "phoneBettingOnly": true,
-                    "inPlay": true,
-                    "goingInPlay": false,
-                    "allowWin": true,
-                    "allowPlace": false,
-                    "allowEachWay": false,
-                    "allowMulti": true,
-                    "allowMultiWin": true,
-                    "allowMultiPlace": false,
-                    "allowMultiEachWay": false,
-                    "numberOfPlaces": 0,
-                    "cashOutEligibility": "Disabled",
-                    "allowBundle": false,
-                    "propositions": [
-                        {
-                            "id": "28356",
-                            "name": "Fremantle -13.5",
-                            "returnWin": 3.5,
-                            "returnPlace": 0,
-                            "differential": null,
-                            "bettingStatus": "Open",
-                            "allowPlace": false,
-                            "number": 28356,
-                            "isOpen": true,
-                            "sortOrder": 1,
-                            "line": "-13.5"
-                        },
-                        {
-                            "id": "28357",
-                            "name": "Hawthorn +13.5",
-                            "returnWin": 1.28,
-                            "returnPlace": 0,
-                            "differential": null,
-                            "bettingStatus": "Open",
-                            "allowPlace": false,
-                            "number": 28357,
-                            "isOpen": true,
-                            "sortOrder": 2,
-                            "line": "+13.5"
-                        }
-                    ]
-                },
-                {
-                    "id": "118111878",
-                    "name": "AFL Frem-Haw LiveLine -22.5",
-                    "shortName": "AFL Fre-Haw LveLne -22.5",
-                    "betOption": "Live Lines",
-                    "betOptionSpectrumId": "235",
-                    "betOptionPriority": 2470,
-                    "marketUniqueId": 118111878,
-                    "closeTime": "2025-07-12T10:11:00.000Z",
-                    "bettingStatus": "Open",
-                    "message": null,
-                    "informationMessage": null,
-                    "isFuture": false,
-                    "onlineBetting": false,
-                    "phoneBettingOnly": true,
-                    "inPlay": true,
-                    "goingInPlay": false,
-                    "allowWin": true,
-                    "allowPlace": false,
-                    "allowEachWay": false,
-                    "allowMulti": true,
-                    "allowMultiWin": true,
-                    "allowMultiPlace": false,
-                    "allowMultiEachWay": false,
-                    "numberOfPlaces": 0,
-                    "cashOutEligibility": "Disabled",
-                    "allowBundle": false,
-                    "propositions": [
-                        {
-                            "id": "28399",
-                            "name": "Fremantle -22.5",
-                            "returnWin": 6.5,
-                            "returnPlace": 0,
-                            "differential": null,
-                            "bettingStatus": "Open",
-                            "allowPlace": false,
-                            "number": 28399,
-                            "isOpen": true,
-                            "sortOrder": 1,
-                            "line": "-22.5"
-                        },
-                        {
-                            "id": "28400",
-                            "name": "Hawthorn +22.5",
-                            "returnWin": 1.09,
-                            "returnPlace": 0,
-                            "differential": null,
-                            "bettingStatus": "Open",
-                            "allowPlace": false,
-                            "number": 28400,
-                            "isOpen": true,
-                            "sortOrder": 2,
-                            "line": "+22.5"
-                        }
-                    ]
-                },
-                {
-                    "id": "118111791",
-                    "name": "AFL Frem-Haw LiveLine -4.5",
-                    "shortName": "AFL Fre-Haw LveLne -4.5",
-                    "betOption": "Live Lines",
-                    "betOptionSpectrumId": "235",
-                    "betOptionPriority": 2470,
-                    "marketUniqueId": 118111791,
-                    "closeTime": "2025-07-12T10:11:00.000Z",
-                    "bettingStatus": "Open",
-                    "message": null,
-                    "informationMessage": null,
-                    "isFuture": false,
-                    "onlineBetting": false,
-                    "phoneBettingOnly": true,
-                    "inPlay": true,
-                    "goingInPlay": false,
-                    "allowWin": true,
-                    "allowPlace": false,
-                    "allowEachWay": false,
-                    "allowMulti": true,
-                    "allowMultiWin": true,
-                    "allowMultiPlace": false,
-                    "allowMultiEachWay": false,
-                    "numberOfPlaces": 0,
-                    "cashOutEligibility": "Disabled",
-                    "allowBundle": false,
-                    "propositions": [
-                        {
-                            "id": "27418",
-                            "name": "Fremantle -4.5",
-                            "returnWin": 2.1,
-                            "returnPlace": 0,
-                            "differential": null,
-                            "bettingStatus": "Open",
-                            "allowPlace": false,
-                            "number": 27418,
-                            "isOpen": true,
-                            "sortOrder": 1,
-                            "line": "-4.5"
-                        },
-                        {
-                            "id": "27840",
-                            "name": "Hawthorn +4.5",
-                            "returnWin": 1.68,
-                            "returnPlace": 0,
-                            "differential": null,
-                            "bettingStatus": "Open",
-                            "allowPlace": false,
-                            "number": 27840,
-                            "isOpen": true,
-                            "sortOrder": 2,
-                            "line": "+4.5"
-                        }
-                    ]
-                },
-                {
-                    "id": "117906217",
-                    "name": "AFL Frem-Haw Margin",
-                    "shortName": "AFL Frem-Haw Margin",
-                    "betOption": "Margin",
-                    "betOptionSpectrumId": "32",
-                    "betOptionPriority": 2675,
-                    "marketUniqueId": 117906217,
-                    "closeTime": "2025-07-12T10:11:00.000Z",
-                    "bettingStatus": "Open",
-                    "message": null,
-                    "informationMessage": null,
-                    "isFuture": false,
-                    "onlineBetting": false,
-                    "phoneBettingOnly": true,
-                    "inPlay": true,
-                    "goingInPlay": false,
-                    "allowWin": true,
-                    "allowPlace": false,
-                    "allowEachWay": false,
-                    "allowMulti": true,
-                    "allowMultiWin": true,
-                    "allowMultiPlace": false,
-                    "allowMultiEachWay": false,
-                    "numberOfPlaces": 0,
-                    "cashOutEligibility": "Enabled",
-                    "allowBundle": false,
-                    "propositions": [
-                        {
-                            "id": "8247",
-                            "name": "Fremantle by 40+",
-                            "returnWin": 34,
-                            "returnPlace": 0,
-                            "differential": null,
-                            "bettingStatus": "Open",
-                            "allowPlace": false,
-                            "number": 8247,
-                            "isOpen": true,
-                            "sortOrder": 1
-                        },
-                        {
-                            "id": "8248",
-                            "name": "Fremantle by 1-39",
-                            "returnWin": 1.8,
-                            "returnPlace": 0,
-                            "differential": null,
-                            "bettingStatus": "Open",
-                            "allowPlace": false,
-                            "number": 8248,
-                            "isOpen": true,
-                            "sortOrder": 2
-                        },
-                        {
-                            "id": "8249",
-                            "name": "Draw",
-                            "returnWin": 26,
-                            "returnPlace": 0,
-                            "differential": null,
-                            "bettingStatus": "Open",
-                            "allowPlace": false,
-                            "number": 8249,
-                            "isOpen": true,
-                            "sortOrder": 3
-                        },
-                        {
-                            "id": "8250",
-                            "name": "Hawthorn by 1-39",
-                            "returnWin": 2.1,
-                            "returnPlace": 0,
-                            "differential": null,
-                            "bettingStatus": "Open",
-                            "allowPlace": false,
-                            "number": 8250,
-                            "isOpen": true,
-                            "sortOrder": 4
-                        },
-                        {
-                            "id": "8251",
-                            "name": "Hawthorn by 40+",
-                            "returnWin": 41,
-                            "returnPlace": 0,
-                            "differential": null,
-                            "bettingStatus": "Open",
-                            "allowPlace": false,
-                            "number": 8251,
-                            "isOpen": true,
-                            "sortOrder": 5
-                        }
-                    ]
-                },
-                {
-                    "id": "117906234",
-                    "name": "AFL Frem-Haw WMgn25",
-                    "shortName": "AFL Fre-Haw WMgn25",
-                    "betOption": "Margin (1-24)",
-                    "betOptionSpectrumId": "765",
-                    "betOptionPriority": 2685,
-                    "marketUniqueId": 117906234,
-                    "closeTime": "2025-07-12T10:11:00.000Z",
-                    "bettingStatus": "Open",
-                    "message": null,
-                    "informationMessage": null,
-                    "isFuture": false,
-                    "onlineBetting": false,
-                    "phoneBettingOnly": true,
-                    "inPlay": true,
-                    "goingInPlay": false,
-                    "allowWin": true,
-                    "allowPlace": false,
-                    "allowEachWay": false,
-                    "allowMulti": true,
-                    "allowMultiWin": true,
-                    "allowMultiPlace": false,
-                    "allowMultiEachWay": false,
-                    "numberOfPlaces": 0,
-                    "cashOutEligibility": "Enabled",
-                    "allowBundle": false,
-                    "propositions": [
-                        {
-                            "id": "7874",
-                            "name": "Fremantle by 25+",
-                            "returnWin": 7.5,
-                            "returnPlace": 0,
-                            "differential": null,
-                            "bettingStatus": "Open",
-                            "allowPlace": false,
-                            "number": 7874,
-                            "isOpen": true,
-                            "sortOrder": 1
-                        },
-                        {
-                            "id": "7875",
-                            "name": "Fremantle by 1-24",
-                            "returnWin": 2.1,
-                            "returnPlace": 0,
-                            "differential": null,
-                            "bettingStatus": "Open",
-                            "allowPlace": false,
-                            "number": 7875,
-                            "isOpen": true,
-                            "sortOrder": 2
-                        },
-                        {
-                            "id": "7876",
-                            "name": "Draw",
-                            "returnWin": 21,
-                            "returnPlace": 0,
-                            "differential": null,
-                            "bettingStatus": "Open",
-                            "allowPlace": false,
-                            "number": 7876,
-                            "isOpen": true,
-                            "sortOrder": 3
-                        },
-                        {
-                            "id": "7877",
-                            "name": "Hawthorn by 1-24",
-                            "returnWin": 2.4,
-                            "returnPlace": 0,
-                            "differential": null,
-                            "bettingStatus": "Open",
-                            "allowPlace": false,
-                            "number": 7877,
-                            "isOpen": true,
-                            "sortOrder": 4
-                        },
-                        {
-                            "id": "7878",
-                            "name": "Hawthorn by 25+",
-                            "returnWin": 11,
-                            "returnPlace": 0,
-                            "differential": null,
-                            "bettingStatus": "Open",
-                            "allowPlace": false,
-                            "number": 7878,
-                            "isOpen": true,
-                            "sortOrder": 5
-                        }
-                    ]
-                },
-                {
-                    "id": "117906195",
-                    "name": "AFL Fre-Haw Mgn72",
-                    "shortName": "AFL Fre-Haw Mgn72",
-                    "betOption": "Winning Margin (72pt)",
-                    "betOptionSpectrumId": "1603",
-                    "betOptionPriority": 4545,
-                    "marketUniqueId": 117906195,
-                    "closeTime": "2025-07-12T10:11:00.000Z",
-                    "bettingStatus": "Open",
-                    "message": null,
-                    "informationMessage": null,
-                    "isFuture": false,
-                    "onlineBetting": false,
-                    "phoneBettingOnly": true,
-                    "inPlay": true,
-                    "goingInPlay": false,
-                    "allowWin": true,
-                    "allowPlace": false,
-                    "allowEachWay": false,
-                    "allowMulti": true,
-                    "allowMultiWin": true,
-                    "allowMultiPlace": false,
-                    "allowMultiEachWay": false,
-                    "numberOfPlaces": 0,
-                    "cashOutEligibility": "Enabled",
-                    "allowBundle": false,
-                    "propositions": [
-                        {
-                            "id": "8225",
-                            "name": "Fremantle by 73+",
-                            "returnWin": 101,
-                            "returnPlace": 0,
-                            "differential": null,
-                            "bettingStatus": "Open",
-                            "allowPlace": false,
-                            "number": 8225,
-                            "isOpen": true,
-                            "sortOrder": 1
-                        },
-                        {
-                            "id": "8226",
-                            "name": "Fremantle by 61-72",
-                            "returnWin": 101,
-                            "returnPlace": 0,
-                            "differential": null,
-                            "bettingStatus": "Open",
-                            "allowPlace": false,
-                            "number": 8226,
-                            "isOpen": true,
-                            "sortOrder": 2
-                        },
-                        {
-                            "id": "8227",
-                            "name": "Fremantle by 49-60",
-                            "returnWin": 81,
-                            "returnPlace": 0,
-                            "differential": null,
-                            "bettingStatus": "Open",
-                            "allowPlace": false,
-                            "number": 8227,
-                            "isOpen": true,
-                            "sortOrder": 3
-                        },
-                        {
-                            "id": "8228",
-                            "name": "Fremantle by 37-48",
-                            "returnWin": 26,
-                            "returnPlace": 0,
-                            "differential": null,
-                            "bettingStatus": "Open",
-                            "allowPlace": false,
-                            "number": 8228,
-                            "isOpen": true,
-                            "sortOrder": 4
-                        },
-                        {
-                            "id": "8229",
-                            "name": "Fremantle by 25-36",
-                            "returnWin": 10,
-                            "returnPlace": 0,
-                            "differential": null,
-                            "bettingStatus": "Open",
-                            "allowPlace": false,
-                            "number": 8229,
-                            "isOpen": true,
-                            "sortOrder": 5
-                        },
-                        {
-                            "id": "8230",
-                            "name": "Fremantle by 13-24",
-                            "returnWin": 4.5,
-                            "returnPlace": 0,
-                            "differential": null,
-                            "bettingStatus": "Open",
-                            "allowPlace": false,
-                            "number": 8230,
-                            "isOpen": true,
-                            "sortOrder": 6
-                        },
-                        {
-                            "id": "8231",
-                            "name": "Fremantle by 1-12",
-                            "returnWin": 3.4,
-                            "returnPlace": 0,
-                            "differential": null,
-                            "bettingStatus": "Open",
-                            "allowPlace": false,
-                            "number": 8231,
-                            "isOpen": true,
-                            "sortOrder": 7
-                        },
-                        {
-                            "id": "8232",
-                            "name": "Draw",
-                            "returnWin": 26,
-                            "returnPlace": 0,
-                            "differential": null,
-                            "bettingStatus": "Open",
-                            "allowPlace": false,
-                            "number": 8232,
-                            "isOpen": true,
-                            "sortOrder": 8
-                        },
-                        {
-                            "id": "8233",
-                            "name": "Hawthorn by 1-12",
-                            "returnWin": 3.6,
-                            "returnPlace": 0,
-                            "differential": null,
-                            "bettingStatus": "Open",
-                            "allowPlace": false,
-                            "number": 8233,
-                            "isOpen": true,
-                            "sortOrder": 9
-                        },
-                        {
-                            "id": "8234",
-                            "name": "Hawthorn by 13-24",
-                            "returnWin": 6,
-                            "returnPlace": 0,
-                            "differential": null,
-                            "bettingStatus": "Open",
-                            "allowPlace": false,
-                            "number": 8234,
-                            "isOpen": true,
-                            "sortOrder": 10
-                        },
-                        {
-                            "id": "8235",
-                            "name": "Hawthorn by 25-36",
-                            "returnWin": 15,
-                            "returnPlace": 0,
-                            "differential": null,
-                            "bettingStatus": "Open",
-                            "allowPlace": false,
-                            "number": 8235,
-                            "isOpen": true,
-                            "sortOrder": 11
-                        },
-                        {
-                            "id": "8236",
-                            "name": "Hawthorn by 37-48",
-                            "returnWin": 41,
-                            "returnPlace": 0,
-                            "differential": null,
-                            "bettingStatus": "Open",
-                            "allowPlace": false,
-                            "number": 8236,
-                            "isOpen": true,
-                            "sortOrder": 12
-                        },
-                        {
-                            "id": "8237",
-                            "name": "Hawthorn by 49-60",
-                            "returnWin": 101,
-                            "returnPlace": 0,
-                            "differential": null,
-                            "bettingStatus": "Open",
-                            "allowPlace": false,
-                            "number": 8237,
-                            "isOpen": true,
-                            "sortOrder": 13
-                        },
-                        {
-                            "id": "8238",
-                            "name": "Hawthorn by 61-72",
-                            "returnWin": 101,
-                            "returnPlace": 0,
-                            "differential": null,
-                            "bettingStatus": "Open",
-                            "allowPlace": false,
-                            "number": 8238,
-                            "isOpen": true,
-                            "sortOrder": 14
-                        },
-                        {
-                            "id": "8239",
-                            "name": "Hawthorn by 73+",
-                            "returnWin": 101,
-                            "returnPlace": 0,
-                            "differential": null,
-                            "bettingStatus": "Open",
-                            "allowPlace": false,
-                            "number": 8239,
-                            "isOpen": true,
-                            "sortOrder": 15
-                        }
-                    ]
-                },
-                {
-                    "id": "118111871",
-                    "name": "AFL Fre-Haw TS3Way",
-                    "shortName": "AFL Fre-Haw TS3Way",
-                    "betOption": "Total Score 3-Way",
-                    "betOptionSpectrumId": "806",
-                    "betOptionPriority": 6660,
-                    "marketUniqueId": 118111871,
-                    "closeTime": "2025-07-12T10:11:00.000Z",
-                    "bettingStatus": "Open",
-                    "message": null,
-                    "informationMessage": null,
-                    "isFuture": false,
-                    "onlineBetting": false,
-                    "phoneBettingOnly": true,
-                    "inPlay": true,
-                    "goingInPlay": false,
-                    "allowWin": true,
-                    "allowPlace": false,
-                    "allowEachWay": false,
-                    "allowMulti": true,
-                    "allowMultiWin": true,
-                    "allowMultiPlace": false,
-                    "allowMultiEachWay": false,
-                    "numberOfPlaces": 0,
-                    "cashOutEligibility": "Disabled",
-                    "allowBundle": false,
-                    "propositions": [
-                        {
-                            "id": "28384",
-                            "name": "Over 160",
-                            "returnWin": 3,
-                            "returnPlace": 0,
-                            "differential": null,
-                            "bettingStatus": "Open",
-                            "allowPlace": false,
-                            "number": 28384,
-                            "isOpen": true,
-                            "sortOrder": 1
-                        },
-                        {
-                            "id": "28385",
-                            "name": "Between 150-160",
-                            "returnWin": 3.6,
-                            "returnPlace": 0,
-                            "differential": null,
-                            "bettingStatus": "Open",
-                            "allowPlace": false,
-                            "number": 28385,
-                            "isOpen": true,
-                            "sortOrder": 2
-                        },
-                        {
-                            "id": "28386",
-                            "name": "Under 150",
-                            "returnWin": 1.92,
-                            "returnPlace": 0,
-                            "differential": null,
-                            "bettingStatus": "Open",
-                            "allowPlace": false,
-                            "number": 28386,
-                            "isOpen": true,
-                            "sortOrder": 3
-                        }
-                    ]
-                },
-                {
-                    "id": "118111845",
-                    "name": "AFL Fre-Haw Lv4QHH",
-                    "shortName": "AFL Fre-Haw Lv4QHH",
-                    "betOption": "Live 4th Quarter Head to Head",
-                    "betOptionSpectrumId": "1637",
-                    "betOptionPriority": 16175,
-                    "marketUniqueId": 118111845,
-                    "closeTime": "2025-07-12T10:11:00.000Z",
-                    "bettingStatus": "Open",
-                    "message": null,
-                    "informationMessage": null,
-                    "isFuture": false,
-                    "onlineBetting": false,
-                    "phoneBettingOnly": true,
-                    "inPlay": true,
-                    "goingInPlay": false,
-                    "allowWin": true,
-                    "allowPlace": false,
-                    "allowEachWay": false,
-                    "allowMulti": true,
-                    "allowMultiWin": true,
-                    "allowMultiPlace": false,
-                    "allowMultiEachWay": false,
-                    "numberOfPlaces": 0,
-                    "cashOutEligibility": "Disabled",
-                    "allowBundle": false,
-                    "propositions": [
-                        {
-                            "id": "28327",
-                            "name": "Fremantle",
-                            "returnWin": 1.85,
-                            "returnPlace": 0,
-                            "differential": null,
-                            "bettingStatus": "Open",
-                            "allowPlace": false,
-                            "number": 28327,
-                            "isOpen": true,
-                            "sortOrder": 1
-                        },
-                        {
-                            "id": "28328",
-                            "name": "Tie",
-                            "returnWin": 17,
-                            "returnPlace": 0,
-                            "differential": null,
-                            "bettingStatus": "Open",
-                            "allowPlace": false,
-                            "number": 28328,
-                            "isOpen": true,
-                            "sortOrder": 2
-                        },
-                        {
-                            "id": "28329",
-                            "name": "Hawthorn",
-                            "returnWin": 2,
-                            "returnPlace": 0,
-                            "differential": null,
-                            "bettingStatus": "Open",
-                            "allowPlace": false,
-                            "number": 28329,
-                            "isOpen": true,
-                            "sortOrder": 3
-                        }
-                    ]
-                },
-                {
-                    "id": "118111851",
-                    "name": "AFL Frem-Haw Lv4QLine -1.5",
-                    "shortName": "AFL Fre-Haw Lv4QLn -1.5",
-                    "betOption": "Live 4th Quarter Line",
-                    "betOptionSpectrumId": "1640",
-                    "betOptionPriority": 16195,
-                    "marketUniqueId": 118111851,
-                    "closeTime": "2025-07-12T10:11:00.000Z",
-                    "bettingStatus": "Open",
-                    "message": null,
-                    "informationMessage": null,
-                    "isFuture": false,
-                    "onlineBetting": false,
-                    "phoneBettingOnly": true,
-                    "inPlay": true,
-                    "goingInPlay": false,
-                    "allowWin": true,
-                    "allowPlace": false,
-                    "allowEachWay": false,
-                    "allowMulti": true,
-                    "allowMultiWin": true,
-                    "allowMultiPlace": false,
-                    "allowMultiEachWay": false,
-                    "numberOfPlaces": 0,
-                    "cashOutEligibility": "Disabled",
-                    "allowBundle": false,
-                    "propositions": [
-                        {
-                            "id": "28340",
-                            "name": "Fremantle -1.5",
-                            "returnWin": 1.95,
-                            "returnPlace": 0,
-                            "differential": null,
-                            "bettingStatus": "Open",
-                            "allowPlace": false,
-                            "number": 28340,
-                            "isOpen": true,
-                            "sortOrder": 1
-                        },
-                        {
-                            "id": "28341",
-                            "name": "Hawthorn +1.5",
-                            "returnWin": 1.75,
-                            "returnPlace": 0,
-                            "differential": null,
-                            "bettingStatus": "Open",
-                            "allowPlace": false,
-                            "number": 28341,
-                            "isOpen": true,
-                            "sortOrder": 2
-                        }
-                    ]
-                },
-                {
-                    "id": "118054050",
-                    "name": "AFL Frem-Haw 1stGol4Q",
-                    "shortName": "AFL Fre-Haw 1stGol4Q",
-                    "betOption": "4th Quarter 1st Goal Scorer",
-                    "betOptionSpectrumId": "143",
-                    "betOptionPriority": 16200,
-                    "marketUniqueId": 118054050,
-                    "closeTime": "2025-07-12T10:11:00.000Z",
-                    "bettingStatus": "Open",
-                    "message": null,
-                    "informationMessage": "Quote Others. Starting SUB refunded",
-                    "isFuture": false,
-                    "onlineBetting": false,
-                    "phoneBettingOnly": true,
-                    "inPlay": true,
-                    "goingInPlay": false,
-                    "allowWin": true,
-                    "allowPlace": false,
-                    "allowEachWay": false,
-                    "allowMulti": true,
-                    "allowMultiWin": true,
-                    "allowMultiPlace": false,
-                    "allowMultiEachWay": false,
-                    "numberOfPlaces": 0,
-                    "cashOutEligibility": "Enabled",
-                    "allowBundle": false,
-                    "propositions": [
-                        {
-                            "id": "34143",
-                            "name": "Jack Gunston (HAW)",
-                            "returnWin": 9,
-                            "returnPlace": 0,
-                            "differential": null,
-                            "bettingStatus": "Open",
-                            "allowPlace": false,
-                            "number": 34143,
-                            "isOpen": true,
-                            "sortOrder": 28
-                        },
-                        {
-                            "id": "34131",
-                            "name": "Josh Treacy (FRE)",
-                            "returnWin": 10,
-                            "returnPlace": 0,
-                            "differential": null,
-                            "bettingStatus": "Open",
-                            "allowPlace": false,
-                            "number": 34131,
-                            "isOpen": true,
-                            "sortOrder": 16
-                        },
-                        {
-                            "id": "34140",
-                            "name": "Mabior Chol (HAW)",
-                            "returnWin": 11,
-                            "returnPlace": 0,
-                            "differential": null,
-                            "bettingStatus": "Open",
-                            "allowPlace": false,
-                            "number": 34140,
-                            "isOpen": true,
-                            "sortOrder": 25
-                        },
-                        {
-                            "id": "34132",
-                            "name": "Patrick Voss (FRE)",
-                            "returnWin": 11,
-                            "returnPlace": 0,
-                            "differential": null,
-                            "bettingStatus": "Open",
-                            "allowPlace": false,
-                            "number": 34132,
-                            "isOpen": true,
-                            "sortOrder": 17
-                        },
-                        {
-                            "id": "34156",
-                            "name": "Nick Watson (HAW)",
-                            "returnWin": 12,
-                            "returnPlace": 0,
-                            "differential": null,
-                            "bettingStatus": "Open",
-                            "allowPlace": false,
-                            "number": 34156,
-                            "isOpen": true,
-                            "sortOrder": 41
-                        },
-                        {
-                            "id": "34116",
-                            "name": "Jye Amiss (FRE)",
-                            "returnWin": 13,
-                            "returnPlace": 0,
-                            "differential": null,
-                            "bettingStatus": "Open",
-                            "allowPlace": false,
-                            "number": 34116,
-                            "isOpen": true,
-                            "sortOrder": 1
-                        },
-                        {
-                            "id": "34137",
-                            "name": "Shai Bolton (FRE)",
-                            "returnWin": 14,
-                            "returnPlace": 0,
-                            "differential": null,
-                            "bettingStatus": "Open",
-                            "allowPlace": false,
-                            "number": 34137,
-                            "isOpen": true,
-                            "sortOrder": 22
-                        },
-                        {
-                            "id": "34142",
-                            "name": "Jack Ginnivan (HAW)",
-                            "returnWin": 14,
-                            "returnPlace": 0,
-                            "differential": null,
-                            "bettingStatus": "Open",
-                            "allowPlace": false,
-                            "number": 34142,
-                            "isOpen": true,
-                            "sortOrder": 27
-                        },
-                        {
-                            "id": "34165",
-                            "name": "Calsher Dear (HAW)",
-                            "returnWin": 15,
-                            "returnPlace": 0,
-                            "differential": null,
-                            "bettingStatus": "Open",
-                            "allowPlace": false,
-                            "number": 34165,
-                            "isOpen": true,
-                            "sortOrder": 50
-                        },
-                        {
-                            "id": "34124",
-                            "name": "Michael Frederick (FRE)",
-                            "returnWin": 16,
-                            "returnPlace": 0,
-                            "differential": null,
-                            "bettingStatus": "Open",
-                            "allowPlace": false,
-                            "number": 34124,
-                            "isOpen": true,
-                            "sortOrder": 9
-                        },
-                        {
-                            "id": "34136",
-                            "name": "Murphy Reid (FRE)",
-                            "returnWin": 17,
-                            "returnPlace": 0,
-                            "differential": null,
-                            "bettingStatus": "Open",
-                            "allowPlace": false,
-                            "number": 34136,
-                            "isOpen": true,
-                            "sortOrder": 21
-                        },
-                        {
-                            "id": "34125",
-                            "name": "Luke Jackson (FRE)",
-                            "returnWin": 18,
-                            "returnPlace": 0,
-                            "differential": null,
-                            "bettingStatus": "Open",
-                            "allowPlace": false,
-                            "number": 34125,
-                            "isOpen": true,
-                            "sortOrder": 10
-                        },
-                        {
-                            "id": "34150",
-                            "name": "Dylan Moore (HAW)",
-                            "returnWin": 19,
-                            "returnPlace": 0,
-                            "differential": null,
-                            "bettingStatus": "Open",
-                            "allowPlace": false,
-                            "number": 34150,
-                            "isOpen": true,
-                            "sortOrder": 35
-                        },
-                        {
-                            "id": "34147",
-                            "name": "Connor Macdonald (HAW)",
-                            "returnWin": 19,
-                            "returnPlace": 0,
-                            "differential": null,
-                            "bettingStatus": "Open",
-                            "allowPlace": false,
-                            "number": 34147,
-                            "isOpen": true,
-                            "sortOrder": 32
-                        },
-                        {
-                            "id": "34164",
-                            "name": "Sam Switkowski (FRE)",
-                            "returnWin": 26,
-                            "returnPlace": 0,
-                            "differential": null,
-                            "bettingStatus": "Open",
-                            "allowPlace": false,
-                            "number": 34164,
-                            "isOpen": true,
-                            "sortOrder": 49
-                        },
-                        {
-                            "id": "34127",
-                            "name": "Oscar McDonald (FRE)",
-                            "returnWin": 34,
-                            "returnPlace": 0,
-                            "differential": null,
-                            "bettingStatus": "Open",
-                            "allowPlace": false,
-                            "number": 34127,
-                            "isOpen": true,
-                            "sortOrder": 12
-                        },
-                        {
-                            "id": "34134",
-                            "name": "Karl Worner (FRE)",
-                            "returnWin": 41,
-                            "returnPlace": 0,
-                            "differential": null,
-                            "bettingStatus": "Open",
-                            "allowPlace": false,
-                            "number": 34134,
-                            "isOpen": true,
-                            "sortOrder": 19
-                        },
-                        {
-                            "id": "34138",
-                            "name": "Karl Amon (HAW)",
-                            "returnWin": 41,
-                            "returnPlace": 0,
-                            "differential": null,
-                            "bettingStatus": "Open",
-                            "allowPlace": false,
-                            "number": 34138,
-                            "isOpen": true,
-                            "sortOrder": 23
-                        },
-                        {
-                            "id": "34161",
-                            "name": "James Worpel (HAW)",
-                            "returnWin": 41,
-                            "returnPlace": 0,
-                            "differential": null,
-                            "bettingStatus": "Open",
-                            "allowPlace": false,
-                            "number": 34161,
-                            "isOpen": true,
-                            "sortOrder": 46
-                        },
-                        {
-                            "id": "34155",
-                            "name": "Josh Ward (HAW)",
-                            "returnWin": 41,
-                            "returnPlace": 0,
-                            "differential": null,
-                            "bettingStatus": "Open",
-                            "allowPlace": false,
-                            "number": 34155,
-                            "isOpen": true,
-                            "sortOrder": 40
-                        },
-                        {
-                            "id": "34163",
-                            "name": "Jaeger OMeara (FRE)",
-                            "returnWin": 41,
-                            "returnPlace": 0,
-                            "differential": null,
-                            "bettingStatus": "Open",
-                            "allowPlace": false,
-                            "number": 34163,
-                            "isOpen": true,
-                            "sortOrder": 48
-                        },
-                        {
-                            "id": "34122",
-                            "name": "Sean Darcy (FRE)",
-                            "returnWin": 41,
-                            "returnPlace": 0,
-                            "differential": null,
-                            "bettingStatus": "Open",
-                            "allowPlace": false,
-                            "number": 34122,
-                            "isOpen": true,
-                            "sortOrder": 7
-                        },
-                        {
-                            "id": "34126",
-                            "name": "Matthew Johnson (FRE)",
-                            "returnWin": 41,
-                            "returnPlace": 0,
-                            "differential": null,
-                            "bettingStatus": "Open",
-                            "allowPlace": false,
-                            "number": 34126,
-                            "isOpen": true,
-                            "sortOrder": 11
-                        },
-                        {
-                            "id": "34158",
-                            "name": "Josh Battle (HAW)",
-                            "returnWin": 41,
-                            "returnPlace": 0,
-                            "differential": null,
-                            "bettingStatus": "Open",
-                            "allowPlace": false,
-                            "number": 34158,
-                            "isOpen": true,
-                            "sortOrder": 43
-                        },
-                        {
-                            "id": "34149",
-                            "name": "Lloyd Meek (HAW)",
-                            "returnWin": 41,
-                            "returnPlace": 0,
-                            "differential": null,
-                            "bettingStatus": "Open",
-                            "allowPlace": false,
-                            "number": 34149,
-                            "isOpen": true,
-                            "sortOrder": 34
-                        },
-                        {
-                            "id": "34119",
-                            "name": "Heath Chapman (FRE)",
-                            "returnWin": 41,
-                            "returnPlace": 0,
-                            "differential": null,
-                            "bettingStatus": "Open",
-                            "allowPlace": false,
-                            "number": 34119,
-                            "isOpen": true,
-                            "sortOrder": 4
-                        },
-                        {
-                            "id": "34162",
-                            "name": "James Sicily (HAW)",
-                            "returnWin": 41,
-                            "returnPlace": 0,
-                            "differential": null,
-                            "bettingStatus": "Open",
-                            "allowPlace": false,
-                            "number": 34162,
-                            "isOpen": true,
-                            "sortOrder": 47
-                        },
-                        {
-                            "id": "34159",
-                            "name": "Tom Barrass (HAW)",
-                            "returnWin": 41,
-                            "returnPlace": 0,
-                            "differential": null,
-                            "bettingStatus": "Open",
-                            "allowPlace": false,
-                            "number": 34159,
-                            "isOpen": true,
-                            "sortOrder": 44
-                        },
-                        {
-                            "id": "34144",
-                            "name": "Blake Hardwick (HAW)",
-                            "returnWin": 41,
-                            "returnPlace": 0,
-                            "differential": null,
-                            "bettingStatus": "Open",
-                            "allowPlace": false,
-                            "number": 34144,
-                            "isOpen": true,
-                            "sortOrder": 29
-                        },
-                        {
-                            "id": "34133",
-                            "name": "Corey Wagner (FRE)",
-                            "returnWin": 41,
-                            "returnPlace": 0,
-                            "differential": null,
-                            "bettingStatus": "Open",
-                            "allowPlace": false,
-                            "number": 34133,
-                            "isOpen": true,
-                            "sortOrder": 18
-                        },
-                        {
-                            "id": "34151",
-                            "name": "Harry Morrison (HAW)",
-                            "returnWin": 41,
-                            "returnPlace": 0,
-                            "differential": null,
-                            "bettingStatus": "Open",
-                            "allowPlace": false,
-                            "number": 34151,
-                            "isOpen": true,
-                            "sortOrder": 36
-                        },
-                        {
-                            "id": "34145",
-                            "name": "Jarman Impey (HAW)",
-                            "returnWin": 41,
-                            "returnPlace": 0,
-                            "differential": null,
-                            "bettingStatus": "Open",
-                            "allowPlace": false,
-                            "number": 34145,
-                            "isOpen": true,
-                            "sortOrder": 30
-                        },
-                        {
-                            "id": "34148",
-                            "name": "Cam Mackenzie (HAW)",
-                            "returnWin": 41,
-                            "returnPlace": 0,
-                            "differential": null,
-                            "bettingStatus": "Open",
-                            "allowPlace": false,
-                            "number": 34148,
-                            "isOpen": true,
-                            "sortOrder": 33
-                        },
-                        {
-                            "id": "34152",
-                            "name": "Conor Nash (HAW)",
-                            "returnWin": 41,
-                            "returnPlace": 0,
-                            "differential": null,
-                            "bettingStatus": "Open",
-                            "allowPlace": false,
-                            "number": 34152,
-                            "isOpen": true,
-                            "sortOrder": 37
-                        },
-                        {
-                            "id": "34141",
-                            "name": "Massimo DAmbrosio (HAW)",
-                            "returnWin": 41,
-                            "returnPlace": 0,
-                            "differential": null,
-                            "bettingStatus": "Open",
-                            "allowPlace": false,
-                            "number": 34141,
-                            "isOpen": true,
-                            "sortOrder": 26
-                        },
-                        {
-                            "id": "34129",
-                            "name": "Luke Ryan (FRE)",
-                            "returnWin": 41,
-                            "returnPlace": 0,
-                            "differential": null,
-                            "bettingStatus": "Open",
-                            "allowPlace": false,
-                            "number": 34129,
-                            "isOpen": true,
-                            "sortOrder": 14
-                        },
-                        {
-                            "id": "34130",
-                            "name": "Caleb Serong (FRE)",
-                            "returnWin": 41,
-                            "returnPlace": 0,
-                            "differential": null,
-                            "bettingStatus": "Open",
-                            "allowPlace": false,
-                            "number": 34130,
-                            "isOpen": true,
-                            "sortOrder": 15
-                        },
-                        {
-                            "id": "34117",
-                            "name": "Bailey Banfield (FRE)",
-                            "returnWin": 41,
-                            "returnPlace": 0,
-                            "differential": null,
-                            "bettingStatus": "Open",
-                            "allowPlace": false,
-                            "number": 34117,
-                            "isOpen": true,
-                            "sortOrder": 2
-                        },
-                        {
-                            "id": "34120",
-                            "name": "Jordan Clark (FRE)",
-                            "returnWin": 41,
-                            "returnPlace": 0,
-                            "differential": null,
-                            "bettingStatus": "Open",
-                            "allowPlace": false,
-                            "number": 34120,
-                            "isOpen": true,
-                            "sortOrder": 5
-                        },
-                        {
-                            "id": "34118",
-                            "name": "Andrew Brayshaw (FRE)",
-                            "returnWin": 41,
-                            "returnPlace": 0,
-                            "differential": null,
-                            "bettingStatus": "Open",
-                            "allowPlace": false,
-                            "number": 34118,
-                            "isOpen": true,
-                            "sortOrder": 3
-                        },
-                        {
-                            "id": "34146",
-                            "name": "Changkuoth Jiath (HAW)",
-                            "returnWin": 41,
-                            "returnPlace": 0,
-                            "differential": null,
-                            "bettingStatus": "Open",
-                            "allowPlace": false,
-                            "number": 34146,
-                            "isOpen": true,
-                            "sortOrder": 31
-                        },
-                        {
-                            "id": "34121",
-                            "name": "Brennan Cox (FRE)",
-                            "returnWin": 41,
-                            "returnPlace": 0,
-                            "differential": null,
-                            "bettingStatus": "Open",
-                            "allowPlace": false,
-                            "number": 34121,
-                            "isOpen": true,
-                            "sortOrder": 6
-                        },
-                        {
-                            "id": "34128",
-                            "name": "Nathan ODriscoll (FRE)",
-                            "returnWin": 41,
-                            "returnPlace": 0,
-                            "differential": null,
-                            "bettingStatus": "Open",
-                            "allowPlace": false,
-                            "number": 34128,
-                            "isOpen": true,
-                            "sortOrder": 13
-                        },
-                        {
-                            "id": "34153",
-                            "name": "Jai Newcombe (HAW)",
-                            "returnWin": 41,
-                            "returnPlace": 0,
-                            "differential": null,
-                            "bettingStatus": "Open",
-                            "allowPlace": false,
-                            "number": 34153,
-                            "isOpen": true,
-                            "sortOrder": 38
-                        }
-                    ]
-                },
-                {
-                    "id": "118054057",
-                    "name": "AFL Frem-Haw 4QAnyGS",
-                    "shortName": "AFL Fre-Haw 4QAnyGS",
-                    "betOption": "To Kick a Goal (4th Quarter)",
-                    "betOptionSpectrumId": "987",
-                    "betOptionPriority": 16205,
-                    "marketUniqueId": 118054057,
-                    "closeTime": "2025-07-12T10:11:00.000Z",
-                    "bettingStatus": "Open",
-                    "message": null,
-                    "informationMessage": "Quote Others. Starting SUB refunded",
-                    "isFuture": false,
-                    "onlineBetting": false,
-                    "phoneBettingOnly": true,
-                    "inPlay": true,
-                    "goingInPlay": false,
-                    "allowWin": true,
-                    "allowPlace": false,
-                    "allowEachWay": false,
-                    "allowMulti": true,
-                    "allowMultiWin": true,
-                    "allowMultiPlace": false,
-                    "allowMultiEachWay": false,
-                    "numberOfPlaces": 0,
-                    "cashOutEligibility": "Enabled",
-                    "allowBundle": false,
-                    "propositions": [
-                        {
-                            "id": "34770",
-                            "name": "Jack Gunston (HAW)",
-                            "returnWin": 2.2,
-                            "returnPlace": 0,
-                            "differential": null,
-                            "bettingStatus": "Open",
-                            "allowPlace": false,
-                            "number": 34770,
-                            "isOpen": true,
-                            "sortOrder": 28
-                        },
-                        {
-                            "id": "34758",
-                            "name": "Josh Treacy (FRE)",
-                            "returnWin": 2.5,
-                            "returnPlace": 0,
-                            "differential": null,
-                            "bettingStatus": "Open",
-                            "allowPlace": false,
-                            "number": 34758,
-                            "isOpen": true,
-                            "sortOrder": 16
-                        },
-                        {
-                            "id": "34767",
-                            "name": "Mabior Chol (HAW)",
-                            "returnWin": 2.6,
-                            "returnPlace": 0,
-                            "differential": null,
-                            "bettingStatus": "Open",
-                            "allowPlace": false,
-                            "number": 34767,
-                            "isOpen": true,
-                            "sortOrder": 25
-                        },
-                        {
-                            "id": "34759",
-                            "name": "Patrick Voss (FRE)",
-                            "returnWin": 2.7,
-                            "returnPlace": 0,
-                            "differential": null,
-                            "bettingStatus": "Open",
-                            "allowPlace": false,
-                            "number": 34759,
-                            "isOpen": true,
-                            "sortOrder": 17
-                        },
-                        {
-                            "id": "34783",
-                            "name": "Nick Watson (HAW)",
-                            "returnWin": 2.8,
-                            "returnPlace": 0,
-                            "differential": null,
-                            "bettingStatus": "Open",
-                            "allowPlace": false,
-                            "number": 34783,
-                            "isOpen": true,
-                            "sortOrder": 41
-                        },
-                        {
-                            "id": "34743",
-                            "name": "Jye Amiss (FRE)",
-                            "returnWin": 2.9,
-                            "returnPlace": 0,
-                            "differential": null,
-                            "bettingStatus": "Open",
-                            "allowPlace": false,
-                            "number": 34743,
-                            "isOpen": true,
-                            "sortOrder": 1
-                        },
-                        {
-                            "id": "34769",
-                            "name": "Jack Ginnivan (HAW)",
-                            "returnWin": 3.2,
-                            "returnPlace": 0,
-                            "differential": null,
-                            "bettingStatus": "Open",
-                            "allowPlace": false,
-                            "number": 34769,
-                            "isOpen": true,
-                            "sortOrder": 27
-                        },
-                        {
-                            "id": "34764",
-                            "name": "Shai Bolton (FRE)",
-                            "returnWin": 3.2,
-                            "returnPlace": 0,
-                            "differential": null,
-                            "bettingStatus": "Open",
-                            "allowPlace": false,
-                            "number": 34764,
-                            "isOpen": true,
-                            "sortOrder": 22
-                        },
-                        {
-                            "id": "34792",
-                            "name": "Calsher Dear (HAW)",
-                            "returnWin": 3.4,
-                            "returnPlace": 0,
-                            "differential": null,
-                            "bettingStatus": "Open",
-                            "allowPlace": false,
-                            "number": 34792,
-                            "isOpen": true,
-                            "sortOrder": 50
-                        },
-                        {
-                            "id": "34751",
-                            "name": "Michael Frederick (FRE)",
-                            "returnWin": 3.5,
-                            "returnPlace": 0,
-                            "differential": null,
-                            "bettingStatus": "Open",
-                            "allowPlace": false,
-                            "number": 34751,
-                            "isOpen": true,
-                            "sortOrder": 9
-                        },
-                        {
-                            "id": "34763",
-                            "name": "Murphy Reid (FRE)",
-                            "returnWin": 3.6,
-                            "returnPlace": 0,
-                            "differential": null,
-                            "bettingStatus": "Open",
-                            "allowPlace": false,
-                            "number": 34763,
-                            "isOpen": true,
-                            "sortOrder": 21
-                        },
-                        {
-                            "id": "34752",
-                            "name": "Luke Jackson (FRE)",
-                            "returnWin": 3.8,
-                            "returnPlace": 0,
-                            "differential": null,
-                            "bettingStatus": "Open",
-                            "allowPlace": false,
-                            "number": 34752,
-                            "isOpen": true,
-                            "sortOrder": 10
-                        },
-                        {
-                            "id": "34774",
-                            "name": "Connor Macdonald (HAW)",
-                            "returnWin": 4.2,
-                            "returnPlace": 0,
-                            "differential": null,
-                            "bettingStatus": "Open",
-                            "allowPlace": false,
-                            "number": 34774,
-                            "isOpen": true,
-                            "sortOrder": 32
-                        },
-                        {
-                            "id": "34777",
-                            "name": "Dylan Moore (HAW)",
-                            "returnWin": 4.25,
-                            "returnPlace": 0,
-                            "differential": null,
-                            "bettingStatus": "Open",
-                            "allowPlace": false,
-                            "number": 34777,
-                            "isOpen": true,
-                            "sortOrder": 35
-                        },
-                        {
-                            "id": "34791",
-                            "name": "Sam Switkowski (FRE)",
-                            "returnWin": 6,
-                            "returnPlace": 0,
-                            "differential": null,
-                            "bettingStatus": "Open",
-                            "allowPlace": false,
-                            "number": 34791,
-                            "isOpen": true,
-                            "sortOrder": 49
-                        },
-                        {
-                            "id": "34754",
-                            "name": "Oscar McDonald (FRE)",
-                            "returnWin": 7,
-                            "returnPlace": 0,
-                            "differential": null,
-                            "bettingStatus": "Open",
-                            "allowPlace": false,
-                            "number": 34754,
-                            "isOpen": true,
-                            "sortOrder": 12
-                        },
-                        {
-                            "id": "34780",
-                            "name": "Jai Newcombe (HAW)",
-                            "returnWin": 7.5,
-                            "returnPlace": 0,
-                            "differential": null,
-                            "bettingStatus": "Open",
-                            "allowPlace": false,
-                            "number": 34780,
-                            "isOpen": true,
-                            "sortOrder": 38
-                        },
-                        {
-                            "id": "34755",
-                            "name": "Nathan ODriscoll (FRE)",
-                            "returnWin": 8,
-                            "returnPlace": 0,
-                            "differential": null,
-                            "bettingStatus": "Open",
-                            "allowPlace": false,
-                            "number": 34755,
-                            "isOpen": true,
-                            "sortOrder": 13
-                        },
-                        {
-                            "id": "34757",
-                            "name": "Caleb Serong (FRE)",
-                            "returnWin": 9,
-                            "returnPlace": 0,
-                            "differential": null,
-                            "bettingStatus": "Open",
-                            "allowPlace": false,
-                            "number": 34757,
-                            "isOpen": true,
-                            "sortOrder": 15
-                        },
-                        {
-                            "id": "34749",
-                            "name": "Sean Darcy (FRE)",
-                            "returnWin": 9.5,
-                            "returnPlace": 0,
-                            "differential": null,
-                            "bettingStatus": "Open",
-                            "allowPlace": false,
-                            "number": 34749,
-                            "isOpen": true,
-                            "sortOrder": 7
-                        },
-                        {
-                            "id": "34745",
-                            "name": "Andrew Brayshaw (FRE)",
-                            "returnWin": 9.5,
-                            "returnPlace": 0,
-                            "differential": null,
-                            "bettingStatus": "Open",
-                            "allowPlace": false,
-                            "number": 34745,
-                            "isOpen": true,
-                            "sortOrder": 3
-                        },
-                        {
-                            "id": "34768",
-                            "name": "Massimo DAmbrosio (HAW)",
-                            "returnWin": 10,
-                            "returnPlace": 0,
-                            "differential": null,
-                            "bettingStatus": "Open",
-                            "allowPlace": false,
-                            "number": 34768,
-                            "isOpen": true,
-                            "sortOrder": 26
-                        },
-                        {
-                            "id": "34788",
-                            "name": "James Worpel (HAW)",
-                            "returnWin": 10,
-                            "returnPlace": 0,
-                            "differential": null,
-                            "bettingStatus": "Open",
-                            "allowPlace": false,
-                            "number": 34788,
-                            "isOpen": true,
-                            "sortOrder": 46
-                        },
-                        {
-                            "id": "34776",
-                            "name": "Lloyd Meek (HAW)",
-                            "returnWin": 10,
-                            "returnPlace": 0,
-                            "differential": null,
-                            "bettingStatus": "Open",
-                            "allowPlace": false,
-                            "number": 34776,
-                            "isOpen": true,
-                            "sortOrder": 34
-                        },
-                        {
-                            "id": "34775",
-                            "name": "Cam Mackenzie (HAW)",
-                            "returnWin": 11,
-                            "returnPlace": 0,
-                            "differential": null,
-                            "bettingStatus": "Open",
-                            "allowPlace": false,
-                            "number": 34775,
-                            "isOpen": true,
-                            "sortOrder": 33
-                        },
-                        {
-                            "id": "34778",
-                            "name": "Harry Morrison (HAW)",
-                            "returnWin": 11,
-                            "returnPlace": 0,
-                            "differential": null,
-                            "bettingStatus": "Open",
-                            "allowPlace": false,
-                            "number": 34778,
-                            "isOpen": true,
-                            "sortOrder": 36
-                        },
-                        {
-                            "id": "34753",
-                            "name": "Matthew Johnson (FRE)",
-                            "returnWin": 11,
-                            "returnPlace": 0,
-                            "differential": null,
-                            "bettingStatus": "Open",
-                            "allowPlace": false,
-                            "number": 34753,
-                            "isOpen": true,
-                            "sortOrder": 11
-                        },
-                        {
-                            "id": "34790",
-                            "name": "Jaeger OMeara (FRE)",
-                            "returnWin": 12,
-                            "returnPlace": 0,
-                            "differential": null,
-                            "bettingStatus": "Open",
-                            "allowPlace": false,
-                            "number": 34790,
-                            "isOpen": true,
-                            "sortOrder": 48
-                        }
-                    ]
-                },
-                {
-                    "id": "117906875",
-                    "name": "AFL R18 Fremantle-Hawthorn 12/07",
-                    "shortName": "AFL R18 Frem-Haw 4QLOU",
-                    "betOption": "4th Quarter Line/OverUnder Double",
-                    "betOptionSpectrumId": "346",
-                    "betOptionPriority": 16210,
-                    "marketUniqueId": 117906875,
-                    "closeTime": "2025-07-12T13:10:00.000Z",
-                    "bettingStatus": "Open",
-                    "message": null,
-                    "informationMessage": null,
-                    "isFuture": false,
-                    "onlineBetting": false,
-                    "phoneBettingOnly": true,
-                    "inPlay": true,
-                    "goingInPlay": false,
-                    "allowWin": true,
-                    "allowPlace": false,
-                    "allowEachWay": false,
-                    "allowMulti": true,
-                    "allowMultiWin": true,
-                    "allowMultiPlace": false,
-                    "allowMultiEachWay": false,
-                    "numberOfPlaces": 0,
-                    "cashOutEligibility": "Disabled",
-                    "allowBundle": false,
-                    "propositions": [
-                        {
-                            "id": "10936",
-                            "name": "Fremantle -0.5/Over 39.5",
-                            "returnWin": 3.5,
-                            "returnPlace": 0,
-                            "differential": null,
-                            "bettingStatus": "Open",
-                            "allowPlace": false,
-                            "number": 10936,
-                            "isOpen": true,
-                            "sortOrder": 1
-                        },
-                        {
-                            "id": "10937",
-                            "name": "Fremantle -0.5/Under 39.5",
-                            "returnWin": 3.5,
-                            "returnPlace": 0,
-                            "differential": null,
-                            "bettingStatus": "Open",
-                            "allowPlace": false,
-                            "number": 10937,
-                            "isOpen": true,
-                            "sortOrder": 2
-                        },
-                        {
-                            "id": "10938",
-                            "name": "Hawthorn +0.5/Over 39.5",
-                            "returnWin": 3.5,
-                            "returnPlace": 0,
-                            "differential": null,
-                            "bettingStatus": "Open",
-                            "allowPlace": false,
-                            "number": 10938,
-                            "isOpen": true,
-                            "sortOrder": 3
-                        },
-                        {
-                            "id": "10939",
-                            "name": "Hawthorn +0.5/Under 39.5",
-                            "returnWin": 3.5,
-                            "returnPlace": 0,
-                            "differential": null,
-                            "bettingStatus": "Open",
-                            "allowPlace": false,
-                            "number": 10939,
-                            "isOpen": true,
-                            "sortOrder": 4
-                        }
-                    ]
-                },
-                {
-                    "id": "117906869",
-                    "name": "AFL R18 Fremantle-Hawthorn 12/07",
-                    "shortName": "AFL R18 Frem-Haw 4QGls",
-                    "betOption": "4th Quarter Goals",
-                    "betOptionSpectrumId": "1965",
-                    "betOptionPriority": 16220,
-                    "marketUniqueId": 117906869,
-                    "closeTime": "2025-07-12T13:10:00.000Z",
-                    "bettingStatus": "Open",
-                    "message": null,
-                    "informationMessage": null,
-                    "isFuture": false,
-                    "onlineBetting": false,
-                    "phoneBettingOnly": true,
-                    "inPlay": true,
-                    "goingInPlay": false,
-                    "allowWin": true,
-                    "allowPlace": false,
-                    "allowEachWay": false,
-                    "allowMulti": true,
-                    "allowMultiWin": true,
-                    "allowMultiPlace": false,
-                    "allowMultiEachWay": false,
-                    "numberOfPlaces": 0,
-                    "cashOutEligibility": "Enabled",
-                    "allowBundle": false,
-                    "propositions": [
-                        {
-                            "id": "10974",
-                            "name": "0-5 Goals",
-                            "returnWin": 1.95,
-                            "returnPlace": 0,
-                            "differential": null,
-                            "bettingStatus": "Open",
-                            "allowPlace": false,
-                            "number": 10974,
-                            "isOpen": true,
-                            "sortOrder": 1
-                        },
-                        {
-                            "id": "10975",
-                            "name": "6-7 Goals",
-                            "returnWin": 3.1,
-                            "returnPlace": 0,
-                            "differential": null,
-                            "bettingStatus": "Open",
-                            "allowPlace": false,
-                            "number": 10975,
-                            "isOpen": true,
-                            "sortOrder": 2
-                        },
-                        {
-                            "id": "10976",
-                            "name": "8+ Goals",
-                            "returnWin": 3.8,
-                            "returnPlace": 0,
-                            "differential": null,
-                            "bettingStatus": "Open",
-                            "allowPlace": false,
-                            "number": 10976,
-                            "isOpen": true,
-                            "sortOrder": 3
-                        }
-                    ]
-                },
-                {
-                    "id": "117906858",
-                    "name": "AFL R18 Fremantle-Hawthorn 12/07",
-                    "shortName": "AFL R18 Frem-Haw Lv4QMg",
-                    "betOption": "Live 4th Quarter Margin",
-                    "betOptionSpectrumId": "2839",
-                    "betOptionPriority": 16235,
-                    "marketUniqueId": 117906858,
-                    "closeTime": "2025-07-12T13:10:00.000Z",
-                    "bettingStatus": "Open",
-                    "message": null,
-                    "informationMessage": null,
-                    "isFuture": false,
-                    "onlineBetting": false,
-                    "phoneBettingOnly": true,
-                    "inPlay": true,
-                    "goingInPlay": false,
-                    "allowWin": true,
-                    "allowPlace": false,
-                    "allowEachWay": false,
-                    "allowMulti": true,
-                    "allowMultiWin": true,
-                    "allowMultiPlace": false,
-                    "allowMultiEachWay": false,
-                    "numberOfPlaces": 0,
-                    "cashOutEligibility": "Enabled",
-                    "allowBundle": false,
-                    "propositions": [
-                        {
-                            "id": "10954",
-                            "name": "Fremantle by 13+",
-                            "returnWin": 4.25,
-                            "returnPlace": 0,
-                            "differential": null,
-                            "bettingStatus": "Open",
-                            "allowPlace": false,
-                            "number": 10954,
-                            "isOpen": true,
-                            "sortOrder": 1
-                        },
-                        {
-                            "id": "10955",
-                            "name": "Fremantle by 1-12",
-                            "returnWin": 2.9,
-                            "returnPlace": 0,
-                            "differential": null,
-                            "bettingStatus": "Open",
-                            "allowPlace": false,
-                            "number": 10955,
-                            "isOpen": true,
-                            "sortOrder": 2
-                        },
-                        {
-                            "id": "10956",
-                            "name": "Draw",
-                            "returnWin": 21,
-                            "returnPlace": 0,
-                            "differential": null,
-                            "bettingStatus": "Open",
-                            "allowPlace": false,
-                            "number": 10956,
-                            "isOpen": true,
-                            "sortOrder": 3
-                        },
-                        {
-                            "id": "10957",
-                            "name": "Hawthorn by 1-12",
-                            "returnWin": 2.95,
-                            "returnPlace": 0,
-                            "differential": null,
-                            "bettingStatus": "Open",
-                            "allowPlace": false,
-                            "number": 10957,
-                            "isOpen": true,
-                            "sortOrder": 4
-                        },
-                        {
-                            "id": "10958",
-                            "name": "Hawthorn by 13+",
-                            "returnWin": 4.75,
-                            "returnPlace": 0,
-                            "differential": null,
-                            "bettingStatus": "Open",
-                            "allowPlace": false,
-                            "number": 10958,
-                            "isOpen": true,
-                            "sortOrder": 5
-                        }
-                    ]
-                },
-                {
-                    "id": "118111907",
-                    "name": "AFL Fre-Haw Qtr4Mg",
-                    "shortName": "AFL Fre-Haw Qtr4Mg",
-                    "betOption": "4th Quarter Winning Margin",
-                    "betOptionSpectrumId": "460",
-                    "betOptionPriority": 16240,
-                    "marketUniqueId": 118111907,
-                    "closeTime": "2025-07-12T10:11:00.000Z",
-                    "bettingStatus": "Open",
-                    "message": null,
-                    "informationMessage": null,
-                    "isFuture": false,
-                    "onlineBetting": false,
-                    "phoneBettingOnly": true,
-                    "inPlay": true,
-                    "goingInPlay": false,
-                    "allowWin": true,
-                    "allowPlace": false,
-                    "allowEachWay": false,
-                    "allowMulti": true,
-                    "allowMultiWin": true,
-                    "allowMultiPlace": false,
-                    "allowMultiEachWay": false,
-                    "numberOfPlaces": 0,
-                    "cashOutEligibility": "Disabled",
-                    "allowBundle": false,
-                    "propositions": [
-                        {
-                            "id": "28223",
-                            "name": "Fremantle Between 1-6",
-                            "returnWin": 5,
-                            "returnPlace": 0,
-                            "differential": null,
-                            "bettingStatus": "Open",
-                            "allowPlace": false,
-                            "number": 28223,
-                            "isOpen": true,
-                            "sortOrder": 1
-                        },
-                        {
-                            "id": "28224",
-                            "name": "Fremantle Between 7-12",
-                            "returnWin": 6,
-                            "returnPlace": 0,
-                            "differential": null,
-                            "bettingStatus": "Open",
-                            "allowPlace": false,
-                            "number": 28224,
-                            "isOpen": true,
-                            "sortOrder": 2
-                        },
-                        {
-                            "id": "28225",
-                            "name": "Fremantle Between 13-18",
-                            "returnWin": 8,
-                            "returnPlace": 0,
-                            "differential": null,
-                            "bettingStatus": "Open",
-                            "allowPlace": false,
-                            "number": 28225,
-                            "isOpen": true,
-                            "sortOrder": 3
-                        },
-                        {
-                            "id": "28226",
-                            "name": "Fremantle Between 19-24",
-                            "returnWin": 13,
-                            "returnPlace": 0,
-                            "differential": null,
-                            "bettingStatus": "Open",
-                            "allowPlace": false,
-                            "number": 28226,
-                            "isOpen": true,
-                            "sortOrder": 4
-                        },
-                        {
-                            "id": "28227",
-                            "name": "Fremantle Between 25-30",
-                            "returnWin": 21,
-                            "returnPlace": 0,
-                            "differential": null,
-                            "bettingStatus": "Open",
-                            "allowPlace": false,
-                            "number": 28227,
-                            "isOpen": true,
-                            "sortOrder": 5
-                        },
-                        {
-                            "id": "28228",
-                            "name": "Fremantle 31+",
-                            "returnWin": 26,
-                            "returnPlace": 0,
-                            "differential": null,
-                            "bettingStatus": "Open",
-                            "allowPlace": false,
-                            "number": 28228,
-                            "isOpen": true,
-                            "sortOrder": 6
-                        },
-                        {
-                            "id": "28229",
-                            "name": "Hawthorn Between 1-6",
-                            "returnWin": 5,
-                            "returnPlace": 0,
-                            "differential": null,
-                            "bettingStatus": "Open",
-                            "allowPlace": false,
-                            "number": 28229,
-                            "isOpen": true,
-                            "sortOrder": 7
-                        },
-                        {
-                            "id": "28230",
-                            "name": "Hawthorn Between 7-12",
-                            "returnWin": 6,
-                            "returnPlace": 0,
-                            "differential": null,
-                            "bettingStatus": "Open",
-                            "allowPlace": false,
-                            "number": 28230,
-                            "isOpen": true,
-                            "sortOrder": 8
-                        },
-                        {
-                            "id": "28231",
-                            "name": "Hawthorn Between 13-18",
-                            "returnWin": 9,
-                            "returnPlace": 0,
-                            "differential": null,
-                            "bettingStatus": "Open",
-                            "allowPlace": false,
-                            "number": 28231,
-                            "isOpen": true,
-                            "sortOrder": 9
-                        },
-                        {
-                            "id": "28232",
-                            "name": "Hawthorn Between 19-24",
-                            "returnWin": 15,
-                            "returnPlace": 0,
-                            "differential": null,
-                            "bettingStatus": "Open",
-                            "allowPlace": false,
-                            "number": 28232,
-                            "isOpen": true,
-                            "sortOrder": 10
-                        },
-                        {
-                            "id": "28233",
-                            "name": "Hawthorn Between 25-30",
-                            "returnWin": 26,
-                            "returnPlace": 0,
-                            "differential": null,
-                            "bettingStatus": "Open",
-                            "allowPlace": false,
-                            "number": 28233,
-                            "isOpen": true,
-                            "sortOrder": 11
-                        },
-                        {
-                            "id": "28234",
-                            "name": "Hawthorn 31+",
-                            "returnWin": 34,
-                            "returnPlace": 0,
-                            "differential": null,
-                            "bettingStatus": "Open",
-                            "allowPlace": false,
-                            "number": 28234,
-                            "isOpen": true,
-                            "sortOrder": 12
-                        },
-                        {
-                            "id": "28235",
-                            "name": "Tie",
-                            "returnWin": 17,
-                            "returnPlace": 0,
-                            "differential": null,
-                            "bettingStatus": "Open",
-                            "allowPlace": false,
-                            "number": 28235,
-                            "isOpen": true,
-                            "sortOrder": 13
-                        }
-                    ]
-                },
-                {
-                    "id": "117906187",
-                    "name": "AFL Frem-Haw 4Qtr1Scr",
-                    "shortName": "AFL Fre-Haw 4Q1Scr",
-                    "betOption": "4th Quarter 1st Scoring Play",
-                    "betOptionSpectrumId": "2856",
-                    "betOptionPriority": 16320,
-                    "marketUniqueId": 117906187,
-                    "closeTime": "2025-07-12T10:11:00.000Z",
-                    "bettingStatus": "Open",
-                    "message": null,
-                    "informationMessage": null,
-                    "isFuture": false,
-                    "onlineBetting": false,
-                    "phoneBettingOnly": true,
-                    "inPlay": true,
-                    "goingInPlay": false,
-                    "allowWin": true,
-                    "allowPlace": false,
-                    "allowEachWay": false,
-                    "allowMulti": true,
-                    "allowMultiWin": true,
-                    "allowMultiPlace": false,
-                    "allowMultiEachWay": false,
-                    "numberOfPlaces": 0,
-                    "cashOutEligibility": "Disabled",
-                    "allowBundle": false,
-                    "propositions": [
-                        {
-                            "id": "7832",
-                            "name": "Fremantle Goal",
-                            "returnWin": 3.3,
-                            "returnPlace": 0,
-                            "differential": null,
-                            "bettingStatus": "Open",
-                            "allowPlace": false,
-                            "number": 7832,
-                            "isOpen": true,
-                            "sortOrder": 1
-                        },
-                        {
-                            "id": "7833",
-                            "name": "Hawthorn Goal",
-                            "returnWin": 3.1,
-                            "returnPlace": 0,
-                            "differential": null,
-                            "bettingStatus": "Open",
-                            "allowPlace": false,
-                            "number": 7833,
-                            "isOpen": true,
-                            "sortOrder": 2
-                        },
-                        {
-                            "id": "7834",
-                            "name": "Fremantle Behind",
-                            "returnWin": 3.6,
-                            "returnPlace": 0,
-                            "differential": null,
-                            "bettingStatus": "Open",
-                            "allowPlace": false,
-                            "number": 7834,
-                            "isOpen": true,
-                            "sortOrder": 3
-                        },
-                        {
-                            "id": "7835",
-                            "name": "Hawthorn Behind",
-                            "returnWin": 4,
-                            "returnPlace": 0,
-                            "differential": null,
-                            "bettingStatus": "Open",
-                            "allowPlace": false,
-                            "number": 7835,
-                            "isOpen": true,
-                            "sortOrder": 4
-                        }
-                    ]
-                },
-                {
-                    "id": "117919130",
-                    "name": "AFL Fre-Haw 4QTm1G",
-                    "shortName": "AFL Fre-Haw 4QTm1G",
-                    "betOption": "4th Quarter Time of 1st Goal",
-                    "betOptionSpectrumId": "2860",
-                    "betOptionPriority": 16325,
-                    "marketUniqueId": 117919130,
-                    "closeTime": "2025-07-12T10:11:00.000Z",
-                    "bettingStatus": "Open",
-                    "message": "Pays on elapsed time as per afl.com.au",
-                    "informationMessage": null,
-                    "isFuture": false,
-                    "onlineBetting": false,
-                    "phoneBettingOnly": true,
-                    "inPlay": true,
-                    "goingInPlay": false,
-                    "allowWin": true,
-                    "allowPlace": false,
-                    "allowEachWay": false,
-                    "allowMulti": true,
-                    "allowMultiWin": true,
-                    "allowMultiPlace": false,
-                    "allowMultiEachWay": false,
-                    "numberOfPlaces": 0,
-                    "cashOutEligibility": "Disabled",
-                    "allowBundle": false,
-                    "propositions": [
-                        {
-                            "id": "16835",
-                            "name": "0:00-1:00",
-                            "returnWin": 6,
-                            "returnPlace": 0,
-                            "differential": null,
-                            "bettingStatus": "Open",
-                            "allowPlace": false,
-                            "number": 16835,
-                            "isOpen": true,
-                            "sortOrder": 1
-                        },
-                        {
-                            "id": "16836",
-                            "name": "1:01-2:00",
-                            "returnWin": 5,
-                            "returnPlace": 0,
-                            "differential": null,
-                            "bettingStatus": "Open",
-                            "allowPlace": false,
-                            "number": 16836,
-                            "isOpen": true,
-                            "sortOrder": 2
-                        },
-                        {
-                            "id": "16837",
-                            "name": "2:01-3:00",
-                            "returnWin": 5,
-                            "returnPlace": 0,
-                            "differential": null,
-                            "bettingStatus": "Open",
-                            "allowPlace": false,
-                            "number": 16837,
-                            "isOpen": true,
-                            "sortOrder": 3
-                        },
-                        {
-                            "id": "16838",
-                            "name": "3:01-4:00",
-                            "returnWin": 6,
-                            "returnPlace": 0,
-                            "differential": null,
-                            "bettingStatus": "Open",
-                            "allowPlace": false,
-                            "number": 16838,
-                            "isOpen": true,
-                            "sortOrder": 4
-                        },
-                        {
-                            "id": "16839",
-                            "name": "4:01-5:00",
-                            "returnWin": 9,
-                            "returnPlace": 0,
-                            "differential": null,
-                            "bettingStatus": "Open",
-                            "allowPlace": false,
-                            "number": 16839,
-                            "isOpen": true,
-                            "sortOrder": 5
-                        },
-                        {
-                            "id": "16840",
-                            "name": "5:01 or Later",
-                            "returnWin": 3.2,
-                            "returnPlace": 0,
-                            "differential": null,
-                            "bettingStatus": "Open",
-                            "allowPlace": false,
-                            "number": 16840,
-                            "isOpen": true,
-                            "sortOrder": 6
-                        }
-                    ]
-                },
-                {
-                    "id": "118041008",
-                    "name": "AFL Frem-Haw 4QtrLScr",
-                    "shortName": "AFL Fre-Haw 4QLScr",
-                    "betOption": "4th Quarter Last Scoring Play",
-                    "betOptionSpectrumId": "2857",
-                    "betOptionPriority": 16340,
-                    "marketUniqueId": 118041008,
-                    "closeTime": "2025-07-12T10:11:00.000Z",
-                    "bettingStatus": "Open",
-                    "message": null,
-                    "informationMessage": null,
-                    "isFuture": false,
-                    "onlineBetting": false,
-                    "phoneBettingOnly": true,
-                    "inPlay": true,
-                    "goingInPlay": false,
-                    "allowWin": true,
-                    "allowPlace": false,
-                    "allowEachWay": false,
-                    "allowMulti": true,
-                    "allowMultiWin": true,
-                    "allowMultiPlace": false,
-                    "allowMultiEachWay": false,
-                    "numberOfPlaces": 0,
-                    "cashOutEligibility": "Disabled",
-                    "allowBundle": false,
-                    "propositions": [
-                        {
-                            "id": "25391",
-                            "name": "Fremantle Goal",
-                            "returnWin": 3.3,
-                            "returnPlace": 0,
-                            "differential": null,
-                            "bettingStatus": "Open",
-                            "allowPlace": false,
-                            "number": 25391,
-                            "isOpen": true,
-                            "sortOrder": 1
-                        },
-                        {
-                            "id": "25392",
-                            "name": "Hawthorn Goal",
-                            "returnWin": 3.1,
-                            "returnPlace": 0,
-                            "differential": null,
-                            "bettingStatus": "Open",
-                            "allowPlace": false,
-                            "number": 25392,
-                            "isOpen": true,
-                            "sortOrder": 2
-                        },
-                        {
-                            "id": "25393",
-                            "name": "Fremantle Behind",
-                            "returnWin": 3.6,
-                            "returnPlace": 0,
-                            "differential": null,
-                            "bettingStatus": "Open",
-                            "allowPlace": false,
-                            "number": 25393,
-                            "isOpen": true,
-                            "sortOrder": 3
-                        },
-                        {
-                            "id": "25394",
-                            "name": "Hawthorn Behind",
-                            "returnWin": 4,
-                            "returnPlace": 0,
-                            "differential": null,
-                            "bettingStatus": "Open",
-                            "allowPlace": false,
-                            "number": 25394,
-                            "isOpen": true,
-                            "sortOrder": 4
-                        }
-                    ]
-                },
-                {
-                    "id": "117906870",
-                    "name": "AFL R18 Fremantle-Hawthorn 12/07",
-                    "shortName": "AFL R18 Frem-Haw 4QtTri",
-                    "betOption": "4th Quarter Tri Bet",
-                    "betOptionSpectrumId": "1444",
-                    "betOptionPriority": 16360,
-                    "marketUniqueId": 117906870,
-                    "closeTime": "2025-07-12T13:10:00.000Z",
-                    "bettingStatus": "Open",
-                    "message": null,
-                    "informationMessage": null,
-                    "isFuture": false,
-                    "onlineBetting": false,
-                    "phoneBettingOnly": true,
-                    "inPlay": true,
-                    "goingInPlay": false,
-                    "allowWin": true,
-                    "allowPlace": false,
-                    "allowEachWay": false,
-                    "allowMulti": true,
-                    "allowMultiWin": true,
-                    "allowMultiPlace": false,
-                    "allowMultiEachWay": false,
-                    "numberOfPlaces": 0,
-                    "cashOutEligibility": "Enabled",
-                    "allowBundle": false,
-                    "propositions": [
-                        {
-                            "id": "10965",
-                            "name": "Fremantle Over 6.5 Pts Q4",
-                            "returnWin": 2.75,
-                            "returnPlace": 0,
-                            "differential": null,
-                            "bettingStatus": "Open",
-                            "allowPlace": false,
-                            "number": 10965,
-                            "isOpen": true,
-                            "sortOrder": 1
-                        },
-                        {
-                            "id": "10966",
-                            "name": "Either Team Under 6.5 Pts Q4",
-                            "returnWin": 2.5,
-                            "returnPlace": 0,
-                            "differential": null,
-                            "bettingStatus": "Open",
-                            "allowPlace": false,
-                            "number": 10966,
-                            "isOpen": true,
-                            "sortOrder": 2
-                        },
-                        {
-                            "id": "10967",
-                            "name": "Hawthorn Over 6.5 Pts Q4",
-                            "returnWin": 2.95,
-                            "returnPlace": 0,
-                            "differential": null,
-                            "bettingStatus": "Open",
-                            "allowPlace": false,
-                            "number": 10967,
-                            "isOpen": true,
-                            "sortOrder": 3
-                        }
-                    ]
-                }
-            ],
-            "inPlay": true,
-            "goingInPlay": false
-        },
-        {
             "id": "MlbvNMl",
             "name": "Melbourne v North Melbourne",
             "spectrumId": "MlbvNMl",
@@ -135495,6 +132846,189 @@
             "stats": true
         },
         {
+            "id": "BrsvWBd",
+            "name": "Brisbane v Wst Bulldogs",
+            "spectrumId": "BrsvWBd",
+            "spectrumUniqueId": 2933867,
+            "competitionSpectrumId": "102",
+            "round": "19",
+            "broadcastChannel": "Fox Footy",
+            "broadcastChannels": [
+                "Fox Footy"
+            ],
+            "startTime": "2025-07-18T09:40:00.000Z",
+            "_links": {
+                "self": "https://api.beta.tab.com.au/v1/tab-info-service/sports/AFL%20Football/competitions/AFL/matches/Brisbane%20v%20Wst%20Bulldogs?jurisdiction=SA&homeState=SA",
+                "selfTemplate": "https://api.beta.tab.com.au/v1/tab-info-service/sports/AFL%20Football/competitions/AFL/matches/Brisbane%20v%20Wst%20Bulldogs?jurisdiction={jurisdiction}{&returnPromo,returnOffers,returnMultiOnly,channelType,cashSales,homeState}",
+                "markets": "https://api.beta.tab.com.au/v1/tab-info-service/sports/AFL%20Football/competitions/AFL/matches/Brisbane%20v%20Wst%20Bulldogs/markets?jurisdiction=SA&homeState=SA",
+                "stats": "https://api.beta.tab.com.au/v1/stats-service/sports/AFL%20Football/competitions/AFL/matches/2933867/h2h/stats"
+            },
+            "contestants": [
+                {
+                    "name": "Brisbane",
+                    "position": "HOME",
+                    "isHome": true,
+                    "image": [
+                        {
+                            "size": "svg",
+                            "url": "https://metadata.beta.tab.com.au/icons/AFL/Brisbane%20Lions.svg"
+                        },
+                        {
+                            "size": "xxhdpi",
+                            "url": "https://metadata.beta.tab.com.au/icons/AFL/Brisbane%20Lions_xxhdpi.png"
+                        },
+                        {
+                            "size": "2x",
+                            "url": "https://metadata.beta.tab.com.au/icons/AFL/Brisbane%20Lions%402x.png"
+                        }
+                    ]
+                },
+                {
+                    "name": "Wst Bulldogs",
+                    "position": "AWAY",
+                    "isHome": false,
+                    "image": [
+                        {
+                            "size": "svg",
+                            "url": "https://metadata.beta.tab.com.au/icons/AFL/Western%20Bulldogs.svg"
+                        },
+                        {
+                            "size": "xxhdpi",
+                            "url": "https://metadata.beta.tab.com.au/icons/AFL/Western%20Bulldogs_xxhdpi.png"
+                        },
+                        {
+                            "size": "2x",
+                            "url": "https://metadata.beta.tab.com.au/icons/AFL/Western%20Bulldogs%402x.png"
+                        }
+                    ]
+                }
+            ],
+            "competitors": [
+                "Brisbane",
+                "Wst Bulldogs"
+            ],
+            "openMarketCount": 2,
+            "futureMarketCount": 0,
+            "nonFutureMarketCount": 2,
+            "markets": [
+                {
+                    "id": "117891648",
+                    "name": "AFL R19 Brisbane-Wst Bulldogs 18/07",
+                    "shortName": "AFL R19 Bris-WBdg NxRdHH",
+                    "betOption": "Head To Head",
+                    "betOptionSpectrumId": "72",
+                    "betOptionPriority": 445,
+                    "marketUniqueId": 117891648,
+                    "closeTime": "2025-07-18T09:40:00.000Z",
+                    "bettingStatus": "Open",
+                    "message": null,
+                    "informationMessage": null,
+                    "isFuture": false,
+                    "onlineBetting": true,
+                    "phoneBettingOnly": false,
+                    "inPlay": false,
+                    "goingInPlay": false,
+                    "allowWin": true,
+                    "allowPlace": false,
+                    "allowEachWay": false,
+                    "allowMulti": true,
+                    "allowMultiWin": true,
+                    "allowMultiPlace": false,
+                    "allowMultiEachWay": false,
+                    "numberOfPlaces": 0,
+                    "cashOutEligibility": "PreMatch",
+                    "allowBundle": false,
+                    "propositions": [
+                        {
+                            "id": "2568",
+                            "name": "Brisbane",
+                            "returnWin": 1.58,
+                            "returnPlace": 0,
+                            "differential": null,
+                            "bettingStatus": "Open",
+                            "allowPlace": false,
+                            "number": 2568,
+                            "isOpen": true,
+                            "sortOrder": 1,
+                            "position": "HOME"
+                        },
+                        {
+                            "id": "2569",
+                            "name": "Wst Bulldogs",
+                            "returnWin": 2.4,
+                            "returnPlace": 0,
+                            "differential": null,
+                            "bettingStatus": "Open",
+                            "allowPlace": false,
+                            "number": 2569,
+                            "isOpen": true,
+                            "sortOrder": 2,
+                            "position": "AWAY"
+                        }
+                    ]
+                },
+                {
+                    "id": "117891649",
+                    "name": "AFL R19 Brisbane-Wst Bulldogs 18/07",
+                    "shortName": "AFL R19 Bris-WBdg NxRdLn",
+                    "betOption": "Line",
+                    "betOptionSpectrumId": "43",
+                    "betOptionPriority": 1355,
+                    "marketUniqueId": 117891649,
+                    "closeTime": "2025-07-18T09:40:00.000Z",
+                    "bettingStatus": "Open",
+                    "message": null,
+                    "informationMessage": null,
+                    "isFuture": false,
+                    "onlineBetting": true,
+                    "phoneBettingOnly": false,
+                    "inPlay": false,
+                    "goingInPlay": false,
+                    "allowWin": true,
+                    "allowPlace": false,
+                    "allowEachWay": false,
+                    "allowMulti": true,
+                    "allowMultiWin": true,
+                    "allowMultiPlace": false,
+                    "allowMultiEachWay": false,
+                    "numberOfPlaces": 0,
+                    "cashOutEligibility": "Enabled",
+                    "allowBundle": false,
+                    "propositions": [
+                        {
+                            "id": "2576",
+                            "name": "Brisbane -9.5",
+                            "returnWin": 1.9,
+                            "returnPlace": 0,
+                            "differential": null,
+                            "bettingStatus": "Open",
+                            "allowPlace": false,
+                            "number": 2576,
+                            "isOpen": true,
+                            "sortOrder": 5,
+                            "line": "-9.5"
+                        },
+                        {
+                            "id": "2577",
+                            "name": "Wst Bulldogs +9.5",
+                            "returnWin": 1.9,
+                            "returnPlace": 0,
+                            "differential": null,
+                            "bettingStatus": "Open",
+                            "allowPlace": false,
+                            "number": 2577,
+                            "isOpen": true,
+                            "sortOrder": 6,
+                            "line": "+9.5"
+                        }
+                    ]
+                }
+            ],
+            "inPlay": false,
+            "goingInPlay": false,
+            "stats": true
+        },
+        {
             "id": "HawvPtA",
             "name": "Hawthorn v Port Adelaide",
             "spectrumId": "HawvPtA",
@@ -136044,80 +133578,80 @@
             "stats": true
         },
         {
-            "id": "ColvFre",
-            "name": "Collingwood v Fremantle",
-            "spectrumId": "ColvFre",
-            "spectrumUniqueId": 2933873,
+            "id": "GeevStK",
+            "name": "Geelong v St Kilda",
+            "spectrumId": "GeevStK",
+            "spectrumUniqueId": 2933872,
             "competitionSpectrumId": "102",
             "round": "19",
             "broadcastChannel": "Fox Footy",
             "broadcastChannels": [
                 "Fox Footy"
             ],
-            "startTime": "2025-07-20T05:20:00.000Z",
+            "startTime": "2025-07-20T03:10:00.000Z",
             "_links": {
-                "self": "https://api.beta.tab.com.au/v1/tab-info-service/sports/AFL%20Football/competitions/AFL/matches/Collingwood%20v%20Fremantle?jurisdiction=SA&homeState=SA",
-                "selfTemplate": "https://api.beta.tab.com.au/v1/tab-info-service/sports/AFL%20Football/competitions/AFL/matches/Collingwood%20v%20Fremantle?jurisdiction={jurisdiction}{&returnPromo,returnOffers,returnMultiOnly,channelType,cashSales,homeState}",
-                "markets": "https://api.beta.tab.com.au/v1/tab-info-service/sports/AFL%20Football/competitions/AFL/matches/Collingwood%20v%20Fremantle/markets?jurisdiction=SA&homeState=SA",
-                "stats": "https://api.beta.tab.com.au/v1/stats-service/sports/AFL%20Football/competitions/AFL/matches/2933873/h2h/stats"
+                "self": "https://api.beta.tab.com.au/v1/tab-info-service/sports/AFL%20Football/competitions/AFL/matches/Geelong%20v%20St%20Kilda?jurisdiction=SA&homeState=SA",
+                "selfTemplate": "https://api.beta.tab.com.au/v1/tab-info-service/sports/AFL%20Football/competitions/AFL/matches/Geelong%20v%20St%20Kilda?jurisdiction={jurisdiction}{&returnPromo,returnOffers,returnMultiOnly,channelType,cashSales,homeState}",
+                "markets": "https://api.beta.tab.com.au/v1/tab-info-service/sports/AFL%20Football/competitions/AFL/matches/Geelong%20v%20St%20Kilda/markets?jurisdiction=SA&homeState=SA",
+                "stats": "https://api.beta.tab.com.au/v1/stats-service/sports/AFL%20Football/competitions/AFL/matches/2933872/h2h/stats"
             },
             "contestants": [
                 {
-                    "name": "Collingwood",
+                    "name": "Geelong",
                     "position": "HOME",
                     "isHome": true,
                     "image": [
                         {
                             "size": "svg",
-                            "url": "https://metadata.beta.tab.com.au/icons/AFL/Collingwood.svg"
+                            "url": "https://metadata.beta.tab.com.au/icons/AFL/Geelong.svg"
                         },
                         {
                             "size": "xxhdpi",
-                            "url": "https://metadata.beta.tab.com.au/icons/AFL/Collingwood_xxhdpi.png"
+                            "url": "https://metadata.beta.tab.com.au/icons/AFL/Geelong_xxhdpi.png"
                         },
                         {
                             "size": "2x",
-                            "url": "https://metadata.beta.tab.com.au/icons/AFL/Collingwood%402x.png"
+                            "url": "https://metadata.beta.tab.com.au/icons/AFL/Geelong%402x.png"
                         }
                     ]
                 },
                 {
-                    "name": "Fremantle",
+                    "name": "St Kilda",
                     "position": "AWAY",
                     "isHome": false,
                     "image": [
                         {
                             "size": "svg",
-                            "url": "https://metadata.beta.tab.com.au/icons/AFL/Fremantle%20Dockers.svg"
+                            "url": "https://metadata.beta.tab.com.au/icons/AFL/St%20Kilda.svg"
                         },
                         {
                             "size": "xxhdpi",
-                            "url": "https://metadata.beta.tab.com.au/icons/AFL/Fremantle%20Dockers_xxhdpi.png"
+                            "url": "https://metadata.beta.tab.com.au/icons/AFL/St%20Kilda_xxhdpi.png"
                         },
                         {
                             "size": "2x",
-                            "url": "https://metadata.beta.tab.com.au/icons/AFL/Fremantle%20Dockers%402x.png"
+                            "url": "https://metadata.beta.tab.com.au/icons/AFL/St%20Kilda%402x.png"
                         }
                     ]
                 }
             ],
             "competitors": [
-                "Collingwood",
-                "Fremantle"
+                "Geelong",
+                "St Kilda"
             ],
             "openMarketCount": 2,
             "futureMarketCount": 0,
             "nonFutureMarketCount": 2,
             "markets": [
                 {
-                    "id": "117891652",
-                    "name": "AFL R19 Collingwood-Fremantle 20/07",
-                    "shortName": "AFL R19 Coll-Frem NxRdHH",
+                    "id": "117891656",
+                    "name": "AFL R19 Geelong-St Kilda 20/07",
+                    "shortName": "AFL R19 Geel-StK NxRdHH",
                     "betOption": "Head To Head",
                     "betOptionSpectrumId": "72",
                     "betOptionPriority": 445,
-                    "marketUniqueId": 117891652,
-                    "closeTime": "2025-07-20T05:20:00.000Z",
+                    "marketUniqueId": 117891656,
+                    "closeTime": "2025-07-20T03:10:00.000Z",
                     "bettingStatus": "Open",
                     "message": null,
                     "informationMessage": null,
@@ -136138,27 +133672,27 @@
                     "allowBundle": false,
                     "propositions": [
                         {
-                            "id": "2677",
-                            "name": "Collingwood",
-                            "returnWin": 1.28,
+                            "id": "2661",
+                            "name": "Geelong",
+                            "returnWin": 1.15,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
                             "allowPlace": false,
-                            "number": 2677,
+                            "number": 2661,
                             "isOpen": true,
                             "sortOrder": 1,
                             "position": "HOME"
                         },
                         {
-                            "id": "2678",
-                            "name": "Fremantle",
-                            "returnWin": 3.7,
+                            "id": "2662",
+                            "name": "St Kilda",
+                            "returnWin": 5.5,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
                             "allowPlace": false,
-                            "number": 2678,
+                            "number": 2662,
                             "isOpen": true,
                             "sortOrder": 2,
                             "position": "AWAY"
@@ -136166,14 +133700,14 @@
                     ]
                 },
                 {
-                    "id": "117891653",
-                    "name": "AFL R19 Collingwood-Fremantle 20/07",
-                    "shortName": "AFL R19 Coll-Frem NxRdLn",
+                    "id": "117891657",
+                    "name": "AFL R19 Geelong-St Kilda 20/07",
+                    "shortName": "AFL R19 Geel-StK NxRdLn",
                     "betOption": "Line",
                     "betOptionSpectrumId": "43",
                     "betOptionPriority": 1355,
-                    "marketUniqueId": 117891653,
-                    "closeTime": "2025-07-20T05:20:00.000Z",
+                    "marketUniqueId": 117891657,
+                    "closeTime": "2025-07-20T03:10:00.000Z",
                     "bettingStatus": "Open",
                     "message": null,
                     "informationMessage": null,
@@ -136194,30 +133728,30 @@
                     "allowBundle": false,
                     "propositions": [
                         {
-                            "id": "2683",
-                            "name": "Collingwood -22.5",
+                            "id": "2666",
+                            "name": "Geelong -32.5",
                             "returnWin": 1.9,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
                             "allowPlace": false,
-                            "number": 2683,
+                            "number": 2666,
                             "isOpen": true,
                             "sortOrder": 3,
-                            "line": "-22.5"
+                            "line": "-32.5"
                         },
                         {
-                            "id": "2684",
-                            "name": "Fremantle +22.5",
+                            "id": "2667",
+                            "name": "St Kilda +32.5",
                             "returnWin": 1.9,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
                             "allowPlace": false,
-                            "number": 2684,
+                            "number": 2667,
                             "isOpen": true,
                             "sortOrder": 4,
-                            "line": "+22.5"
+                            "line": "+32.5"
                         }
                     ]
                 }
@@ -136227,86 +133761,87 @@
             "stats": true
         },
         {
-            "id": "RchvEss",
-            "name": "Richmond v Essendon",
-            "spectrumId": "RchvEss",
-            "spectrumUniqueId": 2926959,
+            "id": "AdlvGCs",
+            "name": "Adelaide v Gold Coast",
+            "spectrumId": "AdlvGCs",
+            "spectrumUniqueId": 2933874,
             "competitionSpectrumId": "102",
-            "round": "18",
+            "round": "19",
             "broadcastChannel": "Fox Footy",
             "broadcastChannels": [
                 "Fox Footy"
             ],
-            "startTime": "2025-07-12T09:36:00.000Z",
+            "startTime": "2025-07-20T06:40:00.000Z",
             "_links": {
-                "self": "https://api.beta.tab.com.au/v1/tab-info-service/sports/AFL%20Football/competitions/AFL/matches/Richmond%20v%20Essendon?jurisdiction=SA&homeState=SA",
-                "selfTemplate": "https://api.beta.tab.com.au/v1/tab-info-service/sports/AFL%20Football/competitions/AFL/matches/Richmond%20v%20Essendon?jurisdiction={jurisdiction}{&returnPromo,returnOffers,returnMultiOnly,channelType,cashSales,homeState}",
-                "markets": "https://api.beta.tab.com.au/v1/tab-info-service/sports/AFL%20Football/competitions/AFL/matches/Richmond%20v%20Essendon/markets?jurisdiction=SA&homeState=SA"
+                "self": "https://api.beta.tab.com.au/v1/tab-info-service/sports/AFL%20Football/competitions/AFL/matches/Adelaide%20v%20Gold%20Coast?jurisdiction=SA&homeState=SA",
+                "selfTemplate": "https://api.beta.tab.com.au/v1/tab-info-service/sports/AFL%20Football/competitions/AFL/matches/Adelaide%20v%20Gold%20Coast?jurisdiction={jurisdiction}{&returnPromo,returnOffers,returnMultiOnly,channelType,cashSales,homeState}",
+                "markets": "https://api.beta.tab.com.au/v1/tab-info-service/sports/AFL%20Football/competitions/AFL/matches/Adelaide%20v%20Gold%20Coast/markets?jurisdiction=SA&homeState=SA",
+                "stats": "https://api.beta.tab.com.au/v1/stats-service/sports/AFL%20Football/competitions/AFL/matches/2933874/h2h/stats"
             },
             "contestants": [
                 {
-                    "name": "Richmond",
+                    "name": "Adelaide",
                     "position": "HOME",
                     "isHome": true,
                     "image": [
                         {
                             "size": "svg",
-                            "url": "https://metadata.beta.tab.com.au/icons/AFL/Richmond.svg"
+                            "url": "https://metadata.beta.tab.com.au/icons/AFL/Adelaide.svg"
                         },
                         {
                             "size": "xxhdpi",
-                            "url": "https://metadata.beta.tab.com.au/icons/AFL/Richmond_xxhdpi.png"
+                            "url": "https://metadata.beta.tab.com.au/icons/AFL/Adelaide_xxhdpi.png"
                         },
                         {
                             "size": "2x",
-                            "url": "https://metadata.beta.tab.com.au/icons/AFL/Richmond%402x.png"
+                            "url": "https://metadata.beta.tab.com.au/icons/AFL/Adelaide%402x.png"
                         }
                     ]
                 },
                 {
-                    "name": "Essendon",
+                    "name": "Gold Coast",
                     "position": "AWAY",
                     "isHome": false,
                     "image": [
                         {
                             "size": "svg",
-                            "url": "https://metadata.beta.tab.com.au/icons/AFL/Essendon.svg"
+                            "url": "https://metadata.beta.tab.com.au/icons/AFL/Gold%20Coast.svg"
                         },
                         {
                             "size": "xxhdpi",
-                            "url": "https://metadata.beta.tab.com.au/icons/AFL/Essendon_xxhdpi.png"
+                            "url": "https://metadata.beta.tab.com.au/icons/AFL/Gold%20Coast_xxhdpi.png"
                         },
                         {
                             "size": "2x",
-                            "url": "https://metadata.beta.tab.com.au/icons/AFL/Essendon%402x.png"
+                            "url": "https://metadata.beta.tab.com.au/icons/AFL/Gold%20Coast%402x.png"
                         }
                     ]
                 }
             ],
             "competitors": [
-                "Richmond",
-                "Essendon"
+                "Adelaide",
+                "Gold Coast"
             ],
-            "openMarketCount": 1,
+            "openMarketCount": 2,
             "futureMarketCount": 0,
-            "nonFutureMarketCount": 1,
+            "nonFutureMarketCount": 2,
             "markets": [
                 {
-                    "id": "118111940",
-                    "name": "AFL Richmond-Ess LiveLine -4.5",
-                    "shortName": "AFL Rch-Ess LveLne -4.5",
-                    "betOption": "Live Lines",
-                    "betOptionSpectrumId": "235",
-                    "betOptionPriority": 2470,
-                    "marketUniqueId": 118111940,
-                    "closeTime": "2025-07-12T09:36:00.000Z",
-                    "bettingStatus": "Suspended",
+                    "id": "117891646",
+                    "name": "AFL R19 Adelaide-Gold Coast 20/07",
+                    "shortName": "AFL R19 Adl-GCst NxRdHH",
+                    "betOption": "Head To Head",
+                    "betOptionSpectrumId": "72",
+                    "betOptionPriority": 445,
+                    "marketUniqueId": 117891646,
+                    "closeTime": "2025-07-20T06:40:00.000Z",
+                    "bettingStatus": "Open",
                     "message": null,
                     "informationMessage": null,
                     "isFuture": false,
-                    "onlineBetting": false,
-                    "phoneBettingOnly": true,
-                    "inPlay": true,
+                    "onlineBetting": true,
+                    "phoneBettingOnly": false,
+                    "inPlay": false,
                     "goingInPlay": false,
                     "allowWin": true,
                     "allowPlace": false,
@@ -136316,40 +133851,97 @@
                     "allowMultiPlace": false,
                     "allowMultiEachWay": false,
                     "numberOfPlaces": 0,
-                    "cashOutEligibility": "Disabled",
+                    "cashOutEligibility": "PreMatch",
                     "allowBundle": false,
                     "propositions": [
                         {
-                            "id": "23899",
-                            "name": "Richmond -4.5",
-                            "returnWin": 1.28,
+                            "id": "2691",
+                            "name": "Adelaide",
+                            "returnWin": 1.4,
                             "returnPlace": 0,
                             "differential": null,
-                            "bettingStatus": "Suspended",
+                            "bettingStatus": "Open",
                             "allowPlace": false,
-                            "number": 23899,
-                            "isOpen": false,
+                            "number": 2691,
+                            "isOpen": true,
                             "sortOrder": 1,
-                            "line": "-4.5"
+                            "position": "HOME"
                         },
                         {
-                            "id": "23900",
-                            "name": "Essendon +4.5",
-                            "returnWin": 3.5,
+                            "id": "2692",
+                            "name": "Gold Coast",
+                            "returnWin": 2.95,
                             "returnPlace": 0,
                             "differential": null,
-                            "bettingStatus": "Suspended",
+                            "bettingStatus": "Open",
                             "allowPlace": false,
-                            "number": 23900,
-                            "isOpen": false,
+                            "number": 2692,
+                            "isOpen": true,
                             "sortOrder": 2,
-                            "line": "+4.5"
+                            "position": "AWAY"
+                        }
+                    ]
+                },
+                {
+                    "id": "117891647",
+                    "name": "AFL R19 Adelaide-Gold Coast 20/07",
+                    "shortName": "AFL R19 Adl-GCst NxRdLn",
+                    "betOption": "Line",
+                    "betOptionSpectrumId": "43",
+                    "betOptionPriority": 1355,
+                    "marketUniqueId": 117891647,
+                    "closeTime": "2025-07-20T06:40:00.000Z",
+                    "bettingStatus": "Open",
+                    "message": null,
+                    "informationMessage": null,
+                    "isFuture": false,
+                    "onlineBetting": true,
+                    "phoneBettingOnly": false,
+                    "inPlay": false,
+                    "goingInPlay": false,
+                    "allowWin": true,
+                    "allowPlace": false,
+                    "allowEachWay": false,
+                    "allowMulti": true,
+                    "allowMultiWin": true,
+                    "allowMultiPlace": false,
+                    "allowMultiEachWay": false,
+                    "numberOfPlaces": 0,
+                    "cashOutEligibility": "Enabled",
+                    "allowBundle": false,
+                    "propositions": [
+                        {
+                            "id": "2697",
+                            "name": "Adelaide -15.5",
+                            "returnWin": 1.9,
+                            "returnPlace": 0,
+                            "differential": null,
+                            "bettingStatus": "Open",
+                            "allowPlace": false,
+                            "number": 2697,
+                            "isOpen": true,
+                            "sortOrder": 5,
+                            "line": "-15.5"
+                        },
+                        {
+                            "id": "2698",
+                            "name": "Gold Coast +15.5",
+                            "returnWin": 1.9,
+                            "returnPlace": 0,
+                            "differential": null,
+                            "bettingStatus": "Open",
+                            "allowPlace": false,
+                            "number": 2698,
+                            "isOpen": true,
+                            "sortOrder": 6,
+                            "line": "+15.5"
                         }
                     ]
                 }
             ],
-            "inPlay": true,
-            "goingInPlay": false
+            "inPlay": false,
+            "goingInPlay": false,
+            "stats": true
         }
     ],
     "tournaments": [],
@@ -136359,7 +133951,6 @@
         "First Goalscorer",
         "Top Goal Scorer",
         "Line",
-        "Live Lines",
         "Margin",
         "Tri Bet",
         "Margin (1-24)",
@@ -136443,7 +134034,6 @@
         "Home Total Points Alternate",
         "Away Total Points",
         "Away Total Points Alternate",
-        "Total Score 3-Way",
         "Last Goalscorer",
         "Player Goals Head to Head A",
         "Player Goals Head to Head B",
@@ -136562,17 +134152,11 @@
         "3rd Quarter Last Scoring Play",
         "4th Quarter Result",
         "4th Quarter Head to Head",
-        "Live 4th Quarter Head to Head",
         "4th Quarter Line",
-        "Live 4th Quarter Line",
         "4th Quarter 1st Goal Scorer",
         "To Kick a Goal (4th Quarter)",
-        "4th Quarter Line/OverUnder Double",
-        "4th Quarter Goals",
         "4th Quarter Margin (1-6)",
         "4th Quarter Margin (1-12)",
-        "Live 4th Quarter Margin",
-        "4th Quarter Winning Margin",
         "4th Quarter Super Margin",
         "4th Quarter Time of 1st Goal O/U",
         "4th Quarter Total Points",
@@ -136589,7 +134173,6 @@
         "4th Quarter Last Scoring Play",
         "Highest Scoring Half",
         "Highest Scoring Quarter",
-        "4th Quarter Tri Bet",
         "Team With Highest Scoring Half",
         "Home Team Highest Scoring Half",
         "Away Team Highest Scoring Half",
@@ -136609,7 +134192,7 @@
         {
             "name": "Head To Head",
             "hasFutureMarket": false,
-            "openMarketCount": 8,
+            "openMarketCount": 9,
             "_links": {
                 "markets": "https://api.beta.tab.com.au/v1/tab-info-service/sports/AFL%20Football/competitions/AFL/markets?jurisdiction=SA&betOptionName=Head%20To%20Head&homeState=SA"
             }
@@ -136633,23 +134216,15 @@
         {
             "name": "Line",
             "hasFutureMarket": false,
-            "openMarketCount": 7,
+            "openMarketCount": 9,
             "_links": {
                 "markets": "https://api.beta.tab.com.au/v1/tab-info-service/sports/AFL%20Football/competitions/AFL/markets?jurisdiction=SA&betOptionName=Line&homeState=SA"
             }
         },
         {
-            "name": "Live Lines",
-            "hasFutureMarket": false,
-            "openMarketCount": 6,
-            "_links": {
-                "markets": "https://api.beta.tab.com.au/v1/tab-info-service/sports/AFL%20Football/competitions/AFL/markets?jurisdiction=SA&betOptionName=Live%20Lines&homeState=SA"
-            }
-        },
-        {
             "name": "Margin",
             "hasFutureMarket": false,
-            "openMarketCount": 4,
+            "openMarketCount": 3,
             "_links": {
                 "markets": "https://api.beta.tab.com.au/v1/tab-info-service/sports/AFL%20Football/competitions/AFL/markets?jurisdiction=SA&betOptionName=Margin&homeState=SA"
             }
@@ -136665,7 +134240,7 @@
         {
             "name": "Margin (1-24)",
             "hasFutureMarket": false,
-            "openMarketCount": 4,
+            "openMarketCount": 3,
             "_links": {
                 "markets": "https://api.beta.tab.com.au/v1/tab-info-service/sports/AFL%20Football/competitions/AFL/markets?jurisdiction=SA&betOptionName=Margin%20(1-24)&homeState=SA"
             }
@@ -137121,7 +134696,7 @@
         {
             "name": "Winning Margin (72pt)",
             "hasFutureMarket": false,
-            "openMarketCount": 4,
+            "openMarketCount": 3,
             "_links": {
                 "markets": "https://api.beta.tab.com.au/v1/tab-info-service/sports/AFL%20Football/competitions/AFL/markets?jurisdiction=SA&betOptionName=Winning%20Margin%20(72pt)&homeState=SA"
             }
@@ -137308,14 +134883,6 @@
             "openMarketCount": 3,
             "_links": {
                 "markets": "https://api.beta.tab.com.au/v1/tab-info-service/sports/AFL%20Football/competitions/AFL/markets?jurisdiction=SA&betOptionName=Away%20Total%20Points%20Alternate&homeState=SA"
-            }
-        },
-        {
-            "name": "Total Score 3-Way",
-            "hasFutureMarket": false,
-            "openMarketCount": 1,
-            "_links": {
-                "markets": "https://api.beta.tab.com.au/v1/tab-info-service/sports/AFL%20Football/competitions/AFL/markets?jurisdiction=SA&betOptionName=Total%20Score%203-Way&homeState=SA"
             }
         },
         {
@@ -138263,14 +135830,6 @@
             }
         },
         {
-            "name": "Live 4th Quarter Head to Head",
-            "hasFutureMarket": false,
-            "openMarketCount": 1,
-            "_links": {
-                "markets": "https://api.beta.tab.com.au/v1/tab-info-service/sports/AFL%20Football/competitions/AFL/markets?jurisdiction=SA&betOptionName=Live%204th%20Quarter%20Head%20to%20Head&homeState=SA"
-            }
-        },
-        {
             "name": "4th Quarter Line",
             "hasFutureMarket": false,
             "openMarketCount": 3,
@@ -138279,17 +135838,9 @@
             }
         },
         {
-            "name": "Live 4th Quarter Line",
-            "hasFutureMarket": false,
-            "openMarketCount": 1,
-            "_links": {
-                "markets": "https://api.beta.tab.com.au/v1/tab-info-service/sports/AFL%20Football/competitions/AFL/markets?jurisdiction=SA&betOptionName=Live%204th%20Quarter%20Line&homeState=SA"
-            }
-        },
-        {
             "name": "4th Quarter 1st Goal Scorer",
             "hasFutureMarket": false,
-            "openMarketCount": 4,
+            "openMarketCount": 3,
             "_links": {
                 "markets": "https://api.beta.tab.com.au/v1/tab-info-service/sports/AFL%20Football/competitions/AFL/markets?jurisdiction=SA&betOptionName=4th%20Quarter%201st%20Goal%20Scorer&homeState=SA"
             }
@@ -138297,25 +135848,9 @@
         {
             "name": "To Kick a Goal (4th Quarter)",
             "hasFutureMarket": false,
-            "openMarketCount": 4,
+            "openMarketCount": 3,
             "_links": {
                 "markets": "https://api.beta.tab.com.au/v1/tab-info-service/sports/AFL%20Football/competitions/AFL/markets?jurisdiction=SA&betOptionName=To%20Kick%20a%20Goal%20(4th%20Quarter)&homeState=SA"
-            }
-        },
-        {
-            "name": "4th Quarter Line/OverUnder Double",
-            "hasFutureMarket": false,
-            "openMarketCount": 1,
-            "_links": {
-                "markets": "https://api.beta.tab.com.au/v1/tab-info-service/sports/AFL%20Football/competitions/AFL/markets?jurisdiction=SA&betOptionName=4th%20Quarter%20Line%2FOverUnder%20Double&homeState=SA"
-            }
-        },
-        {
-            "name": "4th Quarter Goals",
-            "hasFutureMarket": false,
-            "openMarketCount": 1,
-            "_links": {
-                "markets": "https://api.beta.tab.com.au/v1/tab-info-service/sports/AFL%20Football/competitions/AFL/markets?jurisdiction=SA&betOptionName=4th%20Quarter%20Goals&homeState=SA"
             }
         },
         {
@@ -138332,22 +135867,6 @@
             "openMarketCount": 3,
             "_links": {
                 "markets": "https://api.beta.tab.com.au/v1/tab-info-service/sports/AFL%20Football/competitions/AFL/markets?jurisdiction=SA&betOptionName=4th%20Quarter%20Margin%20(1-12)&homeState=SA"
-            }
-        },
-        {
-            "name": "Live 4th Quarter Margin",
-            "hasFutureMarket": false,
-            "openMarketCount": 1,
-            "_links": {
-                "markets": "https://api.beta.tab.com.au/v1/tab-info-service/sports/AFL%20Football/competitions/AFL/markets?jurisdiction=SA&betOptionName=Live%204th%20Quarter%20Margin&homeState=SA"
-            }
-        },
-        {
-            "name": "4th Quarter Winning Margin",
-            "hasFutureMarket": false,
-            "openMarketCount": 1,
-            "_links": {
-                "markets": "https://api.beta.tab.com.au/v1/tab-info-service/sports/AFL%20Football/competitions/AFL/markets?jurisdiction=SA&betOptionName=4th%20Quarter%20Winning%20Margin&homeState=SA"
             }
         },
         {
@@ -138425,7 +135944,7 @@
         {
             "name": "4th Quarter 1st Scoring Play",
             "hasFutureMarket": false,
-            "openMarketCount": 3,
+            "openMarketCount": 2,
             "_links": {
                 "markets": "https://api.beta.tab.com.au/v1/tab-info-service/sports/AFL%20Football/competitions/AFL/markets?jurisdiction=SA&betOptionName=4th%20Quarter%201st%20Scoring%20Play&homeState=SA"
             }
@@ -138433,7 +135952,7 @@
         {
             "name": "4th Quarter Time of 1st Goal",
             "hasFutureMarket": false,
-            "openMarketCount": 3,
+            "openMarketCount": 2,
             "_links": {
                 "markets": "https://api.beta.tab.com.au/v1/tab-info-service/sports/AFL%20Football/competitions/AFL/markets?jurisdiction=SA&betOptionName=4th%20Quarter%20Time%20of%201st%20Goal&homeState=SA"
             }
@@ -138457,7 +135976,7 @@
         {
             "name": "4th Quarter Last Scoring Play",
             "hasFutureMarket": false,
-            "openMarketCount": 3,
+            "openMarketCount": 2,
             "_links": {
                 "markets": "https://api.beta.tab.com.au/v1/tab-info-service/sports/AFL%20Football/competitions/AFL/markets?jurisdiction=SA&betOptionName=4th%20Quarter%20Last%20Scoring%20Play&homeState=SA"
             }
@@ -138476,14 +135995,6 @@
             "openMarketCount": 3,
             "_links": {
                 "markets": "https://api.beta.tab.com.au/v1/tab-info-service/sports/AFL%20Football/competitions/AFL/markets?jurisdiction=SA&betOptionName=Highest%20Scoring%20Quarter&homeState=SA"
-            }
-        },
-        {
-            "name": "4th Quarter Tri Bet",
-            "hasFutureMarket": false,
-            "openMarketCount": 1,
-            "_links": {
-                "markets": "https://api.beta.tab.com.au/v1/tab-info-service/sports/AFL%20Football/competitions/AFL/markets?jurisdiction=SA&betOptionName=4th%20Quarter%20Tri%20Bet&homeState=SA"
             }
         },
         {
