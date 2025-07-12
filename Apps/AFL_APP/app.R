@@ -83,6 +83,8 @@ if (
   player_fantasy_data <- read_rds("../../Data/processed_odds/all_player_fantasy_points.rds")
   player_marks_data <- read_rds("../../Data/processed_odds/all_player_marks.rds")
   player_tackles_data <- read_rds("../../Data/processed_odds/all_player_tackles.rds")
+  player_kicks_data <- read_rds("../../Data/processed_odds/all_player_kicks.rds")
+  player_handballs_data <- read_rds("../../Data/processed_odds/all_player_handballs.rds")
 } else {
   # Google Sheets Data for other OS
   ss_name <- gs4_find("AFL Data")
@@ -125,13 +127,27 @@ player_tackles_data <-
   left_join(dvp_data, by = c("opposition_team", "Position", "market_name"), relationship = "many-to-one") |>
   relocate(Position, DVP_Category, .after = player_name)
 
+player_kicks_data <-
+  player_kicks_data |>
+  left_join(player_positions, relationship = "many-to-one") |>
+  left_join(dvp_data, by = c("opposition_team", "Position", "market_name"), relationship = "many-to-one") |>
+  relocate(Position, DVP_Category, .after = player_name)
+
+player_handballs_data <-
+  player_handballs_data |>
+  left_join(player_positions, relationship = "many-to-one") |>
+  left_join(dvp_data, by = c("opposition_team", "Position", "market_name"), relationship = "many-to-one") |>
+  relocate(Position, DVP_Category, .after = player_name)
+
 # List of players available in any odds dataset
 player_names_odds <- sort(unique(c(
   player_disposals_data$player_name,
   player_goals_data$player_name,
   player_fantasy_data$player_name,
   player_marks_data$player_name,
-  player_tackles_data$player_name
+  player_tackles_data$player_name,
+  player_kicks_data$player_name,
+  player_handballs_data$player_name
 )))
 
 # Add home_away variable
@@ -531,7 +547,7 @@ ui <- page_navbar(
           selected = "Tim English"
         ),
         selectInput("season_input_a", "Select Season:", choices = all_player_stats$season_name |> unique(), multiple = TRUE, selectize = TRUE, selected = c("2025","2024")),
-        selectInput("stat_input_a", "Select Statistic:", choices = c("Disposals", "Fantasy", "Tackles", "Marks", "Goals"), selected = "Disposals"),
+        selectInput("stat_input_a", "Select Statistic:", choices = c("Disposals", "Fantasy", "Tackles", "Marks", "Goals", "Kicks", "Handballs"), selected = "Disposals"),
         selectInput("opp_input_a", "Select Opposition:", choices = c(all_player_stats$opposition_team |> unique() |> sort()), multiple = TRUE),
         selectInput("venue_input_a", "Select Venue:", choices = c(all_player_stats$venue |> unique() |> sort()), multiple = TRUE),
         selectInput("weather_input_a", "Select Weather:", choices = c(all_player_stats$weather_category |> unique() |> sort()), multiple = TRUE),
@@ -751,7 +767,7 @@ ui <- page_navbar(
                 width = 3,
                 h4("Settings"),
                 selectInput("agency_input", "Select Agencies:", choices = agencies, multiple = TRUE, selectize = TRUE, selected = agencies),
-                selectInput("market_input", "Select Market:", choices = c("H2H", "Total","Line", "Disposals", "Fantasy", "Goals", "Marks", "Tackles"), multiple = FALSE),
+                selectInput("market_input", "Select Market:", choices = c("H2H", "Total","Line", "Disposals", "Fantasy", "Goals", "Marks", "Tackles", "Kicks", "Handballs"), multiple = FALSE),
                 selectInput("match_input", "Select Matches:", choices = h2h_data$match |> unique(), multiple = TRUE, selectize = FALSE, selected = h2h_data$match |> unique()),
                 selectInput("matchup_input", "Select Difficulty:", choices = player_disposals_data$DVP_Category |> unique(), multiple = TRUE, selectize = FALSE, selected = player_disposals_data$DVP_Category |> unique()),
                 selectInput(
@@ -796,7 +812,7 @@ ui <- page_navbar(
                    selected = "Clayton Oliver"
                  ),
                  selectInput("season_input", "Select Season:", choices = all_player_stats$season_name |> unique(), multiple = TRUE, selectize = TRUE, selected = c("2024")),
-                 selectInput("metric_input", "Select Statistic:", choices = c("Disposals", "Fantasy", "Goals", "Marks", "Tackles"), multiple = FALSE, selected = "Fantasy")
+                 selectInput("metric_input", "Select Statistic:", choices = c("Disposals", "Fantasy", "Goals", "Marks", "Tackles", "Kicks", "Handballs"), multiple = FALSE, selected = "Fantasy")
                )
              )
       ),
@@ -827,7 +843,7 @@ ui <- page_navbar(
                    selectize = TRUE,
                    selected = "Adam Treloar"
                  ),
-                 selectInput("metric_input_corr_a", "Select Statistic:", choices = c("Disposals", "Fantasy", "Goals", "Marks", "Tackles"), selected = "Disposals"),
+                 selectInput("metric_input_corr_a", "Select Statistic:", choices = c("Disposals", "Fantasy", "Goals", "Marks", "Tackles", "Kicks", "Handballs"), selected = "Disposals"),
                  numericInput("line_input_corr_a", "Player 1 Line:", value = 25, min = 0, max = 100, step = 0.5),
                  selectInput(
                    "teammate_name_corr",
@@ -836,7 +852,7 @@ ui <- page_navbar(
                    selectize = TRUE,
                    selected = "Tim English"
                  ),
-                 selectInput("metric_input_corr_b", "Select Statistic:", choices = c("Disposals", "Fantasy", "Goals", "Marks", "Tackles"), selected = "Disposals"),
+                 selectInput("metric_input_corr_b", "Select Statistic:", choices = c("Disposals", "Fantasy", "Goals", "Marks", "Tackles", "Kicks", "Handballs"), selected = "Disposals"),
                  numericInput("line_input_corr_b", "Player 2 Line:", value = 25, min = 0, max = 100, step = 0.5),
                  selectInput("season_input_corr", "Select Season:", choices = all_player_stats$season_name |> unique(), multiple = TRUE, selectize = TRUE, selected = c("2025","2024"))
                )
@@ -1860,6 +1876,50 @@ output$venue_specific_table <- renderDT({
     if (input$market_input == "Tackles") {
       odds <-
         player_tackles_data |>
+        mutate(variation = round(variation, 2)) |>
+        filter(agency %in% input$agency_input) |>
+        filter(match %in% input$match_input) |>
+        filter(DVP_Category  %in% input$matchup_input) |>
+        select(-any_of(
+          c(
+            "match",
+            "group_by_header",
+            "outcome_name",
+            "outcome_name_under",
+            "EventKey",
+            "MarketKey",
+            "OutcomeKey",
+            "OutcomeKey_unders"
+          )
+        ))
+    }
+    
+    # Kicks
+    if (input$market_input == "Kicks") {
+      odds <-
+        player_kicks_data |>
+        mutate(variation = round(variation, 2)) |>
+        filter(agency %in% input$agency_input) |>
+        filter(match %in% input$match_input) |>
+        filter(DVP_Category  %in% input$matchup_input) |>
+        select(-any_of(
+          c(
+            "match",
+            "group_by_header",
+            "outcome_name",
+            "outcome_name_under",
+            "EventKey",
+            "MarketKey",
+            "OutcomeKey",
+            "OutcomeKey_unders"
+          )
+        ))
+    }
+    
+    # Handballs
+    if (input$market_input == "Handballs") {
+      odds <-
+        player_handballs_data |>
         mutate(variation = round(variation, 2)) |>
         filter(agency %in% input$agency_input) |>
         filter(match %in% input$match_input) |>

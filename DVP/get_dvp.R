@@ -35,6 +35,8 @@ all_player_stats_2015_2025 <-
     start_time_utc,
     opposition_team,
     disposals,
+    kicks,
+    handballs,
     marks,
     tackles,
     fantasy_points,
@@ -92,12 +94,16 @@ get_dvp <- function(team, stat) {
               date = start_time_utc,
               tog_percentage,
               disposals,
+              kicks,
+              handballs,
               marks,
               tackles,
               fantasy_points,
               goals,
               Pos = pos_1_factor) |> 
     mutate(DisposalsPer100TOG = disposals / (tog_percentage/100),
+           KicksPer100TOG = kicks / (tog_percentage/100),
+           HandballsPer100TOG = handballs / (tog_percentage/100),
            MarksPer100TOG = marks / (tog_percentage/100),
            TacklesPer100TOG = tackles / (tog_percentage/100),
            GoalsPer100TOG = goals / (tog_percentage/100),
@@ -123,6 +129,8 @@ get_dvp <- function(team, stat) {
     stats_table_vs_team |> 
     group_by(Player, Pos, Team, Opponent) |> 
     summarise(med_disposals_vs = median(DisposalsPer100TOG, na.rm = TRUE),
+              med_kicks_vs = median(KicksPer100TOG, na.rm = TRUE),
+              med_handballs_vs = median(HandballsPer100TOG, na.rm = TRUE),
               med_marks_vs = median(MarksPer100TOG, na.rm = TRUE),
               med_tackles_vs = median(TacklesPer100TOG, na.rm = TRUE),
               med_goals_vs = mean(GoalsPer100TOG, na.rm = TRUE),
@@ -133,6 +141,8 @@ get_dvp <- function(team, stat) {
     stats_table_vs_others |> 
     group_by(Player, Pos, Team) |> 
     summarise(med_disposals_others = median(DisposalsPer100TOG, na.rm = TRUE),
+              med_kicks_others = median(KicksPer100TOG, na.rm = TRUE),
+              med_handballs_others = median(HandballsPer100TOG, na.rm = TRUE),
               med_marks_others = median(MarksPer100TOG, na.rm = TRUE),
               med_tackles_others = median(TacklesPer100TOG, na.rm = TRUE),
               med_goals_others = mean(GoalsPer100TOG, na.rm = TRUE),
@@ -147,13 +157,15 @@ get_dvp <- function(team, stat) {
               Team,
               Opponent,
               disposals_diff = med_disposals_vs - med_disposals_others,
+              kicks_diff = med_kicks_vs - med_kicks_others,
+              handballs_diff = med_handballs_vs - med_handballs_others,
               marks_diff = med_marks_vs - med_marks_others,
               tackles_diff = med_tackles_vs - med_tackles_others,
               goals_diff = med_goals_vs - med_goals_others,
               fantasy_points_diff = med_fantasy_points_vs - med_fantasy_points_others)
   
   # Get for desired stat
-  stat_var <- match.arg(stat, choices = c("disposals", "marks", "tackles", "fantasy_points", "goals"))
+  stat_var <- match.arg(stat, choices = c("disposals", "kicks", "handballs", "marks", "tackles", "fantasy_points", "goals"))
   diff_var <- paste0(stat_var, "_diff")
   
   dvp_data |> 
@@ -209,6 +221,20 @@ goals_dvp <-
   bind_rows() |> 
   arrange(Pos, desc(median_diff))
 
+# Get kicks DVP
+kicks_dvp <-
+  team_list |> 
+  map_df(get_dvp, stat = "kicks") |> 
+  bind_rows() |> 
+  arrange(Pos, desc(median_diff))
+
+# Get handballs DVP
+handballs_dvp <-
+  team_list |> 
+  map_df(get_dvp, stat = "handballs") |> 
+  bind_rows() |> 
+  arrange(Pos, desc(median_diff))
+
 #===============================================================================
 # Save Data
 #===============================================================================
@@ -244,9 +270,23 @@ goals_dvp_combine <-
   mutate(dvp = 0.8*dvp) |> 
   mutate(market_name = "Player Goals")
 
+kicks_dvp_combine <-
+  kicks_dvp |> 
+  rename(dvp = median_diff) |> 
+  mutate(dvp = 0.8*dvp) |> 
+  mutate(market_name = "Player Kicks")
+
+handballs_dvp_combine <-
+  handballs_dvp |> 
+  rename(dvp = median_diff) |> 
+  mutate(dvp = 0.8*dvp) |> 
+  mutate(market_name = "Player Handballs")
+
 # Combine
 dvp_data <-
   bind_rows(disposals_dvp_combine,
+            kicks_dvp_combine,
+            handballs_dvp_combine,
             marks_dvp_combine,
             tackles_dvp_combine,
             fantasy_points_dvp_combine,

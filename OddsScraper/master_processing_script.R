@@ -11,8 +11,8 @@ plan(multisession)
 # Get empirical probability function
 source("Functions/get_empirical_probabilities_last_n.R")
 
-# Read in 2024 empirical probabilities
-empirical_probabilities_2024 <- read_rds("Data/empirical_probabilities_2024.rds")
+# Read in 2025 empirical probabilities
+empirical_probabilities_2025 <- read_rds("Data/empirical_probabilities_2025.rds")
 
 # Get fixtures data
 current_season_fixture <- read_rds("Data/current_fixture.rds")
@@ -164,12 +164,12 @@ distinct_disposal_combos <-
   rename(player_full_name = player_name) |> 
   mutate(stat = "disposals")
 
-player_emp_probs_2024 <-
-  empirical_probabilities_2024 |>
+player_emp_probs_2025 <-
+  empirical_probabilities_2025 |>
   filter(stat == "disposals") |>
   select(-stat) |> 
   rename(player_name = player_full_name,
-         empirical_prob_over_2024 = emp_prob_2024)
+         empirical_prob_over_2025 = emp_prob_2025)
   
 player_emp_probs_last_n <-
   future_pmap(distinct_disposal_combos, get_empirical_prob, .progress = TRUE) |>
@@ -182,20 +182,20 @@ all_player_disposals <-
     implied_prob_over = 1 / over_price,
     implied_prob_under = 1 / under_price
   ) |>
-  left_join(player_emp_probs_2024, by = c("player_name", "line")) |>
+  left_join(player_emp_probs_2025, by = c("player_name", "line")) |>
   left_join(player_emp_probs_last_n, by = c("player_name", "line")) |>
-  mutate(empirical_prob_under_2024 = 1 - empirical_prob_over_2024) |> 
+  mutate(empirical_prob_under_2025 = 1 - empirical_prob_over_2025) |> 
   mutate(empirical_prop_under_last_3 = 1 - emp_prob_last_3,
          empirical_prop_under_last_5 = 1 - emp_prob_last_5,
          empirical_prop_under_last_7 = 1 - emp_prob_last_7,
          empirical_prop_under_last_10 = 1 - emp_prob_last_10) |> 
   mutate(
-    diff_over_2024 = empirical_prob_over_2024 - implied_prob_over,
+    diff_over_2025 = empirical_prob_over_2025 - implied_prob_over,
     diff_over_last_3 = emp_prob_last_3 - implied_prob_over,
     diff_over_last_5 = emp_prob_last_5 - implied_prob_over,
     diff_over_last_7 = emp_prob_last_7 - implied_prob_over,
     diff_over_last_10 = emp_prob_last_10 - implied_prob_over,
-    diff_under_2024 = empirical_prob_under_2024 - implied_prob_under,
+    diff_under_2025 = empirical_prob_under_2025 - implied_prob_under,
     diff_under_last_3 = empirical_prop_under_last_3 - implied_prob_under,
     diff_under_last_5 = empirical_prop_under_last_5 - implied_prob_under,
     diff_under_last_7 = empirical_prop_under_last_7 - implied_prob_under,
@@ -244,12 +244,12 @@ distinct_goal_combos <-
   rename(player_full_name = player_name) |> 
   mutate(stat = "goals")
 
-player_emp_probs_2024 <-
-  empirical_probabilities_2024 |>
+player_emp_probs_2025 <-
+  empirical_probabilities_2025 |>
   filter(stat == "goals") |>
   select(-stat) |> 
   rename(player_name = player_full_name,
-         empirical_prob_over_2024 = emp_prob_2024)
+         empirical_prob_over_2025 = emp_prob_2025)
 
 player_emp_probs_last_n <-
   future_pmap(distinct_goal_combos, get_empirical_prob, .progress = TRUE) |>
@@ -262,20 +262,20 @@ all_player_goals <-
     implied_prob_over = 1 / over_price,
     implied_prob_under = 1 / under_price
   ) |>
-  left_join(player_emp_probs_2024, by = c("player_name", "line")) |>
+  left_join(player_emp_probs_2025, by = c("player_name", "line")) |>
   left_join(player_emp_probs_last_n, by = c("player_name", "line")) |>
-  mutate(empirical_prob_under_2024 = 1 - empirical_prob_over_2024) |>
+  mutate(empirical_prob_under_2025 = 1 - empirical_prob_over_2025) |>
   mutate(empirical_prop_under_last_3 = 1 - emp_prob_last_3,
          empirical_prop_under_last_5 = 1 - emp_prob_last_5,
          empirical_prop_under_last_7 = 1 - emp_prob_last_7,
          empirical_prop_under_last_10 = 1 - emp_prob_last_10) |> 
   mutate(
-    diff_over_2024 = empirical_prob_over_2024 - implied_prob_over,
+    diff_over_2025 = empirical_prob_over_2025 - implied_prob_over,
     diff_over_last_3 = emp_prob_last_3 - implied_prob_over,
     diff_over_last_5 = emp_prob_last_5 - implied_prob_over,
     diff_over_last_7 = emp_prob_last_7 - implied_prob_over,
     diff_over_last_10 = emp_prob_last_10 - implied_prob_over,
-    diff_under_2024 = empirical_prob_under_2024 - implied_prob_under,
+    diff_under_2025 = empirical_prob_under_2025 - implied_prob_under,
     diff_under_last_3 = empirical_prop_under_last_3 - implied_prob_under,
     diff_under_last_5 = empirical_prop_under_last_5 - implied_prob_under,
     diff_under_last_7 = empirical_prop_under_last_7 - implied_prob_under,
@@ -324,12 +324,12 @@ distinct_point_combos <-
   rename(player_full_name = player_name) |>
   mutate(stat = "fantasy_points")
 
-player_emp_probs_2024 <-
-  empirical_probabilities_2024 |>
+player_emp_probs_2025 <-
+  empirical_probabilities_2025 |>
   filter(stat == "fantasy_points") |>
   select(-stat) |> 
   rename(player_name = player_full_name,
-         empirical_prob_over_2024 = emp_prob_2024)
+         empirical_prob_over_2025 = emp_prob_2025)
 
 player_emp_probs_last_n <-
   future_pmap(distinct_point_combos, get_empirical_prob, .progress = TRUE) |>
@@ -342,20 +342,20 @@ all_player_fantasy_points <-
     implied_prob_over = 1 / over_price,
     implied_prob_under = 1 / under_price
   ) |>
-  left_join(player_emp_probs_2024, by = c("player_name", "line")) |>
+  left_join(player_emp_probs_2025, by = c("player_name", "line")) |>
   left_join(player_emp_probs_last_n, by = c("player_name", "line")) |>
-  mutate(empirical_prob_under_2024 = 1 - empirical_prob_over_2024) |>
+  mutate(empirical_prob_under_2025 = 1 - empirical_prob_over_2025) |>
   mutate(empirical_prop_under_last_3 = 1 - emp_prob_last_3,
          empirical_prop_under_last_5 = 1 - emp_prob_last_5,
          empirical_prop_under_last_7 = 1 - emp_prob_last_7,
          empirical_prop_under_last_10 = 1 - emp_prob_last_10) |>
   mutate(
-    diff_over_2024 = empirical_prob_over_2024 - implied_prob_over,
+    diff_over_2025 = empirical_prob_over_2025 - implied_prob_over,
     diff_over_last_3 = emp_prob_last_3 - implied_prob_over,
     diff_over_last_5 = emp_prob_last_5 - implied_prob_over,
     diff_over_last_7 = emp_prob_last_7 - implied_prob_over,
     diff_over_last_10 = emp_prob_last_10 - implied_prob_over,
-    diff_under_2024 = empirical_prob_under_2024 - implied_prob_under,
+    diff_under_2025 = empirical_prob_under_2025 - implied_prob_under,
     diff_under_last_3 = empirical_prop_under_last_3 - implied_prob_under,
     diff_under_last_5 = empirical_prop_under_last_5 - implied_prob_under,
     diff_under_last_7 = empirical_prop_under_last_7 - implied_prob_under,
@@ -404,12 +404,12 @@ distinct_mark_combos <-
   rename(player_full_name = player_name) |> 
   mutate(stat = "marks")
 
-player_emp_probs_2024 <-
-  empirical_probabilities_2024 |>
+player_emp_probs_2025 <-
+  empirical_probabilities_2025 |>
   filter(stat == "marks") |>
   select(-stat) |> 
   rename(player_name = player_full_name,
-         empirical_prob_over_2024 = emp_prob_2024)
+         empirical_prob_over_2025 = emp_prob_2025)
 
 player_emp_probs_last_n <-
   future_pmap(distinct_mark_combos, get_empirical_prob, .progress = TRUE) |>
@@ -421,10 +421,10 @@ all_player_marks <-
   mutate(
     implied_prob_over = 1 / over_price
   ) |>
-  left_join(player_emp_probs_2024, by = c("player_name", "line")) |>
+  left_join(player_emp_probs_2025, by = c("player_name", "line")) |>
   left_join(player_emp_probs_last_n, by = c("player_name", "line")) |>
   mutate(
-    diff_over_2024 = empirical_prob_over_2024 - implied_prob_over,
+    diff_over_2025 = empirical_prob_over_2025 - implied_prob_over,
     diff_over_last_3 = emp_prob_last_3 - implied_prob_over,
     diff_over_last_5 = emp_prob_last_5 - implied_prob_over,
     diff_over_last_7 = emp_prob_last_7 - implied_prob_over,
@@ -473,12 +473,12 @@ distinct_tackle_combos <-
   rename(player_full_name = player_name) |> 
   mutate(stat = "tackles")
 
-player_emp_probs_2024 <-
-  empirical_probabilities_2024 |>
+player_emp_probs_2025 <-
+  empirical_probabilities_2025 |>
   filter(stat == "tackles") |>
   select(-stat) |> 
   rename(player_name = player_full_name,
-         empirical_prob_over_2024 = emp_prob_2024)
+         empirical_prob_over_2025 = emp_prob_2025)
 
 player_emp_probs_last_n <-
   future_pmap(distinct_tackle_combos, get_empirical_prob, .progress = TRUE) |>
@@ -490,10 +490,10 @@ all_player_tackles <-
   mutate(
     implied_prob_over = 1 / over_price
   ) |>
-  left_join(player_emp_probs_2024, by = c("player_name", "line")) |>
+  left_join(player_emp_probs_2025, by = c("player_name", "line")) |>
   left_join(player_emp_probs_last_n, by = c("player_name", "line")) |>
   mutate(
-    diff_over_2024 = empirical_prob_over_2024 - implied_prob_over,
+    diff_over_2025 = empirical_prob_over_2025 - implied_prob_over,
     diff_over_last_3 = emp_prob_last_3 - implied_prob_over,
     diff_over_last_5 = emp_prob_last_5 - implied_prob_over,
     diff_over_last_7 = emp_prob_last_7 - implied_prob_over,
@@ -514,3 +514,141 @@ all_player_tackles <-
 
 # Write as RDS
 all_player_tackles |> write_rds("Data/processed_odds/all_player_tackles.rds")
+
+##%######################################################%##
+#                                                          #
+####                   Player Kicks                     ####
+#                                                          #
+##%######################################################%##
+
+# Get all scraped odds files and combine
+all_player_kicks <-
+  list.files("Data/scraped_odds", full.names = TRUE, pattern = "kicks") |>
+  map(read_csv) |>
+  # Ignore null elements
+  keep(~nrow(.x) > 0) |>
+  # de-select event_id from each if it exists
+  map(~select(.x, -matches("id"))) |>
+  reduce(bind_rows) |>
+  arrange(player_name, line, desc(over_price)) |>
+  select(-matches("id"))
+
+# Add empirical probabilities---------------------------------------------------
+
+# kicks
+distinct_kick_combos <-
+  all_player_kicks |>
+  distinct(player_name, line) |> 
+  rename(player_full_name = player_name) |> 
+  mutate(stat = "kicks")
+
+player_emp_probs_2025 <-
+  empirical_probabilities_2025 |>
+  filter(stat == "kicks") |>
+  select(-stat) |> 
+  rename(player_name = player_full_name,
+         empirical_prob_over_2025 = emp_prob_2025)
+
+player_emp_probs_last_n <-
+  future_pmap(distinct_kick_combos, get_empirical_prob, .progress = TRUE) |>
+  bind_rows() |>
+  select(player_name = player_full_name, line, contains("emp_prob"))
+
+all_player_kicks <-
+  all_player_kicks |>
+  mutate(
+    implied_prob_over = 1 / over_price
+  ) |>
+  left_join(player_emp_probs_2025, by = c("player_name", "line")) |>
+  left_join(player_emp_probs_last_n, by = c("player_name", "line")) |>
+  mutate(
+    diff_over_2025 = empirical_prob_over_2025 - implied_prob_over,
+    diff_over_last_3 = emp_prob_last_3 - implied_prob_over,
+    diff_over_last_5 = emp_prob_last_5 - implied_prob_over,
+    diff_over_last_7 = emp_prob_last_7 - implied_prob_over,
+    diff_over_last_10 = emp_prob_last_10 - implied_prob_over) |>
+  mutate_if(is.double, round, 2) |>
+  group_by(player_name, line) |>
+  mutate(
+    min_implied_prob = min(implied_prob_over, na.rm = TRUE),
+    max_implied_prob = max(implied_prob_over, na.rm = TRUE)
+  ) |>
+  mutate(variation = max_implied_prob - min_implied_prob) |>
+  ungroup() |>
+  select(-min_implied_prob,-max_implied_prob) |>
+  arrange(desc(variation), player_name, desc(over_price), line)
+
+# # Add to google sheets
+# write_sheet(sheet, data = all_player_kicks, sheet = "Player Kicks")
+
+# Write as RDS
+all_player_kicks |> write_rds("Data/processed_odds/all_player_kicks.rds")
+
+##%######################################################%##
+#                                                          #
+####                 Player Handballs                   ####
+#                                                          #
+##%######################################################%##
+
+# Get all scraped odds files and combine
+all_player_handballs <-
+  list.files("Data/scraped_odds", full.names = TRUE, pattern = "handballs") |>
+  map(read_csv) |>
+  # Ignore null elements
+  keep(~nrow(.x) > 0) |>
+  # de-select event_id from each if it exists
+  map(~select(.x, -matches("id"))) |>
+  reduce(bind_rows) |>
+  arrange(player_name, line, desc(over_price)) |>
+  select(-matches("id"))
+
+# Add empirical probabilities---------------------------------------------------
+
+# handballs
+distinct_handball_combos <-
+  all_player_handballs |>
+  distinct(player_name, line) |> 
+  rename(player_full_name = player_name) |> 
+  mutate(stat = "handballs")
+
+player_emp_probs_2025 <-
+  empirical_probabilities_2025 |>
+  filter(stat == "handballs") |>
+  select(-stat) |> 
+  rename(player_name = player_full_name,
+         empirical_prob_over_2025 = emp_prob_2025)
+
+player_emp_probs_last_n <-
+  future_pmap(distinct_handball_combos, get_empirical_prob, .progress = TRUE) |>
+  bind_rows() |>
+  select(player_name = player_full_name, line, contains("emp_prob"))
+
+all_player_handballs <-
+  all_player_handballs |>
+  mutate(
+    implied_prob_over = 1 / over_price
+  ) |>
+  left_join(player_emp_probs_2025, by = c("player_name", "line")) |>
+  left_join(player_emp_probs_last_n, by = c("player_name", "line")) |>
+  mutate(
+    diff_over_2025 = empirical_prob_over_2025 - implied_prob_over,
+    diff_over_last_3 = emp_prob_last_3 - implied_prob_over,
+    diff_over_last_5 = emp_prob_last_5 - implied_prob_over,
+    diff_over_last_7 = emp_prob_last_7 - implied_prob_over,
+    diff_over_last_10 = emp_prob_last_10 - implied_prob_over) |>
+  mutate_if(is.double, round, 2) |>
+  group_by(player_name, line) |>
+  mutate(
+    min_implied_prob = min(implied_prob_over, na.rm = TRUE),
+    max_implied_prob = max(implied_prob_over, na.rm = TRUE)
+  ) |>
+  mutate(variation = max_implied_prob - min_implied_prob) |>
+  ungroup() |>
+  select(-min_implied_prob,-max_implied_prob) |>
+  arrange(desc(variation), player_name, desc(over_price), line)
+
+# # Add to google sheets
+# write_sheet(sheet, data = all_player_handballs, sheet = "Player Handballs")
+
+# Write as RDS
+all_player_handballs |> write_rds("Data/processed_odds/all_player_handballs.rds")

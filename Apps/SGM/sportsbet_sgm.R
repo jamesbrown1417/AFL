@@ -11,6 +11,8 @@ sportsbet_sgm <-
   bind_rows(read_csv("../../Data/scraped_odds/sportsbet_player_goals.csv")) |> 
   bind_rows(read_csv("../../Data/scraped_odds/sportsbet_player_tackles.csv")) |>
   bind_rows(read_csv("../../Data/scraped_odds/sportsbet_player_marks.csv")) |>
+  bind_rows(read_csv("../../Data/scraped_odds/sportsbet_player_kicks.csv")) |>
+  bind_rows(read_csv("../../Data/scraped_odds/sportsbet_player_handballs.csv")) |>
   rename(price = over_price) |> 
   distinct(match, player_name, line, market_name, agency, .keep_all = TRUE) |> 
   select(-contains("under"))

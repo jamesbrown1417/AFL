@@ -161,32 +161,44 @@ compare_cgm <- function(player_names_cross, lines_cross, market_names_cross) {
 disposals <-
   read_rds("../../Data/processed_odds/all_player_disposals.rds") |> 
   rename(price = over_price,
-         empirical_probability_2024 = empirical_prob_over_2024,
-         diff_2024 = diff_over_2024)
+         empirical_probability_2025 = empirical_prob_over_2025,
+         diff_2025 = diff_over_2025)
 
 goals <-
   read_rds("../../Data/processed_odds/all_player_goals.rds") |> 
   rename(price = over_price,
-         empirical_probability_2024 = empirical_prob_over_2024,
-         diff_2024 = diff_over_2024)
+         empirical_probability_2025 = empirical_prob_over_2025,
+         diff_2025 = diff_over_2025)
 
 marks <- 
   read_rds("../../Data/processed_odds/all_player_marks.rds") |> 
   rename(price = over_price,
-         empirical_probability_2024 = empirical_prob_over_2024,
-         diff_2024 = diff_over_2024)
+         empirical_probability_2025 = empirical_prob_over_2025,
+         diff_2025 = diff_over_2025)
 
 tackles <- 
   read_rds("../../Data/processed_odds/all_player_tackles.rds") |> 
   rename(price = over_price,
-         empirical_probability_2024 = empirical_prob_over_2024,
-         diff_2024 = diff_over_2024)
+         empirical_probability_2025 = empirical_prob_over_2025,
+         diff_2025 = diff_over_2025)
 
 fantasy_points <- 
   read_rds("../../Data/processed_odds/all_player_fantasy_points.rds") |> 
   rename(price = over_price,
-         empirical_probability_2024 = empirical_prob_over_2024,
-         diff_2024 = diff_over_2024)
+         empirical_probability_2025 = empirical_prob_over_2025,
+         diff_2025 = diff_over_2025)
+
+kicks <-
+  read_rds("../../Data/processed_odds/all_player_kicks.rds") |> 
+  rename(price = over_price,
+         empirical_probability_2025 = empirical_prob_over_2025,
+         diff_2025 = diff_over_2025)
+
+handballs <-
+  read_rds("../../Data/processed_odds/all_player_handballs.rds") |> 
+  rename(price = over_price,
+         empirical_probability_2025 = empirical_prob_over_2025,
+         diff_2025 = diff_over_2025)
 
 disposals <-
   disposals |>
@@ -194,6 +206,8 @@ disposals <-
   bind_rows(marks) |>
   bind_rows(tackles) |>
   bind_rows(fantasy_points) |>
+  bind_rows(kicks) |>
+  bind_rows(handballs) |>
   left_join(player_positions, relationship = "many-to-one") |>
   left_join(dvp_data, by = c("opposition_team", "Position", "market_name"), relationship = "many-to-one") |> 
   relocate(Position, DVP_Category, .after = player_name)
@@ -241,8 +255,8 @@ disposals_display <-
          line,
          price,
          agency,
-         prob_2024 = round(empirical_probability_2024, 2),
-         diff_2024 = round(diff_2024, 2),
+         prob_2025 = round(empirical_probability_2025, 2),
+         diff_2025 = round(diff_2025, 2),
          prob_last_10 = round(emp_prob_last_10, 2),
          diff_last_10 = round(diff_over_last_10, 2),
          next_best_diff = round(100 * next_best_diff, 1),
@@ -284,8 +298,8 @@ ui <- fluidPage(
                  selectInput(
                    "market",
                    "Select Market",
-                   choices = c("Player Disposals", "Player Goals", "Player Marks", "Player Tackles", "Player Fantasy Points"),
-                   selected = c("Player Disposals", "Player Goals", "Player Marks", "Player Tackles", "Player Fantasy Points"),
+                   choices = c("Player Disposals", "Player Goals", "Player Marks", "Player Tackles", "Player Fantasy Points", "Player Kicks", "Player Handballs"),
+                   selected = c("Player Disposals", "Player Goals", "Player Marks", "Player Tackles", "Player Fantasy Points", "Player Kicks", "Player Handballs"),
                    multiple = TRUE
                  ),
                  selectInput(
@@ -331,8 +345,8 @@ ui <- fluidPage(
                  selectInput(
                    "market_cross",
                    "Select Market",
-                   choices = c("Player Disposals", "Player Goals", "Player Marks", "Player Tackles", "Player Fantasy Points"),
-                   selected = c("Player Disposals", "Player Goals", "Player Marks", "Player Tackles", "Player Fantasy Points"),
+                   choices = c("Player Disposals", "Player Goals", "Player Marks", "Player Tackles", "Player Fantasy Points", "Player Kicks", "Player Handballs"),
+                   selected = c("Player Disposals", "Player Goals", "Player Marks", "Player Tackles", "Player Fantasy Points", "Player Kicks", "Player Handballs"),
                    multiple = TRUE
                  ),
                  selectInput(
@@ -371,7 +385,7 @@ ui <- fluidPage(
                  selectInput(
                    "market_filter",
                    "Filter by Market",
-                   choices = c("All", "Player Disposals", "Player Goals", "Player Marks", "Player Tackles", "Player Fantasy Points"),
+                   choices = c("All", "Player Disposals", "Player Goals", "Player Marks", "Player Tackles", "Player Fantasy Points", "Player Kicks", "Player Handballs"),
                    selected = "All"
                  ),
                  sliderInput(
@@ -613,14 +627,14 @@ server <- function(input, output, session) {
       
       selected_data_cross <- filtered_data_cross[input$table_cross_rows_selected, ]
       uncorrelated_price_cross <- prod(selected_data_cross$price)
-      empirical_price_cross <- 1 / prod(selected_data_cross$prob_2024)
+      empirical_price_cross <- 1 / prod(selected_data_cross$prob_2025)
       empirical_price_cross_l10 <- 1 / prod(selected_data_cross$prob_last_10)
       diff = 1/empirical_price_cross - 1/uncorrelated_price_cross
       diff_l10 = 1/empirical_price_cross_l10 - 1/uncorrelated_price_cross
       HTML(paste0("<strong>Multi Price:</strong>", " $", round(uncorrelated_price_cross, 2), "<br/>",
                   " <strong>Theoretical Multi Price:</strong>", " $", round(empirical_price_cross, 2), "<br/>",
                   " <strong>Edge L10:</strong>", " ", round(100*diff_l10, 3), "%"), "<br/>",
-                  " <strong>Edge 2024:</strong>", " ", round(100*diff, 3), "%")
+                  " <strong>Edge 2025:</strong>", " ", round(100*diff, 3), "%")
     }
   })
   
