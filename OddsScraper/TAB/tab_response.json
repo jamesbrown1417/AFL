@@ -73,9 +73,9 @@
                 "Hawthorn",
                 "Port Adelaide"
             ],
-            "openMarketCount": 179,
+            "openMarketCount": 180,
             "futureMarketCount": 0,
-            "nonFutureMarketCount": 179,
+            "nonFutureMarketCount": 180,
             "markets": [
                 {
                     "id": "118212707",
@@ -108,7 +108,7 @@
                         {
                             "id": "1008",
                             "name": "Hawthorn",
-                            "returnWin": 1.15,
+                            "returnWin": 1.14,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -122,7 +122,7 @@
                         {
                             "id": "1011",
                             "name": "Port Adelaide",
-                            "returnWin": 5.5,
+                            "returnWin": 5.8,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -1002,7 +1002,8 @@
                             "number": 12974,
                             "isOpen": true,
                             "sortOrder": 1,
-                            "line": "-32.5"
+                            "line": "-32.5",
+                            "sameGame": true
                         },
                         {
                             "id": "12975",
@@ -1015,9 +1016,12 @@
                             "number": 12975,
                             "isOpen": true,
                             "sortOrder": 2,
-                            "line": "+32.5"
+                            "line": "+32.5",
+                            "sameGame": true
                         }
-                    ]
+                    ],
+                    "sameGame": true,
+                    "sameGameMultipleSelections": false
                 },
                 {
                     "id": "118212286",
@@ -1050,7 +1054,7 @@
                         {
                             "id": "6265",
                             "name": "Hawthorn by 40+",
-                            "returnWin": 2.25,
+                            "returnWin": 2.2,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -1089,7 +1093,7 @@
                         {
                             "id": "6268",
                             "name": "Port Adelaide by 1-39",
-                            "returnWin": 6,
+                            "returnWin": 6.5,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -1147,7 +1151,7 @@
                         {
                             "id": "6593",
                             "name": "Hawthorn by 16+",
-                            "returnWin": 1.36,
+                            "returnWin": 1.34,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -1218,7 +1222,7 @@
                         {
                             "id": "7021",
                             "name": "Hawthorn by 25+",
-                            "returnWin": 1.58,
+                            "returnWin": 1.55,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -1257,7 +1261,7 @@
                         {
                             "id": "7024",
                             "name": "Port Adelaide by 1-24",
-                            "returnWin": 7,
+                            "returnWin": 7.5,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -1270,7 +1274,7 @@
                         {
                             "id": "7025",
                             "name": "Port Adelaide by 25+",
-                            "returnWin": 17,
+                            "returnWin": 19,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -1285,13 +1289,13 @@
                     "sameGameMultipleSelections": false
                 },
                 {
-                    "id": "118260837",
+                    "id": "118374322",
                     "name": "AFL Haw-PtA LnOUDb",
                     "shortName": "AFL Haw-PtA LnOUDb",
                     "betOption": "Line/Over Under Double",
                     "betOptionSpectrumId": "212",
                     "betOptionPriority": 2690,
-                    "marketUniqueId": 118260837,
+                    "marketUniqueId": 118374322,
                     "closeTime": "2025-07-19T03:20:00.000Z",
                     "bettingStatus": "Open",
                     "message": null,
@@ -1313,131 +1317,137 @@
                     "allowBundle": false,
                     "propositions": [
                         {
-                            "id": "20206",
-                            "name": "Haw -32.5 /Over 150.5",
-                            "returnWin": 3.3,
+                            "id": "12616",
+                            "name": "Haw -32.5 /Over 147.5",
+                            "returnWin": 3.1,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
                             "allowPlace": false,
-                            "number": 20206,
-                            "isOpen": true,
-                            "sortOrder": 1
-                        },
-                        {
-                            "id": "20207",
-                            "name": "Haw -32.5 /Under 150.5",
-                            "returnWin": 4,
-                            "returnPlace": 0,
-                            "differential": null,
-                            "bettingStatus": "Open",
-                            "allowPlace": false,
-                            "number": 20207,
-                            "isOpen": true,
-                            "sortOrder": 2
-                        },
-                        {
-                            "id": "20208",
-                            "name": "PtAd +32.5 /Over 150.5",
-                            "returnWin": 4,
-                            "returnPlace": 0,
-                            "differential": null,
-                            "bettingStatus": "Open",
-                            "allowPlace": false,
-                            "number": 20208,
-                            "isOpen": true,
-                            "sortOrder": 3
-                        },
-                        {
-                            "id": "20209",
-                            "name": "PtAd +32.5 /Under 150.5",
-                            "returnWin": 3.3,
-                            "returnPlace": 0,
-                            "differential": null,
-                            "bettingStatus": "Open",
-                            "allowPlace": false,
-                            "number": 20209,
-                            "isOpen": true,
-                            "sortOrder": 4
-                        }
-                    ]
-                },
-                {
-                    "id": "118256354",
-                    "name": "AFL Haw-Pt Adel H2H/OvUn",
-                    "shortName": "AFL Haw-PtA H2H/OvUn",
-                    "betOption": "HDtoHD/OverUnder Double",
-                    "betOptionSpectrumId": "285",
-                    "betOptionPriority": 2705,
-                    "marketUniqueId": 118256354,
-                    "closeTime": "2025-07-19T03:20:00.000Z",
-                    "bettingStatus": "Open",
-                    "message": null,
-                    "informationMessage": null,
-                    "isFuture": false,
-                    "onlineBetting": true,
-                    "phoneBettingOnly": false,
-                    "inPlay": false,
-                    "goingInPlay": false,
-                    "allowWin": true,
-                    "allowPlace": false,
-                    "allowEachWay": false,
-                    "allowMulti": true,
-                    "allowMultiWin": true,
-                    "allowMultiPlace": false,
-                    "allowMultiEachWay": false,
-                    "numberOfPlaces": 0,
-                    "cashOutEligibility": "PreMatch",
-                    "allowBundle": false,
-                    "propositions": [
-                        {
-                            "id": "19302",
-                            "name": "Hawthorn /Over 151.5",
-                            "returnWin": 2.15,
-                            "returnPlace": 0,
-                            "differential": null,
-                            "bettingStatus": "Open",
-                            "allowPlace": false,
-                            "number": 19302,
+                            "number": 12616,
                             "isOpen": true,
                             "sortOrder": 1,
                             "sameGame": true
                         },
                         {
-                            "id": "19303",
-                            "name": "Hawthorn /Under 151.5",
-                            "returnWin": 2.15,
+                            "id": "12617",
+                            "name": "Haw -32.5 /Under 147.5",
+                            "returnWin": 4.2,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
                             "allowPlace": false,
-                            "number": 19303,
+                            "number": 12617,
                             "isOpen": true,
                             "sortOrder": 2,
                             "sameGame": true
                         },
                         {
-                            "id": "19304",
-                            "name": "Port Adel /Over 151.5",
-                            "returnWin": 12,
+                            "id": "12618",
+                            "name": "PtAd +32.5 /Over 147.5",
+                            "returnWin": 3.6,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
                             "allowPlace": false,
-                            "number": 19304,
+                            "number": 12618,
                             "isOpen": true,
                             "sortOrder": 3,
                             "sameGame": true
                         },
                         {
-                            "id": "19305",
-                            "name": "Port Adel /Under 151.5",
-                            "returnWin": 9,
+                            "id": "12619",
+                            "name": "PtAd +32.5 /Under 147.5",
+                            "returnWin": 3.5,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
                             "allowPlace": false,
-                            "number": 19305,
+                            "number": 12619,
+                            "isOpen": true,
+                            "sortOrder": 4,
+                            "sameGame": true
+                        }
+                    ],
+                    "sameGame": true,
+                    "sameGameMultipleSelections": false
+                },
+                {
+                    "id": "118374320",
+                    "name": "AFL Haw-Pt Adel H2H/OvUn",
+                    "shortName": "AFL Haw-PtA H2H/OvUn",
+                    "betOption": "HDtoHD/OverUnder Double",
+                    "betOptionSpectrumId": "285",
+                    "betOptionPriority": 2705,
+                    "marketUniqueId": 118374320,
+                    "closeTime": "2025-07-19T03:20:00.000Z",
+                    "bettingStatus": "Open",
+                    "message": null,
+                    "informationMessage": null,
+                    "isFuture": false,
+                    "onlineBetting": true,
+                    "phoneBettingOnly": false,
+                    "inPlay": false,
+                    "goingInPlay": false,
+                    "allowWin": true,
+                    "allowPlace": false,
+                    "allowEachWay": false,
+                    "allowMulti": true,
+                    "allowMultiWin": true,
+                    "allowMultiPlace": false,
+                    "allowMultiEachWay": false,
+                    "numberOfPlaces": 0,
+                    "cashOutEligibility": "PreMatch",
+                    "allowBundle": false,
+                    "propositions": [
+                        {
+                            "id": "12608",
+                            "name": "Hawthorn /Over 148.5",
+                            "returnWin": 2.05,
+                            "returnPlace": 0,
+                            "differential": null,
+                            "bettingStatus": "Open",
+                            "allowPlace": false,
+                            "number": 12608,
+                            "isOpen": true,
+                            "sortOrder": 1,
+                            "sameGame": true
+                        },
+                        {
+                            "id": "12609",
+                            "name": "Hawthorn /Under 148.5",
+                            "returnWin": 2.25,
+                            "returnPlace": 0,
+                            "differential": null,
+                            "bettingStatus": "Open",
+                            "allowPlace": false,
+                            "number": 12609,
+                            "isOpen": true,
+                            "sortOrder": 2,
+                            "sameGame": true
+                        },
+                        {
+                            "id": "12610",
+                            "name": "Port Adel /Over 148.5",
+                            "returnWin": 11,
+                            "returnPlace": 0,
+                            "differential": null,
+                            "bettingStatus": "Open",
+                            "allowPlace": false,
+                            "number": 12610,
+                            "isOpen": true,
+                            "sortOrder": 3,
+                            "sameGame": true
+                        },
+                        {
+                            "id": "12611",
+                            "name": "Port Adel /Under 148.5",
+                            "returnWin": 10,
+                            "returnPlace": 0,
+                            "differential": null,
+                            "bettingStatus": "Open",
+                            "allowPlace": false,
+                            "number": 12611,
                             "isOpen": true,
                             "sortOrder": 4,
                             "sameGame": true
@@ -1603,13 +1613,13 @@
                     ]
                 },
                 {
-                    "id": "118254479",
-                    "name": "AFL Haw-Pt Adel TotPtsOU 150.5",
-                    "shortName": "AFL Haw-PtA ToPtOU 150.5",
+                    "id": "118256353",
+                    "name": "AFL Haw-Pt Adel TotPtsOU 149.5",
+                    "shortName": "AFL Haw-PtA ToPtOU 149.5",
                     "betOption": "Total Points Over/Under",
                     "betOptionSpectrumId": "456",
                     "betOptionPriority": 3095,
-                    "marketUniqueId": 118254479,
+                    "marketUniqueId": 118256353,
                     "closeTime": "2025-07-19T03:20:00.000Z",
                     "bettingStatus": "Open",
                     "message": null,
@@ -1631,27 +1641,27 @@
                     "allowBundle": false,
                     "propositions": [
                         {
-                            "id": "17328",
-                            "name": "Over 150.5 Pts",
+                            "id": "19300",
+                            "name": "Over 149.5 Pts",
                             "returnWin": 1.9,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
                             "allowPlace": false,
-                            "number": 17328,
+                            "number": 19300,
                             "isOpen": true,
                             "sortOrder": 1,
                             "sameGame": true
                         },
                         {
-                            "id": "17329",
-                            "name": "Under 150.5 Pts",
+                            "id": "19301",
+                            "name": "Under 149.5 Pts",
                             "returnWin": 1.9,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
                             "allowPlace": false,
-                            "number": 17329,
+                            "number": 19301,
                             "isOpen": true,
                             "sortOrder": 2,
                             "sameGame": true
@@ -1973,31 +1983,33 @@
                         {
                             "id": "6679",
                             "name": "Hawthorn -66.5",
-                            "returnWin": 6.2,
+                            "returnWin": 6,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
                             "allowPlace": false,
                             "number": 6679,
                             "isOpen": true,
-                            "sortOrder": 21
+                            "sortOrder": 21,
+                            "sameGame": true
                         },
                         {
                             "id": "6681",
                             "name": "Port Adel +66.5",
-                            "returnWin": 1.1,
+                            "returnWin": 1.11,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
                             "allowPlace": false,
                             "number": 6681,
                             "isOpen": true,
-                            "sortOrder": 22
+                            "sortOrder": 22,
+                            "sameGame": true
                         },
                         {
                             "id": "6683",
                             "name": "Hawthorn -62.5",
-                            "returnWin": 5.2,
+                            "returnWin": 5,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -2010,7 +2022,7 @@
                         {
                             "id": "6685",
                             "name": "Port Adel +62.5",
-                            "returnWin": 1.14,
+                            "returnWin": 1.15,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -2023,7 +2035,7 @@
                         {
                             "id": "6687",
                             "name": "Hawthorn -58.5",
-                            "returnWin": 4.5,
+                            "returnWin": 4.2,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -2036,7 +2048,7 @@
                         {
                             "id": "6688",
                             "name": "Port Adel +58.5",
-                            "returnWin": 1.18,
+                            "returnWin": 1.2,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -2049,7 +2061,7 @@
                         {
                             "id": "6689",
                             "name": "Hawthorn -54.5",
-                            "returnWin": 3.7,
+                            "returnWin": 3.6,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -2062,7 +2074,7 @@
                         {
                             "id": "6690",
                             "name": "Port Adel +54.5",
-                            "returnWin": 1.25,
+                            "returnWin": 1.26,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -2075,7 +2087,7 @@
                         {
                             "id": "6691",
                             "name": "Hawthorn -50.5",
-                            "returnWin": 3.2,
+                            "returnWin": 3.1,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -2088,7 +2100,7 @@
                         {
                             "id": "6692",
                             "name": "Port Adel +50.5",
-                            "returnWin": 1.32,
+                            "returnWin": 1.34,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -2101,7 +2113,7 @@
                         {
                             "id": "6693",
                             "name": "Hawthorn -46.5",
-                            "returnWin": 2.8,
+                            "returnWin": 2.75,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -2114,7 +2126,7 @@
                         {
                             "id": "6695",
                             "name": "Port Adel +46.5",
-                            "returnWin": 1.4,
+                            "returnWin": 1.42,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -2127,7 +2139,7 @@
                         {
                             "id": "6696",
                             "name": "Hawthorn -42.5",
-                            "returnWin": 2.5,
+                            "returnWin": 2.45,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -2140,7 +2152,7 @@
                         {
                             "id": "6698",
                             "name": "Port Adel +42.5",
-                            "returnWin": 1.5,
+                            "returnWin": 1.52,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -2153,7 +2165,7 @@
                         {
                             "id": "6700",
                             "name": "Hawthorn -38.5",
-                            "returnWin": 2.2,
+                            "returnWin": 2.15,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -2166,7 +2178,7 @@
                         {
                             "id": "6701",
                             "name": "Port Adel +38.5",
-                            "returnWin": 1.62,
+                            "returnWin": 1.65,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -2179,7 +2191,7 @@
                         {
                             "id": "6702",
                             "name": "Hawthorn -34.5",
-                            "returnWin": 2,
+                            "returnWin": 1.95,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -2192,7 +2204,7 @@
                         {
                             "id": "6703",
                             "name": "Port Adel +34.5",
-                            "returnWin": 1.75,
+                            "returnWin": 1.8,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -2205,7 +2217,7 @@
                         {
                             "id": "6704",
                             "name": "Hawthorn -30.5",
-                            "returnWin": 1.8,
+                            "returnWin": 1.75,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -2218,7 +2230,7 @@
                         {
                             "id": "6705",
                             "name": "Port Adel +30.5",
-                            "returnWin": 1.95,
+                            "returnWin": 2,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -2231,7 +2243,7 @@
                         {
                             "id": "6707",
                             "name": "Hawthorn -26.5",
-                            "returnWin": 1.65,
+                            "returnWin": 1.62,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -2244,7 +2256,7 @@
                         {
                             "id": "6708",
                             "name": "Port Adel +26.5",
-                            "returnWin": 2.15,
+                            "returnWin": 2.2,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -2257,7 +2269,7 @@
                         {
                             "id": "6710",
                             "name": "Hawthorn -22.5",
-                            "returnWin": 1.53,
+                            "returnWin": 1.52,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -2270,7 +2282,7 @@
                         {
                             "id": "6711",
                             "name": "Port Adel +22.5",
-                            "returnWin": 2.4,
+                            "returnWin": 2.45,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -2283,7 +2295,7 @@
                         {
                             "id": "6712",
                             "name": "Hawthorn -18.5",
-                            "returnWin": 1.42,
+                            "returnWin": 1.4,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -2296,7 +2308,7 @@
                         {
                             "id": "6713",
                             "name": "Port Adel +18.5",
-                            "returnWin": 2.75,
+                            "returnWin": 2.8,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -2309,7 +2321,7 @@
                         {
                             "id": "6714",
                             "name": "Hawthorn -14.5",
-                            "returnWin": 1.34,
+                            "returnWin": 1.32,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -2322,7 +2334,7 @@
                         {
                             "id": "6716",
                             "name": "Port Adel +14.5",
-                            "returnWin": 3.1,
+                            "returnWin": 3.2,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -2335,7 +2347,7 @@
                         {
                             "id": "6718",
                             "name": "Hawthorn -10.5",
-                            "returnWin": 1.26,
+                            "returnWin": 1.25,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -2348,7 +2360,7 @@
                         {
                             "id": "6719",
                             "name": "Port Adel +10.5",
-                            "returnWin": 3.6,
+                            "returnWin": 3.7,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -2419,7 +2431,7 @@
                         {
                             "id": "13202",
                             "name": "Over 175.5",
-                            "returnWin": 5.2,
+                            "returnWin": 5.7,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -2432,7 +2444,7 @@
                         {
                             "id": "13203",
                             "name": "Under 175.5",
-                            "returnWin": 1.14,
+                            "returnWin": 1.12,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -2445,7 +2457,7 @@
                         {
                             "id": "13204",
                             "name": "Over 169.5",
-                            "returnWin": 3.9,
+                            "returnWin": 4.2,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -2458,7 +2470,7 @@
                         {
                             "id": "13205",
                             "name": "Under 169.5",
-                            "returnWin": 1.23,
+                            "returnWin": 1.2,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -2471,7 +2483,7 @@
                         {
                             "id": "13206",
                             "name": "Over 163.5",
-                            "returnWin": 2.9,
+                            "returnWin": 3.1,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -2484,7 +2496,7 @@
                         {
                             "id": "13207",
                             "name": "Under 163.5",
-                            "returnWin": 1.38,
+                            "returnWin": 1.34,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -2497,7 +2509,7 @@
                         {
                             "id": "13208",
                             "name": "Over 157.5",
-                            "returnWin": 2.3,
+                            "returnWin": 2.45,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -2510,7 +2522,7 @@
                         {
                             "id": "13209",
                             "name": "Under 157.5",
-                            "returnWin": 1.58,
+                            "returnWin": 1.52,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -2523,7 +2535,7 @@
                         {
                             "id": "13210",
                             "name": "Over 151.5",
-                            "returnWin": 1.9,
+                            "returnWin": 2,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -2536,7 +2548,7 @@
                         {
                             "id": "13211",
                             "name": "Under 151.5",
-                            "returnWin": 1.85,
+                            "returnWin": 1.75,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -2549,7 +2561,7 @@
                         {
                             "id": "13212",
                             "name": "Over 145.5",
-                            "returnWin": 1.6,
+                            "returnWin": 1.68,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -2562,7 +2574,7 @@
                         {
                             "id": "13213",
                             "name": "Under 145.5",
-                            "returnWin": 2.25,
+                            "returnWin": 2.1,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -2575,7 +2587,7 @@
                         {
                             "id": "13214",
                             "name": "Over 139.5",
-                            "returnWin": 1.4,
+                            "returnWin": 1.45,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -2588,7 +2600,7 @@
                         {
                             "id": "13215",
                             "name": "Under 139.5",
-                            "returnWin": 2.8,
+                            "returnWin": 2.65,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -2601,7 +2613,7 @@
                         {
                             "id": "13216",
                             "name": "Over 133.5",
-                            "returnWin": 1.26,
+                            "returnWin": 1.28,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -2614,7 +2626,7 @@
                         {
                             "id": "13217",
                             "name": "Under 133.5",
-                            "returnWin": 3.6,
+                            "returnWin": 3.4,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -2627,7 +2639,7 @@
                         {
                             "id": "13218",
                             "name": "Over 127.5",
-                            "returnWin": 1.15,
+                            "returnWin": 1.17,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -2640,7 +2652,7 @@
                         {
                             "id": "13219",
                             "name": "Under 127.5",
-                            "returnWin": 5,
+                            "returnWin": 4.6,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -2919,7 +2931,7 @@
                         {
                             "id": "6297",
                             "name": "Hawthorn/Hawthorn",
-                            "returnWin": 1.28,
+                            "returnWin": 1.26,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -2931,7 +2943,7 @@
                         {
                             "id": "6299",
                             "name": "Hawthorn/Port Adel",
-                            "returnWin": 18,
+                            "returnWin": 19,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -2943,7 +2955,7 @@
                         {
                             "id": "6300",
                             "name": "Port Adel/Port Adel",
-                            "returnWin": 7.5,
+                            "returnWin": 8,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -2979,13 +2991,13 @@
                     ]
                 },
                 {
-                    "id": "118256351",
+                    "id": "118423745",
                     "name": "AFL Haw-PtA 1QtLOU",
                     "shortName": "AFL Haw-PtA 1QtLOU",
                     "betOption": "1st Quarter Line/OverUnder Double",
                     "betOptionSpectrumId": "410",
                     "betOptionPriority": 3360,
-                    "marketUniqueId": 118256351,
+                    "marketUniqueId": 118423745,
                     "closeTime": "2025-07-19T03:20:00.000Z",
                     "bettingStatus": "Open",
                     "message": null,
@@ -3007,50 +3019,50 @@
                     "allowBundle": false,
                     "propositions": [
                         {
-                            "id": "19292",
-                            "name": "Haw -7.5 /Over 36.5",
-                            "returnWin": 3,
+                            "id": "12474",
+                            "name": "Haw -9.5 /Over 36.5",
+                            "returnWin": 3.3,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
                             "allowPlace": false,
-                            "number": 19292,
+                            "number": 12474,
                             "isOpen": true,
                             "sortOrder": 1
                         },
                         {
-                            "id": "19293",
-                            "name": "Haw -7.5 /Under 36.5",
-                            "returnWin": 3.8,
+                            "id": "12475",
+                            "name": "Haw -9.5 /Under 36.5",
+                            "returnWin": 4.5,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
                             "allowPlace": false,
-                            "number": 19293,
+                            "number": 12475,
                             "isOpen": true,
                             "sortOrder": 2
                         },
                         {
-                            "id": "19294",
-                            "name": "Pt Adel +7.5 /Over 36.5",
-                            "returnWin": 3.8,
+                            "id": "12476",
+                            "name": "Pt Adel +9.5 /Over 36.5",
+                            "returnWin": 3.6,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
                             "allowPlace": false,
-                            "number": 19294,
+                            "number": 12476,
                             "isOpen": true,
                             "sortOrder": 3
                         },
                         {
-                            "id": "19295",
-                            "name": "Pt Adel +7.5 /Under 36.5",
-                            "returnWin": 3.4,
+                            "id": "12477",
+                            "name": "Pt Adel +9.5 /Under 36.5",
+                            "returnWin": 3.1,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
                             "allowPlace": false,
-                            "number": 19295,
+                            "number": 12477,
                             "isOpen": true,
                             "sortOrder": 4
                         }
@@ -6861,7 +6873,7 @@
                         {
                             "id": "30562",
                             "name": "M Georgiades 2+Gls/PA Win",
-                            "returnWin": 8,
+                            "returnWin": 8.5,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -7476,9 +7488,35 @@
                             "sameGame": true
                         },
                         {
+                            "id": "14700",
+                            "name": "Mani Liddy (PA)",
+                            "returnWin": 3.25,
+                            "returnPlace": 0,
+                            "differential": null,
+                            "bettingStatus": "Open",
+                            "allowPlace": false,
+                            "number": 14700,
+                            "isOpen": true,
+                            "sortOrder": 48,
+                            "sameGame": true
+                        },
+                        {
+                            "id": "14679",
+                            "name": "Zak Butters (PA)",
+                            "returnWin": 3.25,
+                            "returnPlace": 0,
+                            "differential": null,
+                            "bettingStatus": "Open",
+                            "allowPlace": false,
+                            "number": 14679,
+                            "isOpen": true,
+                            "sortOrder": 27,
+                            "sameGame": true
+                        },
+                        {
                             "id": "29286",
                             "name": "Jackson Mead (PA)",
-                            "returnWin": 3.4,
+                            "returnWin": 3.5,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -7645,19 +7683,6 @@
                             "sameGame": true
                         },
                         {
-                            "id": "14700",
-                            "name": "Mani Liddy (PA)",
-                            "returnWin": 4,
-                            "returnPlace": 0,
-                            "differential": null,
-                            "bettingStatus": "Open",
-                            "allowPlace": false,
-                            "number": 14700,
-                            "isOpen": true,
-                            "sortOrder": 48,
-                            "sameGame": true
-                        },
-                        {
                             "id": "14682",
                             "name": "Kane Farrell (PA)",
                             "returnWin": 4,
@@ -7681,19 +7706,6 @@
                             "number": 14672,
                             "isOpen": true,
                             "sortOrder": 20,
-                            "sameGame": true
-                        },
-                        {
-                            "id": "14679",
-                            "name": "Zak Butters (PA)",
-                            "returnWin": 4,
-                            "returnPlace": 0,
-                            "differential": null,
-                            "bettingStatus": "Open",
-                            "allowPlace": false,
-                            "number": 14679,
-                            "isOpen": true,
-                            "sortOrder": 27,
                             "sameGame": true
                         },
                         {
@@ -8067,6 +8079,19 @@
                             "sameGame": true
                         },
                         {
+                            "id": "14535",
+                            "name": "Zak Butters (PA)",
+                            "returnWin": 14,
+                            "returnPlace": 0,
+                            "differential": null,
+                            "bettingStatus": "Open",
+                            "allowPlace": false,
+                            "number": 14535,
+                            "isOpen": true,
+                            "sortOrder": 27,
+                            "sameGame": true
+                        },
+                        {
                             "id": "29273",
                             "name": "Will Lorenz (PA)",
                             "returnWin": 14,
@@ -8080,16 +8105,16 @@
                             "sameGame": true
                         },
                         {
-                            "id": "14535",
-                            "name": "Zak Butters (PA)",
-                            "returnWin": 15,
+                            "id": "14556",
+                            "name": "Mani Liddy (PA)",
+                            "returnWin": 14,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
                             "allowPlace": false,
-                            "number": 14535,
+                            "number": 14556,
                             "isOpen": true,
-                            "sortOrder": 27,
+                            "sortOrder": 48,
                             "sameGame": true
                         },
                         {
@@ -8142,19 +8167,6 @@
                             "number": 14537,
                             "isOpen": true,
                             "sortOrder": 29,
-                            "sameGame": true
-                        },
-                        {
-                            "id": "14556",
-                            "name": "Mani Liddy (PA)",
-                            "returnWin": 15,
-                            "returnPlace": 0,
-                            "differential": null,
-                            "bettingStatus": "Open",
-                            "allowPlace": false,
-                            "number": 14556,
-                            "isOpen": true,
-                            "sortOrder": 48,
                             "sameGame": true
                         },
                         {
@@ -15124,7 +15136,7 @@
                         {
                             "id": "29366",
                             "name": "Zak Butters 1+ Gls & 25+ Dis",
-                            "returnWin": 5.5,
+                            "returnWin": 3.8,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -15136,7 +15148,7 @@
                         {
                             "id": "29367",
                             "name": "Zak Butters 1+ Gls & 30+ Dis",
-                            "returnWin": 7.5,
+                            "returnWin": 5.5,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -15148,7 +15160,7 @@
                         {
                             "id": "29368",
                             "name": "Zak Butters 2+Gls OR 35+Dis",
-                            "returnWin": 2.8,
+                            "returnWin": 2.6,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -15922,7 +15934,7 @@
                         {
                             "id": "30427",
                             "name": "Karl Amon 20+ Dis/HAW Win",
-                            "returnWin": 1.15,
+                            "returnWin": 1.14,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -16498,7 +16510,7 @@
                         {
                             "id": "30477",
                             "name": "Jase Burgoyne 20+ Dis/PA Win",
-                            "returnWin": 9.5,
+                            "returnWin": 10,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -16558,7 +16570,7 @@
                         {
                             "id": "30482",
                             "name": "Zak Butters 20+ Dis/PA Win",
-                            "returnWin": 4.8,
+                            "returnWin": 5,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -16762,7 +16774,7 @@
                         {
                             "id": "30499",
                             "name": "Ollie Wines 30+ Dis/PA Win",
-                            "returnWin": 13,
+                            "returnWin": 14,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -21208,7 +21220,7 @@
                         {
                             "id": "30052",
                             "name": "Jack Gunston/HAW 1-39",
-                            "returnWin": 17,
+                            "returnWin": 16,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -21364,7 +21376,7 @@
                         {
                             "id": "30065",
                             "name": "Nick Watson/HAW 40+",
-                            "returnWin": 18,
+                            "returnWin": 17,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -21448,7 +21460,7 @@
                         {
                             "id": "30072",
                             "name": "Mitch Lewis/HAW 1-39",
-                            "returnWin": 21,
+                            "returnWin": 19,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -21676,7 +21688,7 @@
                         {
                             "id": "30091",
                             "name": "Darcy Byrne-Jones/PA 40+",
-                            "returnWin": 251,
+                            "returnWin": 301,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -21688,7 +21700,7 @@
                         {
                             "id": "30092",
                             "name": "Mitch Georgiades/HAW 1-39",
-                            "returnWin": 18,
+                            "returnWin": 17,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -21820,7 +21832,7 @@
                         {
                             "id": "30103",
                             "name": "Joe Richards/PA 40+",
-                            "returnWin": 251,
+                            "returnWin": 301,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -21983,7 +21995,7 @@
                         {
                             "id": "6574",
                             "name": "Hawthorn by 40-59",
-                            "returnWin": 3.6,
+                            "returnWin": 3.5,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -22061,7 +22073,7 @@
                         {
                             "id": "6585",
                             "name": "Port Adel by 40-59",
-                            "returnWin": 67,
+                            "returnWin": 81,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -22132,7 +22144,7 @@
                         {
                             "id": "6126",
                             "name": "Hawthorn by 61-72",
-                            "returnWin": 8.5,
+                            "returnWin": 8,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -22249,7 +22261,7 @@
                         {
                             "id": "6142",
                             "name": "Port Adelaide by 25-36",
-                            "returnWin": 31,
+                            "returnWin": 34,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -22262,7 +22274,7 @@
                         {
                             "id": "6144",
                             "name": "Port Adelaide by 37-48",
-                            "returnWin": 67,
+                            "returnWin": 81,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -22275,7 +22287,7 @@
                         {
                             "id": "6146",
                             "name": "Port Adelaide by 49-60",
-                            "returnWin": 101,
+                            "returnWin": 151,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -22288,7 +22300,7 @@
                         {
                             "id": "6148",
                             "name": "Port Adelaide by 61-72",
-                            "returnWin": 201,
+                            "returnWin": 251,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -22359,7 +22371,7 @@
                         {
                             "id": "7052",
                             "name": "Hawthorn by 90-99",
-                            "returnWin": 41,
+                            "returnWin": 34,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -22385,7 +22397,7 @@
                         {
                             "id": "7054",
                             "name": "Hawthorn by 70-79",
-                            "returnWin": 14,
+                            "returnWin": 13,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -22515,7 +22527,7 @@
                         {
                             "id": "7072",
                             "name": "Port Adelaide by 10-19",
-                            "returnWin": 16,
+                            "returnWin": 17,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -22580,7 +22592,7 @@
                         {
                             "id": "7082",
                             "name": "Port Adelaide by 60-69",
-                            "returnWin": 201,
+                            "returnWin": 251,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -22593,7 +22605,7 @@
                         {
                             "id": "7084",
                             "name": "Port Adelaide by 70-79",
-                            "returnWin": 401,
+                            "returnWin": 501,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -22677,7 +22689,7 @@
                         {
                             "id": "6320",
                             "name": "Hawthorn by 61+",
-                            "returnWin": 4.8,
+                            "returnWin": 4.6,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -22742,7 +22754,7 @@
                         {
                             "id": "6330",
                             "name": "Hawthorn by 51-52",
-                            "returnWin": 26,
+                            "returnWin": 23,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -22989,7 +23001,7 @@
                         {
                             "id": "6368",
                             "name": "Hawthorn by 13-14",
-                            "returnWin": 23,
+                            "returnWin": 26,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -23171,7 +23183,7 @@
                         {
                             "id": "6396",
                             "name": "Port Adelaide by 13-14",
-                            "returnWin": 51,
+                            "returnWin": 67,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -23236,7 +23248,7 @@
                         {
                             "id": "6406",
                             "name": "Port Adelaide by 23-24",
-                            "returnWin": 81,
+                            "returnWin": 101,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -23366,7 +23378,7 @@
                         {
                             "id": "6426",
                             "name": "Port Adelaide by 43-44",
-                            "returnWin": 151,
+                            "returnWin": 201,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -23457,7 +23469,7 @@
                         {
                             "id": "6440",
                             "name": "Port Adelaide by 57-58",
-                            "returnWin": 301,
+                            "returnWin": 401,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -23732,7 +23744,7 @@
                         {
                             "id": "6113",
                             "name": "Hawthorn by 10+",
-                            "returnWin": 1.25,
+                            "returnWin": 1.23,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -23758,7 +23770,7 @@
                         {
                             "id": "6117",
                             "name": "Port Adelaide by 10+",
-                            "returnWin": 8.5,
+                            "returnWin": 9,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -23803,7 +23815,7 @@
                         {
                             "id": "7028",
                             "name": "Hawthorn by 20+",
-                            "returnWin": 1.45,
+                            "returnWin": 1.44,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -23816,7 +23828,7 @@
                         {
                             "id": "7029",
                             "name": "Either Team By 19 or Less",
-                            "returnWin": 2.9,
+                            "returnWin": 3,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -23874,7 +23886,7 @@
                         {
                             "id": "6887",
                             "name": "Hawthorn by 30+",
-                            "returnWin": 1.75,
+                            "returnWin": 1.72,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -23945,7 +23957,7 @@
                         {
                             "id": "6234",
                             "name": "Hawthorn by 40+",
-                            "returnWin": 2.25,
+                            "returnWin": 2.2,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -23958,7 +23970,7 @@
                         {
                             "id": "6236",
                             "name": "Either Team By 39 or Less",
-                            "returnWin": 1.58,
+                            "returnWin": 1.6,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -24028,7 +24040,7 @@
                         {
                             "id": "6918",
                             "name": "Haw 13+ / Haw 1-24",
-                            "returnWin": 8.5,
+                            "returnWin": 9,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -24052,7 +24064,7 @@
                         {
                             "id": "6920",
                             "name": "Haw 13+ / PtAd 25+",
-                            "returnWin": 301,
+                            "returnWin": 401,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -24172,7 +24184,7 @@
                         {
                             "id": "6930",
                             "name": "PtAd 13+ / Haw 1-24",
-                            "returnWin": 26,
+                            "returnWin": 31,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -24196,7 +24208,7 @@
                         {
                             "id": "6932",
                             "name": "PtAd 13+ / PtAd 25+",
-                            "returnWin": 31,
+                            "returnWin": 34,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -24262,7 +24274,7 @@
                         {
                             "id": "13140",
                             "name": "Haw 40+ /181-200",
-                            "returnWin": 12,
+                            "returnWin": 13,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -24286,7 +24298,7 @@
                         {
                             "id": "13142",
                             "name": "Haw 40+ /160 or less",
-                            "returnWin": 3.1,
+                            "returnWin": 2.9,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -24298,7 +24310,7 @@
                         {
                             "id": "13143",
                             "name": "Haw 1-39 /201 or more",
-                            "returnWin": 81,
+                            "returnWin": 101,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -24322,7 +24334,7 @@
                         {
                             "id": "13145",
                             "name": "Haw 1-39 /161-180",
-                            "returnWin": 7,
+                            "returnWin": 7.5,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -24334,7 +24346,7 @@
                         {
                             "id": "13146",
                             "name": "Haw 1-39 /160 or less",
-                            "returnWin": 2.25,
+                            "returnWin": 2.2,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -24418,7 +24430,7 @@
                         {
                             "id": "13153",
                             "name": "Pt Adel 1-39 /161-180",
-                            "returnWin": 21,
+                            "returnWin": 23,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -24442,7 +24454,7 @@
                         {
                             "id": "13155",
                             "name": "Pt Adel 40+ /201 or more",
-                            "returnWin": 401,
+                            "returnWin": 501,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -24466,7 +24478,7 @@
                         {
                             "id": "13157",
                             "name": "Pt Adel 40+ /161-180",
-                            "returnWin": 101,
+                            "returnWin": 151,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -24478,7 +24490,7 @@
                         {
                             "id": "13158",
                             "name": "Pt Adel 40+ /160 or less",
-                            "returnWin": 81,
+                            "returnWin": 101,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -24520,7 +24532,7 @@
                         {
                             "id": "13300",
                             "name": "Haw 0-59 / PtA 0-59",
-                            "returnWin": 19,
+                            "returnWin": 18,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -24572,7 +24584,7 @@
                         {
                             "id": "13304",
                             "name": "Haw 0-59 / PtA 120+",
-                            "returnWin": 401,
+                            "returnWin": 501,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -24585,7 +24597,7 @@
                         {
                             "id": "13305",
                             "name": "Haw 60-79 / PtA 0-59",
-                            "returnWin": 7.5,
+                            "returnWin": 7,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -24611,7 +24623,7 @@
                         {
                             "id": "13307",
                             "name": "Haw 60-79 / PtA 80-99",
-                            "returnWin": 17,
+                            "returnWin": 18,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -24624,7 +24636,7 @@
                         {
                             "id": "13308",
                             "name": "Haw 60-79 / PtA 100-119",
-                            "returnWin": 81,
+                            "returnWin": 101,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -24637,7 +24649,7 @@
                         {
                             "id": "13309",
                             "name": "Haw 60-79 / PtA 120+",
-                            "returnWin": 401,
+                            "returnWin": 501,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -24650,7 +24662,7 @@
                         {
                             "id": "13310",
                             "name": "Haw 80-99 / PtA 0-59",
-                            "returnWin": 4.5,
+                            "returnWin": 4.2,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -24676,7 +24688,7 @@
                         {
                             "id": "13312",
                             "name": "Haw 80-99 / PtA 80-99",
-                            "returnWin": 15,
+                            "returnWin": 16,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -24689,7 +24701,7 @@
                         {
                             "id": "13313",
                             "name": "Haw 80-99 / PtA 100-119",
-                            "returnWin": 81,
+                            "returnWin": 101,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -24702,7 +24714,7 @@
                         {
                             "id": "13314",
                             "name": "Haw 80-99 / PtA 120+",
-                            "returnWin": 401,
+                            "returnWin": 501,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -24741,7 +24753,7 @@
                         {
                             "id": "13317",
                             "name": "Haw 100-119 / PtA 80-99",
-                            "returnWin": 23,
+                            "returnWin": 26,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -24754,7 +24766,7 @@
                         {
                             "id": "13318",
                             "name": "Haw 100-119 / PtA 100-119",
-                            "returnWin": 101,
+                            "returnWin": 151,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -24793,7 +24805,7 @@
                         {
                             "id": "13321",
                             "name": "Haw 120+ / PtA 60-79",
-                            "returnWin": 18,
+                            "returnWin": 19,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -24877,7 +24889,7 @@
                         {
                             "id": "24772",
                             "name": "Both teams score 90+",
-                            "returnWin": 31,
+                            "returnWin": 34,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -24901,7 +24913,7 @@
                         {
                             "id": "24774",
                             "name": "Port Adel score 90+ only",
-                            "returnWin": 18,
+                            "returnWin": 21,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -24913,7 +24925,7 @@
                         {
                             "id": "24775",
                             "name": "Neither Team Score 90+",
-                            "returnWin": 2.05,
+                            "returnWin": 2,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -24955,7 +24967,7 @@
                         {
                             "id": "13333",
                             "name": "130 Points or Less",
-                            "returnWin": 4.2,
+                            "returnWin": 4,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -25015,7 +25027,7 @@
                         {
                             "id": "13338",
                             "name": "171 to 180",
-                            "returnWin": 8,
+                            "returnWin": 8.5,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -25039,7 +25051,7 @@
                         {
                             "id": "13340",
                             "name": "191 Points or More",
-                            "returnWin": 11,
+                            "returnWin": 13,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -25081,7 +25093,7 @@
                         {
                             "id": "24816",
                             "name": "130 Points or Less",
-                            "returnWin": 4.2,
+                            "returnWin": 4,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -25093,7 +25105,7 @@
                         {
                             "id": "24817",
                             "name": "131 to 150",
-                            "returnWin": 2.8,
+                            "returnWin": 2.7,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -25129,7 +25141,7 @@
                         {
                             "id": "24820",
                             "name": "191 Points or More",
-                            "returnWin": 11,
+                            "returnWin": 13,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -25171,7 +25183,7 @@
                         {
                             "id": "13014",
                             "name": "130 Points or Less",
-                            "returnWin": 4.2,
+                            "returnWin": 4,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -25183,7 +25195,7 @@
                         {
                             "id": "13015",
                             "name": "131 to 133",
-                            "returnWin": 15,
+                            "returnWin": 14,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -25195,7 +25207,7 @@
                         {
                             "id": "13016",
                             "name": "134 to 136",
-                            "returnWin": 14,
+                            "returnWin": 13,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -25207,7 +25219,7 @@
                         {
                             "id": "13017",
                             "name": "137 to 139",
-                            "returnWin": 13,
+                            "returnWin": 12,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -25231,7 +25243,7 @@
                         {
                             "id": "13019",
                             "name": "143 to 145",
-                            "returnWin": 12,
+                            "returnWin": 11,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -25279,7 +25291,7 @@
                         {
                             "id": "13023",
                             "name": "155 to 157",
-                            "returnWin": 12,
+                            "returnWin": 11,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -25303,7 +25315,7 @@
                         {
                             "id": "13025",
                             "name": "161 to 163",
-                            "returnWin": 12,
+                            "returnWin": 13,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -25339,7 +25351,7 @@
                         {
                             "id": "13028",
                             "name": "170 to 172",
-                            "returnWin": 15,
+                            "returnWin": 16,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -25351,7 +25363,7 @@
                         {
                             "id": "13029",
                             "name": "173 to 175",
-                            "returnWin": 17,
+                            "returnWin": 18,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -25375,7 +25387,7 @@
                         {
                             "id": "13031",
                             "name": "179 to 181",
-                            "returnWin": 21,
+                            "returnWin": 23,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -25423,7 +25435,7 @@
                         {
                             "id": "13035",
                             "name": "191 Points or More",
-                            "returnWin": 11,
+                            "returnWin": 13,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -25465,7 +25477,7 @@
                         {
                             "id": "13036",
                             "name": "34 Goals or More",
-                            "returnWin": 34,
+                            "returnWin": 41,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -25477,7 +25489,7 @@
                         {
                             "id": "13037",
                             "name": "31 to 33 Goals",
-                            "returnWin": 21,
+                            "returnWin": 23,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -25537,7 +25549,7 @@
                         {
                             "id": "13042",
                             "name": "18 Goals or Less",
-                            "returnWin": 3.8,
+                            "returnWin": 3.6,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -25579,7 +25591,7 @@
                         {
                             "id": "24783",
                             "name": "Haw Over 91.5",
-                            "returnWin": 1.87,
+                            "returnWin": 1.9,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -25591,7 +25603,7 @@
                         {
                             "id": "24784",
                             "name": "Haw Under 91.5",
-                            "returnWin": 1.87,
+                            "returnWin": 1.85,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -25603,13 +25615,13 @@
                     ]
                 },
                 {
-                    "id": "118334076",
-                    "name": "AFL Haw-PtA AwPtOU 59.5",
-                    "shortName": "AFL Haw-PtA AwPtOU 59.5",
+                    "id": "118341524",
+                    "name": "AFL Haw-PtA AwPtOU 58.5",
+                    "shortName": "AFL Haw-PtA AwPtOU 58.5",
                     "betOption": "Away Total Points O/U",
                     "betOptionSpectrumId": "3345",
                     "betOptionPriority": 6640,
-                    "marketUniqueId": 118334076,
+                    "marketUniqueId": 118341524,
                     "closeTime": "2025-07-19T03:20:00.000Z",
                     "bettingStatus": "Open",
                     "message": null,
@@ -25631,26 +25643,26 @@
                     "allowBundle": false,
                     "propositions": [
                         {
-                            "id": "24842",
-                            "name": "Pt Adel Over 59.5",
+                            "id": "28591",
+                            "name": "Pt Adel Over 58.5",
                             "returnWin": 1.87,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
                             "allowPlace": false,
-                            "number": 24842,
+                            "number": 28591,
                             "isOpen": true,
                             "sortOrder": 1
                         },
                         {
-                            "id": "24843",
-                            "name": "Pt Adel Under 59.5",
+                            "id": "28592",
+                            "name": "Pt Adel Under 58.5",
                             "returnWin": 1.87,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
                             "allowPlace": false,
-                            "number": 24843,
+                            "number": 28592,
                             "isOpen": true,
                             "sortOrder": 2
                         }
@@ -25687,7 +25699,7 @@
                         {
                             "id": "24797",
                             "name": "Hawthorn 0 to 70",
-                            "returnWin": 4.5,
+                            "returnWin": 4.2,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -25789,7 +25801,7 @@
                         {
                             "id": "24700",
                             "name": "Hawthorn 0 to 70",
-                            "returnWin": 4.5,
+                            "returnWin": 4.2,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -25801,7 +25813,7 @@
                         {
                             "id": "24703",
                             "name": "Hawthorn 71 to 75",
-                            "returnWin": 11,
+                            "returnWin": 12,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -25939,7 +25951,7 @@
                         {
                             "id": "24810",
                             "name": "Port Adel 0 to 50",
-                            "returnWin": 2.75,
+                            "returnWin": 2.65,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -25963,7 +25975,7 @@
                         {
                             "id": "24812",
                             "name": "Port Adel 61 to 70",
-                            "returnWin": 4.5,
+                            "returnWin": 4.2,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -25975,7 +25987,7 @@
                         {
                             "id": "24813",
                             "name": "Port Adel 71 to 80",
-                            "returnWin": 5.5,
+                            "returnWin": 6,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -25987,7 +25999,7 @@
                         {
                             "id": "24814",
                             "name": "Port Adel 81 to 90",
-                            "returnWin": 9,
+                            "returnWin": 10,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -25999,7 +26011,7 @@
                         {
                             "id": "24815",
                             "name": "Port Adel 91+",
-                            "returnWin": 11,
+                            "returnWin": 13,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -26041,7 +26053,7 @@
                         {
                             "id": "24726",
                             "name": "Port Adelaide 0 to 50",
-                            "returnWin": 2.75,
+                            "returnWin": 2.65,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -26065,7 +26077,7 @@
                         {
                             "id": "24728",
                             "name": "Port Adelaide 56 to 60",
-                            "returnWin": 7.5,
+                            "returnWin": 7,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -26125,7 +26137,7 @@
                         {
                             "id": "24737",
                             "name": "Port Adelaide 81 to 85",
-                            "returnWin": 14,
+                            "returnWin": 15,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -26137,7 +26149,7 @@
                         {
                             "id": "24739",
                             "name": "Port Adelaide 86 to 90",
-                            "returnWin": 19,
+                            "returnWin": 21,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -26149,7 +26161,7 @@
                         {
                             "id": "24741",
                             "name": "Port Adelaide 91+",
-                            "returnWin": 11,
+                            "returnWin": 13,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -26191,7 +26203,7 @@
                         {
                             "id": "29566",
                             "name": "Jack Gunston (HAW)",
-                            "returnWin": 10,
+                            "returnWin": 9,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -26239,7 +26251,7 @@
                         {
                             "id": "29606",
                             "name": "Calsher Dear (HAW)",
-                            "returnWin": 14,
+                            "returnWin": 13,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -27013,7 +27025,7 @@
                         {
                             "id": "30328",
                             "name": "Jack Gunston (HAW)",
-                            "returnWin": 4.8,
+                            "returnWin": 4.75,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -27021,6 +27033,18 @@
                             "number": 30328,
                             "isOpen": true,
                             "sortOrder": 5
+                        },
+                        {
+                            "id": "30349",
+                            "name": "Mitch Lewis (HAW)",
+                            "returnWin": 5.5,
+                            "returnPlace": 0,
+                            "differential": null,
+                            "bettingStatus": "Open",
+                            "allowPlace": false,
+                            "number": 30349,
+                            "isOpen": true,
+                            "sortOrder": 26
                         },
                         {
                             "id": "30341",
@@ -27033,18 +27057,6 @@
                             "number": 30341,
                             "isOpen": true,
                             "sortOrder": 18
-                        },
-                        {
-                            "id": "30349",
-                            "name": "Mitch Lewis (HAW)",
-                            "returnWin": 6,
-                            "returnPlace": 0,
-                            "differential": null,
-                            "bettingStatus": "Open",
-                            "allowPlace": false,
-                            "number": 30349,
-                            "isOpen": true,
-                            "sortOrder": 26
                         },
                         {
                             "id": "30327",
@@ -27097,7 +27109,7 @@
                         {
                             "id": "30350",
                             "name": "Finn Maginness (HAW)",
-                            "returnWin": 16,
+                            "returnWin": 15,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -27413,6 +27425,30 @@
                             "sortOrder": 28
                         },
                         {
+                            "id": "30590",
+                            "name": "Zak Butters (PA)",
+                            "returnWin": 19,
+                            "returnPlace": 0,
+                            "differential": null,
+                            "bettingStatus": "Open",
+                            "allowPlace": false,
+                            "number": 30590,
+                            "isOpen": true,
+                            "sortOrder": 5
+                        },
+                        {
+                            "id": "30610",
+                            "name": "Mani Liddy (PA)",
+                            "returnWin": 19,
+                            "returnPlace": 0,
+                            "differential": null,
+                            "bettingStatus": "Open",
+                            "allowPlace": false,
+                            "number": 30610,
+                            "isOpen": true,
+                            "sortOrder": 25
+                        },
+                        {
                             "id": "30604",
                             "name": "Ollie Wines (PA)",
                             "returnWin": 21,
@@ -27497,18 +27533,6 @@
                             "sortOrder": 20
                         },
                         {
-                            "id": "30590",
-                            "name": "Zak Butters (PA)",
-                            "returnWin": 26,
-                            "returnPlace": 0,
-                            "differential": null,
-                            "bettingStatus": "Open",
-                            "allowPlace": false,
-                            "number": 30590,
-                            "isOpen": true,
-                            "sortOrder": 5
-                        },
-                        {
                             "id": "30596",
                             "name": "Lachie Jones (PA)",
                             "returnWin": 26,
@@ -27519,18 +27543,6 @@
                             "number": 30596,
                             "isOpen": true,
                             "sortOrder": 11
-                        },
-                        {
-                            "id": "30610",
-                            "name": "Mani Liddy (PA)",
-                            "returnWin": 26,
-                            "returnPlace": 0,
-                            "differential": null,
-                            "bettingStatus": "Open",
-                            "allowPlace": false,
-                            "number": 30610,
-                            "isOpen": true,
-                            "sortOrder": 25
                         },
                         {
                             "id": "30601",
@@ -28502,6 +28514,30 @@
                             "sameGame": true
                         },
                         {
+                            "id": "30150",
+                            "name": "Zak Butters (PA)",
+                            "returnWin": 10,
+                            "returnPlace": 0,
+                            "differential": null,
+                            "bettingStatus": "Open",
+                            "allowPlace": false,
+                            "number": 30150,
+                            "isOpen": true,
+                            "sortOrder": 27
+                        },
+                        {
+                            "id": "30171",
+                            "name": "Mani Liddy (PA)",
+                            "returnWin": 10,
+                            "returnPlace": 0,
+                            "differential": null,
+                            "bettingStatus": "Open",
+                            "allowPlace": false,
+                            "number": 30171,
+                            "isOpen": true,
+                            "sortOrder": 48
+                        },
+                        {
                             "id": "30178",
                             "name": "Jackson Mead (PA)",
                             "returnWin": 11,
@@ -28846,6 +28882,18 @@
                             "sameGame": true
                         },
                         {
+                            "id": "29461",
+                            "name": "Mani Liddy (PA)",
+                            "returnWin": 5.5,
+                            "returnPlace": 0,
+                            "differential": null,
+                            "bettingStatus": "Open",
+                            "allowPlace": false,
+                            "number": 29461,
+                            "isOpen": true,
+                            "sortOrder": 48
+                        },
+                        {
                             "id": "29427",
                             "name": "Conor Nash (HAW)",
                             "returnWin": 5.5,
@@ -28911,17 +28959,16 @@
                             "sameGame": true
                         },
                         {
-                            "id": "29468",
-                            "name": "Jackson Mead (PA)",
-                            "returnWin": 6,
+                            "id": "29440",
+                            "name": "Zak Butters (PA)",
+                            "returnWin": 5.5,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
                             "allowPlace": false,
-                            "number": 29468,
+                            "number": 29440,
                             "isOpen": true,
-                            "sortOrder": 55,
-                            "sameGame": true
+                            "sortOrder": 27
                         }
                     ],
                     "sameGame": true,
@@ -29232,6 +29279,30 @@
                             "sortOrder": 54
                         },
                         {
+                            "id": "29983",
+                            "name": "Mani Liddy (PA)",
+                            "returnWin": 5.5,
+                            "returnPlace": 0,
+                            "differential": null,
+                            "bettingStatus": "Open",
+                            "allowPlace": false,
+                            "number": 29983,
+                            "isOpen": true,
+                            "sortOrder": 48
+                        },
+                        {
+                            "id": "29962",
+                            "name": "Zak Butters (PA)",
+                            "returnWin": 5.5,
+                            "returnPlace": 0,
+                            "differential": null,
+                            "bettingStatus": "Open",
+                            "allowPlace": false,
+                            "number": 29962,
+                            "isOpen": true,
+                            "sortOrder": 27
+                        },
+                        {
                             "id": "29961",
                             "name": "Jase Burgoyne (PA)",
                             "returnWin": 6,
@@ -29300,7 +29371,7 @@
                         {
                             "id": "6814",
                             "name": "Hawthorn",
-                            "returnWin": 1.26,
+                            "returnWin": 1.25,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -29312,7 +29383,7 @@
                         {
                             "id": "6817",
                             "name": "Port Adelaide",
-                            "returnWin": 3.9,
+                            "returnWin": 4,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -29354,7 +29425,7 @@
                         {
                             "id": "6062",
                             "name": "Hawthorn",
-                            "returnWin": 1.26,
+                            "returnWin": 1.25,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -29395,13 +29466,13 @@
                     "sameGameMultipleSelections": false
                 },
                 {
-                    "id": "118218739",
-                    "name": "AFL Haw-Pt Adel 1stHlfLn -15.5",
-                    "shortName": "AFL Haw-PtA 1stHlfLn -15.5",
+                    "id": "118219011",
+                    "name": "AFL Haw-Pt Adel 1stHlfLn -16.5",
+                    "shortName": "AFL Haw-PtA 1stHlfLn -16.5",
                     "betOption": "1st Half Line",
                     "betOptionSpectrumId": "280",
                     "betOptionPriority": 10750,
-                    "marketUniqueId": 118218739,
+                    "marketUniqueId": 118219011,
                     "closeTime": "2025-07-19T03:20:00.000Z",
                     "bettingStatus": "Open",
                     "message": null,
@@ -29423,27 +29494,27 @@
                     "allowBundle": false,
                     "propositions": [
                         {
-                            "id": "11763",
-                            "name": "Hawthorn -15.5",
-                            "returnWin": 1.85,
+                            "id": "12922",
+                            "name": "Hawthorn -16.5",
+                            "returnWin": 1.9,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
                             "allowPlace": false,
-                            "number": 11763,
+                            "number": 12922,
                             "isOpen": true,
                             "sortOrder": 1,
                             "sameGame": true
                         },
                         {
-                            "id": "11764",
-                            "name": "Port Adelaide +15.5",
-                            "returnWin": 1.95,
+                            "id": "12923",
+                            "name": "Port Adelaide +16.5",
+                            "returnWin": 1.9,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
                             "allowPlace": false,
-                            "number": 11764,
+                            "number": 12923,
                             "isOpen": true,
                             "sortOrder": 2,
                             "sameGame": true
@@ -29531,13 +29602,13 @@
                     ]
                 },
                 {
-                    "id": "118254477",
+                    "id": "118374319",
                     "name": "AFL Haw-Pt Adel 1stHHHOU",
                     "shortName": "AFL Haw-PtA 1HHHOU",
                     "betOption": "1st Half H2H/Over Under Double",
                     "betOptionSpectrumId": "879",
                     "betOptionPriority": 10790,
-                    "marketUniqueId": 118254477,
+                    "marketUniqueId": 118374319,
                     "closeTime": "2025-07-19T03:20:00.000Z",
                     "bettingStatus": "Open",
                     "message": null,
@@ -29559,50 +29630,50 @@
                     "allowBundle": false,
                     "propositions": [
                         {
-                            "id": "17322",
-                            "name": "Hawthorn /Over 75.5",
-                            "returnWin": 2.3,
+                            "id": "12604",
+                            "name": "Hawthorn /Over 73.5",
+                            "returnWin": 2.2,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
                             "allowPlace": false,
-                            "number": 17322,
+                            "number": 12604,
                             "isOpen": true,
                             "sortOrder": 1
                         },
                         {
-                            "id": "17323",
-                            "name": "Hawthorn /Under 75.5",
-                            "returnWin": 2.4,
+                            "id": "12605",
+                            "name": "Hawthorn /Under 73.5",
+                            "returnWin": 2.5,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
                             "allowPlace": false,
-                            "number": 17323,
+                            "number": 12605,
                             "isOpen": true,
                             "sortOrder": 2
                         },
                         {
-                            "id": "17324",
-                            "name": "Port Adelaide /Over 75.5",
-                            "returnWin": 8.5,
+                            "id": "12606",
+                            "name": "Port Adelaide /Over 73.5",
+                            "returnWin": 8,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
                             "allowPlace": false,
-                            "number": 17324,
+                            "number": 12606,
                             "isOpen": true,
                             "sortOrder": 3
                         },
                         {
-                            "id": "17325",
-                            "name": "Port Adelaide /Under 75.5",
-                            "returnWin": 6.5,
+                            "id": "12607",
+                            "name": "Port Adelaide /Under 73.5",
+                            "returnWin": 7,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
                             "allowPlace": false,
-                            "number": 17325,
+                            "number": 12607,
                             "isOpen": true,
                             "sortOrder": 4
                         }
@@ -29639,7 +29710,7 @@
                         {
                             "id": "6956",
                             "name": "Hawthorn -35.5",
-                            "returnWin": 4.8,
+                            "returnWin": 4.6,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -29652,7 +29723,7 @@
                         {
                             "id": "6957",
                             "name": "Port Adel +35.5",
-                            "returnWin": 1.16,
+                            "returnWin": 1.17,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -29665,7 +29736,7 @@
                         {
                             "id": "6958",
                             "name": "Hawthorn -29.5",
-                            "returnWin": 3.4,
+                            "returnWin": 3.3,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -29678,7 +29749,7 @@
                         {
                             "id": "6959",
                             "name": "Port Adel +29.5",
-                            "returnWin": 1.28,
+                            "returnWin": 1.3,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -29743,7 +29814,7 @@
                         {
                             "id": "6964",
                             "name": "Hawthorn -11.5",
-                            "returnWin": 1.62,
+                            "returnWin": 1.6,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -29756,7 +29827,7 @@
                         {
                             "id": "6965",
                             "name": "Port Adel +11.5",
-                            "returnWin": 2.2,
+                            "returnWin": 2.25,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -29821,7 +29892,7 @@
                         {
                             "id": "7009",
                             "name": "Hawthorn +6.5",
-                            "returnWin": 1.12,
+                            "returnWin": 1.11,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -29834,7 +29905,7 @@
                         {
                             "id": "7010",
                             "name": "Port Adel -6.5",
-                            "returnWin": 5.7,
+                            "returnWin": 6,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -29879,7 +29950,7 @@
                         {
                             "id": "6911",
                             "name": "Hawthorn by 10+",
-                            "returnWin": 1.53,
+                            "returnWin": 1.52,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -29931,7 +30002,7 @@
                         {
                             "id": "6916",
                             "name": "Port Adelaide by 10+",
-                            "returnWin": 7,
+                            "returnWin": 7.5,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -29976,7 +30047,7 @@
                         {
                             "id": "6270",
                             "name": "Hawthorn by 20+",
-                            "returnWin": 2.15,
+                            "returnWin": 2.1,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -29989,7 +30060,7 @@
                         {
                             "id": "6271",
                             "name": "Hawthorn by 1-19",
-                            "returnWin": 2.4,
+                            "returnWin": 2.5,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -30015,7 +30086,7 @@
                         {
                             "id": "6273",
                             "name": "Port Adelaide by 1-19",
-                            "returnWin": 4.5,
+                            "returnWin": 4.8,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -30151,7 +30222,7 @@
                         {
                             "id": "6258",
                             "name": "Port Adelaide by 13-24",
-                            "returnWin": 13,
+                            "returnWin": 14,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -30248,7 +30319,7 @@
                         {
                             "id": "6838",
                             "name": "Hawthorn by 37-42",
-                            "returnWin": 12,
+                            "returnWin": 11,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -30287,7 +30358,7 @@
                         {
                             "id": "6841",
                             "name": "Hawthorn by 19-24",
-                            "returnWin": 7,
+                            "returnWin": 6.5,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -30456,7 +30527,7 @@
                         {
                             "id": "6864",
                             "name": "Port Adel by 49+",
-                            "returnWin": 151,
+                            "returnWin": 201,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -30513,7 +30584,7 @@
                         {
                             "id": "13179",
                             "name": "51 to 60",
-                            "returnWin": 7,
+                            "returnWin": 6.5,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -30561,7 +30632,7 @@
                         {
                             "id": "13183",
                             "name": "91 to 100",
-                            "returnWin": 7,
+                            "returnWin": 7.5,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -30573,7 +30644,7 @@
                         {
                             "id": "13184",
                             "name": "101 to 110",
-                            "returnWin": 15,
+                            "returnWin": 16,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -30585,7 +30656,7 @@
                         {
                             "id": "13185",
                             "name": "111 Points or More",
-                            "returnWin": 23,
+                            "returnWin": 26,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -30765,7 +30836,7 @@
                         {
                             "id": "24674",
                             "name": "Port Adelaide 11 to 20",
-                            "returnWin": 4.8,
+                            "returnWin": 4.5,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -30813,7 +30884,7 @@
                         {
                             "id": "24679",
                             "name": "Port Adelaide 51 to 60",
-                            "returnWin": 18,
+                            "returnWin": 19,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -30825,7 +30896,7 @@
                         {
                             "id": "24680",
                             "name": "Port Adelaide 61 to 70",
-                            "returnWin": 81,
+                            "returnWin": 101,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -30837,7 +30908,7 @@
                         {
                             "id": "24681",
                             "name": "Port Adelaide 71+",
-                            "returnWin": 201,
+                            "returnWin": 251,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -31053,7 +31124,7 @@
                         {
                             "id": "24758",
                             "name": "Hawthorn -16.5",
-                            "returnWin": 1.95,
+                            "returnWin": 1.9,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -31065,7 +31136,7 @@
                         {
                             "id": "24759",
                             "name": "Port Adelaide +16.5",
-                            "returnWin": 1.85,
+                            "returnWin": 1.9,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -31155,7 +31226,7 @@
                         {
                             "id": "13083",
                             "name": "Port Adelaide by 10+",
-                            "returnWin": 7,
+                            "returnWin": 7.5,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -31197,7 +31268,7 @@
                         {
                             "id": "13260",
                             "name": "Hawthorn by 20+",
-                            "returnWin": 2.15,
+                            "returnWin": 2.1,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -31233,7 +31304,7 @@
                         {
                             "id": "13263",
                             "name": "Port Adelaide by 1-19",
-                            "returnWin": 4.5,
+                            "returnWin": 4.8,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -31311,7 +31382,7 @@
                         {
                             "id": "6801",
                             "name": "Hawthorn by 13-24",
-                            "returnWin": 4,
+                            "returnWin": 3.8,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -31359,7 +31430,7 @@
                         {
                             "id": "6807",
                             "name": "Port Adelaide by 13-24",
-                            "returnWin": 13,
+                            "returnWin": 14,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -31449,7 +31520,7 @@
                         {
                             "id": "6079",
                             "name": "Hawthorn by 37-42",
-                            "returnWin": 12,
+                            "returnWin": 11,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -31485,7 +31556,7 @@
                         {
                             "id": "6082",
                             "name": "Hawthorn by 19-24",
-                            "returnWin": 7,
+                            "returnWin": 6.5,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -31629,7 +31700,7 @@
                         {
                             "id": "6103",
                             "name": "Port Adelaide by 43-48",
-                            "returnWin": 151,
+                            "returnWin": 201,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -31641,7 +31712,7 @@
                         {
                             "id": "6105",
                             "name": "Port Adelaide by 49+",
-                            "returnWin": 151,
+                            "returnWin": 201,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -31709,7 +31780,7 @@
                         {
                             "id": "6557",
                             "name": "Port Adelaide",
-                            "returnWin": 3.1,
+                            "returnWin": 3.2,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -31776,6 +31847,64 @@
                             "sortOrder": 2
                         }
                     ]
+                },
+                {
+                    "id": "118216254",
+                    "name": "AFL Haw-Pt Adel 1stQtrLn",
+                    "shortName": "AFL Haw-PtA 1stQtrLn -8.5",
+                    "betOption": "1st Quarter Line",
+                    "betOptionSpectrumId": "408",
+                    "betOptionPriority": 11755,
+                    "marketUniqueId": 118216254,
+                    "closeTime": "2025-07-19T03:20:00.000Z",
+                    "bettingStatus": "Open",
+                    "message": null,
+                    "informationMessage": null,
+                    "isFuture": false,
+                    "onlineBetting": true,
+                    "phoneBettingOnly": false,
+                    "inPlay": false,
+                    "goingInPlay": false,
+                    "allowWin": true,
+                    "allowPlace": false,
+                    "allowEachWay": false,
+                    "allowMulti": true,
+                    "allowMultiWin": true,
+                    "allowMultiPlace": false,
+                    "allowMultiEachWay": false,
+                    "numberOfPlaces": 0,
+                    "cashOutEligibility": "PreMatch",
+                    "allowBundle": false,
+                    "propositions": [
+                        {
+                            "id": "11374",
+                            "name": "Hawthorn -8.5",
+                            "returnWin": 1.95,
+                            "returnPlace": 0,
+                            "differential": null,
+                            "bettingStatus": "Open",
+                            "allowPlace": false,
+                            "number": 11374,
+                            "isOpen": true,
+                            "sortOrder": 1,
+                            "sameGame": true
+                        },
+                        {
+                            "id": "11375",
+                            "name": "Port Adelaide +8.5",
+                            "returnWin": 1.85,
+                            "returnPlace": 0,
+                            "differential": null,
+                            "bettingStatus": "Open",
+                            "allowPlace": false,
+                            "number": 11375,
+                            "isOpen": true,
+                            "sortOrder": 2,
+                            "sameGame": true
+                        }
+                    ],
+                    "sameGame": true,
+                    "sameGameMultipleSelections": false
                 },
                 {
                     "id": "118212292",
@@ -31878,7 +32007,7 @@
                         {
                             "id": "21800",
                             "name": "Hawthorn /Under 36.5",
-                            "returnWin": 2.8,
+                            "returnWin": 2.7,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -32048,7 +32177,7 @@
                         {
                             "id": "5948",
                             "name": "Hawthorn -11.5",
-                            "returnWin": 2.3,
+                            "returnWin": 2.25,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -32061,7 +32190,7 @@
                         {
                             "id": "5949",
                             "name": "Port Adel +11.5",
-                            "returnWin": 1.58,
+                            "returnWin": 1.6,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -32074,7 +32203,7 @@
                         {
                             "id": "5950",
                             "name": "Hawthorn -8.5",
-                            "returnWin": 1.95,
+                            "returnWin": 1.9,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -32087,7 +32216,7 @@
                         {
                             "id": "5951",
                             "name": "Port Adel +8.5",
-                            "returnWin": 1.8,
+                            "returnWin": 1.85,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -32100,7 +32229,7 @@
                         {
                             "id": "5952",
                             "name": "Hawthorn -5.5",
-                            "returnWin": 1.68,
+                            "returnWin": 1.65,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -32113,7 +32242,7 @@
                         {
                             "id": "5953",
                             "name": "Port Adel +5.5",
-                            "returnWin": 2.1,
+                            "returnWin": 2.15,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -32480,7 +32609,7 @@
                         {
                             "id": "13255",
                             "name": "Neither",
-                            "returnWin": 7.5,
+                            "returnWin": 7,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -32534,7 +32663,7 @@
                         {
                             "id": "13117",
                             "name": "Port Adelaide",
-                            "returnWin": 4,
+                            "returnWin": 4.2,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -32546,7 +32675,7 @@
                         {
                             "id": "13118",
                             "name": "Neither",
-                            "returnWin": 3.3,
+                            "returnWin": 3.2,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -32600,7 +32729,7 @@
                         {
                             "id": "13288",
                             "name": "Port Adel",
-                            "returnWin": 6,
+                            "returnWin": 6.5,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -32690,7 +32819,7 @@
                         {
                             "id": "13128",
                             "name": "41 to 50",
-                            "returnWin": 3.3,
+                            "returnWin": 3.4,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -32906,7 +33035,7 @@
                         {
                             "id": "24751",
                             "name": "Port Adelaide 26 to 30",
-                            "returnWin": 11,
+                            "returnWin": 12,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -33116,7 +33245,7 @@
                         {
                             "id": "6176",
                             "name": "Port Adel by 11-15",
-                            "returnWin": 15,
+                            "returnWin": 16,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -33155,7 +33284,7 @@
                         {
                             "id": "6182",
                             "name": "Port Adel by 26-30",
-                            "returnWin": 81,
+                            "returnWin": 101,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -33555,6 +33684,18 @@
                             "sortOrder": 51
                         },
                         {
+                            "id": "30036",
+                            "name": "Calsher Dear (HAW)",
+                            "returnWin": 11,
+                            "returnPlace": 0,
+                            "differential": null,
+                            "bettingStatus": "Open",
+                            "allowPlace": false,
+                            "number": 30036,
+                            "isOpen": true,
+                            "sortOrder": 45
+                        },
+                        {
                             "id": "29995",
                             "name": "Jack Ginnivan (HAW)",
                             "returnWin": 12,
@@ -33565,18 +33706,6 @@
                             "number": 29995,
                             "isOpen": true,
                             "sortOrder": 4
-                        },
-                        {
-                            "id": "30036",
-                            "name": "Calsher Dear (HAW)",
-                            "returnWin": 12,
-                            "returnPlace": 0,
-                            "differential": null,
-                            "bettingStatus": "Open",
-                            "allowPlace": false,
-                            "number": 30036,
-                            "isOpen": true,
-                            "sortOrder": 45
                         },
                         {
                             "id": "30034",
@@ -34329,6 +34458,18 @@
                             "sortOrder": 14
                         },
                         {
+                            "id": "29523",
+                            "name": "Mani Liddy (PA)",
+                            "returnWin": 10,
+                            "returnPlace": 0,
+                            "differential": null,
+                            "bettingStatus": "Open",
+                            "allowPlace": false,
+                            "number": 29523,
+                            "isOpen": true,
+                            "sortOrder": 48
+                        },
+                        {
                             "id": "29529",
                             "name": "Will Lorenz (PA)",
                             "returnWin": 10,
@@ -34339,6 +34480,18 @@
                             "number": 29529,
                             "isOpen": true,
                             "sortOrder": 54
+                        },
+                        {
+                            "id": "29502",
+                            "name": "Zak Butters (PA)",
+                            "returnWin": 10,
+                            "returnPlace": 0,
+                            "differential": null,
+                            "bettingStatus": "Open",
+                            "allowPlace": false,
+                            "number": 29502,
+                            "isOpen": true,
+                            "sortOrder": 27
                         },
                         {
                             "id": "29501",
@@ -34481,7 +34634,7 @@
                         {
                             "id": "24788",
                             "name": "Port Adel by 1-6",
-                            "returnWin": 6,
+                            "returnWin": 5.5,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -34493,7 +34646,7 @@
                         {
                             "id": "24789",
                             "name": "Port Adel by 7+",
-                            "returnWin": 5.2,
+                            "returnWin": 5.5,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -34895,7 +35048,7 @@
                         {
                             "id": "13173",
                             "name": "21 to 30",
-                            "returnWin": 4.5,
+                            "returnWin": 4.2,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -34931,7 +35084,7 @@
                         {
                             "id": "13176",
                             "name": "51 to 60",
-                            "returnWin": 7,
+                            "returnWin": 7.5,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -35295,6 +35448,18 @@
                             "sortOrder": 12
                         },
                         {
+                            "id": "30276",
+                            "name": "Connor Macdonald (HAW)",
+                            "returnWin": 18,
+                            "returnPlace": 0,
+                            "differential": null,
+                            "bettingStatus": "Open",
+                            "allowPlace": false,
+                            "number": 30276,
+                            "isOpen": true,
+                            "sortOrder": 9
+                        },
+                        {
                             "id": "30311",
                             "name": "Joe Richards (PA)",
                             "returnWin": 18,
@@ -35329,18 +35494,6 @@
                             "number": 30314,
                             "isOpen": true,
                             "sortOrder": 47
-                        },
-                        {
-                            "id": "30276",
-                            "name": "Connor Macdonald (HAW)",
-                            "returnWin": 19,
-                            "returnPlace": 0,
-                            "differential": null,
-                            "bettingStatus": "Open",
-                            "allowPlace": false,
-                            "number": 30276,
-                            "isOpen": true,
-                            "sortOrder": 9
                         },
                         {
                             "id": "30323",
@@ -36033,16 +36186,28 @@
                             "sortOrder": 54
                         },
                         {
-                            "id": "29934",
-                            "name": "Jackson Mead (PA)",
-                            "returnWin": 10,
+                            "id": "29927",
+                            "name": "Mani Liddy (PA)",
+                            "returnWin": 9.5,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
                             "allowPlace": false,
-                            "number": 29934,
+                            "number": 29927,
                             "isOpen": true,
-                            "sortOrder": 55
+                            "sortOrder": 48
+                        },
+                        {
+                            "id": "29906",
+                            "name": "Zak Butters (PA)",
+                            "returnWin": 9.5,
+                            "returnPlace": 0,
+                            "differential": null,
+                            "bettingStatus": "Open",
+                            "allowPlace": false,
+                            "number": 29906,
+                            "isOpen": true,
+                            "sortOrder": 27
                         },
                         {
                             "id": "29905",
@@ -36103,6 +36268,18 @@
                             "number": 29885,
                             "isOpen": true,
                             "sortOrder": 6
+                        },
+                        {
+                            "id": "29934",
+                            "name": "Jackson Mead (PA)",
+                            "returnWin": 11,
+                            "returnPlace": 0,
+                            "differential": null,
+                            "bettingStatus": "Open",
+                            "allowPlace": false,
+                            "number": 29934,
+                            "isOpen": true,
+                            "sortOrder": 55
                         }
                     ]
                 },
@@ -36173,7 +36350,7 @@
                         {
                             "id": "24781",
                             "name": "Port Adel by 1-6",
-                            "returnWin": 6,
+                            "returnWin": 5.5,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -36185,7 +36362,7 @@
                         {
                             "id": "24782",
                             "name": "Port Adel by 7+",
-                            "returnWin": 5.2,
+                            "returnWin": 5.5,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -36587,7 +36764,7 @@
                         {
                             "id": "13164",
                             "name": "21 to 30",
-                            "returnWin": 4.5,
+                            "returnWin": 4.2,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -36623,7 +36800,7 @@
                         {
                             "id": "13167",
                             "name": "51 to 60",
-                            "returnWin": 7,
+                            "returnWin": 7.5,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -36731,7 +36908,7 @@
                         {
                             "id": "24803",
                             "name": "Hawthorn",
-                            "returnWin": 1.6,
+                            "returnWin": 1.58,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -36743,7 +36920,7 @@
                         {
                             "id": "24804",
                             "name": "Port Adelaide",
-                            "returnWin": 2.3,
+                            "returnWin": 2.35,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -36939,6 +37116,18 @@
                             "sortOrder": 18
                         },
                         {
+                            "id": "29351",
+                            "name": "Calsher Dear (HAW)",
+                            "returnWin": 11,
+                            "returnPlace": 0,
+                            "differential": null,
+                            "bettingStatus": "Open",
+                            "allowPlace": false,
+                            "number": 29351,
+                            "isOpen": true,
+                            "sortOrder": 45
+                        },
+                        {
                             "id": "29310",
                             "name": "Jack Ginnivan (HAW)",
                             "returnWin": 12,
@@ -36949,18 +37138,6 @@
                             "number": 29310,
                             "isOpen": true,
                             "sortOrder": 4
-                        },
-                        {
-                            "id": "29351",
-                            "name": "Calsher Dear (HAW)",
-                            "returnWin": 12,
-                            "returnPlace": 0,
-                            "differential": null,
-                            "bettingStatus": "Open",
-                            "allowPlace": false,
-                            "number": 29351,
-                            "isOpen": true,
-                            "sortOrder": 45
                         },
                         {
                             "id": "29349",
@@ -36985,6 +37162,18 @@
                             "number": 29318,
                             "isOpen": true,
                             "sortOrder": 12
+                        },
+                        {
+                            "id": "29315",
+                            "name": "Connor Macdonald (HAW)",
+                            "returnWin": 18,
+                            "returnPlace": 0,
+                            "differential": null,
+                            "bettingStatus": "Open",
+                            "allowPlace": false,
+                            "number": 29315,
+                            "isOpen": true,
+                            "sortOrder": 9
                         },
                         {
                             "id": "29334",
@@ -37021,18 +37210,6 @@
                             "number": 29353,
                             "isOpen": true,
                             "sortOrder": 47
-                        },
-                        {
-                            "id": "29315",
-                            "name": "Connor Macdonald (HAW)",
-                            "returnWin": 19,
-                            "returnPlace": 0,
-                            "differential": null,
-                            "bettingStatus": "Open",
-                            "allowPlace": false,
-                            "number": 29315,
-                            "isOpen": true,
-                            "sortOrder": 9
                         },
                         {
                             "id": "29362",
@@ -37713,6 +37890,18 @@
                             "sortOrder": 13
                         },
                         {
+                            "id": "30396",
+                            "name": "Zak Butters (PA)",
+                            "returnWin": 10,
+                            "returnPlace": 0,
+                            "differential": null,
+                            "bettingStatus": "Open",
+                            "allowPlace": false,
+                            "number": 30396,
+                            "isOpen": true,
+                            "sortOrder": 27
+                        },
+                        {
                             "id": "30423",
                             "name": "Will Lorenz (PA)",
                             "returnWin": 10,
@@ -37725,16 +37914,16 @@
                             "sortOrder": 54
                         },
                         {
-                            "id": "30424",
-                            "name": "Jackson Mead (PA)",
+                            "id": "30417",
+                            "name": "Mani Liddy (PA)",
                             "returnWin": 10,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
                             "allowPlace": false,
-                            "number": 30424,
+                            "number": 30417,
                             "isOpen": true,
-                            "sortOrder": 55
+                            "sortOrder": 48
                         },
                         {
                             "id": "30386",
@@ -37795,6 +37984,18 @@
                             "number": 30375,
                             "isOpen": true,
                             "sortOrder": 6
+                        },
+                        {
+                            "id": "30424",
+                            "name": "Jackson Mead (PA)",
+                            "returnWin": 11,
+                            "returnPlace": 0,
+                            "differential": null,
+                            "bettingStatus": "Open",
+                            "allowPlace": false,
+                            "number": 30424,
+                            "isOpen": true,
+                            "sortOrder": 55
                         }
                     ]
                 },
@@ -37865,7 +38066,7 @@
                         {
                             "id": "24808",
                             "name": "Port Adel by 1-6",
-                            "returnWin": 6,
+                            "returnWin": 5.5,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -37877,7 +38078,7 @@
                         {
                             "id": "24809",
                             "name": "Port Adel by 7+",
-                            "returnWin": 5.2,
+                            "returnWin": 5.5,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -38141,7 +38342,7 @@
                         {
                             "id": "6518",
                             "name": "Port Adelaide by 6-10",
-                            "returnWin": 10,
+                            "returnWin": 11,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -38303,7 +38504,7 @@
                         {
                             "id": "13103",
                             "name": "41 to 50",
-                            "returnWin": 3.2,
+                            "returnWin": 3.3,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -39122,21 +39323,9 @@
                             "sortOrder": 12
                         },
                         {
-                            "id": "30638",
-                            "name": "Connor Macdonald (HAW)",
-                            "returnWin": 18,
-                            "returnPlace": 0,
-                            "differential": null,
-                            "bettingStatus": "Open",
-                            "allowPlace": false,
-                            "number": 30638,
-                            "isOpen": true,
-                            "sortOrder": 9
-                        },
-                        {
                             "id": "30657",
                             "name": "Darcy Byrne-Jones (PA)",
-                            "returnWin": 18,
+                            "returnWin": 17,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -39148,7 +39337,7 @@
                         {
                             "id": "30673",
                             "name": "Joe Richards (PA)",
-                            "returnWin": 18,
+                            "returnWin": 17,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -39156,6 +39345,18 @@
                             "number": 30673,
                             "isOpen": true,
                             "sortOrder": 44
+                        },
+                        {
+                            "id": "30638",
+                            "name": "Connor Macdonald (HAW)",
+                            "returnWin": 18,
+                            "returnPlace": 0,
+                            "differential": null,
+                            "bettingStatus": "Open",
+                            "allowPlace": false,
+                            "number": 30638,
+                            "isOpen": true,
+                            "sortOrder": 9
                         },
                         {
                             "id": "30676",
@@ -39680,21 +39881,9 @@
                             "sortOrder": 12
                         },
                         {
-                            "id": "30697",
-                            "name": "Connor Macdonald (HAW)",
-                            "returnWin": 18,
-                            "returnPlace": 0,
-                            "differential": null,
-                            "bettingStatus": "Open",
-                            "allowPlace": false,
-                            "number": 30697,
-                            "isOpen": true,
-                            "sortOrder": 9
-                        },
-                        {
                             "id": "30716",
                             "name": "Darcy Byrne-Jones (PA)",
-                            "returnWin": 18,
+                            "returnWin": 17,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -39706,7 +39895,7 @@
                         {
                             "id": "30732",
                             "name": "Joe Richards (PA)",
-                            "returnWin": 18,
+                            "returnWin": 17,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -39714,6 +39903,18 @@
                             "number": 30732,
                             "isOpen": true,
                             "sortOrder": 44
+                        },
+                        {
+                            "id": "30697",
+                            "name": "Connor Macdonald (HAW)",
+                            "returnWin": 18,
+                            "returnPlace": 0,
+                            "differential": null,
+                            "bettingStatus": "Open",
+                            "allowPlace": false,
+                            "number": 30697,
+                            "isOpen": true,
+                            "sortOrder": 9
                         },
                         {
                             "id": "30735",
@@ -40238,6 +40439,18 @@
                             "sortOrder": 23
                         },
                         {
+                            "id": "29409",
+                            "name": "Mani Liddy (PA)",
+                            "returnWin": 19,
+                            "returnPlace": 0,
+                            "differential": null,
+                            "bettingStatus": "Open",
+                            "allowPlace": false,
+                            "number": 29409,
+                            "isOpen": true,
+                            "sortOrder": 25
+                        },
+                        {
                             "id": "29412",
                             "name": "Will Lorenz (PA)",
                             "returnWin": 19,
@@ -40248,6 +40461,18 @@
                             "number": 29412,
                             "isOpen": true,
                             "sortOrder": 28
+                        },
+                        {
+                            "id": "29389",
+                            "name": "Zak Butters (PA)",
+                            "returnWin": 19,
+                            "returnPlace": 0,
+                            "differential": null,
+                            "bettingStatus": "Open",
+                            "allowPlace": false,
+                            "number": 29389,
+                            "isOpen": true,
+                            "sortOrder": 5
                         },
                         {
                             "id": "29388",
@@ -40370,30 +40595,6 @@
                             "sortOrder": 1
                         },
                         {
-                            "id": "29409",
-                            "name": "Mani Liddy (PA)",
-                            "returnWin": 26,
-                            "returnPlace": 0,
-                            "differential": null,
-                            "bettingStatus": "Open",
-                            "allowPlace": false,
-                            "number": 29409,
-                            "isOpen": true,
-                            "sortOrder": 25
-                        },
-                        {
-                            "id": "29389",
-                            "name": "Zak Butters (PA)",
-                            "returnWin": 26,
-                            "returnPlace": 0,
-                            "differential": null,
-                            "bettingStatus": "Open",
-                            "allowPlace": false,
-                            "number": 29389,
-                            "isOpen": true,
-                            "sortOrder": 5
-                        },
-                        {
                             "id": "29395",
                             "name": "Lachie Jones (PA)",
                             "returnWin": 26,
@@ -40438,7 +40639,7 @@
                         {
                             "id": "29536",
                             "name": "Jack Gunston (HAW)",
-                            "returnWin": 4.8,
+                            "returnWin": 4.75,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -40450,7 +40651,7 @@
                         {
                             "id": "29557",
                             "name": "Mitch Lewis (HAW)",
-                            "returnWin": 6,
+                            "returnWin": 5.5,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -40522,7 +40723,7 @@
                         {
                             "id": "29558",
                             "name": "Finn Maginness (HAW)",
-                            "returnWin": 16,
+                            "returnWin": 15,
                             "returnPlace": 0,
                             "differential": null,
                             "bettingStatus": "Open",
@@ -305004,7 +305205,7 @@
         {
             "name": "1st Quarter Line",
             "hasFutureMarket": false,
-            "openMarketCount": 7,
+            "openMarketCount": 8,
             "_links": {
                 "markets": "https://api.beta.tab.com.au/v1/tab-info-service/sports/AFL%20Football/competitions/AFL/markets?jurisdiction=SA&betOptionName=1st%20Quarter%20Line&homeState=SA"
             }
