@@ -8,9 +8,6 @@ library(furrr)
 # Set up parallel processing
 plan(multisession)
 
-# Get empirical probability function
-source("Functions/get_empirical_probabilities_last_n.R")
-
 # Read in 2025 empirical probabilities
 empirical_probabilities_2025 <- read_rds("Data/empirical_probabilities_2025.rds")
 
