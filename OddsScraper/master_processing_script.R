@@ -434,13 +434,7 @@ all_player_tackles <-
 
 # Add empirical probabilities---------------------------------------------------
 
-# tackles
-distinct_tackle_combos <-
-  all_player_tackles |>
-  distinct(player_name, line) |> 
-  rename(player_full_name = player_name) |> 
-  mutate(stat = "tackles")
-
+# Read pre-computed empirical probabilities
 player_emp_probs_2025 <-
   empirical_probabilities_2025 |>
   filter(stat == "tackles") |>
@@ -449,9 +443,7 @@ player_emp_probs_2025 <-
          empirical_prob_over_2025 = emp_prob_2025)
 
 player_emp_probs_last_n <-
-  future_pmap(distinct_tackle_combos, get_empirical_prob, .progress = TRUE) |>
-  bind_rows() |>
-  select(player_name = player_full_name, line, contains("emp_prob"))
+  read_csv("Data/empirical_probabilities_tackles_last_n.csv")
 
 all_player_tackles <-
   all_player_tackles |>
@@ -503,13 +495,7 @@ all_player_kicks <-
 
 # Add empirical probabilities---------------------------------------------------
 
-# kicks
-distinct_kick_combos <-
-  all_player_kicks |>
-  distinct(player_name, line) |> 
-  rename(player_full_name = player_name) |> 
-  mutate(stat = "kicks")
-
+# Read pre-computed empirical probabilities
 player_emp_probs_2025 <-
   empirical_probabilities_2025 |>
   filter(stat == "kicks") |>
@@ -518,9 +504,7 @@ player_emp_probs_2025 <-
          empirical_prob_over_2025 = emp_prob_2025)
 
 player_emp_probs_last_n <-
-  future_pmap(distinct_kick_combos, get_empirical_prob, .progress = TRUE) |>
-  bind_rows() |>
-  select(player_name = player_full_name, line, contains("emp_prob"))
+  read_csv("Data/empirical_probabilities_kicks_last_n.csv")
 
 all_player_kicks <-
   all_player_kicks |>
@@ -572,13 +556,7 @@ all_player_handballs <-
 
 # Add empirical probabilities---------------------------------------------------
 
-# handballs
-distinct_handball_combos <-
-  all_player_handballs |>
-  distinct(player_name, line) |> 
-  rename(player_full_name = player_name) |> 
-  mutate(stat = "handballs")
-
+# Read pre-computed empirical probabilities
 player_emp_probs_2025 <-
   empirical_probabilities_2025 |>
   filter(stat == "handballs") |>
@@ -587,9 +565,7 @@ player_emp_probs_2025 <-
          empirical_prob_over_2025 = emp_prob_2025)
 
 player_emp_probs_last_n <-
-  future_pmap(distinct_handball_combos, get_empirical_prob, .progress = TRUE) |>
-  bind_rows() |>
-  select(player_name = player_full_name, line, contains("emp_prob"))
+  read_csv("Data/empirical_probabilities_handballs_last_n.csv")
 
 all_player_handballs <-
   all_player_handballs |>
