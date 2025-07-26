@@ -157,24 +157,16 @@ all_player_disposals <-
 
 # Add empirical probabilities---------------------------------------------------
 
-# Disposals
-distinct_disposal_combos <-
-  all_player_disposals |>
-  distinct(player_name, line) |> 
-  rename(player_full_name = player_name) |> 
-  mutate(stat = "disposals")
-
+# Read pre-computed empirical probabilities
 player_emp_probs_2025 <-
   empirical_probabilities_2025 |>
   filter(stat == "disposals") |>
   select(-stat) |> 
   rename(player_name = player_full_name,
          empirical_prob_over_2025 = emp_prob_2025)
-  
+
 player_emp_probs_last_n <-
-  future_pmap(distinct_disposal_combos, get_empirical_prob, .progress = TRUE) |>
-  bind_rows() |>
-  select(player_name = player_full_name, line, contains("emp_prob"))
+  read_csv("Data/empirical_probabilities_disposals_last_n.csv")
 
 all_player_disposals <-
   all_player_disposals |>
@@ -237,13 +229,7 @@ all_player_goals <-
 
 # Add empirical probabilities---------------------------------------------------
 
-# goals
-distinct_goal_combos <-
-  all_player_goals |>
-  distinct(player_name, line) |> 
-  rename(player_full_name = player_name) |> 
-  mutate(stat = "goals")
-
+# Read pre-computed empirical probabilities
 player_emp_probs_2025 <-
   empirical_probabilities_2025 |>
   filter(stat == "goals") |>
@@ -252,9 +238,7 @@ player_emp_probs_2025 <-
          empirical_prob_over_2025 = emp_prob_2025)
 
 player_emp_probs_last_n <-
-  future_pmap(distinct_goal_combos, get_empirical_prob, .progress = TRUE) |>
-  bind_rows() |>
-  select(player_name = player_full_name, line, contains("emp_prob"))
+  read_csv("Data/empirical_probabilities_goals_last_n.csv")
 
 all_player_goals <-
   all_player_goals |>
@@ -317,13 +301,7 @@ all_player_fantasy_points <-
 
 # Add empirical probabilities---------------------------------------------------
 
-# fantasy_points
-distinct_point_combos <-
-  all_player_fantasy_points |>
-  distinct(player_name, line) |>
-  rename(player_full_name = player_name) |>
-  mutate(stat = "fantasy_points")
-
+# Read pre-computed empirical probabilities
 player_emp_probs_2025 <-
   empirical_probabilities_2025 |>
   filter(stat == "fantasy_points") |>
@@ -332,9 +310,7 @@ player_emp_probs_2025 <-
          empirical_prob_over_2025 = emp_prob_2025)
 
 player_emp_probs_last_n <-
-  future_pmap(distinct_point_combos, get_empirical_prob, .progress = TRUE) |>
-  bind_rows() |>
-  select(player_name = player_full_name, line, contains("emp_prob"))
+  read_csv("Data/empirical_probabilities_fantasy_points_last_n.csv")
 
 all_player_fantasy_points <-
   all_player_fantasy_points |>
@@ -397,13 +373,7 @@ all_player_marks <-
 
 # Add empirical probabilities---------------------------------------------------
 
-# marks
-distinct_mark_combos <-
-  all_player_marks |>
-  distinct(player_name, line) |> 
-  rename(player_full_name = player_name) |> 
-  mutate(stat = "marks")
-
+# Read pre-computed empirical probabilities
 player_emp_probs_2025 <-
   empirical_probabilities_2025 |>
   filter(stat == "marks") |>
@@ -412,9 +382,7 @@ player_emp_probs_2025 <-
          empirical_prob_over_2025 = emp_prob_2025)
 
 player_emp_probs_last_n <-
-  future_pmap(distinct_mark_combos, get_empirical_prob, .progress = TRUE) |>
-  bind_rows() |>
-  select(player_name = player_full_name, line, contains("emp_prob"))
+  read_csv("Data/empirical_probabilities_marks_last_n.csv")
 
 all_player_marks <-
   all_player_marks |>
