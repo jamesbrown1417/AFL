@@ -1,51 +1,51 @@
 {
     "entrants": {
-        "d311ab00-6589-4c77-9ff9-29ef16f30874": {
-            "id": "d311ab00-6589-4c77-9ff9-29ef16f30874",
-            "name": "Port Adelaide",
+        "2534ed4c-deac-4ec9-8c99-80ba112f1f05": {
+            "id": "2534ed4c-deac-4ec9-8c99-80ba112f1f05",
+            "name": "GWS Giants",
             "home_away": "HOME",
             "visible": true,
             "sort_order": 10,
-            "market_id": "d97e4ea7-6b78-4be8-a93c-026dc4ef165d"
+            "market_id": "23e2e92d-6d65-40aa-836f-a005a7df443a"
         },
-        "e3c7e76a-c3dd-415c-a205-69ea373576c3": {
-            "id": "e3c7e76a-c3dd-415c-a205-69ea373576c3",
-            "name": "Fremantle",
+        "74bc4fbd-87ab-4d82-b85f-90e27bc142d5": {
+            "id": "74bc4fbd-87ab-4d82-b85f-90e27bc142d5",
+            "name": "North Melbourne",
             "home_away": "AWAY",
             "visible": true,
             "sort_order": 20,
-            "market_id": "d97e4ea7-6b78-4be8-a93c-026dc4ef165d"
+            "market_id": "23e2e92d-6d65-40aa-836f-a005a7df443a"
         }
     },
     "event_participants": {
-        "0eb892a2-7e0c-4af4-bb4c-6bb3825c9cd2": {
-            "id": "0eb892a2-7e0c-4af4-bb4c-6bb3825c9cd2",
-            "event_id": "4d72eb15-f849-416c-a65a-67c5d1e955d5",
-            "name": "Fremantle",
+        "8b014909-0572-4a3d-98ba-acaff5e5d48c": {
+            "id": "8b014909-0572-4a3d-98ba-acaff5e5d48c",
+            "event_id": "8d26cee6-c223-4080-b951-f63efc1f65f7",
+            "name": "North Melbourne",
             "home_away": "AWAY",
-            "colour": "#ffffff"
+            "colour": "#1a3b8e"
         },
-        "e6716d1a-0503-410c-b8ab-80da8f7a018e": {
-            "id": "e6716d1a-0503-410c-b8ab-80da8f7a018e",
-            "event_id": "4d72eb15-f849-416c-a65a-67c5d1e955d5",
-            "name": "Port Adelaide",
+        "f46a552e-9389-4062-912c-950ad72efb26": {
+            "id": "f46a552e-9389-4062-912c-950ad72efb26",
+            "event_id": "8d26cee6-c223-4080-b951-f63efc1f65f7",
+            "name": "GWS Giants",
             "home_away": "HOME",
-            "colour": "#000000"
+            "colour": "#f47920"
         }
     },
     "events": {
-        "4d72eb15-f849-416c-a65a-67c5d1e955d5": {
-            "id": "4d72eb15-f849-416c-a65a-67c5d1e955d5",
-            "name": "Port Adelaide vs Fremantle",
+        "8d26cee6-c223-4080-b951-f63efc1f65f7": {
+            "id": "8d26cee6-c223-4080-b951-f63efc1f65f7",
+            "name": "GWS Giants vs North Melbourne",
             "event_type": {
                 "id": "6bfa0efc-05df-4ae1-9b1e-152365290cfd",
                 "name": "Match"
             },
             "match_status": "BettingOpen",
-            "advertised_start": "2025-08-09T10:10:00Z",
-            "actual_start": "2025-08-09T10:10:00Z",
+            "advertised_start": "2025-08-10T03:40:00Z",
+            "actual_start": "2025-08-10T03:40:00Z",
             "visible": true,
-            "slug": "port-adelaide-vs-fremantle",
+            "slug": "gws-giants-vs-north-melbourne",
             "competition": {
                 "id": "ccff2e9a-5347-41aa-902a-bb6b1886d817",
                 "name": "AFL",
@@ -60,22 +60,22 @@
                 {
                     "market_type_group_id": "29edb5e1-a717-4769-8bcd-2d43ec38d828",
                     "market_ids": [
-                        "d97e4ea7-6b78-4be8-a93c-026dc4ef165d"
+                        "23e2e92d-6d65-40aa-836f-a005a7df443a"
                     ]
                 }
             ],
             "market_count": 1,
             "main_markets": [
-                "d97e4ea7-6b78-4be8-a93c-026dc4ef165d"
+                "23e2e92d-6d65-40aa-836f-a005a7df443a"
             ],
             "market_ids": [
-                "d97e4ea7-6b78-4be8-a93c-026dc4ef165d"
+                "23e2e92d-6d65-40aa-836f-a005a7df443a"
             ],
             "category_id": "23d497e6-8aab-4309-905b-9421f42c9bc5",
             "round_id": "2c229b74-604f-477c-be80-6ea4615b5445",
             "participant_ids": [
-                "0eb892a2-7e0c-4af4-bb4c-6bb3825c9cd2",
-                "e6716d1a-0503-410c-b8ab-80da8f7a018e"
+                "8b014909-0572-4a3d-98ba-acaff5e5d48c",
+                "f46a552e-9389-4062-912c-950ad72efb26"
             ]
         }
     },
@@ -89,41 +89,41 @@
         }
     },
     "markets": {
-        "d97e4ea7-6b78-4be8-a93c-026dc4ef165d": {
-            "id": "d97e4ea7-6b78-4be8-a93c-026dc4ef165d",
-            "event_id": "4d72eb15-f849-416c-a65a-67c5d1e955d5",
+        "23e2e92d-6d65-40aa-836f-a005a7df443a": {
+            "id": "23e2e92d-6d65-40aa-836f-a005a7df443a",
+            "event_id": "8d26cee6-c223-4080-b951-f63efc1f65f7",
             "market_type_id": "be25c37a-71ff-47f6-a1e2-02a494eb5a4d",
             "market_status_id": "4bc8fe96-296b-4b4c-aea4-85c94f63b9c6",
             "name": "Match Betting",
             "advertised_start": {
-                "seconds": 1754734200
+                "seconds": 1754797200
             },
             "actual_start": {
-                "seconds": 1754734200
+                "seconds": 1754797200
             },
             "is_primary": true,
             "visible": true,
             "entrant_ids": [
-                "d311ab00-6589-4c77-9ff9-29ef16f30874",
-                "e3c7e76a-c3dd-415c-a205-69ea373576c3"
+                "2534ed4c-deac-4ec9-8c99-80ba112f1f05",
+                "74bc4fbd-87ab-4d82-b85f-90e27bc142d5"
             ],
             "num_winners": 1
         }
     },
     "markets_allow_cashout": {
-        "d97e4ea7-6b78-4be8-a93c-026dc4ef165d": false
+        "23e2e92d-6d65-40aa-836f-a005a7df443a": false
     },
     "prices": {
-        "d311ab00-6589-4c77-9ff9-29ef16f30874:940b8704-e497-4a76-b390-00918ff7d282:": {
+        "2534ed4c-deac-4ec9-8c99-80ba112f1f05:940b8704-e497-4a76-b390-00918ff7d282:": {
             "odds": {
-                "numerator": 41,
-                "denominator": 20
+                "numerator": 1,
+                "denominator": 25
             }
         },
-        "e3c7e76a-c3dd-415c-a205-69ea373576c3:940b8704-e497-4a76-b390-00918ff7d282:": {
+        "74bc4fbd-87ab-4d82-b85f-90e27bc142d5:940b8704-e497-4a76-b390-00918ff7d282:": {
             "odds": {
-                "numerator": 19,
-                "denominator": 50
+                "numerator": 10,
+                "denominator": 1
             }
         }
     }
