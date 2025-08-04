@@ -8,6 +8,14 @@
             "sort_order": 20,
             "market_id": "cd26dc66-297e-4dc1-8152-739ea6efd900"
         },
+        "84078d75-2f01-4b36-a9d5-d7c359ed36e4": {
+            "id": "84078d75-2f01-4b36-a9d5-d7c359ed36e4",
+            "name": "West Coast Eagles",
+            "home_away": "HOME",
+            "visible": true,
+            "sort_order": 10,
+            "market_id": "5044fc5a-35e1-4d3d-97ad-4fa226080c5f"
+        },
         "cb3e9734-0607-4bc4-b447-cc85b5bd8d0d": {
             "id": "cb3e9734-0607-4bc4-b447-cc85b5bd8d0d",
             "name": "West Coast Eagles",
@@ -15,6 +23,14 @@
             "visible": true,
             "sort_order": 10,
             "market_id": "cd26dc66-297e-4dc1-8152-739ea6efd900"
+        },
+        "fa085824-8fdd-4a47-9fe8-a73d4dbeb2ca": {
+            "id": "fa085824-8fdd-4a47-9fe8-a73d4dbeb2ca",
+            "name": "Adelaide Crows",
+            "home_away": "AWAY",
+            "visible": true,
+            "sort_order": 20,
+            "market_id": "5044fc5a-35e1-4d3d-97ad-4fa226080c5f"
         }
     },
     "event_participants": {
@@ -60,16 +76,18 @@
                 {
                     "market_type_group_id": "29edb5e1-a717-4769-8bcd-2d43ec38d828",
                     "market_ids": [
-                        "cd26dc66-297e-4dc1-8152-739ea6efd900"
+                        "cd26dc66-297e-4dc1-8152-739ea6efd900",
+                        "5044fc5a-35e1-4d3d-97ad-4fa226080c5f"
                     ]
                 }
             ],
-            "market_count": 1,
+            "market_count": 2,
             "main_markets": [
                 "cd26dc66-297e-4dc1-8152-739ea6efd900"
             ],
             "market_ids": [
-                "cd26dc66-297e-4dc1-8152-739ea6efd900"
+                "cd26dc66-297e-4dc1-8152-739ea6efd900",
+                "5044fc5a-35e1-4d3d-97ad-4fa226080c5f"
             ],
             "category_id": "23d497e6-8aab-4309-905b-9421f42c9bc5",
             "round_id": "2c229b74-604f-477c-be80-6ea4615b5445",
@@ -89,6 +107,26 @@
         }
     },
     "markets": {
+        "5044fc5a-35e1-4d3d-97ad-4fa226080c5f": {
+            "id": "5044fc5a-35e1-4d3d-97ad-4fa226080c5f",
+            "event_id": "0f1b8fbf-b116-49db-93d5-145abf6cc752",
+            "market_type_id": "d04cddcd-5f42-4d17-ae1c-950dfdaa2c98",
+            "market_status_id": "4bc8fe96-296b-4b4c-aea4-85c94f63b9c6",
+            "name": "Line",
+            "advertised_start": {
+                "seconds": 1754809800
+            },
+            "actual_start": {
+                "seconds": 1754809800
+            },
+            "handicap": -57.5,
+            "visible": true,
+            "entrant_ids": [
+                "84078d75-2f01-4b36-a9d5-d7c359ed36e4",
+                "fa085824-8fdd-4a47-9fe8-a73d4dbeb2ca"
+            ],
+            "num_winners": 1
+        },
         "cd26dc66-297e-4dc1-8152-739ea6efd900": {
             "id": "cd26dc66-297e-4dc1-8152-739ea6efd900",
             "event_id": "0f1b8fbf-b116-49db-93d5-145abf6cc752",
@@ -111,6 +149,7 @@
         }
     },
     "markets_allow_cashout": {
+        "5044fc5a-35e1-4d3d-97ad-4fa226080c5f": false,
         "cd26dc66-297e-4dc1-8152-739ea6efd900": true
     },
     "prices": {
@@ -120,10 +159,22 @@
                 "denominator": 100
             }
         },
+        "84078d75-2f01-4b36-a9d5-d7c359ed36e4:940b8704-e497-4a76-b390-00918ff7d282:": {
+            "odds": {
+                "numerator": 87,
+                "denominator": 100
+            }
+        },
         "cb3e9734-0607-4bc4-b447-cc85b5bd8d0d:940b8704-e497-4a76-b390-00918ff7d282:": {
             "odds": {
                 "numerator": 11,
                 "denominator": 1
+            }
+        },
+        "fa085824-8fdd-4a47-9fe8-a73d4dbeb2ca:940b8704-e497-4a76-b390-00918ff7d282:": {
+            "odds": {
+                "numerator": 87,
+                "denominator": 100
             }
         }
     }

@@ -1,51 +1,67 @@
 {
     "entrants": {
-        "68f87b1e-85b2-443f-bd05-db2632c90e3b": {
-            "id": "68f87b1e-85b2-443f-bd05-db2632c90e3b",
-            "name": "Western Bulldogs",
+        "13c91664-9ffe-4fc6-910a-821c4b52b03c": {
+            "id": "13c91664-9ffe-4fc6-910a-821c4b52b03c",
+            "name": "Gold Coast Suns",
             "home_away": "AWAY",
             "visible": true,
             "sort_order": 20,
-            "market_id": "e2d1d091-91e5-45cd-bcb1-479562984b59"
+            "market_id": "a1c507f2-f1f1-4939-850e-d4b1a68dbac0"
         },
-        "cec22319-56d9-4680-a1eb-e0be29984305": {
-            "id": "cec22319-56d9-4680-a1eb-e0be29984305",
-            "name": "Melbourne",
+        "21a6593d-5ba6-432f-b06b-269716072a88": {
+            "id": "21a6593d-5ba6-432f-b06b-269716072a88",
+            "name": "Carlton",
             "home_away": "HOME",
             "visible": true,
             "sort_order": 10,
-            "market_id": "e2d1d091-91e5-45cd-bcb1-479562984b59"
+            "market_id": "1ddfcb0b-b7f9-4127-954b-4f2e3448143a"
+        },
+        "9166ab57-c8e6-4a4b-b32a-9f2c5bc71f79": {
+            "id": "9166ab57-c8e6-4a4b-b32a-9f2c5bc71f79",
+            "name": "Carlton",
+            "home_away": "HOME",
+            "visible": true,
+            "sort_order": 10,
+            "market_id": "a1c507f2-f1f1-4939-850e-d4b1a68dbac0"
+        },
+        "92e780ca-632b-4533-903c-b929ec0d31ea": {
+            "id": "92e780ca-632b-4533-903c-b929ec0d31ea",
+            "name": "Gold Coast Suns",
+            "home_away": "AWAY",
+            "visible": true,
+            "sort_order": 20,
+            "market_id": "1ddfcb0b-b7f9-4127-954b-4f2e3448143a"
         }
     },
     "event_participants": {
-        "5e4d7779-10fb-4139-83b7-adec417ff9e4": {
-            "id": "5e4d7779-10fb-4139-83b7-adec417ff9e4",
-            "event_id": "5632dd6a-f97f-4d25-baed-28462de065ab",
-            "name": "Melbourne",
+        "8d5a8108-de63-496f-8cc3-ab6f2fc18d84": {
+            "id": "8d5a8108-de63-496f-8cc3-ab6f2fc18d84",
+            "event_id": "726d3223-7a66-4069-b2e6-af9ec4a55ca3",
+            "name": "Carlton",
             "home_away": "HOME",
-            "colour": "#0f1131"
+            "colour": "#031a29"
         },
-        "938b9b2a-f68c-4d3f-92a7-44691779196c": {
-            "id": "938b9b2a-f68c-4d3f-92a7-44691779196c",
-            "event_id": "5632dd6a-f97f-4d25-baed-28462de065ab",
-            "name": "Western Bulldogs",
+        "a053f5e5-bb07-40ff-8ff9-315bf1e1ae7b": {
+            "id": "a053f5e5-bb07-40ff-8ff9-315bf1e1ae7b",
+            "event_id": "726d3223-7a66-4069-b2e6-af9ec4a55ca3",
+            "name": "Gold Coast Suns",
             "home_away": "AWAY",
-            "colour": "#ffffff"
+            "colour": "#ee3728"
         }
     },
     "events": {
-        "5632dd6a-f97f-4d25-baed-28462de065ab": {
-            "id": "5632dd6a-f97f-4d25-baed-28462de065ab",
-            "name": "Melbourne vs Western Bulldogs",
+        "726d3223-7a66-4069-b2e6-af9ec4a55ca3": {
+            "id": "726d3223-7a66-4069-b2e6-af9ec4a55ca3",
+            "name": "Carlton vs Gold Coast Suns",
             "event_type": {
                 "id": "6bfa0efc-05df-4ae1-9b1e-152365290cfd",
                 "name": "Match"
             },
             "match_status": "BettingOpen",
-            "advertised_start": "2025-08-10T05:15:00Z",
-            "actual_start": "2025-08-10T05:15:00Z",
+            "advertised_start": "2025-08-09T09:35:00Z",
+            "actual_start": "2025-08-09T09:35:00Z",
             "visible": true,
-            "slug": "melbourne-vs-western-bulldogs",
+            "slug": "carlton-vs-gold-coast-suns",
             "competition": {
                 "id": "ccff2e9a-5347-41aa-902a-bb6b1886d817",
                 "name": "AFL",
@@ -60,22 +76,24 @@
                 {
                     "market_type_group_id": "29edb5e1-a717-4769-8bcd-2d43ec38d828",
                     "market_ids": [
-                        "e2d1d091-91e5-45cd-bcb1-479562984b59"
+                        "1ddfcb0b-b7f9-4127-954b-4f2e3448143a",
+                        "a1c507f2-f1f1-4939-850e-d4b1a68dbac0"
                     ]
                 }
             ],
-            "market_count": 1,
+            "market_count": 2,
             "main_markets": [
-                "e2d1d091-91e5-45cd-bcb1-479562984b59"
+                "1ddfcb0b-b7f9-4127-954b-4f2e3448143a"
             ],
             "market_ids": [
-                "e2d1d091-91e5-45cd-bcb1-479562984b59"
+                "1ddfcb0b-b7f9-4127-954b-4f2e3448143a",
+                "a1c507f2-f1f1-4939-850e-d4b1a68dbac0"
             ],
             "category_id": "23d497e6-8aab-4309-905b-9421f42c9bc5",
             "round_id": "2c229b74-604f-477c-be80-6ea4615b5445",
             "participant_ids": [
-                "5e4d7779-10fb-4139-83b7-adec417ff9e4",
-                "938b9b2a-f68c-4d3f-92a7-44691779196c"
+                "8d5a8108-de63-496f-8cc3-ab6f2fc18d84",
+                "a053f5e5-bb07-40ff-8ff9-315bf1e1ae7b"
             ]
         }
     },
@@ -89,41 +107,74 @@
         }
     },
     "markets": {
-        "e2d1d091-91e5-45cd-bcb1-479562984b59": {
-            "id": "e2d1d091-91e5-45cd-bcb1-479562984b59",
-            "event_id": "5632dd6a-f97f-4d25-baed-28462de065ab",
+        "1ddfcb0b-b7f9-4127-954b-4f2e3448143a": {
+            "id": "1ddfcb0b-b7f9-4127-954b-4f2e3448143a",
+            "event_id": "726d3223-7a66-4069-b2e6-af9ec4a55ca3",
             "market_type_id": "be25c37a-71ff-47f6-a1e2-02a494eb5a4d",
             "market_status_id": "4bc8fe96-296b-4b4c-aea4-85c94f63b9c6",
             "name": "Match Betting",
             "advertised_start": {
-                "seconds": 1754802900
+                "seconds": 1754732100
             },
             "actual_start": {
-                "seconds": 1754802900
+                "seconds": 1754732100
             },
             "is_primary": true,
             "visible": true,
             "entrant_ids": [
-                "cec22319-56d9-4680-a1eb-e0be29984305",
-                "68f87b1e-85b2-443f-bd05-db2632c90e3b"
+                "21a6593d-5ba6-432f-b06b-269716072a88",
+                "92e780ca-632b-4533-903c-b929ec0d31ea"
+            ],
+            "num_winners": 1
+        },
+        "a1c507f2-f1f1-4939-850e-d4b1a68dbac0": {
+            "id": "a1c507f2-f1f1-4939-850e-d4b1a68dbac0",
+            "event_id": "726d3223-7a66-4069-b2e6-af9ec4a55ca3",
+            "market_type_id": "d04cddcd-5f42-4d17-ae1c-950dfdaa2c98",
+            "market_status_id": "4bc8fe96-296b-4b4c-aea4-85c94f63b9c6",
+            "name": "Line",
+            "advertised_start": {
+                "seconds": 1754732100
+            },
+            "actual_start": {
+                "seconds": 1754732100
+            },
+            "handicap": -27.5,
+            "visible": true,
+            "entrant_ids": [
+                "9166ab57-c8e6-4a4b-b32a-9f2c5bc71f79",
+                "13c91664-9ffe-4fc6-910a-821c4b52b03c"
             ],
             "num_winners": 1
         }
     },
     "markets_allow_cashout": {
-        "e2d1d091-91e5-45cd-bcb1-479562984b59": true
+        "1ddfcb0b-b7f9-4127-954b-4f2e3448143a": true,
+        "a1c507f2-f1f1-4939-850e-d4b1a68dbac0": false
     },
     "prices": {
-        "68f87b1e-85b2-443f-bd05-db2632c90e3b:940b8704-e497-4a76-b390-00918ff7d282:": {
+        "13c91664-9ffe-4fc6-910a-821c4b52b03c:940b8704-e497-4a76-b390-00918ff7d282:": {
             "odds": {
-                "numerator": 3,
-                "denominator": 10
+                "numerator": 87,
+                "denominator": 100
             }
         },
-        "cec22319-56d9-4680-a1eb-e0be29984305:940b8704-e497-4a76-b390-00918ff7d282:": {
+        "21a6593d-5ba6-432f-b06b-269716072a88:940b8704-e497-4a76-b390-00918ff7d282:": {
             "odds": {
-                "numerator": 5,
+                "numerator": 7,
                 "denominator": 2
+            }
+        },
+        "9166ab57-c8e6-4a4b-b32a-9f2c5bc71f79:940b8704-e497-4a76-b390-00918ff7d282:": {
+            "odds": {
+                "numerator": 87,
+                "denominator": 100
+            }
+        },
+        "92e780ca-632b-4533-903c-b929ec0d31ea:940b8704-e497-4a76-b390-00918ff7d282:": {
+            "odds": {
+                "numerator": 19,
+                "denominator": 100
             }
         }
     }
