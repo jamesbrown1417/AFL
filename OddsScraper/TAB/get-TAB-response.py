@@ -1,5 +1,5 @@
-import requests
 import json
+from playwright.sync_api import sync_playwright
 
 # Define the URL for the GET request (for AFL odds)
 tab_url = "https://api.beta.tab.com.au/v1/tab-info-service/sports/AFL%20Football/competitions/AFL?homeState=SA&jurisdiction=SA"
@@ -8,41 +8,35 @@ tab_url = "https://api.beta.tab.com.au/v1/tab-info-service/sports/AFL%20Football
 headers = {
     "accept": "application/json, text/plain, */*",
     "accept-language": "en-US,en;q=0.9",
-    "origin": "https://www.tab.com.au",
     "referer": "https://www.tab.com.au/",
-    "sec-ch-ua": '"Not/A)Brand";v="8", "Chromium";v="129", "Google Chrome";v="129"',
+    "sec-ch-ua": '"Not)A;Brand";v="8", "Chromium";v="138", "Google Chrome";v="138"',
     "sec-ch-ua-mobile": "?0",
-    "sec-ch-ua-platform": '"Windows"',
+    "sec-ch-ua-platform": '"macOS"',
     "sec-fetch-dest": "empty",
     "sec-fetch-mode": "cors",
     "sec-fetch-site": "same-site",
-    "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36"
+    "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36",
 }
 
-# Attempt the GET request with a 10-second timeout. If the request fails, set response to None.
-try:
-    response = requests.get(tab_url, headers=headers, timeout=10)
-except requests.exceptions.RequestException:
-    response = None
+tab_response = None
 
-# Check if the response is valid and the request was successful (status code 200).
-if response is not None and response.status_code == 200:
+with sync_playwright() as p:
+    req = p.request.new_context()
+    response = None
     try:
-        # Parse the response body as JSON and store it in tab_response.
-        tab_response = response.json()
-    except ValueError:
-        # Handle the case where the response is not a valid JSON.
-        tab_response = None
-else:
-    # If the request failed or the response was invalid, set tab_response to None.
-    tab_response = None
+        response = req.get(tab_url, headers=headers, timeout=10000)  # 10s in ms
+    except Exception:
+        response = None
+
+    if response is not None and response.status == 200:
+        try:
+            tab_response = response.json()
+        except ValueError:
+            tab_response = None
 
 # If the response was successfully parsed, write the JSON data to a file.
 if tab_response is not None:
-    # Specify the path and file name where the JSON data will be saved.
     with open("OddsScraper/TAB/tab_response.json", "w") as json_file:
-        # Write the JSON data to the file with pretty formatting (indentation).
         json.dump(tab_response, json_file, indent=4)
 else:
-    # Print a message if there's no data to write.
     print("No data to write to file.")
