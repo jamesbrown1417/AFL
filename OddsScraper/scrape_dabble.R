@@ -121,6 +121,9 @@ fixtures <-
 # Get List of Fixture URLs
 fixture_urls <- paste0("https://api.dabble.com.au/sportfixtures/details/", fixtures$id)
 
+# Pick Em URLs
+pickem_urls <- paste0("https://api.dabble.com.au/sportfixtures/details/", fixtures$id, "?filter=dfs-enabled")
+
 # Function to get fixture details
 get_fixture_details <- function(url) {
   
