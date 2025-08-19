@@ -1,0 +1,181 @@
+{
+    "entrants": {
+        "0f7a9bc8-80d3-40a4-8011-5d08e1dc2294": {
+            "id": "0f7a9bc8-80d3-40a4-8011-5d08e1dc2294",
+            "name": "Hawthorn (W)",
+            "home_away": "HOME",
+            "visible": true,
+            "sort_order": 10,
+            "market_id": "07c6c558-e200-4d7e-9987-a2ac425f52e6"
+        },
+        "1859b17e-ef08-48c4-9610-926531ef1b48": {
+            "id": "1859b17e-ef08-48c4-9610-926531ef1b48",
+            "name": "Hawthorn (W)",
+            "home_away": "HOME",
+            "visible": true,
+            "sort_order": 10,
+            "market_id": "eaa3cce1-a666-4d5d-9664-0dc00b4e98bd"
+        },
+        "4f927543-28d6-48b7-8421-e85a78e7ec62": {
+            "id": "4f927543-28d6-48b7-8421-e85a78e7ec62",
+            "name": "Carlton (W)",
+            "home_away": "AWAY",
+            "visible": true,
+            "sort_order": 20,
+            "market_id": "07c6c558-e200-4d7e-9987-a2ac425f52e6"
+        },
+        "c1761efd-bafc-4dd3-83c7-5d85a656fb91": {
+            "id": "c1761efd-bafc-4dd3-83c7-5d85a656fb91",
+            "name": "Carlton (W)",
+            "home_away": "AWAY",
+            "visible": true,
+            "sort_order": 20,
+            "market_id": "eaa3cce1-a666-4d5d-9664-0dc00b4e98bd"
+        }
+    },
+    "event_participants": {
+        "419fc35c-23ff-4aa5-b2ef-6204d550298b": {
+            "id": "419fc35c-23ff-4aa5-b2ef-6204d550298b",
+            "event_id": "c05c359e-5aa7-464b-8e46-cd4d59e12dcf",
+            "name": "Hawthorn (W)",
+            "home_away": "HOME",
+            "colour": "#663300"
+        },
+        "6f71e7a8-926f-4037-8d9f-c8ed48107a18": {
+            "id": "6f71e7a8-926f-4037-8d9f-c8ed48107a18",
+            "event_id": "c05c359e-5aa7-464b-8e46-cd4d59e12dcf",
+            "name": "Carlton (W)",
+            "home_away": "AWAY",
+            "colour": "#031a29"
+        }
+    },
+    "events": {
+        "c05c359e-5aa7-464b-8e46-cd4d59e12dcf": {
+            "id": "c05c359e-5aa7-464b-8e46-cd4d59e12dcf",
+            "name": "Hawthorn (W) vs Carlton (W)",
+            "event_type": {
+                "id": "6bfa0efc-05df-4ae1-9b1e-152365290cfd",
+                "name": "Match"
+            },
+            "match_status": "BettingOpen",
+            "advertised_start": "2025-08-23T09:15:00Z",
+            "actual_start": "2025-08-23T09:15:00Z",
+            "visible": true,
+            "slug": "hawthorn-w-vs-carlton-w",
+            "competition": {
+                "id": "f4de6fff-de1d-40f9-b3bc-1d9d614ae6c1",
+                "name": "AFLW",
+                "sort_order": 8,
+                "region": "Australia"
+            },
+            "competition_id": "f4de6fff-de1d-40f9-b3bc-1d9d614ae6c1",
+            "market_type_group_ids": [
+                "29edb5e1-a717-4769-8bcd-2d43ec38d828"
+            ],
+            "market_type_group_markets": [
+                {
+                    "market_type_group_id": "29edb5e1-a717-4769-8bcd-2d43ec38d828",
+                    "market_ids": [
+                        "eaa3cce1-a666-4d5d-9664-0dc00b4e98bd",
+                        "07c6c558-e200-4d7e-9987-a2ac425f52e6"
+                    ]
+                }
+            ],
+            "market_count": 2,
+            "main_markets": [
+                "eaa3cce1-a666-4d5d-9664-0dc00b4e98bd"
+            ],
+            "market_ids": [
+                "eaa3cce1-a666-4d5d-9664-0dc00b4e98bd",
+                "07c6c558-e200-4d7e-9987-a2ac425f52e6"
+            ],
+            "category_id": "23d497e6-8aab-4309-905b-9421f42c9bc5",
+            "round_id": "5d6f6e35-c6c1-4e42-877c-91deca9c6ded",
+            "participant_ids": [
+                "419fc35c-23ff-4aa5-b2ef-6204d550298b",
+                "6f71e7a8-926f-4037-8d9f-c8ed48107a18"
+            ]
+        }
+    },
+    "market_type_groups": {
+        "29edb5e1-a717-4769-8bcd-2d43ec38d828": {
+            "id": "29edb5e1-a717-4769-8bcd-2d43ec38d828",
+            "category_id": "23d497e6-8aab-4309-905b-9421f42c9bc5",
+            "name": "Top Markets",
+            "priority": 352,
+            "type": "MARKET_TYPE_GROUP_TYPE_EVENT"
+        }
+    },
+    "markets": {
+        "07c6c558-e200-4d7e-9987-a2ac425f52e6": {
+            "id": "07c6c558-e200-4d7e-9987-a2ac425f52e6",
+            "event_id": "c05c359e-5aa7-464b-8e46-cd4d59e12dcf",
+            "market_type_id": "d04cddcd-5f42-4d17-ae1c-950dfdaa2c98",
+            "market_status_id": "4bc8fe96-296b-4b4c-aea4-85c94f63b9c6",
+            "name": "Line",
+            "advertised_start": {
+                "seconds": 1755940500
+            },
+            "actual_start": {
+                "seconds": 1755940500
+            },
+            "handicap": 18.5,
+            "visible": true,
+            "entrant_ids": [
+                "0f7a9bc8-80d3-40a4-8011-5d08e1dc2294",
+                "4f927543-28d6-48b7-8421-e85a78e7ec62"
+            ],
+            "num_winners": 1
+        },
+        "eaa3cce1-a666-4d5d-9664-0dc00b4e98bd": {
+            "id": "eaa3cce1-a666-4d5d-9664-0dc00b4e98bd",
+            "event_id": "c05c359e-5aa7-464b-8e46-cd4d59e12dcf",
+            "market_type_id": "be25c37a-71ff-47f6-a1e2-02a494eb5a4d",
+            "market_status_id": "4bc8fe96-296b-4b4c-aea4-85c94f63b9c6",
+            "name": "Match Betting",
+            "advertised_start": {
+                "seconds": 1755940500
+            },
+            "actual_start": {
+                "seconds": 1755940500
+            },
+            "is_primary": true,
+            "visible": true,
+            "entrant_ids": [
+                "1859b17e-ef08-48c4-9610-926531ef1b48",
+                "c1761efd-bafc-4dd3-83c7-5d85a656fb91"
+            ],
+            "num_winners": 1
+        }
+    },
+    "markets_allow_cashout": {
+        "07c6c558-e200-4d7e-9987-a2ac425f52e6": false,
+        "eaa3cce1-a666-4d5d-9664-0dc00b4e98bd": true
+    },
+    "prices": {
+        "0f7a9bc8-80d3-40a4-8011-5d08e1dc2294:940b8704-e497-4a76-b390-00918ff7d282:": {
+            "odds": {
+                "numerator": 87,
+                "denominator": 100
+            }
+        },
+        "1859b17e-ef08-48c4-9610-926531ef1b48:940b8704-e497-4a76-b390-00918ff7d282:": {
+            "odds": {
+                "numerator": 19,
+                "denominator": 100
+            }
+        },
+        "4f927543-28d6-48b7-8421-e85a78e7ec62:940b8704-e497-4a76-b390-00918ff7d282:": {
+            "odds": {
+                "numerator": 87,
+                "denominator": 100
+            }
+        },
+        "c1761efd-bafc-4dd3-83c7-5d85a656fb91:940b8704-e497-4a76-b390-00918ff7d282:": {
+            "odds": {
+                "numerator": 7,
+                "denominator": 2
+            }
+        }
+    }
+}

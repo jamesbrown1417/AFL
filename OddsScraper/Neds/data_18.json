@@ -1,0 +1,181 @@
+{
+    "entrants": {
+        "835175cd-36ac-4df4-8092-3d651d70e4aa": {
+            "id": "835175cd-36ac-4df4-8092-3d651d70e4aa",
+            "name": "Fremantle (W)",
+            "home_away": "HOME",
+            "visible": true,
+            "sort_order": 10,
+            "market_id": "e0d2bad6-22af-43a8-bd8b-694a933a4dde"
+        },
+        "bb59d4b1-7874-4c37-b00c-3058f750c732": {
+            "id": "bb59d4b1-7874-4c37-b00c-3058f750c732",
+            "name": "Brisbane Lions (W)",
+            "home_away": "AWAY",
+            "visible": true,
+            "sort_order": 20,
+            "market_id": "e0d2bad6-22af-43a8-bd8b-694a933a4dde"
+        },
+        "cb0482a7-0923-46f2-9d61-4c7bc341308a": {
+            "id": "cb0482a7-0923-46f2-9d61-4c7bc341308a",
+            "name": "Brisbane Lions (W)",
+            "home_away": "AWAY",
+            "visible": true,
+            "sort_order": 20,
+            "market_id": "c75a6332-76b8-47b3-9947-8458d7f852c7"
+        },
+        "cfd00fd1-2b2c-4e13-a471-3eb029665beb": {
+            "id": "cfd00fd1-2b2c-4e13-a471-3eb029665beb",
+            "name": "Fremantle (W)",
+            "home_away": "HOME",
+            "visible": true,
+            "sort_order": 10,
+            "market_id": "c75a6332-76b8-47b3-9947-8458d7f852c7"
+        }
+    },
+    "event_participants": {
+        "10dd6639-7bc3-4dd9-b96e-86de4060de49": {
+            "id": "10dd6639-7bc3-4dd9-b96e-86de4060de49",
+            "event_id": "d6d305d1-2c2c-41dd-9d83-0a8cff5e0c2e",
+            "name": "Brisbane Lions (W)",
+            "home_away": "AWAY",
+            "colour": "#a0192e"
+        },
+        "490e64da-b949-435c-bd36-be68d39cd46e": {
+            "id": "490e64da-b949-435c-bd36-be68d39cd46e",
+            "event_id": "d6d305d1-2c2c-41dd-9d83-0a8cff5e0c2e",
+            "name": "Fremantle (W)",
+            "home_away": "HOME",
+            "colour": "#583085"
+        }
+    },
+    "events": {
+        "d6d305d1-2c2c-41dd-9d83-0a8cff5e0c2e": {
+            "id": "d6d305d1-2c2c-41dd-9d83-0a8cff5e0c2e",
+            "name": "Fremantle (W) vs Brisbane Lions (W)",
+            "event_type": {
+                "id": "6bfa0efc-05df-4ae1-9b1e-152365290cfd",
+                "name": "Match"
+            },
+            "match_status": "BettingOpen",
+            "advertised_start": "2025-08-23T07:05:00Z",
+            "actual_start": "2025-08-23T07:05:00Z",
+            "visible": true,
+            "slug": "fremantle-w-vs-brisbane-lions-w",
+            "competition": {
+                "id": "f4de6fff-de1d-40f9-b3bc-1d9d614ae6c1",
+                "name": "AFLW",
+                "sort_order": 8,
+                "region": "Australia"
+            },
+            "competition_id": "f4de6fff-de1d-40f9-b3bc-1d9d614ae6c1",
+            "market_type_group_ids": [
+                "29edb5e1-a717-4769-8bcd-2d43ec38d828"
+            ],
+            "market_type_group_markets": [
+                {
+                    "market_type_group_id": "29edb5e1-a717-4769-8bcd-2d43ec38d828",
+                    "market_ids": [
+                        "c75a6332-76b8-47b3-9947-8458d7f852c7",
+                        "e0d2bad6-22af-43a8-bd8b-694a933a4dde"
+                    ]
+                }
+            ],
+            "market_count": 2,
+            "main_markets": [
+                "c75a6332-76b8-47b3-9947-8458d7f852c7"
+            ],
+            "market_ids": [
+                "c75a6332-76b8-47b3-9947-8458d7f852c7",
+                "e0d2bad6-22af-43a8-bd8b-694a933a4dde"
+            ],
+            "category_id": "23d497e6-8aab-4309-905b-9421f42c9bc5",
+            "round_id": "5d6f6e35-c6c1-4e42-877c-91deca9c6ded",
+            "participant_ids": [
+                "10dd6639-7bc3-4dd9-b96e-86de4060de49",
+                "490e64da-b949-435c-bd36-be68d39cd46e"
+            ]
+        }
+    },
+    "market_type_groups": {
+        "29edb5e1-a717-4769-8bcd-2d43ec38d828": {
+            "id": "29edb5e1-a717-4769-8bcd-2d43ec38d828",
+            "category_id": "23d497e6-8aab-4309-905b-9421f42c9bc5",
+            "name": "Top Markets",
+            "priority": 352,
+            "type": "MARKET_TYPE_GROUP_TYPE_EVENT"
+        }
+    },
+    "markets": {
+        "c75a6332-76b8-47b3-9947-8458d7f852c7": {
+            "id": "c75a6332-76b8-47b3-9947-8458d7f852c7",
+            "event_id": "d6d305d1-2c2c-41dd-9d83-0a8cff5e0c2e",
+            "market_type_id": "be25c37a-71ff-47f6-a1e2-02a494eb5a4d",
+            "market_status_id": "4bc8fe96-296b-4b4c-aea4-85c94f63b9c6",
+            "name": "Match Betting",
+            "advertised_start": {
+                "seconds": 1755932700
+            },
+            "actual_start": {
+                "seconds": 1755932700
+            },
+            "is_primary": true,
+            "visible": true,
+            "entrant_ids": [
+                "cfd00fd1-2b2c-4e13-a471-3eb029665beb",
+                "cb0482a7-0923-46f2-9d61-4c7bc341308a"
+            ],
+            "num_winners": 1
+        },
+        "e0d2bad6-22af-43a8-bd8b-694a933a4dde": {
+            "id": "e0d2bad6-22af-43a8-bd8b-694a933a4dde",
+            "event_id": "d6d305d1-2c2c-41dd-9d83-0a8cff5e0c2e",
+            "market_type_id": "d04cddcd-5f42-4d17-ae1c-950dfdaa2c98",
+            "market_status_id": "4bc8fe96-296b-4b4c-aea4-85c94f63b9c6",
+            "name": "Line",
+            "advertised_start": {
+                "seconds": 1755932700
+            },
+            "actual_start": {
+                "seconds": 1755932700
+            },
+            "handicap": -6.5,
+            "visible": true,
+            "entrant_ids": [
+                "835175cd-36ac-4df4-8092-3d651d70e4aa",
+                "bb59d4b1-7874-4c37-b00c-3058f750c732"
+            ],
+            "num_winners": 1
+        }
+    },
+    "markets_allow_cashout": {
+        "c75a6332-76b8-47b3-9947-8458d7f852c7": true,
+        "e0d2bad6-22af-43a8-bd8b-694a933a4dde": false
+    },
+    "prices": {
+        "835175cd-36ac-4df4-8092-3d651d70e4aa:940b8704-e497-4a76-b390-00918ff7d282:": {
+            "odds": {
+                "numerator": 87,
+                "denominator": 100
+            }
+        },
+        "bb59d4b1-7874-4c37-b00c-3058f750c732:940b8704-e497-4a76-b390-00918ff7d282:": {
+            "odds": {
+                "numerator": 87,
+                "denominator": 100
+            }
+        },
+        "cb0482a7-0923-46f2-9d61-4c7bc341308a:940b8704-e497-4a76-b390-00918ff7d282:": {
+            "odds": {
+                "numerator": 53,
+                "denominator": 100
+            }
+        },
+        "cfd00fd1-2b2c-4e13-a471-3eb029665beb:940b8704-e497-4a76-b390-00918ff7d282:": {
+            "odds": {
+                "numerator": 3,
+                "denominator": 2
+            }
+        }
+    }
+}
