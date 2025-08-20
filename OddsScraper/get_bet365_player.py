@@ -23,6 +23,7 @@ async def main():
     # options.add_argument("--headless=True")
     
     async with webdriver.Chrome(options=options) as driver:
+        await driver.minimize_window()
         for index, url in enumerate(url_df, start=1): # Start counting from 1 for match_n
             try:
                 await driver.get(url)

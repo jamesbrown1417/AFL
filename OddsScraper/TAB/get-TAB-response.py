@@ -1,42 +1,62 @@
+from selenium_driverless import webdriver
+import asyncio
 import json
-from playwright.sync_api import sync_playwright
+import os
 
-# Define the URL for the GET request (for AFL odds)
-tab_url = "https://api.beta.tab.com.au/v1/tab-info-service/sports/AFL%20Football/competitions/AFL?homeState=SA&jurisdiction=SA"
+OUTPUT_PATH = "/Users/jamesbrown/Projects/AFL/OddsScraper/TAB/tab_response.json"
 
-# Set the headers required for the request (simulating a browser request)
-headers = {
-    "accept": "application/json, text/plain, */*",
-    "accept-language": "en-US,en;q=0.9",
-    "referer": "https://www.tab.com.au/",
-    "sec-ch-ua": '"Not)A;Brand";v="8", "Chromium";v="138", "Google Chrome";v="138"',
-    "sec-ch-ua-mobile": "?0",
-    "sec-ch-ua-platform": '"macOS"',
-    "sec-fetch-dest": "empty",
-    "sec-fetch-mode": "cors",
-    "sec-fetch-site": "same-site",
-    "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36",
-}
+async def main():
+    options = webdriver.ChromeOptions()
+    options.add_argument("--disable-blink-features=AutomationControlled")
 
-tab_response = None
-
-with sync_playwright() as p:
-    req = p.request.new_context()
-    response = None
-    try:
-        response = req.get(tab_url, headers=headers, timeout=10000)  # 10s in ms
-    except Exception:
-        response = None
-
-    if response is not None and response.status == 200:
+    
+    async with webdriver.Chrome(options=options) as driver:
+        await driver.minimize_window()
+        # First establish session on main site
+        await driver.get("https://www.tab.com.au")
+        await driver.sleep(3)
+        
+        # Now fetch the API directly through the browser
+        api_url = "https://api.beta.tab.com.au/v1/tab-info-service/sports/AFL%20Football/competitions/AFL?homeState=SA&jurisdiction=SA"
+        await driver.get(api_url)
+        await driver.sleep(2)
+        
+        # Get the JSON response
+        page_content = await driver.page_source
+        
+        # Parse JSON from the page
         try:
-            tab_response = response.json()
-        except ValueError:
-            tab_response = None
+            # Browser displays JSON as text in <pre> tags
+            if "<pre" in page_content:
+                import re
+                json_match = re.search(r'<pre[^>]*>(.+?)</pre>', page_content, re.DOTALL)
+                if json_match:
+                    json_str = json_match.group(1)
+                else:
+                    json_str = page_content
+            else:
+                json_str = page_content
+            
+            data = json.loads(json_str)
+            
+            # Create directory if it doesn't exist
+            os.makedirs(os.path.dirname(OUTPUT_PATH), exist_ok=True)
+            
+            # Save to the specified path
+            with open(OUTPUT_PATH, "w", encoding='utf-8') as f:
+                json.dump(data, f, indent=2)
+            print(f"[SUCCESS] Saved API data to {OUTPUT_PATH}")
+            
+            # Quick summary of what was saved
+            if "matches" in data:
+                print(f"[INFO] Saved {len(data.get('matches', []))} matches")
+            
+        except json.JSONDecodeError:
+            print("[ERROR] Could not parse JSON from response")
+            # Save debug file in same directory
+            debug_path = OUTPUT_PATH.replace('.json', '_debug.html')
+            with open(debug_path, "w", encoding='utf-8') as f:
+                f.write(page_content)
+            print(f"[DEBUG] Saved raw response to {debug_path}")
 
-# If the response was successfully parsed, write the JSON data to a file.
-if tab_response is not None:
-    with open("OddsScraper/TAB/tab_response.json", "w") as json_file:
-        json.dump(tab_response, json_file, indent=4)
-else:
-    print("No data to write to file.")
+asyncio.run(main())
