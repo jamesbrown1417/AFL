@@ -8,14 +8,6 @@
             "sort_order": 10,
             "market_id": "198bc2e2-7035-4cb2-bd5a-8d5ee3a97032"
         },
-        "0ae4944c-27fa-44b5-a9cc-e94787cf0e72": {
-            "id": "0ae4944c-27fa-44b5-a9cc-e94787cf0e72",
-            "name": "Fremantle (W)",
-            "home_away": "HOME",
-            "visible": true,
-            "sort_order": 10,
-            "market_id": "9833144d-08ef-4e6e-b9ff-5e5f52abe659"
-        },
         "0ce2fbd4-a650-4a04-89be-0a0af9543685": {
             "id": "0ce2fbd4-a650-4a04-89be-0a0af9543685",
             "name": "Brisbane Lions (W) Goal",
@@ -63,14 +55,6 @@
             "visible": true,
             "sort_order": 10,
             "market_id": "10bb44e7-bb7a-42ed-9576-a82fb2379d6b"
-        },
-        "1df7b62a-f19c-4388-a5e0-f126046661af": {
-            "id": "1df7b62a-f19c-4388-a5e0-f126046661af",
-            "name": "Brisbane Lions (W)",
-            "home_away": "AWAY",
-            "visible": true,
-            "sort_order": 20,
-            "market_id": "9833144d-08ef-4e6e-b9ff-5e5f52abe659"
         },
         "1ff0a1f1-0517-46bd-8e96-f4a892d6a249": {
             "id": "1ff0a1f1-0517-46bd-8e96-f4a892d6a249",
@@ -589,7 +573,6 @@
             "market_type_group_ids": [
                 "29edb5e1-a717-4769-8bcd-2d43ec38d828",
                 "f8d682e7-80d0-4489-bbf5-358f1e8c7801",
-                "5c1408f5-c08a-4318-9ee5-14be3923e593",
                 "88dbaaac-e459-425e-90f2-319521d6fb27",
                 "23b315d6-f5f6-4a84-aeb7-76ab244b34c0",
                 "068cedc4-f695-4eec-a31d-9e94b25dc06d",
@@ -612,12 +595,6 @@
                         "64a9a895-c0ca-461a-b916-3d2ca3e369c1",
                         "12212855-9f47-4117-95fe-4acc6b3b5725",
                         "56a66113-f846-4819-8bff-8d924a9af301"
-                    ]
-                },
-                {
-                    "market_type_group_id": "5c1408f5-c08a-4318-9ee5-14be3923e593",
-                    "market_ids": [
-                        "9833144d-08ef-4e6e-b9ff-5e5f52abe659"
                     ]
                 },
                 {
@@ -674,7 +651,7 @@
                     ]
                 }
             ],
-            "market_count": 24,
+            "market_count": 23,
             "main_markets": [
                 "c75a6332-76b8-47b3-9947-8458d7f852c7"
             ],
@@ -684,7 +661,6 @@
                 "64a9a895-c0ca-461a-b916-3d2ca3e369c1",
                 "12212855-9f47-4117-95fe-4acc6b3b5725",
                 "56a66113-f846-4819-8bff-8d924a9af301",
-                "9833144d-08ef-4e6e-b9ff-5e5f52abe659",
                 "ef77030e-5e00-4fe9-8609-41afee2cbf95",
                 "32caa5bb-b496-4028-965a-2d5511ca0477",
                 "c56b945a-2bec-45a1-a1e1-a9dbc0b48fe6",
@@ -747,13 +723,6 @@
             "category_id": "23d497e6-8aab-4309-905b-9421f42c9bc5",
             "name": "1st Quarter Markets",
             "priority": 120,
-            "type": "MARKET_TYPE_GROUP_TYPE_EVENT"
-        },
-        "5c1408f5-c08a-4318-9ee5-14be3923e593": {
-            "id": "5c1408f5-c08a-4318-9ee5-14be3923e593",
-            "category_id": "23d497e6-8aab-4309-905b-9421f42c9bc5",
-            "name": "Match Markets",
-            "priority": 210,
             "type": "MARKET_TYPE_GROUP_TYPE_EVENT"
         },
         "88dbaaac-e459-425e-90f2-319521d6fb27": {
@@ -1043,25 +1012,6 @@
             ],
             "num_winners": 1
         },
-        "9833144d-08ef-4e6e-b9ff-5e5f52abe659": {
-            "id": "9833144d-08ef-4e6e-b9ff-5e5f52abe659",
-            "event_id": "d6d305d1-2c2c-41dd-9d83-0a8cff5e0c2e",
-            "market_type_id": "23a8cd1c-1eeb-4844-95f6-c7dcf705ce3d",
-            "market_status_id": "4bc8fe96-296b-4b4c-aea4-85c94f63b9c6",
-            "name": "To Win Both Individual Halves",
-            "advertised_start": {
-                "seconds": 1755932700
-            },
-            "actual_start": {
-                "seconds": 1755932700
-            },
-            "visible": true,
-            "entrant_ids": [
-                "0ae4944c-27fa-44b5-a9cc-e94787cf0e72",
-                "1df7b62a-f19c-4388-a5e0-f126046661af"
-            ],
-            "num_winners": 1
-        },
         "9fb3215a-9ae8-455d-aea7-06b4fb496948": {
             "id": "9fb3215a-9ae8-455d-aea7-06b4fb496948",
             "event_id": "d6d305d1-2c2c-41dd-9d83-0a8cff5e0c2e",
@@ -1308,7 +1258,6 @@
         "5c9d041d-0cfd-4f4a-a841-b7171c932c36": true,
         "64a9a895-c0ca-461a-b916-3d2ca3e369c1": true,
         "8496f2d5-2180-43d0-823c-b12432ac149c": true,
-        "9833144d-08ef-4e6e-b9ff-5e5f52abe659": true,
         "9fb3215a-9ae8-455d-aea7-06b4fb496948": true,
         "b701faac-cc25-47ce-bada-b9b6ba3a0ac2": true,
         "b976eea4-e683-4552-950b-d4042a8bd32e": true,
@@ -1326,12 +1275,6 @@
             "odds": {
                 "numerator": 51,
                 "denominator": 50
-            }
-        },
-        "0ae4944c-27fa-44b5-a9cc-e94787cf0e72:940b8704-e497-4a76-b390-00918ff7d282:": {
-            "odds": {
-                "numerator": 417,
-                "denominator": 100
             }
         },
         "0ce2fbd4-a650-4a04-89be-0a0af9543685:940b8704-e497-4a76-b390-00918ff7d282:": {
@@ -1368,12 +1311,6 @@
             "odds": {
                 "numerator": 49,
                 "denominator": 20
-            }
-        },
-        "1df7b62a-f19c-4388-a5e0-f126046661af:940b8704-e497-4a76-b390-00918ff7d282:": {
-            "odds": {
-                "numerator": 119,
-                "denominator": 50
             }
         },
         "1ff0a1f1-0517-46bd-8e96-f4a892d6a249:940b8704-e497-4a76-b390-00918ff7d282:": {
