@@ -1,58 +1,74 @@
 {
     "entrants": {
-        "54a233d3-8afa-43c4-8741-c78f24f8bc2e": {
-            "id": "54a233d3-8afa-43c4-8741-c78f24f8bc2e",
-            "name": "Geelong Cats",
+        "26958f43-487c-49f5-a729-2d8986f5f110": {
+            "id": "26958f43-487c-49f5-a729-2d8986f5f110",
+            "name": "Western Bulldogs (W)",
             "home_away": "HOME",
             "visible": true,
             "sort_order": 10,
-            "market_id": "f03c472e-83a1-45f5-a41c-ea121707ae7a"
+            "market_id": "7c750570-e136-4f90-88ac-be257048a750"
         },
-        "59c1bbbe-a9f2-49ce-aa37-c2804f2315b8": {
-            "id": "59c1bbbe-a9f2-49ce-aa37-c2804f2315b8",
-            "name": "Brisbane Lions",
-            "home_away": "AWAY",
-            "visible": true,
-            "sort_order": 2,
-            "market_id": "a143ca51-dbc8-4edd-8554-d9c4603e644b"
-        },
-        "9173d83a-9ff0-40d6-9ab0-0761d89686f8": {
-            "id": "9173d83a-9ff0-40d6-9ab0-0761d89686f8",
-            "name": "Brisbane Lions",
+        "5b74d91f-99c0-46f1-b827-2df6c5518791": {
+            "id": "5b74d91f-99c0-46f1-b827-2df6c5518791",
+            "name": "Hawthorn (W)",
             "home_away": "AWAY",
             "visible": true,
             "sort_order": 20,
-            "market_id": "f03c472e-83a1-45f5-a41c-ea121707ae7a"
+            "market_id": "8d66c6f8-5544-4cff-b4f2-74edc84dc8a9"
         },
-        "a9834ca4-3a36-4d62-a63e-7a5bf95f20ac": {
-            "id": "a9834ca4-3a36-4d62-a63e-7a5bf95f20ac",
-            "name": "Geelong Cats",
+        "6e5b011f-3e64-4fca-b0c3-151cd7b1af9f": {
+            "id": "6e5b011f-3e64-4fca-b0c3-151cd7b1af9f",
+            "name": "Hawthorn (W)",
+            "home_away": "AWAY",
+            "visible": true,
+            "sort_order": 20,
+            "market_id": "7c750570-e136-4f90-88ac-be257048a750"
+        },
+        "aba2f320-378e-4e80-80fa-07521e02e982": {
+            "id": "aba2f320-378e-4e80-80fa-07521e02e982",
+            "name": "Western Bulldogs (W)",
             "home_away": "HOME",
             "visible": true,
-            "sort_order": 1,
-            "market_id": "a143ca51-dbc8-4edd-8554-d9c4603e644b"
+            "sort_order": 10,
+            "market_id": "8d66c6f8-5544-4cff-b4f2-74edc84dc8a9"
+        }
+    },
+    "event_participants": {
+        "426a81b3-b0a0-42a8-b391-2be8ed1a4e57": {
+            "id": "426a81b3-b0a0-42a8-b391-2be8ed1a4e57",
+            "event_id": "01f7f145-2341-45e7-a466-bdb5940a7847",
+            "name": "Western Bulldogs (W)",
+            "home_away": "HOME",
+            "colour": "#e50035"
+        },
+        "77b3ef81-b939-4abc-8a45-08b72750f4d1": {
+            "id": "77b3ef81-b939-4abc-8a45-08b72750f4d1",
+            "event_id": "01f7f145-2341-45e7-a466-bdb5940a7847",
+            "name": "Hawthorn (W)",
+            "home_away": "AWAY",
+            "colour": "#663300"
         }
     },
     "events": {
-        "22f21feb-05f7-40ab-9fde-d3bd4049dce7": {
-            "id": "22f21feb-05f7-40ab-9fde-d3bd4049dce7",
-            "name": "Geelong Cats vs Brisbane Lions",
+        "01f7f145-2341-45e7-a466-bdb5940a7847": {
+            "id": "01f7f145-2341-45e7-a466-bdb5940a7847",
+            "name": "Western Bulldogs (W) vs Hawthorn (W)",
             "event_type": {
                 "id": "6bfa0efc-05df-4ae1-9b1e-152365290cfd",
                 "name": "Match"
             },
             "match_status": "BettingOpen",
-            "advertised_start": "2025-09-04T09:30:00Z",
-            "actual_start": "2025-09-04T09:30:00Z",
+            "advertised_start": "2025-08-30T09:15:00Z",
+            "actual_start": "2025-08-30T09:15:00Z",
             "visible": true,
-            "slug": "geelong-cats-vs-brisbane-lions",
+            "slug": "western-bulldogs-w-vs-hawthorn-w",
             "competition": {
-                "id": "ccff2e9a-5347-41aa-902a-bb6b1886d817",
-                "name": "AFL",
-                "sort_order": 1,
+                "id": "f4de6fff-de1d-40f9-b3bc-1d9d614ae6c1",
+                "name": "AFLW",
+                "sort_order": 2,
                 "region": "Australia"
             },
-            "competition_id": "ccff2e9a-5347-41aa-902a-bb6b1886d817",
+            "competition_id": "f4de6fff-de1d-40f9-b3bc-1d9d614ae6c1",
             "market_type_group_ids": [
                 "29edb5e1-a717-4769-8bcd-2d43ec38d828"
             ],
@@ -60,20 +76,25 @@
                 {
                     "market_type_group_id": "29edb5e1-a717-4769-8bcd-2d43ec38d828",
                     "market_ids": [
-                        "a143ca51-dbc8-4edd-8554-d9c4603e644b",
-                        "f03c472e-83a1-45f5-a41c-ea121707ae7a"
+                        "8d66c6f8-5544-4cff-b4f2-74edc84dc8a9",
+                        "7c750570-e136-4f90-88ac-be257048a750"
                     ]
                 }
             ],
             "market_count": 2,
             "main_markets": [
-                "a143ca51-dbc8-4edd-8554-d9c4603e644b"
+                "8d66c6f8-5544-4cff-b4f2-74edc84dc8a9"
             ],
             "market_ids": [
-                "a143ca51-dbc8-4edd-8554-d9c4603e644b",
-                "f03c472e-83a1-45f5-a41c-ea121707ae7a"
+                "8d66c6f8-5544-4cff-b4f2-74edc84dc8a9",
+                "7c750570-e136-4f90-88ac-be257048a750"
             ],
-            "category_id": "23d497e6-8aab-4309-905b-9421f42c9bc5"
+            "category_id": "23d497e6-8aab-4309-905b-9421f42c9bc5",
+            "round_id": "2c69f3c6-80f6-49a1-82b2-fa82726d0d2a",
+            "participant_ids": [
+                "426a81b3-b0a0-42a8-b391-2be8ed1a4e57",
+                "77b3ef81-b939-4abc-8a45-08b72750f4d1"
+            ]
         }
     },
     "market_type_groups": {
@@ -86,73 +107,74 @@
         }
     },
     "markets": {
-        "a143ca51-dbc8-4edd-8554-d9c4603e644b": {
-            "id": "a143ca51-dbc8-4edd-8554-d9c4603e644b",
-            "event_id": "22f21feb-05f7-40ab-9fde-d3bd4049dce7",
-            "market_type_id": "be25c37a-71ff-47f6-a1e2-02a494eb5a4d",
-            "market_status_id": "4bc8fe96-296b-4b4c-aea4-85c94f63b9c6",
-            "name": "Match Betting",
-            "advertised_start": {
-                "seconds": 1756978200
-            },
-            "actual_start": {
-                "seconds": 1756978200
-            },
-            "is_primary": true,
-            "visible": true,
-            "entrant_ids": [
-                "a9834ca4-3a36-4d62-a63e-7a5bf95f20ac",
-                "59c1bbbe-a9f2-49ce-aa37-c2804f2315b8"
-            ],
-            "num_winners": 1
-        },
-        "f03c472e-83a1-45f5-a41c-ea121707ae7a": {
-            "id": "f03c472e-83a1-45f5-a41c-ea121707ae7a",
-            "event_id": "22f21feb-05f7-40ab-9fde-d3bd4049dce7",
+        "7c750570-e136-4f90-88ac-be257048a750": {
+            "id": "7c750570-e136-4f90-88ac-be257048a750",
+            "event_id": "01f7f145-2341-45e7-a466-bdb5940a7847",
             "market_type_id": "d04cddcd-5f42-4d17-ae1c-950dfdaa2c98",
             "market_status_id": "4bc8fe96-296b-4b4c-aea4-85c94f63b9c6",
             "name": "Line",
             "advertised_start": {
-                "seconds": 1756978200
+                "seconds": 1756545300
             },
             "actual_start": {
-                "seconds": 1756978200
+                "seconds": 1756545300
             },
+            "handicap": -27.5,
             "visible": true,
             "entrant_ids": [
-                "54a233d3-8afa-43c4-8741-c78f24f8bc2e",
-                "9173d83a-9ff0-40d6-9ab0-0761d89686f8"
+                "26958f43-487c-49f5-a729-2d8986f5f110",
+                "6e5b011f-3e64-4fca-b0c3-151cd7b1af9f"
+            ],
+            "num_winners": 1
+        },
+        "8d66c6f8-5544-4cff-b4f2-74edc84dc8a9": {
+            "id": "8d66c6f8-5544-4cff-b4f2-74edc84dc8a9",
+            "event_id": "01f7f145-2341-45e7-a466-bdb5940a7847",
+            "market_type_id": "be25c37a-71ff-47f6-a1e2-02a494eb5a4d",
+            "market_status_id": "4bc8fe96-296b-4b4c-aea4-85c94f63b9c6",
+            "name": "Match Betting",
+            "advertised_start": {
+                "seconds": 1756545300
+            },
+            "actual_start": {
+                "seconds": 1756545300
+            },
+            "is_primary": true,
+            "visible": true,
+            "entrant_ids": [
+                "aba2f320-378e-4e80-80fa-07521e02e982",
+                "5b74d91f-99c0-46f1-b827-2df6c5518791"
             ],
             "num_winners": 1
         }
     },
     "markets_allow_cashout": {
-        "a143ca51-dbc8-4edd-8554-d9c4603e644b": true,
-        "f03c472e-83a1-45f5-a41c-ea121707ae7a": false
+        "7c750570-e136-4f90-88ac-be257048a750": false,
+        "8d66c6f8-5544-4cff-b4f2-74edc84dc8a9": true
     },
     "prices": {
-        "54a233d3-8afa-43c4-8741-c78f24f8bc2e:940b8704-e497-4a76-b390-00918ff7d282:": {
+        "26958f43-487c-49f5-a729-2d8986f5f110:940b8704-e497-4a76-b390-00918ff7d282:": {
             "odds": {
-                "numerator": 9,
+                "numerator": 87,
+                "denominator": 100
+            }
+        },
+        "5b74d91f-99c0-46f1-b827-2df6c5518791:940b8704-e497-4a76-b390-00918ff7d282:": {
+            "odds": {
+                "numerator": 1,
                 "denominator": 10
             }
         },
-        "59c1bbbe-a9f2-49ce-aa37-c2804f2315b8:940b8704-e497-4a76-b390-00918ff7d282:": {
+        "6e5b011f-3e64-4fca-b0c3-151cd7b1af9f:940b8704-e497-4a76-b390-00918ff7d282:": {
             "odds": {
-                "numerator": 5,
-                "denominator": 4
+                "numerator": 87,
+                "denominator": 100
             }
         },
-        "9173d83a-9ff0-40d6-9ab0-0761d89686f8:940b8704-e497-4a76-b390-00918ff7d282:": {
+        "aba2f320-378e-4e80-80fa-07521e02e982:940b8704-e497-4a76-b390-00918ff7d282:": {
             "odds": {
-                "numerator": 9,
-                "denominator": 10
-            }
-        },
-        "a9834ca4-3a36-4d62-a63e-7a5bf95f20ac:940b8704-e497-4a76-b390-00918ff7d282:": {
-            "odds": {
-                "numerator": 13,
-                "denominator": 20
+                "numerator": 27,
+                "denominator": 5
             }
         }
     }
