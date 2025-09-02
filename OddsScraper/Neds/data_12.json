@@ -1,0 +1,181 @@
+{
+    "entrants": {
+        "949ed6c9-7999-479b-b968-6f764bdb1167": {
+            "id": "949ed6c9-7999-479b-b968-6f764bdb1167",
+            "name": "West Coast Eagles (W)",
+            "home_away": "HOME",
+            "visible": true,
+            "sort_order": 10,
+            "market_id": "2ef059bd-c80a-492e-a006-24a15425eb09"
+        },
+        "d03bfa1f-b1a5-445b-a897-6bf25e762f7e": {
+            "id": "d03bfa1f-b1a5-445b-a897-6bf25e762f7e",
+            "name": "West Coast Eagles (W)",
+            "home_away": "HOME",
+            "visible": true,
+            "sort_order": 10,
+            "market_id": "fc4469ba-785d-4cc0-81d0-84b604c02263"
+        },
+        "f3ab0277-a612-45ed-baf7-a3333b36dda2": {
+            "id": "f3ab0277-a612-45ed-baf7-a3333b36dda2",
+            "name": "Port Adelaide (W)",
+            "home_away": "AWAY",
+            "visible": true,
+            "sort_order": 20,
+            "market_id": "2ef059bd-c80a-492e-a006-24a15425eb09"
+        },
+        "ff0194fe-45a4-430c-8356-e8cf316c4d4e": {
+            "id": "ff0194fe-45a4-430c-8356-e8cf316c4d4e",
+            "name": "Port Adelaide (W)",
+            "home_away": "AWAY",
+            "visible": true,
+            "sort_order": 20,
+            "market_id": "fc4469ba-785d-4cc0-81d0-84b604c02263"
+        }
+    },
+    "event_participants": {
+        "5b1d033d-e877-4b18-86aa-984ab03f4b2f": {
+            "id": "5b1d033d-e877-4b18-86aa-984ab03f4b2f",
+            "event_id": "d55f9bf7-acc0-47ee-bb52-583d289e51ad",
+            "name": "Port Adelaide (W)",
+            "home_away": "AWAY",
+            "colour": "#39c4c7"
+        },
+        "c08333b9-e636-4fe4-936b-3c69ac224c77": {
+            "id": "c08333b9-e636-4fe4-936b-3c69ac224c77",
+            "event_id": "d55f9bf7-acc0-47ee-bb52-583d289e51ad",
+            "name": "West Coast Eagles (W)",
+            "home_away": "HOME",
+            "colour": "#003087"
+        }
+    },
+    "events": {
+        "d55f9bf7-acc0-47ee-bb52-583d289e51ad": {
+            "id": "d55f9bf7-acc0-47ee-bb52-583d289e51ad",
+            "name": "West Coast Eagles (W) vs Port Adelaide (W)",
+            "event_type": {
+                "id": "6bfa0efc-05df-4ae1-9b1e-152365290cfd",
+                "name": "Match"
+            },
+            "match_status": "BettingOpen",
+            "advertised_start": "2025-09-07T07:05:00Z",
+            "actual_start": "2025-09-07T07:05:00Z",
+            "visible": true,
+            "slug": "west-coast-eagles-w-vs-port-adelaide-w",
+            "competition": {
+                "id": "f4de6fff-de1d-40f9-b3bc-1d9d614ae6c1",
+                "name": "AFLW",
+                "sort_order": 2,
+                "region": "Australia"
+            },
+            "competition_id": "f4de6fff-de1d-40f9-b3bc-1d9d614ae6c1",
+            "market_type_group_ids": [
+                "29edb5e1-a717-4769-8bcd-2d43ec38d828"
+            ],
+            "market_type_group_markets": [
+                {
+                    "market_type_group_id": "29edb5e1-a717-4769-8bcd-2d43ec38d828",
+                    "market_ids": [
+                        "2ef059bd-c80a-492e-a006-24a15425eb09",
+                        "fc4469ba-785d-4cc0-81d0-84b604c02263"
+                    ]
+                }
+            ],
+            "market_count": 2,
+            "main_markets": [
+                "2ef059bd-c80a-492e-a006-24a15425eb09"
+            ],
+            "market_ids": [
+                "2ef059bd-c80a-492e-a006-24a15425eb09",
+                "fc4469ba-785d-4cc0-81d0-84b604c02263"
+            ],
+            "category_id": "23d497e6-8aab-4309-905b-9421f42c9bc5",
+            "round_id": "9b9354fb-a437-44ec-956f-039b79387a38",
+            "participant_ids": [
+                "5b1d033d-e877-4b18-86aa-984ab03f4b2f",
+                "c08333b9-e636-4fe4-936b-3c69ac224c77"
+            ]
+        }
+    },
+    "market_type_groups": {
+        "29edb5e1-a717-4769-8bcd-2d43ec38d828": {
+            "id": "29edb5e1-a717-4769-8bcd-2d43ec38d828",
+            "category_id": "23d497e6-8aab-4309-905b-9421f42c9bc5",
+            "name": "Top Markets",
+            "priority": 352,
+            "type": "MARKET_TYPE_GROUP_TYPE_EVENT"
+        }
+    },
+    "markets": {
+        "2ef059bd-c80a-492e-a006-24a15425eb09": {
+            "id": "2ef059bd-c80a-492e-a006-24a15425eb09",
+            "event_id": "d55f9bf7-acc0-47ee-bb52-583d289e51ad",
+            "market_type_id": "be25c37a-71ff-47f6-a1e2-02a494eb5a4d",
+            "market_status_id": "4bc8fe96-296b-4b4c-aea4-85c94f63b9c6",
+            "name": "Match Betting",
+            "advertised_start": {
+                "seconds": 1757228700
+            },
+            "actual_start": {
+                "seconds": 1757228700
+            },
+            "is_primary": true,
+            "visible": true,
+            "entrant_ids": [
+                "949ed6c9-7999-479b-b968-6f764bdb1167",
+                "f3ab0277-a612-45ed-baf7-a3333b36dda2"
+            ],
+            "num_winners": 1
+        },
+        "fc4469ba-785d-4cc0-81d0-84b604c02263": {
+            "id": "fc4469ba-785d-4cc0-81d0-84b604c02263",
+            "event_id": "d55f9bf7-acc0-47ee-bb52-583d289e51ad",
+            "market_type_id": "d04cddcd-5f42-4d17-ae1c-950dfdaa2c98",
+            "market_status_id": "4bc8fe96-296b-4b4c-aea4-85c94f63b9c6",
+            "name": "Line",
+            "advertised_start": {
+                "seconds": 1757228700
+            },
+            "actual_start": {
+                "seconds": 1757228700
+            },
+            "handicap": 0.5,
+            "visible": true,
+            "entrant_ids": [
+                "d03bfa1f-b1a5-445b-a897-6bf25e762f7e",
+                "ff0194fe-45a4-430c-8356-e8cf316c4d4e"
+            ],
+            "num_winners": 1
+        }
+    },
+    "markets_allow_cashout": {
+        "2ef059bd-c80a-492e-a006-24a15425eb09": true,
+        "fc4469ba-785d-4cc0-81d0-84b604c02263": false
+    },
+    "prices": {
+        "949ed6c9-7999-479b-b968-6f764bdb1167:940b8704-e497-4a76-b390-00918ff7d282:": {
+            "odds": {
+                "numerator": 41,
+                "denominator": 50
+            }
+        },
+        "d03bfa1f-b1a5-445b-a897-6bf25e762f7e:940b8704-e497-4a76-b390-00918ff7d282:": {
+            "odds": {
+                "numerator": 87,
+                "denominator": 100
+            }
+        },
+        "f3ab0277-a612-45ed-baf7-a3333b36dda2:940b8704-e497-4a76-b390-00918ff7d282:": {
+            "odds": {
+                "numerator": 23,
+                "denominator": 25
+            }
+        },
+        "ff0194fe-45a4-430c-8356-e8cf316c4d4e:940b8704-e497-4a76-b390-00918ff7d282:": {
+            "odds": {
+                "numerator": 87,
+                "denominator": 100
+            }
+        }
+    }
+}
