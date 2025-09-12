@@ -27,7 +27,7 @@ async def main():
         for index, url in enumerate(url_df, start=1): # Start counting from 1 for match_n
             try:
                 await driver.get(url)
-                await driver.sleep(5)
+                await driver.sleep(15)
                 
                 
                 # Scroll into view of disposal button and click
