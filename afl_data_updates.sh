@@ -7,6 +7,7 @@ export PATH="/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
 cd /Users/jamesbrown/Projects/AFL || exit
 
 # Execute R scripts in sequence
+Rscript Scripts/get_schedule.R
 Rscript Scripts/get_current_fantasy_data.R
 Rscript DVP/get_dvp.R
 Rscript Scripts/get_empirical_probabilities_last_n.R
