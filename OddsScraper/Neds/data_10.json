@@ -168,6 +168,13 @@
             "sort_order": 110,
             "market_id": "8757e84e-d816-423f-bf26-94dab448700b"
         },
+        "0fcc9d37-1c54-4e54-98d2-004fab54ee64": {
+            "id": "0fcc9d37-1c54-4e54-98d2-004fab54ee64",
+            "name": "Port Adelaide (W) +16.5 / Under 93.5",
+            "visible": true,
+            "sort_order": 90,
+            "market_id": "892fa7ac-7575-4e5f-ae87-9fa1312944f2"
+        },
         "1079f333-46a8-4d8a-9961-2738bfab770d": {
             "id": "1079f333-46a8-4d8a-9961-2738bfab770d",
             "name": "Alyssa Bannan (Melbourne (W))",
@@ -1442,6 +1449,13 @@
             "sort_order": 310,
             "market_id": "26d1f682-7d41-4287-babe-11c972558579"
         },
+        "a41ded2d-1907-4b06-bcb2-f0bfdbd6df89": {
+            "id": "a41ded2d-1907-4b06-bcb2-f0bfdbd6df89",
+            "name": "Melbourne (W) -16.5 / Over 93.5",
+            "visible": true,
+            "sort_order": 100,
+            "market_id": "892fa7ac-7575-4e5f-ae87-9fa1312944f2"
+        },
         "a695a079-1eb8-4f06-aed5-1e93849882cc": {
             "id": "a695a079-1eb8-4f06-aed5-1e93849882cc",
             "name": "Elizabeth McNamara (Melbourne (W))",
@@ -1617,6 +1631,13 @@
             "visible": true,
             "sort_order": 300,
             "market_id": "26d1f682-7d41-4287-babe-11c972558579"
+        },
+        "b1315464-a912-47f5-bcb4-3b430eda294e": {
+            "id": "b1315464-a912-47f5-bcb4-3b430eda294e",
+            "name": "Port Adelaide (W) +16.5 / Over 93.5",
+            "visible": true,
+            "sort_order": 120,
+            "market_id": "892fa7ac-7575-4e5f-ae87-9fa1312944f2"
         },
         "b1d70a6b-1b16-4177-b2ac-8728dc929e4e": {
             "id": "b1d70a6b-1b16-4177-b2ac-8728dc929e4e",
@@ -2254,6 +2275,13 @@
             "sort_order": 70,
             "market_id": "88b4b4ba-5ea2-4d91-a642-dbaadf704f0e"
         },
+        "f9cd97ac-cb76-4b05-b8d7-56ff7a6851d1": {
+            "id": "f9cd97ac-cb76-4b05-b8d7-56ff7a6851d1",
+            "name": "Melbourne (W) -16.5 / Under 93.5",
+            "visible": true,
+            "sort_order": 110,
+            "market_id": "892fa7ac-7575-4e5f-ae87-9fa1312944f2"
+        },
         "fa0dbadd-9ec2-4552-a4e4-b8f0210fd8f8": {
             "id": "fa0dbadd-9ec2-4552-a4e4-b8f0210fd8f8",
             "name": "Port Adelaide (W) Goal",
@@ -2397,6 +2425,7 @@
                 {
                     "market_type_group_id": "f4719457-4b2b-4f69-b8f9-c943d2b1440b",
                     "market_ids": [
+                        "892fa7ac-7575-4e5f-ae87-9fa1312944f2",
                         "5aa01adf-cf4c-40e0-95a1-083918985b77"
                     ]
                 },
@@ -2468,7 +2497,7 @@
                     ]
                 }
             ],
-            "market_count": 33,
+            "market_count": 34,
             "main_markets": [
                 "bef25a92-fd29-4e4f-a769-ae7738b1885d"
             ],
@@ -2484,6 +2513,7 @@
                 "88b4b4ba-5ea2-4d91-a642-dbaadf704f0e",
                 "8757e84e-d816-423f-bf26-94dab448700b",
                 "af952470-f4b6-4401-84c1-372a519d6848",
+                "892fa7ac-7575-4e5f-ae87-9fa1312944f2",
                 "5aa01adf-cf4c-40e0-95a1-083918985b77",
                 "d7a6b84b-376a-460f-b420-a3ce31d681e3",
                 "9eb9edb2-3196-4e89-976e-58157e5e97d5",
@@ -3193,6 +3223,29 @@
             ],
             "num_winners": 1
         },
+        "892fa7ac-7575-4e5f-ae87-9fa1312944f2": {
+            "id": "892fa7ac-7575-4e5f-ae87-9fa1312944f2",
+            "event_id": "b8df0a77-fa77-4317-9f67-bf6618b4082b",
+            "market_type_id": "785f7163-5608-4650-8101-1f4bc0015543",
+            "market_status_id": "4bc8fe96-296b-4b4c-aea4-85c94f63b9c6",
+            "name": "Line / Total Points Double",
+            "advertised_start": {
+                "seconds": 1757739900
+            },
+            "actual_start": {
+                "seconds": 1757739900
+            },
+            "same_game_multi_available": true,
+            "is_multiple_outcome_market": true,
+            "visible": true,
+            "entrant_ids": [
+                "0fcc9d37-1c54-4e54-98d2-004fab54ee64",
+                "a41ded2d-1907-4b06-bcb2-f0bfdbd6df89",
+                "f9cd97ac-cb76-4b05-b8d7-56ff7a6851d1",
+                "b1315464-a912-47f5-bcb4-3b430eda294e"
+            ],
+            "num_winners": 12
+        },
         "8bd60e83-74a6-4ae8-8e0b-1c3bdaed1a90": {
             "id": "8bd60e83-74a6-4ae8-8e0b-1c3bdaed1a90",
             "event_id": "b8df0a77-fa77-4317-9f67-bf6618b4082b",
@@ -3537,6 +3590,7 @@
         "861e09a5-66ee-4ceb-aba7-f727975293b4": true,
         "8757e84e-d816-423f-bf26-94dab448700b": true,
         "88b4b4ba-5ea2-4d91-a642-dbaadf704f0e": true,
+        "892fa7ac-7575-4e5f-ae87-9fa1312944f2": false,
         "8bd60e83-74a6-4ae8-8e0b-1c3bdaed1a90": true,
         "9eb9edb2-3196-4e89-976e-58157e5e97d5": true,
         "af952470-f4b6-4401-84c1-372a519d6848": true,
@@ -3676,6 +3730,12 @@
             "odds": {
                 "numerator": 16,
                 "denominator": 1
+            }
+        },
+        "0fcc9d37-1c54-4e54-98d2-004fab54ee64:940b8704-e497-4a76-b390-00918ff7d282:": {
+            "odds": {
+                "numerator": 21,
+                "denominator": 10
             }
         },
         "1079f333-46a8-4d8a-9961-2738bfab770d:940b8704-e497-4a76-b390-00918ff7d282:": {
@@ -4638,6 +4698,12 @@
                 "denominator": 1
             }
         },
+        "a41ded2d-1907-4b06-bcb2-f0bfdbd6df89:940b8704-e497-4a76-b390-00918ff7d282:": {
+            "odds": {
+                "numerator": 12,
+                "denominator": 5
+            }
+        },
         "a695a079-1eb8-4f06-aed5-1e93849882cc:940b8704-e497-4a76-b390-00918ff7d282:": {
             "odds": {
                 "numerator": 1,
@@ -4768,6 +4834,12 @@
             "odds": {
                 "numerator": 40,
                 "denominator": 1
+            }
+        },
+        "b1315464-a912-47f5-bcb4-3b430eda294e:940b8704-e497-4a76-b390-00918ff7d282:": {
+            "odds": {
+                "numerator": 14,
+                "denominator": 5
             }
         },
         "b1d70a6b-1b16-4177-b2ac-8728dc929e4e:940b8704-e497-4a76-b390-00918ff7d282:": {
@@ -5248,6 +5320,12 @@
             "odds": {
                 "numerator": 13,
                 "denominator": 1
+            }
+        },
+        "f9cd97ac-cb76-4b05-b8d7-56ff7a6851d1:940b8704-e497-4a76-b390-00918ff7d282:": {
+            "odds": {
+                "numerator": 5,
+                "denominator": 2
             }
         },
         "fa0dbadd-9ec2-4552-a4e4-b8f0210fd8f8:940b8704-e497-4a76-b390-00918ff7d282:": {

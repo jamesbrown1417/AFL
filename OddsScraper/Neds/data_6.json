@@ -208,6 +208,13 @@
             "sort_order": 30,
             "market_id": "318d115e-2ec2-4610-ae69-807b45385167"
         },
+        "10d76568-36e2-419e-902e-9ea6c5f152bb": {
+            "id": "10d76568-36e2-419e-902e-9ea6c5f152bb",
+            "name": "GWS GIANTS (W) +13.5 / Under 82.5",
+            "visible": true,
+            "sort_order": 90,
+            "market_id": "acabc695-d880-40bc-b9cf-c526847b1f0e"
+        },
         "10efe1e3-516f-4341-bc0c-9b80cae65b81": {
             "id": "10efe1e3-516f-4341-bc0c-9b80cae65b81",
             "name": "Taylah Levy (GWS GIANTS (W))",
@@ -247,6 +254,13 @@
             "visible": true,
             "sort_order": 40,
             "market_id": "bb66e9ab-c32e-4d02-a2ce-77b1a8f90715"
+        },
+        "13dcc76b-c20d-4bb2-9651-0cc2a50c2078": {
+            "id": "13dcc76b-c20d-4bb2-9651-0cc2a50c2078",
+            "name": "GWS GIANTS (W) +13.5 / Over 82.5",
+            "visible": true,
+            "sort_order": 120,
+            "market_id": "acabc695-d880-40bc-b9cf-c526847b1f0e"
         },
         "149683db-e4bc-4104-9daa-ed29a9a3be72": {
             "id": "149683db-e4bc-4104-9daa-ed29a9a3be72",
@@ -1530,6 +1544,13 @@
             "sort_order": 160,
             "market_id": "6adf9d18-2da7-40f5-a86d-84f835142a61"
         },
+        "a54f91af-b3ac-4de6-9987-2ea7df3422dc": {
+            "id": "a54f91af-b3ac-4de6-9987-2ea7df3422dc",
+            "name": "Western Bulldogs (W) -13.5 / Over 82.5",
+            "visible": true,
+            "sort_order": 100,
+            "market_id": "acabc695-d880-40bc-b9cf-c526847b1f0e"
+        },
         "a5546ea0-d4ba-44e9-b730-47e48f50099c": {
             "id": "a5546ea0-d4ba-44e9-b730-47e48f50099c",
             "name": "Elisabeth Georgostathis (Western Bulldogs (W))",
@@ -2200,6 +2221,13 @@
             "sort_order": 370,
             "market_id": "2a18526e-6c94-404a-93ae-cb2e23269637"
         },
+        "ee6a9911-b71e-47f0-bdbf-7a0ca1c62491": {
+            "id": "ee6a9911-b71e-47f0-bdbf-7a0ca1c62491",
+            "name": "Western Bulldogs (W) -13.5 / Under 82.5",
+            "visible": true,
+            "sort_order": 110,
+            "market_id": "acabc695-d880-40bc-b9cf-c526847b1f0e"
+        },
         "eea07021-20a0-4bf7-8af0-aaad6a15dafd": {
             "id": "eea07021-20a0-4bf7-8af0-aaad6a15dafd",
             "name": "Zarlie Goldsworthy (GWS GIANTS (W))",
@@ -2413,6 +2441,7 @@
                 {
                     "market_type_group_id": "f4719457-4b2b-4f69-b8f9-c943d2b1440b",
                     "market_ids": [
+                        "acabc695-d880-40bc-b9cf-c526847b1f0e",
                         "d608f22f-15b7-455e-b421-e84713f461e2"
                     ]
                 },
@@ -2484,7 +2513,7 @@
                     ]
                 }
             ],
-            "market_count": 33,
+            "market_count": 34,
             "main_markets": [
                 "2251d554-d9de-43e1-89c8-4b5b72aec4ed"
             ],
@@ -2500,6 +2529,7 @@
                 "2a18526e-6c94-404a-93ae-cb2e23269637",
                 "06137ec4-3f84-42c3-b785-d8244dd39f23",
                 "2e653d39-0521-422a-800c-db48825f75e5",
+                "acabc695-d880-40bc-b9cf-c526847b1f0e",
                 "d608f22f-15b7-455e-b421-e84713f461e2",
                 "52de0dcc-dd84-49a1-ae3c-d31242e3c65d",
                 "6f54b67e-53eb-41b7-9397-f733655cd6e6",
@@ -3223,6 +3253,29 @@
             ],
             "num_winners": 1
         },
+        "acabc695-d880-40bc-b9cf-c526847b1f0e": {
+            "id": "acabc695-d880-40bc-b9cf-c526847b1f0e",
+            "event_id": "75e29303-fc3b-4738-9074-60a7c0fff1d7",
+            "market_type_id": "785f7163-5608-4650-8101-1f4bc0015543",
+            "market_status_id": "4bc8fe96-296b-4b4c-aea4-85c94f63b9c6",
+            "name": "Line / Total Points Double",
+            "advertised_start": {
+                "seconds": 1757745300
+            },
+            "actual_start": {
+                "seconds": 1757745300
+            },
+            "same_game_multi_available": true,
+            "is_multiple_outcome_market": true,
+            "visible": true,
+            "entrant_ids": [
+                "10d76568-36e2-419e-902e-9ea6c5f152bb",
+                "a54f91af-b3ac-4de6-9987-2ea7df3422dc",
+                "ee6a9911-b71e-47f0-bdbf-7a0ca1c62491",
+                "13dcc76b-c20d-4bb2-9651-0cc2a50c2078"
+            ],
+            "num_winners": 12
+        },
         "af130d7b-e84b-4fb9-94f1-2113979e3942": {
             "id": "af130d7b-e84b-4fb9-94f1-2113979e3942",
             "event_id": "75e29303-fc3b-4738-9074-60a7c0fff1d7",
@@ -3554,6 +3607,7 @@
         "6f54b67e-53eb-41b7-9397-f733655cd6e6": true,
         "79a1d552-59b6-4c8a-8a2a-bc46e126ec0e": true,
         "8cfb9e3c-3d1a-475e-bfa5-837c77bdb78c": true,
+        "acabc695-d880-40bc-b9cf-c526847b1f0e": false,
         "af130d7b-e84b-4fb9-94f1-2113979e3942": false,
         "b0a136cc-ef40-4a19-a25f-344b1477ad03": false,
         "b32eb7df-137c-4f67-a41f-76a1f4b89e27": true,
@@ -3726,6 +3780,12 @@
                 "denominator": 5
             }
         },
+        "10d76568-36e2-419e-902e-9ea6c5f152bb:940b8704-e497-4a76-b390-00918ff7d282:": {
+            "odds": {
+                "numerator": 43,
+                "denominator": 20
+            }
+        },
         "10efe1e3-516f-4341-bc0c-9b80cae65b81:940b8704-e497-4a76-b390-00918ff7d282:": {
             "odds": {
                 "numerator": 22,
@@ -3754,6 +3814,12 @@
             "odds": {
                 "numerator": 17,
                 "denominator": 10
+            }
+        },
+        "13dcc76b-c20d-4bb2-9651-0cc2a50c2078:940b8704-e497-4a76-b390-00918ff7d282:": {
+            "odds": {
+                "numerator": 11,
+                "denominator": 4
             }
         },
         "149683db-e4bc-4104-9daa-ed29a9a3be72:940b8704-e497-4a76-b390-00918ff7d282:": {
@@ -4722,6 +4788,12 @@
                 "denominator": 4
             }
         },
+        "a54f91af-b3ac-4de6-9987-2ea7df3422dc:940b8704-e497-4a76-b390-00918ff7d282:": {
+            "odds": {
+                "numerator": 47,
+                "denominator": 20
+            }
+        },
         "a5546ea0-d4ba-44e9-b730-47e48f50099c:940b8704-e497-4a76-b390-00918ff7d282:": {
             "odds": {
                 "numerator": 6,
@@ -5224,6 +5296,12 @@
             "odds": {
                 "numerator": 40,
                 "denominator": 1
+            }
+        },
+        "ee6a9911-b71e-47f0-bdbf-7a0ca1c62491:940b8704-e497-4a76-b390-00918ff7d282:": {
+            "odds": {
+                "numerator": 5,
+                "denominator": 2
             }
         },
         "eea07021-20a0-4bf7-8af0-aaad6a15dafd:940b8704-e497-4a76-b390-00918ff7d282:": {
