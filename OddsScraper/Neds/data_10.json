@@ -1,0 +1,181 @@
+{
+    "entrants": {
+        "49068397-f5c7-4851-a667-852766d0958b": {
+            "id": "49068397-f5c7-4851-a667-852766d0958b",
+            "name": "St Kilda (W)",
+            "home_away": "HOME",
+            "visible": true,
+            "sort_order": 10,
+            "market_id": "5b66734f-cdb4-41c7-afa5-a1ce4f6e54e3"
+        },
+        "4aceaf3d-99b0-4da6-bf36-4bd14e9f6b59": {
+            "id": "4aceaf3d-99b0-4da6-bf36-4bd14e9f6b59",
+            "name": "Richmond (W)",
+            "home_away": "AWAY",
+            "visible": true,
+            "sort_order": 20,
+            "market_id": "5b66734f-cdb4-41c7-afa5-a1ce4f6e54e3"
+        },
+        "9495da9b-e57a-4eb7-9a90-8d9d7b3fc7a6": {
+            "id": "9495da9b-e57a-4eb7-9a90-8d9d7b3fc7a6",
+            "name": "Richmond (W)",
+            "home_away": "AWAY",
+            "visible": true,
+            "sort_order": 20,
+            "market_id": "43c8820b-7e9b-4839-98dc-9e7fd3d12dc8"
+        },
+        "eba8de54-35a9-41f5-801d-2779cfa52c62": {
+            "id": "eba8de54-35a9-41f5-801d-2779cfa52c62",
+            "name": "St Kilda (W)",
+            "home_away": "HOME",
+            "visible": true,
+            "sort_order": 10,
+            "market_id": "43c8820b-7e9b-4839-98dc-9e7fd3d12dc8"
+        }
+    },
+    "event_participants": {
+        "bffa2a85-2d71-4ebc-9f20-d192af4c4929": {
+            "id": "bffa2a85-2d71-4ebc-9f20-d192af4c4929",
+            "event_id": "dde7a30a-878b-477c-8da9-e286226fb61a",
+            "name": "Richmond (W)",
+            "home_away": "AWAY",
+            "colour": "#ffd700"
+        },
+        "e7f40689-d490-49ae-9f05-831b2642d7ed": {
+            "id": "e7f40689-d490-49ae-9f05-831b2642d7ed",
+            "event_id": "dde7a30a-878b-477c-8da9-e286226fb61a",
+            "name": "St Kilda (W)",
+            "home_away": "HOME",
+            "colour": "#e50035"
+        }
+    },
+    "events": {
+        "dde7a30a-878b-477c-8da9-e286226fb61a": {
+            "id": "dde7a30a-878b-477c-8da9-e286226fb61a",
+            "name": "St Kilda (W) vs Richmond (W)",
+            "event_type": {
+                "id": "6bfa0efc-05df-4ae1-9b1e-152365290cfd",
+                "name": "Match"
+            },
+            "match_status": "BettingOpen",
+            "advertised_start": "2025-09-21T05:05:00Z",
+            "actual_start": "2025-09-21T05:05:00Z",
+            "visible": true,
+            "slug": "st-kilda-w-vs-richmond-w",
+            "competition": {
+                "id": "f4de6fff-de1d-40f9-b3bc-1d9d614ae6c1",
+                "name": "AFLW",
+                "sort_order": 2,
+                "region": "Australia"
+            },
+            "competition_id": "f4de6fff-de1d-40f9-b3bc-1d9d614ae6c1",
+            "market_type_group_ids": [
+                "29edb5e1-a717-4769-8bcd-2d43ec38d828"
+            ],
+            "market_type_group_markets": [
+                {
+                    "market_type_group_id": "29edb5e1-a717-4769-8bcd-2d43ec38d828",
+                    "market_ids": [
+                        "43c8820b-7e9b-4839-98dc-9e7fd3d12dc8",
+                        "5b66734f-cdb4-41c7-afa5-a1ce4f6e54e3"
+                    ]
+                }
+            ],
+            "market_count": 2,
+            "main_markets": [
+                "43c8820b-7e9b-4839-98dc-9e7fd3d12dc8"
+            ],
+            "market_ids": [
+                "43c8820b-7e9b-4839-98dc-9e7fd3d12dc8",
+                "5b66734f-cdb4-41c7-afa5-a1ce4f6e54e3"
+            ],
+            "category_id": "23d497e6-8aab-4309-905b-9421f42c9bc5",
+            "round_id": "6754fe31-6612-4d8e-be2f-e83298dfa2b2",
+            "participant_ids": [
+                "bffa2a85-2d71-4ebc-9f20-d192af4c4929",
+                "e7f40689-d490-49ae-9f05-831b2642d7ed"
+            ]
+        }
+    },
+    "market_type_groups": {
+        "29edb5e1-a717-4769-8bcd-2d43ec38d828": {
+            "id": "29edb5e1-a717-4769-8bcd-2d43ec38d828",
+            "category_id": "23d497e6-8aab-4309-905b-9421f42c9bc5",
+            "name": "Top Markets",
+            "priority": 352,
+            "type": "MARKET_TYPE_GROUP_TYPE_EVENT"
+        }
+    },
+    "markets": {
+        "43c8820b-7e9b-4839-98dc-9e7fd3d12dc8": {
+            "id": "43c8820b-7e9b-4839-98dc-9e7fd3d12dc8",
+            "event_id": "dde7a30a-878b-477c-8da9-e286226fb61a",
+            "market_type_id": "be25c37a-71ff-47f6-a1e2-02a494eb5a4d",
+            "market_status_id": "4bc8fe96-296b-4b4c-aea4-85c94f63b9c6",
+            "name": "Match Betting",
+            "advertised_start": {
+                "seconds": 1758431100
+            },
+            "actual_start": {
+                "seconds": 1758431100
+            },
+            "is_primary": true,
+            "visible": true,
+            "entrant_ids": [
+                "eba8de54-35a9-41f5-801d-2779cfa52c62",
+                "9495da9b-e57a-4eb7-9a90-8d9d7b3fc7a6"
+            ],
+            "num_winners": 1
+        },
+        "5b66734f-cdb4-41c7-afa5-a1ce4f6e54e3": {
+            "id": "5b66734f-cdb4-41c7-afa5-a1ce4f6e54e3",
+            "event_id": "dde7a30a-878b-477c-8da9-e286226fb61a",
+            "market_type_id": "d04cddcd-5f42-4d17-ae1c-950dfdaa2c98",
+            "market_status_id": "4bc8fe96-296b-4b4c-aea4-85c94f63b9c6",
+            "name": "Line",
+            "advertised_start": {
+                "seconds": 1758431100
+            },
+            "actual_start": {
+                "seconds": 1758431100
+            },
+            "handicap": 14.5,
+            "visible": true,
+            "entrant_ids": [
+                "49068397-f5c7-4851-a667-852766d0958b",
+                "4aceaf3d-99b0-4da6-bf36-4bd14e9f6b59"
+            ],
+            "num_winners": 1
+        }
+    },
+    "markets_allow_cashout": {
+        "43c8820b-7e9b-4839-98dc-9e7fd3d12dc8": false,
+        "5b66734f-cdb4-41c7-afa5-a1ce4f6e54e3": false
+    },
+    "prices": {
+        "49068397-f5c7-4851-a667-852766d0958b:940b8704-e497-4a76-b390-00918ff7d282:": {
+            "odds": {
+                "numerator": 87,
+                "denominator": 100
+            }
+        },
+        "4aceaf3d-99b0-4da6-bf36-4bd14e9f6b59:940b8704-e497-4a76-b390-00918ff7d282:": {
+            "odds": {
+                "numerator": 87,
+                "denominator": 100
+            }
+        },
+        "9495da9b-e57a-4eb7-9a90-8d9d7b3fc7a6:940b8704-e497-4a76-b390-00918ff7d282:": {
+            "odds": {
+                "numerator": 11,
+                "denominator": 4
+            }
+        },
+        "eba8de54-35a9-41f5-801d-2779cfa52c62:940b8704-e497-4a76-b390-00918ff7d282:": {
+            "odds": {
+                "numerator": 1,
+                "denominator": 4
+            }
+        }
+    }
+}
