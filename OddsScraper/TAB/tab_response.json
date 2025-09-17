@@ -108,7 +108,7 @@
             {
               "id": "1007",
               "name": "Geelong",
-              "returnWin": 1.52,
+              "returnWin": 1.5,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -122,7 +122,7 @@
             {
               "id": "1008",
               "name": "Hawthorn",
-              "returnWin": 2.55,
+              "returnWin": 2.6,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -220,7 +220,7 @@
             {
               "id": "10433",
               "name": "Mabior Chol (HAW)",
-              "returnWin": 16,
+              "returnWin": 15,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -228,6 +228,19 @@
               "number": 10433,
               "isOpen": true,
               "sortOrder": 25,
+              "sameGame": true
+            },
+            {
+              "id": "10447",
+              "name": "Nick Watson (HAW)",
+              "returnWin": 16,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 10447,
+              "isOpen": true,
+              "sortOrder": 39,
               "sameGame": true
             },
             {
@@ -254,19 +267,6 @@
               "number": 10424,
               "isOpen": true,
               "sortOrder": 16,
-              "sameGame": true
-            },
-            {
-              "id": "10447",
-              "name": "Nick Watson (HAW)",
-              "returnWin": 17,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 10447,
-              "isOpen": true,
-              "sortOrder": 39,
               "sameGame": true
             },
             {
@@ -742,13 +742,13 @@
           "sameGameMultipleSelections": false
         },
         {
-          "id": "121140670",
-          "name": "AFL Geel-Haw Line -9.5",
-          "shortName": "AFL Gee-Haw Line -9.5",
+          "id": "121140641",
+          "name": "AFL Geel-Haw Line -10.5",
+          "shortName": "AFL Gee-Haw Line -10.5",
           "betOption": "Line",
           "betOptionSpectrumId": "43",
           "betOptionPriority": 1365,
-          "marketUniqueId": 121140670,
+          "marketUniqueId": 121140641,
           "closeTime": "2025-09-19T09:40:00.000Z",
           "bettingStatus": "Open",
           "message": null,
@@ -770,31 +770,31 @@
           "allowBundle": false,
           "propositions": [
             {
-              "id": "7010",
-              "name": "Geelong -9.5",
+              "id": "6768",
+              "name": "Geelong -10.5",
               "returnWin": 1.9,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
               "allowPlace": false,
-              "number": 7010,
+              "number": 6768,
               "isOpen": true,
               "sortOrder": 1,
-              "line": "-9.5",
+              "line": "-10.5",
               "sameGame": true
             },
             {
-              "id": "7011",
-              "name": "Hawthorn +9.5",
+              "id": "6769",
+              "name": "Hawthorn +10.5",
               "returnWin": 1.9,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
               "allowPlace": false,
-              "number": 7011,
+              "number": 6769,
               "isOpen": true,
               "sortOrder": 2,
-              "line": "+9.5",
+              "line": "+10.5",
               "sameGame": true
             }
           ],
@@ -832,7 +832,7 @@
             {
               "id": "9764",
               "name": "Geelong by 40+",
-              "returnWin": 4.8,
+              "returnWin": 4.6,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -929,7 +929,7 @@
             {
               "id": "6977",
               "name": "Geelong by 16+",
-              "returnWin": 2.15,
+              "returnWin": 2.1,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -955,7 +955,7 @@
             {
               "id": "6979",
               "name": "Hawthorn by 16+",
-              "returnWin": 3.9,
+              "returnWin": 4,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -1000,7 +1000,7 @@
             {
               "id": "7170",
               "name": "Geelong by 25+",
-              "returnWin": 2.8,
+              "returnWin": 2.75,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -1052,7 +1052,7 @@
             {
               "id": "7174",
               "name": "Hawthorn by 25+",
-              "returnWin": 5.7,
+              "returnWin": 6,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -1067,13 +1067,13 @@
           "sameGameMultipleSelections": false
         },
         {
-          "id": "121140665",
+          "id": "121141485",
           "name": "AFL Gee-Haw LnOUDb",
           "shortName": "AFL Gee-Haw LnOUDb",
           "betOption": "Line/Over Under Double",
           "betOptionSpectrumId": "212",
           "betOptionPriority": 2725,
-          "marketUniqueId": 121140665,
+          "marketUniqueId": 121141485,
           "closeTime": "2025-09-19T09:40:00.000Z",
           "bettingStatus": "Open",
           "message": null,
@@ -1095,53 +1095,53 @@
           "allowBundle": false,
           "propositions": [
             {
-              "id": "6988",
-              "name": "Geel -9.5 /Over 166.5",
-              "returnWin": 3.3,
+              "id": "9793",
+              "name": "Geel -11.5 /Over 164.5",
+              "returnWin": 3.4,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
               "allowPlace": false,
-              "number": 6988,
+              "number": 9793,
               "isOpen": true,
               "sortOrder": 1,
               "sameGame": true
             },
             {
-              "id": "6989",
-              "name": "Geel -9.5 /Under 166.5",
-              "returnWin": 3.8,
+              "id": "9794",
+              "name": "Geel -11.5 /Under 164.5",
+              "returnWin": 4,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
               "allowPlace": false,
-              "number": 6989,
+              "number": 9794,
               "isOpen": true,
               "sortOrder": 2,
               "sameGame": true
             },
             {
-              "id": "6990",
-              "name": "Haw +9.5 /Over 166.5",
-              "returnWin": 3.6,
+              "id": "9795",
+              "name": "Haw +11.5 /Over 164.5",
+              "returnWin": 3.4,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
               "allowPlace": false,
-              "number": 6990,
+              "number": 9795,
               "isOpen": true,
               "sortOrder": 3,
               "sameGame": true
             },
             {
-              "id": "6991",
-              "name": "Haw +9.5 /Under 166.5",
-              "returnWin": 3.5,
+              "id": "9796",
+              "name": "Haw +11.5 /Under 164.5",
+              "returnWin": 3.4,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
               "allowPlace": false,
-              "number": 6991,
+              "number": 9796,
               "isOpen": true,
               "sortOrder": 4,
               "sameGame": true
@@ -1151,13 +1151,13 @@
           "sameGameMultipleSelections": false
         },
         {
-          "id": "121140701",
+          "id": "121141486",
           "name": "AFL Geel-Haw H2H/OvUn",
           "shortName": "AFL Gee-Haw H2H/OvUn",
           "betOption": "HDtoHD/OverUnder Double",
           "betOptionSpectrumId": "285",
           "betOptionPriority": 2740,
-          "marketUniqueId": 121140701,
+          "marketUniqueId": 121141486,
           "closeTime": "2025-09-19T09:40:00.000Z",
           "bettingStatus": "Open",
           "message": null,
@@ -1179,53 +1179,53 @@
           "allowBundle": false,
           "propositions": [
             {
-              "id": "7243",
-              "name": "Geelong /Over 168.5",
-              "returnWin": 2.9,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 7243,
-              "isOpen": true,
-              "sortOrder": 1,
-              "sameGame": true
-            },
-            {
-              "id": "7244",
-              "name": "Geelong /Under 168.5",
+              "id": "9797",
+              "name": "Geelong /Over 165.5",
               "returnWin": 2.7,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
               "allowPlace": false,
-              "number": 7244,
+              "number": 9797,
+              "isOpen": true,
+              "sortOrder": 1,
+              "sameGame": true
+            },
+            {
+              "id": "9798",
+              "name": "Geelong /Under 165.5",
+              "returnWin": 2.8,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 9798,
               "isOpen": true,
               "sortOrder": 2,
               "sameGame": true
             },
             {
-              "id": "7245",
-              "name": "Hawthorn /Over 168.5",
+              "id": "9799",
+              "name": "Hawthorn /Over 165.5",
               "returnWin": 5,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
               "allowPlace": false,
-              "number": 7245,
+              "number": 9799,
               "isOpen": true,
               "sortOrder": 3,
               "sameGame": true
             },
             {
-              "id": "7246",
-              "name": "Hawthorn /Under 168.5",
-              "returnWin": 4.5,
+              "id": "9800",
+              "name": "Hawthorn /Under 165.5",
+              "returnWin": 4.8,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
               "allowPlace": false,
-              "number": 7246,
+              "number": 9800,
               "isOpen": true,
               "sortOrder": 4,
               "sameGame": true
@@ -1391,13 +1391,13 @@
           ]
         },
         {
-          "id": "121140721",
-          "name": "AFL Geel-Haw TotPtsOU 166.5",
-          "shortName": "AFL Gee-Haw ToPtOU 166.5",
+          "id": "121140545",
+          "name": "AFL Geel-Haw TotPtsOU 165.5",
+          "shortName": "AFL Gee-Haw ToPtOU 165.5",
           "betOption": "Total Points Over/Under",
           "betOptionSpectrumId": "456",
           "betOptionPriority": 3130,
-          "marketUniqueId": 121140721,
+          "marketUniqueId": 121140545,
           "closeTime": "2025-09-19T09:40:00.000Z",
           "bettingStatus": "Open",
           "message": null,
@@ -1419,27 +1419,27 @@
           "allowBundle": false,
           "propositions": [
             {
-              "id": "7247",
-              "name": "Over 166.5 Pts",
-              "returnWin": 1.85,
+              "id": "9561",
+              "name": "Over 165.5 Pts",
+              "returnWin": 1.9,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
               "allowPlace": false,
-              "number": 7247,
+              "number": 9561,
               "isOpen": true,
               "sortOrder": 1,
               "sameGame": true
             },
             {
-              "id": "7248",
-              "name": "Under 166.5 Pts",
-              "returnWin": 1.95,
+              "id": "9562",
+              "name": "Under 165.5 Pts",
+              "returnWin": 1.9,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
               "allowPlace": false,
-              "number": 7248,
+              "number": 9562,
               "isOpen": true,
               "sortOrder": 2,
               "sameGame": true
@@ -1815,7 +1815,7 @@
             {
               "id": "9659",
               "name": "Geelong -45.5",
-              "returnWin": 6.2,
+              "returnWin": 6,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -1828,7 +1828,7 @@
             {
               "id": "9660",
               "name": "Hawthorn +45.5",
-              "returnWin": 1.1,
+              "returnWin": 1.11,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -1841,7 +1841,7 @@
             {
               "id": "9661",
               "name": "Geelong -41.5",
-              "returnWin": 5.2,
+              "returnWin": 5,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -1854,7 +1854,7 @@
             {
               "id": "9662",
               "name": "Hawthorn +41.5",
-              "returnWin": 1.14,
+              "returnWin": 1.15,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -1867,7 +1867,7 @@
             {
               "id": "9663",
               "name": "Geelong -37.5",
-              "returnWin": 4.5,
+              "returnWin": 4.2,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -1880,7 +1880,7 @@
             {
               "id": "9664",
               "name": "Hawthorn +37.5",
-              "returnWin": 1.18,
+              "returnWin": 1.2,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -1893,7 +1893,7 @@
             {
               "id": "9665",
               "name": "Geelong -33.5",
-              "returnWin": 3.8,
+              "returnWin": 3.7,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -1906,7 +1906,7 @@
             {
               "id": "9666",
               "name": "Hawthorn +33.5",
-              "returnWin": 1.24,
+              "returnWin": 1.25,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -1919,7 +1919,7 @@
             {
               "id": "9667",
               "name": "Geelong -29.5",
-              "returnWin": 3.3,
+              "returnWin": 3.2,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -1932,7 +1932,7 @@
             {
               "id": "9668",
               "name": "Hawthorn +29.5",
-              "returnWin": 1.3,
+              "returnWin": 1.32,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -1945,7 +1945,7 @@
             {
               "id": "9669",
               "name": "Geelong -25.5",
-              "returnWin": 2.9,
+              "returnWin": 2.8,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -1958,7 +1958,7 @@
             {
               "id": "9670",
               "name": "Hawthorn +25.5",
-              "returnWin": 1.38,
+              "returnWin": 1.4,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -1971,7 +1971,7 @@
             {
               "id": "9671",
               "name": "Geelong -21.5",
-              "returnWin": 2.55,
+              "returnWin": 2.5,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -1984,7 +1984,7 @@
             {
               "id": "9672",
               "name": "Hawthorn +21.5",
-              "returnWin": 1.48,
+              "returnWin": 1.5,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -1997,7 +1997,7 @@
             {
               "id": "9673",
               "name": "Geelong -17.5",
-              "returnWin": 2.3,
+              "returnWin": 2.25,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -2010,7 +2010,7 @@
             {
               "id": "9674",
               "name": "Hawthorn +17.5",
-              "returnWin": 1.58,
+              "returnWin": 1.6,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -2023,7 +2023,7 @@
             {
               "id": "9675",
               "name": "Geelong -13.5",
-              "returnWin": 2.05,
+              "returnWin": 2,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -2036,7 +2036,7 @@
             {
               "id": "9676",
               "name": "Hawthorn +13.5",
-              "returnWin": 1.72,
+              "returnWin": 1.75,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -2049,7 +2049,7 @@
             {
               "id": "9677",
               "name": "Geelong -9.5",
-              "returnWin": 1.9,
+              "returnWin": 1.85,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -2075,7 +2075,7 @@
             {
               "id": "9679",
               "name": "Geelong -5.5",
-              "returnWin": 1.72,
+              "returnWin": 1.68,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -2088,7 +2088,7 @@
             {
               "id": "9680",
               "name": "Hawthorn +5.5",
-              "returnWin": 2.05,
+              "returnWin": 2.1,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -2101,7 +2101,7 @@
             {
               "id": "9681",
               "name": "Geelong +4.5",
-              "returnWin": 1.44,
+              "returnWin": 1.42,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -2114,7 +2114,7 @@
             {
               "id": "9682",
               "name": "Hawthorn -4.5",
-              "returnWin": 2.7,
+              "returnWin": 2.75,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -2127,7 +2127,7 @@
             {
               "id": "9683",
               "name": "Geelong +8.5",
-              "returnWin": 1.34,
+              "returnWin": 1.32,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -2140,7 +2140,7 @@
             {
               "id": "9684",
               "name": "Hawthorn -8.5",
-              "returnWin": 3.1,
+              "returnWin": 3.2,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -2153,7 +2153,7 @@
             {
               "id": "9685",
               "name": "Geelong +12.5",
-              "returnWin": 1.27,
+              "returnWin": 1.26,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -2166,7 +2166,7 @@
             {
               "id": "9686",
               "name": "Hawthorn -12.5",
-              "returnWin": 3.5,
+              "returnWin": 3.6,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -2179,7 +2179,7 @@
             {
               "id": "9687",
               "name": "Geelong +16.5",
-              "returnWin": 1.22,
+              "returnWin": 1.2,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -2192,7 +2192,7 @@
             {
               "id": "9688",
               "name": "Hawthorn -16.5",
-              "returnWin": 4,
+              "returnWin": 4.2,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -2205,7 +2205,7 @@
             {
               "id": "9689",
               "name": "Geelong +20.5",
-              "returnWin": 1.16,
+              "returnWin": 1.15,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -2218,7 +2218,7 @@
             {
               "id": "9690",
               "name": "Hawthorn -20.5",
-              "returnWin": 4.8,
+              "returnWin": 5,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -2231,7 +2231,7 @@
             {
               "id": "9691",
               "name": "Geelong +24.5",
-              "returnWin": 1.12,
+              "returnWin": 1.11,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -2244,7 +2244,7 @@
             {
               "id": "9692",
               "name": "Hawthorn -24.5",
-              "returnWin": 5.7,
+              "returnWin": 6,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -2289,7 +2289,7 @@
             {
               "id": "6911",
               "name": "Over 192.5",
-              "returnWin": 5.2,
+              "returnWin": 5.5,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -2302,7 +2302,7 @@
             {
               "id": "6912",
               "name": "Under 192.5",
-              "returnWin": 1.14,
+              "returnWin": 1.13,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -2315,7 +2315,7 @@
             {
               "id": "6913",
               "name": "Over 186.5",
-              "returnWin": 3.8,
+              "returnWin": 4,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -2328,7 +2328,7 @@
             {
               "id": "6914",
               "name": "Under 186.5",
-              "returnWin": 1.24,
+              "returnWin": 1.22,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -2341,7 +2341,7 @@
             {
               "id": "6915",
               "name": "Over 180.5",
-              "returnWin": 3,
+              "returnWin": 3.1,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -2354,7 +2354,7 @@
             {
               "id": "6916",
               "name": "Under 180.5",
-              "returnWin": 1.36,
+              "returnWin": 1.34,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -2367,7 +2367,7 @@
             {
               "id": "6917",
               "name": "Over 174.5",
-              "returnWin": 2.35,
+              "returnWin": 2.5,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -2380,7 +2380,7 @@
             {
               "id": "6918",
               "name": "Under 174.5",
-              "returnWin": 1.55,
+              "returnWin": 1.5,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -2393,7 +2393,7 @@
             {
               "id": "6919",
               "name": "Over 168.5",
-              "returnWin": 1.95,
+              "returnWin": 2.05,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -2406,7 +2406,7 @@
             {
               "id": "6920",
               "name": "Under 168.5",
-              "returnWin": 1.8,
+              "returnWin": 1.72,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -2419,7 +2419,7 @@
             {
               "id": "6921",
               "name": "Over 162.5",
-              "returnWin": 1.65,
+              "returnWin": 1.72,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -2432,7 +2432,7 @@
             {
               "id": "6922",
               "name": "Under 162.5",
-              "returnWin": 2.15,
+              "returnWin": 2.05,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -2445,7 +2445,7 @@
             {
               "id": "6923",
               "name": "Over 156.5",
-              "returnWin": 1.45,
+              "returnWin": 1.5,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -2458,7 +2458,7 @@
             {
               "id": "6924",
               "name": "Under 156.5",
-              "returnWin": 2.65,
+              "returnWin": 2.5,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -2471,7 +2471,7 @@
             {
               "id": "6925",
               "name": "Over 150.5",
-              "returnWin": 1.3,
+              "returnWin": 1.32,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -2484,7 +2484,7 @@
             {
               "id": "6926",
               "name": "Under 150.5",
-              "returnWin": 3.3,
+              "returnWin": 3.2,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -2497,7 +2497,7 @@
             {
               "id": "6927",
               "name": "Over 144.5",
-              "returnWin": 1.18,
+              "returnWin": 1.2,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -2510,7 +2510,7 @@
             {
               "id": "6928",
               "name": "Under 144.5",
-              "returnWin": 4.5,
+              "returnWin": 4.2,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -2523,7 +2523,7 @@
             {
               "id": "6929",
               "name": "Over 138.5",
-              "returnWin": 1.11,
+              "returnWin": 1.12,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -2536,7 +2536,7 @@
             {
               "id": "6930",
               "name": "Under 138.5",
-              "returnWin": 6,
+              "returnWin": 5.7,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -2815,7 +2815,7 @@
             {
               "id": "7224",
               "name": "Geelong/Geelong",
-              "returnWin": 1.9,
+              "returnWin": 1.85,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -2827,7 +2827,7 @@
             {
               "id": "7225",
               "name": "Geelong/Hawthorn",
-              "returnWin": 8.5,
+              "returnWin": 9,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -2839,7 +2839,7 @@
             {
               "id": "7226",
               "name": "Hawthorn/Hawthorn",
-              "returnWin": 3.1,
+              "returnWin": 3.2,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -2905,7 +2905,7 @@
             {
               "id": "6775",
               "name": "Geel -2.5 /Over 41.5",
-              "returnWin": 3.4,
+              "returnWin": 3.5,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -2941,7 +2941,7 @@
             {
               "id": "6778",
               "name": "Haw +2.5 /Under 41.5",
-              "returnWin": 3.3,
+              "returnWin": 3.2,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -3165,7 +3165,7 @@
             {
               "id": "10203",
               "name": "Shannon Neale (GEE)",
-              "returnWin": 1.15,
+              "returnWin": 1.16,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -3230,7 +3230,7 @@
             {
               "id": "10201",
               "name": "Shaun Mannagh (GEE)",
-              "returnWin": 1.35,
+              "returnWin": 1.36,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -3243,7 +3243,7 @@
             {
               "id": "10228",
               "name": "Mitch Lewis (HAW)",
-              "returnWin": 1.38,
+              "returnWin": 1.4,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -3412,7 +3412,7 @@
             {
               "id": "10219",
               "name": "Jai Newcombe (HAW)",
-              "returnWin": 3.1,
+              "returnWin": 3.2,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -3425,7 +3425,7 @@
             {
               "id": "10216",
               "name": "Lloyd Meek (HAW)",
-              "returnWin": 3.3,
+              "returnWin": 3.4,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -3462,19 +3462,6 @@
               "sameGame": true
             },
             {
-              "id": "10224",
-              "name": "James Worpel (HAW)",
-              "returnWin": 4.2,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 10224,
-              "isOpen": true,
-              "sortOrder": 41,
-              "sameGame": true
-            },
-            {
               "id": "10206",
               "name": "Karl Amon (HAW)",
               "returnWin": 4.25,
@@ -3485,6 +3472,19 @@
               "number": 10206,
               "isOpen": true,
               "sortOrder": 23,
+              "sameGame": true
+            },
+            {
+              "id": "10224",
+              "name": "James Worpel (HAW)",
+              "returnWin": 4.25,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 10224,
+              "isOpen": true,
+              "sortOrder": 41,
               "sameGame": true
             },
             {
@@ -3769,7 +3769,7 @@
             {
               "id": "10563",
               "name": "Shannon Neale (GEE)",
-              "returnWin": 1.87,
+              "returnWin": 1.88,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -3834,7 +3834,7 @@
             {
               "id": "10561",
               "name": "Shaun Mannagh (GEE)",
-              "returnWin": 2.6,
+              "returnWin": 2.7,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -3847,7 +3847,7 @@
             {
               "id": "10588",
               "name": "Mitch Lewis (HAW)",
-              "returnWin": 2.75,
+              "returnWin": 2.8,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -4016,7 +4016,7 @@
             {
               "id": "10579",
               "name": "Jai Newcombe (HAW)",
-              "returnWin": 13,
+              "returnWin": 14,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -4024,19 +4024,6 @@
               "number": 10579,
               "isOpen": true,
               "sortOrder": 36,
-              "sameGame": true
-            },
-            {
-              "id": "10576",
-              "name": "Lloyd Meek (HAW)",
-              "returnWin": 14,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 10576,
-              "isOpen": true,
-              "sortOrder": 33,
               "sameGame": true
             },
             {
@@ -4310,6 +4297,19 @@
               "number": 10569,
               "isOpen": true,
               "sortOrder": 26,
+              "sameGame": true
+            },
+            {
+              "id": "10576",
+              "name": "Lloyd Meek (HAW)",
+              "returnWin": 15,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 10576,
+              "isOpen": true,
+              "sortOrder": 33,
               "sameGame": true
             }
           ],
@@ -5055,7 +5055,7 @@
             {
               "id": "10408",
               "name": "Mitch Lewis (HAW)",
-              "returnWin": 17,
+              "returnWin": 18,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -5581,7 +5581,7 @@
             {
               "id": "10702",
               "name": "Shannon Neale (GEE)",
-              "returnWin": 17,
+              "returnWin": 18,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -5631,19 +5631,6 @@
               "sameGame": true
             },
             {
-              "id": "10700",
-              "name": "Shaun Mannagh (GEE)",
-              "returnWin": 41,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 10700,
-              "isOpen": true,
-              "sortOrder": 18,
-              "sameGame": true
-            },
-            {
               "id": "10721",
               "name": "Nick Watson (HAW)",
               "returnWin": 41,
@@ -5654,6 +5641,19 @@
               "number": 10721,
               "isOpen": true,
               "sortOrder": 39,
+              "sameGame": true
+            },
+            {
+              "id": "10700",
+              "name": "Shaun Mannagh (GEE)",
+              "returnWin": 51,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 10700,
+              "isOpen": true,
+              "sortOrder": 18,
               "sameGame": true
             },
             {
@@ -6183,7 +6183,7 @@
             {
               "id": "10158",
               "name": "Shannon Neale (GEE)",
-              "returnWin": 41,
+              "returnWin": 51,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -15873,7 +15873,7 @@
             {
               "id": "6943",
               "name": "Geelong by 20-39",
-              "returnWin": 4,
+              "returnWin": 3.8,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -15886,7 +15886,7 @@
             {
               "id": "6944",
               "name": "Geelong by 1-19",
-              "returnWin": 3.5,
+              "returnWin": 3.4,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -15938,7 +15938,7 @@
             {
               "id": "6948",
               "name": "Hawthorn by 40-59",
-              "returnWin": 15,
+              "returnWin": 16,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -15951,7 +15951,7 @@
             {
               "id": "6949",
               "name": "Hawthorn by 60+",
-              "returnWin": 26,
+              "returnWin": 34,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -16262,7 +16262,7 @@
             {
               "id": "6736",
               "name": "Geelong by 70-79",
-              "returnWin": 41,
+              "returnWin": 34,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -16275,7 +16275,7 @@
             {
               "id": "6737",
               "name": "Geelong by 60-69",
-              "returnWin": 23,
+              "returnWin": 21,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -16431,7 +16431,7 @@
             {
               "id": "6749",
               "name": "Hawthorn by 40-49",
-              "returnWin": 21,
+              "returnWin": 23,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -16444,7 +16444,7 @@
             {
               "id": "6750",
               "name": "Hawthorn by 50-59",
-              "returnWin": 34,
+              "returnWin": 41,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -16496,7 +16496,7 @@
             {
               "id": "6754",
               "name": "Hawthorn by 90-99",
-              "returnWin": 251,
+              "returnWin": 301,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -16509,7 +16509,7 @@
             {
               "id": "6755",
               "name": "Hawthorn by 100+",
-              "returnWin": 301,
+              "returnWin": 401,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -16671,7 +16671,7 @@
             {
               "id": "7260",
               "name": "Geelong by 43-44",
-              "returnWin": 41,
+              "returnWin": 34,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -16736,7 +16736,7 @@
             {
               "id": "7265",
               "name": "Geelong by 33-34",
-              "returnWin": 31,
+              "returnWin": 26,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -17048,7 +17048,7 @@
             {
               "id": "7429",
               "name": "Hawthorn by 13-14",
-              "returnWin": 26,
+              "returnWin": 31,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -17230,7 +17230,7 @@
             {
               "id": "9174",
               "name": "Hawthorn by 41-42",
-              "returnWin": 67,
+              "returnWin": 81,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -17269,7 +17269,7 @@
             {
               "id": "9177",
               "name": "Hawthorn by 47-48",
-              "returnWin": 81,
+              "returnWin": 101,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -17347,7 +17347,7 @@
             {
               "id": "9183",
               "name": "Hawthorn by 59-60",
-              "returnWin": 101,
+              "returnWin": 151,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -17360,7 +17360,7 @@
             {
               "id": "9184",
               "name": "Hawthorn by 61+",
-              "returnWin": 26,
+              "returnWin": 34,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -17405,7 +17405,7 @@
             {
               "id": "5918",
               "name": "Geelong by 10+",
-              "returnWin": 1.9,
+              "returnWin": 1.85,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -17431,7 +17431,7 @@
             {
               "id": "5927",
               "name": "Hawthorn by 10+",
-              "returnWin": 3.2,
+              "returnWin": 3.3,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -17476,7 +17476,7 @@
             {
               "id": "9571",
               "name": "Geelong by 20+",
-              "returnWin": 2.4,
+              "returnWin": 2.35,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -17502,7 +17502,7 @@
             {
               "id": "9573",
               "name": "Hawthorn by 20+",
-              "returnWin": 4.6,
+              "returnWin": 4.8,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -17547,7 +17547,7 @@
             {
               "id": "9516",
               "name": "Geelong by 30+",
-              "returnWin": 3.3,
+              "returnWin": 3.2,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -17573,7 +17573,7 @@
             {
               "id": "9518",
               "name": "Hawthorn by 30+",
-              "returnWin": 7,
+              "returnWin": 7.5,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -17618,7 +17618,7 @@
             {
               "id": "6343",
               "name": "Geelong by 40+",
-              "returnWin": 4.8,
+              "returnWin": 4.6,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -17689,7 +17689,7 @@
             {
               "id": "6133",
               "name": "Geel 13+ / Geel 25+",
-              "returnWin": 3.6,
+              "returnWin": 3.5,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -17737,7 +17737,7 @@
             {
               "id": "6139",
               "name": "Geel 1-12 / Geel 25+",
-              "returnWin": 13,
+              "returnWin": 12,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -17821,7 +17821,7 @@
             {
               "id": "6165",
               "name": "Haw 1-12 / Haw 25+",
-              "returnWin": 23,
+              "returnWin": 26,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -17923,7 +17923,7 @@
             {
               "id": "9769",
               "name": "Geel 40+ /201 or more",
-              "returnWin": 26,
+              "returnWin": 31,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -17947,7 +17947,7 @@
             {
               "id": "9771",
               "name": "Geel 40+ /161-180",
-              "returnWin": 13,
+              "returnWin": 12,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -17959,7 +17959,7 @@
             {
               "id": "9772",
               "name": "Geel 40+ /160 or less",
-              "returnWin": 12,
+              "returnWin": 11,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -17983,7 +17983,7 @@
             {
               "id": "9774",
               "name": "Geel 1-39 /181-200",
-              "returnWin": 9,
+              "returnWin": 10,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -18007,7 +18007,7 @@
             {
               "id": "9776",
               "name": "Geel 1-39 /160 or less",
-              "returnWin": 3.8,
+              "returnWin": 3.5,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -18067,7 +18067,7 @@
             {
               "id": "9781",
               "name": "Haw 1-39 /201 or more",
-              "returnWin": 31,
+              "returnWin": 34,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -18079,7 +18079,7 @@
             {
               "id": "9782",
               "name": "Haw 1-39 /181-200",
-              "returnWin": 13,
+              "returnWin": 14,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -18103,7 +18103,7 @@
             {
               "id": "9784",
               "name": "Haw 1-39 /160 or less",
-              "returnWin": 5,
+              "returnWin": 4.8,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -18115,7 +18115,7 @@
             {
               "id": "9785",
               "name": "Haw 40+ /201 or more",
-              "returnWin": 67,
+              "returnWin": 81,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -18193,7 +18193,7 @@
             {
               "id": "6794",
               "name": "Gee 0-59 / Haw 0-59",
-              "returnWin": 51,
+              "returnWin": 41,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -18245,7 +18245,7 @@
             {
               "id": "6798",
               "name": "Gee 0-59 / Haw 120+",
-              "returnWin": 67,
+              "returnWin": 81,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -18258,7 +18258,7 @@
             {
               "id": "6799",
               "name": "Gee 60-79 / Haw 0-59",
-              "returnWin": 18,
+              "returnWin": 16,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -18297,7 +18297,7 @@
             {
               "id": "6802",
               "name": "Gee 60-79 / Haw 100-119",
-              "returnWin": 15,
+              "returnWin": 16,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -18323,7 +18323,7 @@
             {
               "id": "6804",
               "name": "Gee 80-99 / Haw 0-59",
-              "returnWin": 11,
+              "returnWin": 10,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -18362,7 +18362,7 @@
             {
               "id": "6807",
               "name": "Gee 80-99 / Haw 100-119",
-              "returnWin": 14,
+              "returnWin": 15,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -18375,7 +18375,7 @@
             {
               "id": "6808",
               "name": "Gee 80-99 / Haw 120+",
-              "returnWin": 51,
+              "returnWin": 67,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -18388,7 +18388,7 @@
             {
               "id": "6809",
               "name": "Gee 100-119 / Haw 0-59",
-              "returnWin": 12,
+              "returnWin": 11,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -18401,7 +18401,7 @@
             {
               "id": "6810",
               "name": "Gee 100-119 / Haw 60-79",
-              "returnWin": 9,
+              "returnWin": 8.5,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -18414,7 +18414,7 @@
             {
               "id": "6811",
               "name": "Gee 100-119 / Haw 80-99",
-              "returnWin": 10,
+              "returnWin": 11,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -18550,7 +18550,7 @@
             {
               "id": "6326",
               "name": "Both teams score 90+",
-              "returnWin": 6.5,
+              "returnWin": 7,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -18562,7 +18562,7 @@
             {
               "id": "6329",
               "name": "Geelong score 90+ only",
-              "returnWin": 2.5,
+              "returnWin": 2.4,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -18574,7 +18574,7 @@
             {
               "id": "6331",
               "name": "Hawthorn score 90+ only",
-              "returnWin": 4.2,
+              "returnWin": 4.5,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -18586,7 +18586,7 @@
             {
               "id": "6333",
               "name": "Neither Team Score 90+",
-              "returnWin": 2.7,
+              "returnWin": 2.6,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -18628,7 +18628,7 @@
             {
               "id": "5881",
               "name": "140 Points or Less",
-              "returnWin": 5.5,
+              "returnWin": 5,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -18688,7 +18688,7 @@
             {
               "id": "5908",
               "name": "181 to 190",
-              "returnWin": 6.5,
+              "returnWin": 7,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -18700,7 +18700,7 @@
             {
               "id": "5911",
               "name": "191 to 200",
-              "returnWin": 9,
+              "returnWin": 10,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -18712,7 +18712,7 @@
             {
               "id": "5913",
               "name": "201 Points or More",
-              "returnWin": 8,
+              "returnWin": 8.5,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -18754,7 +18754,7 @@
             {
               "id": "6789",
               "name": "140 Points or Less",
-              "returnWin": 5.5,
+              "returnWin": 5,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -18766,7 +18766,7 @@
             {
               "id": "6790",
               "name": "141 to 160",
-              "returnWin": 3.2,
+              "returnWin": 3.1,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -18790,7 +18790,7 @@
             {
               "id": "6792",
               "name": "181 to 200",
-              "returnWin": 3.8,
+              "returnWin": 4,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -18802,7 +18802,7 @@
             {
               "id": "6793",
               "name": "201 Points or More",
-              "returnWin": 8,
+              "returnWin": 8.5,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -18844,7 +18844,7 @@
             {
               "id": "9477",
               "name": "140 Points or Less",
-              "returnWin": 5.5,
+              "returnWin": 5,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -18856,7 +18856,7 @@
             {
               "id": "9478",
               "name": "141 to 143",
-              "returnWin": 18,
+              "returnWin": 17,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -18868,7 +18868,7 @@
             {
               "id": "9479",
               "name": "144 to 146",
-              "returnWin": 16,
+              "returnWin": 15,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -18880,7 +18880,7 @@
             {
               "id": "9480",
               "name": "147 to 149",
-              "returnWin": 15,
+              "returnWin": 14,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -18892,7 +18892,7 @@
             {
               "id": "9481",
               "name": "150 to 152",
-              "returnWin": 14,
+              "returnWin": 13,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -18940,7 +18940,7 @@
             {
               "id": "9485",
               "name": "162 to 164",
-              "returnWin": 12,
+              "returnWin": 11,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -18964,7 +18964,7 @@
             {
               "id": "9487",
               "name": "168 to 170",
-              "returnWin": 11,
+              "returnWin": 12,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -19000,7 +19000,7 @@
             {
               "id": "9490",
               "name": "177 to 179",
-              "returnWin": 12,
+              "returnWin": 13,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -19036,7 +19036,7 @@
             {
               "id": "9493",
               "name": "186 to 188",
-              "returnWin": 15,
+              "returnWin": 16,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -19048,7 +19048,7 @@
             {
               "id": "9494",
               "name": "189 to 191",
-              "returnWin": 16,
+              "returnWin": 17,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -19060,7 +19060,7 @@
             {
               "id": "9495",
               "name": "192 to 194",
-              "returnWin": 18,
+              "returnWin": 19,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -19084,7 +19084,7 @@
             {
               "id": "9497",
               "name": "198 to 200",
-              "returnWin": 23,
+              "returnWin": 26,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -19096,7 +19096,7 @@
             {
               "id": "9511",
               "name": "201 Points or More",
-              "returnWin": 8,
+              "returnWin": 8.5,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -19150,7 +19150,7 @@
             {
               "id": "6995",
               "name": "31 to 33 Goals",
-              "returnWin": 10,
+              "returnWin": 11,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -19198,7 +19198,7 @@
             {
               "id": "6999",
               "name": "19 to 21 Goals",
-              "returnWin": 4.8,
+              "returnWin": 4.5,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -19210,7 +19210,7 @@
             {
               "id": "7000",
               "name": "18 Goals or Less",
-              "returnWin": 7,
+              "returnWin": 6.5,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -19252,7 +19252,7 @@
             {
               "id": "9193",
               "name": "Over 24.5",
-              "returnWin": 1.95,
+              "returnWin": 2,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -19264,7 +19264,7 @@
             {
               "id": "9194",
               "name": "Under 24.5",
-              "returnWin": 1.85,
+              "returnWin": 1.8,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -19276,13 +19276,13 @@
           ]
         },
         {
-          "id": "121140639",
-          "name": "AFL Gee-Haw HmPtOU 88.5",
-          "shortName": "AFL Gee-Haw HmPtOU 88.5",
+          "id": "121140664",
+          "name": "AFL Gee-Haw HmPtOU 87.5",
+          "shortName": "AFL Gee-Haw HmPtOU 87.5",
           "betOption": "Home Total Points O/U",
           "betOptionSpectrumId": "1756",
           "betOptionPriority": 6670,
-          "marketUniqueId": 121140639,
+          "marketUniqueId": 121140664,
           "closeTime": "2025-09-19T09:40:00.000Z",
           "bettingStatus": "Open",
           "message": null,
@@ -19304,39 +19304,39 @@
           "allowBundle": false,
           "propositions": [
             {
-              "id": "6758",
-              "name": "Geel Over 88.5",
-              "returnWin": 1.9,
+              "id": "6984",
+              "name": "Geel Over 87.5",
+              "returnWin": 1.85,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
               "allowPlace": false,
-              "number": 6758,
+              "number": 6984,
               "isOpen": true,
               "sortOrder": 1
             },
             {
-              "id": "6759",
-              "name": "Geel Under 88.5",
-              "returnWin": 1.9,
+              "id": "6985",
+              "name": "Geel Under 87.5",
+              "returnWin": 1.95,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
               "allowPlace": false,
-              "number": 6759,
+              "number": 6985,
               "isOpen": true,
               "sortOrder": 2
             }
           ]
         },
         {
-          "id": "121140519",
-          "name": "AFL Gee-Haw AwPtOU 78.5",
-          "shortName": "AFL Gee-Haw AwPtOU 78.5",
+          "id": "121140637",
+          "name": "AFL Gee-Haw AwPtOU 77.5",
+          "shortName": "AFL Gee-Haw AwPtOU 77.5",
           "betOption": "Away Total Points O/U",
           "betOptionSpectrumId": "3345",
           "betOptionPriority": 6675,
-          "marketUniqueId": 121140519,
+          "marketUniqueId": 121140637,
           "closeTime": "2025-09-19T09:40:00.000Z",
           "bettingStatus": "Open",
           "message": null,
@@ -19358,26 +19358,26 @@
           "allowBundle": false,
           "propositions": [
             {
-              "id": "7235",
-              "name": "Haw Over 78.5",
+              "id": "6722",
+              "name": "Haw Over 77.5",
               "returnWin": 1.9,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
               "allowPlace": false,
-              "number": 7235,
+              "number": 6722,
               "isOpen": true,
               "sortOrder": 1
             },
             {
-              "id": "7236",
-              "name": "Haw Under 78.5",
+              "id": "6723",
+              "name": "Haw Under 77.5",
               "returnWin": 1.9,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
               "allowPlace": false,
-              "number": 7236,
+              "number": 6723,
               "isOpen": true,
               "sortOrder": 2
             }
@@ -19462,7 +19462,7 @@
             {
               "id": "6217",
               "name": "Geelong 101 to 110",
-              "returnWin": 6,
+              "returnWin": 6.5,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -19666,7 +19666,7 @@
             {
               "id": "6870",
               "name": "Hawthorn 0 to 60",
-              "returnWin": 4.2,
+              "returnWin": 4,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -19678,7 +19678,7 @@
             {
               "id": "6871",
               "name": "Hawthorn 61 to 70",
-              "returnWin": 5.5,
+              "returnWin": 5,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -19690,7 +19690,7 @@
             {
               "id": "6872",
               "name": "Hawthorn 71 to 80",
-              "returnWin": 4.8,
+              "returnWin": 4.5,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -19726,7 +19726,7 @@
             {
               "id": "6875",
               "name": "Hawthorn 101+",
-              "returnWin": 5,
+              "returnWin": 5.5,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -19768,7 +19768,7 @@
             {
               "id": "5964",
               "name": "Hawthorn 0 to 60",
-              "returnWin": 4.2,
+              "returnWin": 4,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -19792,7 +19792,7 @@
             {
               "id": "5977",
               "name": "Hawthorn 66 to 70",
-              "returnWin": 9,
+              "returnWin": 8.5,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -19804,7 +19804,7 @@
             {
               "id": "5983",
               "name": "Hawthorn 71 to 75",
-              "returnWin": 8.5,
+              "returnWin": 8,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -19864,7 +19864,7 @@
             {
               "id": "6011",
               "name": "Hawthorn 96 to 100",
-              "returnWin": 11,
+              "returnWin": 12,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -19876,7 +19876,7 @@
             {
               "id": "6013",
               "name": "Hawthorn 101+",
-              "returnWin": 5,
+              "returnWin": 5.5,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -19918,7 +19918,7 @@
             {
               "id": "7211",
               "name": "Geelong",
-              "returnWin": 1.65,
+              "returnWin": 1.62,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -19930,7 +19930,7 @@
             {
               "id": "7212",
               "name": "Hawthorn",
-              "returnWin": 2.25,
+              "returnWin": 2.3,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -19972,7 +19972,7 @@
             {
               "id": "6726",
               "name": "Geelong",
-              "returnWin": 1.65,
+              "returnWin": 1.62,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -19998,7 +19998,7 @@
             {
               "id": "6728",
               "name": "Hawthorn",
-              "returnWin": 2.25,
+              "returnWin": 2.3,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -20013,13 +20013,13 @@
           "sameGameMultipleSelections": false
         },
         {
-          "id": "121140578",
-          "name": "AFL Geel-Haw 1stHlfLn -4.5",
-          "shortName": "AFL Gee-Haw 1stHlfLn -4.5",
+          "id": "121140529",
+          "name": "AFL Geel-Haw 1stHlfLn -5.5",
+          "shortName": "AFL Gee-Haw 1stHlfLn -5.5",
           "betOption": "1st Half Line",
           "betOptionSpectrumId": "280",
           "betOptionPriority": 10795,
-          "marketUniqueId": 121140578,
+          "marketUniqueId": 121140529,
           "closeTime": "2025-09-19T09:40:00.000Z",
           "bettingStatus": "Open",
           "message": null,
@@ -20041,27 +20041,27 @@
           "allowBundle": false,
           "propositions": [
             {
-              "id": "6263",
-              "name": "Geelong -4.5",
+              "id": "9435",
+              "name": "Geelong -5.5",
               "returnWin": 1.9,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
               "allowPlace": false,
-              "number": 6263,
+              "number": 9435,
               "isOpen": true,
               "sortOrder": 1,
               "sameGame": true
             },
             {
-              "id": "6266",
-              "name": "Hawthorn +4.5",
+              "id": "9436",
+              "name": "Hawthorn +5.5",
               "returnWin": 1.9,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
               "allowPlace": false,
-              "number": 6266,
+              "number": 9436,
               "isOpen": true,
               "sortOrder": 2,
               "sameGame": true
@@ -20071,13 +20071,13 @@
           "sameGameMultipleSelections": false
         },
         {
-          "id": "121140551",
+          "id": "121140549",
           "name": "AFL Geel-Haw 1HlfLnOU",
           "shortName": "AFL Gee-Haw 1HlfLnOU",
           "betOption": "1st Half Line/OverUnder Double",
           "betOptionSpectrumId": "379",
           "betOptionPriority": 10815,
-          "marketUniqueId": 121140551,
+          "marketUniqueId": 121140549,
           "closeTime": "2025-09-19T09:40:00.000Z",
           "bettingStatus": "Open",
           "message": null,
@@ -20099,50 +20099,50 @@
           "allowBundle": false,
           "propositions": [
             {
-              "id": "9599",
-              "name": "Geel -4.5 /Over 83.5",
-              "returnWin": 3.4,
+              "id": "9576",
+              "name": "Geel -6.5 /Over 83.5",
+              "returnWin": 3.6,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
               "allowPlace": false,
-              "number": 9599,
+              "number": 9576,
               "isOpen": true,
               "sortOrder": 1
             },
             {
-              "id": "9600",
-              "name": "Geel -4.5 /Under 83.5",
-              "returnWin": 3.6,
+              "id": "9577",
+              "name": "Geel -6.5 /Under 83.5",
+              "returnWin": 3.8,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
               "allowPlace": false,
-              "number": 9600,
+              "number": 9577,
               "isOpen": true,
               "sortOrder": 2
             },
             {
-              "id": "9601",
-              "name": "Haw +4.5 /Over 83.5",
+              "id": "9578",
+              "name": "Haw +6.5 /Over 83.5",
               "returnWin": 3.6,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
               "allowPlace": false,
-              "number": 9601,
+              "number": 9578,
               "isOpen": true,
               "sortOrder": 3
             },
             {
-              "id": "9602",
-              "name": "Haw +4.5 /Under 83.5",
-              "returnWin": 3.4,
+              "id": "9579",
+              "name": "Haw +6.5 /Under 83.5",
+              "returnWin": 3.1,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
               "allowPlace": false,
-              "number": 9602,
+              "number": 9579,
               "isOpen": true,
               "sortOrder": 4
             }
@@ -20305,13 +20305,13 @@
           ]
         },
         {
-          "id": "121140535",
+          "id": "121256197",
           "name": "AFL Geel-Haw 1stHHHOU",
           "shortName": "AFL Gee-Haw 1HHHOU",
           "betOption": "1st Half H2H/Over Under Double",
           "betOptionSpectrumId": "879",
           "betOptionPriority": 10835,
-          "marketUniqueId": 121140535,
+          "marketUniqueId": 121256197,
           "closeTime": "2025-09-19T09:40:00.000Z",
           "bettingStatus": "Open",
           "message": null,
@@ -20333,50 +20333,50 @@
           "allowBundle": false,
           "propositions": [
             {
-              "id": "9512",
-              "name": "Geelong /Over 83.5",
-              "returnWin": 3,
+              "id": "4996",
+              "name": "Geelong /Over 81.5",
+              "returnWin": 2.9,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
               "allowPlace": false,
-              "number": 9512,
+              "number": 4996,
               "isOpen": true,
               "sortOrder": 1
             },
             {
-              "id": "9513",
-              "name": "Geelong /Under 83.5",
-              "returnWin": 3.1,
+              "id": "4997",
+              "name": "Geelong /Under 81.5",
+              "returnWin": 3.2,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
               "allowPlace": false,
-              "number": 9513,
+              "number": 4997,
               "isOpen": true,
               "sortOrder": 2
             },
             {
-              "id": "9514",
-              "name": "Hawthorn /Over 83.5",
-              "returnWin": 4.5,
+              "id": "4998",
+              "name": "Hawthorn /Over 81.5",
+              "returnWin": 4.2,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
               "allowPlace": false,
-              "number": 9514,
+              "number": 4998,
               "isOpen": true,
               "sortOrder": 3
             },
             {
-              "id": "9515",
-              "name": "Hawthorn /Under 83.5",
-              "returnWin": 4,
+              "id": "4999",
+              "name": "Hawthorn /Under 81.5",
+              "returnWin": 4.2,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
               "allowPlace": false,
-              "number": 9515,
+              "number": 4999,
               "isOpen": true,
               "sortOrder": 4
             }
@@ -20465,7 +20465,7 @@
             {
               "id": "7117",
               "name": "Geelong -16.5",
-              "returnWin": 3,
+              "returnWin": 2.9,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -20478,7 +20478,7 @@
             {
               "id": "7118",
               "name": "Hawthorn +16.5",
-              "returnWin": 1.36,
+              "returnWin": 1.38,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -20491,7 +20491,7 @@
             {
               "id": "7119",
               "name": "Geelong -10.5",
-              "returnWin": 2.3,
+              "returnWin": 2.25,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -20504,7 +20504,7 @@
             {
               "id": "7120",
               "name": "Hawthorn +10.5",
-              "returnWin": 1.58,
+              "returnWin": 1.6,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -20517,7 +20517,7 @@
             {
               "id": "7121",
               "name": "Geelong -4.5",
-              "returnWin": 1.9,
+              "returnWin": 1.85,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -20543,7 +20543,7 @@
             {
               "id": "7123",
               "name": "Geelong +1.5",
-              "returnWin": 1.55,
+              "returnWin": 1.53,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -20556,7 +20556,7 @@
             {
               "id": "7124",
               "name": "Hawthorn -1.5",
-              "returnWin": 2.35,
+              "returnWin": 2.4,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -20621,7 +20621,7 @@
             {
               "id": "7129",
               "name": "Geelong +19.5",
-              "returnWin": 1.11,
+              "returnWin": 1.1,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -20634,7 +20634,7 @@
             {
               "id": "7130",
               "name": "Hawthorn -19.5",
-              "returnWin": 6,
+              "returnWin": 6.2,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -20679,7 +20679,7 @@
             {
               "id": "6048",
               "name": "Over 101.5",
-              "returnWin": 5.2,
+              "returnWin": 5.5,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -20692,7 +20692,7 @@
             {
               "id": "6049",
               "name": "Under 101.5",
-              "returnWin": 1.14,
+              "returnWin": 1.13,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -20705,7 +20705,7 @@
             {
               "id": "6050",
               "name": "Over 92.5",
-              "returnWin": 2.9,
+              "returnWin": 3,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -20718,7 +20718,7 @@
             {
               "id": "6051",
               "name": "Under 92.5",
-              "returnWin": 1.38,
+              "returnWin": 1.36,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -20731,7 +20731,7 @@
             {
               "id": "6052",
               "name": "Over 83.5",
-              "returnWin": 1.9,
+              "returnWin": 1.95,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -20744,7 +20744,7 @@
             {
               "id": "6054",
               "name": "Under 83.5",
-              "returnWin": 1.9,
+              "returnWin": 1.8,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -20757,7 +20757,7 @@
             {
               "id": "6056",
               "name": "Over 74.5",
-              "returnWin": 1.4,
+              "returnWin": 1.42,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -20770,7 +20770,7 @@
             {
               "id": "6058",
               "name": "Under 74.5",
-              "returnWin": 2.8,
+              "returnWin": 2.75,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -20783,7 +20783,7 @@
             {
               "id": "6060",
               "name": "Over 65.5",
-              "returnWin": 1.15,
+              "returnWin": 1.16,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -20796,7 +20796,7 @@
             {
               "id": "6062",
               "name": "Under 65.5",
-              "returnWin": 5,
+              "returnWin": 4.8,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -20880,7 +20880,7 @@
             {
               "id": "7092",
               "name": "Hawthorn by 1-9",
-              "returnWin": 5,
+              "returnWin": 4.8,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -20893,7 +20893,7 @@
             {
               "id": "7093",
               "name": "Hawthorn by 10+",
-              "returnWin": 3.4,
+              "returnWin": 3.5,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -20951,7 +20951,7 @@
             {
               "id": "9736",
               "name": "Geelong by 1-19",
-              "returnWin": 2.6,
+              "returnWin": 2.5,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -20990,7 +20990,7 @@
             {
               "id": "9739",
               "name": "Hawthorn by 20+",
-              "returnWin": 6,
+              "returnWin": 6.2,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -21061,7 +21061,7 @@
             {
               "id": "6408",
               "name": "Geelong by 13-24",
-              "returnWin": 5,
+              "returnWin": 4.8,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -21139,7 +21139,7 @@
             {
               "id": "6428",
               "name": "Hawthorn by 37+",
-              "returnWin": 17,
+              "returnWin": 19,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -21366,7 +21366,7 @@
             {
               "id": "9594",
               "name": "Hawthorn by 25-30",
-              "returnWin": 18,
+              "returnWin": 19,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -21405,7 +21405,7 @@
             {
               "id": "9597",
               "name": "Hawthorn by 43-48",
-              "returnWin": 67,
+              "returnWin": 81,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -21499,7 +21499,7 @@
             {
               "id": "7057",
               "name": "71 to 80",
-              "returnWin": 4.5,
+              "returnWin": 4.2,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -21511,7 +21511,7 @@
             {
               "id": "7058",
               "name": "81 to 90",
-              "returnWin": 4.2,
+              "returnWin": 4,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -21535,7 +21535,7 @@
             {
               "id": "7060",
               "name": "101 to 110",
-              "returnWin": 8,
+              "returnWin": 8.5,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -21547,7 +21547,7 @@
             {
               "id": "7061",
               "name": "111 Points or More",
-              "returnWin": 10,
+              "returnWin": 11,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -21559,13 +21559,13 @@
           ]
         },
         {
-          "id": "121140747",
-          "name": "AFL Gee-Haw 1HlfOU 83.5",
-          "shortName": "AFL Gee-Haw 1HlfOU 83.5",
+          "id": "121140746",
+          "name": "AFL Gee-Haw 1HlfOU 82.5",
+          "shortName": "AFL Gee-Haw 1HlfOU 82.5",
           "betOption": "1st Half Total Points O/U",
           "betOptionSpectrumId": "291",
           "betOptionPriority": 10945,
-          "marketUniqueId": 121140747,
+          "marketUniqueId": 121140746,
           "closeTime": "2025-09-19T09:40:00.000Z",
           "bettingStatus": "Open",
           "message": null,
@@ -21587,26 +21587,26 @@
           "allowBundle": false,
           "propositions": [
             {
-              "id": "6374",
-              "name": "Over 83.5",
+              "id": "6129",
+              "name": "Over 82.5",
               "returnWin": 1.9,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
               "allowPlace": false,
-              "number": 6374,
+              "number": 6129,
               "isOpen": true,
               "sortOrder": 1
             },
             {
-              "id": "6376",
-              "name": "Under 83.5",
+              "id": "6130",
+              "name": "Under 82.5",
               "returnWin": 1.9,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
               "allowPlace": false,
-              "number": 6376,
+              "number": 6130,
               "isOpen": true,
               "sortOrder": 2
             }
@@ -21643,7 +21643,7 @@
             {
               "id": "6300",
               "name": "Over 80 Pts",
-              "returnWin": 1.68,
+              "returnWin": 1.72,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -21667,7 +21667,7 @@
             {
               "id": "6308",
               "name": "Under 75 Pts",
-              "returnWin": 2.8,
+              "returnWin": 2.75,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -21709,7 +21709,7 @@
             {
               "id": "7082",
               "name": "Over 85 Pts",
-              "returnWin": 2.05,
+              "returnWin": 2.1,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -21733,7 +21733,7 @@
             {
               "id": "7084",
               "name": "Under 80 Pts",
-              "returnWin": 2.2,
+              "returnWin": 2.1,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -21847,7 +21847,7 @@
             {
               "id": "6247",
               "name": "Geelong 61 to 70",
-              "returnWin": 7.5,
+              "returnWin": 8,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -21967,7 +21967,7 @@
             {
               "id": "6464",
               "name": "Hawthorn 11 to 20",
-              "returnWin": 10,
+              "returnWin": 9,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -21979,7 +21979,7 @@
             {
               "id": "6471",
               "name": "Hawthorn 21 to 30",
-              "returnWin": 4.8,
+              "returnWin": 4.5,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -22027,7 +22027,7 @@
             {
               "id": "6485",
               "name": "Hawthorn 61 to 70",
-              "returnWin": 14,
+              "returnWin": 15,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -22039,7 +22039,7 @@
             {
               "id": "6486",
               "name": "Hawthorn 71+",
-              "returnWin": 26,
+              "returnWin": 34,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -22051,13 +22051,13 @@
           ]
         },
         {
-          "id": "121140655",
-          "name": "AFL Gee-Haw 1HAwPtOU 38.5",
-          "shortName": "AFL Gee-Haw 1HAwP 38.5",
+          "id": "121140681",
+          "name": "AFL Gee-Haw 1HAwPtOU 37.5",
+          "shortName": "AFL Gee-Haw 1HAwP 37.5",
           "betOption": "1st Half Away Points O/U",
           "betOptionSpectrumId": "1744",
           "betOptionPriority": 11005,
-          "marketUniqueId": 121140655,
+          "marketUniqueId": 121140681,
           "closeTime": "2025-09-19T09:40:00.000Z",
           "bettingStatus": "Open",
           "message": null,
@@ -22079,26 +22079,26 @@
           "allowBundle": false,
           "propositions": [
             {
-              "id": "6878",
-              "name": "Hawthorn Over 38.5",
-              "returnWin": 1.9,
+              "id": "7094",
+              "name": "Hawthorn Over 37.5",
+              "returnWin": 1.85,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
               "allowPlace": false,
-              "number": 6878,
+              "number": 7094,
               "isOpen": true,
               "sortOrder": 1
             },
             {
-              "id": "6879",
-              "name": "Hawthorn Under 38.5",
-              "returnWin": 1.9,
+              "id": "7095",
+              "name": "Hawthorn Under 37.5",
+              "returnWin": 1.95,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
               "allowPlace": false,
-              "number": 6879,
+              "number": 7095,
               "isOpen": true,
               "sortOrder": 2
             }
@@ -22189,7 +22189,7 @@
             {
               "id": "9454",
               "name": "Geelong",
-              "returnWin": 1.65,
+              "returnWin": 1.62,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -22213,7 +22213,7 @@
             {
               "id": "9456",
               "name": "Hawthorn",
-              "returnWin": 2.25,
+              "returnWin": 2.3,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -22255,7 +22255,7 @@
             {
               "id": "7197",
               "name": "Geelong",
-              "returnWin": 1.65,
+              "returnWin": 1.62,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -22267,7 +22267,7 @@
             {
               "id": "7198",
               "name": "Hawthorn",
-              "returnWin": 2.25,
+              "returnWin": 2.3,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -22279,13 +22279,13 @@
           ]
         },
         {
-          "id": "121140638",
-          "name": "AFL Gee-Haw 2HlfLn -4.5",
-          "shortName": "AFL Gee-Haw 2HlfLn -4.5",
+          "id": "121140594",
+          "name": "AFL Gee-Haw 2HlfLn -5.5",
+          "shortName": "AFL Gee-Haw 2HlfLn -5.5",
           "betOption": "2nd Half Line",
           "betOptionSpectrumId": "270",
           "betOptionPriority": 11360,
-          "marketUniqueId": 121140638,
+          "marketUniqueId": 121140594,
           "closeTime": "2025-09-19T09:40:00.000Z",
           "bettingStatus": "Open",
           "message": null,
@@ -22307,26 +22307,26 @@
           "allowBundle": false,
           "propositions": [
             {
-              "id": "6756",
-              "name": "Geelong -4.5",
+              "id": "6377",
+              "name": "Geelong -5.5",
               "returnWin": 1.9,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
               "allowPlace": false,
-              "number": 6756,
+              "number": 6377,
               "isOpen": true,
               "sortOrder": 1
             },
             {
-              "id": "6757",
-              "name": "Hawthorn +4.5",
+              "id": "6378",
+              "name": "Hawthorn +5.5",
               "returnWin": 1.9,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
               "allowPlace": false,
-              "number": 6757,
+              "number": 6378,
               "isOpen": true,
               "sortOrder": 2
             }
@@ -22363,7 +22363,7 @@
             {
               "id": "7073",
               "name": "Geelong by 10+",
-              "returnWin": 2.25,
+              "returnWin": 2.2,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -22375,7 +22375,7 @@
             {
               "id": "7074",
               "name": "Geelong by 1-9",
-              "returnWin": 4.5,
+              "returnWin": 4.2,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -22411,7 +22411,7 @@
             {
               "id": "7077",
               "name": "Hawthorn by 10+",
-              "returnWin": 3.4,
+              "returnWin": 3.6,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -22465,7 +22465,7 @@
             {
               "id": "6826",
               "name": "Geelong by 1-19",
-              "returnWin": 2.6,
+              "returnWin": 2.5,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -22489,7 +22489,7 @@
             {
               "id": "6828",
               "name": "Hawthorn by 1-19",
-              "returnWin": 3,
+              "returnWin": 3.1,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -22501,7 +22501,7 @@
             {
               "id": "6829",
               "name": "Hawthorn by 20+",
-              "returnWin": 6,
+              "returnWin": 6.2,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -22567,7 +22567,7 @@
             {
               "id": "6285",
               "name": "Geelong by 13-24",
-              "returnWin": 5,
+              "returnWin": 4.8,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -22627,7 +22627,7 @@
             {
               "id": "6294",
               "name": "Hawthorn by 25-36",
-              "returnWin": 13,
+              "returnWin": 14,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -22717,7 +22717,7 @@
             {
               "id": "6953",
               "name": "Geelong by 31-36",
-              "returnWin": 15,
+              "returnWin": 14,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -22849,7 +22849,7 @@
             {
               "id": "6964",
               "name": "Hawthorn by 25-30",
-              "returnWin": 18,
+              "returnWin": 19,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -22939,7 +22939,7 @@
             {
               "id": "6296",
               "name": "Over 83.5",
-              "returnWin": 1.9,
+              "returnWin": 1.95,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -22951,7 +22951,7 @@
             {
               "id": "6298",
               "name": "Under 83.5",
-              "returnWin": 1.9,
+              "returnWin": 1.85,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -22993,7 +22993,7 @@
             {
               "id": "6643",
               "name": "Over 85 Pts",
-              "returnWin": 2.05,
+              "returnWin": 2.1,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -23017,7 +23017,7 @@
             {
               "id": "6647",
               "name": "Under 80 Pts",
-              "returnWin": 2.25,
+              "returnWin": 2.2,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -23275,7 +23275,7 @@
             {
               "id": "7182",
               "name": "Hawthorn 31 to 40",
-              "returnWin": 3.5,
+              "returnWin": 3.4,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -23311,7 +23311,7 @@
             {
               "id": "7185",
               "name": "Hawthorn 61 to 70",
-              "returnWin": 12,
+              "returnWin": 13,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -23323,7 +23323,7 @@
             {
               "id": "7186",
               "name": "Hawthorn 71+",
-              "returnWin": 21,
+              "returnWin": 26,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -23335,13 +23335,13 @@
           ]
         },
         {
-          "id": "121140568",
-          "name": "AFL Gee-Haw 2HAwPtOU 40.5",
-          "shortName": "AFL Gee-Haw 2HAwP 40.5",
+          "id": "121140576",
+          "name": "AFL Gee-Haw 2HAwPtOU 39.5",
+          "shortName": "AFL Gee-Haw 2HAwP 39.5",
           "betOption": "2nd Half Away Points O/U",
           "betOptionSpectrumId": "1749",
           "betOptionPriority": 11460,
-          "marketUniqueId": 121140568,
+          "marketUniqueId": 121140576,
           "closeTime": "2025-09-19T09:40:00.000Z",
           "bettingStatus": "Open",
           "message": null,
@@ -23363,26 +23363,26 @@
           "allowBundle": false,
           "propositions": [
             {
-              "id": "9742",
-              "name": "Hawthorn Over 40.5",
+              "id": "6203",
+              "name": "Hawthorn Over 39.5",
               "returnWin": 1.9,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
               "allowPlace": false,
-              "number": 9742,
+              "number": 6203,
               "isOpen": true,
               "sortOrder": 1
             },
             {
-              "id": "9743",
-              "name": "Hawthorn Under 40.5",
+              "id": "6206",
+              "name": "Hawthorn Under 39.5",
               "returnWin": 1.9,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
               "allowPlace": false,
-              "number": 9743,
+              "number": 6206,
               "isOpen": true,
               "sortOrder": 2
             }
@@ -23445,7 +23445,7 @@
             {
               "id": "6867",
               "name": "Hawthorn",
-              "returnWin": 2.15,
+              "returnWin": 2.2,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -23614,7 +23614,7 @@
             {
               "id": "7238",
               "name": "Geelong /Under 41.5",
-              "returnWin": 3.2,
+              "returnWin": 3.1,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -23626,7 +23626,7 @@
             {
               "id": "7239",
               "name": "Hawthorn /Over 41.5",
-              "returnWin": 4.2,
+              "returnWin": 4.5,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -23706,7 +23706,7 @@
             {
               "id": "6673",
               "name": "Geelong -14.5",
-              "returnWin": 4,
+              "returnWin": 3.9,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -23719,7 +23719,7 @@
             {
               "id": "6675",
               "name": "Hawthorn +14.5",
-              "returnWin": 1.22,
+              "returnWin": 1.23,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -23732,7 +23732,7 @@
             {
               "id": "6676",
               "name": "Geelong -11.5",
-              "returnWin": 3.2,
+              "returnWin": 3.1,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -23745,7 +23745,7 @@
             {
               "id": "6678",
               "name": "Hawthorn +11.5",
-              "returnWin": 1.32,
+              "returnWin": 1.34,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -23784,7 +23784,7 @@
             {
               "id": "6682",
               "name": "Geelong -5.5",
-              "returnWin": 2.2,
+              "returnWin": 2.15,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -23797,7 +23797,7 @@
             {
               "id": "6683",
               "name": "Hawthorn +5.5",
-              "returnWin": 1.62,
+              "returnWin": 1.65,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -23862,7 +23862,7 @@
             {
               "id": "6688",
               "name": "Geelong +3.5",
-              "returnWin": 1.46,
+              "returnWin": 1.45,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -23875,7 +23875,7 @@
             {
               "id": "6689",
               "name": "Hawthorn -3.5",
-              "returnWin": 2.6,
+              "returnWin": 2.65,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -23914,7 +23914,7 @@
             {
               "id": "6692",
               "name": "Geelong +9.5",
-              "returnWin": 1.23,
+              "returnWin": 1.22,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -23927,7 +23927,7 @@
             {
               "id": "6693",
               "name": "Hawthorn -9.5",
-              "returnWin": 3.9,
+              "returnWin": 4,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -23940,7 +23940,7 @@
             {
               "id": "6694",
               "name": "Geelong +12.5",
-              "returnWin": 1.15,
+              "returnWin": 1.14,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -23953,7 +23953,7 @@
             {
               "id": "6695",
               "name": "Hawthorn -12.5",
-              "returnWin": 5,
+              "returnWin": 5.2,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -23998,7 +23998,7 @@
             {
               "id": "7030",
               "name": "Over 53.5",
-              "returnWin": 5.2,
+              "returnWin": 5.5,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -24011,7 +24011,7 @@
             {
               "id": "7031",
               "name": "Under 53.5",
-              "returnWin": 1.14,
+              "returnWin": 1.13,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -24024,7 +24024,7 @@
             {
               "id": "7032",
               "name": "Over 47.5",
-              "returnWin": 3,
+              "returnWin": 3.1,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -24037,7 +24037,7 @@
             {
               "id": "7033",
               "name": "Under 47.5",
-              "returnWin": 1.36,
+              "returnWin": 1.34,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -24063,7 +24063,7 @@
             {
               "id": "7035",
               "name": "Under 41.5",
-              "returnWin": 1.85,
+              "returnWin": 1.8,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -24076,7 +24076,7 @@
             {
               "id": "7036",
               "name": "Over 35.5",
-              "returnWin": 1.42,
+              "returnWin": 1.44,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -24089,7 +24089,7 @@
             {
               "id": "7037",
               "name": "Under 35.5",
-              "returnWin": 2.75,
+              "returnWin": 2.7,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -24173,7 +24173,7 @@
             {
               "id": "6623",
               "name": "Geelong by 1-6",
-              "returnWin": 4.8,
+              "returnWin": 4.5,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -24309,7 +24309,7 @@
             {
               "id": "9725",
               "name": "Hawthorn by 13+",
-              "returnWin": 5,
+              "returnWin": 5.2,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -24366,7 +24366,7 @@
             {
               "id": "6270",
               "name": "Hawthorn",
-              "returnWin": 2.2,
+              "returnWin": 2.25,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -24432,7 +24432,7 @@
             {
               "id": "6338",
               "name": "Hawthorn",
-              "returnWin": 2.6,
+              "returnWin": 2.7,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -24444,7 +24444,7 @@
             {
               "id": "6340",
               "name": "Neither",
-              "returnWin": 4.2,
+              "returnWin": 4,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -24498,7 +24498,7 @@
             {
               "id": "7097",
               "name": "Hawthorn",
-              "returnWin": 3.5,
+              "returnWin": 3.6,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -24510,7 +24510,7 @@
             {
               "id": "7098",
               "name": "Neither",
-              "returnWin": 2.25,
+              "returnWin": 2.2,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -24744,7 +24744,7 @@
             {
               "id": "6888",
               "name": "41 to 50",
-              "returnWin": 2.9,
+              "returnWin": 3,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -24780,13 +24780,13 @@
           ]
         },
         {
-          "id": "121140729",
-          "name": "AFL Geel-Haw 1QtrOU 41.5",
-          "shortName": "AFL Gee-Haw 1stQtrOU 41.5",
+          "id": "121140731",
+          "name": "AFL Geel-Haw 1QtrOU 40.5",
+          "shortName": "AFL Gee-Haw 1stQtrOU 40.5",
           "betOption": "1st Quarter Total Points O/U",
           "betOptionSpectrumId": "409",
           "betOptionPriority": 12055,
-          "marketUniqueId": 121140729,
+          "marketUniqueId": 121140731,
           "closeTime": "2025-09-19T09:40:00.000Z",
           "bettingStatus": "Open",
           "message": null,
@@ -24808,26 +24808,26 @@
           "allowBundle": false,
           "propositions": [
             {
-              "id": "6401",
-              "name": "Over 41.5",
-              "returnWin": 1.95,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 6401,
-              "isOpen": true,
-              "sortOrder": 1
-            },
-            {
-              "id": "6404",
-              "name": "Under 41.5",
+              "id": "6766",
+              "name": "Over 40.5",
               "returnWin": 1.85,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
               "allowPlace": false,
-              "number": 6404,
+              "number": 6766,
+              "isOpen": true,
+              "sortOrder": 1
+            },
+            {
+              "id": "6767",
+              "name": "Under 40.5",
+              "returnWin": 1.95,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 6767,
               "isOpen": true,
               "sortOrder": 2
             }
@@ -24864,7 +24864,7 @@
             {
               "id": "9605",
               "name": "Over 42 Pts",
-              "returnWin": 2.05,
+              "returnWin": 2.1,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -24888,7 +24888,7 @@
             {
               "id": "9607",
               "name": "Under 40 Pts",
-              "returnWin": 2.05,
+              "returnWin": 2,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -25098,7 +25098,7 @@
             {
               "id": "6115",
               "name": "Hawthorn 11 to 15",
-              "returnWin": 5,
+              "returnWin": 4.8,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -25242,7 +25242,7 @@
             {
               "id": "6834",
               "name": "Over 5.5",
-              "returnWin": 1.7,
+              "returnWin": 1.75,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -25254,7 +25254,7 @@
             {
               "id": "6835",
               "name": "Under 5.5",
-              "returnWin": 2.1,
+              "returnWin": 2.05,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -25322,7 +25322,7 @@
             {
               "id": "7145",
               "name": "Geelong by 31-35",
-              "returnWin": 41,
+              "returnWin": 34,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -25335,7 +25335,7 @@
             {
               "id": "7146",
               "name": "Geelong by 26-30",
-              "returnWin": 23,
+              "returnWin": 21,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -25374,7 +25374,7 @@
             {
               "id": "7149",
               "name": "Geelong by 11-15",
-              "returnWin": 8,
+              "returnWin": 7.5,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -25400,7 +25400,7 @@
             {
               "id": "7151",
               "name": "Geelong by 1-5",
-              "returnWin": 6.5,
+              "returnWin": 6,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -25439,7 +25439,7 @@
             {
               "id": "7154",
               "name": "Hawthorn by 6-10",
-              "returnWin": 7.5,
+              "returnWin": 8,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -25478,7 +25478,7 @@
             {
               "id": "7157",
               "name": "Hawthorn by 21-25",
-              "returnWin": 21,
+              "returnWin": 23,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -25504,7 +25504,7 @@
             {
               "id": "7159",
               "name": "Hawthorn by 31-35",
-              "returnWin": 67,
+              "returnWin": 81,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -25575,7 +25575,7 @@
             {
               "id": "6975",
               "name": "Geelong",
-              "returnWin": 1.75,
+              "returnWin": 1.7,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -25587,7 +25587,7 @@
             {
               "id": "6976",
               "name": "Hawthorn",
-              "returnWin": 2.05,
+              "returnWin": 2.1,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -25713,7 +25713,7 @@
             {
               "id": "7012",
               "name": "Geelong",
-              "returnWin": 1.75,
+              "returnWin": 1.7,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -25725,7 +25725,7 @@
             {
               "id": "7013",
               "name": "Hawthorn",
-              "returnWin": 2.05,
+              "returnWin": 2.1,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -26013,7 +26013,7 @@
             {
               "id": "6393",
               "name": "Geelong by 7+",
-              "returnWin": 2.35,
+              "returnWin": 2.3,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -26061,7 +26061,7 @@
             {
               "id": "6398",
               "name": "Hawthorn by 7+",
-              "returnWin": 3.2,
+              "returnWin": 3.3,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -26139,7 +26139,7 @@
             {
               "id": "9617",
               "name": "Hawthorn by 1-12",
-              "returnWin": 3.1,
+              "returnWin": 3.2,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -26217,7 +26217,7 @@
             {
               "id": "6501",
               "name": "Geelong by 31-35",
-              "returnWin": 41,
+              "returnWin": 34,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -26289,7 +26289,7 @@
             {
               "id": "6603",
               "name": "Geelong by 1-5",
-              "returnWin": 6.5,
+              "returnWin": 6,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -26385,7 +26385,7 @@
             {
               "id": "6611",
               "name": "Hawthorn by 31-35",
-              "returnWin": 67,
+              "returnWin": 81,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -26421,13 +26421,13 @@
           ]
         },
         {
-          "id": "121140542",
-          "name": "AFL Gee-Haw 2QtrTtl 42.5",
-          "shortName": "AFL Gee-Haw 2QTtl 42.5",
+          "id": "121140592",
+          "name": "AFL Gee-Haw 2QtrTtl 41.5",
+          "shortName": "AFL Gee-Haw 2QTtl 41.5",
           "betOption": "2nd Quarter Total Points O/U",
           "betOptionSpectrumId": "2581",
           "betOptionPriority": 15855,
-          "marketUniqueId": 121140542,
+          "marketUniqueId": 121140592,
           "closeTime": "2025-09-19T09:40:00.000Z",
           "bettingStatus": "Open",
           "message": null,
@@ -26449,26 +26449,26 @@
           "allowBundle": false,
           "propositions": [
             {
-              "id": "9554",
-              "name": "Over 42.5",
-              "returnWin": 1.95,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 9554,
-              "isOpen": true,
-              "sortOrder": 1
-            },
-            {
-              "id": "9555",
-              "name": "Under 42.5",
+              "id": "6369",
+              "name": "Over 41.5",
               "returnWin": 1.85,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
               "allowPlace": false,
-              "number": 9555,
+              "number": 6369,
+              "isOpen": true,
+              "sortOrder": 1
+            },
+            {
+              "id": "6370",
+              "name": "Under 41.5",
+              "returnWin": 1.95,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 6370,
               "isOpen": true,
               "sortOrder": 2
             }
@@ -26529,7 +26529,7 @@
             {
               "id": "7201",
               "name": "31 to 40",
-              "returnWin": 3.2,
+              "returnWin": 3.1,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -26565,7 +26565,7 @@
             {
               "id": "7204",
               "name": "61 Points or More",
-              "returnWin": 10,
+              "returnWin": 11,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -26763,7 +26763,7 @@
             {
               "id": "9726",
               "name": "Hawthorn 0 to 10",
-              "returnWin": 4.6,
+              "returnWin": 4.4,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -26823,7 +26823,7 @@
             {
               "id": "9731",
               "name": "Hawthorn 31+",
-              "returnWin": 6,
+              "returnWin": 6.2,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -26865,7 +26865,7 @@
             {
               "id": "6110",
               "name": "Hawthorn Over 19.5",
-              "returnWin": 1.9,
+              "returnWin": 1.95,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -26877,7 +26877,7 @@
             {
               "id": "6112",
               "name": "Hawthorn Under 19.5",
-              "returnWin": 1.9,
+              "returnWin": 1.85,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -26945,7 +26945,7 @@
             {
               "id": "9527",
               "name": "Geelong Behind",
-              "returnWin": 3.4,
+              "returnWin": 3.3,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -27321,7 +27321,7 @@
             {
               "id": "6880",
               "name": "Geelong by 7+",
-              "returnWin": 2.35,
+              "returnWin": 2.3,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -27369,7 +27369,7 @@
             {
               "id": "6884",
               "name": "Hawthorn by 7+",
-              "returnWin": 3.2,
+              "returnWin": 3.3,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -27447,7 +27447,7 @@
             {
               "id": "7220",
               "name": "Hawthorn by 1-12",
-              "returnWin": 3.1,
+              "returnWin": 3.2,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -27525,7 +27525,7 @@
             {
               "id": "9535",
               "name": "Geelong by 31-35",
-              "returnWin": 41,
+              "returnWin": 34,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -27597,7 +27597,7 @@
             {
               "id": "9541",
               "name": "Geelong by 1-5",
-              "returnWin": 6.5,
+              "returnWin": 6,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -27693,7 +27693,7 @@
             {
               "id": "9549",
               "name": "Hawthorn by 31-35",
-              "returnWin": 67,
+              "returnWin": 81,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -27783,7 +27783,7 @@
             {
               "id": "6385",
               "name": "31 to 40",
-              "returnWin": 3.2,
+              "returnWin": 3.1,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -27819,7 +27819,7 @@
             {
               "id": "6391",
               "name": "61 Points or More",
-              "returnWin": 10,
+              "returnWin": 11,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -27831,13 +27831,13 @@
           ]
         },
         {
-          "id": "121140605",
-          "name": "AFL Gee-Haw 3rdQTtl 42.5",
-          "shortName": "AFL Gee-Haw 3QTtl 42.5",
+          "id": "121140606",
+          "name": "AFL Gee-Haw 3rdQTtl 41.5",
+          "shortName": "AFL Gee-Haw 3QTtl 41.5",
           "betOption": "3rd Quarter Total Points O/U",
           "betOptionSpectrumId": "2582",
           "betOptionPriority": 16095,
-          "marketUniqueId": 121140605,
+          "marketUniqueId": 121140606,
           "closeTime": "2025-09-19T09:40:00.000Z",
           "bettingStatus": "Open",
           "message": null,
@@ -27859,39 +27859,39 @@
           "allowBundle": false,
           "propositions": [
             {
-              "id": "6107",
-              "name": "Over 42.5",
-              "returnWin": 1.95,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 6107,
-              "isOpen": true,
-              "sortOrder": 1
-            },
-            {
-              "id": "6109",
-              "name": "Under 42.5",
+              "id": "6355",
+              "name": "Over 41.5",
               "returnWin": 1.85,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
               "allowPlace": false,
-              "number": 6109,
+              "number": 6355,
+              "isOpen": true,
+              "sortOrder": 1
+            },
+            {
+              "id": "6356",
+              "name": "Under 41.5",
+              "returnWin": 1.95,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 6356,
               "isOpen": true,
               "sortOrder": 2
             }
           ]
         },
         {
-          "id": "121140544",
+          "id": "121141488",
           "name": "AFL Gee-Haw 3rdQtr3W",
           "shortName": "AFL Gee-Haw 3rdQ3W",
           "betOption": "3rd Quarter Total Points 3-Way",
           "betOptionSpectrumId": "3152",
           "betOptionPriority": 16100,
-          "marketUniqueId": 121140544,
+          "marketUniqueId": 121141488,
           "closeTime": "2025-09-19T09:40:00.000Z",
           "bettingStatus": "Open",
           "message": null,
@@ -27913,38 +27913,38 @@
           "allowBundle": false,
           "propositions": [
             {
-              "id": "9558",
-              "name": "Over 44 Pts",
-              "returnWin": 2.2,
+              "id": "9805",
+              "name": "Over 42 Pts",
+              "returnWin": 2,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
               "allowPlace": false,
-              "number": 9558,
+              "number": 9805,
               "isOpen": true,
               "sortOrder": 1
             },
             {
-              "id": "9559",
-              "name": "42 - 44 Pts",
+              "id": "9806",
+              "name": "40 - 42 Pts",
               "returnWin": 8,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
               "allowPlace": false,
-              "number": 9559,
+              "number": 9806,
               "isOpen": true,
               "sortOrder": 2
             },
             {
-              "id": "9560",
-              "name": "Under 42 Pts",
-              "returnWin": 1.95,
+              "id": "9807",
+              "name": "Under 40 Pts",
+              "returnWin": 2.2,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
               "allowPlace": false,
-              "number": 9560,
+              "number": 9807,
               "isOpen": true,
               "sortOrder": 3
             }
@@ -28137,7 +28137,7 @@
             {
               "id": "9756",
               "name": "Hawthorn 0 to 10",
-              "returnWin": 4.8,
+              "returnWin": 4.6,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -28185,7 +28185,7 @@
             {
               "id": "9760",
               "name": "Hawthorn 26 to 30",
-              "returnWin": 5.5,
+              "returnWin": 6,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -28197,7 +28197,7 @@
             {
               "id": "9761",
               "name": "Hawthorn 31+",
-              "returnWin": 5.8,
+              "returnWin": 6,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -28239,7 +28239,7 @@
             {
               "id": "9563",
               "name": "Hawthorn Over 19.5",
-              "returnWin": 1.85,
+              "returnWin": 1.9,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -28251,7 +28251,7 @@
             {
               "id": "9564",
               "name": "Hawthorn Under 19.5",
-              "returnWin": 1.95,
+              "returnWin": 1.9,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -28306,7 +28306,7 @@
             {
               "id": "7063",
               "name": "Hawthorn Goal",
-              "returnWin": 3.3,
+              "returnWin": 3.4,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -28695,7 +28695,7 @@
             {
               "id": "6221",
               "name": "Geelong by 7+",
-              "returnWin": 2.35,
+              "returnWin": 2.3,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -28743,7 +28743,7 @@
             {
               "id": "6229",
               "name": "Hawthorn by 7+",
-              "returnWin": 3.2,
+              "returnWin": 3.3,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -28821,7 +28821,7 @@
             {
               "id": "7008",
               "name": "Hawthorn by 1-12",
-              "returnWin": 3.1,
+              "returnWin": 3.2,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -28899,7 +28899,7 @@
             {
               "id": "6846",
               "name": "Geelong by 31-35",
-              "returnWin": 41,
+              "returnWin": 34,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -28947,7 +28947,7 @@
             {
               "id": "6850",
               "name": "Geelong by 11-15",
-              "returnWin": 8,
+              "returnWin": 7.5,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -28971,7 +28971,7 @@
             {
               "id": "6852",
               "name": "Geelong by 1-5",
-              "returnWin": 6.5,
+              "returnWin": 6,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -29043,7 +29043,7 @@
             {
               "id": "6858",
               "name": "Hawthorn by 21-25",
-              "returnWin": 21,
+              "returnWin": 23,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -29067,7 +29067,7 @@
             {
               "id": "6860",
               "name": "Hawthorn by 31-35",
-              "returnWin": 67,
+              "returnWin": 81,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -29181,7 +29181,7 @@
             {
               "id": "9475",
               "name": "51 to 60",
-              "returnWin": 4.8,
+              "returnWin": 5,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -29235,7 +29235,7 @@
             {
               "id": "9187",
               "name": "Over 41.5",
-              "returnWin": 1.85,
+              "returnWin": 1.9,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -29247,7 +29247,7 @@
             {
               "id": "9188",
               "name": "Under 41.5",
-              "returnWin": 1.95,
+              "returnWin": 1.9,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -29313,7 +29313,7 @@
             {
               "id": "5907",
               "name": "Under 40 Pts",
-              "returnWin": 2.2,
+              "returnWin": 2.1,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -29511,7 +29511,7 @@
             {
               "id": "7099",
               "name": "Hawthorn 0 to 10",
-              "returnWin": 5.2,
+              "returnWin": 5,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -29571,7 +29571,7 @@
             {
               "id": "7104",
               "name": "Hawthorn 31+",
-              "returnWin": 5.2,
+              "returnWin": 5.5,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -29613,7 +29613,7 @@
             {
               "id": "7229",
               "name": "Hawthorn Over 20.5",
-              "returnWin": 1.9,
+              "returnWin": 1.95,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -29625,7 +29625,7 @@
             {
               "id": "7230",
               "name": "Hawthorn Under 20.5",
-              "returnWin": 1.9,
+              "returnWin": 1.85,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -29667,7 +29667,7 @@
             {
               "id": "9567",
               "name": "Geelong Goal",
-              "returnWin": 3.2,
+              "returnWin": 3.1,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -29853,7 +29853,7 @@
             {
               "id": "9519",
               "name": "Geelong",
-              "returnWin": 1.85,
+              "returnWin": 1.8,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -29865,7 +29865,7 @@
             {
               "id": "9520",
               "name": "Hawthorn",
-              "returnWin": 1.95,
+              "returnWin": 2,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -29907,7 +29907,7 @@
             {
               "id": "7241",
               "name": "Geelong",
-              "returnWin": 1.9,
+              "returnWin": 1.85,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -29919,7 +29919,7 @@
             {
               "id": "7242",
               "name": "Hawthorn",
-              "returnWin": 1.9,
+              "returnWin": 1.95,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -29961,7 +29961,7 @@
             {
               "id": "9621",
               "name": "Geelong Goal",
-              "returnWin": 3.2,
+              "returnWin": 3.1,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -30194,7 +30194,7 @@
             {
               "id": "6105",
               "name": "Geelong",
-              "returnWin": 1.53,
+              "returnWin": 1.52,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -30206,7 +30206,7 @@
             {
               "id": "6106",
               "name": "Hawthorn",
-              "returnWin": 2.45,
+              "returnWin": 2.5,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -30380,7 +30380,7 @@
             {
               "id": "6720",
               "name": "Geelong",
-              "returnWin": 1.62,
+              "returnWin": 1.6,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -30392,7 +30392,7 @@
             {
               "id": "6721",
               "name": "Hawthorn",
-              "returnWin": 2.25,
+              "returnWin": 2.3,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -37703,19 +37703,6 @@
               "isOpen": true,
               "sortOrder": 36,
               "sameGame": true
-            },
-            {
-              "id": "9329",
-              "name": "Mason Cox (COL)",
-              "returnWin": 2.4,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 9329,
-              "isOpen": true,
-              "sortOrder": 2,
-              "sameGame": true
             }
           ],
           "sameGame": true,
@@ -38149,19 +38136,6 @@
               "isOpen": true,
               "sortOrder": 36,
               "sameGame": true
-            },
-            {
-              "id": "9283",
-              "name": "Mason Cox (COL)",
-              "returnWin": 8,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 9283,
-              "isOpen": true,
-              "sortOrder": 2,
-              "sameGame": true
             }
           ],
           "sameGame": true,
@@ -38517,19 +38491,6 @@
               "number": 9406,
               "isOpen": true,
               "sortOrder": 33
-            },
-            {
-              "id": "9375",
-              "name": "Mason Cox (COL)",
-              "returnWin": 9,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 9375,
-              "isOpen": true,
-              "sortOrder": 2,
-              "sameGame": true
             },
             {
               "id": "9394",
@@ -39070,19 +39031,6 @@
               "sortOrder": 18
             },
             {
-              "id": "10094",
-              "name": "Mason Cox (COL)",
-              "returnWin": 26,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 10094,
-              "isOpen": true,
-              "sortOrder": 2,
-              "sameGame": true
-            },
-            {
               "id": "10099",
               "name": "Jamie Elliott (COL)",
               "returnWin": 26,
@@ -39592,19 +39540,6 @@
               "number": 8993,
               "isOpen": true,
               "sortOrder": 1,
-              "sameGame": true
-            },
-            {
-              "id": "8994",
-              "name": "Mason Cox (COL)",
-              "returnWin": 51,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 8994,
-              "isOpen": true,
-              "sortOrder": 2,
               "sameGame": true
             },
             {
@@ -40352,19 +40287,6 @@
               "sameGame": true
             },
             {
-              "id": "9092",
-              "name": "Mason Cox (COL)",
-              "returnWin": 81,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 9092,
-              "isOpen": true,
-              "sortOrder": 2,
-              "sameGame": true
-            },
-            {
               "id": "9099",
               "name": "Patrick Lipinski (COL)",
               "returnWin": 81,
@@ -40647,18 +40569,6 @@
               "number": 9968,
               "isOpen": true,
               "sortOrder": 14
-            },
-            {
-              "id": "9956",
-              "name": "Mason Cox (COL)",
-              "returnWin": 101,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 9956,
-              "isOpen": true,
-              "sortOrder": 2
             },
             {
               "id": "9955",
@@ -41354,19 +41264,6 @@
               "isOpen": true,
               "sortOrder": 46,
               "sameGame": true
-            },
-            {
-              "id": "6447",
-              "name": "Beau McCreery (COL)",
-              "returnWin": 1.38,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 6447,
-              "isOpen": true,
-              "sortOrder": 11,
-              "sameGame": true
             }
           ],
           "sameGame": true,
@@ -41942,19 +41839,6 @@
               "number": 6158,
               "isOpen": true,
               "sortOrder": 46,
-              "sameGame": true
-            },
-            {
-              "id": "6072",
-              "name": "Beau McCreery (COL)",
-              "returnWin": 3.5,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 6072,
-              "isOpen": true,
-              "sortOrder": 11,
               "sameGame": true
             }
           ],
@@ -42545,19 +42429,6 @@
               "isOpen": true,
               "sortOrder": 46,
               "sameGame": true
-            },
-            {
-              "id": "5038",
-              "name": "Beau McCreery (COL)",
-              "returnWin": 13,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 5038,
-              "isOpen": true,
-              "sortOrder": 11,
-              "sameGame": true
             }
           ],
           "sameGame": true,
@@ -43136,19 +43007,6 @@
               "sameGame": true
             },
             {
-              "id": "6561",
-              "name": "Beau McCreery (COL)",
-              "returnWin": 51,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 6561,
-              "isOpen": true,
-              "sortOrder": 11,
-              "sameGame": true
-            },
-            {
               "id": "6661",
               "name": "Oscar McInerney (BRI)",
               "returnWin": 51,
@@ -43723,19 +43581,6 @@
               "number": 6283,
               "isOpen": true,
               "sortOrder": 6,
-              "sameGame": true
-            },
-            {
-              "id": "6292",
-              "name": "Beau McCreery (COL)",
-              "returnWin": 81,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 6292,
-              "isOpen": true,
-              "sortOrder": 11,
               "sameGame": true
             },
             {
