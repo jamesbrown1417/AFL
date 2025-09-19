@@ -12,10 +12,17 @@ from selenium_driverless.types.by import By
 from datetime import datetime, timezone
 import pandas as pd
 import asyncio
+import os
+from dotenv import load_dotenv
 
 # Get current timestamp=======================================================
 now = datetime.now()
 time_stamp = now.strftime("%Y-%m-%d_%H-%M-%S")
+
+# Load environment for optional login
+load_dotenv()
+BET365_USERNAME = os.getenv("BET365USER")
+BET365_PASSWORD = os.getenv("BET365PW")
 
 
 async def collect_h2h_and_urls(driver):
@@ -33,10 +40,47 @@ async def collect_h2h_and_urls(driver):
 
     # AFL all matches page
     await driver.get("https://www.bet365.com.au/#/AC/B36/C21011844/D48/E360013/F48")
-    await driver.sleep(0.1)
+    await driver.sleep(0.5)
+
+    # Attempt to detect main market container; if not present, try login
+    container_xpath = "//div[contains(@class, 'gl-MarketGroup_Wrapper')]"
+    try:
+        elem = await driver.find_element(By.XPATH, container_xpath, timeout=10)
+        print("Market container found - already logged in or login not required")
+    except Exception:
+        print("Market container not found - attempting login")
+        if not BET365_USERNAME or not BET365_PASSWORD:
+            print("BET365 credentials not found in environment; continuing without login")
+        else:
+            try:
+                login_trigger = await driver.find_element(By.XPATH, "//div[contains(@class, 'hm-MainHeaderRHSLoggedOutWide_Login')]", timeout=10)
+                await login_trigger.click()
+                await driver.sleep(1)
+
+                username_field = await driver.find_element(By.XPATH, "//input[@placeholder='Username or email address']", timeout=10)
+                await username_field.clear()
+                await driver.sleep(0.2)
+                await username_field.send_keys(BET365_USERNAME)
+
+                password_field = await driver.find_element(By.XPATH, "//input[@placeholder='Password']", timeout=10)
+                await password_field.clear()
+                await driver.sleep(0.2)
+                await password_field.send_keys(BET365_PASSWORD)
+
+                login_button = await driver.find_element(By.XPATH, "//div[contains(@class, 'lms-LoginButton')]", timeout=10)
+                await login_button.click()
+                print("Clicked login button")
+
+                # Wait for market container after login
+                elem = await driver.find_element(By.XPATH, container_xpath, timeout=30)
+                print("Market container found after login")
+            except Exception as e:
+                print(f"Login attempt failed: {e}")
+                # Fallback: still try to find the container with a longer wait
+                elem = await driver.find_element(By.XPATH, container_xpath, timeout=60)
 
     # Wait for market container and capture HTML
-    elem = await driver.find_element(By.XPATH, "//div[contains(@class, 'gl-MarketGroup_Wrapper ')]", timeout=100)
+    # (elem set in blocks above)
     body_html = await elem.get_attribute("outerHTML")
 
     # Persist H2H HTML
@@ -191,4 +235,3 @@ async def main():
 
 if __name__ == "__main__":
     asyncio.run(main())
-

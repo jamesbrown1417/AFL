@@ -1,5 +1,19 @@
 {
     "entrants": {
+        "36d805c2-44af-4fbb-972f-ef83bedf4c6a": {
+            "id": "36d805c2-44af-4fbb-972f-ef83bedf4c6a",
+            "name": "East Perth to win by 1-39",
+            "visible": true,
+            "sort_order": 40,
+            "market_id": "5d47fd28-6b77-4cf9-a02c-fcb230a640b0"
+        },
+        "383cac99-ba29-481d-81cc-97f1a20f2d6b": {
+            "id": "383cac99-ba29-481d-81cc-97f1a20f2d6b",
+            "name": "East Perth to win by 40+",
+            "visible": true,
+            "sort_order": 50,
+            "market_id": "5d47fd28-6b77-4cf9-a02c-fcb230a640b0"
+        },
         "4937ad24-4674-49a9-9007-7eb5400a637c": {
             "id": "4937ad24-4674-49a9-9007-7eb5400a637c",
             "name": "East Perth",
@@ -7,6 +21,13 @@
             "visible": true,
             "sort_order": 20,
             "market_id": "6f1035b5-7323-49fa-b226-193953735d83"
+        },
+        "63b9aab3-ff7c-446f-9a80-b71e2e13382a": {
+            "id": "63b9aab3-ff7c-446f-9a80-b71e2e13382a",
+            "name": "South Fremantle to win by 40+",
+            "visible": true,
+            "sort_order": 20,
+            "market_id": "5d47fd28-6b77-4cf9-a02c-fcb230a640b0"
         },
         "cff75eeb-eefd-4bdf-ba36-985c62c3a2cf": {
             "id": "cff75eeb-eefd-4bdf-ba36-985c62c3a2cf",
@@ -23,6 +44,20 @@
             "visible": true,
             "sort_order": 10,
             "market_id": "6f1035b5-7323-49fa-b226-193953735d83"
+        },
+        "d46d58bf-3109-4e37-b7d7-1c6fcab22f1d": {
+            "id": "d46d58bf-3109-4e37-b7d7-1c6fcab22f1d",
+            "name": "Draw",
+            "visible": true,
+            "sort_order": 30,
+            "market_id": "5d47fd28-6b77-4cf9-a02c-fcb230a640b0"
+        },
+        "e918d613-d121-4b8d-9a1f-8a9ee6c18d88": {
+            "id": "e918d613-d121-4b8d-9a1f-8a9ee6c18d88",
+            "name": "South Fremantle to win by 1-39",
+            "visible": true,
+            "sort_order": 10,
+            "market_id": "5d47fd28-6b77-4cf9-a02c-fcb230a640b0"
         },
         "fce3a47b-3ffe-47aa-abfa-95780df930e5": {
             "id": "fce3a47b-3ffe-47aa-abfa-95780df930e5",
@@ -54,24 +89,33 @@
             },
             "competition_id": "95553dad-b992-4773-b6fe-4b1572dc13df",
             "market_type_group_ids": [
-                "29edb5e1-a717-4769-8bcd-2d43ec38d828"
+                "29edb5e1-a717-4769-8bcd-2d43ec38d828",
+                "f8d682e7-80d0-4489-bbf5-358f1e8c7801"
             ],
             "market_type_group_markets": [
                 {
                     "market_type_group_id": "29edb5e1-a717-4769-8bcd-2d43ec38d828",
                     "market_ids": [
                         "6f1035b5-7323-49fa-b226-193953735d83",
-                        "a1ef6da8-1150-4e87-8700-700ec04ef39c"
+                        "a1ef6da8-1150-4e87-8700-700ec04ef39c",
+                        "5d47fd28-6b77-4cf9-a02c-fcb230a640b0"
+                    ]
+                },
+                {
+                    "market_type_group_id": "f8d682e7-80d0-4489-bbf5-358f1e8c7801",
+                    "market_ids": [
+                        "5d47fd28-6b77-4cf9-a02c-fcb230a640b0"
                     ]
                 }
             ],
-            "market_count": 2,
+            "market_count": 3,
             "main_markets": [
                 "6f1035b5-7323-49fa-b226-193953735d83"
             ],
             "market_ids": [
                 "6f1035b5-7323-49fa-b226-193953735d83",
-                "a1ef6da8-1150-4e87-8700-700ec04ef39c"
+                "a1ef6da8-1150-4e87-8700-700ec04ef39c",
+                "5d47fd28-6b77-4cf9-a02c-fcb230a640b0"
             ],
             "category_id": "23d497e6-8aab-4309-905b-9421f42c9bc5"
         }
@@ -83,9 +127,38 @@
             "name": "Top Markets",
             "priority": 352,
             "type": "MARKET_TYPE_GROUP_TYPE_EVENT"
+        },
+        "f8d682e7-80d0-4489-bbf5-358f1e8c7801": {
+            "id": "f8d682e7-80d0-4489-bbf5-358f1e8c7801",
+            "category_id": "23d497e6-8aab-4309-905b-9421f42c9bc5",
+            "name": "Winning Margin Markets",
+            "priority": 220,
+            "type": "MARKET_TYPE_GROUP_TYPE_EVENT"
         }
     },
     "markets": {
+        "5d47fd28-6b77-4cf9-a02c-fcb230a640b0": {
+            "id": "5d47fd28-6b77-4cf9-a02c-fcb230a640b0",
+            "event_id": "3408ad02-f92d-47a3-8f64-055922f45e71",
+            "market_type_id": "9c965a30-ec40-4170-9092-a9128d15a3fc",
+            "market_status_id": "4bc8fe96-296b-4b4c-aea4-85c94f63b9c6",
+            "name": "Winning Margin",
+            "advertised_start": {
+                "seconds": 1758439200
+            },
+            "actual_start": {
+                "seconds": 1758439200
+            },
+            "visible": true,
+            "entrant_ids": [
+                "e918d613-d121-4b8d-9a1f-8a9ee6c18d88",
+                "63b9aab3-ff7c-446f-9a80-b71e2e13382a",
+                "d46d58bf-3109-4e37-b7d7-1c6fcab22f1d",
+                "36d805c2-44af-4fbb-972f-ef83bedf4c6a",
+                "383cac99-ba29-481d-81cc-97f1a20f2d6b"
+            ],
+            "num_winners": 1
+        },
         "6f1035b5-7323-49fa-b226-193953735d83": {
             "id": "6f1035b5-7323-49fa-b226-193953735d83",
             "event_id": "3408ad02-f92d-47a3-8f64-055922f45e71",
@@ -128,14 +201,33 @@
         }
     },
     "markets_allow_cashout": {
+        "5d47fd28-6b77-4cf9-a02c-fcb230a640b0": true,
         "6f1035b5-7323-49fa-b226-193953735d83": true,
         "a1ef6da8-1150-4e87-8700-700ec04ef39c": false
     },
     "prices": {
+        "36d805c2-44af-4fbb-972f-ef83bedf4c6a:940b8704-e497-4a76-b390-00918ff7d282:": {
+            "odds": {
+                "numerator": 21,
+                "denominator": 4
+            }
+        },
+        "383cac99-ba29-481d-81cc-97f1a20f2d6b:940b8704-e497-4a76-b390-00918ff7d282:": {
+            "odds": {
+                "numerator": 33,
+                "denominator": 1
+            }
+        },
         "4937ad24-4674-49a9-9007-7eb5400a637c:940b8704-e497-4a76-b390-00918ff7d282:": {
             "odds": {
                 "numerator": 5,
                 "denominator": 1
+            }
+        },
+        "63b9aab3-ff7c-446f-9a80-b71e2e13382a:940b8704-e497-4a76-b390-00918ff7d282:": {
+            "odds": {
+                "numerator": 5,
+                "denominator": 4
             }
         },
         "cff75eeb-eefd-4bdf-ba36-985c62c3a2cf:940b8704-e497-4a76-b390-00918ff7d282:": {
@@ -148,6 +240,18 @@
             "odds": {
                 "numerator": 3,
                 "denominator": 25
+            }
+        },
+        "d46d58bf-3109-4e37-b7d7-1c6fcab22f1d:940b8704-e497-4a76-b390-00918ff7d282:": {
+            "odds": {
+                "numerator": 40,
+                "denominator": 1
+            }
+        },
+        "e918d613-d121-4b8d-9a1f-8a9ee6c18d88:940b8704-e497-4a76-b390-00918ff7d282:": {
+            "odds": {
+                "numerator": 11,
+                "denominator": 10
             }
         },
         "fce3a47b-3ffe-47aa-abfa-95780df930e5:940b8704-e497-4a76-b390-00918ff7d282:": {

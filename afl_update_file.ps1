@@ -6,8 +6,7 @@ Remove-Item -Path "C:\Users\james\OneDrive\Desktop\Projects\AFL-2024\OddsScraper
 Remove-Item -Path "C:\Users\james\OneDrive\Desktop\Projects\AFL-2024\Data\BET365_HTML\*.txt"
 
 # Execute Python and R scripts
-& "C:/Users/james/AppData/Local/Microsoft/WindowsApps/python3.12.exe" "c:/Users/james/OneDrive/Desktop/Projects/AFL-2024/OddsScraper/get_bet365_html.py"
-& "C:/Users/james/AppData/Local/Microsoft/WindowsApps/python3.12.exe" "c:/Users/james/OneDrive/Desktop/Projects/AFL-2024/OddsScraper/get_bet365_player.py"
+& "C:/Users/james/AppData/Local/Microsoft/WindowsApps/python3.12.exe" "c:/Users/james/OneDrive/Desktop/Projects/AFL-2024/OddsScraper/bet365_afl_single.py"
 
 & "C:/Users/james/AppData/Local/Microsoft/WindowsApps/python3.12.exe" "c:/Users/james/OneDrive/Desktop/Projects/AFL-2024/OddsScraper/Neds/get_neds_urls.py"
 & "Rscript" "OddsScraper\Neds\get_neds_match_urls.R"
