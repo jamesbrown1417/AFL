@@ -24,7 +24,6 @@ load_dotenv()
 BET365_USERNAME = os.getenv("BET365USER")
 BET365_PASSWORD = os.getenv("BET365PW")
 
-
 async def collect_h2h_and_urls(driver):
     """Navigate to main AFL page, save H2H HTML, and return list of player URLs.
 
