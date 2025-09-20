@@ -892,6 +892,13 @@
             "sort_order": 80,
             "market_id": "fd7ebd5a-e6f8-4ea9-9c92-ac10ad318e7b"
         },
+        "5e9c69b1-679f-4ba6-ac82-23b4a591b1da": {
+            "id": "5e9c69b1-679f-4ba6-ac82-23b4a591b1da",
+            "name": "Essendon (W) +7.5 / Under 74.5",
+            "visible": true,
+            "sort_order": 90,
+            "market_id": "be505224-bc4e-4542-a519-e44c8e84825b"
+        },
         "5e9ccd73-e85a-48a7-9c33-71a6eb1f7b92": {
             "id": "5e9ccd73-e85a-48a7-9c33-71a6eb1f7b92",
             "name": "Ashleigh Brazill (Fremantle (W))",
@@ -1554,6 +1561,13 @@
             "sort_order": 320,
             "market_id": "36a34e73-4e50-43f2-bc65-8daa3494b78f"
         },
+        "af8b8480-b4f4-4553-87dc-5c5ca82f83e5": {
+            "id": "af8b8480-b4f4-4553-87dc-5c5ca82f83e5",
+            "name": "Fremantle (W) -7.5 / Under 74.5",
+            "visible": true,
+            "sort_order": 110,
+            "market_id": "be505224-bc4e-4542-a519-e44c8e84825b"
+        },
         "af9ad9f9-e9df-4944-956c-b4515690c777": {
             "id": "af9ad9f9-e9df-4944-956c-b4515690c777",
             "name": "Stephanie Wales (Essendon (W))",
@@ -1975,6 +1989,13 @@
             "sort_order": 340,
             "market_id": "36a34e73-4e50-43f2-bc65-8daa3494b78f"
         },
+        "e2eac502-3c4f-49f0-9fec-88d8d30ecd2a": {
+            "id": "e2eac502-3c4f-49f0-9fec-88d8d30ecd2a",
+            "name": "Fremantle (W) -7.5 / Over 74.5",
+            "visible": true,
+            "sort_order": 100,
+            "market_id": "be505224-bc4e-4542-a519-e44c8e84825b"
+        },
         "e312fe0f-4d40-4836-8a73-04a4e74a2938": {
             "id": "e312fe0f-4d40-4836-8a73-04a4e74a2938",
             "name": "Fremantle (W)",
@@ -2070,6 +2091,13 @@
             "visible": true,
             "sort_order": 160,
             "market_id": "fd7ebd5a-e6f8-4ea9-9c92-ac10ad318e7b"
+        },
+        "f2fa417e-8092-43c2-8673-4db9961c2f5b": {
+            "id": "f2fa417e-8092-43c2-8673-4db9961c2f5b",
+            "name": "Essendon (W) +7.5 / Over 74.5",
+            "visible": true,
+            "sort_order": 120,
+            "market_id": "be505224-bc4e-4542-a519-e44c8e84825b"
         },
         "f325a68d-fb84-407b-ac77-71edfc0019a4": {
             "id": "f325a68d-fb84-407b-ac77-71edfc0019a4",
@@ -2309,6 +2337,7 @@
                 {
                     "market_type_group_id": "f4719457-4b2b-4f69-b8f9-c943d2b1440b",
                     "market_ids": [
+                        "be505224-bc4e-4542-a519-e44c8e84825b",
                         "8387f929-4a5d-4f8b-9653-80e0748006bf"
                     ]
                 },
@@ -2380,7 +2409,7 @@
                     ]
                 }
             ],
-            "market_count": 33,
+            "market_count": 34,
             "main_markets": [
                 "ab4cac9c-273a-4e6a-8b98-2ef24847f183"
             ],
@@ -2396,6 +2425,7 @@
                 "36a34e73-4e50-43f2-bc65-8daa3494b78f",
                 "a9e20beb-6b55-4558-9334-dff4f6b18df1",
                 "5a3ae525-aa8b-411c-be24-7a08a67232c4",
+                "be505224-bc4e-4542-a519-e44c8e84825b",
                 "8387f929-4a5d-4f8b-9653-80e0748006bf",
                 "c784bb67-fef1-4fc1-8ddb-9fdaf4ab1c43",
                 "01de373f-54c4-40a6-8fab-18676982761d",
@@ -3312,6 +3342,29 @@
             ],
             "num_winners": 1
         },
+        "be505224-bc4e-4542-a519-e44c8e84825b": {
+            "id": "be505224-bc4e-4542-a519-e44c8e84825b",
+            "event_id": "3d4b90ef-9a73-47b1-a2b0-439e89a01224",
+            "market_type_id": "785f7163-5608-4650-8101-1f4bc0015543",
+            "market_status_id": "4bc8fe96-296b-4b4c-aea4-85c94f63b9c6",
+            "name": "Line / Total Points Double",
+            "advertised_start": {
+                "seconds": 1758344700
+            },
+            "actual_start": {
+                "seconds": 1758344700
+            },
+            "same_game_multi_available": true,
+            "is_multiple_outcome_market": true,
+            "visible": true,
+            "entrant_ids": [
+                "5e9c69b1-679f-4ba6-ac82-23b4a591b1da",
+                "e2eac502-3c4f-49f0-9fec-88d8d30ecd2a",
+                "af8b8480-b4f4-4553-87dc-5c5ca82f83e5",
+                "f2fa417e-8092-43c2-8673-4db9961c2f5b"
+            ],
+            "num_winners": 12
+        },
         "c784bb67-fef1-4fc1-8ddb-9fdaf4ab1c43": {
             "id": "c784bb67-fef1-4fc1-8ddb-9fdaf4ab1c43",
             "event_id": "3d4b90ef-9a73-47b1-a2b0-439e89a01224",
@@ -3447,6 +3500,7 @@
         "ab4cac9c-273a-4e6a-8b98-2ef24847f183": true,
         "b13dface-e5ea-4aca-b950-16b1717b7d18": true,
         "ba5c7e1f-e4df-40cb-a0e5-e1b89538039b": false,
+        "be505224-bc4e-4542-a519-e44c8e84825b": false,
         "c784bb67-fef1-4fc1-8ddb-9fdaf4ab1c43": true,
         "d036dbce-2254-4f44-ac07-9044a7dd9c31": true,
         "f2be661a-1458-4e6e-bc81-67d5656ff2be": false,
@@ -4125,6 +4179,12 @@
                 "denominator": 4
             }
         },
+        "5e9c69b1-679f-4ba6-ac82-23b4a591b1da:940b8704-e497-4a76-b390-00918ff7d282:": {
+            "odds": {
+                "numerator": 9,
+                "denominator": 4
+            }
+        },
         "5e9ccd73-e85a-48a7-9c33-71a6eb1f7b92:940b8704-e497-4a76-b390-00918ff7d282:": {
             "odds": {
                 "numerator": 40,
@@ -4623,6 +4683,12 @@
                 "denominator": 1
             }
         },
+        "af8b8480-b4f4-4553-87dc-5c5ca82f83e5:940b8704-e497-4a76-b390-00918ff7d282:": {
+            "odds": {
+                "numerator": 5,
+                "denominator": 2
+            }
+        },
         "af9ad9f9-e9df-4944-956c-b4515690c777:940b8704-e497-4a76-b390-00918ff7d282:": {
             "odds": {
                 "numerator": 40,
@@ -4941,6 +5007,12 @@
                 "denominator": 1
             }
         },
+        "e2eac502-3c4f-49f0-9fec-88d8d30ecd2a:940b8704-e497-4a76-b390-00918ff7d282:": {
+            "odds": {
+                "numerator": 49,
+                "denominator": 20
+            }
+        },
         "e312fe0f-4d40-4836-8a73-04a4e74a2938:940b8704-e497-4a76-b390-00918ff7d282:": {
             "odds": {
                 "numerator": 7,
@@ -5011,6 +5083,12 @@
             "odds": {
                 "numerator": 41,
                 "denominator": 20
+            }
+        },
+        "f2fa417e-8092-43c2-8673-4db9961c2f5b:940b8704-e497-4a76-b390-00918ff7d282:": {
+            "odds": {
+                "numerator": 13,
+                "denominator": 5
             }
         },
         "f325a68d-fb84-407b-ac77-71edfc0019a4:940b8704-e497-4a76-b390-00918ff7d282:": {
