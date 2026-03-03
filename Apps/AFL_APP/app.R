@@ -88,6 +88,7 @@ dummy_player <- tibble(
   market_name = character(),
   line = numeric(),
   over_price = numeric(),
+  variation = numeric(),
   agency = character(),
   empirical_prob_over_2025 = numeric(),
   diff_over_2025 = numeric(),
@@ -127,6 +128,8 @@ if (
   player_tackles_data <- safe_read_rds("../../Data/processed_odds/all_player_tackles.rds", dummy_player)
   player_kicks_data <- safe_read_rds("../../Data/processed_odds/all_player_kicks.rds", dummy_player)
   player_handballs_data <- safe_read_rds("../../Data/processed_odds/all_player_handballs.rds", dummy_player)
+  player_hitouts_data <- safe_read_rds("../../Data/processed_odds/all_player_hitouts.rds", dummy_player)
+  player_clearances_data <- safe_read_rds("../../Data/processed_odds/all_player_clearances.rds", dummy_player)
 } else {
   # Google Sheets Data for other OS
   ss_name <- gs4_find("AFL Data")
@@ -135,6 +138,8 @@ if (
   player_disposals_data <- read_sheet(ss = ss_name, sheet = "Player Disposals")
   player_goals_data <- read_sheet(ss = ss_name, sheet = "Player Goals")
   player_fantasy_data <- read_sheet(ss = ss_name, sheet = "Player Fantasy Points")
+  player_hitouts_data <- tryCatch(read_sheet(ss = ss_name, sheet = "Player Hitouts"), error = function(e) dummy_player)
+  player_clearances_data <- tryCatch(read_sheet(ss = ss_name, sheet = "Player Clearances"), error = function(e) dummy_player)
 }
 
 # Add DVP Data------------------------------------------------------------------
@@ -181,6 +186,18 @@ player_handballs_data <-
   left_join(dvp_data, by = c("opposition_team", "Position", "market_name"), relationship = "many-to-one") |>
   relocate(Position, DVP_Category, .after = player_name)
 
+player_hitouts_data <-
+  player_hitouts_data |>
+  left_join(player_positions, relationship = "many-to-one") |>
+  left_join(dvp_data, by = c("opposition_team", "Position", "market_name"), relationship = "many-to-one") |>
+  relocate(Position, DVP_Category, .after = player_name)
+
+player_clearances_data <-
+  player_clearances_data |>
+  left_join(player_positions, relationship = "many-to-one") |>
+  left_join(dvp_data, by = c("opposition_team", "Position", "market_name"), relationship = "many-to-one") |>
+  relocate(Position, DVP_Category, .after = player_name)
+
 # List of players available in any odds dataset
 player_names_odds <- sort(unique(c(
   player_disposals_data$player_name,
@@ -189,7 +206,9 @@ player_names_odds <- sort(unique(c(
   player_marks_data$player_name,
   player_tackles_data$player_name,
   player_kicks_data$player_name,
-  player_handballs_data$player_name
+  player_handballs_data$player_name,
+  player_hitouts_data$player_name,
+  player_clearances_data$player_name
 )))
 
 # ===============================================================================
@@ -402,7 +421,9 @@ disposals_sgm <-
   bind_rows(player_tackles_data |> rename(price = over_price, empirical_probability_2025 = empirical_prob_over_2025, diff_2025 = diff_over_2025)) |>
   bind_rows(player_fantasy_data |> rename(price = over_price, empirical_probability_2025 = empirical_prob_over_2025, diff_2025 = diff_over_2025)) |>
   bind_rows(player_kicks_data |> rename(price = over_price, empirical_probability_2025 = empirical_prob_over_2025, diff_2025 = diff_over_2025)) |>
-  bind_rows(player_handballs_data |> rename(price = over_price, empirical_probability_2025 = empirical_prob_over_2025, diff_2025 = diff_over_2025))
+  bind_rows(player_handballs_data |> rename(price = over_price, empirical_probability_2025 = empirical_prob_over_2025, diff_2025 = diff_over_2025)) |>
+  bind_rows(player_hitouts_data |> rename(price = over_price, empirical_probability_2025 = empirical_prob_over_2025, diff_2025 = diff_over_2025)) |>
+  bind_rows(player_clearances_data |> rename(price = over_price, empirical_probability_2025 = empirical_prob_over_2025, diff_2025 = diff_over_2025))
 
 # Create market best
 disposals_sgm <-
@@ -1112,7 +1133,7 @@ ui <- page_navbar(
         width = 3,
         h4("Settings"),
         selectInput("agency_input", "Select Agencies:", choices = agencies, multiple = TRUE, selectize = TRUE, selected = agencies),
-        selectInput("market_input", "Select Market:", choices = c("H2H", "Total", "Line", "Disposals", "Fantasy", "Goals", "Marks", "Tackles", "Kicks", "Handballs"), multiple = FALSE),
+        selectInput("market_input", "Select Market:", choices = c("H2H", "Total", "Line", "Disposals", "Fantasy", "Goals", "Marks", "Tackles", "Kicks", "Handballs", "Hitouts", "Clearances"), multiple = FALSE),
         selectInput("match_input", "Select Matches:", choices = h2h_data$match |> unique(), multiple = TRUE, selectize = FALSE, selected = h2h_data$match |> unique()),
         selectInput("matchup_input", "Select Difficulty:", choices = player_disposals_data$DVP_Category |> unique(), multiple = TRUE, selectize = FALSE, selected = player_disposals_data$DVP_Category |> unique()),
         selectInput(
@@ -1231,8 +1252,8 @@ ui <- page_navbar(
         selectInput(
           "market",
           "Select Market",
-          choices = c("Player Disposals", "Player Goals", "Player Marks", "Player Tackles", "Player Fantasy Points", "Player Kicks", "Player Handballs"),
-          selected = c("Player Disposals", "Player Goals", "Player Marks", "Player Tackles", "Player Fantasy Points", "Player Kicks", "Player Handballs"),
+          choices = c("Player Disposals", "Player Goals", "Player Marks", "Player Tackles", "Player Fantasy Points", "Player Kicks", "Player Handballs", "Player Hitouts", "Player Clearances"),
+          selected = c("Player Disposals", "Player Goals", "Player Marks", "Player Tackles", "Player Fantasy Points", "Player Kicks", "Player Handballs", "Player Hitouts", "Player Clearances"),
           multiple = TRUE
         ),
         selectInput(
@@ -1275,8 +1296,8 @@ ui <- page_navbar(
         selectInput(
           "market_cross",
           "Select Market",
-          choices = c("Player Disposals", "Player Goals", "Player Marks", "Player Tackles", "Player Fantasy Points", "Player Kicks", "Player Handballs"),
-          selected = c("Player Disposals", "Player Goals", "Player Marks", "Player Tackles", "Player Fantasy Points", "Player Kicks", "Player Handballs"),
+          choices = c("Player Disposals", "Player Goals", "Player Marks", "Player Tackles", "Player Fantasy Points", "Player Kicks", "Player Handballs", "Player Hitouts", "Player Clearances"),
+          selected = c("Player Disposals", "Player Goals", "Player Marks", "Player Tackles", "Player Fantasy Points", "Player Kicks", "Player Handballs", "Player Hitouts", "Player Clearances"),
           multiple = TRUE
         ),
         selectInput(
@@ -1313,7 +1334,7 @@ ui <- page_navbar(
         selectInput(
           "market_filter",
           "Filter by Market",
-          choices = c("All", "Player Disposals", "Player Goals", "Player Marks", "Player Tackles", "Player Fantasy Points", "Player Kicks", "Player Handballs"),
+          choices = c("All", "Player Disposals", "Player Goals", "Player Marks", "Player Tackles", "Player Fantasy Points", "Player Kicks", "Player Handballs", "Player Hitouts", "Player Clearances"),
           selected = "All"
         ),
         sliderInput(
@@ -2385,6 +2406,50 @@ server <- function(input, output) {
     if (input$market_input == "Handballs") {
       odds <-
         player_handballs_data |>
+        mutate(variation = round(variation, 2)) |>
+        filter(agency %in% input$agency_input) |>
+        filter(match %in% input$match_input) |>
+        filter(DVP_Category %in% input$matchup_input) |>
+        select(-any_of(
+          c(
+            "match",
+            "group_by_header",
+            "outcome_name",
+            "outcome_name_under",
+            "EventKey",
+            "MarketKey",
+            "OutcomeKey",
+            "OutcomeKey_unders"
+          )
+        ))
+    }
+
+    # Hitouts
+    if (input$market_input == "Hitouts") {
+      odds <-
+        player_hitouts_data |>
+        mutate(variation = round(variation, 2)) |>
+        filter(agency %in% input$agency_input) |>
+        filter(match %in% input$match_input) |>
+        filter(DVP_Category %in% input$matchup_input) |>
+        select(-any_of(
+          c(
+            "match",
+            "group_by_header",
+            "outcome_name",
+            "outcome_name_under",
+            "EventKey",
+            "MarketKey",
+            "OutcomeKey",
+            "OutcomeKey_unders"
+          )
+        ))
+    }
+
+    # Clearances
+    if (input$market_input == "Clearances") {
+      odds <-
+        player_clearances_data |>
         mutate(variation = round(variation, 2)) |>
         filter(agency %in% input$agency_input) |>
         filter(match %in% input$match_input) |>

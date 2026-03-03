@@ -18,13 +18,23 @@ safe_read_csv <- function(path, ...)  {
 
 
 # Sportsbet SGM-----------------------------------------------------------------
+sportsbet_sgm_list <-
+  list(
+    safe_read_csv("../../Data/scraped_odds/sportsbet_player_disposals.csv"),
+    safe_read_csv("../../Data/scraped_odds/sportsbet_player_goals.csv"),
+    safe_read_csv("../../Data/scraped_odds/sportsbet_player_tackles.csv"),
+    safe_read_csv("../../Data/scraped_odds/sportsbet_player_marks.csv"),
+    safe_read_csv("../../Data/scraped_odds/sportsbet_player_kicks.csv"),
+    safe_read_csv("../../Data/scraped_odds/sportsbet_player_handballs.csv"),
+    safe_read_csv("../../Data/scraped_odds/sportsbet_player_fantasy_points.csv"),
+    safe_read_csv("../../Data/scraped_odds/sportsbet_player_hitouts.csv"),
+    safe_read_csv("../../Data/scraped_odds/sportsbet_player_clearances.csv")
+  )
+
 sportsbet_sgm <-
-  safe_read_csv("../../Data/scraped_odds/sportsbet_player_disposals.csv") |> 
-  bind_rows(safe_read_csv("../../Data/scraped_odds/sportsbet_player_goals.csv")) |> 
-  bind_rows(safe_read_csv("../../Data/scraped_odds/sportsbet_player_tackles.csv")) |>
-  bind_rows(safe_read_csv("../../Data/scraped_odds/sportsbet_player_marks.csv")) |>
-  bind_rows(safe_read_csv("../../Data/scraped_odds/sportsbet_player_kicks.csv")) |>
-  bind_rows(safe_read_csv("../../Data/scraped_odds/sportsbet_player_handballs.csv")) |>
+  sportsbet_sgm_list |>
+  keep(~nrow(.x) > 0) |>
+  bind_rows() |>
   rename(any_of(c(price = 'over_price'))) |> 
   distinct(across(any_of(c('match', 'player_name', 'line', 'market_name', 'agency'))), .keep_all = TRUE) |> 
   select(!matches('under'))
