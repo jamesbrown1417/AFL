@@ -4,22 +4,34 @@ library(tidyverse)
 library(purrr)
 library(R.utils)
 
+# Safe function to read CSV files
+safe_read_csv <- function(path, ...)  {
+  if (file.exists(path)) {
+    tryCatch({
+      df <- readr::read_csv(path, show_col_types = FALSE)
+      if (nrow(df) > 0) return(df)
+    }, error = function(e) {})
+  }
+  return(tibble::tibble(match=character(), player_name=character(), line=numeric(), market_name=character(), agency=character(), over_price=numeric()))
+}
+
+
 # TAB SGM-----------------------------------------------------------------------
 tab_sgm_list <-
   list(
-  read_csv("../../Data/scraped_odds/tab_player_disposals.csv"),
-  read_csv("../../Data/scraped_odds/tab_player_goals.csv"),
-  read_csv("../../Data/scraped_odds/tab_player_tackles.csv"),
-  read_csv("../../Data/scraped_odds/tab_player_marks.csv")
+  safe_read_csv("../../Data/scraped_odds/tab_player_disposals.csv"),
+  safe_read_csv("../../Data/scraped_odds/tab_player_goals.csv"),
+  safe_read_csv("../../Data/scraped_odds/tab_player_tackles.csv"),
+  safe_read_csv("../../Data/scraped_odds/tab_player_marks.csv")
 )
 
 tab_sgm <-
   tab_sgm_list |> 
   keep(~nrow(.x) > 0) |>
   bind_rows() |>
-  rename(price = over_price) |>  
-  distinct(match, player_name, line, market_name, agency, .keep_all = TRUE) |>
-  select(-contains("under"))
+  rename(any_of(c(price = 'over_price'))) |>  
+  distinct(across(any_of(c('match', 'player_name', 'line', 'market_name', 'agency'))), .keep_all = TRUE) |>
+  select(!matches('under'))
 
 #==============================================================================
 # Function to get SGM data

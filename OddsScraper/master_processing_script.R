@@ -95,11 +95,6 @@ all_odds_h2h <-
   left_join(current_season_fixture) |>
   relocate(round, start_time, venue, .after = match)
 
-# # Google Sheets-----------------------------------------------------
-# sheet <- gs4_find("AFL Data")
-# 
-# write_sheet(sheet, data = all_odds_h2h, sheet = "H2H")
-
 # Write as RDS
 all_odds_h2h |> write_rds("Data/processed_odds/all_h2h.rds")
 
@@ -127,9 +122,6 @@ all_odds_line <-
   ungroup() |>
   arrange(desc(diff), match, desc(home_line)) |> 
   select(-min_home_line, -max_home_line)
-# 
-# # Google Sheets-----------------------------------------------------
-# write_sheet(sheet, data = all_odds_line, sheet = "Line")
 
 # Write as RDS
 all_odds_line |> write_rds("Data/processed_odds/all_line.rds")
@@ -199,9 +191,6 @@ all_player_disposals <-
   ungroup() |>
   select(-min_implied_prob,-max_implied_prob) |>
   arrange(desc(variation), player_name, desc(over_price), line)
-
-# # Add to google sheets
-# write_sheet(sheet, data = all_player_disposals, sheet = "Player Disposals")
 
 # Write as RDS
 all_player_disposals |> write_rds("Data/processed_odds/all_player_disposals.rds")
@@ -313,7 +302,6 @@ all_player_fantasy_points <-
   all_player_fantasy_points |>
   mutate(
     implied_prob_over = 1 / over_price,
-    implied_prob_under = 1 / under_price
   ) |>
   left_join(player_emp_probs_2025, by = c("player_name", "line")) |>
   left_join(player_emp_probs_last_n, by = c("player_name", "line")) |>
@@ -327,12 +315,7 @@ all_player_fantasy_points <-
     diff_over_last_3 = emp_prob_last_3 - implied_prob_over,
     diff_over_last_5 = emp_prob_last_5 - implied_prob_over,
     diff_over_last_7 = emp_prob_last_7 - implied_prob_over,
-    diff_over_last_10 = emp_prob_last_10 - implied_prob_over,
-    diff_under_2025 = empirical_prob_under_2025 - implied_prob_under,
-    diff_under_last_3 = empirical_prop_under_last_3 - implied_prob_under,
-    diff_under_last_5 = empirical_prop_under_last_5 - implied_prob_under,
-    diff_under_last_7 = empirical_prop_under_last_7 - implied_prob_under,
-    diff_under_last_10 = empirical_prop_under_last_10 - implied_prob_under) |>
+    diff_over_last_10 = emp_prob_last_10 - implied_prob_over) |>
   mutate_if(is.double, round, 2) |>
   group_by(player_name, line) |>
   mutate(
@@ -343,9 +326,6 @@ all_player_fantasy_points <-
   ungroup() |>
   select(-min_implied_prob,-max_implied_prob) |>
   arrange(desc(variation), player_name, desc(over_price), line)
-
-# # Add to google sheets
-# write_sheet(sheet, data = all_player_fantasy_points, sheet = "Player Fantasy Points")
 
 # Write as RDS
 all_player_fantasy_points |> write_rds("Data/processed_odds/all_player_fantasy_points.rds")
@@ -405,9 +385,6 @@ all_player_marks <-
   select(-min_implied_prob,-max_implied_prob) |>
   arrange(desc(variation), player_name, desc(over_price), line)
 
-# # Add to google sheets
-# write_sheet(sheet, data = all_player_marks, sheet = "Player Marks")
-
 # Write as RDS
 all_player_marks |> write_rds("Data/processed_odds/all_player_marks.rds")
 
@@ -465,9 +442,6 @@ all_player_tackles <-
   ungroup() |>
   select(-min_implied_prob,-max_implied_prob) |>
   arrange(desc(variation), player_name, desc(over_price), line)
-
-# # Add to google sheets
-# write_sheet(sheet, data = all_player_tackles, sheet = "Player Tackles")
 
 # Write as RDS
 all_player_tackles |> write_rds("Data/processed_odds/all_player_tackles.rds")
@@ -527,9 +501,6 @@ all_player_kicks <-
   select(-min_implied_prob,-max_implied_prob) |>
   arrange(desc(variation), player_name, desc(over_price), line)
 
-# # Add to google sheets
-# write_sheet(sheet, data = all_player_kicks, sheet = "Player Kicks")
-
 # Write as RDS
 all_player_kicks |> write_rds("Data/processed_odds/all_player_kicks.rds")
 
@@ -587,9 +558,6 @@ all_player_handballs <-
   ungroup() |>
   select(-min_implied_prob,-max_implied_prob) |>
   arrange(desc(variation), player_name, desc(over_price), line)
-
-# # Add to google sheets
-# write_sheet(sheet, data = all_player_handballs, sheet = "Player Handballs")
 
 # Write as RDS
 all_player_handballs |> write_rds("Data/processed_odds/all_player_handballs.rds")

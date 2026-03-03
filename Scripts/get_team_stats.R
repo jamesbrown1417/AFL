@@ -1,9 +1,9 @@
 library(tidyverse)
 
 # Read in current fantasy data table
-afl_fantasy_2025_data <- read_rds("Data/afl_fantasy_2025_data.rds")
-afl_fantasy_2015_2024_data <- read_rds("Data/afl_fantasy_2015_2024_data.rds")
-afl_fantasy_data <- bind_rows(afl_fantasy_2015_2024_data, afl_fantasy_2025_data)
+afl_fantasy_2026_data <- read_rds("Data/afl_fantasy_2026_data.rds")
+afl_fantasy_2015_2025_data <- read_rds("Data/afl_fantasy_2015_2025_data.rds")
+afl_fantasy_data <- bind_rows(afl_fantasy_2015_2025_data, afl_fantasy_2026_data)
 
 # Get just since 2021
 afl_fantasy_data <-

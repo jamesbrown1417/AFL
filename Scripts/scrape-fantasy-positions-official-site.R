@@ -12,7 +12,7 @@ library(openxlsx)
 library(readxl)
 
 # Get URL of data from API
-url = "https://fantasy.afl.com.au/data/afl/players.json?_=1677977794603"
+url = "https://fantasy.afl.com.au/json/fantasy/players.json"
 
 # Get Data from API
 scraped_fantasy_data <-
@@ -27,18 +27,16 @@ scraped_fantasy_data <-
 
 get_afl_api_player_data <- function(player_data){
   # Name and price data
-  first_name = player_data$first_name
-  last_name = player_data$last_name
-  team_id = player_data$squad_id
-  price = player_data$cost
-  projected_average = player_data$stats$proj_avg
-  adp = player_data$stats$adp
+  first_name = player_data$firstName
+  last_name = player_data$lastName
+  team_id = player_data$squadId
+  price = player_data$price
   
   # Position Boolean Variables
-  forward_status = 4 %in% player_data$positions
-  ruck_status =  3 %in% player_data$positions
-  midfield_status = 2 %in% player_data$positions
-  defender_status = 1 %in% player_data$positions
+  forward_status = "FWD" %in% player_data$position
+  ruck_status =  "RUC" %in% player_data$position
+  midfield_status = "MID" %in% player_data$position
+  defender_status = "DEF" %in% player_data$position
   
   # Get url of player photo
   photo_url = paste("https://fantasy.afl.com.au/assets/media/players/afl/", player_data$id ,"_450.webp", sep = "")
@@ -49,8 +47,6 @@ get_afl_api_player_data <- function(player_data){
     last_name,
     team_id,
     price,
-    projected_average,
-    adp,
     forward_status,
     ruck_status,
     midfield_status,
@@ -92,8 +88,8 @@ afl_player_api_data <-
   )) |>
   relocate(player_full_name, team_name, .after = last_name)
 
-# Write out as starting data for 2025 season
-write_rds(afl_player_api_data, "Data/2025_start_positions_and_prices.rds")
+# Write out as starting data for 2026 season
+write_rds(afl_player_api_data, "Data/2026_start_positions_and_prices.rds")
 
 
 afl_player_api_data$position <- apply(afl_player_api_data[, c("midfield_status", "defender_status", "ruck_status", "forward_status")], 1, function(row) {

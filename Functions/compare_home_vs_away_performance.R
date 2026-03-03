@@ -10,8 +10,8 @@ library(tidyverse)
 #===============================================================================
 
 combined_stats <-
-  read_rds("Data/afl_fantasy_2015_2024_data.rds") |> 
-  bind_rows(read_rds("Data/afl_fantasy_2025_data.rds")) |>
+  read_rds("Data/afl_fantasy_2015_2025_data.rds") |> 
+  bind_rows(read_rds("Data/afl_fantasy_2026_data.rds")) |>
   mutate(home_away = if_else(home_team == player_team, "home", "away"))
 
 combined_stats_2025 <-

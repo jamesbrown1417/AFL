@@ -9,7 +9,7 @@ library(tidyjson)
 source("Functions/fix_team_names.R")
 
 # Player names file
-player_names <- read_rds("Data/2025_start_positions_and_prices.rds")
+player_names <- read_rds("Data/2026_start_positions_and_prices.rds")
 player_names <- player_names |> select(player_full_name, team_name)
 
 pointsbet_h2h_main <- function() {
@@ -282,8 +282,9 @@ pointsbet_h2h_main <- function() {
   pointsbet_player_disposals_lines <-
     pointsbet_data_player_props |>
     filter(str_detect(market, "Disposals")) |>
+    filter(str_detect(market, "Any Player To Get 40", negate = TRUE)) |>
     filter(str_detect(market, "To Get")) |>
-    mutate(line = str_extract(market, "[0-9]{1,2}")) |>
+    mutate(line = str_extract(outcome, "[0-9]{1,2}")) |>
     mutate(line = as.numeric(line) - 0.5) |>
     separate(
       match,
@@ -294,12 +295,7 @@ pointsbet_h2h_main <- function() {
     mutate(home_team = fix_team_names(home_team),
            away_team = fix_team_names(away_team)) |>
     mutate(match = paste(home_team, "v", away_team)) |>
-    mutate(
-      outcome = case_when(
-        outcome == "Lebron James" ~ "LeBron James",
-        .default = outcome
-      )
-    ) |>
+    mutate(outcome = str_remove_all(outcome, " Over.*$")) |>
     left_join(player_names[, c("player_full_name", "team_name")], by = c("outcome" = "player_full_name")) |>
     mutate(opposition_team = if_else(home_team == team_name, away_team, home_team)) |>
     transmute(
@@ -597,10 +593,20 @@ pointsbet_h2h_main <- function() {
   # Filter list to player goals
   pointsbet_player_goals_lines <-
     pointsbet_data_player_props |>
-    mutate(market = ifelse(str_detect(market,"Anytime Goalscorer"), "To Kick 1+ Goals", market)) |>
-    filter(str_detect(market, "^To Kick \\d+\\+ Goals")) |>
-    mutate(line = str_extract(market, "[0-9]{1,2}")) |>
-    mutate(line = as.numeric(line) - 0.5) |>
+    mutate(market = ifelse(str_detect(market, "Anytime Goalscorer"), "To Kick 1+ Goals", market)) |>
+    filter(str_detect(market, "^To Kick \\d+\\+ Goals|^To Kick Goals")) |>
+    mutate(
+      line_from_market = str_extract(market, "(?<=To Kick )\\d{1,2}(?=\\+ Goals)"),
+      line_from_outcome = str_extract(outcome, "(?<= Over )\\d{1,2}(?=\\+)"),
+      line = coalesce(line_from_market, line_from_outcome),
+      line = as.numeric(line) - 0.5,
+      player_name = case_when(
+        !is.na(line_from_outcome) ~ str_remove(outcome, " Over \\d{1,2}\\+$"),
+        .default = outcome
+      ),
+      player_name = str_squish(player_name)
+    ) |>
+    filter(!is.na(line)) |>
     separate(
       match,
       into = c("home_team", "away_team"),
@@ -611,19 +617,19 @@ pointsbet_h2h_main <- function() {
            away_team = fix_team_names(away_team)) |>
     mutate(match = paste(home_team, "v", away_team)) |>
     mutate(
-      outcome = case_when(
-        outcome == "Lebron James" ~ "LeBron James",
-        .default = outcome
+      player_name = case_when(
+        player_name == "Lebron James" ~ "LeBron James",
+        .default = player_name
       )
     ) |>
-    left_join(player_names[, c("player_full_name", "team_name")], by = c("outcome" = "player_full_name")) |>
+    left_join(player_names[, c("player_full_name", "team_name")], by = c("player_name" = "player_full_name")) |>
     mutate(opposition_team = if_else(home_team == team_name, away_team, home_team)) |>
     transmute(
       match,
       home_team,
       away_team,
       market_name = "Player Goals",
-      player_name = outcome,
+      player_name,
       player_team = team_name,
       opposition_team,
       line,
@@ -852,7 +858,8 @@ pointsbet_h2h_main <- function() {
   # Goals
   pointsbet_player_goals_lines |>
     bind_rows(pointsbet_player_goals_over_under) |>
-    mutate(match = paste(home_team, away_team, sep = " v ")) |>
+    mutate(match = paste(home_team, away_team, sep = " v "),
+           row_order = row_number()) |>
     select(
       "match",
       "home_team",
@@ -868,10 +875,16 @@ pointsbet_h2h_main <- function() {
       "EventKey",
       "MarketKey",
       "OutcomeKey",
-      "OutcomeKey_unders"
+      "OutcomeKey_unders",
+      "row_order"
     ) |>
     mutate(market_name = "Player Goals") |>
     mutate(agency = "Pointsbet") |>
+    group_by(match, home_team, away_team, market_name, player_name, line) |>
+    arrange(desc(replace_na(over_price, -Inf)), row_order, .by_group = TRUE) |>
+    slice_head(n = 1) |>
+    ungroup() |>
+    select(-row_order) |>
     write_csv("Data/scraped_odds/pointsbet_player_goals.csv")
   
   # Fantasy Points

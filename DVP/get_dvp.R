@@ -18,8 +18,8 @@ player_positions |>
 
 # Read in player stats----------------------------------------------------------
 all_player_stats_2015_2025 <-
-  read_rds("Data/afl_fantasy_2015_2024_data.rds") |> 
-  bind_rows(read_rds("Data/afl_fantasy_2025_data.rds"))
+  read_rds("Data/afl_fantasy_2015_2025_data.rds") |> 
+  bind_rows(read_rds("Data/afl_fantasy_2026_data.rds"))
 
 # Select only the columns we need-----------------------------------------------
 all_player_stats_2015_2025 <-

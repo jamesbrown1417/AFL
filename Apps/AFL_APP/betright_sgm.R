@@ -3,22 +3,34 @@ library(jsonlite)
 library(tidyverse)
 library(purrr)
 
+# Safe function to read CSV files
+safe_read_csv <- function(path, ...)  {
+  if (file.exists(path)) {
+    tryCatch({
+      df <- readr::read_csv(path, show_col_types = FALSE)
+      if (nrow(df) > 0) return(df)
+    }, error = function(e) {})
+  }
+  return(tibble::tibble(match=character(), player_name=character(), line=numeric(), market_name=character(), agency=character(), over_price=numeric()))
+}
+
+
 # BetRight SGM------------------------------------------------------------------
 betright_sgm_list <- list(
-  read_csv("../../Data/scraped_odds/betright_player_disposals.csv"),
-  read_csv("../../Data/scraped_odds/betright_player_goals.csv"),
-  read_csv("../../Data/scraped_odds/betright_player_tackles.csv"),
-  read_csv("../../Data/scraped_odds/betright_player_marks.csv"),
-  read_csv("../../Data/scraped_odds/betright_player_fantasy_points.csv")
+  safe_read_csv("../../Data/scraped_odds/betright_player_disposals.csv"),
+  safe_read_csv("../../Data/scraped_odds/betright_player_goals.csv"),
+  safe_read_csv("../../Data/scraped_odds/betright_player_tackles.csv"),
+  safe_read_csv("../../Data/scraped_odds/betright_player_marks.csv"),
+  safe_read_csv("../../Data/scraped_odds/betright_player_fantasy_points.csv")
 )
 
 betright_sgm <-
   betright_sgm_list |> 
   keep(~nrow(.x) > 0) |>
   bind_rows() |> 
-  rename(price = over_price) |> 
-  distinct(match, player_name, line, market_name, agency, .keep_all = TRUE) |> 
-  select(-contains("under"))
+  rename(any_of(c(price = 'over_price'))) |> 
+  distinct(across(any_of(c('match', 'player_name', 'line', 'market_name', 'agency'))), .keep_all = TRUE) |> 
+  select(!matches('under'))
 
 #===============================================================================
 # Function to get SGM data

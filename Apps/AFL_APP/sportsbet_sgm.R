@@ -5,17 +5,29 @@ library(purrr)
 library(mongolite)
 library(tidyverse)
 
+# Safe function to read CSV files
+safe_read_csv <- function(path, ...)  {
+  if (file.exists(path)) {
+    tryCatch({
+      df <- readr::read_csv(path, show_col_types = FALSE)
+      if (nrow(df) > 0) return(df)
+    }, error = function(e) {})
+  }
+  return(tibble::tibble(match=character(), player_name=character(), line=numeric(), market_name=character(), agency=character(), over_price=numeric()))
+}
+
+
 # Sportsbet SGM-----------------------------------------------------------------
 sportsbet_sgm <-
-  read_csv("../../Data/scraped_odds/sportsbet_player_disposals.csv") |> 
-  bind_rows(read_csv("../../Data/scraped_odds/sportsbet_player_goals.csv")) |> 
-  bind_rows(read_csv("../../Data/scraped_odds/sportsbet_player_tackles.csv")) |>
-  bind_rows(read_csv("../../Data/scraped_odds/sportsbet_player_marks.csv")) |>
-  bind_rows(read_csv("../../Data/scraped_odds/sportsbet_player_kicks.csv")) |>
-  bind_rows(read_csv("../../Data/scraped_odds/sportsbet_player_handballs.csv")) |>
-  rename(price = over_price) |> 
-  distinct(match, player_name, line, market_name, agency, .keep_all = TRUE) |> 
-  select(-contains("under"))
+  safe_read_csv("../../Data/scraped_odds/sportsbet_player_disposals.csv") |> 
+  bind_rows(safe_read_csv("../../Data/scraped_odds/sportsbet_player_goals.csv")) |> 
+  bind_rows(safe_read_csv("../../Data/scraped_odds/sportsbet_player_tackles.csv")) |>
+  bind_rows(safe_read_csv("../../Data/scraped_odds/sportsbet_player_marks.csv")) |>
+  bind_rows(safe_read_csv("../../Data/scraped_odds/sportsbet_player_kicks.csv")) |>
+  bind_rows(safe_read_csv("../../Data/scraped_odds/sportsbet_player_handballs.csv")) |>
+  rename(any_of(c(price = 'over_price'))) |> 
+  distinct(across(any_of(c('match', 'player_name', 'line', 'market_name', 'agency'))), .keep_all = TRUE) |> 
+  select(!matches('under'))
 
 sportsbet_sgm <-
   rename(

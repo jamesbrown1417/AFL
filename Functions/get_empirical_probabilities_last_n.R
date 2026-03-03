@@ -3,7 +3,6 @@
 #===============================================================================
 
 library(tidyverse)
-library(zoo)
 `%notin%` <- Negate(`%in%`)
 
 #===============================================================================
@@ -11,9 +10,9 @@ library(zoo)
 #===============================================================================
 
 combined_stats <-
-  read_rds("Data/afl_fantasy_2015_2024_data.rds")
+  read_rds("Data/afl_fantasy_2015_2025_data.rds")
 
-current_season_stats <- read_rds("Data/afl_fantasy_2025_data.rds")
+current_season_stats <- read_rds("Data/afl_fantasy_2026_data.rds")
 
 combined_stats <- bind_rows(combined_stats, current_season_stats)
 
@@ -22,48 +21,53 @@ combined_stats <- bind_rows(combined_stats, current_season_stats)
 #===============================================================================
 
 get_empirical_prob <- function(player_full_name, line, stat) {
-  
-  # Get name of last season
-  last_season = as.character(as.numeric(format(Sys.Date(), "%Y")) - 1)
-  
+
   # Filter for player
   player_stats <-
     combined_stats |> 
-    tidytable::filter(player_full_name == !!player_full_name) |> 
-    tidytable::arrange(tidytable::desc(start_time_utc))
+    filter(player_full_name == !!player_full_name) |>
+    mutate(
+      game_date = suppressWarnings(ymd_hms(start_time_utc, quiet = TRUE, tz = "UTC")),
+      game_date = coalesce(game_date, as.POSIXct(start_time_utc, tz = "UTC"))
+    ) |>
+    arrange(desc(game_date), desc(start_time_utc))
   
   # Ensure 'stat' column exists
   if(!stat %in% names(player_stats)) {
     stop("Stat column does not exist in the dataset")
   }
-  
-  # Calculate proportion of games above 'line' for last 3, 5, 7, and 10 games
+
+  # If player has no historical rows, return nothing
+  if (nrow(player_stats) == 0) {
+    return(
+      tibble(
+        player_full_name = character(),
+        line = numeric(),
+        emp_prob_last_3 = numeric(),
+        emp_prob_last_5 = numeric(),
+        emp_prob_last_7 = numeric(),
+        emp_prob_last_10 = numeric()
+      )
+    )
+  }
+
+  calc_emp_prob <- function(n_games) {
+    if (nrow(player_stats) < n_games) {
+      return(NA_real_)
+    }
+    
+    mean((head(player_stats[[stat]], n_games) > line), na.rm = TRUE)
+  }
+
+  # Calculate proportions from the latest n games by date
   last_games_stats <-
-    player_stats |> 
-    tidytable::mutate(
-      above_line = as.numeric(!!sym(stat) > line), # Convert logical to numeric for summing
-      emp_prob_last_3 = rollapply(above_line, width = 3, FUN = function(x) mean(x, na.rm = TRUE), partial = TRUE, align = "left"),
-      emp_prob_last_5 = rollapply(above_line, width = 5, FUN = function(x) mean(x, na.rm = TRUE), partial = TRUE, align = "left"),
-      emp_prob_last_7 = rollapply(above_line, width = 7, FUN = function(x) mean(x, na.rm = TRUE), partial = TRUE, align = "left"),
-      emp_prob_last_10 = rollapply(above_line, width = 10, FUN = function(x) mean(x, na.rm = TRUE), partial = TRUE, align = "left")
-    ) |> 
-    mutate(sample_size = n()) |>
-    tidytable::mutate(
-      emp_prob_last_3 = ifelse(sample_size < 3, NA, emp_prob_last_3),
-      emp_prob_last_5 = ifelse(sample_size < 5, NA, emp_prob_last_5),
-      emp_prob_last_7 = ifelse(sample_size < 7, NA, emp_prob_last_7),
-      emp_prob_last_10 = ifelse(sample_size < 10, NA, emp_prob_last_10)
-    ) |>
-    tidytable::select(-sample_size) |>
-    tidytable::slice_head(n = 1) |> 
-    tidytable::mutate(line = line) |> 
-    tidytable::select(
-      player_full_name,
-      line,
-      emp_prob_last_3,
-      emp_prob_last_5,
-      emp_prob_last_7,
-      emp_prob_last_10
+    tibble(
+      player_full_name = player_full_name,
+      line = line,
+      emp_prob_last_3 = calc_emp_prob(3),
+      emp_prob_last_5 = calc_emp_prob(5),
+      emp_prob_last_7 = calc_emp_prob(7),
+      emp_prob_last_10 = calc_emp_prob(10)
     )
   
   return(last_games_stats)

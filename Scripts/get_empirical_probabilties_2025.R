@@ -18,7 +18,7 @@ players_2025 <- combined_stats |> filter(season_name == "2025")
 
 # Get list of all players this year
 players_this_year <-
-  read_rds("Data/2025_start_positions_and_prices.rds") |> 
+  read_rds("Data/2026_start_positions_and_prices.rds") |> 
   filter(player_full_name %in% players_2025$player_full_name) |>
   pull(player_full_name) |> 
   unique()
@@ -28,7 +28,7 @@ players_this_year <-
 #===============================================================================
 
 # Get Disposal Lines
-disposal_lines <- c(9.5, 14.5, 19.5, 24.5, 29.5, 34.5, 39.5)
+disposal_lines <- seq(9.5, 39.5, by = 1)
 
 # Get table of all player, disposal combinations
 disposals_table <- 
