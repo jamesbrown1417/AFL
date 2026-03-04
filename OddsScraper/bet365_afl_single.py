@@ -19,10 +19,41 @@ from dotenv import load_dotenv
 now = datetime.now()
 time_stamp = now.strftime("%Y-%m-%d_%H-%M-%S")
 
-# Load environment for optional login
+# Load environment variables: try default .env, then fallback to 'env'
 load_dotenv()
-BET365_USERNAME = os.getenv("BET365USER")
-BET365_PASSWORD = os.getenv("BET365PW")
+if os.getenv('BET365USER') is None or os.getenv('BET365PW') is None:
+    load_dotenv('/Users/jamesbrown/Projects/AFL/env')
+
+# Read credentials after loading
+username = os.getenv('BET365USER')
+password = os.getenv('BET365PW')
+
+# Validate credentials early with a clear error
+if not username or not password:
+    raise RuntimeError(
+        "Missing Bet365 credentials. Set BET365USER and BET365PW in .env or env, or export them in the environment."
+    )
+
+# Lower-case projection for case-insensitive XPath text matching.
+XPATH_LOWER_TEXT = (
+    "translate(normalize-space(string(.)), "
+    "'ABCDEFGHIJKLMNOPQRSTUVWXYZ', "
+    "'abcdefghijklmnopqrstuvwxyz')"
+)
+
+
+async def find_first_element(driver, locator_candidates, timeout_per_candidate=3):
+    """Try locators in order and return the first element that can be found."""
+    last_error = None
+    for by, value in locator_candidates:
+        try:
+            return await driver.find_element(by, value, timeout=timeout_per_candidate)
+        except Exception as exc:
+            last_error = exc
+    if last_error:
+        raise last_error
+    raise RuntimeError("No locator candidates provided")
+
 
 async def collect_h2h_and_urls(driver):
     """Navigate to main AFL page, save H2H HTML, and return list of player URLs.
@@ -38,53 +69,82 @@ async def collect_h2h_and_urls(driver):
     schedule_df_current = schedule_df[schedule_df["round"] == current_round]
 
     # AFL all matches page
-    await driver.get("https://www.bet365.com.au/#/AC/B36/C21011844/D48/E360013/F48")
-    await driver.sleep(0.5)
+    await driver.get("https://www.bet365.com.au/#/AC/B36/C21101752/D48/E360013/F48/")
+    await driver.sleep(2)
 
-    # Attempt to detect main market container; if not present, try login
-    container_xpath = "//div[contains(@class, 'gl-MarketGroup_Wrapper')]"
+    # Always perform login each run
+    print("Attempting login...")
+    login_locator_candidates = [
+        # Most stable header container when logged out.
+        (By.XPATH, "//div[contains(@class, 'hm-MainHeaderRHSLoggedOutWide_Login')]"),
+        # Dynamic hrm-* class token, matched by prefix and label text.
+        (
+            By.XPATH,
+            f"//span[contains(@class, 'hrm-') and (contains({XPATH_LOWER_TEXT}, 'log in') or contains({XPATH_LOWER_TEXT}, 'login'))]",
+        ),
+        # Generic clickable fallback based on visible label.
+        (
+            By.XPATH,
+            f"//*[self::button or self::a][contains({XPATH_LOWER_TEXT}, 'log in') or contains({XPATH_LOWER_TEXT}, 'login')]",
+        ),
+    ]
+    login_element = await find_first_element(
+        driver, login_locator_candidates, timeout_per_candidate=4
+    )
+    await driver.sleep(2)
     try:
-        elem = await driver.find_element(By.XPATH, container_xpath, timeout=10)
-        print("Market container found - already logged in or login not required")
+        await login_element.click()
     except Exception:
-        print("Market container not found - attempting login")
-        if not BET365_USERNAME or not BET365_PASSWORD:
-            print("BET365 credentials not found in environment; continuing without login")
-        else:
-            try:
-                login_trigger = await driver.find_element(By.XPATH, "//div[contains(@class, 'hm-MainHeaderRHSLoggedOutWide_Login')]", timeout=10)
-                await login_trigger.click()
-                await driver.sleep(1)
+        await driver.execute_script("arguments[0].click();", login_element)
+    await driver.sleep(1)
 
-                username_field = await driver.find_element(By.XPATH, "//input[@placeholder='Username or email address']", timeout=10)
-                await username_field.clear()
-                await driver.sleep(0.2)
-                await username_field.send_keys(BET365_USERNAME)
+    username_field = await driver.find_element(By.XPATH, "//input[@placeholder='Username or email address']", timeout=10)
+    await username_field.clear()
+    await driver.sleep(0.3)
+    await username_field.send_keys(username)
+    print("Entered username")
 
-                password_field = await driver.find_element(By.XPATH, "//input[@placeholder='Password']", timeout=10)
-                await password_field.clear()
-                await driver.sleep(0.2)
-                await password_field.send_keys(BET365_PASSWORD)
+    password_field = await driver.find_element(By.XPATH, "//input[@placeholder='Password']", timeout=10)
+    await password_field.clear()
+    await driver.sleep(0.3)
+    await password_field.send_keys(password)
+    print("Entered password")
 
-                login_button = await driver.find_element(By.XPATH, "//div[contains(@class, 'lms-LoginButton')]", timeout=10)
-                await login_button.click()
-                print("Clicked login button")
+    login_submit_locator_candidates = [
+        (
+            By.XPATH,
+            f"//input[@placeholder='Password']/ancestor::form//*[self::button or self::span][contains({XPATH_LOWER_TEXT}, 'log in') or contains({XPATH_LOWER_TEXT}, 'login')]",
+        ),
+        (By.XPATH, "//span[starts-with(@class, 'slm')]"),
+    ]
+    login_button = await find_first_element(
+        driver, login_submit_locator_candidates, timeout_per_candidate=3
+    )
+    try:
+        await login_button.click()
+    except Exception:
+        await driver.execute_script("arguments[0].click();", login_button)
+    print("Clicked login button")
 
-                # Wait for market container after login
-                elem = await driver.find_element(By.XPATH, container_xpath, timeout=30)
-                print("Market container found after login")
-            except Exception as e:
-                print(f"Login attempt failed: {e}")
-                # Fallback: still try to find the container with a longer wait
-                elem = await driver.find_element(By.XPATH, container_xpath, timeout=60)
+    print("Waiting 2 seconds...")
+    await driver.sleep(2)
+
+    await driver.minimize_window()
+
+    # Wait for market container after login
+    container_xpath = "//div[contains(@class, 'gl-MarketGroup_Wrapper')]"
+    elem = await driver.find_element(By.XPATH, container_xpath, timeout=10)
+    print("Market container found after login")
 
     # Wait for market container and capture HTML
-    # (elem set in blocks above)
     body_html = await elem.get_attribute("outerHTML")
 
     # Persist H2H HTML
     with open("Data/BET365_HTML/h2h_html.txt", "w") as f:
         f.write(body_html)
+
+    print("Waiting 2 seconds...")
+    await driver.sleep(2)
 
     # Discover team rows (match links)
     team_xpath = "//div[contains(@class, 'src-ParticipantFixtureDetailsHigher_TeamNames')]"
@@ -101,11 +161,15 @@ async def collect_h2h_and_urls(driver):
     matches_to_click = len(schedule_df_current)
 
     for index in range(matches_to_click):
+        print(f"Getting base URL for match {index}")
         # Re-query elements each loop as DOM may refresh
         team_elements = await driver.find_elements(By.XPATH, team_xpath)
 
         # Safety: skip if fewer items than expected
         if index >= len(team_elements):
+            print(
+                f"Skipping match {index}: Index out of range. (Found {len(team_elements)} matches on site, tried accessing index {index})"
+            )
             break
 
         await driver.execute_script("arguments[0].scrollIntoView(true);", team_elements[index])
@@ -120,6 +184,7 @@ async def collect_h2h_and_urls(driver):
         player_urls.append(modified_player_url)
 
         await driver.back()
+        await driver.sleep(0.5)
 
     # Optionally persist URL list for debugging/traceability
     try:
@@ -165,6 +230,11 @@ async def scrape_player_pages(driver, player_urls):
 
     for index, url in enumerate(player_urls, start=1):
         try:
+            print(f"\n{'='*60}")
+            print(f"Processing match {index}")
+            print(f"{'='*60}")
+            print(f"URL: {url}")
+
             await driver.get(url)
             # Wait for Disposals market group to exist (page ready)
             await driver.find_element(By.XPATH, "//div[contains(@class, 'gl-MarketGroupButton_Text') and text()='Disposals']", timeout=30)
@@ -176,9 +246,10 @@ async def scrape_player_pages(driver, player_urls):
                     await driver.execute_script("arguments[0].scrollIntoView(true);", el)
                     await driver.execute_script("window.scrollBy(0, -150)")
                     await el.click()
+                    print(f"  Clicked '{xpath_text}'")
                     await driver.sleep(2)
                 except Exception:
-                    pass
+                    print(f"  No '{xpath_text}' button found")
 
             await maybe_click("Disposals")
             await maybe_click("Player Disposals")
@@ -192,6 +263,7 @@ async def scrape_player_pages(driver, player_urls):
             body_html_players_a = await elem.get_attribute("outerHTML")
             with open(f"Data/BET365_HTML/body_html_players_a_match_{index}.txt", "w") as f:
                 f.write(body_html_players_a)
+            print(f"  Saved: Data/BET365_HTML/body_html_players_a_match_{index}.txt")
 
             # Switch to the second tab of second section (matches prior behavior)
             try:
@@ -212,9 +284,10 @@ async def scrape_player_pages(driver, player_urls):
             body_html_players_b = await elem.get_attribute("outerHTML")
             with open(f"Data/BET365_HTML/body_html_players_b_match_{index}.txt", "w") as f:
                 f.write(body_html_players_b)
+            print(f"  Saved: Data/BET365_HTML/body_html_players_b_match_{index}.txt")
 
         except Exception as e:
-            print(f"An error occurred with URL {url}: {e}. Moving to the next URL.")
+            print(f"  Error with match {index}: {e}. Continuing...")
             continue
 
 
@@ -223,11 +296,6 @@ async def main():
     # options.add_argument("--headless=True")
 
     async with webdriver.Chrome(options=options) as driver:
-        try:
-            await driver.minimize_window()
-        except Exception:
-            pass
-
         player_urls = await collect_h2h_and_urls(driver)
         await scrape_player_pages(driver, player_urls)
 
