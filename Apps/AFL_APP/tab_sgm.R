@@ -25,39 +25,78 @@ tab_sgm_list <-
   safe_read_csv("../../Data/scraped_odds/tab_player_marks.csv")
 )
 
-tab_sgm <-
-  tab_sgm_list |> 
+tab_sgm_raw <-
+  tab_sgm_list |>
   keep(~nrow(.x) > 0) |>
-  bind_rows() |>
-  rename(any_of(c(price = 'over_price'))) |>  
-  distinct(across(any_of(c('match', 'player_name', 'line', 'market_name', 'agency'))), .keep_all = TRUE) |>
-  select(!matches('under'))
+  bind_rows()
+
+if (nrow(tab_sgm_raw) > 0 && "match" %in% names(tab_sgm_raw)) {
+  # Build Over/Under rows with appropriate proposition IDs and price
+  tab_over <- tab_sgm_raw |>
+    transmute(match = .data$match,
+              player_name = .data$player_name,
+              line = .data$line,
+              market_name = .data$market_name,
+              agency = .data$agency,
+              type = "Over",
+              price = .data$over_price,
+              prop_id_sgm = .data$prop_id)
+
+  tab_under <- tibble()
+  if ("under_price" %in% names(tab_sgm_raw)) {
+    tab_under <- tab_sgm_raw |>
+      filter(!is.na(under_price) | !is.na(under_prop_id)) |>
+      transmute(match = .data$match,
+                player_name = .data$player_name,
+                line = .data$line,
+                market_name = .data$market_name,
+                agency = .data$agency,
+                type = "Under",
+                price = .data$under_price,
+                prop_id_sgm = .data$under_prop_id)
+  }
+
+  tab_sgm <- bind_rows(tab_over, tab_under) |>
+    distinct(match, player_name, line, market_name, type, agency, .keep_all = TRUE)
+} else {
+  tab_sgm <- tibble(
+    match = character(),
+    player_name = character(),
+    line = numeric(),
+    market_name = character(),
+    agency = character(),
+    type = character(),
+    price = numeric(),
+    prop_id_sgm = character()
+  )
+}
 
 #==============================================================================
 # Function to get SGM data
 #===============================================================================
 
 # Function to get SGM data
-get_sgm_tab <- function(data, player_names, stat_counts, markets) {
+get_sgm_tab <- function(data, player_names, stat_counts, markets, types) {
   if (length(player_names) != length(stat_counts)) {
     stop("Both lists should have the same length")
   }
-  
+
   filtered_df <- data.frame()
   for (i in seq_along(player_names)) {
-    temp_df <- data %>% 
+    temp_df <- data %>%
       filter(player_name == player_names[i] &
                line == stat_counts[i] &
-               market_name == markets[i])
+               market_name == markets[i] &
+               type == types[i])
     filtered_df <- bind_rows(filtered_df, temp_df)
   }
-  
-  # Get the 'id' column as a list
-  id_list <- filtered_df$prop_id
-  
+
+  # Get the proposition ID column as a list
+  id_list <- filtered_df$prop_id_sgm
+
   # Create the propositions list using the id_list
   propositions <- lapply(id_list, function(id) list(type = unbox("WIN"), propositionId = unbox(id)))
-  
+
   return(propositions)
 }
 
@@ -66,33 +105,34 @@ get_sgm_tab <- function(data, player_names, stat_counts, markets) {
 #==============================================================================
 
 # Make Post Request
-call_sgm_tab <- function(data, player_names, stat_counts, markets) {
+call_sgm_tab <- function(data, player_names, stat_counts, markets, types) {
   tryCatch({
     if (length(player_names) != length(stat_counts)) {
       stop("Both lists should have the same length")
     }
-    
+
     filtered_df <- data.frame()
     for (i in seq_along(player_names)) {
-      temp_df <- data %>% 
+      temp_df <- data %>%
         filter(player_name == player_names[i] &
                  line == stat_counts[i] &
-                 market_name == markets[i])
+                 market_name == markets[i] &
+                 type == types[i])
       filtered_df <- bind_rows(filtered_df, temp_df)
     }
-    
+
     if (nrow(filtered_df) != length(player_names)) {
       return(NULL)
     }
-    
+
     # Unadjusted price
     unadjusted_price <- prod(filtered_df$price)
-    
+
     # Get propositions
-    propositions <- get_sgm_tab(data, player_names, stat_counts, markets)
-    
+    propositions <- get_sgm_tab(data, player_names, stat_counts, markets, types)
+
     url <- "https://api.beta.tab.com.au/v1/pricing-service/enquiry"
-    
+
     headers <- c(
       "Accept" = "application/json, text/plain, */*",
       "Accept-Encoding" = "gzip, deflate, br, zstd",
@@ -106,7 +146,7 @@ call_sgm_tab <- function(data, player_names, stat_counts, markets) {
       "sec-ch-ua-platform" = '"macOS"',
       "Cookie" = "YOUR_COOKIE_STRING_HERE"  # You'll need to add the full cookie string
     )
-    
+
     payload <- list(
       clientDetails = list(jurisdiction = unbox("SA"), channel = unbox("web")),
       bets = list(
@@ -122,19 +162,19 @@ call_sgm_tab <- function(data, player_names, stat_counts, markets) {
       ),
       returnValidationMatrix = unbox(TRUE)  # Added this line
     )
-    
-    # Try response, if nothing in 3 seconds, make it null
+
+    # Try response, if nothing in 5 seconds, make it null
     response <- tryCatch({
-      POST(url, 
-           body = toJSON(payload), 
-           add_headers(.headers = headers), 
-           encode = "json", 
+      POST(url,
+           body = toJSON(payload),
+           add_headers(.headers = headers),
+           encode = "json",
            timeout(5),
            config = config(http_version = 1.1))  # Force HTTP/1.1
     }, error = function(e) {
       return(NULL)
     })
-    
+
     if(is.null(response)) {
       return(data.frame(
         Selections = NA_character_,
@@ -145,14 +185,14 @@ call_sgm_tab <- function(data, player_names, stat_counts, markets) {
         Agency = NA_character_
       ))
     }
-    
+
     response_content <- content(response, "parsed")
     adjusted_price <- as.numeric(response_content$bets[[1]]$legs[[1]]$odds$decimal)
     adjustment_factor <- adjusted_price / unadjusted_price
     combined_list <- paste(player_names, stat_counts, sep = ": ")
     market_string <- paste(markets, collapse = ", ")
     player_string <- paste(combined_list, collapse = ", ")
-    
+
     output_data <- tryCatch({
       data.frame(
         Selections = player_string,
@@ -172,9 +212,9 @@ call_sgm_tab <- function(data, player_names, stat_counts, markets) {
         Agency = NA_character_
       )
     })
-    
+
     return(output_data)
-    
+
   }, error = function(e) {
     print(paste("Error: ", e))
   })
@@ -184,5 +224,6 @@ call_sgm_tab <- function(data, player_names, stat_counts, markets) {
 #   data = tab_sgm,
 #   player_names = c("Zach Guthrie", "Gryan Miers"),
 #   stat_counts = c(14.5, 19.5),
-#   markets = c("Player Disposals", "Player Disposals")
+#   markets = c("Player Disposals", "Player Disposals"),
+#   types = c("Over", "Over")
 # )

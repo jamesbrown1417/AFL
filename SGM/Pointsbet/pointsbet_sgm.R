@@ -14,46 +14,78 @@ pointsbet_sgm_list <-
     read_csv("Data/scraped_odds/pointsbet_player_marks.csv")
   )
 
-pointsbet_sgm <-
-  pointsbet_sgm_list |> 
+pointsbet_sgm_raw <-
+  pointsbet_sgm_list |>
   keep(~nrow(.x) > 0) |>
-  bind_rows() |>
-  rename(price = over_price) |>  
-  distinct(match, player_name, line, market_name, agency, .keep_all = TRUE) |>
-  select(-contains("under"))
+  bind_rows()
+
+# Build Over/Under rows with appropriate outcome IDs and price
+pointsbet_sgm_overs <-
+  pointsbet_sgm_raw |>
+  filter(!is.na(over_price)) |>
+  transmute(match = .data$match,
+            player_name = .data$player_name,
+            line = .data$line,
+            market_name = .data$market_name,
+            agency = .data$agency,
+            type = "Overs",
+            price = .data$over_price,
+            EventKey = .data$EventKey,
+            MarketKey = .data$MarketKey,
+            OutcomeKey_sgm = .data$OutcomeKey) |>
+  distinct(match, player_name, line, market_name, agency, .keep_all = TRUE)
+
+pointsbet_sgm_unders <-
+  pointsbet_sgm_raw |>
+  filter(!is.na(under_price)) |>
+  transmute(match = .data$match,
+            player_name = .data$player_name,
+            line = .data$line,
+            market_name = .data$market_name,
+            agency = .data$agency,
+            type = "Unders",
+            price = .data$under_price,
+            EventKey = .data$EventKey,
+            MarketKey = .data$MarketKey,
+            OutcomeKey_sgm = .data$OutcomeKey_unders) |>
+  distinct(match, player_name, line, market_name, agency, .keep_all = TRUE)
+
+pointsbet_sgm <-
+  bind_rows(pointsbet_sgm_overs, pointsbet_sgm_unders)
 
 #===============================================================================
 # Function to get SGM data
 #=-=============================================================================
 
 # Create function to call the API
-get_sgm_pointsbet <- function(data, player_names, stat_counts, markets) {
+get_sgm_pointsbet <- function(data, player_names, stat_counts, markets, over_under) {
   if (length(player_names) != length(stat_counts)) {
     stop("Both lists should have the same length")
   }
-  
+
   filtered_df <- data.frame()
   for (i in seq_along(player_names)) {
-    temp_df <- data %>% 
+    temp_df <- data %>%
       filter(player_name == player_names[[i]] &
                line == stat_counts[i] &
-               market_name == markets[i])
+               market_name == markets[i] &
+               type == over_under[i])
     filtered_df <- bind_rows(filtered_df, temp_df)
   }
-  
-  id_list <- as.character(filtered_df$OutcomeKey)
+
+  id_list <- as.character(filtered_df$OutcomeKey_sgm)
   market_id_list <- as.character(filtered_df$MarketKey)
   event_key <- as.character(filtered_df$EventKey[1])
-  
-  selected_outcomes <- lapply(1:length(id_list), function(i) 
+
+  selected_outcomes <- lapply(1:length(id_list), function(i)
     list(MarketKey = unbox(market_id_list[i]), OutcomeKey = unbox(id_list[i]))
   )
-  
+
   payload <- list(
     EventKey = unbox(event_key),
     SelectedOutcomes = selected_outcomes
   )
-  
+
   return(payload)
 }
 
@@ -61,35 +93,36 @@ get_sgm_pointsbet <- function(data, player_names, stat_counts, markets) {
 # Make Post Request
 #==============================================================================
 
-call_sgm_pointsbet <- function(data, player_names, stat_counts, markets) {
+call_sgm_pointsbet <- function(data, player_names, stat_counts, markets, over_under) {
   if (length(player_names) != length(stat_counts)) {
     stop("Both lists should have the same length")
   }
-  
+
   filtered_df <- data.frame()
   for (i in seq_along(player_names)) {
-    temp_df <- data %>% 
+    temp_df <- data %>%
       filter(player_name == player_names[i],
              line == stat_counts[i],
-             market_name == markets[i])
+             market_name == markets[i],
+             type == over_under[i])
     filtered_df <- bind_rows(filtered_df, temp_df)
   }
-  
+
   if (nrow(filtered_df) != length(player_names)) {
     return(NULL)
   }
-  
+
   unadjusted_price <- prod(filtered_df$price)
-  
-  payload <- get_sgm_pointsbet(data, player_names, stat_counts, markets)
-  
+
+  payload <- get_sgm_pointsbet(data, player_names, stat_counts, markets, over_under)
+
   url <- 'https://api.au.pointsbet.com/api/v2/sgm/price'
-  
+
   headers <- c('User-Agent' = 'Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Mobile Safari/537.36',
                'Content-Type' = 'application/json;charset=UTF-8',
                'Origin' = 'https://pointsbet.com.au',
                'Referer' = 'https://pointsbet.com.au/')
-  
+
   # Error handling for the POST request
   tryCatch({
     response <- POST(url, body = toJSON(payload), add_headers(.headers = headers), encode = "json")
@@ -97,19 +130,19 @@ call_sgm_pointsbet <- function(data, player_names, stat_counts, markets) {
     message("Error in POST request: ", e)
     return(NULL)
   })
-  
+
   # If there is no response, return NULL
   if (is.null(response)) {
     return(NULL)
   }
-  
+
   response_content <- content(response, "parsed")
   adjusted_price <- as.numeric(response_content$price)
   adjustment_factor <- adjusted_price / unadjusted_price
   combined_list <- paste(player_names, stat_counts, sep = ": ")
   player_string <- paste(combined_list, collapse = ", ")
   market_string <- paste(markets, collapse = ", ")
-  
+
   output_data <- data.frame(
     Selections = player_string,
     Markets = market_string,
@@ -118,13 +151,14 @@ call_sgm_pointsbet <- function(data, player_names, stat_counts, markets) {
     Adjustment_Factor = adjustment_factor,
     Agency = 'Pointsbet'
   )
-  
+
   return(output_data)
 }
 
 # call_sgm_pointsbet(
 #   data = pointsbet_sgm,
-# player_names = c("Charlie Curnow", "Blake Acres"),
-# stat_counts = c(2.5, 19.5),
-# markets = c("Player Goals", "Player Disposals")
+#   player_names = c("Charlie Curnow", "Blake Acres"),
+#   stat_counts = c(2.5, 19.5),
+#   markets = c("Player Goals", "Player Disposals"),
+#   over_under = c("Overs", "Overs")
 # )

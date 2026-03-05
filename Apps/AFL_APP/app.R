@@ -248,7 +248,7 @@ matches_in_order <-
   pull()
 
 # Compare SGM function
-compare_sgm <- function(player_names, stat_counts, markets) {
+compare_sgm <- function(player_names, stat_counts, markets, types) {
   empty_sgm_result <- tibble(
     Selections = character(),
     Markets = character(),
@@ -279,10 +279,10 @@ compare_sgm <- function(player_names, stat_counts, markets) {
   }
 
   # Function to handle errors in the call_sgm functions
-  handle_call_sgm <- function(func, sgm, player_names, stat_counts, markets) {
+  handle_call_sgm <- function(func, sgm, player_names, stat_counts, markets, types) {
     tryCatch(
       {
-        normalise_sgm_result(func(sgm, player_names, stat_counts, markets))
+        normalise_sgm_result(func(sgm, player_names, stat_counts, markets, types))
       },
       error = function(e) {
         # Return no rows if an error occurs for this agency
@@ -292,13 +292,13 @@ compare_sgm <- function(player_names, stat_counts, markets) {
   }
 
   # Get individual dataframes
-  pointsbet_data <- handle_call_sgm(call_sgm_pointsbet, pointsbet_sgm, player_names, stat_counts, markets)
-  sportsbet_data <- handle_call_sgm(call_sgm_sportsbet, sportsbet_sgm, player_names, stat_counts, markets)
-  tab_data <- handle_call_sgm(call_sgm_tab, tab_sgm, player_names, stat_counts, markets)
-  betright_data <- handle_call_sgm(call_sgm_betright, betright_sgm, player_names, stat_counts, markets)
-  neds_data <- handle_call_sgm(call_sgm_neds, neds_sgm, player_names, stat_counts, markets)
-  bet365_data <- handle_call_sgm(call_sgm_bet365, bet365_sgm, player_names, stat_counts, markets)
-  dabble_data <- handle_call_sgm(call_sgm_dabble, dabble_sgm, player_names, stat_counts, markets)
+  pointsbet_data <- handle_call_sgm(call_sgm_pointsbet, pointsbet_sgm, player_names, stat_counts, markets, types)
+  sportsbet_data <- handle_call_sgm(call_sgm_sportsbet, sportsbet_sgm, player_names, stat_counts, markets, types)
+  tab_data <- handle_call_sgm(call_sgm_tab, tab_sgm, player_names, stat_counts, markets, types)
+  betright_data <- handle_call_sgm(call_sgm_betright, betright_sgm, player_names, stat_counts, markets, types)
+  neds_data <- handle_call_sgm(call_sgm_neds, neds_sgm, player_names, stat_counts, markets, types)
+  bet365_data <- handle_call_sgm(call_sgm_bet365, bet365_sgm, player_names, stat_counts, markets, types)
+  dabble_data <- handle_call_sgm(call_sgm_dabble, dabble_sgm, player_names, stat_counts, markets, types)
 
   combined_sgm <- bind_rows(pointsbet_data, sportsbet_data, tab_data, betright_data, neds_data, bet365_data, dabble_data)
 
