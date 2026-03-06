@@ -4,6 +4,15 @@ library(tidyverse)
 library(purrr)
 library(R.utils)
 
+tab_bootstrap_url <- "https://www.tab.com.au/"
+tab_pricing_url <- "https://api.beta.tab.com.au/v1/pricing-service/enquiry"
+tab_client_jurisdiction <- Sys.getenv("TAB_CLIENT_JURISDICTION", unset = "NSW")
+tab_user_agent <- paste(
+  "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)",
+  "AppleWebKit/537.36 (KHTML, like Gecko)",
+  "Chrome/136.0.0.0 Safari/537.36"
+)
+
 # Safe function to read CSV files
 safe_read_csv <- function(path, ...)  {
   if (file.exists(path)) {
@@ -100,6 +109,51 @@ get_sgm_tab <- function(data, player_names, stat_counts, markets, types) {
   return(propositions)
 }
 
+submit_tab_pricing_request <- function(payload_json) {
+  if (!requireNamespace("curl", quietly = TRUE)) {
+    return(NULL)
+  }
+
+  handle <- curl::new_handle()
+  curl::handle_setopt(handle, followlocation = TRUE, timeout = 15)
+  curl::handle_setheaders(handle, "user-agent" = tab_user_agent)
+
+  bootstrap_response <- tryCatch(
+    curl::curl_fetch_memory(tab_bootstrap_url, handle = handle),
+    error = function(e) NULL
+  )
+
+  if (is.null(bootstrap_response) || bootstrap_response$status_code >= 400) {
+    return(NULL)
+  }
+
+  curl::handle_reset(handle)
+  curl::handle_setheaders(
+    handle,
+    "accept" = "application/json, text/plain, */*",
+    "accept-language" = "en-US,en;q=0.9",
+    "content-type" = "application/json;charset=UTF-8",
+    "origin" = "https://www.tab.com.au",
+    "referer" = "https://www.tab.com.au/",
+    "user-agent" = tab_user_agent
+  )
+  curl::handle_setopt(handle, timeout = 15, postfields = payload_json, customrequest = "POST")
+
+  pricing_response <- tryCatch(
+    curl::curl_fetch_memory(tab_pricing_url, handle = handle),
+    error = function(e) NULL
+  )
+
+  if (is.null(pricing_response) || pricing_response$status_code >= 400) {
+    return(NULL)
+  }
+
+  tryCatch(
+    fromJSON(rawToChar(pricing_response$content), simplifyVector = FALSE),
+    error = function(e) NULL
+  )
+}
+
 #==============================================================================
 # Make Post Request
 #==============================================================================
@@ -131,24 +185,11 @@ call_sgm_tab <- function(data, player_names, stat_counts, markets, types) {
     # Get propositions
     propositions <- get_sgm_tab(data, player_names, stat_counts, markets, types)
 
-    url <- "https://api.beta.tab.com.au/v1/pricing-service/enquiry"
-
-    headers <- c(
-      "Accept" = "application/json, text/plain, */*",
-      "Accept-Encoding" = "gzip, deflate, br, zstd",
-      "Accept-Language" = "en-US,en;q=0.9",
-      "Content-Type" = "application/json;charset=UTF-8",
-      "Origin" = "https://www.tab.com.au",
-      "Referer" = "https://www.tab.com.au/",
-      "User-Agent" = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36",
-      "sec-ch-ua" = '"Chromium";v="136", "Google Chrome";v="136", "Not.A/Brand";v="99"',
-      "sec-ch-ua-mobile" = "?0",
-      "sec-ch-ua-platform" = '"macOS"',
-      "Cookie" = "YOUR_COOKIE_STRING_HERE"  # You'll need to add the full cookie string
-    )
-
     payload <- list(
-      clientDetails = list(jurisdiction = unbox("SA"), channel = unbox("web")),
+      clientDetails = list(
+        jurisdiction = unbox(tab_client_jurisdiction),
+        channel = unbox("web")
+      ),
       bets = list(
         list(
           type = unbox("FIXED_ODDS"),
@@ -160,70 +201,55 @@ call_sgm_tab <- function(data, player_names, stat_counts, markets, types) {
           )
         )
       ),
-      returnValidationMatrix = unbox(TRUE)  # Added this line
+      returnValidationMatrix = unbox(TRUE)
     )
 
-    # Try response, if nothing in 5 seconds, make it null
-    response <- tryCatch({
-      POST(url,
-           body = toJSON(payload),
-           add_headers(.headers = headers),
-           encode = "json",
-           timeout(5),
-           config = config(http_version = 1.1))  # Force HTTP/1.1
-    }, error = function(e) {
-      return(NULL)
-    })
+    response_content <- submit_tab_pricing_request(
+      toJSON(payload, auto_unbox = TRUE)
+    )
 
-    if(is.null(response)) {
-      return(data.frame(
-        Selections = NA_character_,
-        Markets = NA_character_,
-        Unadjusted_Price = NA_real_,
-        Adjusted_Price = NA_real_,
-        Adjustment_Factor = NA_real_,
-        Agency = NA_character_
-      ))
+    if (is.null(response_content)) {
+      return(NULL)
     }
 
-    response_content <- content(response, "parsed")
-    adjusted_price <- as.numeric(response_content$bets[[1]]$legs[[1]]$odds$decimal)
+    bet_status <- purrr::pluck(response_content, "bets", 1, "status", .default = NA_character_)
+    adjusted_price <- as.numeric(
+      purrr::pluck(
+        response_content,
+        "bets", 1, "legs", 1, "odds", "decimal",
+        .default = NA_character_
+      )
+    )
+
+    if (!identical(bet_status, "ok") || is.na(adjusted_price)) {
+      return(NULL)
+    }
+
     adjustment_factor <- adjusted_price / unadjusted_price
     combined_list <- paste(player_names, stat_counts, sep = ": ")
     market_string <- paste(markets, collapse = ", ")
     player_string <- paste(combined_list, collapse = ", ")
 
-    output_data <- tryCatch({
-      data.frame(
-        Selections = player_string,
-        Markets = market_string,
-        Unadjusted_Price = unadjusted_price,
-        Adjusted_Price = adjusted_price,
-        Adjustment_Factor = adjustment_factor,
-        Agency = 'TAB'
-      )
-    }, error = function(e) {
-      data.frame(
-        Selections = NA_character_,
-        Markets = NA_character_,
-        Unadjusted_Price = NA_real_,
-        Adjusted_Price = NA_real_,
-        Adjustment_Factor = NA_real_,
-        Agency = NA_character_
-      )
-    })
+    output_data <- data.frame(
+      Selections = player_string,
+      Markets = market_string,
+      Unadjusted_Price = unadjusted_price,
+      Adjusted_Price = adjusted_price,
+      Adjustment_Factor = adjustment_factor,
+      Agency = "TAB"
+    )
 
     return(output_data)
 
   }, error = function(e) {
-    print(paste("Error: ", e))
+    return(NULL)
   })
 }
 
-# call_sgm_tab(
-#   data = tab_sgm,
-#   player_names = c("Zach Guthrie", "Gryan Miers"),
-#   stat_counts = c(14.5, 19.5),
-#   markets = c("Player Disposals", "Player Disposals"),
-#   types = c("Over", "Over")
-# )
+call_sgm_tab(
+  data = tab_sgm,
+  player_names = c("Zach Guthrie", "Gryan Miers"),
+  stat_counts = c(14.5, 19.5),
+  markets = c("Player Disposals", "Player Disposals"),
+  types = c("Over", "Over")
+)
