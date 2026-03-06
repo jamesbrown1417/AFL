@@ -316,7 +316,7 @@ compare_sgm <- function(player_names, stat_counts, markets, types) {
 }
 
 # Compare CGM function
-compare_cgm <- function(player_names_cross, lines_cross, market_names_cross) {
+compare_cgm <- function(player_names_cross, lines_cross, market_names_cross, types_cross) {
   empty_cgm_result <- tibble(
     Selections = character(),
     Matches = character(),
@@ -345,7 +345,7 @@ compare_cgm <- function(player_names_cross, lines_cross, market_names_cross) {
   all_data <- list(pointsbet_sgm, sportsbet_sgm, tab_sgm, betright_sgm, neds_sgm, bet365_sgm, dabble_sgm)
 
   # Function to get cross game multi data
-  get_cgm <- function(data, player_names_cross, lines_cross, market_names_cross) {
+  get_cgm <- function(data, player_names_cross, lines_cross, market_names_cross, types_cross) {
     if (length(player_names_cross) == 0) {
       return(NULL)
     }
@@ -360,7 +360,8 @@ compare_cgm <- function(player_names_cross, lines_cross, market_names_cross) {
         filter(
           player_name == player_names_cross[i],
           line == lines_cross[i],
-          market_name == market_names_cross[i]
+          market_name == market_names_cross[i],
+          type == types_cross[i]
         )
       filtered_df <- bind_rows(filtered_df, temp_df)
     }
@@ -388,10 +389,10 @@ compare_cgm <- function(player_names_cross, lines_cross, market_names_cross) {
   }
 
   # Function to handle errors in the get_cgm function
-  handle_get_cgm <- function(data, player_names_cross, lines_cross, market_names_cross) {
+  handle_get_cgm <- function(data, player_names_cross, lines_cross, market_names_cross, types_cross) {
     tryCatch(
       {
-        normalise_cgm_result(get_cgm(data, player_names_cross, lines_cross, market_names_cross))
+        normalise_cgm_result(get_cgm(data, player_names_cross, lines_cross, market_names_cross, types_cross))
       },
       error = function(e) {
         # Return no rows if an error occurs for this agency
@@ -401,37 +402,57 @@ compare_cgm <- function(player_names_cross, lines_cross, market_names_cross) {
   }
 
   # Map over list of dataframes
-  cgm_all <- map_dfr(all_data, handle_get_cgm, player_names_cross, lines_cross, market_names_cross) %>%
+  cgm_all <- map_dfr(all_data, handle_get_cgm, player_names_cross, lines_cross, market_names_cross, types_cross) %>%
     mutate(Price = as.numeric(Price)) |>
     arrange(desc(Price))
 
   return(cgm_all)
 }
 
-# SGM data for display
-disposals_sgm <-
+# SGM data for display - combine all player data
+all_player_data <-
   player_disposals_data |>
-  rename(
+  bind_rows(player_goals_data) |>
+  bind_rows(player_marks_data) |>
+  bind_rows(player_tackles_data) |>
+  bind_rows(player_fantasy_data) |>
+  bind_rows(player_kicks_data) |>
+  bind_rows(player_handballs_data) |>
+  bind_rows(player_hitouts_data) |>
+  bind_rows(player_clearances_data)
+
+# Build overs with unified columns
+disposals_sgm_overs <- all_player_data |>
+  mutate(
+    type = "Over",
     price = over_price,
     empirical_probability_2025 = empirical_prob_over_2025,
-    diff_2025 = diff_over_2025
-  ) |>
-  bind_rows(player_goals_data |> rename(price = over_price, empirical_probability_2025 = empirical_prob_over_2025, diff_2025 = diff_over_2025)) |>
-  bind_rows(player_marks_data |> rename(price = over_price, empirical_probability_2025 = empirical_prob_over_2025, diff_2025 = diff_over_2025)) |>
-  bind_rows(player_tackles_data |> rename(price = over_price, empirical_probability_2025 = empirical_prob_over_2025, diff_2025 = diff_over_2025)) |>
-  bind_rows(player_fantasy_data |> rename(price = over_price, empirical_probability_2025 = empirical_prob_over_2025, diff_2025 = diff_over_2025)) |>
-  bind_rows(player_kicks_data |> rename(price = over_price, empirical_probability_2025 = empirical_prob_over_2025, diff_2025 = diff_over_2025)) |>
-  bind_rows(player_handballs_data |> rename(price = over_price, empirical_probability_2025 = empirical_prob_over_2025, diff_2025 = diff_over_2025)) |>
-  bind_rows(player_hitouts_data |> rename(price = over_price, empirical_probability_2025 = empirical_prob_over_2025, diff_2025 = diff_over_2025)) |>
-  bind_rows(player_clearances_data |> rename(price = over_price, empirical_probability_2025 = empirical_prob_over_2025, diff_2025 = diff_over_2025))
+    diff_2025 = diff_over_2025,
+    prob_last_10_sgm = emp_prob_last_10,
+    diff_last_10_sgm = diff_over_last_10
+  )
+
+# Build unders with unified columns
+disposals_sgm_unders <- all_player_data |>
+  filter(!is.na(under_price)) |>
+  mutate(
+    type = "Under",
+    price = under_price,
+    empirical_probability_2025 = empirical_prob_under_2025,
+    diff_2025 = diff_under_2025,
+    prob_last_10_sgm = empirical_prop_under_last_10,
+    diff_last_10_sgm = diff_under_last_10
+  )
+
+disposals_sgm <- bind_rows(disposals_sgm_overs, disposals_sgm_unders)
 
 # Create market best
 disposals_sgm <-
   disposals_sgm |>
-  group_by(match, player_name, market_name, line) |>
+  group_by(match, player_name, market_name, line, type) |>
   arrange(desc(price), .by_group = TRUE) |>
   mutate(
-    max_player_diff = max(diff_over_last_10, na.rm = TRUE),
+    max_player_diff = max(diff_last_10_sgm, na.rm = TRUE),
     second_best_price = if_else(n() >= 2, nth(price, 2), NA_real_),
     market_best = row_number() == 1
   ) |>
@@ -452,7 +473,7 @@ agencies_sgm <- c(agencies_sgm, "Dabble") |> unique()
 # Create disposals dataframe to display
 disposals_display <-
   disposals_sgm |>
-  group_by(player_name, match, line, market_name) |>
+  group_by(player_name, match, line, market_name, type) |>
   mutate(
     next_best_diff = if_else(market_best,
       ((1 / second_best_price) - (1 / price)),
@@ -464,6 +485,7 @@ disposals_display <-
   transmute(match,
     player_name,
     Position,
+    type,
     Matchup = DVP_Category,
     market_name,
     line,
@@ -471,8 +493,8 @@ disposals_display <-
     agency,
     prob_2025 = round(empirical_probability_2025, 2),
     diff_2025 = round(diff_2025, 2),
-    prob_last_10 = round(emp_prob_last_10, 2),
-    diff_last_10 = round(diff_over_last_10, 2),
+    prob_last_10 = round(prob_last_10_sgm, 2),
+    diff_last_10 = round(diff_last_10_sgm, 2),
     next_best_diff = round(100 * next_best_diff, 1),
     market_best
   )
@@ -2672,9 +2694,10 @@ server <- function(input, output) {
         filter(market_best) |>
         select(-market_best)
     }
-    selected_data <- filtered_data[input$table_rows_selected, c("player_name", "line", "market_name", "price")]
+    selected_data <- filtered_data[input$table_rows_selected, c("player_name", "type", "line", "market_name", "price")]
 
     player_names <- selected_data$player_name
+    types <- selected_data$type
     lines <- selected_data$line
     market_names <- selected_data$market_name
 
@@ -2684,7 +2707,8 @@ server <- function(input, output) {
         compare_sgm(
           player_names = player_names,
           stat_counts = lines,
-          markets = market_names
+          markets = market_names,
+          types = types
         )
       },
       error = function(e) {
@@ -2797,9 +2821,10 @@ server <- function(input, output) {
         select(-market_best)
     }
 
-    selected_data_cross <- filtered_data_cross[input$table_cross_rows_selected, c("player_name", "line", "market_name", "price", "agency")]
+    selected_data_cross <- filtered_data_cross[input$table_cross_rows_selected, c("player_name", "type", "line", "market_name", "price", "agency")]
 
     player_names_cross <- selected_data_cross$player_name
+    types_cross <- selected_data_cross$type
     lines_cross <- selected_data_cross$line
     market_names_cross <- selected_data_cross$market_name
 
@@ -2809,7 +2834,8 @@ server <- function(input, output) {
         compare_cgm(
           market_names_cross = market_names_cross,
           player_names_cross = player_names_cross,
-          lines_cross = lines_cross
+          lines_cross = lines_cross,
+          types_cross = types_cross
         )
       },
       error = function(e) {

@@ -46,26 +46,27 @@ tab_sgm <-
 #===============================================================================
 
 # Function to get SGM data
-get_sgm_tab <- function(data, player_names, stat_counts, markets) {
+get_sgm_tab <- function(data, player_names, stat_counts, markets, over_under) {
   if (length(player_names) != length(stat_counts)) {
     stop("Both lists should have the same length")
   }
-  
+
   filtered_df <- data.frame()
   for (i in seq_along(player_names)) {
-    temp_df <- data %>% 
+    temp_df <- data %>%
       filter(player_name == player_names[i],
              market_name == markets[i],
-             line == stat_counts[i])
+             line == stat_counts[i],
+             type == over_under[i])
     filtered_df <- bind_rows(filtered_df, temp_df)
   }
-  
+
   # Get the 'id' column as a list
   id_list <- filtered_df$id
-  
+
   # Create the propositions list using the id_list
   propositions <- lapply(id_list, function(id) list(type = unbox("WIN"), propositionId = unbox(id)))
-  
+
   return(propositions)
 }
 
@@ -74,31 +75,32 @@ get_sgm_tab <- function(data, player_names, stat_counts, markets) {
 #==============================================================================
 
 # Make Post Request
-call_sgm_tab <- function(data, player_names, stat_counts, markets) {
+call_sgm_tab <- function(data, player_names, stat_counts, markets, over_under) {
   tryCatch({
     if (length(player_names) != length(stat_counts)) {
       stop("Both lists should have the same length")
     }
-    
+
     filtered_df <- data.frame()
     for (i in seq_along(player_names)) {
-      temp_df <- data %>% 
+      temp_df <- data %>%
         filter(player_name == player_names[i],
                market_name == markets[i],
-               line == stat_counts[i])
+               line == stat_counts[i],
+               type == over_under[i])
       filtered_df <- bind_rows(filtered_df, temp_df)
     }
-    
+
     # Unadjusted price
     unadjusted_price <- prod(filtered_df$price)
-    
+
     # Get propositions
-    propositions <- get_sgm_tab(data, player_names, stat_counts, markets)
-    
+    propositions <- get_sgm_tab(data, player_names, stat_counts, markets, over_under)
+
     url <- "https://api.beta.tab.com.au/v1/pricing-service/enquiry"
-    
+
     headers <- c("Content-Type" = "application/json")
-    
+
     payload <- list(
       clientDetails = list(jurisdiction = unbox("SA"), channel = unbox("web")),
       bets = list(
@@ -113,19 +115,19 @@ call_sgm_tab <- function(data, player_names, stat_counts, markets) {
         )
       )
     )
-    
+
     response <- POST(url, body = toJSON(payload), add_headers(.headers = headers), encode = "json")
-    
+
     if (http_error(response)) {
       stop("HTTP request failed. Please check your URL or network connection.")
     }
-    
+
     response_content <- content(response, "parsed")
     adjusted_price <- as.numeric(response_content$bets[[1]]$legs[[1]]$odds$decimal)
     adjustment_factor <- adjusted_price / unadjusted_price
     combined_list <- paste(player_names, stat_counts, sep = ": ")
     player_string <- paste(combined_list, collapse = ", ")
-    
+
     output_data <- tryCatch({
       data.frame(
         Selections = player_string,
@@ -145,17 +147,18 @@ call_sgm_tab <- function(data, player_names, stat_counts, markets) {
         Agency = NA_character_
       )
     })
-    
+
     return(output_data)
-    
+
   }, error = function(e) {
     print(paste("Error: ", e))
   })
 }
 
-call_sgm_tab(
-  data = tab_sgm,
-  player_names = c("Chad Warner", "Isaac Heeney"),
-  stat_counts = c("24.5", "24.5"),
-  markets = c("Player Disposals", "Player Disposals")
-)
+# call_sgm_tab(
+#   data = tab_sgm,
+#   player_names = c("Chad Warner", "Isaac Heeney"),
+#   stat_counts = c("24.5", "24.5"),
+#   markets = c("Player Disposals", "Player Disposals"),
+#   over_under = c("Overs", "Overs")
+# )
