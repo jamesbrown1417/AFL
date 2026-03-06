@@ -248,7 +248,7 @@ matches_in_order <-
   pull()
 
 # Compare SGM function
-compare_sgm <- function(player_names, stat_counts, markets, types) {
+compare_sgm <- function(player_names, stat_counts, markets, types, non_tab_stat_counts = stat_counts) {
   empty_sgm_result <- tibble(
     Selections = character(),
     Markets = character(),
@@ -278,27 +278,41 @@ compare_sgm <- function(player_names, stat_counts, markets, types) {
       )
   }
 
+  sgm_retry_attempts <- 3L
+  sgm_retry_delay_seconds <- 0.35
+
   # Function to handle errors in the call_sgm functions
   handle_call_sgm <- function(func, sgm, player_names, stat_counts, markets, types) {
-    tryCatch(
-      {
-        normalise_sgm_result(func(sgm, player_names, stat_counts, markets, types))
-      },
-      error = function(e) {
-        # Return no rows if an error occurs for this agency
-        empty_sgm_result
+    for (attempt in seq_len(sgm_retry_attempts)) {
+      result <- tryCatch(
+        {
+          normalise_sgm_result(func(sgm, player_names, stat_counts, markets, types))
+        },
+        error = function(e) {
+          empty_sgm_result
+        }
+      )
+
+      if (nrow(result) > 0) {
+        return(result)
       }
-    )
+
+      if (attempt < sgm_retry_attempts) {
+        Sys.sleep(sgm_retry_delay_seconds)
+      }
+    }
+
+    empty_sgm_result
   }
 
   # Get individual dataframes
-  pointsbet_data <- handle_call_sgm(call_sgm_pointsbet, pointsbet_sgm, player_names, stat_counts, markets, types)
-  sportsbet_data <- handle_call_sgm(call_sgm_sportsbet, sportsbet_sgm, player_names, stat_counts, markets, types)
+  pointsbet_data <- handle_call_sgm(call_sgm_pointsbet, pointsbet_sgm, player_names, non_tab_stat_counts, markets, types)
+  sportsbet_data <- handle_call_sgm(call_sgm_sportsbet, sportsbet_sgm, player_names, non_tab_stat_counts, markets, types)
   tab_data <- handle_call_sgm(call_sgm_tab, tab_sgm, player_names, stat_counts, markets, types)
-  betright_data <- handle_call_sgm(call_sgm_betright, betright_sgm, player_names, stat_counts, markets, types)
-  neds_data <- handle_call_sgm(call_sgm_neds, neds_sgm, player_names, stat_counts, markets, types)
-  bet365_data <- handle_call_sgm(call_sgm_bet365, bet365_sgm, player_names, stat_counts, markets, types)
-  dabble_data <- handle_call_sgm(call_sgm_dabble, dabble_sgm, player_names, stat_counts, markets, types)
+  betright_data <- handle_call_sgm(call_sgm_betright, betright_sgm, player_names, non_tab_stat_counts, markets, types)
+  neds_data <- handle_call_sgm(call_sgm_neds, neds_sgm, player_names, non_tab_stat_counts, markets, types)
+  bet365_data <- handle_call_sgm(call_sgm_bet365, bet365_sgm, player_names, non_tab_stat_counts, markets, types)
+  dabble_data <- handle_call_sgm(call_sgm_dabble, dabble_sgm, player_names, non_tab_stat_counts, markets, types)
 
   combined_sgm <- bind_rows(pointsbet_data, sportsbet_data, tab_data, betright_data, neds_data, bet365_data, dabble_data)
 
@@ -1286,6 +1300,11 @@ ui <- page_navbar(
           multiple = TRUE
         ),
         checkboxInput("best_odds", "Only Show Best Market Odds?", value = FALSE),
+        bslib::input_switch(
+          "tab_miss_by_one_mode",
+          "TAB miss-by-one mode",
+          value = FALSE
+        ),
         h3("Selections"),
         DT::dataTableOutput("selected"),
         h3("SGM Information"),
@@ -2700,6 +2719,15 @@ server <- function(input, output) {
     types <- selected_data$type
     lines <- selected_data$line
     market_names <- selected_data$market_name
+    comparison_lines <- lines
+
+    if (isTRUE(input$tab_miss_by_one_mode) && identical(input$agency_sgm, "TAB")) {
+      comparison_lines <- ifelse(
+        market_names == "Player Disposals" & types == "Over",
+        lines - 1,
+        lines
+      )
+    }
 
     # Call function
     comparison_df <- tryCatch(
@@ -2707,6 +2735,7 @@ server <- function(input, output) {
         compare_sgm(
           player_names = player_names,
           stat_counts = lines,
+          non_tab_stat_counts = comparison_lines,
           markets = market_names,
           types = types
         )
