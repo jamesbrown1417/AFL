@@ -24,119 +24,74 @@ players_this_year <-
   unique()
 
 #===============================================================================
-# Apply function to all player, disposal combinations
+# Hardcoded market lines
 #===============================================================================
 
-# Get Disposal Lines
 disposal_lines <- seq(9.5, 39.5, by = 1)
+fantasy_lines <- seq(64.5, 129.5, by = 5)
+goal_lines <- seq(0.5, 6.5, by = 1)
+kick_lines <- seq(9.5, 27.5, by = 2)
+handball_lines <- seq(7.5, 25.5, by = 2)
+mark_lines <- seq(1.5, 11.5, by = 1)
+tackle_lines <- seq(0.5, 12.5, by = 1)
+hitout_lines <- seq(24.5, 49.5, by = 5)
+clearance_lines <- seq(2.5, 9.5, by = 1)
 
-# Get table of all player, disposal combinations
-disposals_table <- 
-  expand_grid(player_full_name = players_this_year, line = disposal_lines) |> 
-  mutate(stat = "disposals")
+market_specs <-
+  tibble(
+    market_key = c(
+      "disposals",
+      "fantasy_points",
+      "goals",
+      "kicks",
+      "handballs",
+      "marks",
+      "tackles",
+      "hitouts",
+      "clearances"
+    ),
+    stat_column = c(
+      "disposals",
+      "fantasy_points",
+      "goals",
+      "kicks",
+      "handballs",
+      "marks",
+      "tackles",
+      "hitouts",
+      "total_clearances"
+    ),
+    lines = list(
+      disposal_lines,
+      fantasy_lines,
+      goal_lines,
+      kick_lines,
+      handball_lines,
+      mark_lines,
+      tackle_lines,
+      hitout_lines,
+      clearance_lines
+    )
+  )
 
-# Apply function to all player, disposal combinations
-disposals_results <-
-  future_pmap(disposals_table, get_empirical_prob_season, .progress = TRUE) |> 
-  bind_rows()
+get_season_probs <- function(market_key, stat_column, lines) {
+  player_stat_lines <-
+    expand_grid(player_full_name = players_this_year, line = lines) |>
+    mutate(stat = stat_column)
 
-# Join with initial table
-disposals_table <-
-  disposals_table |> 
-  bind_cols(disposals_results) |> 
-  mutate(across(where(is.numeric), ~round(., 3)))
+  season_results <-
+    future_pmap(player_stat_lines, get_empirical_prob_season, .progress = TRUE) |>
+    bind_rows()
 
-#===============================================================================
-# Apply function to all player, fantasy combinations
-#===============================================================================
-
-# Get fantasy Lines
-fantasy_lines <- c(69.5, 74.5, 79.5, 84.5, 89.5, 94.5, 99.5, 104.5, 109.5, 114.5, 119.5)
-
-# Get table of all player, fantasy combinations
-fantasy_table <- 
-  expand_grid(player_full_name = players_this_year, line = fantasy_lines) |> 
-  mutate(stat = "fantasy_points")
-
-# Apply function to all player, fantasy combinations
-fantasy_results <-
-  future_pmap(fantasy_table, get_empirical_prob_season, .progress = TRUE) |> 
-  bind_rows()
-
-# Join with initial table
-fantasy_table <-
-  fantasy_table |> 
-  bind_cols(fantasy_results) |> 
-  mutate(across(where(is.numeric), ~round(., 3)))
-
-#===============================================================================
-# Apply function to all player, goal combinations
-#===============================================================================
-
-# Get goal Lines
-goal_lines <- c(0.5, 1.5, 2.5, 3.5, 4.5, 5.5, 6.5, 7.5)
-
-# Get table of all player, goal combinations
-goal_table <- 
-  expand_grid(player_full_name = players_this_year, line = goal_lines) |> 
-  mutate(stat = "goals")
-
-# Apply function to all player, goal combinations
-goal_results <-
-  future_pmap(goal_table, get_empirical_prob_season, .progress = TRUE) |> 
-  bind_rows()
-
-# Join with initial table
-goal_table <-
-  goal_table |> 
-  bind_cols(goal_results) |> 
-  mutate(across(where(is.numeric), ~round(., 3)))
-
-#===============================================================================
-# Apply function to all player, kick combinations
-#===============================================================================
-
-# Get kick Lines
-kick_lines <- c(9.5, 11.5, 13.5, 15.5, 17.5, 19.5, 21.5, 23.5, 25.5, 27.5)
-
-# Get table of all player, kick combinations
-kick_table <- 
-  expand_grid(player_full_name = players_this_year, line = kick_lines) |> 
-  mutate(stat = "kicks")
-
-# Apply function to all player, kick combinations
-kick_results <-
-  future_pmap(kick_table, get_empirical_prob_season, .progress = TRUE) |> 
-  bind_rows()
-
-# Join with initial table
-kick_table <-
-  kick_table |> 
-  bind_cols(kick_results) |> 
-  mutate(across(where(is.numeric), ~round(., 3)))
-
-#===============================================================================
-# Apply function to all player, handball combinations
-#===============================================================================
-
-# Get handball Lines
-handball_lines <- c(7.5, 9.5, 11.5, 13.5, 15.5, 17.5, 19.5, 21.5, 23.5)
-
-# Get table of all player, handball combinations
-handball_table <- 
-  expand_grid(player_full_name = players_this_year, line = handball_lines) |> 
-  mutate(stat = "handballs")
-
-# Apply function to all player, handball combinations
-handball_results <-
-  future_pmap(handball_table, get_empirical_prob_season, .progress = TRUE) |> 
-  bind_rows()
-
-# Join with initial table
-handball_table <-
-  handball_table |> 
-  bind_cols(handball_results) |> 
-  mutate(across(where(is.numeric), ~round(., 3)))
+  player_stat_lines |>
+    select(player_full_name, line) |>
+    bind_cols(season_results) |>
+    mutate(
+      stat = market_key,
+      across(where(is.numeric), ~ round(., 3))
+    ) |>
+    relocate(stat, .after = line)
+}
 
 #===============================================================================
 # Combine and save as RDS
@@ -144,7 +99,7 @@ handball_table <-
 
 # Combine
 combined_table <-
-  bind_rows(disposals_table, fantasy_table, goal_table, kick_table, handball_table)
+  pmap_dfr(market_specs, get_season_probs, .progress = TRUE)
 
 # Save as RDS
 write_rds(combined_table, "Data/empirical_probabilities_2025.rds")

@@ -184,7 +184,7 @@ player_disposals_links <- glue("https://www.sportsbet.com.au/apigw/sportsbook-sp
 player_pyo_disposals_links <- glue("https://www.sportsbet.com.au/apigw/sportsbook-sports/Sportsbook/Sports/Events/{match_ids}/MarketGroupings/972/Markets")
 
 # Player goals links
-player_goals_links <- glue("https://www.sportsbet.com.au/apigw/sportsbook-sports/Sportsbook/Sports/Events/{match_ids}/MarketGroupings/148/Markets")
+player_goals_links <- glue("https://www.sportsbet.com.au/apigw/sportsbook-sports/Sportsbook/Sports/Events/{match_ids}/MarketGroupings/1053/Markets")
 
 # Player Marks Links
 player_marks_links <- glue("https://www.sportsbet.com.au/apigw/sportsbook-sports/Sportsbook/Sports/Events/{match_ids}/MarketGroupings/1029/Markets")

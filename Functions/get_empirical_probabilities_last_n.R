@@ -5,6 +5,18 @@
 library(tidyverse)
 `%notin%` <- Negate(`%in%`)
 
+is_integer_line <- function(line) {
+  isTRUE(is.finite(line)) && abs(line - round(line)) < sqrt(.Machine$double.eps)
+}
+
+is_over_market_line <- function(values, line) {
+  if (is_integer_line(line)) {
+    values >= line
+  } else {
+    values > line
+  }
+}
+
 #===============================================================================
 # Read in past season stats
 #===============================================================================
@@ -56,7 +68,7 @@ get_empirical_prob <- function(player_full_name, line, stat) {
       return(NA_real_)
     }
     
-    mean((head(player_stats[[stat]], n_games) > line), na.rm = TRUE)
+    mean(is_over_market_line(head(player_stats[[stat]], n_games), line), na.rm = TRUE)
   }
 
   # Calculate proportions from the latest n games by date

@@ -6,6 +6,18 @@ library(tidyverse)
 library(zoo)
 `%notin%` <- Negate(`%in%`)
 
+is_integer_line <- function(line) {
+  isTRUE(is.finite(line)) && abs(line - round(line)) < sqrt(.Machine$double.eps)
+}
+
+is_over_market_line <- function(values, line) {
+  if (is_integer_line(line)) {
+    values >= line
+  } else {
+    values > line
+  }
+}
+
 #===============================================================================
 # Read in past season stats
 #===============================================================================
@@ -44,7 +56,7 @@ get_empirical_prob_season <- function(player_full_name, line, stat) {
   last_season_stats <-
     player_stats |> 
     mutate(
-      above_line = as.numeric(!!sym(stat) > line)) |> 
+      above_line = as.numeric(is_over_market_line(.data[[stat]], line))) |> 
     summarise(
       n_games_2025 = n(),
       emp_prob_2025 = ifelse(n() == 0, NA_real_, mean(above_line, na.rm = TRUE))
