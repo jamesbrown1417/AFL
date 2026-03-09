@@ -34,6 +34,11 @@ po/*~
 # RStudio Connect folder
 rsconnect/
 .secrets
+.env
+env
+backend/.env
+!.env.example
+!backend/.env.example
 
 # Python backend
 backend/.venv/

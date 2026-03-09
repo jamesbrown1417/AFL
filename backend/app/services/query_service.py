@@ -664,7 +664,7 @@ class QueryService:
         universe_where_clause = f"WHERE {' AND '.join(universe_conditions)}" if universe_conditions else ""
         row_where_conditions = list(row_conditions)
         if best_only:
-            row_where_conditions.append("market_price_rank = 1")
+            row_where_conditions.append("is_best_price = TRUE")
         row_where_clause = f"WHERE {' AND '.join(row_where_conditions)}" if row_where_conditions else ""
         order_clause = self._build_odds_order_clause(sort_by=sort_by, sort_dir=sort_dir)
         params = [*universe_params, *row_params, limit, offset]

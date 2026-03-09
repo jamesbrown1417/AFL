@@ -43,9 +43,18 @@ class Settings(BaseSettings):
         "Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) "
         "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Mobile Safari/537.36"
     )
+    tab_bootstrap_url: str = "https://www.tab.com.au/"
     tab_quote_url: str = "https://api.beta.tab.com.au/v1/pricing-service/enquiry"
-    tab_jurisdiction: str = "SA"
+    tab_jurisdiction: str = "NSW"
     tab_channel: str = "web"
+    tab_request_timeout_seconds: float = 30.0
+    tab_origin: str = "https://www.tab.com.au"
+    tab_referer: str = "https://www.tab.com.au/"
+    tab_user_agent: str = (
+        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
+        "AppleWebKit/537.36 (KHTML, like Gecko) "
+        "Chrome/136.0.0.0 Safari/537.36"
+    )
     pointsbet_quote_url: str = "https://api.au.pointsbet.com/api/v2/sgm/price"
     pointsbet_user_agent: str = sportsbet_user_agent
     pointsbet_origin: str = "https://pointsbet.com.au"

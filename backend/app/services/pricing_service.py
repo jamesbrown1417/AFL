@@ -83,7 +83,7 @@ class PricingService:
         for comparison_request in comparison_requests:
             try:
                 quote = await self.quote_sgm(comparison_request)
-            except AppError:
+            except Exception:
                 continue
             results.append(quote)
 
@@ -109,6 +109,27 @@ class PricingService:
                     await adapter.ensure_session(client)
                     payload = await adapter.send(client, request_spec)
                 return adapter.parse_response(payload, resolved_legs)
+            except httpx.TimeoutException as exc:
+                last_error = AppError(
+                    502,
+                    f"{adapter.code}_timeout",
+                    f"{adapter.code.upper()} pricing timed out.",
+                    retriable=True,
+                )
+                if attempt >= attempts:
+                    raise last_error from exc
+                await asyncio.sleep(self.settings.sgm_retry_delay_seconds)
+            except httpx.HTTPError as exc:
+                last_error = AppError(
+                    502,
+                    f"{adapter.code}_transport_error",
+                    f"{adapter.code.upper()} pricing request failed.",
+                    retriable=True,
+                    details={"error": str(exc)},
+                )
+                if attempt >= attempts:
+                    raise last_error from exc
+                await asyncio.sleep(self.settings.sgm_retry_delay_seconds)
             except AppError as exc:
                 last_error = exc
                 if not exc.retriable or attempt >= attempts:

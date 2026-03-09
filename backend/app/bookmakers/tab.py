@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 from typing import Any
 
 import httpx
@@ -11,7 +12,7 @@ from app.utils.errors import AppError
 
 class TabAdapter(BookmakerAdapter):
     code = "tab"
-    adapter_version = "v1"
+    adapter_version = "v2"
 
     def __init__(self, settings: Settings):
         self.settings = settings
@@ -40,33 +41,59 @@ class TabAdapter(BookmakerAdapter):
             "method": "POST",
             "url": self.settings.tab_quote_url,
             "headers": {
-                "Content-Type": "application/json",
+                "accept": "application/json, text/plain, */*",
+                "accept-language": "en-US,en;q=0.9",
+                "content-type": "application/json;charset=UTF-8",
+                "origin": self.settings.tab_origin,
+                "referer": self.settings.tab_referer,
+                "user-agent": self.settings.tab_user_agent,
             },
-            "json": {
-                "clientDetails": {
-                    "jurisdiction": self.settings.tab_jurisdiction,
-                    "channel": self.settings.tab_channel,
+            "body": json.dumps(
+                {
+                    "clientDetails": {
+                        "jurisdiction": self.settings.tab_jurisdiction,
+                        "channel": self.settings.tab_channel,
+                    },
+                    "bets": [
+                        {
+                            "type": "FIXED_ODDS",
+                            "legs": [
+                                {
+                                    "type": "SAME_GAME_MULTI",
+                                    "propositions": propositions,
+                                }
+                            ],
+                        }
+                    ],
+                    "returnValidationMatrix": True,
                 },
-                "bets": [
-                    {
-                        "type": "FIXED_ODDS",
-                        "legs": [
-                            {
-                                "type": "SAME_GAME_MULTI",
-                                "propositions": propositions,
-                            }
-                        ],
-                    }
-                ],
-            },
+                separators=(",", ":"),
+            ),
         }
+
+    async def ensure_session(self, client: httpx.AsyncClient) -> None:
+        if getattr(client, "_afl_tab_bootstrapped", False):
+            return
+        response = await client.get(
+            self.settings.tab_bootstrap_url,
+            headers={
+                "user-agent": self.settings.tab_user_agent,
+                "accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+                "accept-language": "en-US,en;q=0.9",
+            },
+            follow_redirects=True,
+            timeout=self.settings.tab_request_timeout_seconds,
+        )
+        response.raise_for_status()
+        setattr(client, "_afl_tab_bootstrapped", True)
 
     async def send(self, client: httpx.AsyncClient, request_spec: dict[str, Any]) -> dict[str, Any]:
         response = await client.request(
             method=request_spec["method"],
             url=request_spec["url"],
             headers=request_spec["headers"],
-            json=request_spec["json"],
+            content=request_spec["body"],
+            timeout=self.settings.tab_request_timeout_seconds,
         )
         try:
             response.raise_for_status()
@@ -89,6 +116,14 @@ class TabAdapter(BookmakerAdapter):
 
     def parse_response(self, payload: dict[str, Any], resolved_legs: list[ResolvedLeg]) -> QuoteResult:
         del resolved_legs
+        status = str(payload.get("bets", [{}])[0].get("status", "")).lower()
+        if status and status != "ok":
+            raise AppError(
+                409,
+                "tab_bet_rejected",
+                "TAB did not accept the requested combination.",
+                details={"status": status},
+            )
         try:
             quoted_price = float(payload["bets"][0]["legs"][0]["odds"]["decimal"])
         except (KeyError, IndexError, TypeError, ValueError) as exc:
