@@ -34,3 +34,19 @@ po/*~
 # RStudio Connect folder
 rsconnect/
 .secrets
+
+# Python backend
+backend/.venv/
+backend/.pytest_cache/
+backend/.ruff_cache/
+backend/.mypy_cache/
+backend/.coverage
+runtime/
+__pycache__/
+*.pyc
+
+# Android app
+android/.gradle/
+android/.idea/
+android/local.properties
+android/**/build/

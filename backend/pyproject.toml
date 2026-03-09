@@ -1,0 +1,47 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "afl-backend"
+version = "0.1.0"
+description = "Self-hosted AFL odds and SGM backend"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+  "duckdb>=1.2,<2",
+  "fastapi>=0.115,<1",
+  "httpx>=0.28,<1",
+  "pydantic-settings>=2.7,<3",
+  "pyreadr>=0.5,<1",
+  "uvicorn>=0.34,<1",
+]
+
+[project.optional-dependencies]
+dev = [
+  "mypy>=1.15,<2",
+  "pytest>=8.3,<9",
+  "pytest-asyncio>=0.26,<1",
+  "ruff>=0.11,<1",
+]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["app*", "ingest*"]
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.mypy]
+python_version = "3.11"
+packages = ["app", "ingest"]
+strict = true
+warn_unused_ignores = true
+warn_redundant_casts = true
+warn_return_any = true
+warn_unreachable = true
