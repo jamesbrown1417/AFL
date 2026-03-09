@@ -43,6 +43,9 @@ import com.jamesbrown.aflmobile.ui.common.LoadingCard
 import com.jamesbrown.aflmobile.ui.common.ScreenPadding
 import com.jamesbrown.aflmobile.ui.common.formatDateTime
 import com.jamesbrown.aflmobile.ui.common.simpleViewModelFactory
+import com.jamesbrown.aflmobile.ui.theme.appCardColors
+import com.jamesbrown.aflmobile.ui.theme.appGlassBorder
+import com.jamesbrown.aflmobile.ui.theme.appTopBarColors
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -166,9 +169,11 @@ private fun SettingsScreen(
     var bookmakerExpanded by mutableStateOf(false)
 
     Scaffold(
+        containerColor = androidx.compose.ui.graphics.Color.Transparent,
         topBar = {
             TopAppBar(
                 title = { Text("Connection & defaults") },
+                colors = appTopBarColors(),
             )
         },
     ) { innerPadding ->
@@ -180,7 +185,10 @@ private fun SettingsScreen(
             verticalArrangement = Arrangement.spacedBy(12.dp),
         ) {
             item {
-                Card {
+                Card(
+                    colors = appCardColors(),
+                    border = appGlassBorder(),
+                ) {
                     Column(
                         modifier = Modifier.padding(16.dp),
                         verticalArrangement = Arrangement.spacedBy(14.dp),
@@ -275,7 +283,10 @@ private fun SettingsScreen(
 
             uiState.healthResponse?.let { health ->
                 item {
-                    Card {
+                    Card(
+                        colors = appCardColors(),
+                        border = appGlassBorder(),
+                    ) {
                         Column(
                             modifier = Modifier.padding(16.dp),
                             verticalArrangement = Arrangement.spacedBy(8.dp),

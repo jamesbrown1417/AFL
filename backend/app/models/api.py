@@ -161,6 +161,8 @@ class OddsSearchResult(BaseModel):
     edge_pct: float | None
     diff_2025: float | None = None
     diff_last_10: float | None = None
+    is_best_price: bool = False
+    next_best_prob_diff: float | None = None
     sgm_eligible: bool
 
 
@@ -214,3 +216,56 @@ class SgmQuoteResponse(BaseModel):
     quoted_at: datetime
     expires_at: datetime
     status: str
+
+
+class SgmCompareRequest(BaseModel):
+    event_id: int
+    selection_ids: list[int]
+    force_refresh: bool = False
+
+
+class SgmAgencyComparison(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+
+    quote_id: str
+    bookmaker: str
+    event_id: int
+    legs: list[ResolvedLegResponse]
+    unadjusted_price: float
+    quoted_price: float
+    adjustment_factor: float
+    from_cache: bool
+    quoted_at: datetime
+    expires_at: datetime
+    status: str
+
+
+class SgmCompareResponse(BaseModel):
+    event_id: int
+    selection_count: int
+    results: list[SgmAgencyComparison]
+
+
+class CgmCompareRequest(BaseModel):
+    selection_ids: list[int]
+
+
+class CgmLegPriceResponse(BaseModel):
+    selection_id: int
+    match_name: str
+    label: str
+    market_type_code: str
+    selection_type: str
+    base_price: float
+
+
+class CgmAgencyComparison(BaseModel):
+    bookmaker: str
+    quoted_price: float
+    selection_count: int
+    legs: list[CgmLegPriceResponse]
+
+
+class CgmCompareResponse(BaseModel):
+    selection_count: int
+    results: list[CgmAgencyComparison]

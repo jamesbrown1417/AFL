@@ -3,6 +3,8 @@ package com.jamesbrown.aflmobile.data.network
 import com.jamesbrown.aflmobile.data.settings.AppSettingsStore
 import com.jamesbrown.aflmobile.model.ApiErrorEnvelope
 import com.jamesbrown.aflmobile.model.BookmakerSummary
+import com.jamesbrown.aflmobile.model.CgmCompareRequestPayload
+import com.jamesbrown.aflmobile.model.CgmCompareResponse
 import com.jamesbrown.aflmobile.model.EventSummary
 import com.jamesbrown.aflmobile.model.HealthResponse
 import com.jamesbrown.aflmobile.model.MarketSummary
@@ -13,6 +15,8 @@ import com.jamesbrown.aflmobile.model.PlayerStatSummary
 import com.jamesbrown.aflmobile.model.PlayerSummary
 import com.jamesbrown.aflmobile.model.PropSearchResult
 import com.jamesbrown.aflmobile.model.SelectionSummary
+import com.jamesbrown.aflmobile.model.SgmCompareRequestPayload
+import com.jamesbrown.aflmobile.model.SgmCompareResponse
 import com.jamesbrown.aflmobile.model.SgmQuoteRequestPayload
 import com.jamesbrown.aflmobile.model.SgmQuoteResponse
 import kotlinx.coroutines.Dispatchers
@@ -173,19 +177,29 @@ class BackendApiClient(
         query: String? = null,
         marketType: String? = null,
         eventId: Int? = null,
+        includePlayerIds: List<Int> = emptyList(),
+        excludePlayerIds: List<Int> = emptyList(),
         sortBy: String = "diff_last_10",
         sortDirection: String = "desc",
         selectionType: String? = null,
         minEdge: Double? = null,
         minPrice: Double? = null,
         maxPrice: Double? = null,
+        minDiff2025: Double? = null,
+        maxDiff2025: Double? = null,
+        minDiffLast10: Double? = null,
+        maxDiffLast10: Double? = null,
+        minNextBestProbDiff: Double? = null,
+        maxNextBestProbDiff: Double? = null,
         sgmOnly: Boolean = false,
         bestOnly: Boolean = false,
         limit: Int = 200,
+        offset: Int = 0,
     ): List<OddsSearchResult> = get(
         path = "odds/search",
         query = buildList {
             add("limit" to limit.toString())
+            add("offset" to offset.toString())
             add("scope" to scope)
             bookmakers.forEach { bookmaker ->
                 if (bookmaker.isNotBlank()) {
@@ -195,12 +209,20 @@ class BackendApiClient(
             query?.takeIf { it.isNotBlank() }?.let { add("q" to it) }
             marketType?.takeIf { it.isNotBlank() }?.let { add("market_type" to it) }
             eventId?.let { add("event_id" to it.toString()) }
+            includePlayerIds.forEach { add("include_player_id" to it.toString()) }
+            excludePlayerIds.forEach { add("exclude_player_id" to it.toString()) }
             add("sort_by" to sortBy)
             add("sort_dir" to sortDirection)
             selectionType?.takeIf { it.isNotBlank() }?.let { add("selection_type" to it) }
             minEdge?.let { add("min_edge" to it.toString()) }
             minPrice?.let { add("min_price" to it.toString()) }
             maxPrice?.let { add("max_price" to it.toString()) }
+            minDiff2025?.let { add("min_diff_2025" to it.toString()) }
+            maxDiff2025?.let { add("max_diff_2025" to it.toString()) }
+            minDiffLast10?.let { add("min_diff_last_10" to it.toString()) }
+            maxDiffLast10?.let { add("max_diff_last_10" to it.toString()) }
+            minNextBestProbDiff?.let { add("min_next_best_prob_diff" to it.toString()) }
+            maxNextBestProbDiff?.let { add("max_next_best_prob_diff" to it.toString()) }
             if (sgmOnly) add("sgm_only" to "true")
             if (bestOnly) add("best_only" to "true")
         },
@@ -221,6 +243,12 @@ class BackendApiClient(
 
     suspend fun priceSgm(request: SgmQuoteRequestPayload): SgmQuoteResponse =
         post("pricing/sgm", request)
+
+    suspend fun compareSgm(request: SgmCompareRequestPayload): SgmCompareResponse =
+        post("pricing/sgm/compare", request)
+
+    suspend fun compareCgm(request: CgmCompareRequestPayload): CgmCompareResponse =
+        post("pricing/cgm", request)
 
     suspend fun getQuote(quoteId: String): SgmQuoteResponse = get("quotes/$quoteId")
 

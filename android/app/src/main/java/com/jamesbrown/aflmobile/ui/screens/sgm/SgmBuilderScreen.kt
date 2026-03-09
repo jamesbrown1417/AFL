@@ -20,9 +20,11 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Delete
+import androidx.compose.material.icons.outlined.FilterList
 import androidx.compose.material.icons.outlined.Refresh
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.BottomSheetScaffold
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.DropdownMenu
@@ -33,27 +35,35 @@ import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.FilterChipDefaults
+import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Scaffold
+import androidx.compose.material3.RangeSlider
+import androidx.compose.material3.SheetValue
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.rememberBottomSheetScaffoldState
+import androidx.compose.material3.rememberStandardBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -62,17 +72,38 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.jamesbrown.aflmobile.data.repository.AflRepository
 import com.jamesbrown.aflmobile.data.repository.SgmDraftStore
 import com.jamesbrown.aflmobile.model.BookmakerSummary
+import com.jamesbrown.aflmobile.model.BuilderDisplayMode
+import com.jamesbrown.aflmobile.model.BuilderSortField
 import com.jamesbrown.aflmobile.model.DraftLeg
 import com.jamesbrown.aflmobile.model.EventSummary
+import com.jamesbrown.aflmobile.model.OddsDiffSliderMax
+import com.jamesbrown.aflmobile.model.OddsDiffSliderMin
 import com.jamesbrown.aflmobile.model.OddsSearchResult
+import com.jamesbrown.aflmobile.model.SelectionMetricFilters
+import com.jamesbrown.aflmobile.model.SgmAgencyComparison
 import com.jamesbrown.aflmobile.model.SgmDraftState
 import com.jamesbrown.aflmobile.ui.common.EmptyCard
 import com.jamesbrown.aflmobile.ui.common.ErrorCard
+import com.jamesbrown.aflmobile.ui.common.InlineChip
 import com.jamesbrown.aflmobile.ui.common.LoadingCard
 import com.jamesbrown.aflmobile.ui.common.ScreenPadding
 import com.jamesbrown.aflmobile.ui.common.formatDateTime
 import com.jamesbrown.aflmobile.ui.common.formatDecimalPrice
 import com.jamesbrown.aflmobile.ui.common.simpleViewModelFactory
+import com.jamesbrown.aflmobile.ui.theme.Blue100
+import com.jamesbrown.aflmobile.ui.theme.Blue200
+import com.jamesbrown.aflmobile.ui.theme.Blue50
+import com.jamesbrown.aflmobile.ui.theme.Blue700
+import com.jamesbrown.aflmobile.ui.theme.IceWhite
+import com.jamesbrown.aflmobile.ui.theme.NegativeSurface
+import com.jamesbrown.aflmobile.ui.theme.NeutralSurface
+import com.jamesbrown.aflmobile.ui.theme.Orange100
+import com.jamesbrown.aflmobile.ui.theme.Orange300
+import com.jamesbrown.aflmobile.ui.theme.Orange700
+import com.jamesbrown.aflmobile.ui.theme.PositiveSurface
+import com.jamesbrown.aflmobile.ui.theme.appCardColors
+import com.jamesbrown.aflmobile.ui.theme.appGlassBorder
+import com.jamesbrown.aflmobile.ui.theme.appTopBarColors
 import java.util.Locale
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -101,11 +132,12 @@ private data class CandidateSelectionSlot(
 
 private const val AllMarketCode = "__all__"
 
-private val SgmAccent = Color(0xFFD9791D)
-private val SgmAccentSoft = Color(0xFFFFE8D2)
-private val SgmAccentSurface = Color(0xFFFFF6ED)
-private val SgmAccentBorder = Color(0xFFE7B98A)
-private val SgmMutedSurface = Color(0xFFF4F6F7)
+private val SgmAccent = Orange700
+private val SgmAccentSoft = Orange100
+private val SgmAccentBorder = Orange300
+private val SgmMutedSurface = Blue50
+private val SgmTitle = Blue700
+private val DraftSheetPeekHeight = 144.dp
 
 data class SgmBuilderUiState(
     val draft: SgmDraftState = SgmDraftState(),
@@ -113,6 +145,8 @@ data class SgmBuilderUiState(
     val events: List<EventSummary> = emptyList(),
     val selectedBookmaker: String? = null,
     val selectedEventId: Int? = null,
+    val bestOnly: Boolean = false,
+    val metricFilters: SelectionMetricFilters = SelectionMetricFilters(),
     val candidateLegs: List<OddsSearchResult> = emptyList(),
     val isLoadingOptions: Boolean = true,
     val isLoadingQuote: Boolean = false,
@@ -209,6 +243,16 @@ class SgmBuilderViewModel(
         }
     }
 
+    fun applyMetricFilters(metricFilters: SelectionMetricFilters) {
+        val current = uiState.value
+        _uiState.update { it.copy(metricFilters = metricFilters, isLoadingOptions = current.selectedBookmaker != null && current.selectedEventId != null) }
+        val selectedBookmaker = current.selectedBookmaker ?: return
+        val selectedEventId = current.selectedEventId ?: return
+        viewModelScope.launch {
+            loadCandidateLegs(bookmakerCode = selectedBookmaker, eventId = selectedEventId)
+        }
+    }
+
     fun toggleLeg(leg: OddsSearchResult) {
         val draft = uiState.value.draft
         if (draft.legs.any { it.selectionId == leg.selectionId }) {
@@ -233,6 +277,8 @@ class SgmBuilderViewModel(
                 basePrice = basePrice,
                 diff2025 = leg.diff2025,
                 diffLast10 = leg.diffLast10,
+                nextBestProbDiff = leg.nextBestProbDiff,
+                isBestPrice = leg.isBestPrice,
             ),
         )
         _uiState.update {
@@ -257,34 +303,52 @@ class SgmBuilderViewModel(
         draftStore.setForceRefresh(forceRefresh)
     }
 
+    fun setBestOnly(bestOnly: Boolean) {
+        val current = uiState.value
+        _uiState.update {
+            it.copy(
+                bestOnly = bestOnly,
+                isLoadingOptions = current.selectedBookmaker != null && current.selectedEventId != null,
+                errorMessage = null,
+                infoMessage = null,
+            )
+        }
+        val selectedBookmaker = current.selectedBookmaker ?: return
+        val selectedEventId = current.selectedEventId ?: return
+        viewModelScope.launch {
+            loadCandidateLegs(bookmakerCode = selectedBookmaker, eventId = selectedEventId)
+        }
+    }
+
     fun quote() {
         val draft = uiState.value.draft
         val eventId = uiState.value.selectedEventId ?: draft.eventId
-        val bookmaker = uiState.value.selectedBookmaker ?: draft.bookmaker
-        if (bookmaker == null || eventId == null || draft.legs.size < 2) {
+        if (eventId == null || draft.legs.size < 2) {
             _uiState.update {
-                it.copy(errorMessage = "Choose one agency, one match, and at least two legs before quoting.")
-            }
-            return
-        }
-        if (!isLivePricingEnabled(bookmaker)) {
-            _uiState.update {
-                it.copy(errorMessage = "${displayBookmaker(bookmaker)} is not enabled for live SGM pricing yet.")
+                it.copy(errorMessage = "Choose one match and at least two legs before comparing.")
             }
             return
         }
         viewModelScope.launch {
             _uiState.update { it.copy(isLoadingQuote = true, errorMessage = null, infoMessage = null) }
             runCatching {
-                repository.quoteSgm(
-                    bookmaker = bookmaker,
+                repository.compareSgm(
                     eventId = eventId,
                     selectionIds = draft.legs.map { it.selectionId },
                     forceRefresh = draft.forceRefresh,
                 )
-            }.onSuccess { quote ->
-                draftStore.setQuote(quote)
-                _uiState.update { it.copy(isLoadingQuote = false, infoMessage = "Quote updated.") }
+            }.onSuccess { comparison ->
+                draftStore.setComparisons(comparison.results)
+                _uiState.update {
+                    it.copy(
+                        isLoadingQuote = false,
+                        infoMessage = if (comparison.results.isEmpty()) {
+                            "No agency currently offers the full combination."
+                        } else {
+                            "Comparison updated."
+                        },
+                    )
+                }
             }.onFailure { error ->
                 draftStore.setError(error.message)
                 _uiState.update { it.copy(isLoadingQuote = false, errorMessage = error.message ?: "Quote failed.") }
@@ -325,27 +389,36 @@ class SgmBuilderViewModel(
     }
 
     private suspend fun loadCandidateLegs(bookmakerCode: String, eventId: Int) {
+        val metricFilters = uiState.value.metricFilters
         runCatching {
             repository.odds(
                 bookmakers = listOf(bookmakerCode),
-                scope = "all",
+                scope = "player",
                 query = null,
                 marketType = null,
                 eventId = eventId,
+                includePlayerIds = emptyList(),
+                excludePlayerIds = emptyList(),
                 sortBy = "market",
                 sortDirection = "asc",
                 selectionType = null,
                 minEdge = null,
-                minPrice = null,
-                maxPrice = null,
+                minPrice = metricFilters.minPriceText.toDoubleOrNull(),
+                maxPrice = metricFilters.maxPriceText.toDoubleOrNull(),
+                minDiff2025 = metricFilters.minDiff2025.toDouble(),
+                maxDiff2025 = metricFilters.maxDiff2025.toDouble(),
+                minDiffLast10 = metricFilters.minDiffLast10.toDouble(),
+                maxDiffLast10 = metricFilters.maxDiffLast10.toDouble(),
+                minNextBestProbDiff = metricFilters.minNextBestProbDiff.toDouble(),
+                maxNextBestProbDiff = metricFilters.maxNextBestProbDiff.toDouble(),
                 sgmOnly = false,
-                bestOnly = false,
+                bestOnly = uiState.value.bestOnly,
+                limit = 5000,
             )
         }.onSuccess { odds ->
-            val playerPropOdds = odds.filter { it.marketTypeCode.startsWith("player_") }
             _uiState.update {
                 it.copy(
-                    candidateLegs = playerPropOdds,
+                    candidateLegs = odds.filter { it.marketTypeCode.startsWith("player_") },
                     isLoadingOptions = false,
                     errorMessage = null,
                 )
@@ -360,13 +433,6 @@ class SgmBuilderViewModel(
             }
         }
     }
-
-    private fun isLivePricingEnabled(bookmakerCode: String): Boolean =
-        uiState.value.bookmakers.firstOrNull { it.code == bookmakerCode }?.livePricingEnabled == true
-
-    private fun displayBookmaker(bookmakerCode: String): String =
-        uiState.value.bookmakers.firstOrNull { it.code == bookmakerCode }?.displayName
-            ?: bookmakerCode.replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }
 }
 
 @Composable
@@ -386,6 +452,8 @@ fun SgmBuilderRoute(
         onRemoveLeg = viewModel::removeLeg,
         onClearDraft = viewModel::clearDraft,
         onForceRefreshChanged = viewModel::setForceRefresh,
+        onBestOnlyChanged = viewModel::setBestOnly,
+        onApplyMetricFilters = viewModel::applyMetricFilters,
         onQuote = viewModel::quote,
         onRefresh = viewModel::refresh,
     )
@@ -401,13 +469,25 @@ private fun SgmBuilderScreen(
     onRemoveLeg: (Int) -> Unit,
     onClearDraft: () -> Unit,
     onForceRefreshChanged: (Boolean) -> Unit,
+    onBestOnlyChanged: (Boolean) -> Unit,
+    onApplyMetricFilters: (SelectionMetricFilters) -> Unit,
     onQuote: () -> Unit,
     onRefresh: () -> Unit,
 ) {
     val draft = uiState.draft
     val selectedBookmaker = uiState.selectedBookmaker
     val selectedEvent = uiState.events.firstOrNull { it.id == uiState.selectedEventId }
-    val livePricingEnabled = uiState.bookmakers.firstOrNull { it.code == selectedBookmaker }?.livePricingEnabled == true
+    val selectedSelectionIds = remember(draft.legs) { draft.legs.map { it.selectionId }.toSet() }
+    var showFilters by remember { mutableStateOf(false) }
+    var draftMetricFilters by remember(uiState.metricFilters) { mutableStateOf(uiState.metricFilters) }
+    var displayMode by rememberSaveable { mutableStateOf(BuilderDisplayMode.ROW) }
+    var rowSortField by rememberSaveable { mutableStateOf(BuilderSortField.NEXT_BEST) }
+    val coroutineScope = rememberCoroutineScope()
+    val scaffoldState = rememberBottomSheetScaffoldState(
+        bottomSheetState = rememberStandardBottomSheetState(
+            initialValue = SheetValue.PartiallyExpanded,
+        ),
+    )
     val marketCodes = remember(uiState.candidateLegs) { orderedMarketCodes(uiState.candidateLegs) }
     var selectedMarketCode by rememberSaveable(uiState.selectedBookmaker, uiState.selectedEventId) {
         mutableStateOf(if (marketCodes.isNotEmpty()) AllMarketCode else null)
@@ -418,18 +498,56 @@ private fun SgmBuilderScreen(
             selectedMarketCode = if (marketCodes.isNotEmpty()) AllMarketCode else null
         }
     }
-    val groupedLegs = remember(uiState.candidateLegs, selectedMarketCode) {
-        buildCandidateBoard(
-            legs = uiState.candidateLegs.filter { leg ->
-                selectedMarketCode == null || selectedMarketCode == AllMarketCode || leg.marketTypeCode == selectedMarketCode
-            },
-        )
+    val visibleLegs = remember(uiState.candidateLegs, selectedMarketCode) {
+        uiState.candidateLegs.filter { leg ->
+            selectedMarketCode == null || selectedMarketCode == AllMarketCode || leg.marketTypeCode == selectedMarketCode
+        }
+    }
+    val groupedLegs = remember(visibleLegs) {
+        buildCandidateBoard(legs = visibleLegs)
+    }
+    val rowLegs = remember(visibleLegs, rowSortField) {
+        sortCandidateRows(legs = visibleLegs, sortField = rowSortField)
+    }
+    LaunchedEffect(uiState.isLoadingQuote, draft.latestComparisons.size) {
+        if (uiState.isLoadingQuote || draft.latestComparisons.isNotEmpty()) {
+            scaffoldState.bottomSheetState.expand()
+        }
+    }
+    LaunchedEffect(showFilters, uiState.metricFilters) {
+        if (showFilters) {
+            draftMetricFilters = uiState.metricFilters
+        }
     }
 
-    Scaffold(
+    BottomSheetScaffold(
+        scaffoldState = scaffoldState,
+        sheetPeekHeight = DraftSheetPeekHeight,
+        sheetContainerColor = MaterialTheme.colorScheme.surfaceContainerLow.copy(alpha = 0.98f),
+        sheetContentColor = MaterialTheme.colorScheme.onSurface,
+        sheetShadowElevation = 10.dp,
+        sheetShape = RoundedCornerShape(topStart = 28.dp, topEnd = 28.dp),
+        sheetContent = {
+            SgmDraftSheet(
+                draft = draft,
+                selectedEventName = selectedEvent?.matchName ?: draft.eventLabel,
+                selectedBookmaker = selectedBookmaker,
+                isLoadingQuote = uiState.isLoadingQuote,
+                onCompare = {
+                    coroutineScope.launch {
+                        scaffoldState.bottomSheetState.expand()
+                    }
+                    onQuote()
+                },
+                onRemoveLeg = onRemoveLeg,
+                onClearDraft = onClearDraft,
+            )
+        },
+        containerColor = Color.Transparent,
         topBar = {
             TopAppBar(
                 title = { Text("SGM") },
+                colors = appTopBarColors(),
                 actions = {
                     IconButton(onClick = onRefresh) {
                         Icon(Icons.Outlined.Refresh, contentDescription = "Refresh")
@@ -456,11 +574,18 @@ private fun SgmBuilderScreen(
                     events = uiState.events,
                     selectedBookmaker = selectedBookmaker,
                     selectedEventId = uiState.selectedEventId,
-                    livePricingEnabled = livePricingEnabled,
                     forceRefresh = draft.forceRefresh,
+                    bestOnly = uiState.bestOnly,
+                    metricFilters = uiState.metricFilters,
+                    displayMode = displayMode,
+                    rowSortField = rowSortField,
                     onSelectBookmaker = onSelectBookmaker,
                     onSelectEvent = onSelectEvent,
                     onForceRefreshChanged = onForceRefreshChanged,
+                    onBestOnlyChanged = onBestOnlyChanged,
+                    onDisplayModeChanged = { displayMode = it },
+                    onRowSortFieldChanged = { rowSortField = it },
+                    onOpenFilters = { showFilters = true },
                 )
             }
 
@@ -486,78 +611,7 @@ private fun SgmBuilderScreen(
                 item { EmptyCard("SGM status", message) }
             }
 
-            item {
-                Card {
-                    Column(
-                        modifier = Modifier.padding(16.dp),
-                        verticalArrangement = Arrangement.spacedBy(10.dp),
-                    ) {
-                        Text("Current draft", style = MaterialTheme.typography.titleMedium)
-                        Text(selectedEvent?.matchName ?: draft.eventLabel ?: "No match selected")
-                        Text("Agency: ${selectedBookmaker?.let(::bookmakerLabel) ?: "Not selected"}")
-                        Text("${draft.legs.size} leg${if (draft.legs.size == 1) "" else "s"} selected")
-                        Button(
-                            onClick = onQuote,
-                            modifier = Modifier.fillMaxWidth(),
-                            enabled = draft.legs.size >= 2 && !uiState.isLoadingQuote && livePricingEnabled,
-                            colors = ButtonDefaults.buttonColors(
-                                containerColor = SgmAccent,
-                                contentColor = Color.White,
-                                disabledContainerColor = SgmAccent.copy(alpha = 0.35f),
-                                disabledContentColor = Color.White.copy(alpha = 0.7f),
-                            ),
-                        ) {
-                            Icon(Icons.Outlined.Refresh, contentDescription = null)
-                            Text("Compare quote", modifier = Modifier.padding(start = 8.dp))
-                        }
-                        if (!livePricingEnabled && selectedBookmaker != null) {
-                            Text(
-                                "Live SGM pricing is only enabled for Sportsbet right now.",
-                                style = MaterialTheme.typography.bodySmall,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                            )
-                        }
-                    }
-                }
-            }
-
-            if (uiState.isLoadingQuote) {
-                item { LoadingCard("Pricing selected legs") }
-            }
-
-            if (draft.legs.isEmpty()) {
-                item {
-                    EmptyCard(
-                        title = "No legs selected",
-                        body = "Choose one agency and one match, then tap live-priceable legs below. Read-only tiles are still shown from processed odds.",
-                    )
-                }
-            } else {
-                items(draft.legs, key = { it.selectionId }) { leg ->
-                    DraftLegCard(leg = leg, onRemove = onRemoveLeg)
-                }
-            }
-
-            draft.latestQuote?.let { quote ->
-                item {
-                    Card {
-                        Column(
-                            modifier = Modifier.padding(16.dp),
-                            verticalArrangement = Arrangement.spacedBy(8.dp),
-                        ) {
-                            Text("Comparison", style = MaterialTheme.typography.titleMedium)
-                            Text("Quoted SGM: ${formatDecimalPrice(quote.quotedPrice)}")
-                            Text("Local multi: ${formatDecimalPrice(quote.unadjustedPrice)}")
-                            Text("Adjustment factor: ${formatDecimalPrice(quote.adjustmentFactor)}")
-                            Text("Cached: ${if (quote.fromCache) "yes" else "no"}")
-                            Text("Quoted at: ${formatDateTime(quote.quotedAt)}")
-                            Text("Expires: ${formatDateTime(quote.expiresAt)}")
-                        }
-                    }
-                }
-            }
-
-            if (!uiState.isLoadingOptions && groupedLegs.isEmpty()) {
+            if (!uiState.isLoadingOptions && visibleLegs.isEmpty()) {
                 item {
                     EmptyCard(
                         title = "No eligible legs",
@@ -572,14 +626,43 @@ private fun SgmBuilderScreen(
                         fontWeight = FontWeight.SemiBold,
                     )
                 }
-                items(groupedLegs, key = { it.key }) { group ->
-                    CandidateBoardCard(
-                        group = group,
-                        selectedSelectionIds = draft.legs.map { it.selectionId }.toSet(),
-                        onToggleLeg = onToggleLeg,
-                    )
+                if (displayMode == BuilderDisplayMode.ROW) {
+                    item {
+                        CandidateRowHeader()
+                    }
+                    items(rowLegs, key = { it.selectionId }) { leg ->
+                        CandidateSelectionRow(
+                            selection = leg,
+                            selected = leg.selectionId in selectedSelectionIds,
+                            enabled = isSelectionPriceable(leg),
+                            accent = SgmAccent,
+                            accentBorder = SgmAccentBorder,
+                            titleColor = SgmTitle,
+                            onToggleLeg = onToggleLeg,
+                        )
+                    }
+                } else {
+                    items(groupedLegs, key = { it.key }) { group ->
+                        CandidateBoardCard(
+                            group = group,
+                            selectedSelectionIds = selectedSelectionIds,
+                            onToggleLeg = onToggleLeg,
+                        )
+                    }
                 }
             }
+        }
+        if (showFilters) {
+            SelectionMetricFilterSheet(
+                filters = draftMetricFilters,
+                onFiltersChanged = { draftMetricFilters = it },
+                onApply = {
+                    onApplyMetricFilters(draftMetricFilters)
+                    showFilters = false
+                },
+                onClear = { draftMetricFilters = SelectionMetricFilters() },
+                onDismiss = { showFilters = false },
+            )
         }
     }
 }
@@ -591,16 +674,27 @@ private fun SgmControlCard(
     events: List<EventSummary>,
     selectedBookmaker: String?,
     selectedEventId: Int?,
-    livePricingEnabled: Boolean,
     forceRefresh: Boolean,
+    bestOnly: Boolean,
+    metricFilters: SelectionMetricFilters,
+    displayMode: BuilderDisplayMode,
+    rowSortField: BuilderSortField,
     onSelectBookmaker: (String) -> Unit,
     onSelectEvent: (Int) -> Unit,
     onForceRefreshChanged: (Boolean) -> Unit,
+    onBestOnlyChanged: (Boolean) -> Unit,
+    onDisplayModeChanged: (BuilderDisplayMode) -> Unit,
+    onRowSortFieldChanged: (BuilderSortField) -> Unit,
+    onOpenFilters: () -> Unit,
 ) {
     var bookmakerExpanded by remember { mutableStateOf(false) }
     var eventExpanded by remember { mutableStateOf(false) }
+    var sortExpanded by remember { mutableStateOf(false) }
 
-    Card {
+    Card(
+        colors = appCardColors(),
+        border = appGlassBorder(),
+    ) {
         Column(
             modifier = Modifier.padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp),
@@ -687,19 +781,336 @@ private fun SgmControlCard(
             ) {
                 Column(modifier = Modifier.weight(1f)) {
                     Text("Force refresh")
-                    Text(
-                        if (livePricingEnabled) {
-                            "Bypass the short quote cache."
-                        } else {
-                            "Only applies when live pricing is available."
-                        },
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    )
+                    Text("Bypass the short quote cache for live agency quotes.", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 }
                 Switch(
                     checked = forceRefresh,
                     onCheckedChange = onForceRefreshChanged,
+                )
+            }
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Column(modifier = Modifier.weight(1f)) {
+                    Text("Best market price only")
+                    Text("Only show props where this agency is currently the best price.", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                }
+                Switch(
+                    checked = bestOnly,
+                    onCheckedChange = onBestOnlyChanged,
+                )
+            }
+
+            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                Text("Display mode")
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                ) {
+                    FilterChip(
+                        selected = displayMode == BuilderDisplayMode.ROW,
+                        onClick = { onDisplayModeChanged(BuilderDisplayMode.ROW) },
+                        label = { Text("Row mode") },
+                        colors = FilterChipDefaults.filterChipColors(
+                            containerColor = Blue100,
+                            labelColor = Blue700,
+                            selectedContainerColor = SgmAccent,
+                            selectedLabelColor = IceWhite,
+                        ),
+                    )
+                    FilterChip(
+                        selected = displayMode == BuilderDisplayMode.TILE,
+                        onClick = { onDisplayModeChanged(BuilderDisplayMode.TILE) },
+                        label = { Text("Tile mode") },
+                        colors = FilterChipDefaults.filterChipColors(
+                            containerColor = Blue100,
+                            labelColor = Blue700,
+                            selectedContainerColor = SgmAccent,
+                            selectedLabelColor = IceWhite,
+                        ),
+                    )
+                }
+            }
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Column(
+                    modifier = Modifier.weight(1f),
+                    verticalArrangement = Arrangement.spacedBy(2.dp),
+                ) {
+                    Text("Performance filters")
+                    Text(
+                        "Filter by L10, 2025, and next best probability gap.",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
+                }
+                FilledTonalButton(onClick = onOpenFilters) {
+                    Icon(Icons.Outlined.FilterList, contentDescription = null)
+                    Text("Filters", modifier = Modifier.padding(start = 8.dp))
+                }
+            }
+
+            if (displayMode == BuilderDisplayMode.ROW) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Column(
+                        modifier = Modifier.weight(1f),
+                        verticalArrangement = Arrangement.spacedBy(2.dp),
+                    ) {
+                        Text("Row sort")
+                        Text(
+                            "Sort the dense row list by price or the main model metrics.",
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        )
+                    }
+                    Column(horizontalAlignment = Alignment.End) {
+                        FilledTonalButton(onClick = { sortExpanded = true }) {
+                            Text("Sort: ${rowSortField.label()}")
+                        }
+                        DropdownMenu(
+                            expanded = sortExpanded,
+                            onDismissRequest = { sortExpanded = false },
+                        ) {
+                            BuilderSortField.entries.forEach { option ->
+                                DropdownMenuItem(
+                                    text = { Text(option.label()) },
+                                    onClick = {
+                                        onRowSortFieldChanged(option)
+                                        sortExpanded = false
+                                    },
+                                )
+                            }
+                        }
+                    }
+                }
+            }
+
+            if (!metricFilters.isDefault()) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .horizontalScroll(rememberScrollState()),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                ) {
+                    if (metricFilters.minPriceText.isNotBlank() || metricFilters.maxPriceText.isNotBlank()) {
+                        InlineChip("Price ${formatPriceRange(metricFilters.minPriceText, metricFilters.maxPriceText)}")
+                    }
+                    InlineChip("L10 ${formatMetricRange(metricFilters.minDiffLast10, metricFilters.maxDiffLast10)}")
+                    InlineChip("2025 ${formatMetricRange(metricFilters.minDiff2025, metricFilters.maxDiff2025)}")
+                    InlineChip("Next ${formatMetricRange(metricFilters.minNextBestProbDiff, metricFilters.maxNextBestProbDiff)}")
+                    if (displayMode == BuilderDisplayMode.ROW) {
+                        InlineChip("Sort ${rowSortField.label()}")
+                    }
+                }
+            }
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun SelectionMetricFilterSheet(
+    filters: SelectionMetricFilters,
+    onFiltersChanged: (SelectionMetricFilters) -> Unit,
+    onApply: () -> Unit,
+    onClear: () -> Unit,
+    onDismiss: () -> Unit,
+) {
+    ModalBottomSheet(
+        onDismissRequest = onDismiss,
+        containerColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.98f),
+        scrimColor = MaterialTheme.colorScheme.scrim.copy(alpha = 0.26f),
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 20.dp, vertical = 8.dp),
+            verticalArrangement = Arrangement.spacedBy(18.dp),
+        ) {
+            Text("Selection filters", style = MaterialTheme.typography.headlineSmall)
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(12.dp),
+            ) {
+                OutlinedTextField(
+                    value = filters.minPriceText,
+                    onValueChange = { onFiltersChanged(filters.copy(minPriceText = it)) },
+                    modifier = Modifier.weight(1f),
+                    label = { Text("Min price") },
+                    singleLine = true,
+                )
+                OutlinedTextField(
+                    value = filters.maxPriceText,
+                    onValueChange = { onFiltersChanged(filters.copy(maxPriceText = it)) },
+                    modifier = Modifier.weight(1f),
+                    label = { Text("Max price") },
+                    singleLine = true,
+                )
+            }
+            SelectionMetricRangeSection(
+                title = "Diff last 10",
+                range = filters.minDiffLast10..filters.maxDiffLast10,
+                onRangeChange = { range ->
+                    onFiltersChanged(filters.copy(minDiffLast10 = range.start, maxDiffLast10 = range.endInclusive))
+                },
+            )
+            SelectionMetricRangeSection(
+                title = "Diff 2025",
+                range = filters.minDiff2025..filters.maxDiff2025,
+                onRangeChange = { range ->
+                    onFiltersChanged(filters.copy(minDiff2025 = range.start, maxDiff2025 = range.endInclusive))
+                },
+            )
+            SelectionMetricRangeSection(
+                title = "Next best diff",
+                range = filters.minNextBestProbDiff..filters.maxNextBestProbDiff,
+                onRangeChange = { range ->
+                    onFiltersChanged(filters.copy(minNextBestProbDiff = range.start, maxNextBestProbDiff = range.endInclusive))
+                },
+            )
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(12.dp),
+            ) {
+                TextButton(onClick = onClear, modifier = Modifier.weight(1f)) {
+                    Text("Clear")
+                }
+                FilledTonalButton(onClick = onApply, modifier = Modifier.weight(1f)) {
+                    Text("Apply")
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun SelectionMetricRangeSection(
+    title: String,
+    range: ClosedFloatingPointRange<Float>,
+    onRangeChange: (ClosedFloatingPointRange<Float>) -> Unit,
+) {
+    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+        Text(title, style = MaterialTheme.typography.titleMedium)
+        Text(
+            formatMetricRange(range.start, range.endInclusive),
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+        )
+        RangeSlider(
+            value = range.start..range.endInclusive,
+            onValueChange = { onRangeChange(it.start..it.endInclusive) },
+            valueRange = OddsDiffSliderMin..OddsDiffSliderMax,
+            steps = 39,
+        )
+    }
+}
+
+@Composable
+private fun SgmDraftSheet(
+    draft: SgmDraftState,
+    selectedEventName: String?,
+    selectedBookmaker: String?,
+    isLoadingQuote: Boolean,
+    onCompare: () -> Unit,
+    onRemoveLeg: (Int) -> Unit,
+    onClearDraft: () -> Unit,
+) {
+    LazyColumn(
+        modifier = Modifier
+            .fillMaxWidth()
+            .heightIn(max = 560.dp),
+        contentPadding = ScreenPadding,
+        verticalArrangement = Arrangement.spacedBy(12.dp),
+    ) {
+        item {
+            Column(
+                modifier = Modifier.fillMaxWidth(),
+                verticalArrangement = Arrangement.spacedBy(10.dp),
+            ) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Column(
+                        modifier = Modifier.weight(1f),
+                        verticalArrangement = Arrangement.spacedBy(4.dp),
+                    ) {
+                        Text("Current selections", style = MaterialTheme.typography.titleMedium, color = SgmTitle, fontWeight = FontWeight.SemiBold)
+                        Text(
+                            selectedEventName ?: "Choose a match to start building",
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.onSurface,
+                        )
+                        Text(
+                            "${draft.legs.size} leg${if (draft.legs.size == 1) "" else "s"} • ${selectedBookmaker?.let(::bookmakerLabel) ?: "No agency"}",
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        )
+                    }
+                    if (draft.legs.isNotEmpty()) {
+                        TextButton(onClick = onClearDraft) {
+                            Text("Clear")
+                        }
+                    }
+                }
+                Button(
+                    onClick = onCompare,
+                    modifier = Modifier.fillMaxWidth(),
+                    enabled = draft.legs.size >= 2 && !isLoadingQuote,
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = SgmAccent,
+                        contentColor = Color.White,
+                        disabledContainerColor = SgmAccent.copy(alpha = 0.35f),
+                        disabledContentColor = Color.White.copy(alpha = 0.7f),
+                    ),
+                ) {
+                    Icon(Icons.Outlined.Refresh, contentDescription = null)
+                    Text("Compare agencies", modifier = Modifier.padding(start = 8.dp))
+                }
+            }
+        }
+
+        if (isLoadingQuote) {
+            item { LoadingCard("Pricing selected legs") }
+        }
+
+        if (draft.legs.isEmpty()) {
+            item {
+                EmptyCard(
+                    title = "No legs selected",
+                    body = "Tap live-priceable player prop tiles to build the same-game multi. Swipe up on this bar any time to review the draft.",
+                )
+            }
+        } else {
+            items(draft.legs, key = { it.selectionId }) { leg ->
+                DraftLegCard(leg = leg, onRemove = onRemoveLeg)
+            }
+        }
+
+        if (draft.latestComparisons.isNotEmpty()) {
+            item {
+                Text(
+                    "Agency comparison",
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.SemiBold,
+                    color = SgmTitle,
+                )
+            }
+            items(draft.latestComparisons, key = { it.bookmaker }) { result ->
+                SgmComparisonCard(
+                    result = result,
+                    rank = draft.latestComparisons.indexOfFirst { it.bookmaker == result.bookmaker } + 1,
                 )
             }
         }
@@ -724,15 +1135,15 @@ private fun SgmMarketSelectorRow(
                 onClick = { onSelected(marketCode) },
                 label = { Text(marketDisplayLabel(marketCode)) },
                 colors = FilterChipDefaults.filterChipColors(
-                    containerColor = SgmAccentSoft,
-                    labelColor = SgmAccent,
+                    containerColor = Blue100,
+                    labelColor = Blue700,
                     selectedContainerColor = SgmAccent,
-                    selectedLabelColor = Color.White,
+                    selectedLabelColor = IceWhite,
                 ),
                 border = FilterChipDefaults.filterChipBorder(
                     enabled = true,
                     selected = marketCode == selectedMarketCode,
-                    borderColor = SgmAccentBorder,
+                    borderColor = Blue200,
                     selectedBorderColor = SgmAccent,
                 ),
             )
@@ -748,14 +1159,14 @@ private fun CandidateBoardCard(
 ) {
     Card(
         modifier = Modifier.fillMaxWidth(),
-        colors = CardDefaults.cardColors(containerColor = Color.White),
-        border = BorderStroke(1.dp, SgmAccentBorder.copy(alpha = 0.45f)),
+        colors = appCardColors(),
+        border = appGlassBorder(),
     ) {
         Column(
-            modifier = Modifier.padding(16.dp),
+            modifier = Modifier.padding(14.dp),
             verticalArrangement = Arrangement.spacedBy(10.dp),
         ) {
-            Text(group.title, style = MaterialTheme.typography.titleMedium, color = SgmAccent)
+            Text(group.title, style = MaterialTheme.typography.titleMedium, color = SgmTitle, fontWeight = FontWeight.SemiBold)
             Text(
                 group.subtitle,
                 style = MaterialTheme.typography.bodySmall,
@@ -780,6 +1191,139 @@ private fun CandidateBoardCard(
                 onToggleLeg = onToggleLeg,
             )
         }
+    }
+}
+
+@Composable
+private fun CandidateRowHeader() {
+    Surface(
+        modifier = Modifier.fillMaxWidth(),
+        shape = RoundedCornerShape(16.dp),
+        color = Blue50.copy(alpha = 0.92f),
+        border = BorderStroke(1.dp, Blue200.copy(alpha = 0.8f)),
+    ) {
+        Row(
+            modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            HeaderCell("Player", Modifier.weight(3.4f), Alignment.Start)
+            HeaderCell("Line", Modifier.weight(0.75f), Alignment.End)
+            HeaderCell("Type", Modifier.weight(0.8f), Alignment.End)
+            HeaderCell("Price", Modifier.weight(0.9f), Alignment.End)
+            HeaderCell("L10", Modifier.weight(0.75f), Alignment.End)
+            HeaderCell("25", Modifier.weight(0.75f), Alignment.End)
+            HeaderCell("NB", Modifier.weight(0.8f), Alignment.End)
+        }
+    }
+}
+
+@Composable
+private fun CandidateSelectionRow(
+    selection: OddsSearchResult,
+    selected: Boolean,
+    enabled: Boolean,
+    accent: Color,
+    accentBorder: Color,
+    titleColor: Color,
+    onToggleLeg: (OddsSearchResult) -> Unit,
+) {
+    Surface(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable(enabled = enabled, onClick = { onToggleLeg(selection) }),
+        shape = RoundedCornerShape(18.dp),
+        color = when {
+            selected -> accent
+            enabled -> IceWhite
+            else -> Blue50.copy(alpha = 0.95f)
+        },
+        border = BorderStroke(
+            1.dp,
+            when {
+                selected -> accentBorder
+                enabled -> Blue200.copy(alpha = 0.9f)
+                else -> Blue200.copy(alpha = 0.6f)
+            },
+        ),
+    ) {
+        Row(
+            modifier = Modifier.padding(horizontal = 12.dp, vertical = 9.dp),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Column(
+                modifier = Modifier.weight(3.4f),
+                verticalArrangement = Arrangement.spacedBy(2.dp),
+            ) {
+                Text(
+                    selection.player?.fullName ?: selection.label,
+                    style = MaterialTheme.typography.bodySmall,
+                    fontWeight = FontWeight.SemiBold,
+                    color = if (selected) IceWhite else titleColor,
+                    maxLines = 1,
+                )
+                Text(
+                    buildRowSubtitle(selection),
+                    style = MaterialTheme.typography.labelSmall,
+                    color = if (selected) IceWhite.copy(alpha = 0.84f) else MaterialTheme.colorScheme.onSurfaceVariant,
+                    maxLines = 2,
+                    overflow = TextOverflow.Ellipsis,
+                )
+            }
+            MetricCell(formatLineValue(selection.lineValue), Modifier.weight(0.75f), selected)
+            MetricCell(selectionTypeLabel(selection.selectionType), Modifier.weight(0.8f), selected)
+            MetricCell(formatDecimalPrice(selection.decimalPrice), Modifier.weight(0.9f), selected, emphasize = true)
+            MetricCell(selection.diffLast10?.let(::formatSignedDelta) ?: "--", Modifier.weight(0.75f), selected, value = selection.diffLast10)
+            MetricCell(selection.diff2025?.let(::formatSignedDelta) ?: "--", Modifier.weight(0.75f), selected, value = selection.diff2025)
+            MetricCell(selection.nextBestProbDiff?.let(::formatSignedDelta) ?: "--", Modifier.weight(0.8f), selected, value = selection.nextBestProbDiff)
+        }
+    }
+}
+
+@Composable
+private fun HeaderCell(
+    label: String,
+    modifier: Modifier,
+    alignment: Alignment.Horizontal,
+) {
+    Column(
+        modifier = modifier,
+        horizontalAlignment = alignment,
+    ) {
+        Text(
+            text = label,
+            style = MaterialTheme.typography.labelSmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            fontWeight = FontWeight.SemiBold,
+        )
+    }
+}
+
+@Composable
+private fun MetricCell(
+    text: String,
+    modifier: Modifier,
+    selected: Boolean,
+    emphasize: Boolean = false,
+    value: Double? = null,
+) {
+    val color = when {
+        selected -> IceWhite
+        value == null -> MaterialTheme.colorScheme.onSurface
+        value > 0 -> Color(0xFF1B7F46)
+        value < 0 -> Color(0xFFB34A35)
+        else -> Color(0xFF8E6B10)
+    }
+    Column(
+        modifier = modifier,
+        horizontalAlignment = Alignment.End,
+    ) {
+        Text(
+            text = text,
+            style = if (emphasize) MaterialTheme.typography.bodySmall else MaterialTheme.typography.labelSmall,
+            color = color,
+            fontWeight = if (emphasize) FontWeight.Bold else FontWeight.SemiBold,
+            maxLines = 1,
+        )
     }
 }
 
@@ -833,12 +1377,12 @@ private fun SelectionPriceTile(
     }
     Surface(
         modifier = Modifier
-            .width(82.dp)
+            .width(74.dp)
             .clickable(enabled = enabled, onClick = onClick),
-        shape = RoundedCornerShape(20.dp),
+        shape = RoundedCornerShape(18.dp),
         color = when {
             selected -> SgmAccent
-            enabled -> SgmAccentSurface
+            enabled -> IceWhite
             else -> SgmMutedSurface
         },
         tonalElevation = if (selected) 3.dp else 0.dp,
@@ -846,30 +1390,30 @@ private fun SelectionPriceTile(
             width = 1.dp,
             color = when {
                 selected -> SgmAccent
-                enabled -> SgmAccentBorder
-                else -> SgmAccentBorder.copy(alpha = 0.55f)
+                enabled -> Blue200
+                else -> Blue200.copy(alpha = 0.7f)
             },
         ),
     ) {
         Column(
-            modifier = Modifier.padding(horizontal = 8.dp, vertical = 8.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp),
+            modifier = Modifier.padding(horizontal = 6.dp, vertical = 7.dp),
+            verticalArrangement = Arrangement.spacedBy(5.dp),
         ) {
             Text(
                 label,
-                style = MaterialTheme.typography.labelMedium,
+                style = MaterialTheme.typography.labelSmall,
                 color = when {
-                    selected -> Color.White.copy(alpha = 0.92f)
-                    enabled -> SgmAccent
+                    selected -> IceWhite.copy(alpha = 0.94f)
+                    enabled -> SgmTitle
                     else -> MaterialTheme.colorScheme.onSurfaceVariant
                 },
                 fontWeight = FontWeight.SemiBold,
             )
             Text(
                 formatDecimalPrice(slot.selection.decimalPrice),
-                style = MaterialTheme.typography.headlineSmall,
+                style = MaterialTheme.typography.titleMedium,
                 color = when {
-                    selected -> Color.White
+                    selected -> IceWhite
                     enabled -> MaterialTheme.colorScheme.onSurface
                     else -> MaterialTheme.colorScheme.onSurfaceVariant
                 },
@@ -882,8 +1426,13 @@ private fun SelectionPriceTile(
                     selected = selected,
                 )
                 EmbeddedMetricPill(
-                    title = "2025",
+                    title = "25",
                     value = slot.selection.diff2025,
+                    selected = selected,
+                )
+                EmbeddedMetricPill(
+                    title = if (slot.selection.isBestPrice) "NB" else "GAP",
+                    value = slot.selection.nextBestProbDiff,
                     selected = selected,
                 )
                 if (!enabled) {
@@ -902,22 +1451,22 @@ private fun BlankSelectionTile(
     label: String,
 ) {
     Surface(
-        modifier = Modifier.width(82.dp),
-        shape = RoundedCornerShape(20.dp),
-        color = Color(0xFFF7F2ED),
-        border = BorderStroke(1.dp, SgmAccentBorder.copy(alpha = 0.35f)),
+        modifier = Modifier.width(74.dp),
+        shape = RoundedCornerShape(18.dp),
+        color = MaterialTheme.colorScheme.surfaceContainer.copy(alpha = 0.9f),
+        border = BorderStroke(1.dp, Blue200.copy(alpha = 0.7f)),
     ) {
         Column(
-            modifier = Modifier.padding(horizontal = 8.dp, vertical = 8.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp),
+            modifier = Modifier.padding(horizontal = 6.dp, vertical = 7.dp),
+            verticalArrangement = Arrangement.spacedBy(5.dp),
         ) {
             Text(
                 label,
-                style = MaterialTheme.typography.labelMedium,
+                style = MaterialTheme.typography.labelSmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.65f),
                 fontWeight = FontWeight.SemiBold,
             )
-            Spacer(modifier = Modifier.height(58.dp))
+            Spacer(modifier = Modifier.height(52.dp))
         }
     }
 }
@@ -929,14 +1478,14 @@ private fun EmbeddedMetricPill(
     selected: Boolean,
 ) {
     val background = when {
-        value == null && selected -> Color.White.copy(alpha = 0.18f)
-        value == null -> SgmMutedSurface
-        value > 0 -> Color(0xFFD6F0DE)
-        value < 0 -> Color(0xFFF7DBD7)
-        else -> Color(0xFFF2E7CB)
+        value == null && selected -> IceWhite.copy(alpha = 0.18f)
+        value == null -> Blue100
+        value > 0 -> PositiveSurface
+        value < 0 -> NegativeSurface
+        else -> NeutralSurface
     }
     val textColor = when {
-        value == null && selected -> Color.White
+        value == null && selected -> IceWhite
         value == null -> MaterialTheme.colorScheme.onSurfaceVariant
         value > 0 -> Color(0xFF1B7F46)
         value < 0 -> Color(0xFFB34A35)
@@ -947,8 +1496,8 @@ private fun EmbeddedMetricPill(
         color = background,
     ) {
         Row(
-            modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
-            horizontalArrangement = Arrangement.spacedBy(6.dp),
+            modifier = Modifier.padding(horizontal = 6.dp, vertical = 3.dp),
+            horizontalArrangement = Arrangement.spacedBy(4.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Text(
@@ -958,7 +1507,7 @@ private fun EmbeddedMetricPill(
                 fontWeight = FontWeight.SemiBold,
             )
             Text(
-                value?.let(::formatSignedDelta) ?: "-",
+                value?.let(::formatSignedDelta) ?: "--",
                 style = MaterialTheme.typography.labelSmall,
                 color = textColor,
                 fontWeight = FontWeight.Bold,
@@ -974,13 +1523,13 @@ private fun EmbeddedStatusPill(
 ) {
     Surface(
         shape = RoundedCornerShape(999.dp),
-        color = if (selected) Color.White.copy(alpha = 0.18f) else Color(0xFFE7EBEE),
+        color = if (selected) IceWhite.copy(alpha = 0.18f) else Blue100.copy(alpha = 0.98f),
     ) {
         Text(
             text = label,
-            modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
+            modifier = Modifier.padding(horizontal = 6.dp, vertical = 3.dp),
             style = MaterialTheme.typography.labelSmall,
-            color = if (selected) Color.White else MaterialTheme.colorScheme.onSurfaceVariant,
+            color = if (selected) IceWhite else MaterialTheme.colorScheme.onSurfaceVariant,
             fontWeight = FontWeight.SemiBold,
         )
     }
@@ -991,12 +1540,16 @@ private fun DraftLegCard(
     leg: DraftLeg,
     onRemove: (Int) -> Unit,
 ) {
-    Card(modifier = Modifier.fillMaxWidth()) {
+    Card(
+        modifier = Modifier.fillMaxWidth(),
+        colors = appCardColors(),
+        border = appGlassBorder(),
+    ) {
         Column(
             modifier = Modifier.padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {
-            Text(leg.label, style = MaterialTheme.typography.titleMedium, color = SgmAccent)
+            Text(leg.label, style = MaterialTheme.typography.titleMedium, color = SgmTitle)
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -1018,6 +1571,11 @@ private fun DraftLegCard(
                     value = leg.diffLast10,
                     modifier = Modifier.weight(1f),
                 )
+                DiffMetricCard(
+                    label = if (leg.isBestPrice) "NEXT BEST" else "BEST GAP",
+                    value = leg.nextBestProbDiff,
+                    modifier = Modifier.weight(1f),
+                )
             }
             Button(
                 onClick = { onRemove(leg.selectionId) },
@@ -1030,6 +1588,76 @@ private fun DraftLegCard(
                 Icon(Icons.Outlined.Delete, contentDescription = null)
                 Text("Remove leg", modifier = Modifier.padding(start = 8.dp))
             }
+        }
+    }
+}
+
+@Composable
+private fun SgmComparisonCard(
+    result: SgmAgencyComparison,
+    rank: Int,
+) {
+    Card(
+        modifier = Modifier.fillMaxWidth(),
+        colors = appCardColors(),
+        border = appGlassBorder(),
+    ) {
+        Column(
+            modifier = Modifier.padding(16.dp),
+            verticalArrangement = Arrangement.spacedBy(10.dp),
+        ) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                    Text(
+                        "#$rank ${bookmakerLabel(result.bookmaker)}",
+                        style = MaterialTheme.typography.titleMedium,
+                        color = if (rank == 1) SgmAccent else SgmTitle,
+                        fontWeight = FontWeight.SemiBold,
+                    )
+                    Text(
+                        "${result.legs.size} legs priced",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
+                }
+                Text(
+                    formatDecimalPrice(result.quotedPrice),
+                    style = MaterialTheme.typography.headlineSmall,
+                    fontWeight = FontWeight.Bold,
+                )
+            }
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+            ) {
+                SummaryMetricCard(label = "LOCAL", value = formatDecimalPrice(result.unadjustedPrice), modifier = Modifier.weight(1f))
+                SummaryMetricCard(label = "FACTOR", value = formatDecimalPrice(result.adjustmentFactor), modifier = Modifier.weight(1f))
+                SummaryMetricCard(label = "CACHE", value = if (result.fromCache) "Yes" else "No", modifier = Modifier.weight(1f))
+            }
+            result.legs.forEach { leg ->
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Column(
+                        modifier = Modifier.weight(1f),
+                        verticalArrangement = Arrangement.spacedBy(2.dp),
+                    ) {
+                        Text(leg.label, style = MaterialTheme.typography.bodyMedium, fontWeight = FontWeight.Medium)
+                    }
+                    Text(formatDecimalPrice(leg.basePrice), fontWeight = FontWeight.SemiBold)
+                }
+            }
+            Text(
+                "Quoted ${formatDateTime(result.quotedAt)}",
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
         }
     }
 }
@@ -1063,6 +1691,51 @@ private fun DiffMetricCard(
         )
     }
 }
+
+@Composable
+private fun SummaryMetricCard(
+    label: String,
+    value: String,
+    modifier: Modifier = Modifier,
+) {
+    Column(
+        modifier = modifier.padding(top = 2.dp),
+        verticalArrangement = Arrangement.spacedBy(2.dp),
+    ) {
+        Text(
+            label,
+            style = MaterialTheme.typography.labelSmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+        )
+        Text(
+            value,
+            style = MaterialTheme.typography.bodyMedium,
+            fontWeight = FontWeight.SemiBold,
+            color = MaterialTheme.colorScheme.onSurface,
+        )
+    }
+}
+
+private fun SelectionMetricFilters.isDefault(): Boolean =
+    minPriceText.isBlank() &&
+        maxPriceText.isBlank() &&
+        minDiff2025 == OddsDiffSliderMin &&
+        maxDiff2025 == OddsDiffSliderMax &&
+        minDiffLast10 == OddsDiffSliderMin &&
+        maxDiffLast10 == OddsDiffSliderMax &&
+        minNextBestProbDiff == OddsDiffSliderMin &&
+        maxNextBestProbDiff == OddsDiffSliderMax
+
+private fun formatMetricRange(min: Float, max: Float): String =
+    String.format(Locale.getDefault(), "%+.2f to %+.2f", min, max)
+
+private fun formatPriceRange(minText: String, maxText: String): String =
+    when {
+        minText.isBlank() && maxText.isBlank() -> "Any"
+        minText.isBlank() -> "<= $maxText"
+        maxText.isBlank() -> ">= $minText"
+        else -> "$minText-$maxText"
+    }
 
 private fun orderedMarketCodes(legs: List<OddsSearchResult>): List<String> {
     val preferredOrder = listOf(
@@ -1126,7 +1799,16 @@ private fun buildCandidateBoard(legs: List<OddsSearchResult>): List<CandidateBoa
                 columns = buildLineColumns(selections, first.marketTypeCode),
             )
         }
-        .sortedWith(compareBy({ boardGroupSortBucket(it.key) }, { it.title }))
+        .sortedWith(
+            compareBy<CandidateBoardGroup> { boardGroupSortBucket(it.key) }
+                .thenByDescending { group ->
+                    group.columns.maxOfOrNull { column ->
+                        column.slots.maxOfOrNull { slot -> slot.selection.nextBestProbDiff ?: Double.NEGATIVE_INFINITY }
+                            ?: Double.NEGATIVE_INFINITY
+                    } ?: Double.NEGATIVE_INFINITY
+                }
+                .thenBy { it.title },
+        )
 
 private fun boardGroupKey(selection: OddsSearchResult): String =
     if (selection.player != null) {
@@ -1143,6 +1825,13 @@ private fun buildBoardSubtitle(selection: OddsSearchResult): String =
         "${marketDisplayLabel(selection.marketTypeCode)} • ${selection.matchName}"
     } else {
         selection.matchName
+    }
+
+private fun buildRowSubtitle(selection: OddsSearchResult): String =
+    if (selection.marketTypeCode == AllMarketCode) {
+        selection.matchName
+    } else {
+        "${marketDisplayLabel(selection.marketTypeCode)} • ${selection.matchName}"
     }
 
 private fun buildLineColumns(
@@ -1193,6 +1882,23 @@ private fun selectionSlotSortOrder(selectionType: String): Int =
         else -> 99
     }
 
+private fun sortCandidateRows(
+    legs: List<OddsSearchResult>,
+    sortField: BuilderSortField,
+): List<OddsSearchResult> =
+    legs.sortedWith(
+        compareByDescending<OddsSearchResult> {
+            when (sortField) {
+                BuilderSortField.NEXT_BEST -> it.nextBestProbDiff ?: Double.NEGATIVE_INFINITY
+                BuilderSortField.PRICE -> it.decimalPrice ?: Double.NEGATIVE_INFINITY
+                BuilderSortField.DIFF_LAST_10 -> it.diffLast10 ?: Double.NEGATIVE_INFINITY
+                BuilderSortField.DIFF_2025 -> it.diff2025 ?: Double.NEGATIVE_INFINITY
+            }
+        }.thenBy { it.player?.fullName ?: it.label }
+            .thenBy { it.lineValue ?: Double.MAX_VALUE }
+            .thenBy { selectionTypeLabel(it.selectionType) },
+    )
+
 private fun isSelectionPriceable(selection: OddsSearchResult): Boolean =
     selection.sgmEligible && selection.decimalPrice != null
 
@@ -1217,8 +1923,29 @@ private fun selectionBadge(selection: OddsSearchResult): String =
 private fun bookmakerLabel(bookmakerCode: String): String =
     bookmakerCode.replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }
 
-private fun formatLineValue(value: Double): String =
-    if (value % 1.0 == 0.0) {
+private fun BuilderSortField.label(): String =
+    when (this) {
+        BuilderSortField.NEXT_BEST -> "NB"
+        BuilderSortField.PRICE -> "Price"
+        BuilderSortField.DIFF_LAST_10 -> "L10"
+        BuilderSortField.DIFF_2025 -> "25"
+    }
+
+private fun selectionTypeLabel(selectionType: String): String =
+    when (selectionType) {
+        "over" -> "Over"
+        "under" -> "Under"
+        "home" -> "Home"
+        "away" -> "Away"
+        else -> selectionType.replaceFirstChar {
+            if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString()
+        }
+    }
+
+private fun formatLineValue(value: Double?): String =
+    if (value == null) {
+        "-"
+    } else if (value % 1.0 == 0.0) {
         String.format(Locale.getDefault(), "%.0f", value)
     } else {
         String.format(Locale.getDefault(), "%.1f", value)

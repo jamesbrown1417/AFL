@@ -22,6 +22,7 @@ PLAYER_STAT_COLUMN_MAP = {
 ODDS_SORT_COLUMNS = {
     "diff_last_10": "diff_last_10",
     "diff_2025": "diff_2025",
+    "next_best_prob_diff": "next_best_prob_diff",
     "price": "decimal_price",
     "edge": "edge_pct",
     "player": "player_name",
@@ -561,12 +562,20 @@ class QueryService:
         query: str | None,
         market_type: str | None,
         event_id: int | None,
+        include_player_ids: list[int],
+        exclude_player_ids: list[int],
         selection_type: str | None,
         date_from: str | None,
         date_to: str | None,
         min_edge: float | None,
         min_price: float | None,
         max_price: float | None,
+        min_diff_2025: float | None,
+        max_diff_2025: float | None,
+        min_diff_last_10: float | None,
+        max_diff_last_10: float | None,
+        min_next_best_prob_diff: float | None,
+        max_next_best_prob_diff: float | None,
         sgm_only: bool,
         best_only: bool,
         sort_by: str,
@@ -574,18 +583,16 @@ class QueryService:
         limit: int,
         offset: int,
     ) -> list[dict[str, Any]]:
-        conditions: list[str] = []
+        universe_conditions: list[str] = []
+        row_conditions: list[str] = []
         if scope == "player":
-            conditions.append("m.player_id IS NOT NULL")
+            universe_conditions.append("m.player_id IS NOT NULL")
         elif scope == "match":
-            conditions.append("m.player_id IS NULL")
-        params: list[Any] = []
-        if bookmakers:
-            placeholders = ", ".join("?" for _ in bookmakers)
-            conditions.append(f"b.code IN ({placeholders})")
-            params.extend(bookmakers)
+            universe_conditions.append("m.player_id IS NULL")
+        universe_params: list[Any] = []
+        row_params: list[Any] = []
         if query:
-            conditions.append(
+            universe_conditions.append(
                 """
                 (
                   LOWER(COALESCE(p.full_name, '')) LIKE ?
@@ -596,44 +603,77 @@ class QueryService:
                 """
             )
             q = f"%{query.lower()}%"
-            params.extend([q, q, q, q])
+            universe_params.extend([q, q, q, q])
         if market_type:
-            conditions.append("m.market_type_code = ?")
-            params.append(market_type)
+            universe_conditions.append("m.market_type_code = ?")
+            universe_params.append(market_type)
         if event_id:
-            conditions.append("m.event_id = ?")
-            params.append(event_id)
+            universe_conditions.append("m.event_id = ?")
+            universe_params.append(event_id)
+        if include_player_ids:
+            placeholders = ", ".join("?" for _ in include_player_ids)
+            universe_conditions.append(f"m.player_id IN ({placeholders})")
+            universe_params.extend(include_player_ids)
+        if exclude_player_ids:
+            placeholders = ", ".join("?" for _ in exclude_player_ids)
+            universe_conditions.append(f"m.player_id NOT IN ({placeholders})")
+            universe_params.extend(exclude_player_ids)
         if selection_type:
-            conditions.append("s.selection_type = ?")
-            params.append(selection_type)
+            universe_conditions.append("s.selection_type = ?")
+            universe_params.append(selection_type)
         if date_from:
-            conditions.append("e.start_time_utc >= ?")
-            params.append(date_from)
+            universe_conditions.append("e.start_time_utc >= ?")
+            universe_params.append(date_from)
         if date_to:
-            conditions.append("e.start_time_utc <= ?")
-            params.append(date_to)
+            universe_conditions.append("e.start_time_utc <= ?")
+            universe_params.append(date_to)
+        if bookmakers:
+            placeholders = ", ".join("?" for _ in bookmakers)
+            row_conditions.append(f"bookmaker IN ({placeholders})")
+            row_params.extend(bookmakers)
         if min_edge is not None:
-            conditions.append("COALESCE(lm.edge_pct, -1000000) >= ?")
-            params.append(min_edge)
+            row_conditions.append("COALESCE(edge_pct, -1000000) >= ?")
+            row_params.append(min_edge)
         if min_price is not None:
-            conditions.append("cop.decimal_price >= ?")
-            params.append(min_price)
+            row_conditions.append("decimal_price >= ?")
+            row_params.append(min_price)
         if max_price is not None:
-            conditions.append("cop.decimal_price <= ?")
-            params.append(max_price)
+            row_conditions.append("decimal_price <= ?")
+            row_params.append(max_price)
+        if min_diff_2025 is not None:
+            row_conditions.append("diff_2025 >= ?")
+            row_params.append(min_diff_2025)
+        if max_diff_2025 is not None:
+            row_conditions.append("diff_2025 <= ?")
+            row_params.append(max_diff_2025)
+        if min_diff_last_10 is not None:
+            row_conditions.append("diff_last_10 >= ?")
+            row_params.append(min_diff_last_10)
+        if max_diff_last_10 is not None:
+            row_conditions.append("diff_last_10 <= ?")
+            row_params.append(max_diff_last_10)
+        if min_next_best_prob_diff is not None:
+            row_conditions.append("next_best_prob_diff >= ?")
+            row_params.append(min_next_best_prob_diff)
+        if max_next_best_prob_diff is not None:
+            row_conditions.append("next_best_prob_diff <= ?")
+            row_params.append(max_next_best_prob_diff)
         if sgm_only:
-            conditions.append("sbm.sgm_eligible = TRUE")
+            row_conditions.append("sgm_eligible = TRUE")
 
-        where_clause = f"WHERE {' AND '.join(conditions)}" if conditions else ""
-        best_clause = "WHERE best_rank = 1" if best_only else ""
+        universe_where_clause = f"WHERE {' AND '.join(universe_conditions)}" if universe_conditions else ""
+        row_where_conditions = list(row_conditions)
+        if best_only:
+            row_where_conditions.append("market_price_rank = 1")
+        row_where_clause = f"WHERE {' AND '.join(row_where_conditions)}" if row_where_conditions else ""
         order_clause = self._build_odds_order_clause(sort_by=sort_by, sort_dir=sort_dir)
-        params.extend([limit, offset])
+        params = [*universe_params, *row_params, limit, offset]
 
         with connection(settings=self.settings) as conn:
             rows = fetch_all(
                 conn,
                 f"""
-                WITH ranked_odds AS (
+                WITH base_odds AS (
                   SELECT
                     s.selection_id,
                     s.market_id,
@@ -653,11 +693,7 @@ class QueryService:
                     lm.edge_pct,
                     TRY_CAST(json_extract(lm.metrics_json, '$.diff_2025') AS DOUBLE) AS diff_2025,
                     TRY_CAST(json_extract(lm.metrics_json, '$.diff_last_10') AS DOUBLE) AS diff_last_10,
-                    sbm.sgm_eligible,
-                    ROW_NUMBER() OVER (
-                      PARTITION BY s.selection_id
-                      ORDER BY cop.decimal_price DESC NULLS LAST, b.code ASC
-                    ) AS best_rank
+                    sbm.sgm_eligible
                   FROM selections s
                   JOIN markets m ON m.market_id = s.market_id
                   JOIN events e ON e.event_id = m.event_id
@@ -668,7 +704,60 @@ class QueryService:
                     ON cop.selection_id = s.selection_id AND cop.bookmaker_id = sbm.bookmaker_id
                   LEFT JOIN latest_selection_metrics_v lm
                     ON lm.selection_id = s.selection_id AND lm.bookmaker_id = sbm.bookmaker_id
-                  {where_clause}
+                  {universe_where_clause}
+                ),
+                ranked_odds AS (
+                  SELECT
+                    base_odds.*,
+                    DENSE_RANK() OVER (
+                      PARTITION BY selection_id
+                      ORDER BY decimal_price DESC NULLS LAST
+                    ) AS market_price_rank,
+                    ROW_NUMBER() OVER (
+                      PARTITION BY selection_id
+                      ORDER BY decimal_price DESC NULLS LAST, bookmaker ASC
+                    ) AS market_price_row_number,
+                    FIRST_VALUE(decimal_price) OVER (
+                      PARTITION BY selection_id
+                      ORDER BY decimal_price DESC NULLS LAST, bookmaker ASC
+                    ) AS best_market_price,
+                    LEAD(decimal_price) OVER (
+                      PARTITION BY selection_id
+                      ORDER BY decimal_price DESC NULLS LAST, bookmaker ASC
+                    ) AS next_market_price
+                  FROM base_odds
+                ),
+                scored_odds AS (
+                  SELECT
+                    selection_id,
+                    market_id,
+                    event_id,
+                    match_name,
+                    start_time,
+                    bookmaker,
+                    market_type_code,
+                    market_display_name,
+                    player_id,
+                    player_name,
+                    selection_type,
+                    label,
+                    line_value,
+                    decimal_price,
+                    implied_prob,
+                    edge_pct,
+                    diff_2025,
+                    diff_last_10,
+                    market_price_rank = 1 AS is_best_price,
+                    CASE
+                      WHEN decimal_price IS NULL OR decimal_price <= 0 THEN NULL
+                      WHEN market_price_row_number = 1 AND next_market_price IS NOT NULL AND next_market_price > 0
+                        THEN ((1.0 / decimal_price) - (1.0 / next_market_price)) * -1
+                      WHEN market_price_row_number > 1 AND best_market_price IS NOT NULL AND best_market_price > 0
+                        THEN ((1.0 / decimal_price) - (1.0 / best_market_price)) * -1
+                      ELSE NULL
+                    END AS next_best_prob_diff,
+                    sgm_eligible
+                  FROM ranked_odds
                 )
                 SELECT
                   selection_id,
@@ -689,9 +778,11 @@ class QueryService:
                   edge_pct,
                   diff_2025,
                   diff_last_10,
+                  is_best_price,
+                  next_best_prob_diff,
                   sgm_eligible
-                FROM ranked_odds
-                {best_clause}
+                FROM scored_odds
+                {row_where_clause}
                 ORDER BY
                   {order_clause}
                 LIMIT ? OFFSET ?
@@ -949,8 +1040,6 @@ class QueryService:
             "decimal_price": row["decimal_price"],
             "implied_prob": row["implied_prob"],
             "edge_pct": row["edge_pct"],
-            "diff_2025": row["diff_2025"],
-            "diff_last_10": row["diff_last_10"],
             "sgm_eligible": row["sgm_eligible"],
         }
 
@@ -976,5 +1065,7 @@ class QueryService:
             "edge_pct": row["edge_pct"],
             "diff_2025": row["diff_2025"],
             "diff_last_10": row["diff_last_10"],
+            "is_best_price": row["is_best_price"],
+            "next_best_prob_diff": row["next_best_prob_diff"],
             "sgm_eligible": row["sgm_eligible"],
         }

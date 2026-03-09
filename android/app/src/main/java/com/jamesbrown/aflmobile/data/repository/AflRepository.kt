@@ -4,6 +4,8 @@ import com.jamesbrown.aflmobile.data.network.BackendApiClient
 import com.jamesbrown.aflmobile.data.settings.AppSettingsStore
 import com.jamesbrown.aflmobile.model.AppSettings
 import com.jamesbrown.aflmobile.model.BookmakerSummary
+import com.jamesbrown.aflmobile.model.CgmCompareRequestPayload
+import com.jamesbrown.aflmobile.model.CgmCompareResponse
 import com.jamesbrown.aflmobile.model.EventSummary
 import com.jamesbrown.aflmobile.model.HealthResponse
 import com.jamesbrown.aflmobile.model.MarketSummary
@@ -16,6 +18,8 @@ import com.jamesbrown.aflmobile.model.PlayerStatsFilters
 import com.jamesbrown.aflmobile.model.PropSearchResult
 import com.jamesbrown.aflmobile.model.RequestedLeg
 import com.jamesbrown.aflmobile.model.SelectionSummary
+import com.jamesbrown.aflmobile.model.SgmCompareRequestPayload
+import com.jamesbrown.aflmobile.model.SgmCompareResponse
 import com.jamesbrown.aflmobile.model.SgmQuoteRequestPayload
 import com.jamesbrown.aflmobile.model.SgmQuoteResponse
 import kotlinx.coroutines.flow.Flow
@@ -100,28 +104,48 @@ class AflRepository(
         query: String?,
         marketType: String?,
         eventId: Int?,
+        includePlayerIds: List<Int>,
+        excludePlayerIds: List<Int>,
         sortBy: String,
         sortDirection: String,
         selectionType: String?,
         minEdge: Double?,
         minPrice: Double?,
         maxPrice: Double?,
+        minDiff2025: Double?,
+        maxDiff2025: Double?,
+        minDiffLast10: Double?,
+        maxDiffLast10: Double?,
+        minNextBestProbDiff: Double? = null,
+        maxNextBestProbDiff: Double? = null,
         sgmOnly: Boolean,
         bestOnly: Boolean,
+        limit: Int = 200,
+        offset: Int = 0,
     ): List<OddsSearchResult> = apiClient.searchOdds(
         bookmakers = bookmakers,
         scope = scope,
         query = query,
         marketType = marketType,
         eventId = eventId,
+        includePlayerIds = includePlayerIds,
+        excludePlayerIds = excludePlayerIds,
         sortBy = sortBy,
         sortDirection = sortDirection,
         selectionType = selectionType,
         minEdge = minEdge,
         minPrice = minPrice,
         maxPrice = maxPrice,
+        minDiff2025 = minDiff2025,
+        maxDiff2025 = maxDiff2025,
+        minDiffLast10 = minDiffLast10,
+        maxDiffLast10 = maxDiffLast10,
+        minNextBestProbDiff = minNextBestProbDiff,
+        maxNextBestProbDiff = maxNextBestProbDiff,
         sgmOnly = sgmOnly,
         bestOnly = bestOnly,
+        limit = limit,
+        offset = offset,
     )
 
     suspend fun props(bookmaker: String, query: String?): List<PropSearchResult> =
@@ -140,6 +164,25 @@ class AflRepository(
             forceRefresh = forceRefresh,
         ),
     )
+
+    suspend fun compareSgm(
+        eventId: Int,
+        selectionIds: List<Int>,
+        forceRefresh: Boolean,
+    ): SgmCompareResponse = apiClient.compareSgm(
+        SgmCompareRequestPayload(
+            eventId = eventId,
+            selectionIds = selectionIds,
+            forceRefresh = forceRefresh,
+        ),
+    )
+
+    suspend fun compareCgm(selectionIds: List<Int>): CgmCompareResponse =
+        apiClient.compareCgm(
+            CgmCompareRequestPayload(
+                selectionIds = selectionIds,
+            ),
+        )
 
     suspend fun quote(quoteId: String): SgmQuoteResponse = apiClient.getQuote(quoteId)
 }

@@ -47,6 +47,11 @@ def test_event_market_selection_flow(client) -> None:
     assert odds_payload
     assert "diff_2025" in odds_payload[0]
     assert "diff_last_10" in odds_payload[0]
+    assert "is_best_price" in odds_payload[0]
+    assert "next_best_prob_diff" in odds_payload[0]
+    player_rows = [row for row in odds_payload if row["player"] is not None]
+    assert player_rows
+    player_id = player_rows[0]["player"]["id"]
 
     sorted_odds_response = client.get(
         "/api/v1/odds/search",
@@ -67,6 +72,26 @@ def test_event_market_selection_flow(client) -> None:
     if len(ranked_diffs) >= 2:
         assert ranked_diffs == sorted(ranked_diffs, reverse=True)
 
+    market_diff_sorted_response = client.get(
+        "/api/v1/odds/search",
+        params={
+            "bookmaker": "sportsbet",
+            "scope": "player",
+            "limit": 50,
+            "sort_by": "next_best_prob_diff",
+            "sort_dir": "desc",
+        },
+    )
+    assert market_diff_sorted_response.status_code == 200
+    market_diff_payload = market_diff_sorted_response.json()
+    ranked_market_diffs = [
+        row["next_best_prob_diff"]
+        for row in market_diff_payload
+        if row["next_best_prob_diff"] is not None
+    ]
+    if len(ranked_market_diffs) >= 2:
+        assert ranked_market_diffs == sorted(ranked_market_diffs, reverse=True)
+
     match_odds_response = client.get(
         "/api/v1/odds/search",
         params={
@@ -81,6 +106,135 @@ def test_event_market_selection_flow(client) -> None:
     match_odds_payload = match_odds_response.json()
     assert match_odds_payload
     assert all(row["player"] is None for row in match_odds_payload)
+
+    include_player_response = client.get(
+        "/api/v1/odds/search",
+        params={
+            "bookmaker": "sportsbet",
+            "scope": "player",
+            "include_player_id": player_id,
+            "limit": 50,
+        },
+    )
+    assert include_player_response.status_code == 200
+    include_player_payload = include_player_response.json()
+    assert include_player_payload
+    assert all(row["player"]["id"] == player_id for row in include_player_payload if row["player"] is not None)
+
+    exclude_player_response = client.get(
+        "/api/v1/odds/search",
+        params={
+            "bookmaker": "sportsbet",
+            "scope": "player",
+            "exclude_player_id": player_id,
+            "limit": 50,
+        },
+    )
+    assert exclude_player_response.status_code == 200
+    exclude_player_payload = exclude_player_response.json()
+    assert exclude_player_payload
+    assert all(row["player"]["id"] != player_id for row in exclude_player_payload if row["player"] is not None)
+
+    price_filtered_response = client.get(
+        "/api/v1/odds/search",
+        params={
+            "bookmaker": "sportsbet",
+            "scope": "player",
+            "min_price": 1.5,
+            "max_price": 3.5,
+            "limit": 50,
+        },
+    )
+    assert price_filtered_response.status_code == 200
+    price_filtered_payload = price_filtered_response.json()
+    assert price_filtered_payload
+    for row in price_filtered_payload:
+        assert 1.5 <= row["decimal_price"] <= 3.5
+
+    diff_filtered_response = client.get(
+        "/api/v1/odds/search",
+        params={
+            "bookmaker": "sportsbet",
+            "scope": "player",
+            "min_diff_last_10": -0.05,
+            "max_diff_last_10": 0.2,
+            "min_diff_2025": -0.2,
+            "max_diff_2025": 0.2,
+            "limit": 50,
+        },
+    )
+    assert diff_filtered_response.status_code == 200
+    diff_filtered_payload = diff_filtered_response.json()
+    assert diff_filtered_payload
+    for row in diff_filtered_payload:
+        assert row["diff_last_10"] is not None
+        assert row["diff_2025"] is not None
+        assert -0.05 <= row["diff_last_10"] <= 0.2
+        assert -0.2 <= row["diff_2025"] <= 0.2
+
+    best_only_response = client.get(
+        "/api/v1/odds/search",
+        params={
+            "bookmaker": "sportsbet",
+            "scope": "player",
+            "best_only": True,
+            "limit": 50,
+        },
+    )
+    assert best_only_response.status_code == 200
+    best_only_payload = best_only_response.json()
+    if best_only_payload:
+        assert all(row["is_best_price"] is True for row in best_only_payload)
+
+    cgm_candidate_response = client.get(
+        "/api/v1/odds/search",
+        params={
+            "bookmaker": "sportsbet",
+            "scope": "player",
+            "limit": 200,
+        },
+    )
+    assert cgm_candidate_response.status_code == 200
+    cgm_candidate_rows = [
+        row for row in cgm_candidate_response.json()
+        if row["player"] is not None
+    ]
+    unique_event_rows = []
+    seen_event_ids = set()
+    for row in cgm_candidate_rows:
+        event_id = row["event_id"]
+        if event_id in seen_event_ids:
+            continue
+        seen_event_ids.add(event_id)
+        unique_event_rows.append(row)
+        if len(unique_event_rows) == 2:
+            break
+    assert len(unique_event_rows) == 2
+
+    cgm_response = client.post(
+        "/api/v1/pricing/cgm",
+        json={"selection_ids": [row["selection_id"] for row in unique_event_rows]},
+    )
+    assert cgm_response.status_code == 200
+    cgm_payload = cgm_response.json()
+    assert cgm_payload["selection_count"] == 2
+    assert cgm_payload["results"]
+    assert cgm_payload["results"][0]["quoted_price"] > 0
+
+    same_event_rows = []
+    first_event_id = cgm_candidate_rows[0]["event_id"]
+    for row in cgm_candidate_rows:
+        if row["event_id"] == first_event_id:
+            same_event_rows.append(row)
+        if len(same_event_rows) == 2:
+            break
+    if len(same_event_rows) == 2:
+        same_event_cgm_response = client.post(
+            "/api/v1/pricing/cgm",
+            json={"selection_ids": [row["selection_id"] for row in same_event_rows]},
+        )
+        assert same_event_cgm_response.status_code == 422
+        assert same_event_cgm_response.json()["error"]["code"] == "duplicate_game_legs"
 
     stat_players_response = client.get("/api/v1/players/search", params={"q": "English"})
     assert stat_players_response.status_code == 200

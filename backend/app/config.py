@@ -23,6 +23,9 @@ class Settings(BaseSettings):
     debug: bool = False
     enable_auth: bool = True
     auth_token: str | None = None
+    require_tailscale_identity: bool = False
+    allowed_tailscale_user_logins: str = ""
+    tailscale_user_header_name: str = "Tailscale-User-Login"
     scraped_odds_dir: Path = Field(default=REPO_ROOT / "Data" / "scraped_odds")
     processed_odds_dir: Path = Field(default=REPO_ROOT / "Data" / "processed_odds")
     fixture_path: Path = Field(default=REPO_ROOT / "Data" / "current_fixture.csv")
@@ -33,11 +36,25 @@ class Settings(BaseSettings):
     bind_port: int = 8000
     quote_ttl_seconds: int = 30
     request_timeout_seconds: float = 10.0
+    sgm_retry_attempts: int = 3
+    sgm_retry_delay_seconds: float = 0.35
     sportsbet_quote_url: str = "https://www.sportsbet.com.au/apigw/multi-pricer/combinations/price"
     sportsbet_user_agent: str = (
         "Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) "
         "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Mobile Safari/537.36"
     )
+    tab_quote_url: str = "https://api.beta.tab.com.au/v1/pricing-service/enquiry"
+    tab_jurisdiction: str = "SA"
+    tab_channel: str = "web"
+    pointsbet_quote_url: str = "https://api.au.pointsbet.com/api/v2/sgm/price"
+    pointsbet_user_agent: str = sportsbet_user_agent
+    pointsbet_origin: str = "https://pointsbet.com.au"
+    pointsbet_referer: str = "https://pointsbet.com.au/"
+    bet365_sgm_margin: float = 0.004
+
+    @property
+    def allowed_tailscale_user_logins_list(self) -> tuple[str, ...]:
+        return tuple(item.strip() for item in self.allowed_tailscale_user_logins.split(",") if item.strip())
 
     @property
     def runtime_duckdb_dir(self) -> Path:

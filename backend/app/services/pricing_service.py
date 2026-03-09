@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import asyncio
 import json
 from datetime import timedelta
 from math import prod
@@ -8,11 +9,14 @@ from uuid import uuid4
 
 import httpx
 
+from app.bookmakers.bet365 import Bet365Adapter
 from app.bookmakers.base import BookmakerAdapter, QuoteResult, ResolvedLeg
+from app.bookmakers.pointsbet import PointsbetAdapter
 from app.bookmakers.sportsbet import SportsbetAdapter
+from app.bookmakers.tab import TabAdapter
 from app.config import Settings
 from app.db.duckdb import connection, fetch_all, fetch_one
-from app.models.api import SgmQuoteRequest
+from app.models.api import CgmCompareRequest, RequestedLeg, SgmCompareRequest, SgmQuoteRequest
 from app.utils.errors import AppError
 from app.utils.hashing import sha256_text, stable_json_dumps
 from app.utils.time import utc_now
@@ -22,7 +26,10 @@ class PricingService:
     def __init__(self, settings: Settings):
         self.settings = settings
         self.adapters: dict[str, BookmakerAdapter] = {
+            "bet365": Bet365Adapter(settings),
+            "pointsbet": PointsbetAdapter(settings),
             "sportsbet": SportsbetAdapter(settings),
+            "tab": TabAdapter(settings),
         }
 
     @property
@@ -46,10 +53,11 @@ class PricingService:
                 return cached
 
         request_spec = adapter.build_request(resolved_legs)
-        async with httpx.AsyncClient(timeout=self.settings.request_timeout_seconds) as client:
-            await adapter.ensure_session(client)
-            payload = await adapter.send(client, request_spec)
-        quote_result = adapter.parse_response(payload, resolved_legs)
+        quote_result = await self._request_quote_with_retry(
+            adapter=adapter,
+            request_spec=request_spec,
+            resolved_legs=resolved_legs,
+        )
         response = self._store_quote(
             adapter=adapter,
             cache_key=cache_key,
@@ -58,6 +66,220 @@ class PricingService:
             quote_result=quote_result,
         )
         return response
+
+    async def compare_sgm(self, request: SgmCompareRequest) -> dict[str, Any]:
+        selection_ids = self._validate_sgm_compare_request(request)
+        comparison_requests = [
+            SgmQuoteRequest(
+                bookmaker=bookmaker_code,
+                event_id=request.event_id,
+                legs=[RequestedLeg(selection_id=selection_id) for selection_id in selection_ids],
+                force_refresh=request.force_refresh,
+            )
+            for bookmaker_code in sorted(self.live_pricing_codes)
+        ]
+
+        results: list[dict[str, Any]] = []
+        for comparison_request in comparison_requests:
+            try:
+                quote = await self.quote_sgm(comparison_request)
+            except AppError:
+                continue
+            results.append(quote)
+
+        results.sort(key=lambda result: float(result["quoted_price"]), reverse=True)
+        return {
+            "event_id": request.event_id,
+            "selection_count": len(selection_ids),
+            "results": results,
+        }
+
+    async def _request_quote_with_retry(
+        self,
+        *,
+        adapter: BookmakerAdapter,
+        request_spec: dict[str, Any],
+        resolved_legs: list[ResolvedLeg],
+    ) -> QuoteResult:
+        attempts = max(1, self.settings.sgm_retry_attempts)
+        last_error: AppError | None = None
+        for attempt in range(1, attempts + 1):
+            try:
+                async with httpx.AsyncClient(timeout=self.settings.request_timeout_seconds) as client:
+                    await adapter.ensure_session(client)
+                    payload = await adapter.send(client, request_spec)
+                return adapter.parse_response(payload, resolved_legs)
+            except AppError as exc:
+                last_error = exc
+                if not exc.retriable or attempt >= attempts:
+                    raise
+                await asyncio.sleep(self.settings.sgm_retry_delay_seconds)
+        if last_error is not None:
+            raise last_error
+        raise AppError(502, "pricing_failed", "Pricing failed unexpectedly.", retriable=True)
+
+    def _validate_sgm_compare_request(self, request: SgmCompareRequest) -> list[int]:
+        selection_ids = list(dict.fromkeys(request.selection_ids))
+        if len(selection_ids) < 2:
+            raise AppError(422, "too_few_legs", "An SGM comparison requires at least two legs.")
+
+        placeholders = ", ".join(["?"] * len(selection_ids))
+        with connection(settings=self.settings) as conn:
+            rows = fetch_all(
+                conn,
+                f"""
+                SELECT
+                  s.selection_id,
+                  m.event_id
+                FROM selections s
+                JOIN markets m ON m.market_id = s.market_id
+                WHERE s.selection_id IN ({placeholders})
+                """,
+                selection_ids,
+            )
+
+        found_ids = {int(row["selection_id"]) for row in rows}
+        missing_ids = [selection_id for selection_id in selection_ids if selection_id not in found_ids]
+        if missing_ids:
+            raise AppError(
+                404,
+                "selection_not_found",
+                "One or more selections were not found for SGM comparison.",
+                details={"missing_selection_ids": missing_ids},
+            )
+
+        wrong_event_ids = [
+            int(row["selection_id"])
+            for row in rows
+            if int(row["event_id"]) != request.event_id
+        ]
+        if wrong_event_ids:
+            raise AppError(
+                422,
+                "mixed_event_not_allowed",
+                "All pricing legs must belong to the requested event.",
+                details={"selection_ids": wrong_event_ids, "expected_event_id": request.event_id},
+            )
+
+        return selection_ids
+
+    def compare_cgm(self, request: CgmCompareRequest) -> dict[str, Any]:
+        selection_ids = list(dict.fromkeys(request.selection_ids))
+        if len(selection_ids) < 2:
+            raise AppError(422, "too_few_legs", "A CGM comparison requires at least two legs.")
+
+        placeholders = ", ".join(["?"] * len(selection_ids))
+        with connection(settings=self.settings) as conn:
+            base_rows = fetch_all(
+                conn,
+                f"""
+                SELECT
+                  s.selection_id,
+                  m.event_id,
+                  e.match_name,
+                  m.market_type_code,
+                  s.selection_type,
+                  s.label
+                FROM selections s
+                JOIN markets m ON m.market_id = s.market_id
+                JOIN events e ON e.event_id = m.event_id
+                WHERE s.selection_id IN ({placeholders})
+                """,
+                selection_ids,
+            )
+            price_rows = fetch_all(
+                conn,
+                f"""
+                SELECT
+                  b.code AS bookmaker,
+                  s.selection_id,
+                  e.match_name,
+                  m.market_type_code,
+                  s.selection_type,
+                  s.label,
+                  cop.decimal_price AS base_price
+                FROM selections s
+                JOIN markets m ON m.market_id = s.market_id
+                JOIN events e ON e.event_id = m.event_id
+                JOIN selection_bookmaker_meta sbm ON sbm.selection_id = s.selection_id
+                JOIN bookmakers b ON b.bookmaker_id = sbm.bookmaker_id
+                JOIN current_outcome_prices_v cop
+                  ON cop.selection_id = s.selection_id AND cop.bookmaker_id = sbm.bookmaker_id
+                WHERE s.selection_id IN ({placeholders})
+                  AND b.enabled = TRUE
+                  AND cop.decimal_price IS NOT NULL
+                ORDER BY b.display_name, e.start_time_utc NULLS LAST, e.match_name, s.selection_id
+                """,
+                selection_ids,
+            )
+
+        found_ids = {int(row["selection_id"]) for row in base_rows}
+        missing_ids = [selection_id for selection_id in selection_ids if selection_id not in found_ids]
+        if missing_ids:
+            raise AppError(
+                404,
+                "selection_not_found",
+                "One or more selections were not found for CGM comparison.",
+                details={"missing_selection_ids": missing_ids},
+            )
+
+        non_player_ids = [
+            int(row["selection_id"])
+            for row in base_rows
+            if not str(row["market_type_code"]).startswith("player_")
+        ]
+        if non_player_ids:
+            raise AppError(
+                422,
+                "invalid_cgm_leg",
+                "CGM comparison currently supports player props only.",
+                details={"selection_ids": non_player_ids},
+            )
+
+        event_ids = [int(row["event_id"]) for row in base_rows]
+        if len(set(event_ids)) != len(event_ids):
+            duplicate_event_ids = sorted({event_id for event_id in event_ids if event_ids.count(event_id) > 1})
+            raise AppError(
+                422,
+                "duplicate_game_legs",
+                "Cross-game multis allow only one leg per match.",
+                details={"event_ids": duplicate_event_ids},
+            )
+
+        rows_by_bookmaker: dict[str, dict[int, dict[str, Any]]] = {}
+        for row in price_rows:
+            rows_by_bookmaker.setdefault(row["bookmaker"], {})[int(row["selection_id"])] = row
+
+        results: list[dict[str, Any]] = []
+        for bookmaker, bookmaker_rows in rows_by_bookmaker.items():
+            if len(bookmaker_rows) != len(selection_ids):
+                continue
+            ordered_rows = [bookmaker_rows[selection_id] for selection_id in selection_ids]
+            quoted_price = prod(float(row["base_price"]) for row in ordered_rows)
+            results.append(
+                {
+                    "bookmaker": bookmaker,
+                    "quoted_price": quoted_price,
+                    "selection_count": len(selection_ids),
+                    "legs": [
+                        {
+                            "selection_id": int(row["selection_id"]),
+                            "match_name": row["match_name"],
+                            "label": row["label"],
+                            "market_type_code": row["market_type_code"],
+                            "selection_type": row["selection_type"],
+                            "base_price": float(row["base_price"]),
+                        }
+                        for row in ordered_rows
+                    ],
+                }
+            )
+
+        results.sort(key=lambda row: row["quoted_price"], reverse=True)
+        return {
+            "selection_count": len(selection_ids),
+            "results": results,
+        }
 
     def get_quote(self, quote_id: str) -> dict[str, Any]:
         with connection(write=True, settings=self.settings) as conn:

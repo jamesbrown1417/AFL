@@ -158,6 +158,8 @@ data class OddsSearchResult(
     @SerialName("edge_pct") val edgePct: Double? = null,
     @SerialName("diff_2025") val diff2025: Double? = null,
     @SerialName("diff_last_10") val diffLast10: Double? = null,
+    @SerialName("is_best_price") val isBestPrice: Boolean = false,
+    @SerialName("next_best_prob_diff") val nextBestProbDiff: Double? = null,
     @SerialName("sgm_eligible") val sgmEligible: Boolean,
 )
 
@@ -214,6 +216,64 @@ data class SgmQuoteResponse(
     @SerialName("quoted_at") val quotedAt: String,
     @SerialName("expires_at") val expiresAt: String,
     val status: String,
+)
+
+@Serializable
+data class SgmCompareRequestPayload(
+    @SerialName("event_id") val eventId: Int,
+    @SerialName("selection_ids") val selectionIds: List<Int>,
+    @SerialName("force_refresh") val forceRefresh: Boolean,
+)
+
+@Serializable
+data class SgmAgencyComparison(
+    @SerialName("quote_id") val quoteId: String,
+    val bookmaker: String,
+    @SerialName("event_id") val eventId: Int,
+    val legs: List<QuoteLeg>,
+    @SerialName("unadjusted_price") val unadjustedPrice: Double,
+    @SerialName("quoted_price") val quotedPrice: Double,
+    @SerialName("adjustment_factor") val adjustmentFactor: Double,
+    @SerialName("from_cache") val fromCache: Boolean,
+    @SerialName("quoted_at") val quotedAt: String,
+    @SerialName("expires_at") val expiresAt: String,
+    val status: String,
+)
+
+@Serializable
+data class SgmCompareResponse(
+    @SerialName("event_id") val eventId: Int,
+    @SerialName("selection_count") val selectionCount: Int,
+    val results: List<SgmAgencyComparison>,
+)
+
+@Serializable
+data class CgmCompareRequestPayload(
+    @SerialName("selection_ids") val selectionIds: List<Int>,
+)
+
+@Serializable
+data class CgmLegPrice(
+    @SerialName("selection_id") val selectionId: Int,
+    @SerialName("match_name") val matchName: String,
+    val label: String,
+    @SerialName("market_type_code") val marketTypeCode: String,
+    @SerialName("selection_type") val selectionType: String,
+    @SerialName("base_price") val basePrice: Double,
+)
+
+@Serializable
+data class CgmAgencyComparison(
+    val bookmaker: String,
+    @SerialName("quoted_price") val quotedPrice: Double,
+    @SerialName("selection_count") val selectionCount: Int,
+    val legs: List<CgmLegPrice>,
+)
+
+@Serializable
+data class CgmCompareResponse(
+    @SerialName("selection_count") val selectionCount: Int,
+    val results: List<CgmAgencyComparison>,
 )
 
 @Serializable

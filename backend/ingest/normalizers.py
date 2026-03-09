@@ -251,8 +251,10 @@ def resolve_bookmaker_meta(
 
     sgm_eligible = (
         file_kind == "player_props"
-        and bookmaker_code in {"sportsbet", "tab", "neds", "pointsbet", "betright"}
-        and external_selection_id is not None
+        and (
+            (bookmaker_code in {"sportsbet", "tab", "neds", "pointsbet", "betright"} and external_selection_id is not None)
+            or bookmaker_code == "bet365"
+        )
     )
     return (
         external_event_id,

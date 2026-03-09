@@ -10,6 +10,7 @@ sealed class TopLevelDestination(
     data object Player : TopLevelDestination("player", "Player")
     data object Odds : TopLevelDestination("odds", "Odds")
     data object Sgm : TopLevelDestination("sgm", "SGM")
+    data object Cgm : TopLevelDestination("cgm", "CGM")
     data object Settings : TopLevelDestination("settings", "Settings")
 }
 

@@ -58,8 +58,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.layout.onSizeChanged
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.IntSize
@@ -83,6 +87,9 @@ import com.jamesbrown.aflmobile.ui.common.formatDateTime
 import com.jamesbrown.aflmobile.ui.common.formatDecimalPrice
 import com.jamesbrown.aflmobile.ui.common.formatPercentage
 import com.jamesbrown.aflmobile.ui.common.simpleViewModelFactory
+import com.jamesbrown.aflmobile.ui.theme.appCardColors
+import com.jamesbrown.aflmobile.ui.theme.appGlassBorder
+import com.jamesbrown.aflmobile.ui.theme.appTopBarColors
 import java.time.OffsetDateTime
 import java.time.format.DateTimeFormatter
 import java.util.Locale
@@ -288,9 +295,11 @@ private fun PlayerStatsScreen(
     }
 
     Scaffold(
+        containerColor = Color.Transparent,
         topBar = {
             TopAppBar(
                 title = { Text("Player") },
+                colors = appTopBarColors(),
                 actions = {
                     IconButton(onClick = onRefresh) {
                         Icon(Icons.Outlined.Refresh, contentDescription = "Refresh")
@@ -398,6 +407,7 @@ private fun PlayerSearchCard(
     onSelectPlayer: (PlayerSummary) -> Unit,
 ) {
     var expanded by remember { mutableStateOf(false) }
+    val focusManager = LocalFocusManager.current
     val dropdownPlayers = remember(uiState.allPlayers, uiState.searchResults, uiState.searchQuery, uiState.selectedPlayer, expanded) {
         if (expanded && uiState.selectedPlayer?.fullName == uiState.searchQuery) {
             uiState.allPlayers
@@ -406,7 +416,11 @@ private fun PlayerSearchCard(
         }
     }
 
-    Card(modifier = Modifier.fillMaxWidth()) {
+    Card(
+        modifier = Modifier.fillMaxWidth(),
+        colors = appCardColors(),
+        border = appGlassBorder(),
+    ) {
         Column(
             modifier = Modifier.padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp),
@@ -414,21 +428,34 @@ private fun PlayerSearchCard(
             Text("Player Stats", style = MaterialTheme.typography.titleLarge)
             ExposedDropdownMenuBox(
                 expanded = expanded,
-                onExpandedChange = { expanded = !expanded },
+                onExpandedChange = { },
             ) {
                 OutlinedTextField(
                     value = uiState.searchQuery,
                     onValueChange = {
                         onSearchQueryChanged(it)
-                        expanded = true
+                        expanded = false
                     },
                     modifier = Modifier
                         .menuAnchor(ExposedDropdownMenuAnchorType.PrimaryEditable)
                         .fillMaxWidth(),
                     singleLine = true,
                     label = { Text("Select player") },
+                    keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
+                    keyboardActions = KeyboardActions(
+                        onSearch = {
+                            focusManager.clearFocus()
+                            expanded = dropdownPlayers.isNotEmpty()
+                        },
+                        onDone = {
+                            focusManager.clearFocus()
+                            expanded = dropdownPlayers.isNotEmpty()
+                        },
+                    ),
                     trailingIcon = {
-                        ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded)
+                        IconButton(onClick = { expanded = !expanded }) {
+                            ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded)
+                        }
                     },
                 )
                 DropdownMenu(
@@ -475,7 +502,16 @@ private fun PlayerStatsFilterSummary(
     } else {
         filters.referenceLineText
     }
-    Card(modifier = Modifier.fillMaxWidth()) {
+    val seasonLabel = summarizeFilterValues(filters.seasons)
+    val homeAwayLabel = summarizeFilterValues(filters.homeAway)
+    val oppositionLabel = summarizeFilterValues(filters.oppositions, filterOptions?.oppositions.orEmpty())
+    val venueLabel = summarizeFilterValues(filters.venues, filterOptions?.venues.orEmpty())
+    val weatherLabel = summarizeFilterValues(filters.weatherCategories, filterOptions?.weatherCategories.orEmpty())
+    Card(
+        modifier = Modifier.fillMaxWidth(),
+        colors = appCardColors(),
+        border = appGlassBorder(),
+    ) {
         Column(
             modifier = Modifier.padding(14.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp),
@@ -496,8 +532,15 @@ private fun PlayerStatsFilterSummary(
                 verticalArrangement = Arrangement.spacedBy(8.dp),
             ) {
                 InlineChip("Stat: $statLabel")
-                InlineChip("Seasons: ${filters.seasons.joinToString(", ")}")
+                InlineChip("Seasons: $seasonLabel")
                 InlineChip("Line: $lineLabel")
+                InlineChip("Home/Away: $homeAwayLabel")
+                oppositionLabel?.let { InlineChip("Opp: $it") }
+                venueLabel?.let { InlineChip("Venue: $it") }
+                weatherLabel?.let { InlineChip("Weather: $it") }
+                if (filters.marginMinText != "-200" || filters.marginMaxText != "200") {
+                    InlineChip("Margin: ${filters.marginMinText} to ${filters.marginMaxText}")
+                }
                 if (filters.lastGamesText.isNotBlank()) {
                     InlineChip("Last: ${filters.lastGamesText} games")
                 }
@@ -509,6 +552,18 @@ private fun PlayerStatsFilterSummary(
     }
 }
 
+private fun summarizeFilterValues(
+    selected: List<String>,
+    allValues: List<String> = emptyList(),
+    maxVisible: Int = 3,
+): String? {
+    if (selected.isEmpty()) return null
+    if (allValues.isNotEmpty() && selected.toSet() == allValues.toSet()) return "All"
+    val visible = selected.take(maxVisible)
+    val suffix = if (selected.size > maxVisible) " +${selected.size - maxVisible}" else ""
+    return visible.joinToString(", ") + suffix
+}
+
 @Composable
 private fun PlayerSummaryCard(summary: PlayerStatSummary?) {
     if (summary == null) {
@@ -518,7 +573,11 @@ private fun PlayerSummaryCard(summary: PlayerStatSummary?) {
         )
         return
     }
-    Card(modifier = Modifier.fillMaxWidth()) {
+    Card(
+        modifier = Modifier.fillMaxWidth(),
+        colors = appCardColors(),
+        border = appGlassBorder(),
+    ) {
         Column(
             modifier = Modifier.padding(14.dp),
             verticalArrangement = Arrangement.spacedBy(10.dp),
@@ -575,7 +634,11 @@ private fun PlayerViewModeToggle(
     selected: PlayerViewMode,
     onSelected: (PlayerViewMode) -> Unit,
 ) {
-    Card(modifier = Modifier.fillMaxWidth()) {
+    Card(
+        modifier = Modifier.fillMaxWidth(),
+        colors = appCardColors(),
+        border = appGlassBorder(),
+    ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -605,7 +668,7 @@ private fun DenseSummaryCell(
     Column(
         modifier = modifier
             .background(
-                color = MaterialTheme.colorScheme.surfaceContainerHighest,
+                color = MaterialTheme.colorScheme.surfaceContainerHigh.copy(alpha = 0.92f),
                 shape = RoundedCornerShape(14.dp),
             )
             .padding(horizontal = 10.dp, vertical = 10.dp),
@@ -627,7 +690,11 @@ private fun DenseSummaryCell(
 @Composable
 private fun PlayerHistoryTable(history: List<PlayerGameLogEntry>) {
     val scrollState = rememberScrollState()
-    Card(modifier = Modifier.fillMaxWidth()) {
+    Card(
+        modifier = Modifier.fillMaxWidth(),
+        colors = appCardColors(),
+        border = appGlassBorder(),
+    ) {
         Column(
             modifier = Modifier
                 .horizontalScroll(scrollState)
@@ -711,7 +778,11 @@ private fun PlayerHistoryGraph(
     val selectedEntry = selectedPointIndex?.let { orderedHistory.getOrNull(it) }
     val hitRadiusPx = with(density) { 28.dp.toPx() }
 
-    Card(modifier = Modifier.fillMaxWidth()) {
+    Card(
+        modifier = Modifier.fillMaxWidth(),
+        colors = appCardColors(),
+        border = appGlassBorder(),
+    ) {
         Column(
             modifier = Modifier.padding(14.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp),
@@ -918,7 +989,11 @@ private fun SelectedGraphPointCard(
     } else {
         filters.referenceLineText
     }
-    Card(modifier = Modifier.fillMaxWidth()) {
+    Card(
+        modifier = Modifier.fillMaxWidth(),
+        colors = appCardColors(),
+        border = appGlassBorder(),
+    ) {
         Column(
             modifier = Modifier.padding(12.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp),
@@ -1082,7 +1157,11 @@ private fun PlayerStatsFilterSheet(
 ) {
     var statExpanded by remember { mutableStateOf(false) }
 
-    ModalBottomSheet(onDismissRequest = onDismiss) {
+    ModalBottomSheet(
+        onDismissRequest = onDismiss,
+        containerColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.98f),
+        scrimColor = MaterialTheme.colorScheme.scrim.copy(alpha = 0.26f),
+    ) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()

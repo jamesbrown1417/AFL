@@ -2,6 +2,7 @@ package com.jamesbrown.aflmobile.data.repository
 
 import com.jamesbrown.aflmobile.model.DraftLeg
 import com.jamesbrown.aflmobile.model.DraftMutationResult
+import com.jamesbrown.aflmobile.model.SgmAgencyComparison
 import com.jamesbrown.aflmobile.model.SgmDraftState
 import com.jamesbrown.aflmobile.model.SgmQuoteResponse
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -38,6 +39,7 @@ class SgmDraftStore {
                 eventLabel = leg.eventLabel,
                 legs = it.legs + leg,
                 latestQuote = null,
+                latestComparisons = emptyList(),
                 latestError = null,
             )
         }
@@ -50,7 +52,7 @@ class SgmDraftStore {
             if (updatedLegs.isEmpty()) {
                 SgmDraftState()
             } else {
-                current.copy(legs = updatedLegs, latestQuote = null, latestError = null)
+                current.copy(legs = updatedLegs, latestQuote = null, latestComparisons = emptyList(), latestError = null)
             }
         }
     }
@@ -64,10 +66,29 @@ class SgmDraftStore {
     }
 
     fun setQuote(quote: SgmQuoteResponse) {
-        _state.update { it.copy(latestQuote = quote, latestError = null) }
+        _state.update { it.copy(latestQuote = quote, latestComparisons = emptyList(), latestError = null) }
+    }
+
+    fun setComparisons(comparisons: List<SgmAgencyComparison>) {
+        _state.update { it.copy(latestQuote = comparisons.firstOrNull()?.toQuoteResponse(), latestComparisons = comparisons, latestError = null) }
     }
 
     fun setError(message: String?) {
-        _state.update { it.copy(latestError = message) }
+        _state.update { it.copy(latestError = message, latestComparisons = emptyList()) }
     }
 }
+
+private fun SgmAgencyComparison.toQuoteResponse(): SgmQuoteResponse =
+    SgmQuoteResponse(
+        quoteId = quoteId,
+        bookmaker = bookmaker,
+        eventId = eventId,
+        legs = legs,
+        unadjustedPrice = unadjustedPrice,
+        quotedPrice = quotedPrice,
+        adjustmentFactor = adjustmentFactor,
+        fromCache = fromCache,
+        quotedAt = quotedAt,
+        expiresAt = expiresAt,
+        status = status,
+    )

@@ -6,21 +6,53 @@ data class AppSettings(
     val defaultBookmaker: String = "sportsbet",
 )
 
+const val OddsDiffSliderMin = -1f
+const val OddsDiffSliderMax = 1f
+
 data class OddsFilters(
     val scope: String = "player",
     val query: String = "",
     val bookmakerCodes: List<String> = emptyList(),
     val marketTypeCode: String? = null,
     val eventId: Int? = null,
+    val includePlayerIds: List<Int> = emptyList(),
+    val excludePlayerIds: List<Int> = emptyList(),
     val sortBy: String = "diff_last_10",
     val sortDirection: String = "desc",
     val selectionType: String? = null,
     val minPriceText: String = "",
     val maxPriceText: String = "",
+    val minDiff2025: Float = OddsDiffSliderMin,
+    val maxDiff2025: Float = OddsDiffSliderMax,
+    val minDiffLast10: Float = OddsDiffSliderMin,
+    val maxDiffLast10: Float = OddsDiffSliderMax,
     val minEdgeText: String = "",
     val bestOnly: Boolean = false,
     val sgmOnly: Boolean = false,
 )
+
+data class SelectionMetricFilters(
+    val minPriceText: String = "",
+    val maxPriceText: String = "",
+    val minDiff2025: Float = OddsDiffSliderMin,
+    val maxDiff2025: Float = OddsDiffSliderMax,
+    val minDiffLast10: Float = OddsDiffSliderMin,
+    val maxDiffLast10: Float = OddsDiffSliderMax,
+    val minNextBestProbDiff: Float = OddsDiffSliderMin,
+    val maxNextBestProbDiff: Float = OddsDiffSliderMax,
+)
+
+enum class BuilderDisplayMode {
+    ROW,
+    TILE,
+}
+
+enum class BuilderSortField {
+    NEXT_BEST,
+    PRICE,
+    DIFF_LAST_10,
+    DIFF_2025,
+}
 
 data class PlayerStatsFilters(
     val statCode: String = "disposals",
@@ -50,6 +82,8 @@ data class DraftLeg(
     val basePrice: Double,
     val diff2025: Double? = null,
     val diffLast10: Double? = null,
+    val nextBestProbDiff: Double? = null,
+    val isBestPrice: Boolean = false,
 )
 
 data class SgmDraftState(
@@ -59,6 +93,7 @@ data class SgmDraftState(
     val legs: List<DraftLeg> = emptyList(),
     val forceRefresh: Boolean = false,
     val latestQuote: SgmQuoteResponse? = null,
+    val latestComparisons: List<SgmAgencyComparison> = emptyList(),
     val latestError: String? = null,
 )
 
