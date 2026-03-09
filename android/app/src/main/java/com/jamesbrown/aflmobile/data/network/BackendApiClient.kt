@@ -83,7 +83,7 @@ class BackendApiClient(
 
     suspend fun searchPlayers(
         query: String,
-        limit: Int = 8,
+        limit: Int = 50,
     ): List<PlayerSummary> = get(
         path = "players/search",
         query = buildList {
@@ -169,9 +169,12 @@ class BackendApiClient(
 
     suspend fun searchOdds(
         bookmakers: List<String>,
+        scope: String = "player",
         query: String? = null,
         marketType: String? = null,
         eventId: Int? = null,
+        sortBy: String = "diff_last_10",
+        sortDirection: String = "desc",
         selectionType: String? = null,
         minEdge: Double? = null,
         minPrice: Double? = null,
@@ -183,6 +186,7 @@ class BackendApiClient(
         path = "odds/search",
         query = buildList {
             add("limit" to limit.toString())
+            add("scope" to scope)
             bookmakers.forEach { bookmaker ->
                 if (bookmaker.isNotBlank()) {
                     add("bookmaker" to bookmaker)
@@ -191,6 +195,8 @@ class BackendApiClient(
             query?.takeIf { it.isNotBlank() }?.let { add("q" to it) }
             marketType?.takeIf { it.isNotBlank() }?.let { add("market_type" to it) }
             eventId?.let { add("event_id" to it.toString()) }
+            add("sort_by" to sortBy)
+            add("sort_dir" to sortDirection)
             selectionType?.takeIf { it.isNotBlank() }?.let { add("selection_type" to it) }
             minEdge?.let { add("min_edge" to it.toString()) }
             minPrice?.let { add("min_price" to it.toString()) }

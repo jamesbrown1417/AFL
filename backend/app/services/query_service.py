@@ -19,6 +19,17 @@ PLAYER_STAT_COLUMN_MAP = {
     "clearances": ("Clearances", "total_clearances"),
 }
 
+ODDS_SORT_COLUMNS = {
+    "diff_last_10": "diff_last_10",
+    "diff_2025": "diff_2025",
+    "price": "decimal_price",
+    "edge": "edge_pct",
+    "player": "player_name",
+    "match": "match_name",
+    "market": "market_display_name",
+    "start_time": "start_time",
+}
+
 
 class QueryService:
     def __init__(self, settings: Settings):
@@ -546,6 +557,7 @@ class QueryService:
         self,
         *,
         bookmakers: list[str],
+        scope: str,
         query: str | None,
         market_type: str | None,
         event_id: int | None,
@@ -557,10 +569,16 @@ class QueryService:
         max_price: float | None,
         sgm_only: bool,
         best_only: bool,
+        sort_by: str,
+        sort_dir: str,
         limit: int,
         offset: int,
     ) -> list[dict[str, Any]]:
-        conditions: list[str] = ["m.player_id IS NOT NULL"]
+        conditions: list[str] = []
+        if scope == "player":
+            conditions.append("m.player_id IS NOT NULL")
+        elif scope == "match":
+            conditions.append("m.player_id IS NULL")
         params: list[Any] = []
         if bookmakers:
             placeholders = ", ".join("?" for _ in bookmakers)
@@ -608,6 +626,7 @@ class QueryService:
 
         where_clause = f"WHERE {' AND '.join(conditions)}" if conditions else ""
         best_clause = "WHERE best_rank = 1" if best_only else ""
+        order_clause = self._build_odds_order_clause(sort_by=sort_by, sort_dir=sort_dir)
         params.extend([limit, offset])
 
         with connection(settings=self.settings) as conn:
@@ -674,17 +693,26 @@ class QueryService:
                 FROM ranked_odds
                 {best_clause}
                 ORDER BY
-                  start_time NULLS LAST,
-                  event_id,
-                  COALESCE(player_name, ''),
-                  market_display_name,
-                  selection_type,
-                  bookmaker
+                  {order_clause}
                 LIMIT ? OFFSET ?
                 """,
                 params,
             )
         return [self._shape_odds_result(row) for row in rows]
+
+    def _build_odds_order_clause(self, *, sort_by: str, sort_dir: str) -> str:
+        sort_column = ODDS_SORT_COLUMNS.get(sort_by, "diff_last_10")
+        direction = "ASC" if sort_dir.lower() == "asc" else "DESC"
+        leading = f"{sort_column} {direction} NULLS LAST"
+        tiebreakers = [
+            "start_time NULLS LAST",
+            "event_id",
+            "COALESCE(player_name, '')",
+            "market_display_name",
+            "selection_type",
+            "bookmaker",
+        ]
+        return ",\n                  ".join([leading, *tiebreakers])
 
     def _resolve_player_stat(self, stat: str) -> dict[str, str] | None:
         normalized = stat.strip().lower().replace(" ", "_")

@@ -46,8 +46,8 @@ class AflRepository(
     suspend fun selections(marketId: Int, bookmaker: String): List<SelectionSummary> =
         apiClient.getSelections(marketId = marketId, bookmaker = bookmaker)
 
-    suspend fun searchPlayers(query: String): List<PlayerSummary> =
-        apiClient.searchPlayers(query = query)
+    suspend fun searchPlayers(query: String, limit: Int = 50): List<PlayerSummary> =
+        apiClient.searchPlayers(query = query, limit = limit)
 
     suspend fun playerStatFilters(playerId: Int): PlayerStatFilterOptions =
         apiClient.getPlayerStatFilters(playerId)
@@ -96,9 +96,12 @@ class AflRepository(
 
     suspend fun odds(
         bookmakers: List<String>,
+        scope: String,
         query: String?,
         marketType: String?,
         eventId: Int?,
+        sortBy: String,
+        sortDirection: String,
         selectionType: String?,
         minEdge: Double?,
         minPrice: Double?,
@@ -107,9 +110,12 @@ class AflRepository(
         bestOnly: Boolean,
     ): List<OddsSearchResult> = apiClient.searchOdds(
         bookmakers = bookmakers,
+        scope = scope,
         query = query,
         marketType = marketType,
         eventId = eventId,
+        sortBy = sortBy,
+        sortDirection = sortDirection,
         selectionType = selectionType,
         minEdge = minEdge,
         minPrice = minPrice,

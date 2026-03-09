@@ -31,6 +31,10 @@ def test_event_market_selection_flow(client) -> None:
     players_response = client.get("/api/v1/players/search", params={"q": "Zorko"})
     assert players_response.status_code == 200
 
+    all_players_response = client.get("/api/v1/players/search", params={"limit": 25})
+    assert all_players_response.status_code == 200
+    assert all_players_response.json()
+
     props_response = client.get("/api/v1/props/search", params={"bookmaker": "sportsbet", "q": "Zorko"})
     assert props_response.status_code == 200
 
@@ -43,6 +47,40 @@ def test_event_market_selection_flow(client) -> None:
     assert odds_payload
     assert "diff_2025" in odds_payload[0]
     assert "diff_last_10" in odds_payload[0]
+
+    sorted_odds_response = client.get(
+        "/api/v1/odds/search",
+        params={
+            "bookmaker": "sportsbet",
+            "limit": 50,
+            "sort_by": "diff_last_10",
+            "sort_dir": "desc",
+        },
+    )
+    assert sorted_odds_response.status_code == 200
+    sorted_odds_payload = sorted_odds_response.json()
+    ranked_diffs = [
+        row["diff_last_10"]
+        for row in sorted_odds_payload
+        if row["diff_last_10"] is not None
+    ]
+    if len(ranked_diffs) >= 2:
+        assert ranked_diffs == sorted(ranked_diffs, reverse=True)
+
+    match_odds_response = client.get(
+        "/api/v1/odds/search",
+        params={
+            "bookmaker": "sportsbet",
+            "scope": "match",
+            "limit": 20,
+            "sort_by": "start_time",
+            "sort_dir": "asc",
+        },
+    )
+    assert match_odds_response.status_code == 200
+    match_odds_payload = match_odds_response.json()
+    assert match_odds_payload
+    assert all(row["player"] is None for row in match_odds_payload)
 
     stat_players_response = client.get("/api/v1/players/search", params={"q": "English"})
     assert stat_players_response.status_code == 200

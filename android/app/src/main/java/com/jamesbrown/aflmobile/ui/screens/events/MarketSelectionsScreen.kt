@@ -106,6 +106,8 @@ class MarketSelectionsViewModel(
                 marketTypeCode = selection.selectionType,
                 selectionType = selection.selectionType,
                 basePrice = basePrice,
+                diff2025 = null,
+                diffLast10 = null,
             ),
         )
         _uiState.update { it.copy(infoMessage = result.message) }

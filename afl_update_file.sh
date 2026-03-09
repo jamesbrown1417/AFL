@@ -22,6 +22,15 @@ Rscript OddsScraper/Neds/get_neds_match_urls.R
 Rscript OddsScraper/master_processing_script.R
 Rscript Scripts/get_arbs.R
 
+# Refresh backend DuckDB state from the newly scraped/processed files.
+if ! (
+    cd /Users/jamesbrown/Projects/AFL/backend || exit 1
+    ./.venv/bin/python scripts/run_import_once.py
+); then
+    echo "Backend data update failed. Aborting before publish/push."
+    exit 1
+fi
+
 # Publish reports using Quarto
 echo "1" | quarto publish quarto-pub Reports/afl-odds.qmd
 

@@ -1,21 +1,27 @@
 package com.jamesbrown.aflmobile.ui.screens.props
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.FilterList
 import androidx.compose.material.icons.outlined.Refresh
@@ -43,11 +49,20 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Path
+import androidx.compose.ui.graphics.PathEffect
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -71,8 +86,6 @@ import com.jamesbrown.aflmobile.ui.common.simpleViewModelFactory
 import java.time.OffsetDateTime
 import java.time.format.DateTimeFormatter
 import java.util.Locale
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -82,13 +95,13 @@ import kotlinx.coroutines.launch
 
 data class PlayerStatsUiState(
     val searchQuery: String = "Tim English",
+    val allPlayers: List<PlayerSummary> = emptyList(),
     val searchResults: List<PlayerSummary> = emptyList(),
     val selectedPlayer: PlayerSummary? = null,
     val filterOptions: PlayerStatFilterOptions? = null,
     val filters: PlayerStatsFilters = PlayerStatsFilters(),
     val history: List<PlayerGameLogEntry> = emptyList(),
     val summary: PlayerStatSummary? = null,
-    val isSearchingPlayers: Boolean = false,
     val isLoading: Boolean = true,
     val errorMessage: String? = null,
     val infoMessage: String? = null,
@@ -100,22 +113,20 @@ class PlayerStatsViewModel(
     private val _uiState = MutableStateFlow(PlayerStatsUiState())
     val uiState: StateFlow<PlayerStatsUiState> = _uiState.asStateFlow()
 
-    private var searchJob: Job? = null
-
     init {
         bootstrap()
     }
 
     private fun bootstrap() {
         viewModelScope.launch {
-            val players = runCatching { repository.searchPlayers("Tim English") }.getOrDefault(emptyList())
-            val selected = players.firstOrNull()
+            val players = runCatching { repository.searchPlayers("", limit = 5000) }.getOrDefault(emptyList())
+            val selected = players.firstOrNull { it.fullName.equals("Tim English", ignoreCase = true) } ?: players.firstOrNull()
             _uiState.update {
                 it.copy(
                     searchQuery = selected?.fullName ?: "Tim English",
-                    searchResults = players,
+                    allPlayers = players,
+                    searchResults = filterPlayers(players, selected?.fullName ?: "Tim English"),
                     selectedPlayer = selected,
-                    isSearchingPlayers = false,
                 )
             }
             if (selected != null) {
@@ -127,33 +138,12 @@ class PlayerStatsViewModel(
     }
 
     fun updateSearchQuery(query: String) {
-        _uiState.update { it.copy(searchQuery = query) }
-        searchJob?.cancel()
-        if (query.length < 2) {
-            _uiState.update { it.copy(searchResults = emptyList(), isSearchingPlayers = false) }
-            return
-        }
-        _uiState.update { it.copy(isSearchingPlayers = true) }
-        searchJob = viewModelScope.launch {
-            delay(250)
-            runCatching { repository.searchPlayers(query) }
-                .onSuccess { results ->
-                    _uiState.update { state ->
-                        state.copy(
-                            searchResults = results,
-                            isSearchingPlayers = false,
-                            errorMessage = null,
-                        )
-                    }
-                }
-                .onFailure { error ->
-                    _uiState.update { state ->
-                        state.copy(
-                            isSearchingPlayers = false,
-                            errorMessage = error.message ?: "Failed to search players.",
-                        )
-                    }
-                }
+        _uiState.update { state ->
+            state.copy(
+                searchQuery = query,
+                searchResults = filterPlayers(state.allPlayers, query),
+                errorMessage = null,
+            )
         }
     }
 
@@ -162,7 +152,7 @@ class PlayerStatsViewModel(
             it.copy(
                 selectedPlayer = player,
                 searchQuery = player.fullName,
-                searchResults = emptyList(),
+                searchResults = filterPlayers(it.allPlayers, player.fullName),
             )
         }
         loadPlayer(player)
@@ -249,6 +239,18 @@ class PlayerStatsViewModel(
     }
 }
 
+private fun filterPlayers(players: List<PlayerSummary>, query: String): List<PlayerSummary> {
+    val normalized = query.trim().lowercase(Locale.getDefault())
+    if (players.isEmpty()) return emptyList()
+    if (normalized.isBlank()) return players
+    return players.filter { it.fullName.lowercase(Locale.getDefault()).contains(normalized) }
+}
+
+private enum class PlayerViewMode {
+    Table,
+    Graph,
+}
+
 @Composable
 fun PlayerStatsRoute(
     repository: AflRepository,
@@ -277,6 +279,7 @@ private fun PlayerStatsScreen(
 ) {
     var showFilters by remember { mutableStateOf(false) }
     var draftFilters by remember(uiState.filters) { mutableStateOf(uiState.filters) }
+    var viewMode by rememberSaveable { mutableStateOf(PlayerViewMode.Table.name) }
 
     LaunchedEffect(showFilters, uiState.filters) {
         if (showFilters) {
@@ -345,10 +348,21 @@ private fun PlayerStatsScreen(
                         PlayerSummaryCard(summary = uiState.summary)
                     }
                     item {
+                        PlayerViewModeToggle(
+                            selected = PlayerViewMode.valueOf(viewMode),
+                            onSelected = { viewMode = it.name },
+                        )
+                    }
+                    item {
                         if (uiState.history.isEmpty()) {
                             EmptyCard(
                                 title = "No history",
                                 body = "Adjust the player filters or widen the season range.",
+                            )
+                        } else if (PlayerViewMode.valueOf(viewMode) == PlayerViewMode.Graph) {
+                            PlayerHistoryGraph(
+                                history = uiState.history,
+                                filters = uiState.filters,
                             )
                         } else {
                             PlayerHistoryTable(uiState.history)
@@ -376,44 +390,72 @@ private fun PlayerStatsScreen(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun PlayerSearchCard(
     uiState: PlayerStatsUiState,
     onSearchQueryChanged: (String) -> Unit,
     onSelectPlayer: (PlayerSummary) -> Unit,
 ) {
+    var expanded by remember { mutableStateOf(false) }
+    val dropdownPlayers = remember(uiState.allPlayers, uiState.searchResults, uiState.searchQuery, uiState.selectedPlayer, expanded) {
+        if (expanded && uiState.selectedPlayer?.fullName == uiState.searchQuery) {
+            uiState.allPlayers
+        } else {
+            uiState.searchResults
+        }
+    }
+
     Card(modifier = Modifier.fillMaxWidth()) {
         Column(
             modifier = Modifier.padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp),
         ) {
             Text("Player Stats", style = MaterialTheme.typography.titleLarge)
-            OutlinedTextField(
-                value = uiState.searchQuery,
-                onValueChange = onSearchQueryChanged,
-                modifier = Modifier.fillMaxWidth(),
-                singleLine = true,
-                label = { Text("Select player") },
-            )
+            ExposedDropdownMenuBox(
+                expanded = expanded,
+                onExpandedChange = { expanded = !expanded },
+            ) {
+                OutlinedTextField(
+                    value = uiState.searchQuery,
+                    onValueChange = {
+                        onSearchQueryChanged(it)
+                        expanded = true
+                    },
+                    modifier = Modifier
+                        .menuAnchor(ExposedDropdownMenuAnchorType.PrimaryEditable)
+                        .fillMaxWidth(),
+                    singleLine = true,
+                    label = { Text("Select player") },
+                    trailingIcon = {
+                        ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded)
+                    },
+                )
+                DropdownMenu(
+                    expanded = expanded,
+                    onDismissRequest = { expanded = false },
+                    modifier = Modifier.heightIn(max = 360.dp),
+                ) {
+                    dropdownPlayers.forEach { player ->
+                        DropdownMenuItem(
+                            text = { Text(player.fullName) },
+                            onClick = {
+                                onSelectPlayer(player)
+                                expanded = false
+                            },
+                        )
+                    }
+                }
+            }
             uiState.selectedPlayer?.let { player ->
                 InlineChip("Selected: ${player.fullName}")
             }
-            if (uiState.isSearchingPlayers) {
-                Text("Searching players...", style = MaterialTheme.typography.bodySmall)
-            }
-            if (uiState.searchResults.isNotEmpty()) {
-                Column(
-                    verticalArrangement = Arrangement.spacedBy(4.dp),
-                ) {
-                    uiState.searchResults.take(6).forEach { player ->
-                        TextButton(
-                            onClick = { onSelectPlayer(player) },
-                            modifier = Modifier.fillMaxWidth(),
-                        ) {
-                            Text(player.fullName, modifier = Modifier.fillMaxWidth())
-                        }
-                    }
-                }
+            if (uiState.allPlayers.isNotEmpty()) {
+                Text(
+                    "${dropdownPlayers.size} matching players",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
             }
         }
     }
@@ -529,6 +571,32 @@ private fun PlayerSummaryCard(summary: PlayerStatSummary?) {
 }
 
 @Composable
+private fun PlayerViewModeToggle(
+    selected: PlayerViewMode,
+    onSelected: (PlayerViewMode) -> Unit,
+) {
+    Card(modifier = Modifier.fillMaxWidth()) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(12.dp),
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+        ) {
+            FilterChip(
+                selected = selected == PlayerViewMode.Table,
+                onClick = { onSelected(PlayerViewMode.Table) },
+                label = { Text("Table") },
+            )
+            FilterChip(
+                selected = selected == PlayerViewMode.Graph,
+                onClick = { onSelected(PlayerViewMode.Graph) },
+                label = { Text("Graph") },
+            )
+        }
+    }
+}
+
+@Composable
 private fun DenseSummaryCell(
     label: String,
     value: String,
@@ -574,6 +642,329 @@ private fun PlayerHistoryTable(history: List<PlayerGameLogEntry>) {
             }
         }
     }
+}
+
+@Composable
+private fun PlayerHistoryGraph(
+    history: List<PlayerGameLogEntry>,
+    filters: PlayerStatsFilters,
+) {
+    val orderedHistory = remember(history) { history.sortedBy { it.gameNumber } }
+    var chartSize by remember { mutableStateOf(IntSize.Zero) }
+    var selectedPointIndex by remember(orderedHistory, filters) { mutableStateOf<Int?>(null) }
+    val density = LocalDensity.current
+    val selectedValues = orderedHistory.mapNotNull { it.selectedValue }
+    if (selectedValues.isEmpty()) {
+        EmptyCard("No graph", "No selected stat values are available for the current filter set.")
+        return
+    }
+
+    val singleLine = filters.referenceLineText.toDoubleOrNull()
+    val lowerBound = filters.lowerBoundText.toDoubleOrNull()
+    val upperBound = filters.upperBoundText.toDoubleOrNull()
+    val guideValues = buildList {
+        addAll(selectedValues)
+        singleLine?.let { add(it) }
+        lowerBound?.let { add(it) }
+        upperBound?.let { add(it) }
+    }
+    val minValue = guideValues.minOrNull() ?: 0.0
+    val maxValue = guideValues.maxOrNull() ?: 1.0
+    val span = (maxValue - minValue).takeIf { it > 0.0 } ?: 1.0
+    val paddingValue = span * 0.1
+    val chartMin = minValue - paddingValue
+    val chartMax = maxValue + paddingValue
+    val axisMin = remember(chartMin) { roundDownToHalf(chartMin) }
+    val axisStep = remember(axisMin, chartMax) {
+        roundUpToHalf(((roundUpToHalf(chartMax) - axisMin) / 3.0).coerceAtLeast(0.5))
+    }
+    val axisMax = axisMin + (axisStep * 3.0)
+    val outlineColor = MaterialTheme.colorScheme.outline
+    val primaryColor = MaterialTheme.colorScheme.primary
+    val axisColor = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.35f)
+    val yTickValues = remember(axisMin, axisMax, axisStep) {
+        List(4) { index -> axisMax - (axisStep * index.toDouble()) }
+    }
+    val plottedPoints = remember(orderedHistory, chartSize, axisMin, axisMax, density) {
+        if (chartSize == IntSize.Zero) {
+            emptyList()
+        } else {
+            val left = with(density) { 24.dp.toPx() }
+            val right = chartSize.width.toFloat() - with(density) { 10.dp.toPx() }
+            val top = with(density) { 14.dp.toPx() }
+            val bottom = chartSize.height.toFloat() - with(density) { 24.dp.toPx() }
+            val chartWidth = (right - left).coerceAtLeast(1f)
+            val chartHeight = (bottom - top).coerceAtLeast(1f)
+            orderedHistory.mapIndexedNotNull { index, entry ->
+                val value = entry.selectedValue ?: return@mapIndexedNotNull null
+                val x = if (orderedHistory.size == 1) {
+                    left + (chartWidth / 2f)
+                } else {
+                    left + (index.toFloat() / orderedHistory.lastIndex.toFloat()) * chartWidth
+                }
+                val normalized = ((value - axisMin) / (axisMax - axisMin)).toFloat()
+                val y = bottom - (normalized * chartHeight)
+                IndexedOffset(index = index, offset = Offset(x, y))
+            }
+        }
+    }
+    val selectedEntry = selectedPointIndex?.let { orderedHistory.getOrNull(it) }
+    val hitRadiusPx = with(density) { 28.dp.toPx() }
+
+    Card(modifier = Modifier.fillMaxWidth()) {
+        Column(
+            modifier = Modifier.padding(14.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp),
+        ) {
+            Text(
+                "${orderedHistory.first().selectedStat} graph",
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.SemiBold,
+            )
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(10.dp),
+                verticalAlignment = Alignment.Bottom,
+            ) {
+                Column(
+                    modifier = Modifier.height(280.dp),
+                    verticalArrangement = Arrangement.SpaceBetween,
+                    horizontalAlignment = Alignment.End,
+                ) {
+                    yTickValues.forEach { tick ->
+                        Text(
+                            text = formatGraphValue(tick),
+                            style = MaterialTheme.typography.labelSmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            textAlign = TextAlign.End,
+                        )
+                    }
+                }
+                Canvas(
+                    modifier = Modifier
+                        .weight(1f)
+                        .height(280.dp)
+                        .onSizeChanged { chartSize = it }
+                        .pointerInput(plottedPoints) {
+                            detectTapGestures { tapOffset ->
+                                val nearest = plottedPoints
+                                    .map { point -> point.index to point.offset.getDistanceSquared(tapOffset) }
+                                    .minByOrNull { it.second }
+                                selectedPointIndex = nearest
+                                    ?.takeIf { it.second <= (hitRadiusPx * hitRadiusPx) }
+                                    ?.first
+                            }
+                        },
+                ) {
+                    val left = 24.dp.toPx()
+                    val right = size.width - 10.dp.toPx()
+                    val top = 14.dp.toPx()
+                    val bottom = size.height - 24.dp.toPx()
+                    val chartWidth = (right - left).coerceAtLeast(1f)
+                    val chartHeight = (bottom - top).coerceAtLeast(1f)
+
+                    fun xFor(index: Int): Float =
+                        if (orderedHistory.size == 1) {
+                            left + (chartWidth / 2f)
+                        } else {
+                            left + (index.toFloat() / orderedHistory.lastIndex.toFloat()) * chartWidth
+                        }
+
+                    fun yFor(value: Double): Float {
+                        val normalized = ((value - axisMin) / (axisMax - axisMin)).toFloat()
+                        return bottom - (normalized * chartHeight)
+                    }
+
+                    repeat(4) { step ->
+                        val fraction = step / 3f
+                        val y = top + (fraction * chartHeight)
+                        drawLine(
+                            color = outlineColor.copy(alpha = 0.2f),
+                            start = Offset(left, y),
+                            end = Offset(right, y),
+                            strokeWidth = 1.dp.toPx(),
+                        )
+                    }
+
+                    if (filters.lineMode == "interval" && lowerBound != null && upperBound != null) {
+                        val topBand = yFor(upperBound)
+                        val bottomBand = yFor(lowerBound)
+                        drawRect(
+                            color = Color(0x2624A148),
+                            topLeft = Offset(left, topBand),
+                            size = androidx.compose.ui.geometry.Size(chartWidth, bottomBand - topBand),
+                        )
+                        drawLine(
+                            color = primaryColor,
+                            start = Offset(left, topBand),
+                            end = Offset(right, topBand),
+                            strokeWidth = 2.dp.toPx(),
+                            pathEffect = PathEffect.dashPathEffect(floatArrayOf(14f, 10f)),
+                        )
+                        drawLine(
+                            color = primaryColor,
+                            start = Offset(left, bottomBand),
+                            end = Offset(right, bottomBand),
+                            strokeWidth = 2.dp.toPx(),
+                            pathEffect = PathEffect.dashPathEffect(floatArrayOf(14f, 10f)),
+                        )
+                    } else if (singleLine != null) {
+                        val referenceY = yFor(singleLine)
+                        drawLine(
+                            color = primaryColor,
+                            start = Offset(left, referenceY),
+                            end = Offset(right, referenceY),
+                            strokeWidth = 2.dp.toPx(),
+                            pathEffect = PathEffect.dashPathEffect(floatArrayOf(14f, 10f)),
+                        )
+                    }
+
+                    val trendPath = Path()
+                    orderedHistory.forEachIndexed { index, entry ->
+                        val value = entry.selectedValue ?: return@forEachIndexed
+                        val point = Offset(xFor(index), yFor(value))
+                        if (trendPath.isEmpty) {
+                            trendPath.moveTo(point.x, point.y)
+                        } else {
+                            trendPath.lineTo(point.x, point.y)
+                        }
+                    }
+                    drawPath(
+                        path = trendPath,
+                        color = outlineColor,
+                        style = androidx.compose.ui.graphics.drawscope.Stroke(width = 2.dp.toPx()),
+                    )
+
+                    orderedHistory.forEachIndexed { index, entry ->
+                        val value = entry.selectedValue ?: return@forEachIndexed
+                        val pointColor = when (entry.hit) {
+                            true -> Color(0xFF1B7F46)
+                            false -> Color(0xFFD14343)
+                            null -> primaryColor
+                        }
+                        val radius = if (selectedPointIndex == index) 7.dp.toPx() else 5.dp.toPx()
+                        drawCircle(
+                            color = pointColor,
+                            radius = radius,
+                            center = Offset(xFor(index), yFor(value)),
+                        )
+                        if (selectedPointIndex == index) {
+                            drawCircle(
+                                color = Color.White,
+                                radius = radius + 2.dp.toPx(),
+                                center = Offset(xFor(index), yFor(value)),
+                                style = androidx.compose.ui.graphics.drawscope.Stroke(width = 2.dp.toPx()),
+                            )
+                        }
+                    }
+
+                    drawLine(
+                        color = axisColor,
+                        start = Offset(left, bottom),
+                        end = Offset(right, bottom),
+                        strokeWidth = 1.2.dp.toPx(),
+                    )
+                }
+            }
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Text("Oldest", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                GraphLegendDot(color = Color(0xFF1B7F46), label = "Hit")
+                GraphLegendDot(color = Color(0xFFD14343), label = "Miss")
+                Text("Latest", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            }
+
+            selectedEntry?.let { entry ->
+                SelectedGraphPointCard(
+                    entry = entry,
+                    filters = filters,
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun GraphLegendDot(
+    color: Color,
+    label: String,
+) {
+    Row(
+        horizontalArrangement = Arrangement.spacedBy(6.dp),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Box(
+            modifier = Modifier
+                .width(10.dp)
+                .height(10.dp)
+                .background(color = color, shape = RoundedCornerShape(100.dp)),
+        )
+        Text(label, style = MaterialTheme.typography.labelSmall)
+    }
+}
+
+@OptIn(ExperimentalLayoutApi::class)
+@Composable
+private fun SelectedGraphPointCard(
+    entry: PlayerGameLogEntry,
+    filters: PlayerStatsFilters,
+) {
+    val lineLabel = if (filters.lineMode == "interval") {
+        "${filters.lowerBoundText} - ${filters.upperBoundText}"
+    } else {
+        filters.referenceLineText
+    }
+    Card(modifier = Modifier.fillMaxWidth()) {
+        Column(
+            modifier = Modifier.padding(12.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp),
+        ) {
+            Text(
+                formatGameDate(entry.date),
+                style = MaterialTheme.typography.titleSmall,
+                fontWeight = FontWeight.SemiBold,
+            )
+            FlowRow(
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp),
+            ) {
+                InlineChip("Round: ${entry.roundLabel ?: "--"}")
+                InlineChip("Opp: ${entry.opposition ?: "--"}")
+                InlineChip("Venue: ${entry.venue ?: "--"}")
+                InlineChip("Value: ${formatNumber(entry.selectedValue)}")
+                InlineChip("Line: $lineLabel")
+                InlineChip(
+                    when (entry.hit) {
+                        true -> "Result: Hit"
+                        false -> "Result: Miss"
+                        null -> "Result: --"
+                    },
+                )
+            }
+        }
+    }
+}
+
+private fun formatGraphValue(value: Double): String =
+    String.format(Locale.getDefault(), "%.1f", value)
+
+private fun roundDownToHalf(value: Double): Double = kotlin.math.floor(value * 2.0) / 2.0
+
+private fun roundUpToHalf(value: Double): Double = kotlin.math.ceil(value * 2.0) / 2.0
+
+private data class IndexedOffset(
+    val index: Int,
+    val offset: Offset,
+)
+
+private fun Offset.getDistanceSquared(other: Offset): Float {
+    val dx = x - other.x
+    val dy = y - other.y
+    return (dx * dx) + (dy * dy)
 }
 
 @Composable

@@ -18,7 +18,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material.icons.outlined.FilterList
 import androidx.compose.material.icons.outlined.Refresh
 import androidx.compose.material3.Card
@@ -36,7 +35,9 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.PrimaryTabRow
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Tab
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
@@ -57,9 +58,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.jamesbrown.aflmobile.data.repository.AflRepository
-import com.jamesbrown.aflmobile.data.repository.SgmDraftStore
 import com.jamesbrown.aflmobile.model.BookmakerSummary
-import com.jamesbrown.aflmobile.model.DraftLeg
 import com.jamesbrown.aflmobile.model.EventSummary
 import com.jamesbrown.aflmobile.model.OddsFilters
 import com.jamesbrown.aflmobile.model.OddsSearchResult
@@ -83,7 +82,10 @@ private data class FilterOption(
     val label: String,
 )
 
-private val marketOptions = listOf(
+private const val OddsScopeMatch = "match"
+private const val OddsScopePlayer = "player"
+
+private val playerMarketOptions = listOf(
     FilterOption(code = null, label = "All props"),
     FilterOption(code = "player_disposals", label = "Disposals"),
     FilterOption(code = "player_fantasy_points", label = "Fantasy"),
@@ -94,6 +96,36 @@ private val marketOptions = listOf(
     FilterOption(code = "player_handballs", label = "Handballs"),
     FilterOption(code = "player_hitouts", label = "Hitouts"),
     FilterOption(code = "player_clearances", label = "Clearances"),
+)
+
+private val matchMarketOptions = listOf(
+    FilterOption(code = null, label = "All match markets"),
+    FilterOption(code = "h2h", label = "H2H"),
+    FilterOption(code = "line", label = "Line"),
+    FilterOption(code = "total_points", label = "Totals"),
+)
+
+private data class SortOption(
+    val sortBy: String,
+    val sortDirection: String,
+    val label: String,
+)
+
+private val playerSortOptions = listOf(
+    SortOption(sortBy = "diff_last_10", sortDirection = "desc", label = "Diff L10"),
+    SortOption(sortBy = "diff_2025", sortDirection = "desc", label = "Diff 2025"),
+    SortOption(sortBy = "price", sortDirection = "desc", label = "Price high-low"),
+    SortOption(sortBy = "price", sortDirection = "asc", label = "Price low-high"),
+    SortOption(sortBy = "player", sortDirection = "asc", label = "Player A-Z"),
+    SortOption(sortBy = "match", sortDirection = "asc", label = "Match"),
+)
+
+private val matchSortOptions = listOf(
+    SortOption(sortBy = "start_time", sortDirection = "asc", label = "Start time"),
+    SortOption(sortBy = "price", sortDirection = "desc", label = "Price high-low"),
+    SortOption(sortBy = "price", sortDirection = "asc", label = "Price low-high"),
+    SortOption(sortBy = "market", sortDirection = "asc", label = "Market"),
+    SortOption(sortBy = "match", sortDirection = "asc", label = "Match"),
 )
 
 data class OddsUiState(
@@ -109,7 +141,6 @@ data class OddsUiState(
 
 class OddsViewModel(
     private val repository: AflRepository,
-    private val draftStore: SgmDraftStore,
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(OddsUiState())
     val uiState: StateFlow<OddsUiState> = _uiState.asStateFlow()
@@ -128,11 +159,33 @@ class OddsViewModel(
                     bookmakers = bookmakers,
                     events = events,
                     defaultBookmakerCodes = defaultBookmakers,
-                    filters = OddsFilters(bookmakerCodes = defaultBookmakers),
+                    filters = OddsFilters(
+                        scope = OddsScopePlayer,
+                        bookmakerCodes = defaultBookmakers,
+                    ),
                 )
             }
             refresh()
         }
+    }
+
+    fun setScope(scope: String) {
+        val currentFilters = uiState.value.filters
+        val defaultSort = defaultSortForScope(scope)
+        val nextMarketType = currentFilters.marketTypeCode
+            ?.takeIf { marketOptionsForScope(scope).any { option -> option.code == it } }
+        _uiState.update {
+            it.copy(
+                filters = currentFilters.copy(
+                    scope = scope,
+                    marketTypeCode = nextMarketType,
+                    sortBy = defaultSort.sortBy,
+                    sortDirection = defaultSort.sortDirection,
+                ),
+                infoMessage = null,
+            )
+        }
+        refresh()
     }
 
     fun applyFilters(filters: OddsFilters) {
@@ -147,9 +200,12 @@ class OddsViewModel(
             runCatching {
                 repository.odds(
                     bookmakers = filters.bookmakerCodes,
+                    scope = filters.scope,
                     query = null,
                     marketType = filters.marketTypeCode,
                     eventId = filters.eventId,
+                    sortBy = filters.sortBy,
+                    sortDirection = filters.sortDirection,
                     selectionType = null,
                     minEdge = null,
                     minPrice = null,
@@ -170,46 +226,21 @@ class OddsViewModel(
         }
     }
 
-    fun addToDraft(odds: OddsSearchResult) {
-        if (odds.bookmaker != "sportsbet") {
-            _uiState.update { it.copy(infoMessage = "Live SGM pricing is only enabled for Sportsbet right now.") }
-            return
-        }
-        val basePrice = odds.decimalPrice
-        if (!odds.sgmEligible || basePrice == null) {
-            _uiState.update { it.copy(infoMessage = "That leg is not ready for SGM pricing.") }
-            return
-        }
-        val result = draftStore.addLeg(
-            DraftLeg(
-                selectionId = odds.selectionId,
-                eventId = odds.eventId,
-                eventLabel = odds.matchName,
-                bookmaker = odds.bookmaker,
-                label = odds.label,
-                marketTypeCode = odds.marketTypeCode,
-                selectionType = odds.selectionType,
-                basePrice = basePrice,
-            ),
-        )
-        _uiState.update { it.copy(infoMessage = result.message) }
-    }
 }
 
 @Composable
 fun OddsRoute(
     repository: AflRepository,
-    draftStore: SgmDraftStore,
 ) {
     val viewModel: OddsViewModel = viewModel(
-        factory = simpleViewModelFactory { OddsViewModel(repository, draftStore) },
+        factory = simpleViewModelFactory { OddsViewModel(repository) },
     )
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     OddsScreen(
         uiState = uiState,
+        onScopeSelected = viewModel::setScope,
         onApplyFilters = viewModel::applyFilters,
         onRefresh = viewModel::refresh,
-        onAddToDraft = viewModel::addToDraft,
     )
 }
 
@@ -217,9 +248,9 @@ fun OddsRoute(
 @Composable
 private fun OddsScreen(
     uiState: OddsUiState,
+    onScopeSelected: (String) -> Unit,
     onApplyFilters: (OddsFilters) -> Unit,
     onRefresh: () -> Unit,
-    onAddToDraft: (OddsSearchResult) -> Unit,
 ) {
     var showFilters by remember { mutableStateOf(false) }
     var draftFilters by remember(uiState.filters) { mutableStateOf(uiState.filters) }
@@ -256,6 +287,21 @@ private fun OddsScreen(
                 verticalArrangement = Arrangement.spacedBy(12.dp),
             ) {
                 item {
+                    PrimaryTabRow(selectedTabIndex = if (uiState.filters.scope == OddsScopeMatch) 0 else 1) {
+                        Tab(
+                            selected = uiState.filters.scope == OddsScopeMatch,
+                            onClick = { onScopeSelected(OddsScopeMatch) },
+                            text = { Text("Match") },
+                        )
+                        Tab(
+                            selected = uiState.filters.scope == OddsScopePlayer,
+                            onClick = { onScopeSelected(OddsScopePlayer) },
+                            text = { Text("Player") },
+                        )
+                    }
+                }
+
+                item {
                     Card(modifier = Modifier.fillMaxWidth()) {
                         Row(
                             modifier = Modifier
@@ -268,9 +314,20 @@ private fun OddsScreen(
                                 modifier = Modifier.weight(1f),
                                 verticalArrangement = Arrangement.spacedBy(6.dp),
                             ) {
-                                Text("Processed prop odds", style = MaterialTheme.typography.titleLarge)
                                 Text(
-                                    "${uiState.odds.size} live rows from the current processed odds set.",
+                                    if (uiState.filters.scope == OddsScopeMatch) {
+                                        "Processed match odds"
+                                    } else {
+                                        "Processed player props"
+                                    },
+                                    style = MaterialTheme.typography.titleLarge,
+                                )
+                                Text(
+                                    if (uiState.filters.scope == OddsScopeMatch) {
+                                        "${uiState.odds.size} match-market rows across H2H, line, and totals."
+                                    } else {
+                                        "${uiState.odds.size} player prop rows from the current processed odds set."
+                                    },
                                     style = MaterialTheme.typography.bodyMedium,
                                 )
                             }
@@ -298,12 +355,17 @@ private fun OddsScreen(
                     item { ErrorCard(message) }
                 }
 
-                uiState.infoMessage?.let { message ->
-                    item { EmptyCard("SGM", message) }
-                }
-
                 if (!uiState.isLoading && uiState.odds.isEmpty()) {
-                    item { EmptyCard("No odds", "Change market, agency, or match filters.") }
+                    item {
+                        EmptyCard(
+                            "No odds",
+                            if (uiState.filters.scope == OddsScopeMatch) {
+                                "Change the match-market, agency, or match filters."
+                            } else {
+                                "Change the player market, agency, or match filters."
+                            },
+                        )
+                    }
                 }
 
                 items(
@@ -312,7 +374,7 @@ private fun OddsScreen(
                 ) { odds ->
                     OddsCard(
                         odds = odds,
-                        onAddToDraft = onAddToDraft,
+                        scope = uiState.filters.scope,
                     )
                 }
             }
@@ -329,7 +391,13 @@ private fun OddsScreen(
                         showFilters = false
                     },
                     onClear = {
-                        draftFilters = OddsFilters(bookmakerCodes = uiState.defaultBookmakerCodes)
+                        val defaultSort = defaultSortForScope(draftFilters.scope)
+                        draftFilters = OddsFilters(
+                            scope = draftFilters.scope,
+                            bookmakerCodes = uiState.defaultBookmakerCodes,
+                            sortBy = defaultSort.sortBy,
+                            sortDirection = defaultSort.sortDirection,
+                        )
                     },
                     onDismiss = { showFilters = false },
                 )
@@ -358,9 +426,11 @@ private fun ActiveFilterRow(
         horizontalArrangement = Arrangement.spacedBy(8.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp),
     ) {
-        InlineChip("Market: ${marketLabel(filters.marketTypeCode)}")
+        InlineChip("Scope: ${filters.scope.replaceFirstChar { it.titlecase(Locale.getDefault()) }}")
+        InlineChip("Market: ${marketLabel(filters.marketTypeCode, filters.scope)}")
         InlineChip("Agency: $agencyLabel")
         InlineChip("Match: $matchLabel")
+        InlineChip("Sort: ${sortLabel(filters)}")
     }
 }
 
@@ -376,8 +446,9 @@ private fun OddsFilterSheet(
     onClear: () -> Unit,
     onDismiss: () -> Unit,
 ) {
-    var marketExpanded by mutableStateOf(false)
-    var matchExpanded by mutableStateOf(false)
+    var marketExpanded by remember { mutableStateOf(false) }
+    var matchExpanded by remember { mutableStateOf(false) }
+    var sortExpanded by remember { mutableStateOf(false) }
 
     ModalBottomSheet(onDismissRequest = onDismiss) {
         Column(
@@ -394,7 +465,7 @@ private fun OddsFilterSheet(
                 onExpandedChange = { marketExpanded = !marketExpanded },
             ) {
                 OutlinedTextField(
-                    value = marketLabel(filters.marketTypeCode),
+                    value = marketLabel(filters.marketTypeCode, filters.scope),
                     onValueChange = {},
                     modifier = Modifier
                         .menuAnchor(ExposedDropdownMenuAnchorType.PrimaryNotEditable)
@@ -409,7 +480,7 @@ private fun OddsFilterSheet(
                     expanded = marketExpanded,
                     onDismissRequest = { marketExpanded = false },
                 ) {
-                    marketOptions.forEach { option ->
+                    marketOptionsForScope(filters.scope).forEach { option ->
                         DropdownMenuItem(
                             text = { Text(option.label) },
                             onClick = {
@@ -441,6 +512,43 @@ private fun OddsFilterSheet(
                                 )
                             },
                             label = { Text(bookmaker.displayName) },
+                        )
+                    }
+                }
+            }
+
+            ExposedDropdownMenuBox(
+                expanded = sortExpanded,
+                onExpandedChange = { sortExpanded = !sortExpanded },
+            ) {
+                OutlinedTextField(
+                    value = sortLabel(filters),
+                    onValueChange = {},
+                    modifier = Modifier
+                        .menuAnchor(ExposedDropdownMenuAnchorType.PrimaryNotEditable)
+                        .fillMaxWidth(),
+                    readOnly = true,
+                    label = { Text("Sort") },
+                    trailingIcon = {
+                        ExposedDropdownMenuDefaults.TrailingIcon(expanded = sortExpanded)
+                    },
+                )
+                DropdownMenu(
+                    expanded = sortExpanded,
+                    onDismissRequest = { sortExpanded = false },
+                ) {
+                    sortOptionsForScope(filters.scope).forEach { option ->
+                        DropdownMenuItem(
+                            text = { Text(option.label) },
+                            onClick = {
+                                onFiltersChanged(
+                                    filters.copy(
+                                        sortBy = option.sortBy,
+                                        sortDirection = option.sortDirection,
+                                    ),
+                                )
+                                sortExpanded = false
+                            },
                         )
                     }
                 }
@@ -512,7 +620,18 @@ private fun OddsFilterSheet(
 @Composable
 private fun OddsCard(
     odds: OddsSearchResult,
-    onAddToDraft: (OddsSearchResult) -> Unit,
+    scope: String,
+) {
+    if (scope == OddsScopeMatch) {
+        MatchOddsCard(odds = odds)
+        return
+    }
+    PlayerOddsCard(odds = odds)
+}
+
+@Composable
+private fun PlayerOddsCard(
+    odds: OddsSearchResult,
 ) {
     Card(modifier = Modifier.fillMaxWidth()) {
         Column(
@@ -542,15 +661,6 @@ private fun OddsCard(
                         text = odds.matchName,
                         style = MaterialTheme.typography.bodySmall,
                     )
-                }
-                if (odds.bookmaker == "sportsbet" && odds.sgmEligible && odds.decimalPrice != null) {
-                    TextButton(
-                        onClick = { onAddToDraft(odds) },
-                        modifier = Modifier.padding(start = 8.dp),
-                    ) {
-                        Icon(Icons.Outlined.Add, contentDescription = null)
-                        Text("+SGM", modifier = Modifier.padding(start = 4.dp))
-                    }
                 }
             }
 
@@ -592,6 +702,61 @@ private fun OddsCard(
                 DeltaStatCell(
                     label = "DIFF L10",
                     value = odds.diffLast10,
+                    modifier = Modifier.weight(1f),
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun MatchOddsCard(
+    odds: OddsSearchResult,
+) {
+    Card(modifier = Modifier.fillMaxWidth()) {
+        Column(
+            modifier = Modifier.padding(14.dp),
+            verticalArrangement = Arrangement.spacedBy(10.dp),
+        ) {
+            Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                Text(
+                    text = odds.label,
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.SemiBold,
+                )
+                Text(
+                    text = odds.marketDisplayName,
+                    style = MaterialTheme.typography.labelLarge,
+                    color = MaterialTheme.colorScheme.primary,
+                )
+                Text(
+                    text = odds.matchName,
+                    style = MaterialTheme.typography.bodySmall,
+                )
+            }
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+            ) {
+                DenseStatCell(
+                    label = "SIDE",
+                    value = odds.selectionType.uppercase(Locale.getDefault()),
+                    modifier = Modifier.weight(1f),
+                )
+                DenseStatCell(
+                    label = "LINE",
+                    value = odds.lineValue?.let(::formatLineValue) ?: "-",
+                    modifier = Modifier.weight(1f),
+                )
+                DenseStatCell(
+                    label = "PRICE",
+                    value = formatDecimalPrice(odds.decimalPrice),
+                    modifier = Modifier.weight(1f),
+                )
+                DenseStatCell(
+                    label = "AGENCY",
+                    value = bookmakerLabel(odds.bookmaker),
                     modifier = Modifier.weight(1f),
                 )
             }
@@ -670,8 +835,23 @@ private fun toggleBookmaker(current: List<String>, bookmakerCode: String): List<
         current + bookmakerCode
     }
 
-private fun marketLabel(marketTypeCode: String?): String =
-    marketOptions.firstOrNull { it.code == marketTypeCode }?.label ?: "All props"
+private fun marketOptionsForScope(scope: String): List<FilterOption> =
+    if (scope == OddsScopeMatch) matchMarketOptions else playerMarketOptions
+
+private fun sortOptionsForScope(scope: String): List<SortOption> =
+    if (scope == OddsScopeMatch) matchSortOptions else playerSortOptions
+
+private fun defaultSortForScope(scope: String): SortOption =
+    sortOptionsForScope(scope).first()
+
+private fun marketLabel(marketTypeCode: String?, scope: String): String =
+    marketOptionsForScope(scope).firstOrNull { it.code == marketTypeCode }?.label
+        ?: marketOptionsForScope(scope).first().label
+
+private fun sortLabel(filters: OddsFilters): String =
+    sortOptionsForScope(filters.scope).firstOrNull {
+        it.sortBy == filters.sortBy && it.sortDirection == filters.sortDirection
+    }?.label ?: defaultSortForScope(filters.scope).label
 
 private fun selectedMatchLabel(eventId: Int?, events: List<EventSummary>): String {
     if (eventId == null) return "All matches"

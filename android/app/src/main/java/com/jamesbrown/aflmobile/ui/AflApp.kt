@@ -89,10 +89,7 @@ fun AflApp() {
                 PlayerStatsRoute(repository = container.repository)
             }
             composable(TopLevelDestination.Odds.route) {
-                OddsRoute(
-                    repository = container.repository,
-                    draftStore = container.sgmDraftStore,
-                )
+                OddsRoute(repository = container.repository)
             }
             composable(TopLevelDestination.Sgm.route) {
                 SgmBuilderRoute(

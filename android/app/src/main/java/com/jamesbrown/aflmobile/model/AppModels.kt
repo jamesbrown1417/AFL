@@ -7,10 +7,13 @@ data class AppSettings(
 )
 
 data class OddsFilters(
+    val scope: String = "player",
     val query: String = "",
     val bookmakerCodes: List<String> = emptyList(),
     val marketTypeCode: String? = null,
     val eventId: Int? = null,
+    val sortBy: String = "diff_last_10",
+    val sortDirection: String = "desc",
     val selectionType: String? = null,
     val minPriceText: String = "",
     val maxPriceText: String = "",
@@ -45,6 +48,8 @@ data class DraftLeg(
     val marketTypeCode: String,
     val selectionType: String,
     val basePrice: Double,
+    val diff2025: Double? = null,
+    val diffLast10: Double? = null,
 )
 
 data class SgmDraftState(
