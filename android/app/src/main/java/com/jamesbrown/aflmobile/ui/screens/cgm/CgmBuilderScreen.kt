@@ -1,16 +1,21 @@
 package com.jamesbrown.aflmobile.ui.screens.cgm
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
@@ -20,14 +25,15 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material.icons.outlined.FilterList
+import androidx.compose.material.icons.outlined.Menu
 import androidx.compose.material.icons.outlined.Refresh
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.BottomSheetScaffold
 import androidx.compose.material3.Card
-import androidx.compose.material3.Checkbox
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.Checkbox
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuAnchorType
 import androidx.compose.material3.ExposedDropdownMenuBox
@@ -39,9 +45,8 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.RangeSlider
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SheetValue
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Switch
@@ -83,7 +88,11 @@ import com.jamesbrown.aflmobile.ui.common.EmptyCard
 import com.jamesbrown.aflmobile.ui.common.ErrorCard
 import com.jamesbrown.aflmobile.ui.common.InlineChip
 import com.jamesbrown.aflmobile.ui.common.LoadingCard
+import com.jamesbrown.aflmobile.ui.common.BuilderDisplayModeSegmented
+import com.jamesbrown.aflmobile.ui.common.BuilderSortSheet
+import com.jamesbrown.aflmobile.ui.common.BuilderSupportText
 import com.jamesbrown.aflmobile.ui.common.ScreenPadding
+import com.jamesbrown.aflmobile.ui.common.SelectionMetricFilterSheet
 import com.jamesbrown.aflmobile.ui.common.formatDecimalPrice
 import com.jamesbrown.aflmobile.ui.common.simpleViewModelFactory
 import com.jamesbrown.aflmobile.ui.theme.Blue100
@@ -132,7 +141,7 @@ private val CgmAccentSoft = Orange100
 private val CgmAccentBorder = Orange300
 private val CgmMutedSurface = Blue50
 private val CgmTitle = Blue700
-private val DraftSheetPeekHeight = 144.dp
+private val DraftSheetPeekHeight = 76.dp
 
 data class CgmBuilderUiState(
     val bookmakers: List<BookmakerSummary> = emptyList(),
@@ -436,6 +445,7 @@ class CgmBuilderViewModel(
 @Composable
 fun CgmBuilderRoute(
     repository: AflRepository,
+    onOpenNavigation: () -> Unit,
 ) {
     val viewModel: CgmBuilderViewModel = viewModel(
         factory = simpleViewModelFactory { CgmBuilderViewModel(repository) },
@@ -453,10 +463,11 @@ fun CgmBuilderRoute(
         onApplyMetricFilters = viewModel::applyMetricFilters,
         onCompare = viewModel::compare,
         onRefresh = viewModel::refresh,
+        onOpenNavigation = onOpenNavigation,
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
 private fun CgmBuilderScreen(
     uiState: CgmBuilderUiState,
@@ -470,10 +481,13 @@ private fun CgmBuilderScreen(
     onApplyMetricFilters: (SelectionMetricFilters) -> Unit,
     onCompare: () -> Unit,
     onRefresh: () -> Unit,
+    onOpenNavigation: () -> Unit,
 ) {
     val selectedEventIds = uiState.selectedEventIds
     val selectedSelectionIds = remember(uiState.selectedLegs) { uiState.selectedLegs.map { it.selectionId }.toSet() }
+    val navigationBottomInset = WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding()
     var showFilters by remember { mutableStateOf(false) }
+    var showSortSheet by remember { mutableStateOf(false) }
     var draftMetricFilters by remember(uiState.metricFilters) { mutableStateOf(uiState.metricFilters) }
     var displayMode by rememberSaveable { mutableStateOf(BuilderDisplayMode.ROW) }
     var rowSortField by rememberSaveable { mutableStateOf(BuilderSortField.NEXT_BEST) }
@@ -527,48 +541,7 @@ private fun CgmBuilderScreen(
             draftMetricFilters = uiState.metricFilters
         }
     }
-
-    BottomSheetScaffold(
-        scaffoldState = scaffoldState,
-        sheetPeekHeight = DraftSheetPeekHeight,
-        sheetContainerColor = MaterialTheme.colorScheme.surfaceContainerLow.copy(alpha = 0.98f),
-        sheetContentColor = MaterialTheme.colorScheme.onSurface,
-        sheetShadowElevation = 10.dp,
-        sheetShape = RoundedCornerShape(topStart = 28.dp, topEnd = 28.dp),
-        sheetContent = {
-            CgmDraftSheet(
-                selectedBookmaker = uiState.selectedBookmaker,
-                selectedLegs = uiState.selectedLegs,
-                comparisonResults = uiState.comparisonResults,
-                isComparing = uiState.isComparing,
-                onCompare = {
-                    coroutineScope.launch {
-                        scaffoldState.bottomSheetState.expand()
-                    }
-                    onCompare()
-                },
-                onRemoveLeg = onRemoveLeg,
-                onClearDraft = onClearDraft,
-            )
-        },
-        containerColor = Color.Transparent,
-        topBar = {
-            TopAppBar(
-                title = { Text("CGM") },
-                colors = appTopBarColors(),
-                actions = {
-                    IconButton(onClick = onRefresh) {
-                        Icon(Icons.Outlined.Refresh, contentDescription = "Refresh")
-                    }
-                    if (uiState.selectedLegs.isNotEmpty()) {
-                        IconButton(onClick = onClearDraft) {
-                            Icon(Icons.Outlined.Delete, contentDescription = "Clear")
-                        }
-                    }
-                },
-            )
-        },
-    ) { innerPadding ->
+    val content: @Composable (PaddingValues) -> Unit = { innerPadding ->
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
@@ -591,7 +564,7 @@ private fun CgmBuilderScreen(
                     onClearEventSelection = onClearEventSelection,
                     onBestOnlyChanged = onBestOnlyChanged,
                     onDisplayModeChanged = { displayMode = it },
-                    onRowSortFieldChanged = { rowSortField = it },
+                    onOpenSort = { showSortSheet = true },
                     onOpenFilters = { showFilters = true },
                 )
             }
@@ -634,7 +607,7 @@ private fun CgmBuilderScreen(
                     )
                 }
                 if (displayMode == BuilderDisplayMode.ROW) {
-                    item {
+                    stickyHeader {
                         CandidateRowHeader()
                     }
                     items(rowLegs, key = { it.selectionId }) { leg ->
@@ -671,7 +644,90 @@ private fun CgmBuilderScreen(
                 onDismiss = { showFilters = false },
             )
         }
+        if (showSortSheet && displayMode == BuilderDisplayMode.ROW) {
+            BuilderSortSheet(
+                selectedSortField = rowSortField,
+                onSelect = { rowSortField = it },
+                onDismiss = { showSortSheet = false },
+            )
+        }
     }
+
+    BottomSheetScaffold(
+        scaffoldState = scaffoldState,
+        sheetPeekHeight = if (uiState.selectedLegs.isNotEmpty()) DraftSheetPeekHeight + navigationBottomInset else 0.dp,
+        sheetContainerColor = MaterialTheme.colorScheme.surfaceContainerLow.copy(alpha = 0.98f),
+        sheetContentColor = MaterialTheme.colorScheme.onSurface,
+        sheetShadowElevation = if (uiState.selectedLegs.isNotEmpty()) 10.dp else 0.dp,
+        sheetShape = RoundedCornerShape(topStart = 28.dp, topEnd = 28.dp),
+        sheetDragHandle = null,
+        sheetContent = {
+            if (uiState.selectedLegs.isNotEmpty()) {
+                CgmDraftSheet(
+                    selectedBookmaker = uiState.selectedBookmaker,
+                    selectedLegs = uiState.selectedLegs,
+                    comparisonResults = uiState.comparisonResults,
+                    isComparing = uiState.isComparing,
+                    navigationBottomInset = navigationBottomInset,
+                    onExpand = {
+                        coroutineScope.launch {
+                            scaffoldState.bottomSheetState.expand()
+                        }
+                    },
+                    onCompare = {
+                        coroutineScope.launch {
+                            scaffoldState.bottomSheetState.expand()
+                        }
+                        onCompare()
+                    },
+                    onRemoveLeg = onRemoveLeg,
+                    onClearDraft = onClearDraft,
+                )
+            } else {
+                Spacer(modifier = Modifier.height(1.dp))
+            }
+        },
+        containerColor = Color.Transparent,
+        topBar = {
+            CgmTopBar(
+                hasDraft = uiState.selectedLegs.isNotEmpty(),
+                onRefresh = onRefresh,
+                onClearDraft = onClearDraft,
+                onOpenNavigation = onOpenNavigation,
+            )
+        },
+    ) { innerPadding ->
+        content(innerPadding)
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun CgmTopBar(
+    hasDraft: Boolean,
+    onRefresh: () -> Unit,
+    onClearDraft: () -> Unit,
+    onOpenNavigation: () -> Unit,
+) {
+    TopAppBar(
+        title = { Text("CGM") },
+        colors = appTopBarColors(),
+        navigationIcon = {
+            IconButton(onClick = onOpenNavigation) {
+                Icon(Icons.Outlined.Menu, contentDescription = "Open navigation")
+            }
+        },
+        actions = {
+            IconButton(onClick = onRefresh) {
+                Icon(Icons.Outlined.Refresh, contentDescription = "Refresh")
+            }
+            if (hasDraft) {
+                IconButton(onClick = onClearDraft) {
+                    Icon(Icons.Outlined.Delete, contentDescription = "Clear")
+                }
+            }
+        },
+    )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -690,92 +746,76 @@ private fun CgmControlCard(
     onClearEventSelection: () -> Unit,
     onBestOnlyChanged: (Boolean) -> Unit,
     onDisplayModeChanged: (BuilderDisplayMode) -> Unit,
-    onRowSortFieldChanged: (BuilderSortField) -> Unit,
+    onOpenSort: () -> Unit,
     onOpenFilters: () -> Unit,
 ) {
     var bookmakerExpanded by remember { mutableStateOf(false) }
     var eventExpanded by remember { mutableStateOf(false) }
-    var sortExpanded by remember { mutableStateOf(false) }
-
-    Card(
-        colors = appCardColors(),
-        border = appGlassBorder(),
-    ) {
-        Column(
-            modifier = Modifier.padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(12.dp),
+    Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+        Card(
+            colors = appCardColors(),
+            border = appGlassBorder(),
         ) {
-            Text("Select source agency and matches", style = MaterialTheme.typography.titleMedium)
-
-            ExposedDropdownMenuBox(
-                expanded = bookmakerExpanded,
-                onExpandedChange = { bookmakerExpanded = !bookmakerExpanded },
+            Column(
+                modifier = Modifier.padding(16.dp),
+                verticalArrangement = Arrangement.spacedBy(12.dp),
             ) {
-                OutlinedTextField(
-                    value = selectedBookmaker?.let(::bookmakerLabel) ?: "Choose agency",
-                    onValueChange = {},
-                    modifier = Modifier
-                        .menuAnchor(ExposedDropdownMenuAnchorType.PrimaryNotEditable)
-                        .fillMaxWidth(),
-                    readOnly = true,
-                    label = { Text("Source agency") },
-                    trailingIcon = {
-                        ExposedDropdownMenuDefaults.TrailingIcon(expanded = bookmakerExpanded)
-                    },
-                )
-                DropdownMenu(
+                Text("Agency and matches", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
+                BuilderSupportText("Choose the source agency and the remaining matches you want to include.")
+
+                ExposedDropdownMenuBox(
                     expanded = bookmakerExpanded,
-                    onDismissRequest = { bookmakerExpanded = false },
+                    onExpandedChange = { bookmakerExpanded = !bookmakerExpanded },
                 ) {
-                    bookmakers.filter { it.enabled }.forEach { bookmaker ->
-                        DropdownMenuItem(
-                            text = { Text(bookmaker.displayName) },
-                            onClick = {
-                                onSelectBookmaker(bookmaker.code)
-                                bookmakerExpanded = false
-                            },
-                        )
+                    OutlinedTextField(
+                        value = selectedBookmaker?.let(::bookmakerLabel) ?: "Choose agency",
+                        onValueChange = {},
+                        modifier = Modifier
+                            .menuAnchor(ExposedDropdownMenuAnchorType.PrimaryNotEditable)
+                            .fillMaxWidth(),
+                        readOnly = true,
+                        label = { Text("Source agency") },
+                        trailingIcon = {
+                            ExposedDropdownMenuDefaults.TrailingIcon(expanded = bookmakerExpanded)
+                        },
+                    )
+                    DropdownMenu(
+                        expanded = bookmakerExpanded,
+                        onDismissRequest = { bookmakerExpanded = false },
+                    ) {
+                        bookmakers.filter { it.enabled }.forEach { bookmaker ->
+                            DropdownMenuItem(
+                                text = { Text(bookmaker.displayName) },
+                                onClick = {
+                                    onSelectBookmaker(bookmaker.code)
+                                    bookmakerExpanded = false
+                                },
+                            )
+                        }
                     }
                 }
-            }
 
-            ExposedDropdownMenuBox(
-                expanded = eventExpanded,
-                onExpandedChange = { eventExpanded = !eventExpanded },
-            ) {
-                OutlinedTextField(
-                    value = selectedMatchesLabel(events, selectedEventIds),
-                    onValueChange = {},
-                    modifier = Modifier
-                        .menuAnchor(ExposedDropdownMenuAnchorType.PrimaryNotEditable)
-                        .fillMaxWidth(),
-                    readOnly = true,
-                    label = { Text("Matches") },
-                    trailingIcon = {
-                        ExposedDropdownMenuDefaults.TrailingIcon(expanded = eventExpanded)
-                    },
-                )
-                DropdownMenu(
+                ExposedDropdownMenuBox(
                     expanded = eventExpanded,
-                    onDismissRequest = { eventExpanded = false },
-                    modifier = Modifier.heightIn(max = 360.dp),
+                    onExpandedChange = { eventExpanded = !eventExpanded },
                 ) {
-                    DropdownMenuItem(
-                        text = {
-                            Row(
-                                verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.spacedBy(10.dp),
-                            ) {
-                                Checkbox(
-                                    checked = selectedEventIds.isEmpty(),
-                                    onCheckedChange = null,
-                                )
-                                Text("All matches")
-                            }
+                    OutlinedTextField(
+                        value = selectedMatchesLabel(events, selectedEventIds),
+                        onValueChange = {},
+                        modifier = Modifier
+                            .menuAnchor(ExposedDropdownMenuAnchorType.PrimaryNotEditable)
+                            .fillMaxWidth(),
+                        readOnly = true,
+                        label = { Text("Matches") },
+                        trailingIcon = {
+                            ExposedDropdownMenuDefaults.TrailingIcon(expanded = eventExpanded)
                         },
-                        onClick = { onClearEventSelection() },
                     )
-                    events.forEach { event ->
+                    DropdownMenu(
+                        expanded = eventExpanded,
+                        onDismissRequest = { eventExpanded = false },
+                        modifier = Modifier.heightIn(max = 360.dp),
+                    ) {
                         DropdownMenuItem(
                             text = {
                                 Row(
@@ -783,243 +823,112 @@ private fun CgmControlCard(
                                     horizontalArrangement = Arrangement.spacedBy(10.dp),
                                 ) {
                                     Checkbox(
-                                        checked = event.id in selectedEventIds,
+                                        checked = selectedEventIds.isEmpty(),
                                         onCheckedChange = null,
                                     )
-                                    Text(event.matchName)
+                                    Text("All matches")
                                 }
                             },
-                            onClick = { onToggleEvent(event.id) },
+                            onClick = { onClearEventSelection() },
                         )
+                        events.forEach { event ->
+                            DropdownMenuItem(
+                                text = {
+                                    Row(
+                                        verticalAlignment = Alignment.CenterVertically,
+                                        horizontalArrangement = Arrangement.spacedBy(10.dp),
+                                    ) {
+                                        Checkbox(
+                                            checked = event.id in selectedEventIds,
+                                            onCheckedChange = null,
+                                        )
+                                        Text(event.matchName)
+                                    }
+                                },
+                                onClick = { onToggleEvent(event.id) },
+                            )
+                        }
                     }
                 }
             }
+        }
 
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically,
+        Card(
+            colors = appCardColors(),
+            border = appGlassBorder(),
+        ) {
+            Column(
+                modifier = Modifier.padding(16.dp),
+                verticalArrangement = Arrangement.spacedBy(14.dp),
             ) {
-                Column(modifier = Modifier.weight(1f)) {
-                    Text("Best market price only")
-                    Text(
-                        "Only show source-agency rows where it currently has the best market price.",
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    )
-                }
-                Switch(
-                    checked = bestOnly,
-                    onCheckedChange = onBestOnlyChanged,
-                )
-            }
-
-            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                Text("Display mode")
-                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    FilterChip(
-                        selected = displayMode == BuilderDisplayMode.ROW,
-                        onClick = { onDisplayModeChanged(BuilderDisplayMode.ROW) },
-                        label = { Text("Row mode") },
-                        colors = FilterChipDefaults.filterChipColors(
-                            containerColor = Blue100,
-                            labelColor = Blue700,
-                            selectedContainerColor = CgmAccent,
-                            selectedLabelColor = IceWhite,
-                        ),
-                    )
-                    FilterChip(
-                        selected = displayMode == BuilderDisplayMode.TILE,
-                        onClick = { onDisplayModeChanged(BuilderDisplayMode.TILE) },
-                        label = { Text("Tile mode") },
-                        colors = FilterChipDefaults.filterChipColors(
-                            containerColor = Blue100,
-                            labelColor = Blue700,
-                            selectedContainerColor = CgmAccent,
-                            selectedLabelColor = IceWhite,
-                        ),
-                    )
-                }
-            }
-
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                Column(
-                    modifier = Modifier.weight(1f),
-                    verticalArrangement = Arrangement.spacedBy(2.dp),
-                ) {
-                    Text("Performance filters")
-                    Text(
-                        "Filter by L10, 2025, and next best probability gap.",
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    )
-                }
-                FilledTonalButton(onClick = onOpenFilters) {
-                    Icon(Icons.Outlined.FilterList, contentDescription = null)
-                    Text("Filters", modifier = Modifier.padding(start = 8.dp))
-                }
-            }
-
-            if (displayMode == BuilderDisplayMode.ROW) {
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
-                    Column(
-                        modifier = Modifier.weight(1f),
-                        verticalArrangement = Arrangement.spacedBy(2.dp),
-                    ) {
-                        Text("Row sort")
-                        Text(
-                            "Sort the dense row list by price or the main model metrics.",
-                            style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        )
+                    Column(modifier = Modifier.weight(1f)) {
+                        Text("Best market price", fontWeight = FontWeight.Medium)
+                        BuilderSupportText("Only show source-agency rows where it currently has the best market price.")
                     }
-                    Column(horizontalAlignment = Alignment.End) {
-                        FilledTonalButton(onClick = { sortExpanded = true }) {
+                    Switch(
+                        checked = bestOnly,
+                        onCheckedChange = onBestOnlyChanged,
+                    )
+                }
+
+                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    Text("Display mode", fontWeight = FontWeight.Medium)
+                    BuilderDisplayModeSegmented(
+                        displayMode = displayMode,
+                        onDisplayModeChanged = onDisplayModeChanged,
+                        selectedContainerColor = CgmAccent,
+                        selectedContentColor = IceWhite,
+                        inactiveContainerColor = Blue100,
+                        inactiveContentColor = Blue700,
+                    )
+                }
+
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(10.dp),
+                ) {
+                    FilledTonalButton(
+                        onClick = onOpenFilters,
+                        modifier = Modifier.weight(1f),
+                    ) {
+                        Icon(Icons.Outlined.FilterList, contentDescription = null)
+                        Text("Filters", modifier = Modifier.padding(start = 8.dp))
+                    }
+                    if (displayMode == BuilderDisplayMode.ROW) {
+                        FilledTonalButton(
+                            onClick = onOpenSort,
+                            modifier = Modifier.weight(1f),
+                        ) {
                             Text("Sort: ${rowSortField.label()}")
                         }
-                        DropdownMenu(
-                            expanded = sortExpanded,
-                            onDismissRequest = { sortExpanded = false },
-                        ) {
-                            BuilderSortField.entries.forEach { option ->
-                                DropdownMenuItem(
-                                    text = { Text(option.label()) },
-                                    onClick = {
-                                        onRowSortFieldChanged(option)
-                                        sortExpanded = false
-                                    },
-                                )
-                            }
+                    }
+                }
+
+                if (!metricFilters.isDefault()) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .horizontalScroll(rememberScrollState()),
+                        horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    ) {
+                        if (metricFilters.minPriceText.isNotBlank() || metricFilters.maxPriceText.isNotBlank()) {
+                            InlineChip("Price ${formatPriceRange(metricFilters.minPriceText, metricFilters.maxPriceText)}")
+                        }
+                        InlineChip("L10 ${formatMetricRange(metricFilters.minDiffLast10, metricFilters.maxDiffLast10)}")
+                        InlineChip("2025 ${formatMetricRange(metricFilters.minDiff2025, metricFilters.maxDiff2025)}")
+                        InlineChip("Next ${formatMetricRange(metricFilters.minNextBestProbDiff, metricFilters.maxNextBestProbDiff)}")
+                        if (displayMode == BuilderDisplayMode.ROW) {
+                            InlineChip("Sort ${rowSortField.label()}")
                         }
                     }
                 }
             }
-
-            if (!metricFilters.isDefault()) {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .horizontalScroll(rememberScrollState()),
-                    horizontalArrangement = Arrangement.spacedBy(8.dp),
-                ) {
-                    if (metricFilters.minPriceText.isNotBlank() || metricFilters.maxPriceText.isNotBlank()) {
-                        InlineChip("Price ${formatPriceRange(metricFilters.minPriceText, metricFilters.maxPriceText)}")
-                    }
-                    InlineChip("L10 ${formatMetricRange(metricFilters.minDiffLast10, metricFilters.maxDiffLast10)}")
-                    InlineChip("2025 ${formatMetricRange(metricFilters.minDiff2025, metricFilters.maxDiff2025)}")
-                    InlineChip("Next ${formatMetricRange(metricFilters.minNextBestProbDiff, metricFilters.maxNextBestProbDiff)}")
-                    if (displayMode == BuilderDisplayMode.ROW) {
-                        InlineChip("Sort ${rowSortField.label()}")
-                    }
-                }
-            }
         }
-    }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-private fun SelectionMetricFilterSheet(
-    filters: SelectionMetricFilters,
-    onFiltersChanged: (SelectionMetricFilters) -> Unit,
-    onApply: () -> Unit,
-    onClear: () -> Unit,
-    onDismiss: () -> Unit,
-) {
-    ModalBottomSheet(
-        onDismissRequest = onDismiss,
-        containerColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.98f),
-        scrimColor = MaterialTheme.colorScheme.scrim.copy(alpha = 0.26f),
-    ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 20.dp, vertical = 8.dp),
-            verticalArrangement = Arrangement.spacedBy(18.dp),
-        ) {
-            Text("Selection filters", style = MaterialTheme.typography.headlineSmall)
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(12.dp),
-            ) {
-                OutlinedTextField(
-                    value = filters.minPriceText,
-                    onValueChange = { onFiltersChanged(filters.copy(minPriceText = it)) },
-                    modifier = Modifier.weight(1f),
-                    label = { Text("Min price") },
-                    singleLine = true,
-                )
-                OutlinedTextField(
-                    value = filters.maxPriceText,
-                    onValueChange = { onFiltersChanged(filters.copy(maxPriceText = it)) },
-                    modifier = Modifier.weight(1f),
-                    label = { Text("Max price") },
-                    singleLine = true,
-                )
-            }
-            SelectionMetricRangeSection(
-                title = "Diff last 10",
-                range = filters.minDiffLast10..filters.maxDiffLast10,
-                onRangeChange = { range ->
-                    onFiltersChanged(filters.copy(minDiffLast10 = range.start, maxDiffLast10 = range.endInclusive))
-                },
-            )
-            SelectionMetricRangeSection(
-                title = "Diff 2025",
-                range = filters.minDiff2025..filters.maxDiff2025,
-                onRangeChange = { range ->
-                    onFiltersChanged(filters.copy(minDiff2025 = range.start, maxDiff2025 = range.endInclusive))
-                },
-            )
-            SelectionMetricRangeSection(
-                title = "Next best diff",
-                range = filters.minNextBestProbDiff..filters.maxNextBestProbDiff,
-                onRangeChange = { range ->
-                    onFiltersChanged(filters.copy(minNextBestProbDiff = range.start, maxNextBestProbDiff = range.endInclusive))
-                },
-            )
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(12.dp),
-            ) {
-                TextButton(onClick = onClear, modifier = Modifier.weight(1f)) {
-                    Text("Clear")
-                }
-                FilledTonalButton(onClick = onApply, modifier = Modifier.weight(1f)) {
-                    Text("Apply")
-                }
-            }
-        }
-    }
-}
-
-@Composable
-private fun SelectionMetricRangeSection(
-    title: String,
-    range: ClosedFloatingPointRange<Float>,
-    onRangeChange: (ClosedFloatingPointRange<Float>) -> Unit,
-) {
-    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-        Text(title, style = MaterialTheme.typography.titleMedium)
-        Text(
-            formatMetricRange(range.start, range.endInclusive),
-            style = MaterialTheme.typography.bodySmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-        )
-        RangeSlider(
-            value = range.start..range.endInclusive,
-            onValueChange = { onRangeChange(it.start..it.endInclusive) },
-            valueRange = OddsDiffSliderMin..OddsDiffSliderMax,
-            steps = 39,
-        )
     }
 }
 
@@ -1029,6 +938,8 @@ private fun CgmDraftSheet(
     selectedLegs: List<DraftLeg>,
     comparisonResults: List<CgmAgencyComparison>,
     isComparing: Boolean,
+    navigationBottomInset: androidx.compose.ui.unit.Dp,
+    onExpand: () -> Unit,
     onCompare: () -> Unit,
     onRemoveLeg: (Int) -> Unit,
     onClearDraft: () -> Unit,
@@ -1037,9 +948,24 @@ private fun CgmDraftSheet(
         modifier = Modifier
             .fillMaxWidth()
             .heightIn(max = 560.dp),
-        contentPadding = ScreenPadding,
+        contentPadding = PaddingValues(start = 16.dp, top = 0.dp, end = 16.dp, bottom = 12.dp + navigationBottomInset),
         verticalArrangement = Arrangement.spacedBy(12.dp),
     ) {
+        item {
+            val distinctGames = selectedLegs.map { it.eventId }.distinct().size
+            DraftPeekBar(
+                count = selectedLegs.size,
+                primaryLabel = "${selectedLegs.size} leg${if (selectedLegs.size == 1) "" else "s"} selected",
+                secondaryLabel = "$distinctGames game${if (distinctGames == 1) "" else "s"} • ${selectedBookmaker?.let(::bookmakerLabel) ?: "Tap to review draft"}",
+                accent = CgmAccent,
+                onExpand = onExpand,
+            )
+        }
+
+        item {
+            HorizontalDivider()
+        }
+
         item {
             Column(
                 modifier = Modifier.fillMaxWidth(),
@@ -1092,17 +1018,8 @@ private fun CgmDraftSheet(
             item { LoadingCard("Comparing agency prices") }
         }
 
-        if (selectedLegs.isEmpty()) {
-            item {
-                EmptyCard(
-                    title = "No legs selected",
-                    body = "Tap player prop tiles to build the cross-game multi. Swipe up on this bar to review the draft and compare agencies.",
-                )
-            }
-        } else {
-            items(selectedLegs, key = { it.selectionId }) { leg ->
-                CgmDraftLegCard(leg = leg, onRemove = onRemoveLeg)
-            }
+        items(selectedLegs, key = { it.selectionId }) { leg ->
+            CgmDraftLegCard(leg = leg, onRemove = onRemoveLeg)
         }
 
         if (comparisonResults.isNotEmpty()) {
@@ -1120,6 +1037,71 @@ private fun CgmDraftSheet(
                     rank = comparisonResults.indexOfFirst { it.bookmaker == result.bookmaker } + 1,
                 )
             }
+        }
+    }
+}
+
+@Composable
+private fun DraftPeekBar(
+    count: Int,
+    primaryLabel: String,
+    secondaryLabel: String,
+    accent: Color,
+    onExpand: () -> Unit,
+) {
+    Surface(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable(onClick = onExpand),
+        color = Color.Transparent,
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(DraftSheetPeekHeight)
+                .padding(horizontal = 18.dp),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Row(
+                modifier = Modifier.weight(1f),
+                horizontalArrangement = Arrangement.spacedBy(12.dp),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Surface(
+                    shape = RoundedCornerShape(999.dp),
+                    color = accent,
+                ) {
+                    Text(
+                        text = count.toString(),
+                        modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp),
+                        style = MaterialTheme.typography.labelLarge,
+                        color = Color.White,
+                        fontWeight = FontWeight.Bold,
+                    )
+                }
+                Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
+                    Text(
+                        primaryLabel,
+                        style = MaterialTheme.typography.titleSmall,
+                        fontWeight = FontWeight.SemiBold,
+                        color = CgmTitle,
+                    )
+                    Text(
+                        secondaryLabel,
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.72f),
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                    )
+                }
+            }
+            Text(
+                "Open",
+                style = MaterialTheme.typography.labelLarge,
+                color = accent,
+                fontWeight = FontWeight.SemiBold,
+            )
         }
     }
 }
@@ -1206,20 +1188,21 @@ private fun CandidateRowHeader() {
     Surface(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(16.dp),
-        color = Blue50.copy(alpha = 0.92f),
+        color = MaterialTheme.colorScheme.surface.copy(alpha = 0.98f),
         border = BorderStroke(1.dp, Blue200.copy(alpha = 0.8f)),
     ) {
         Row(
-            modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp),
+            modifier = Modifier.padding(horizontal = 16.dp, vertical = 10.dp),
             verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(10.dp),
         ) {
-            HeaderCell("Player", Modifier.weight(3.4f), Alignment.Start)
-            HeaderCell("Line", Modifier.weight(0.75f), Alignment.End)
-            HeaderCell("Type", Modifier.weight(0.8f), Alignment.End)
-            HeaderCell("Price", Modifier.weight(0.9f), Alignment.End)
-            HeaderCell("L10", Modifier.weight(0.75f), Alignment.End)
-            HeaderCell("25", Modifier.weight(0.75f), Alignment.End)
-            HeaderCell("NB", Modifier.weight(0.8f), Alignment.End)
+            HeaderCell("Player", Modifier.weight(4.1f), Alignment.Start)
+            HeaderCell("Line", Modifier.weight(0.9f), Alignment.End)
+            HeaderCell("Type", Modifier.weight(1.1f), Alignment.Start)
+            HeaderCell("Price", Modifier.weight(0.95f), Alignment.End)
+            HeaderCell("L10", Modifier.weight(0.85f), Alignment.End)
+            HeaderCell("25", Modifier.weight(0.85f), Alignment.End)
+            HeaderCell("NB", Modifier.weight(0.9f), Alignment.End)
         }
     }
 }
@@ -1254,11 +1237,12 @@ private fun CandidateSelectionRow(
         ),
     ) {
         Row(
-            modifier = Modifier.padding(horizontal = 12.dp, vertical = 9.dp),
+            modifier = Modifier.padding(horizontal = 16.dp, vertical = 10.dp),
             verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(10.dp),
         ) {
             Column(
-                modifier = Modifier.weight(3.4f),
+                modifier = Modifier.weight(4.1f),
                 verticalArrangement = Arrangement.spacedBy(2.dp),
             ) {
                 Text(
@@ -1276,12 +1260,12 @@ private fun CandidateSelectionRow(
                     overflow = TextOverflow.Ellipsis,
                 )
             }
-            MetricCell(formatLineValue(selection.lineValue), Modifier.weight(0.75f), selected)
-            MetricCell(selectionTypeLabel(selection.selectionType), Modifier.weight(0.8f), selected)
-            MetricCell(formatDecimalPrice(selection.decimalPrice), Modifier.weight(0.9f), selected, emphasize = true)
-            MetricCell(selection.diffLast10?.let(::formatSignedDelta) ?: "--", Modifier.weight(0.75f), selected, value = selection.diffLast10)
-            MetricCell(selection.diff2025?.let(::formatSignedDelta) ?: "--", Modifier.weight(0.75f), selected, value = selection.diff2025)
-            MetricCell(selection.nextBestProbDiff?.let(::formatSignedDelta) ?: "--", Modifier.weight(0.8f), selected, value = selection.nextBestProbDiff)
+            MetricCell(formatLineValue(selection.lineValue), Modifier.weight(0.9f), selected)
+            TextMetricCell(selectionTypeLabel(selection.selectionType), Modifier.weight(1.1f), selected)
+            MetricCell(formatDecimalPrice(selection.decimalPrice), Modifier.weight(0.95f), selected, emphasize = true)
+            MetricCell(selection.diffLast10?.let(::formatSignedDelta) ?: "--", Modifier.weight(0.85f), selected, value = selection.diffLast10)
+            MetricCell(selection.diff2025?.let(::formatSignedDelta) ?: "--", Modifier.weight(0.85f), selected, value = selection.diff2025)
+            MetricCell(selection.nextBestProbDiff?.let(::formatSignedDelta) ?: "--", Modifier.weight(0.9f), selected, value = selection.nextBestProbDiff)
         }
     }
 }
@@ -1329,6 +1313,26 @@ private fun MetricCell(
             style = if (emphasize) MaterialTheme.typography.bodySmall else MaterialTheme.typography.labelSmall,
             color = color,
             fontWeight = if (emphasize) FontWeight.Bold else FontWeight.SemiBold,
+            maxLines = 1,
+        )
+    }
+}
+
+@Composable
+private fun TextMetricCell(
+    text: String,
+    modifier: Modifier,
+    selected: Boolean,
+) {
+    Column(
+        modifier = modifier,
+        horizontalAlignment = Alignment.Start,
+    ) {
+        Text(
+            text = text,
+            style = MaterialTheme.typography.labelSmall,
+            color = if (selected) IceWhite else MaterialTheme.colorScheme.onSurface,
+            fontWeight = FontWeight.SemiBold,
             maxLines = 1,
         )
     }
@@ -1721,7 +1725,7 @@ private fun marketDisplayLabel(marketTypeCode: String): String =
     }
 
 private fun buildRowSubtitle(selection: OddsSearchResult): String =
-    "${marketDisplayLabel(selection.marketTypeCode)} • ${selection.matchName}"
+    "${marketDisplayLabel(selection.marketTypeCode)}\n${selection.matchName}"
 
 private fun sortCandidateRows(
     legs: List<OddsSearchResult>,

@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.CloudDone
+import androidx.compose.material.icons.outlined.Menu
 import androidx.compose.material.icons.outlined.Save
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
@@ -25,6 +26,7 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -141,7 +143,10 @@ class SettingsViewModel(
 }
 
 @Composable
-fun SettingsRoute(repository: AflRepository) {
+fun SettingsRoute(
+    repository: AflRepository,
+    onOpenNavigation: () -> Unit,
+) {
     val viewModel: SettingsViewModel = viewModel(
         factory = simpleViewModelFactory { SettingsViewModel(repository) },
     )
@@ -153,6 +158,7 @@ fun SettingsRoute(repository: AflRepository) {
         onDefaultBookmakerChanged = viewModel::onDefaultBookmakerChanged,
         onSave = viewModel::save,
         onTestConnection = viewModel::testConnection,
+        onOpenNavigation = onOpenNavigation,
     )
 }
 
@@ -165,8 +171,9 @@ private fun SettingsScreen(
     onDefaultBookmakerChanged: (String) -> Unit,
     onSave: () -> Unit,
     onTestConnection: () -> Unit,
+    onOpenNavigation: () -> Unit,
 ) {
-    var bookmakerExpanded by mutableStateOf(false)
+    var bookmakerExpanded by remember { mutableStateOf(false) }
 
     Scaffold(
         containerColor = androidx.compose.ui.graphics.Color.Transparent,
@@ -174,6 +181,11 @@ private fun SettingsScreen(
             TopAppBar(
                 title = { Text("Connection & defaults") },
                 colors = appTopBarColors(),
+                navigationIcon = {
+                    androidx.compose.material3.IconButton(onClick = onOpenNavigation) {
+                        Icon(Icons.Outlined.Menu, contentDescription = "Open navigation")
+                    }
+                },
             )
         },
     ) { innerPadding ->

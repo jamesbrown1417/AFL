@@ -24,6 +24,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.FilterList
+import androidx.compose.material.icons.outlined.Menu
 import androidx.compose.material.icons.outlined.Refresh
 import androidx.compose.material3.Card
 import androidx.compose.material3.DropdownMenu
@@ -261,6 +262,7 @@ private enum class PlayerViewMode {
 @Composable
 fun PlayerStatsRoute(
     repository: AflRepository,
+    onOpenNavigation: () -> Unit,
 ) {
     val viewModel: PlayerStatsViewModel = viewModel(
         factory = simpleViewModelFactory { PlayerStatsViewModel(repository) },
@@ -272,6 +274,7 @@ fun PlayerStatsRoute(
         onSelectPlayer = viewModel::selectPlayer,
         onApplyFilters = viewModel::applyFilters,
         onRefresh = viewModel::refresh,
+        onOpenNavigation = onOpenNavigation,
     )
 }
 
@@ -283,6 +286,7 @@ private fun PlayerStatsScreen(
     onSelectPlayer: (PlayerSummary) -> Unit,
     onApplyFilters: (PlayerStatsFilters) -> Unit,
     onRefresh: () -> Unit,
+    onOpenNavigation: () -> Unit,
 ) {
     var showFilters by remember { mutableStateOf(false) }
     var draftFilters by remember(uiState.filters) { mutableStateOf(uiState.filters) }
@@ -300,6 +304,11 @@ private fun PlayerStatsScreen(
             TopAppBar(
                 title = { Text("Player") },
                 colors = appTopBarColors(),
+                navigationIcon = {
+                    IconButton(onClick = onOpenNavigation) {
+                        Icon(Icons.Outlined.Menu, contentDescription = "Open navigation")
+                    }
+                },
                 actions = {
                     IconButton(onClick = onRefresh) {
                         Icon(Icons.Outlined.Refresh, contentDescription = "Refresh")

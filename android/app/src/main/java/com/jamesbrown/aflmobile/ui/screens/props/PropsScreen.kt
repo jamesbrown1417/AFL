@@ -20,6 +20,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.Sort
 import androidx.compose.material.icons.outlined.FilterList
+import androidx.compose.material.icons.outlined.Menu
 import androidx.compose.material.icons.outlined.Refresh
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.Card
@@ -430,6 +431,7 @@ class OddsViewModel(
 @Composable
 fun OddsRoute(
     repository: AflRepository,
+    onOpenNavigation: () -> Unit,
 ) {
     val viewModel: OddsViewModel = viewModel(
         factory = simpleViewModelFactory { OddsViewModel(repository) },
@@ -443,6 +445,7 @@ fun OddsRoute(
         onLoadMore = viewModel::loadMore,
         onOpenAlternateUnders = viewModel::openAlternateUnders,
         onDismissAlternateUnders = viewModel::closeAlternateUnders,
+        onOpenNavigation = onOpenNavigation,
     )
 }
 
@@ -456,6 +459,7 @@ private fun OddsScreen(
     onLoadMore: () -> Unit,
     onOpenAlternateUnders: (OddsSearchResult) -> Unit,
     onDismissAlternateUnders: () -> Unit,
+    onOpenNavigation: () -> Unit,
 ) {
     var showFilters by remember { mutableStateOf(false) }
     var showSort by remember { mutableStateOf(false) }
@@ -473,6 +477,11 @@ private fun OddsScreen(
             TopAppBar(
                 title = { Text("Odds") },
                 colors = appTopBarColors(),
+                navigationIcon = {
+                    IconButton(onClick = onOpenNavigation) {
+                        Icon(Icons.Outlined.Menu, contentDescription = "Open navigation")
+                    }
+                },
                 actions = {
                     IconButton(onClick = onRefresh) {
                         Icon(Icons.Outlined.Refresh, contentDescription = "Refresh")
