@@ -338,6 +338,9 @@ private fun ValueBadge(
 
 private fun BuilderSortField.shortLabel(): String =
     when (this) {
+        BuilderSortField.PLAYER -> "Player"
+        BuilderSortField.LINE -> "Line"
+        BuilderSortField.TYPE -> "Type"
         BuilderSortField.NEXT_BEST -> "NB"
         BuilderSortField.PRICE -> "Price"
         BuilderSortField.DIFF_LAST_10 -> "L10"
@@ -346,6 +349,9 @@ private fun BuilderSortField.shortLabel(): String =
 
 private fun BuilderSortField.description(): String =
     when (this) {
+        BuilderSortField.PLAYER -> "Alphabetical by player name."
+        BuilderSortField.LINE -> "Sort by line value."
+        BuilderSortField.TYPE -> "Sort by selection type."
         BuilderSortField.NEXT_BEST -> "Largest next-best probability gap first."
         BuilderSortField.PRICE -> "Highest current price first."
         BuilderSortField.DIFF_LAST_10 -> "Strongest last-10 edge first."

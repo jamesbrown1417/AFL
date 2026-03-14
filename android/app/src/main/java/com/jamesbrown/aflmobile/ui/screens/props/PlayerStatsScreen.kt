@@ -25,6 +25,7 @@ import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.FilterList
 import androidx.compose.material.icons.outlined.Menu
+import androidx.compose.material.icons.outlined.MoreVert
 import androidx.compose.material.icons.outlined.Refresh
 import androidx.compose.material3.Card
 import androidx.compose.material3.DropdownMenu
@@ -34,6 +35,7 @@ import androidx.compose.material3.ExposedDropdownMenuAnchorType
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.FilterChip
+import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -88,6 +90,12 @@ import com.jamesbrown.aflmobile.ui.common.formatDateTime
 import com.jamesbrown.aflmobile.ui.common.formatDecimalPrice
 import com.jamesbrown.aflmobile.ui.common.formatPercentage
 import com.jamesbrown.aflmobile.ui.common.simpleViewModelFactory
+import com.jamesbrown.aflmobile.ui.theme.Blue100
+import com.jamesbrown.aflmobile.ui.theme.Blue200
+import com.jamesbrown.aflmobile.ui.theme.Blue700
+import com.jamesbrown.aflmobile.ui.theme.IceWhite
+import com.jamesbrown.aflmobile.ui.theme.Orange300
+import com.jamesbrown.aflmobile.ui.theme.Orange700
 import com.jamesbrown.aflmobile.ui.theme.appCardColors
 import com.jamesbrown.aflmobile.ui.theme.appGlassBorder
 import com.jamesbrown.aflmobile.ui.theme.appTopBarColors
@@ -259,6 +267,9 @@ private enum class PlayerViewMode {
     Graph,
 }
 
+private val PlayerAccent = Orange700
+private val PlayerAccentBorder = Orange300
+
 @Composable
 fun PlayerStatsRoute(
     repository: AflRepository,
@@ -289,6 +300,7 @@ private fun PlayerStatsScreen(
     onOpenNavigation: () -> Unit,
 ) {
     var showFilters by remember { mutableStateOf(false) }
+    var showOptions by remember { mutableStateOf(false) }
     var draftFilters by remember(uiState.filters) { mutableStateOf(uiState.filters) }
     var viewMode by rememberSaveable { mutableStateOf(PlayerViewMode.Table.name) }
 
@@ -310,11 +322,14 @@ private fun PlayerStatsScreen(
                     }
                 },
                 actions = {
-                    IconButton(onClick = onRefresh) {
-                        Icon(Icons.Outlined.Refresh, contentDescription = "Refresh")
-                    }
                     IconButton(onClick = { showFilters = true }) {
                         Icon(Icons.Outlined.FilterList, contentDescription = "Filters")
+                    }
+                    IconButton(onClick = { showOptions = true }) {
+                        Icon(Icons.Outlined.MoreVert, contentDescription = "Options")
+                    }
+                    IconButton(onClick = onRefresh) {
+                        Icon(Icons.Outlined.Refresh, contentDescription = "Refresh")
                     }
                 },
             )
@@ -344,7 +359,6 @@ private fun PlayerStatsScreen(
                             playerName = selectedPlayer.fullName,
                             filters = uiState.filters,
                             filterOptions = uiState.filterOptions,
-                            onOpenFilters = { showFilters = true },
                         )
                     }
                 }
@@ -364,12 +378,6 @@ private fun PlayerStatsScreen(
                 if (!uiState.isLoading && uiState.selectedPlayer != null) {
                     item {
                         PlayerSummaryCard(summary = uiState.summary)
-                    }
-                    item {
-                        PlayerViewModeToggle(
-                            selected = PlayerViewMode.valueOf(viewMode),
-                            onSelected = { viewMode = it.name },
-                        )
                     }
                     item {
                         if (uiState.history.isEmpty()) {
@@ -402,6 +410,16 @@ private fun PlayerStatsScreen(
                         draftFilters = uiState.filterOptions?.let(::defaultPlayerStatsFilters) ?: PlayerStatsFilters()
                     },
                     onDismiss = { showFilters = false },
+                )
+            }
+            if (showOptions) {
+                PlayerOptionsSheet(
+                    selected = PlayerViewMode.valueOf(viewMode),
+                    onSelected = {
+                        viewMode = it.name
+                        showOptions = false
+                    },
+                    onDismiss = { showOptions = false },
                 )
             }
         }
@@ -503,7 +521,6 @@ private fun PlayerStatsFilterSummary(
     playerName: String,
     filters: PlayerStatsFilters,
     filterOptions: PlayerStatFilterOptions?,
-    onOpenFilters: () -> Unit,
 ) {
     val statLabel = filterOptions?.stats?.firstOrNull { it.code == filters.statCode }?.label ?: filters.statCode
     val lineLabel = if (filters.lineMode == "interval") {
@@ -525,17 +542,7 @@ private fun PlayerStatsFilterSummary(
             modifier = Modifier.padding(14.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                Text(playerName, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
-                FilledTonalButton(onClick = onOpenFilters) {
-                    Icon(Icons.Outlined.FilterList, contentDescription = null)
-                    Text("Filters", modifier = Modifier.padding(start = 6.dp))
-                }
-            }
+            Text(playerName, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
             FlowRow(
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
                 verticalArrangement = Arrangement.spacedBy(8.dp),
@@ -658,11 +665,47 @@ private fun PlayerViewModeToggle(
                 selected = selected == PlayerViewMode.Table,
                 onClick = { onSelected(PlayerViewMode.Table) },
                 label = { Text("Table") },
+                colors = playerAccentFilterChipColors(),
+                border = playerAccentFilterChipBorder(selected == PlayerViewMode.Table),
             )
             FilterChip(
                 selected = selected == PlayerViewMode.Graph,
                 onClick = { onSelected(PlayerViewMode.Graph) },
                 label = { Text("Graph") },
+                colors = playerAccentFilterChipColors(),
+                border = playerAccentFilterChipBorder(selected == PlayerViewMode.Graph),
+            )
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun PlayerOptionsSheet(
+    selected: PlayerViewMode,
+    onSelected: (PlayerViewMode) -> Unit,
+    onDismiss: () -> Unit,
+) {
+    ModalBottomSheet(
+        onDismissRequest = onDismiss,
+        containerColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.98f),
+        scrimColor = MaterialTheme.colorScheme.scrim.copy(alpha = 0.26f),
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 20.dp, vertical = 8.dp),
+            verticalArrangement = Arrangement.spacedBy(14.dp),
+        ) {
+            Text("Options", style = MaterialTheme.typography.headlineSmall)
+            Text(
+                "Display mode",
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.SemiBold,
+            )
+            PlayerViewModeToggle(
+                selected = selected,
+                onSelected = onSelected,
             )
         }
     }
@@ -1223,11 +1266,15 @@ private fun PlayerStatsFilterSheet(
                         selected = filters.lineMode == "single",
                         onClick = { onFiltersChanged(filters.copy(lineMode = "single")) },
                         label = { Text("Single line") },
+                        colors = playerAccentFilterChipColors(),
+                        border = playerAccentFilterChipBorder(filters.lineMode == "single"),
                     )
                     FilterChip(
                         selected = filters.lineMode == "interval",
                         onClick = { onFiltersChanged(filters.copy(lineMode = "interval")) },
                         label = { Text("Interval") },
+                        colors = playerAccentFilterChipColors(),
+                        border = playerAccentFilterChipBorder(filters.lineMode == "interval"),
                     )
                 }
 
@@ -1390,6 +1437,8 @@ private fun ToggleChipGroup(
                     selected = selected.contains(option),
                     onClick = { onToggle(option) },
                     label = { Text(option) },
+                    colors = playerAccentFilterChipColors(),
+                    border = playerAccentFilterChipBorder(selected.contains(option)),
                 )
             }
         }
@@ -1425,6 +1474,22 @@ private fun toggleSelection(current: List<String>, value: String): List<String> 
     } else {
         current + value
     }
+
+@Composable
+private fun playerAccentFilterChipColors() = FilterChipDefaults.filterChipColors(
+    containerColor = Blue100,
+    labelColor = Blue700,
+    selectedContainerColor = PlayerAccent,
+    selectedLabelColor = IceWhite,
+)
+
+@Composable
+private fun playerAccentFilterChipBorder(selected: Boolean) = FilterChipDefaults.filterChipBorder(
+    enabled = true,
+    selected = selected,
+    borderColor = Blue200,
+    selectedBorderColor = PlayerAccentBorder,
+)
 
 private fun formatNumber(value: Double?): String =
     value?.let {

@@ -48,6 +48,9 @@ enum class BuilderDisplayMode {
 }
 
 enum class BuilderSortField {
+    PLAYER,
+    LINE,
+    TYPE,
     NEXT_BEST,
     PRICE,
     DIFF_LAST_10,

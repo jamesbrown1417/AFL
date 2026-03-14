@@ -26,6 +26,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material.icons.outlined.FilterList
 import androidx.compose.material.icons.outlined.Menu
+import androidx.compose.material.icons.outlined.MoreVert
 import androidx.compose.material.icons.outlined.Refresh
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -40,7 +41,6 @@ import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.FilterChipDefaults
-import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -89,7 +89,6 @@ import com.jamesbrown.aflmobile.ui.common.ErrorCard
 import com.jamesbrown.aflmobile.ui.common.InlineChip
 import com.jamesbrown.aflmobile.ui.common.LoadingCard
 import com.jamesbrown.aflmobile.ui.common.BuilderDisplayModeSegmented
-import com.jamesbrown.aflmobile.ui.common.BuilderSortSheet
 import com.jamesbrown.aflmobile.ui.common.BuilderSupportText
 import com.jamesbrown.aflmobile.ui.common.ScreenPadding
 import com.jamesbrown.aflmobile.ui.common.SelectionMetricFilterSheet
@@ -487,10 +486,11 @@ private fun CgmBuilderScreen(
     val selectedSelectionIds = remember(uiState.selectedLegs) { uiState.selectedLegs.map { it.selectionId }.toSet() }
     val navigationBottomInset = WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding()
     var showFilters by remember { mutableStateOf(false) }
-    var showSortSheet by remember { mutableStateOf(false) }
+    var showControls by remember { mutableStateOf(false) }
     var draftMetricFilters by remember(uiState.metricFilters) { mutableStateOf(uiState.metricFilters) }
     var displayMode by rememberSaveable { mutableStateOf(BuilderDisplayMode.ROW) }
     var rowSortField by rememberSaveable { mutableStateOf(BuilderSortField.NEXT_BEST) }
+    var rowSortDescending by rememberSaveable { mutableStateOf(true) }
     val coroutineScope = rememberCoroutineScope()
     val scaffoldState = rememberBottomSheetScaffoldState(
         bottomSheetState = rememberStandardBottomSheetState(
@@ -528,8 +528,8 @@ private fun CgmBuilderScreen(
     val groupedLegs = remember(visibleLegs) {
         buildCandidateBoard(legs = visibleLegs)
     }
-    val rowLegs = remember(visibleLegs, rowSortField) {
-        sortCandidateRows(legs = visibleLegs, sortField = rowSortField)
+    val rowLegs = remember(visibleLegs, rowSortField, rowSortDescending) {
+        sortCandidateRows(legs = visibleLegs, sortField = rowSortField, descending = rowSortDescending)
     }
     LaunchedEffect(uiState.isComparing, uiState.comparisonResults.size) {
         if (uiState.isComparing || uiState.comparisonResults.isNotEmpty()) {
@@ -555,17 +555,9 @@ private fun CgmBuilderScreen(
                     events = availableEvents,
                     selectedBookmaker = uiState.selectedBookmaker,
                     selectedEventIds = uiState.selectedEventIds,
-                    bestOnly = uiState.bestOnly,
-                    metricFilters = uiState.metricFilters,
-                    displayMode = displayMode,
-                    rowSortField = rowSortField,
                     onSelectBookmaker = onSelectBookmaker,
                     onToggleEvent = onToggleEvent,
                     onClearEventSelection = onClearEventSelection,
-                    onBestOnlyChanged = onBestOnlyChanged,
-                    onDisplayModeChanged = { displayMode = it },
-                    onOpenSort = { showSortSheet = true },
-                    onOpenFilters = { showFilters = true },
                 )
             }
 
@@ -608,7 +600,18 @@ private fun CgmBuilderScreen(
                 }
                 if (displayMode == BuilderDisplayMode.ROW) {
                     stickyHeader {
-                        CandidateRowHeader()
+                        CandidateRowHeader(
+                            sortField = rowSortField,
+                            descending = rowSortDescending,
+                            onSortSelected = { selectedField ->
+                                if (rowSortField == selectedField) {
+                                    rowSortDescending = !rowSortDescending
+                                } else {
+                                    rowSortField = selectedField
+                                    rowSortDescending = defaultSortDirectionForField(selectedField)
+                                }
+                            },
+                        )
                     }
                     items(rowLegs, key = { it.selectionId }) { leg ->
                         CandidateSelectionRow(
@@ -644,11 +647,13 @@ private fun CgmBuilderScreen(
                 onDismiss = { showFilters = false },
             )
         }
-        if (showSortSheet && displayMode == BuilderDisplayMode.ROW) {
-            BuilderSortSheet(
-                selectedSortField = rowSortField,
-                onSelect = { rowSortField = it },
-                onDismiss = { showSortSheet = false },
+        if (showControls) {
+            CgmControlsSheet(
+                bestOnly = uiState.bestOnly,
+                displayMode = displayMode,
+                onBestOnlyChanged = onBestOnlyChanged,
+                onDisplayModeChanged = { displayMode = it },
+                onDismiss = { showControls = false },
             )
         }
     }
@@ -694,6 +699,8 @@ private fun CgmBuilderScreen(
                 onRefresh = onRefresh,
                 onClearDraft = onClearDraft,
                 onOpenNavigation = onOpenNavigation,
+                onOpenFilters = { showFilters = true },
+                onOpenOptions = { showControls = true },
             )
         },
     ) { innerPadding ->
@@ -708,6 +715,8 @@ private fun CgmTopBar(
     onRefresh: () -> Unit,
     onClearDraft: () -> Unit,
     onOpenNavigation: () -> Unit,
+    onOpenFilters: () -> Unit,
+    onOpenOptions: () -> Unit,
 ) {
     TopAppBar(
         title = { Text("CGM") },
@@ -718,6 +727,12 @@ private fun CgmTopBar(
             }
         },
         actions = {
+            IconButton(onClick = onOpenFilters) {
+                Icon(Icons.Outlined.FilterList, contentDescription = "Open filters")
+            }
+            IconButton(onClick = onOpenOptions) {
+                Icon(Icons.Outlined.MoreVert, contentDescription = "Open options")
+            }
             IconButton(onClick = onRefresh) {
                 Icon(Icons.Outlined.Refresh, contentDescription = "Refresh")
             }
@@ -737,85 +752,92 @@ private fun CgmControlCard(
     events: List<EventSummary>,
     selectedBookmaker: String?,
     selectedEventIds: Set<Int>,
-    bestOnly: Boolean,
-    metricFilters: SelectionMetricFilters,
-    displayMode: BuilderDisplayMode,
-    rowSortField: BuilderSortField,
     onSelectBookmaker: (String) -> Unit,
     onToggleEvent: (Int) -> Unit,
     onClearEventSelection: () -> Unit,
-    onBestOnlyChanged: (Boolean) -> Unit,
-    onDisplayModeChanged: (BuilderDisplayMode) -> Unit,
-    onOpenSort: () -> Unit,
-    onOpenFilters: () -> Unit,
 ) {
     var bookmakerExpanded by remember { mutableStateOf(false) }
     var eventExpanded by remember { mutableStateOf(false) }
-    Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
-        Card(
-            colors = appCardColors(),
-            border = appGlassBorder(),
+    Card(
+        colors = appCardColors(),
+        border = appGlassBorder(),
+    ) {
+        Column(
+            modifier = Modifier.padding(16.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp),
         ) {
-            Column(
-                modifier = Modifier.padding(16.dp),
-                verticalArrangement = Arrangement.spacedBy(12.dp),
-            ) {
-                Text("Agency and matches", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
-                BuilderSupportText("Choose the source agency and the remaining matches you want to include.")
+            Text("Agency and matches", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
+            BuilderSupportText("Choose the source agency and the remaining matches you want to include.")
 
-                ExposedDropdownMenuBox(
+            ExposedDropdownMenuBox(
+                expanded = bookmakerExpanded,
+                onExpandedChange = { bookmakerExpanded = !bookmakerExpanded },
+            ) {
+                OutlinedTextField(
+                    value = selectedBookmaker?.let(::bookmakerLabel) ?: "Choose agency",
+                    onValueChange = {},
+                    modifier = Modifier
+                        .menuAnchor(ExposedDropdownMenuAnchorType.PrimaryNotEditable)
+                        .fillMaxWidth(),
+                    readOnly = true,
+                    label = { Text("Source agency") },
+                    trailingIcon = {
+                        ExposedDropdownMenuDefaults.TrailingIcon(expanded = bookmakerExpanded)
+                    },
+                )
+                DropdownMenu(
                     expanded = bookmakerExpanded,
-                    onExpandedChange = { bookmakerExpanded = !bookmakerExpanded },
+                    onDismissRequest = { bookmakerExpanded = false },
                 ) {
-                    OutlinedTextField(
-                        value = selectedBookmaker?.let(::bookmakerLabel) ?: "Choose agency",
-                        onValueChange = {},
-                        modifier = Modifier
-                            .menuAnchor(ExposedDropdownMenuAnchorType.PrimaryNotEditable)
-                            .fillMaxWidth(),
-                        readOnly = true,
-                        label = { Text("Source agency") },
-                        trailingIcon = {
-                            ExposedDropdownMenuDefaults.TrailingIcon(expanded = bookmakerExpanded)
-                        },
-                    )
-                    DropdownMenu(
-                        expanded = bookmakerExpanded,
-                        onDismissRequest = { bookmakerExpanded = false },
-                    ) {
-                        bookmakers.filter { it.enabled }.forEach { bookmaker ->
-                            DropdownMenuItem(
-                                text = { Text(bookmaker.displayName) },
-                                onClick = {
-                                    onSelectBookmaker(bookmaker.code)
-                                    bookmakerExpanded = false
-                                },
-                            )
-                        }
+                    bookmakers.filter { it.enabled }.forEach { bookmaker ->
+                        DropdownMenuItem(
+                            text = { Text(bookmaker.displayName) },
+                            onClick = {
+                                onSelectBookmaker(bookmaker.code)
+                                bookmakerExpanded = false
+                            },
+                        )
                     }
                 }
+            }
 
-                ExposedDropdownMenuBox(
+            ExposedDropdownMenuBox(
+                expanded = eventExpanded,
+                onExpandedChange = { eventExpanded = !eventExpanded },
+            ) {
+                OutlinedTextField(
+                    value = selectedMatchesLabel(events, selectedEventIds),
+                    onValueChange = {},
+                    modifier = Modifier
+                        .menuAnchor(ExposedDropdownMenuAnchorType.PrimaryNotEditable)
+                        .fillMaxWidth(),
+                    readOnly = true,
+                    label = { Text("Matches") },
+                    trailingIcon = {
+                        ExposedDropdownMenuDefaults.TrailingIcon(expanded = eventExpanded)
+                    },
+                )
+                DropdownMenu(
                     expanded = eventExpanded,
-                    onExpandedChange = { eventExpanded = !eventExpanded },
+                    onDismissRequest = { eventExpanded = false },
+                    modifier = Modifier.heightIn(max = 360.dp),
                 ) {
-                    OutlinedTextField(
-                        value = selectedMatchesLabel(events, selectedEventIds),
-                        onValueChange = {},
-                        modifier = Modifier
-                            .menuAnchor(ExposedDropdownMenuAnchorType.PrimaryNotEditable)
-                            .fillMaxWidth(),
-                        readOnly = true,
-                        label = { Text("Matches") },
-                        trailingIcon = {
-                            ExposedDropdownMenuDefaults.TrailingIcon(expanded = eventExpanded)
+                    DropdownMenuItem(
+                        text = {
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.spacedBy(10.dp),
+                            ) {
+                                Checkbox(
+                                    checked = selectedEventIds.isEmpty(),
+                                    onCheckedChange = null,
+                                )
+                                Text("All matches")
+                            }
                         },
+                        onClick = { onClearEventSelection() },
                     )
-                    DropdownMenu(
-                        expanded = eventExpanded,
-                        onDismissRequest = { eventExpanded = false },
-                        modifier = Modifier.heightIn(max = 360.dp),
-                    ) {
+                    events.forEach { event ->
                         DropdownMenuItem(
                             text = {
                                 Row(
@@ -823,111 +845,68 @@ private fun CgmControlCard(
                                     horizontalArrangement = Arrangement.spacedBy(10.dp),
                                 ) {
                                     Checkbox(
-                                        checked = selectedEventIds.isEmpty(),
+                                        checked = event.id in selectedEventIds,
                                         onCheckedChange = null,
                                     )
-                                    Text("All matches")
+                                    Text(event.matchName)
                                 }
                             },
-                            onClick = { onClearEventSelection() },
+                            onClick = { onToggleEvent(event.id) },
                         )
-                        events.forEach { event ->
-                            DropdownMenuItem(
-                                text = {
-                                    Row(
-                                        verticalAlignment = Alignment.CenterVertically,
-                                        horizontalArrangement = Arrangement.spacedBy(10.dp),
-                                    ) {
-                                        Checkbox(
-                                            checked = event.id in selectedEventIds,
-                                            onCheckedChange = null,
-                                        )
-                                        Text(event.matchName)
-                                    }
-                                },
-                                onClick = { onToggleEvent(event.id) },
-                            )
-                        }
                     }
                 }
             }
         }
+    }
+}
 
-        Card(
-            colors = appCardColors(),
-            border = appGlassBorder(),
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun CgmControlsSheet(
+    bestOnly: Boolean,
+    displayMode: BuilderDisplayMode,
+    onBestOnlyChanged: (Boolean) -> Unit,
+    onDisplayModeChanged: (BuilderDisplayMode) -> Unit,
+    onDismiss: () -> Unit,
+) {
+    androidx.compose.material3.ModalBottomSheet(
+        onDismissRequest = onDismiss,
+        containerColor = MaterialTheme.colorScheme.surface,
+        scrimColor = MaterialTheme.colorScheme.scrim.copy(alpha = 0.22f),
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 20.dp, vertical = 8.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
-            Column(
-                modifier = Modifier.padding(16.dp),
-                verticalArrangement = Arrangement.spacedBy(14.dp),
+            Text("Options", style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.SemiBold)
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically,
             ) {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
-                    Column(modifier = Modifier.weight(1f)) {
-                        Text("Best market price", fontWeight = FontWeight.Medium)
-                        BuilderSupportText("Only show source-agency rows where it currently has the best market price.")
-                    }
-                    Switch(
-                        checked = bestOnly,
-                        onCheckedChange = onBestOnlyChanged,
-                    )
+                Column(modifier = Modifier.weight(1f)) {
+                    Text("Best market price", fontWeight = FontWeight.Medium)
+                    BuilderSupportText("Only show source-agency rows where it currently has the best market price.")
                 }
-
-                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                    Text("Display mode", fontWeight = FontWeight.Medium)
-                    BuilderDisplayModeSegmented(
-                        displayMode = displayMode,
-                        onDisplayModeChanged = onDisplayModeChanged,
-                        selectedContainerColor = CgmAccent,
-                        selectedContentColor = IceWhite,
-                        inactiveContainerColor = Blue100,
-                        inactiveContentColor = Blue700,
-                    )
-                }
-
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(10.dp),
-                ) {
-                    FilledTonalButton(
-                        onClick = onOpenFilters,
-                        modifier = Modifier.weight(1f),
-                    ) {
-                        Icon(Icons.Outlined.FilterList, contentDescription = null)
-                        Text("Filters", modifier = Modifier.padding(start = 8.dp))
-                    }
-                    if (displayMode == BuilderDisplayMode.ROW) {
-                        FilledTonalButton(
-                            onClick = onOpenSort,
-                            modifier = Modifier.weight(1f),
-                        ) {
-                            Text("Sort: ${rowSortField.label()}")
-                        }
-                    }
-                }
-
-                if (!metricFilters.isDefault()) {
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .horizontalScroll(rememberScrollState()),
-                        horizontalArrangement = Arrangement.spacedBy(8.dp),
-                    ) {
-                        if (metricFilters.minPriceText.isNotBlank() || metricFilters.maxPriceText.isNotBlank()) {
-                            InlineChip("Price ${formatPriceRange(metricFilters.minPriceText, metricFilters.maxPriceText)}")
-                        }
-                        InlineChip("L10 ${formatMetricRange(metricFilters.minDiffLast10, metricFilters.maxDiffLast10)}")
-                        InlineChip("2025 ${formatMetricRange(metricFilters.minDiff2025, metricFilters.maxDiff2025)}")
-                        InlineChip("Next ${formatMetricRange(metricFilters.minNextBestProbDiff, metricFilters.maxNextBestProbDiff)}")
-                        if (displayMode == BuilderDisplayMode.ROW) {
-                            InlineChip("Sort ${rowSortField.label()}")
-                        }
-                    }
-                }
+                Switch(
+                    checked = bestOnly,
+                    onCheckedChange = onBestOnlyChanged,
+                )
             }
+            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                Text("Display mode", fontWeight = FontWeight.Medium)
+                BuilderDisplayModeSegmented(
+                    displayMode = displayMode,
+                    onDisplayModeChanged = onDisplayModeChanged,
+                    selectedContainerColor = CgmAccent,
+                    selectedContentColor = IceWhite,
+                    inactiveContainerColor = Blue100,
+                    inactiveContentColor = Blue700,
+                )
+            }
+            Spacer(modifier = Modifier.height(8.dp))
         }
     }
 }
@@ -1184,7 +1163,11 @@ private fun CandidateBoardCard(
 }
 
 @Composable
-private fun CandidateRowHeader() {
+private fun CandidateRowHeader(
+    sortField: BuilderSortField,
+    descending: Boolean,
+    onSortSelected: (BuilderSortField) -> Unit,
+) {
     Surface(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(16.dp),
@@ -1196,13 +1179,13 @@ private fun CandidateRowHeader() {
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(10.dp),
         ) {
-            HeaderCell("Player", Modifier.weight(4.1f), Alignment.Start)
-            HeaderCell("Line", Modifier.weight(0.9f), Alignment.End)
-            HeaderCell("Type", Modifier.weight(1.1f), Alignment.Start)
-            HeaderCell("Price", Modifier.weight(0.95f), Alignment.End)
-            HeaderCell("L10", Modifier.weight(0.85f), Alignment.End)
-            HeaderCell("25", Modifier.weight(0.85f), Alignment.End)
-            HeaderCell("NB", Modifier.weight(0.9f), Alignment.End)
+            SortableHeaderCell("Player", BuilderSortField.PLAYER, sortField, descending, Modifier.weight(4.1f), Alignment.Start, onSortSelected)
+            SortableHeaderCell("Line", BuilderSortField.LINE, sortField, descending, Modifier.weight(0.9f), Alignment.End, onSortSelected)
+            SortableHeaderCell("Type", BuilderSortField.TYPE, sortField, descending, Modifier.weight(1.1f), Alignment.Start, onSortSelected)
+            SortableHeaderCell("Price", BuilderSortField.PRICE, sortField, descending, Modifier.weight(0.95f), Alignment.End, onSortSelected)
+            SortableHeaderCell("L10", BuilderSortField.DIFF_LAST_10, sortField, descending, Modifier.weight(0.85f), Alignment.End, onSortSelected)
+            SortableHeaderCell("25", BuilderSortField.DIFF_2025, sortField, descending, Modifier.weight(0.85f), Alignment.End, onSortSelected)
+            SortableHeaderCell("NB", BuilderSortField.NEXT_BEST, sortField, descending, Modifier.weight(0.9f), Alignment.End, onSortSelected)
         }
     }
 }
@@ -1287,6 +1270,27 @@ private fun HeaderCell(
             fontWeight = FontWeight.SemiBold,
         )
     }
+}
+
+@Composable
+private fun SortableHeaderCell(
+    label: String,
+    field: BuilderSortField,
+    sortField: BuilderSortField,
+    descending: Boolean,
+    modifier: Modifier,
+    alignment: Alignment.Horizontal,
+    onSortSelected: (BuilderSortField) -> Unit,
+) {
+    HeaderCell(
+        label = if (sortField == field) {
+            "$label ${if (descending) "▼" else "▲"}"
+        } else {
+            label
+        },
+        modifier = modifier.clickable { onSortSelected(field) },
+        alignment = alignment,
+    )
 }
 
 @Composable
@@ -1730,19 +1734,46 @@ private fun buildRowSubtitle(selection: OddsSearchResult): String =
 private fun sortCandidateRows(
     legs: List<OddsSearchResult>,
     sortField: BuilderSortField,
+    descending: Boolean,
 ): List<OddsSearchResult> =
-    legs.sortedWith(
-        compareByDescending<OddsSearchResult> {
-            when (sortField) {
-                BuilderSortField.NEXT_BEST -> it.nextBestProbDiff ?: Double.NEGATIVE_INFINITY
-                BuilderSortField.PRICE -> it.decimalPrice ?: Double.NEGATIVE_INFINITY
-                BuilderSortField.DIFF_LAST_10 -> it.diffLast10 ?: Double.NEGATIVE_INFINITY
-                BuilderSortField.DIFF_2025 -> it.diff2025 ?: Double.NEGATIVE_INFINITY
+    legs.sortedWith { left, right ->
+        val primaryResult = when (sortField) {
+            BuilderSortField.PLAYER -> compareValues(left.player?.fullName ?: left.label, right.player?.fullName ?: right.label)
+            BuilderSortField.LINE -> compareValues(left.lineValue ?: Double.MAX_VALUE, right.lineValue ?: Double.MAX_VALUE)
+            BuilderSortField.TYPE -> compareValues(selectionTypeLabel(left.selectionType), selectionTypeLabel(right.selectionType))
+            BuilderSortField.NEXT_BEST -> compareValues(left.nextBestProbDiff ?: Double.NEGATIVE_INFINITY, right.nextBestProbDiff ?: Double.NEGATIVE_INFINITY)
+            BuilderSortField.PRICE -> compareValues(left.decimalPrice ?: Double.NEGATIVE_INFINITY, right.decimalPrice ?: Double.NEGATIVE_INFINITY)
+            BuilderSortField.DIFF_LAST_10 -> compareValues(left.diffLast10 ?: Double.NEGATIVE_INFINITY, right.diffLast10 ?: Double.NEGATIVE_INFINITY)
+            BuilderSortField.DIFF_2025 -> compareValues(left.diff2025 ?: Double.NEGATIVE_INFINITY, right.diff2025 ?: Double.NEGATIVE_INFINITY)
+        }
+        val signedResult = if (descending) -primaryResult else primaryResult
+        if (signedResult != 0) {
+            signedResult
+        } else {
+            val byPlayer = compareValues(left.player?.fullName ?: left.label, right.player?.fullName ?: right.label)
+            if (byPlayer != 0) {
+                byPlayer
+            } else {
+                val byLine = compareValues(left.lineValue ?: Double.MAX_VALUE, right.lineValue ?: Double.MAX_VALUE)
+                if (byLine != 0) {
+                    byLine
+                } else {
+                    compareValues(selectionTypeLabel(left.selectionType), selectionTypeLabel(right.selectionType))
+                }
             }
-        }.thenBy { it.player?.fullName ?: it.label }
-            .thenBy { it.lineValue ?: Double.MAX_VALUE }
-            .thenBy { selectionTypeLabel(it.selectionType) },
-    )
+        }
+    }
+
+private fun defaultSortDirectionForField(field: BuilderSortField): Boolean =
+    when (field) {
+        BuilderSortField.PLAYER,
+        BuilderSortField.LINE,
+        BuilderSortField.TYPE -> false
+        BuilderSortField.NEXT_BEST,
+        BuilderSortField.PRICE,
+        BuilderSortField.DIFF_LAST_10,
+        BuilderSortField.DIFF_2025 -> true
+    }
 
 private fun buildCandidateBoard(legs: List<OddsSearchResult>): List<CandidateBoardGroup> =
     legs.groupBy { boardGroupKey(it) }
@@ -1804,6 +1835,9 @@ private fun bookmakerLabel(bookmakerCode: String): String =
 
 private fun BuilderSortField.label(): String =
     when (this) {
+        BuilderSortField.PLAYER -> "Player"
+        BuilderSortField.LINE -> "Line"
+        BuilderSortField.TYPE -> "Type"
         BuilderSortField.NEXT_BEST -> "NB"
         BuilderSortField.PRICE -> "Price"
         BuilderSortField.DIFF_LAST_10 -> "L10"

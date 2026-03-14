@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
@@ -18,11 +19,12 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.outlined.Sort
 import androidx.compose.material.icons.outlined.FilterList
 import androidx.compose.material.icons.outlined.Menu
+import androidx.compose.material.icons.outlined.MoreVert
 import androidx.compose.material.icons.outlined.Refresh
 import androidx.compose.material3.Checkbox
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
@@ -31,6 +33,7 @@ import androidx.compose.material3.ExposedDropdownMenuAnchorType
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.FilterChip
+import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -42,6 +45,7 @@ import androidx.compose.material3.PrimaryTabRow
 import androidx.compose.material3.RangeSlider
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Switch
+import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Tab
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -77,6 +81,13 @@ import com.jamesbrown.aflmobile.ui.common.LoadingCard
 import com.jamesbrown.aflmobile.ui.common.ScreenPadding
 import com.jamesbrown.aflmobile.ui.common.formatDecimalPrice
 import com.jamesbrown.aflmobile.ui.common.simpleViewModelFactory
+import com.jamesbrown.aflmobile.ui.theme.Blue100
+import com.jamesbrown.aflmobile.ui.theme.Blue200
+import com.jamesbrown.aflmobile.ui.theme.Blue700
+import com.jamesbrown.aflmobile.ui.theme.IceWhite
+import com.jamesbrown.aflmobile.ui.theme.Orange100
+import com.jamesbrown.aflmobile.ui.theme.Orange300
+import com.jamesbrown.aflmobile.ui.theme.Orange700
 import com.jamesbrown.aflmobile.ui.theme.appCardColors
 import com.jamesbrown.aflmobile.ui.theme.appGlassBorder
 import com.jamesbrown.aflmobile.ui.theme.appTopBarColors
@@ -148,6 +159,9 @@ private val matchSortOptions = listOf(
 )
 
 private const val OddsPageSize = 50
+private val OddsAccent = Orange700
+private val OddsAccentSoft = Orange100
+private val OddsAccentBorder = Orange300
 
 data class OddsUiState(
     val bookmakers: List<BookmakerSummary> = emptyList(),
@@ -462,7 +476,7 @@ private fun OddsScreen(
     onOpenNavigation: () -> Unit,
 ) {
     var showFilters by remember { mutableStateOf(false) }
-    var showSort by remember { mutableStateOf(false) }
+    var showOptions by remember { mutableStateOf(false) }
     var draftFilters by remember(uiState.filters) { mutableStateOf(uiState.filters) }
 
     LaunchedEffect(showFilters, uiState.filters) {
@@ -483,6 +497,12 @@ private fun OddsScreen(
                     }
                 },
                 actions = {
+                    IconButton(onClick = { showFilters = true }) {
+                        Icon(Icons.Outlined.FilterList, contentDescription = "Open filters")
+                    }
+                    IconButton(onClick = { showOptions = true }) {
+                        Icon(Icons.Outlined.MoreVert, contentDescription = "Open options")
+                    }
                     IconButton(onClick = onRefresh) {
                         Icon(Icons.Outlined.Refresh, contentDescription = "Refresh")
                     }
@@ -504,16 +524,20 @@ private fun OddsScreen(
                     PrimaryTabRow(
                         selectedTabIndex = if (uiState.filters.scope == OddsScopeMatch) 0 else 1,
                         containerColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.82f),
-                        contentColor = MaterialTheme.colorScheme.primary,
+                        contentColor = OddsAccent,
                     ) {
                         Tab(
                             selected = uiState.filters.scope == OddsScopeMatch,
                             onClick = { onScopeSelected(OddsScopeMatch) },
+                            selectedContentColor = OddsAccent,
+                            unselectedContentColor = Blue700,
                             text = { Text("Match") },
                         )
                         Tab(
                             selected = uiState.filters.scope == OddsScopePlayer,
                             onClick = { onScopeSelected(OddsScopePlayer) },
+                            selectedContentColor = OddsAccent,
+                            unselectedContentColor = Blue700,
                             text = { Text("Player") },
                         )
                     }
@@ -529,8 +553,7 @@ private fun OddsScreen(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(16.dp),
-                            horizontalArrangement = Arrangement.SpaceBetween,
-                            verticalAlignment = Alignment.CenterVertically,
+                            verticalAlignment = Alignment.Top,
                         ) {
                             Column(
                                 modifier = Modifier.weight(1f),
@@ -552,19 +575,6 @@ private fun OddsScreen(
                                     },
                                     style = MaterialTheme.typography.bodyMedium,
                                 )
-                            }
-                            Column(
-                                horizontalAlignment = Alignment.End,
-                                verticalArrangement = Arrangement.spacedBy(6.dp),
-                            ) {
-                                FilledTonalButton(onClick = { showFilters = true }) {
-                                    Icon(Icons.Outlined.FilterList, contentDescription = null)
-                                    Text("Filters", modifier = Modifier.padding(start = 8.dp))
-                                }
-                                TextButton(onClick = { showSort = true }) {
-                                    Icon(Icons.AutoMirrored.Outlined.Sort, contentDescription = null)
-                                    Text("Sort", modifier = Modifier.padding(start = 8.dp))
-                                }
                             }
                         }
                     }
@@ -664,8 +674,8 @@ private fun OddsScreen(
                 )
             }
 
-            if (showSort) {
-                OddsSortSheet(
+            if (showOptions) {
+                OddsOptionsSheet(
                     filters = uiState.filters,
                     onApply = { option ->
                         onApplyFilters(
@@ -674,9 +684,9 @@ private fun OddsScreen(
                                 sortDirection = option.sortDirection,
                             ),
                         )
-                        showSort = false
+                        showOptions = false
                     },
-                    onDismiss = { showSort = false },
+                    onDismiss = { showOptions = false },
                 )
             }
 
@@ -695,7 +705,7 @@ private fun OddsScreen(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun OddsSortSheet(
+private fun OddsOptionsSheet(
     filters: OddsFilters,
     onApply: (SortOption) -> Unit,
     onDismiss: () -> Unit,
@@ -711,12 +721,21 @@ private fun OddsSortSheet(
                 .padding(horizontal = 20.dp, vertical = 8.dp),
             verticalArrangement = Arrangement.spacedBy(14.dp),
         ) {
-            Text("Sort", style = MaterialTheme.typography.headlineSmall)
+            Text("Options", style = MaterialTheme.typography.headlineSmall)
+            Text(
+                "Sort",
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.SemiBold,
+            )
             sortOptionsForScope(filters.scope).forEach { option ->
                 val selected = option.sortBy == filters.sortBy && option.sortDirection == filters.sortDirection
                 FilledTonalButton(
                     onClick = { onApply(option) },
                     modifier = Modifier.fillMaxWidth(),
+                    colors = ButtonDefaults.filledTonalButtonColors(
+                        containerColor = if (selected) OddsAccentSoft else Blue100,
+                        contentColor = if (selected) OddsAccent else Blue700,
+                    ),
                 ) {
                     Row(
                         modifier = Modifier.fillMaxWidth(),
@@ -729,13 +748,14 @@ private fun OddsSortSheet(
                                 "Selected",
                                 style = MaterialTheme.typography.labelMedium,
                                 fontWeight = FontWeight.SemiBold,
-                            )
-                        }
+                        )
                     }
                 }
             }
+            Spacer(modifier = Modifier.heightIn(min = 8.dp))
         }
     }
+}
 }
 
 @OptIn(ExperimentalLayoutApi::class)
@@ -873,6 +893,8 @@ private fun OddsFilterSheet(
                                 )
                             },
                             label = { Text(bookmaker.displayName) },
+                            colors = oddsFilterChipColors(),
+                            border = oddsFilterChipBorder(filters.bookmakerCodes.contains(bookmaker.code)),
                         )
                     }
                 }
@@ -890,6 +912,8 @@ private fun OddsFilterSheet(
                                 selected = filters.selectionType == option.code,
                                 onClick = { onFiltersChanged(filters.copy(selectionType = option.code)) },
                                 label = { Text(option.label) },
+                                colors = oddsFilterChipColors(),
+                                border = oddsFilterChipBorder(filters.selectionType == option.code),
                             )
                         }
                     }
@@ -994,6 +1018,11 @@ private fun OddsFilterSheet(
                     Switch(
                         checked = filters.bestOnly,
                         onCheckedChange = { onFiltersChanged(filters.copy(bestOnly = it)) },
+                        colors = SwitchDefaults.colors(
+                            checkedThumbColor = IceWhite,
+                            checkedTrackColor = OddsAccent,
+                            checkedBorderColor = OddsAccent,
+                        ),
                     )
                 }
 
@@ -1169,6 +1198,8 @@ private fun SelectedPlayerChipRow(
                     selected = true,
                     onClick = { onRemove(player.id) },
                     label = { Text(player.fullName) },
+                    colors = oddsFilterChipColors(),
+                    border = oddsFilterChipBorder(true),
                 )
             }
         }
@@ -1645,3 +1676,19 @@ private fun formatDelta(value: Double): String =
 
 private fun formatSliderValue(value: Float): String =
     String.format(Locale.getDefault(), "%+.2f", value)
+
+@Composable
+private fun oddsFilterChipColors() = FilterChipDefaults.filterChipColors(
+    containerColor = Blue100,
+    labelColor = Blue700,
+    selectedContainerColor = OddsAccent,
+    selectedLabelColor = IceWhite,
+)
+
+@Composable
+private fun oddsFilterChipBorder(selected: Boolean) = FilterChipDefaults.filterChipBorder(
+    enabled = true,
+    selected = selected,
+    borderColor = Blue200,
+    selectedBorderColor = OddsAccentBorder,
+)
