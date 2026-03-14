@@ -95,6 +95,7 @@ import com.jamesbrown.aflmobile.ui.common.BuilderSupportText
 import com.jamesbrown.aflmobile.ui.common.DataStatusNavigationIcons
 import com.jamesbrown.aflmobile.ui.common.ScreenPadding
 import com.jamesbrown.aflmobile.ui.common.SelectionMetricFilterSheet
+import com.jamesbrown.aflmobile.ui.common.shortAflMatchLabel
 import com.jamesbrown.aflmobile.ui.common.formatDateTime
 import com.jamesbrown.aflmobile.ui.common.formatDecimalPrice
 import com.jamesbrown.aflmobile.ui.common.simpleViewModelFactory
@@ -1985,42 +1986,7 @@ private fun selectionTypeLabel(selectionType: String): String =
     }
 
 private fun shortMatchLabel(matchName: String): String {
-    val normalized = matchName.replace(" vs ", " v ", ignoreCase = true)
-    val parts = normalized.split(" v ")
-    if (parts.size != 2) {
-        return matchName
-    }
-    val home = aflTeamCode(parts[0]) ?: return matchName
-    val away = aflTeamCode(parts[1]) ?: return matchName
-    return "$home v $away"
-}
-
-private fun aflTeamCode(teamName: String): String? {
-    val normalized = teamName
-        .trim()
-        .lowercase(Locale.getDefault())
-        .replace(".", "")
-    return when {
-        normalized.contains("adelaide") -> "ADE"
-        normalized.contains("brisbane") -> "BL"
-        normalized.contains("carlton") -> "CAR"
-        normalized.contains("collingwood") -> "COL"
-        normalized.contains("essendon") -> "ESS"
-        normalized.contains("fremantle") -> "FRE"
-        normalized.contains("geelong") -> "GEE"
-        normalized.contains("gold coast") -> "GC"
-        normalized.contains("greater western sydney") || normalized.contains("gws") -> "GWS"
-        normalized.contains("hawthorn") -> "HAW"
-        normalized.contains("melbourne") -> "MEL"
-        normalized.contains("north melbourne") || normalized == "kangaroos" -> "NM"
-        normalized.contains("port adelaide") || normalized.startsWith("port ") -> "PA"
-        normalized.contains("richmond") -> "RIC"
-        normalized.contains("st kilda") -> "STK"
-        normalized.contains("sydney") -> "SYD"
-        normalized.contains("west coast") -> "WCE"
-        normalized.contains("western bulldogs") || normalized.contains("bulldogs") -> "WB"
-        else -> null
-    }
+    return shortAflMatchLabel(matchName)
 }
 
 private fun formatLineValue(value: Double?): String =

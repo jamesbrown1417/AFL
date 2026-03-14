@@ -31,3 +31,42 @@ fun formatDecimalPrice(value: Double?): String = value?.let { String.format(Loca
 
 fun formatPercentage(value: Double?): String =
     value?.let { String.format(Locale.getDefault(), "%.1f%%", it * 100.0) } ?: "--"
+
+fun shortAflMatchLabel(matchName: String): String {
+    val normalized = matchName.replace(" vs ", " v ", ignoreCase = true)
+    val parts = normalized.split(" v ")
+    if (parts.size != 2) {
+        return matchName
+    }
+    val home = aflTeamCode(parts[0]) ?: return matchName
+    val away = aflTeamCode(parts[1]) ?: return matchName
+    return "$home v $away"
+}
+
+fun aflTeamCode(teamName: String): String? {
+    val normalized = teamName
+        .trim()
+        .lowercase(Locale.getDefault())
+        .replace(".", "")
+    return when {
+        normalized.contains("port adelaide") || normalized.startsWith("port ") || normalized.contains(" power") -> "PTA"
+        normalized.contains("north melbourne") || normalized.contains("kangaroos") -> "NTH"
+        normalized == "adelaide" || normalized.contains("adelaide crows") || normalized.endsWith(" crows") -> "ADE"
+        normalized.contains("brisbane") -> "BRL"
+        normalized.contains("carlton") -> "CAR"
+        normalized.contains("collingwood") -> "COL"
+        normalized.contains("essendon") -> "ESS"
+        normalized.contains("fremantle") -> "FRE"
+        normalized.contains("geelong") -> "GEE"
+        normalized.contains("gold coast") -> "GCS"
+        normalized.contains("greater western sydney") || normalized.contains("gws") -> "GWS"
+        normalized.contains("hawthorn") -> "HAW"
+        normalized.contains("melbourne") -> "MEL"
+        normalized.contains("richmond") -> "RIC"
+        normalized.contains("st kilda") -> "STK"
+        normalized.contains("sydney") -> "SYD"
+        normalized.contains("west coast") -> "WCE"
+        normalized.contains("western bulldogs") || normalized.contains("bulldogs") || normalized.contains("footscray") -> "WBD"
+        else -> null
+    }
+}
