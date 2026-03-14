@@ -6,6 +6,7 @@ import com.jamesbrown.aflmobile.model.AppSettings
 import com.jamesbrown.aflmobile.model.BookmakerSummary
 import com.jamesbrown.aflmobile.model.CgmCompareRequestPayload
 import com.jamesbrown.aflmobile.model.CgmCompareResponse
+import com.jamesbrown.aflmobile.model.DataStatusResponse
 import com.jamesbrown.aflmobile.model.EventSummary
 import com.jamesbrown.aflmobile.model.HealthResponse
 import com.jamesbrown.aflmobile.model.MarketSummary
@@ -36,6 +37,8 @@ class AflRepository(
     suspend fun saveSettings(settings: AppSettings) = settingsStore.save(settings)
 
     suspend fun health(): HealthResponse = apiClient.getHealth()
+
+    suspend fun dataStatus(): DataStatusResponse = apiClient.getDataStatus()
 
     suspend fun bookmakers(): List<BookmakerSummary> = apiClient.getBookmakers()
 

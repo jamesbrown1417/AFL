@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from datetime import datetime, timezone
+from pathlib import Path
 from typing import Any
 
 from app.config import Settings
@@ -48,6 +50,48 @@ class QueryService:
             "last_successful_import_at": last_run["finished_at"] if last_run else None,
         }
 
+    def get_data_status(self) -> dict[str, Any]:
+        sections: list[dict[str, Any]] = []
+
+        processed_files = [
+            self._file_status(path, base_dir=self.settings.processed_odds_dir)
+            for path in sorted(self.settings.processed_odds_dir.glob("*"))
+            if path.is_file()
+        ]
+        if processed_files:
+            sections.append(
+                {
+                    "code": "processed",
+                    "title": "Processed",
+                    "category": "processed",
+                    "files": processed_files,
+                }
+            )
+
+        scraped_by_agency: dict[str, list[dict[str, Any]]] = {}
+        for path in sorted(self.settings.scraped_odds_dir.glob("*")):
+            if not path.is_file():
+                continue
+            agency_code = path.name.split("_", maxsplit=1)[0].lower()
+            scraped_by_agency.setdefault(agency_code, []).append(
+                self._file_status(path, base_dir=self.settings.scraped_odds_dir)
+            )
+
+        for agency_code in sorted(scraped_by_agency):
+            sections.append(
+                {
+                    "code": agency_code,
+                    "title": self._agency_title(agency_code),
+                    "category": "scraped",
+                    "files": scraped_by_agency[agency_code],
+                }
+            )
+
+        return {
+            "generated_at": datetime.now(timezone.utc),
+            "sections": sections,
+        }
+
     def list_bookmakers(self, live_pricing_codes: set[str]) -> list[dict[str, Any]]:
         with connection(settings=self.settings) as conn:
             rows = fetch_all(
@@ -72,6 +116,26 @@ class QueryService:
         for row in rows:
             row["live_pricing_enabled"] = row["code"] in live_pricing_codes
         return rows
+
+    def _file_status(self, path: Path, *, base_dir: Path) -> dict[str, Any]:
+        modified_at = datetime.fromtimestamp(path.stat().st_mtime, tz=timezone.utc)
+        return {
+            "file_name": path.name,
+            "relative_path": str(path.relative_to(base_dir.parent)),
+            "modified_at": modified_at,
+        }
+
+    def _agency_title(self, agency_code: str) -> str:
+        return {
+            "bet365": "Bet365",
+            "betfair": "Betfair",
+            "betright": "Betright",
+            "dabble": "Dabble",
+            "neds": "Neds",
+            "pointsbet": "PointsBet",
+            "sportsbet": "Sportsbet",
+            "tab": "TAB",
+        }.get(agency_code, agency_code.replace("_", " ").title())
 
     def list_events(
         self,

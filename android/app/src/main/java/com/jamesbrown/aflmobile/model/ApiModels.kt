@@ -13,6 +13,27 @@ data class HealthResponse(
 )
 
 @Serializable
+data class DataFileStatus(
+    @SerialName("file_name") val fileName: String,
+    @SerialName("relative_path") val relativePath: String,
+    @SerialName("modified_at") val modifiedAt: String,
+)
+
+@Serializable
+data class DataFileSection(
+    val code: String,
+    val title: String,
+    val category: String,
+    val files: List<DataFileStatus>,
+)
+
+@Serializable
+data class DataStatusResponse(
+    @SerialName("generated_at") val generatedAt: String,
+    val sections: List<DataFileSection>,
+)
+
+@Serializable
 data class TeamSummary(
     val id: Int,
     val name: String,

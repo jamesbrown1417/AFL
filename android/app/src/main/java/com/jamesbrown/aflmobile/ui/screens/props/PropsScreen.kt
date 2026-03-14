@@ -20,7 +20,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.FilterList
-import androidx.compose.material.icons.outlined.Menu
 import androidx.compose.material.icons.outlined.MoreVert
 import androidx.compose.material.icons.outlined.Refresh
 import androidx.compose.material3.Checkbox
@@ -79,6 +78,7 @@ import com.jamesbrown.aflmobile.ui.common.ErrorCard
 import com.jamesbrown.aflmobile.ui.common.InlineChip
 import com.jamesbrown.aflmobile.ui.common.LoadingCard
 import com.jamesbrown.aflmobile.ui.common.ScreenPadding
+import com.jamesbrown.aflmobile.ui.common.DataStatusNavigationIcons
 import com.jamesbrown.aflmobile.ui.common.formatDecimalPrice
 import com.jamesbrown.aflmobile.ui.common.simpleViewModelFactory
 import com.jamesbrown.aflmobile.ui.theme.Blue100
@@ -452,6 +452,7 @@ fun OddsRoute(
     )
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     OddsScreen(
+        repository = repository,
         uiState = uiState,
         onScopeSelected = viewModel::setScope,
         onApplyFilters = viewModel::applyFilters,
@@ -466,6 +467,7 @@ fun OddsRoute(
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
 private fun OddsScreen(
+    repository: AflRepository,
     uiState: OddsUiState,
     onScopeSelected: (String) -> Unit,
     onApplyFilters: (OddsFilters) -> Unit,
@@ -492,9 +494,7 @@ private fun OddsScreen(
                 title = { Text("Odds") },
                 colors = appTopBarColors(),
                 navigationIcon = {
-                    IconButton(onClick = onOpenNavigation) {
-                        Icon(Icons.Outlined.Menu, contentDescription = "Open navigation")
-                    }
+                    DataStatusNavigationIcons(repository = repository, onOpenNavigation = onOpenNavigation)
                 },
                 actions = {
                     IconButton(onClick = { showFilters = true }) {

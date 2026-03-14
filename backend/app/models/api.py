@@ -22,6 +22,24 @@ class HealthResponse(BaseModel):
     last_successful_import_at: datetime | None
 
 
+class DataFileStatus(BaseModel):
+    file_name: str
+    relative_path: str
+    modified_at: datetime
+
+
+class DataFileSection(BaseModel):
+    code: str
+    title: str
+    category: str
+    files: list[DataFileStatus]
+
+
+class DataStatusResponse(BaseModel):
+    generated_at: datetime
+    sections: list[DataFileSection]
+
+
 class TeamSummary(BaseModel):
     id: int
     name: str

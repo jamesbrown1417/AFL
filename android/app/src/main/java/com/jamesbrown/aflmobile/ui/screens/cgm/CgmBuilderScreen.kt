@@ -25,7 +25,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material.icons.outlined.FilterList
-import androidx.compose.material.icons.outlined.Menu
 import androidx.compose.material.icons.outlined.MoreVert
 import androidx.compose.material.icons.outlined.Refresh
 import androidx.compose.material3.Button
@@ -90,6 +89,7 @@ import com.jamesbrown.aflmobile.ui.common.InlineChip
 import com.jamesbrown.aflmobile.ui.common.LoadingCard
 import com.jamesbrown.aflmobile.ui.common.BuilderDisplayModeSegmented
 import com.jamesbrown.aflmobile.ui.common.BuilderSupportText
+import com.jamesbrown.aflmobile.ui.common.DataStatusNavigationIcons
 import com.jamesbrown.aflmobile.ui.common.ScreenPadding
 import com.jamesbrown.aflmobile.ui.common.SelectionMetricFilterSheet
 import com.jamesbrown.aflmobile.ui.common.formatDecimalPrice
@@ -451,6 +451,7 @@ fun CgmBuilderRoute(
     )
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     CgmBuilderScreen(
+        repository = repository,
         uiState = uiState,
         onSelectBookmaker = viewModel::selectBookmaker,
         onToggleEvent = viewModel::toggleEventSelection,
@@ -469,6 +470,7 @@ fun CgmBuilderRoute(
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
 private fun CgmBuilderScreen(
+    repository: AflRepository,
     uiState: CgmBuilderUiState,
     onSelectBookmaker: (String) -> Unit,
     onToggleEvent: (Int) -> Unit,
@@ -555,9 +557,11 @@ private fun CgmBuilderScreen(
                     events = availableEvents,
                     selectedBookmaker = uiState.selectedBookmaker,
                     selectedEventIds = uiState.selectedEventIds,
+                    bestOnly = uiState.bestOnly,
                     onSelectBookmaker = onSelectBookmaker,
                     onToggleEvent = onToggleEvent,
                     onClearEventSelection = onClearEventSelection,
+                    onBestOnlyChanged = onBestOnlyChanged,
                 )
             }
 
@@ -649,9 +653,7 @@ private fun CgmBuilderScreen(
         }
         if (showControls) {
             CgmControlsSheet(
-                bestOnly = uiState.bestOnly,
                 displayMode = displayMode,
-                onBestOnlyChanged = onBestOnlyChanged,
                 onDisplayModeChanged = { displayMode = it },
                 onDismiss = { showControls = false },
             )
@@ -698,6 +700,7 @@ private fun CgmBuilderScreen(
                 hasDraft = uiState.selectedLegs.isNotEmpty(),
                 onRefresh = onRefresh,
                 onClearDraft = onClearDraft,
+                repository = repository,
                 onOpenNavigation = onOpenNavigation,
                 onOpenFilters = { showFilters = true },
                 onOpenOptions = { showControls = true },
@@ -711,6 +714,7 @@ private fun CgmBuilderScreen(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun CgmTopBar(
+    repository: AflRepository,
     hasDraft: Boolean,
     onRefresh: () -> Unit,
     onClearDraft: () -> Unit,
@@ -722,9 +726,7 @@ private fun CgmTopBar(
         title = { Text("CGM") },
         colors = appTopBarColors(),
         navigationIcon = {
-            IconButton(onClick = onOpenNavigation) {
-                Icon(Icons.Outlined.Menu, contentDescription = "Open navigation")
-            }
+            DataStatusNavigationIcons(repository = repository, onOpenNavigation = onOpenNavigation)
         },
         actions = {
             IconButton(onClick = onOpenFilters) {
@@ -752,9 +754,11 @@ private fun CgmControlCard(
     events: List<EventSummary>,
     selectedBookmaker: String?,
     selectedEventIds: Set<Int>,
+    bestOnly: Boolean,
     onSelectBookmaker: (String) -> Unit,
     onToggleEvent: (Int) -> Unit,
     onClearEventSelection: () -> Unit,
+    onBestOnlyChanged: (Boolean) -> Unit,
 ) {
     var bookmakerExpanded by remember { mutableStateOf(false) }
     var eventExpanded by remember { mutableStateOf(false) }
@@ -856,6 +860,21 @@ private fun CgmControlCard(
                     }
                 }
             }
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Column(modifier = Modifier.weight(1f)) {
+                    Text("Best market price", fontWeight = FontWeight.Medium)
+                    BuilderSupportText("Only show source-agency rows where it currently has the best market price.")
+                }
+                Switch(
+                    checked = bestOnly,
+                    onCheckedChange = onBestOnlyChanged,
+                )
+            }
         }
     }
 }
@@ -863,9 +882,7 @@ private fun CgmControlCard(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun CgmControlsSheet(
-    bestOnly: Boolean,
     displayMode: BuilderDisplayMode,
-    onBestOnlyChanged: (Boolean) -> Unit,
     onDisplayModeChanged: (BuilderDisplayMode) -> Unit,
     onDismiss: () -> Unit,
 ) {
@@ -881,20 +898,6 @@ private fun CgmControlsSheet(
             verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
             Text("Options", style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.SemiBold)
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                Column(modifier = Modifier.weight(1f)) {
-                    Text("Best market price", fontWeight = FontWeight.Medium)
-                    BuilderSupportText("Only show source-agency rows where it currently has the best market price.")
-                }
-                Switch(
-                    checked = bestOnly,
-                    onCheckedChange = onBestOnlyChanged,
-                )
-            }
             Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 Text("Display mode", fontWeight = FontWeight.Medium)
                 BuilderDisplayModeSegmented(
@@ -1175,17 +1178,17 @@ private fun CandidateRowHeader(
         border = BorderStroke(1.dp, Blue200.copy(alpha = 0.8f)),
     ) {
         Row(
-            modifier = Modifier.padding(horizontal = 16.dp, vertical = 10.dp),
+            modifier = Modifier.padding(horizontal = 14.dp, vertical = 10.dp),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(10.dp),
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
         ) {
-            SortableHeaderCell("Player", BuilderSortField.PLAYER, sortField, descending, Modifier.weight(4.1f), Alignment.Start, onSortSelected)
+            SortableHeaderCell("Player", BuilderSortField.PLAYER, sortField, descending, Modifier.weight(3.8f), Alignment.Start, onSortSelected)
             SortableHeaderCell("Line", BuilderSortField.LINE, sortField, descending, Modifier.weight(0.9f), Alignment.End, onSortSelected)
             SortableHeaderCell("Type", BuilderSortField.TYPE, sortField, descending, Modifier.weight(1.1f), Alignment.Start, onSortSelected)
             SortableHeaderCell("Price", BuilderSortField.PRICE, sortField, descending, Modifier.weight(0.95f), Alignment.End, onSortSelected)
-            SortableHeaderCell("L10", BuilderSortField.DIFF_LAST_10, sortField, descending, Modifier.weight(0.85f), Alignment.End, onSortSelected)
-            SortableHeaderCell("25", BuilderSortField.DIFF_2025, sortField, descending, Modifier.weight(0.85f), Alignment.End, onSortSelected)
-            SortableHeaderCell("NB", BuilderSortField.NEXT_BEST, sortField, descending, Modifier.weight(0.9f), Alignment.End, onSortSelected)
+            SortableHeaderCell("L10", BuilderSortField.DIFF_LAST_10, sortField, descending, Modifier.weight(1.0f), Alignment.End, onSortSelected)
+            SortableHeaderCell("25", BuilderSortField.DIFF_2025, sortField, descending, Modifier.weight(1.0f), Alignment.End, onSortSelected)
+            SortableHeaderCell("NB", BuilderSortField.NEXT_BEST, sortField, descending, Modifier.weight(1.0f), Alignment.End, onSortSelected)
         }
     }
 }
@@ -1220,12 +1223,12 @@ private fun CandidateSelectionRow(
         ),
     ) {
         Row(
-            modifier = Modifier.padding(horizontal = 16.dp, vertical = 10.dp),
+            modifier = Modifier.padding(horizontal = 14.dp, vertical = 10.dp),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(10.dp),
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
         ) {
             Column(
-                modifier = Modifier.weight(4.1f),
+                modifier = Modifier.weight(3.8f),
                 verticalArrangement = Arrangement.spacedBy(2.dp),
             ) {
                 Text(
@@ -1246,9 +1249,9 @@ private fun CandidateSelectionRow(
             MetricCell(formatLineValue(selection.lineValue), Modifier.weight(0.9f), selected)
             TextMetricCell(selectionTypeLabel(selection.selectionType), Modifier.weight(1.1f), selected)
             MetricCell(formatDecimalPrice(selection.decimalPrice), Modifier.weight(0.95f), selected, emphasize = true)
-            MetricCell(selection.diffLast10?.let(::formatSignedDelta) ?: "--", Modifier.weight(0.85f), selected, value = selection.diffLast10)
-            MetricCell(selection.diff2025?.let(::formatSignedDelta) ?: "--", Modifier.weight(0.85f), selected, value = selection.diff2025)
-            MetricCell(selection.nextBestProbDiff?.let(::formatSignedDelta) ?: "--", Modifier.weight(0.9f), selected, value = selection.nextBestProbDiff)
+            MetricCell(selection.diffLast10?.let(::formatSignedDelta) ?: "--", Modifier.weight(1.0f), selected, value = selection.diffLast10)
+            MetricCell(selection.diff2025?.let(::formatSignedDelta) ?: "--", Modifier.weight(1.0f), selected, value = selection.diff2025)
+            MetricCell(selection.nextBestProbDiff?.let(::formatSignedDelta) ?: "--", Modifier.weight(1.0f), selected, value = selection.nextBestProbDiff)
         }
     }
 }
@@ -1392,7 +1395,7 @@ private fun SelectionPriceTile(
     }
     Surface(
         modifier = Modifier
-            .width(74.dp)
+            .width(82.dp)
             .clickable(enabled = enabled, onClick = onClick),
         shape = RoundedCornerShape(18.dp),
         color = when {
@@ -1411,7 +1414,7 @@ private fun SelectionPriceTile(
         ),
     ) {
         Column(
-            modifier = Modifier.padding(horizontal = 6.dp, vertical = 7.dp),
+            modifier = Modifier.padding(horizontal = 5.dp, vertical = 7.dp),
             verticalArrangement = Arrangement.spacedBy(5.dp),
         ) {
             Text(
@@ -1452,13 +1455,13 @@ private fun BlankSelectionTile(
     label: String,
 ) {
     Surface(
-        modifier = Modifier.width(74.dp),
+        modifier = Modifier.width(82.dp),
         shape = RoundedCornerShape(18.dp),
         color = MaterialTheme.colorScheme.surfaceContainer.copy(alpha = 0.9f),
         border = BorderStroke(1.dp, Blue200.copy(alpha = 0.7f)),
     ) {
         Column(
-            modifier = Modifier.padding(horizontal = 6.dp, vertical = 7.dp),
+            modifier = Modifier.padding(horizontal = 5.dp, vertical = 7.dp),
             verticalArrangement = Arrangement.spacedBy(5.dp),
         ) {
             Text(
@@ -1497,8 +1500,8 @@ private fun EmbeddedMetricPill(
         color = background,
     ) {
         Row(
-            modifier = Modifier.padding(horizontal = 6.dp, vertical = 3.dp),
-            horizontalArrangement = Arrangement.spacedBy(4.dp),
+            modifier = Modifier.padding(horizontal = 5.dp, vertical = 3.dp),
+            horizontalArrangement = Arrangement.spacedBy(3.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Text(
@@ -1729,7 +1732,7 @@ private fun marketDisplayLabel(marketTypeCode: String): String =
     }
 
 private fun buildRowSubtitle(selection: OddsSearchResult): String =
-    "${marketDisplayLabel(selection.marketTypeCode)}\n${selection.matchName}"
+    "${marketDisplayLabel(selection.marketTypeCode)}\n${shortMatchLabel(selection.matchName)}"
 
 private fun sortCandidateRows(
     legs: List<OddsSearchResult>,
@@ -1783,7 +1786,7 @@ private fun buildCandidateBoard(legs: List<OddsSearchResult>): List<CandidateBoa
             CandidateBoardGroup(
                 key = boardGroupKey(first),
                 title = first.player?.fullName ?: marketDisplayLabel(first.marketTypeCode),
-                subtitle = "${marketDisplayLabel(first.marketTypeCode)} • ${first.matchName}",
+                subtitle = "${marketDisplayLabel(first.marketTypeCode)} • ${shortMatchLabel(first.matchName)}",
                 columns = buildLineColumns(selections),
             )
         }
@@ -1854,6 +1857,45 @@ private fun selectionTypeLabel(selectionType: String): String =
             if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString()
         }
     }
+
+private fun shortMatchLabel(matchName: String): String {
+    val normalized = matchName.replace(" vs ", " v ", ignoreCase = true)
+    val parts = normalized.split(" v ")
+    if (parts.size != 2) {
+        return matchName
+    }
+    val home = aflTeamCode(parts[0]) ?: return matchName
+    val away = aflTeamCode(parts[1]) ?: return matchName
+    return "$home v $away"
+}
+
+private fun aflTeamCode(teamName: String): String? {
+    val normalized = teamName
+        .trim()
+        .lowercase(Locale.getDefault())
+        .replace(".", "")
+    return when {
+        normalized.contains("adelaide") -> "ADE"
+        normalized.contains("brisbane") -> "BL"
+        normalized.contains("carlton") -> "CAR"
+        normalized.contains("collingwood") -> "COL"
+        normalized.contains("essendon") -> "ESS"
+        normalized.contains("fremantle") -> "FRE"
+        normalized.contains("geelong") -> "GEE"
+        normalized.contains("gold coast") -> "GC"
+        normalized.contains("greater western sydney") || normalized.contains("gws") -> "GWS"
+        normalized.contains("hawthorn") -> "HAW"
+        normalized.contains("melbourne") -> "MEL"
+        normalized.contains("north melbourne") || normalized == "kangaroos" -> "NM"
+        normalized.contains("port adelaide") || normalized.startsWith("port ") -> "PA"
+        normalized.contains("richmond") -> "RIC"
+        normalized.contains("st kilda") -> "STK"
+        normalized.contains("sydney") -> "SYD"
+        normalized.contains("west coast") -> "WCE"
+        normalized.contains("western bulldogs") || normalized.contains("bulldogs") -> "WB"
+        else -> null
+    }
+}
 
 private fun formatLineValue(value: Double?): String =
     if (value == null) {

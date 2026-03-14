@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.CloudDone
-import androidx.compose.material.icons.outlined.Menu
 import androidx.compose.material.icons.outlined.Save
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
@@ -43,6 +42,7 @@ import com.jamesbrown.aflmobile.ui.common.EmptyCard
 import com.jamesbrown.aflmobile.ui.common.ErrorCard
 import com.jamesbrown.aflmobile.ui.common.LoadingCard
 import com.jamesbrown.aflmobile.ui.common.ScreenPadding
+import com.jamesbrown.aflmobile.ui.common.DataStatusNavigationIcons
 import com.jamesbrown.aflmobile.ui.common.formatDateTime
 import com.jamesbrown.aflmobile.ui.common.simpleViewModelFactory
 import com.jamesbrown.aflmobile.ui.theme.appCardColors
@@ -152,6 +152,7 @@ fun SettingsRoute(
     )
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     SettingsScreen(
+        repository = repository,
         uiState = uiState,
         onBaseUrlChanged = viewModel::onBaseUrlChanged,
         onAuthTokenChanged = viewModel::onAuthTokenChanged,
@@ -165,6 +166,7 @@ fun SettingsRoute(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun SettingsScreen(
+    repository: AflRepository,
     uiState: SettingsUiState,
     onBaseUrlChanged: (String) -> Unit,
     onAuthTokenChanged: (String) -> Unit,
@@ -182,9 +184,7 @@ private fun SettingsScreen(
                 title = { Text("Connection & defaults") },
                 colors = appTopBarColors(),
                 navigationIcon = {
-                    androidx.compose.material3.IconButton(onClick = onOpenNavigation) {
-                        Icon(Icons.Outlined.Menu, contentDescription = "Open navigation")
-                    }
+                    DataStatusNavigationIcons(repository = repository, onOpenNavigation = onOpenNavigation)
                 },
             )
         },

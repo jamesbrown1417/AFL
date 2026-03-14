@@ -2,6 +2,11 @@ from __future__ import annotations
 
 
 def test_event_market_selection_flow(client) -> None:
+    data_status_response = client.get("/api/v1/data/status")
+    assert data_status_response.status_code == 200
+    data_status_payload = data_status_response.json()
+    assert data_status_payload["sections"]
+
     events_response = client.get("/api/v1/events", params={"bookmaker": "sportsbet", "limit": 5})
     assert events_response.status_code == 200
     events_payload = events_response.json()

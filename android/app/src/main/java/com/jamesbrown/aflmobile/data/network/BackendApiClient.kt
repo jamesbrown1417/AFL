@@ -5,6 +5,7 @@ import com.jamesbrown.aflmobile.model.ApiErrorEnvelope
 import com.jamesbrown.aflmobile.model.BookmakerSummary
 import com.jamesbrown.aflmobile.model.CgmCompareRequestPayload
 import com.jamesbrown.aflmobile.model.CgmCompareResponse
+import com.jamesbrown.aflmobile.model.DataStatusResponse
 import com.jamesbrown.aflmobile.model.EventSummary
 import com.jamesbrown.aflmobile.model.HealthResponse
 import com.jamesbrown.aflmobile.model.MarketSummary
@@ -45,6 +46,8 @@ class BackendApiClient(
         .build()
 
     suspend fun getHealth(): HealthResponse = get("health")
+
+    suspend fun getDataStatus(): DataStatusResponse = get("data/status")
 
     suspend fun getBookmakers(): List<BookmakerSummary> = get("bookmakers")
 
