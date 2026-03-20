@@ -179,6 +179,8 @@ class OddsSearchResult(BaseModel):
     edge_pct: float | None
     diff_2025: float | None = None
     diff_last_10: float | None = None
+    player_position: str | None = None
+    matchup_difficulty: str | None = None
     is_best_price: bool = False
     next_best_prob_diff: float | None = None
     sgm_eligible: bool

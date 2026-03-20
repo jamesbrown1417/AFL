@@ -90,6 +90,7 @@ import com.jamesbrown.aflmobile.ui.common.LoadingCard
 import com.jamesbrown.aflmobile.ui.common.BuilderDisplayModeSegmented
 import com.jamesbrown.aflmobile.ui.common.BuilderSupportText
 import com.jamesbrown.aflmobile.ui.common.DataStatusNavigationIcons
+import com.jamesbrown.aflmobile.ui.common.PlayerContextTags
 import com.jamesbrown.aflmobile.ui.common.ScreenPadding
 import com.jamesbrown.aflmobile.ui.common.SelectionMetricFilterSheet
 import com.jamesbrown.aflmobile.ui.common.shortAflMatchLabel
@@ -121,6 +122,8 @@ private data class CandidateBoardGroup(
     val key: String,
     val title: String,
     val subtitle: String,
+    val playerPosition: String?,
+    val matchupDifficulty: String?,
     val columns: List<CandidateLineColumn>,
 )
 
@@ -1139,6 +1142,10 @@ private fun CandidateBoardCard(
             verticalArrangement = Arrangement.spacedBy(10.dp),
         ) {
             Text(group.title, style = MaterialTheme.typography.titleMedium, color = CgmTitle, fontWeight = FontWeight.SemiBold)
+            PlayerContextTags(
+                position = group.playerPosition,
+                matchupDifficulty = group.matchupDifficulty,
+            )
             Text(
                 group.subtitle,
                 style = MaterialTheme.typography.bodySmall,
@@ -1238,6 +1245,10 @@ private fun CandidateSelectionRow(
                     fontWeight = FontWeight.SemiBold,
                     color = if (selected) IceWhite else titleColor,
                     maxLines = 1,
+                )
+                PlayerContextTags(
+                    position = selection.playerPosition,
+                    matchupDifficulty = selection.matchupDifficulty,
                 )
                 Text(
                     buildRowSubtitle(selection),
@@ -1788,6 +1799,8 @@ private fun buildCandidateBoard(legs: List<OddsSearchResult>): List<CandidateBoa
                 key = boardGroupKey(first),
                 title = first.player?.fullName ?: marketDisplayLabel(first.marketTypeCode),
                 subtitle = "${marketDisplayLabel(first.marketTypeCode)} • ${shortMatchLabel(first.matchName)}",
+                playerPosition = first.playerPosition,
+                matchupDifficulty = first.matchupDifficulty,
                 columns = buildLineColumns(selections),
             )
         }

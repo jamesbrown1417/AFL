@@ -757,6 +757,8 @@ class QueryService:
                     lm.edge_pct,
                     TRY_CAST(json_extract(lm.metrics_json, '$.diff_2025') AS DOUBLE) AS diff_2025,
                     TRY_CAST(json_extract(lm.metrics_json, '$.diff_last_10') AS DOUBLE) AS diff_last_10,
+                    json_extract_string(lm.metrics_json, '$.player_position') AS player_position,
+                    json_extract_string(lm.metrics_json, '$.matchup_difficulty') AS matchup_difficulty,
                     sbm.sgm_eligible
                   FROM selections s
                   JOIN markets m ON m.market_id = s.market_id
@@ -811,6 +813,8 @@ class QueryService:
                     edge_pct,
                     diff_2025,
                     diff_last_10,
+                    player_position,
+                    matchup_difficulty,
                     market_price_rank = 1 AS is_best_price,
                     CASE
                       WHEN decimal_price IS NULL OR decimal_price <= 0 THEN NULL
@@ -842,6 +846,8 @@ class QueryService:
                   edge_pct,
                   diff_2025,
                   diff_last_10,
+                  player_position,
+                  matchup_difficulty,
                   is_best_price,
                   next_best_prob_diff,
                   sgm_eligible
@@ -1129,6 +1135,8 @@ class QueryService:
             "edge_pct": row["edge_pct"],
             "diff_2025": row["diff_2025"],
             "diff_last_10": row["diff_last_10"],
+            "player_position": row["player_position"],
+            "matchup_difficulty": row["matchup_difficulty"],
             "is_best_price": row["is_best_price"],
             "next_best_prob_diff": row["next_best_prob_diff"],
             "sgm_eligible": row["sgm_eligible"],

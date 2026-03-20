@@ -6,6 +6,7 @@ import math
 from dataclasses import dataclass
 from datetime import UTC, datetime
 from pathlib import Path
+from statistics import StatisticsError, quantiles
 from typing import Any, Callable, TypedDict
 
 from app.config import Settings, get_settings
@@ -23,6 +24,7 @@ from ingest.normalizers import (
     market_type_from_name,
     normalize_bookmaker_code,
     normalize_player_name,
+    normalize_team_name,
     parse_float,
     resolve_bookmaker_meta,
     selection_sort_order,
@@ -52,6 +54,8 @@ class ProcessedSelectionMetric:
     diff_2025: float | None
     diff_last_10: float | None
     variation: float | None
+    player_position: str | None
+    matchup_difficulty: str | None
 
 
 @dataclass(frozen=True, slots=True)
@@ -105,6 +109,8 @@ class Importer:
         self.event_ids: dict[str, int] = {}
         self.market_ids: dict[str, int] = {}
         self.selection_ids: dict[str, int] = {}
+        self.player_positions_by_name = self._load_player_positions()
+        self.matchup_difficulty_by_key = self._load_matchup_difficulty_map()
 
     def run(self, triggered_by: str = "manual") -> ImportSummary:
         initialize_database(self.settings)
@@ -517,6 +523,12 @@ class Importer:
         market_type_code = market_type_from_name(market_name_raw)
         if not market_type_code.startswith("player_"):
             return []
+        player_position = self.player_positions_by_name.get(player_name)
+        matchup_difficulty = self._resolve_matchup_difficulty(
+            opposition_team=row.get("opposition_team"),
+            player_position=player_position,
+            market_name_raw=market_name_raw,
+        )
         line_value = parse_float(row.get("line"))
         market_key = build_market_key(event_context.event_key, market_type_code, player_name, line_value)
         variation = parse_float(row.get("variation"))
@@ -559,9 +571,95 @@ class Importer:
                     diff_2025=parse_float(row.get(diff_2025_column)),
                     diff_last_10=parse_float(row.get(diff_last_10_column)),
                     variation=variation,
+                    player_position=player_position,
+                    matchup_difficulty=matchup_difficulty,
                 )
             )
         return metrics
+
+    def _load_player_positions(self) -> dict[str, str]:
+        path = self.settings.player_positions_path
+        if not path.exists():
+            LOGGER.warning("Player positions file not found: %s", path)
+            return {}
+
+        positions: dict[str, str] = {}
+        with path.open(newline="", encoding="utf-8") as handle:
+            for row in csv.DictReader(handle):
+                player_name = normalize_player_name(row.get("player_full_name"))
+                position = clean_text(row.get("position"))
+                if player_name and position:
+                    positions[player_name] = position
+        return positions
+
+    def _load_matchup_difficulty_map(self) -> dict[tuple[str, str, str], str]:
+        path = self.settings.dvp_data_path
+        if not path.exists():
+            LOGGER.warning("DVP file not found: %s", path)
+            return {}
+
+        rows_by_market: dict[str, list[dict[str, str | float]]] = {}
+        with path.open(newline="", encoding="utf-8") as handle:
+            for row in csv.DictReader(handle):
+                market_name = clean_text(row.get("market_name"))
+                position = clean_text(row.get("Pos"))
+                opposition_team = normalize_team_name(row.get("Opponent"))
+                dvp_value = parse_float(row.get("dvp"))
+                if not market_name or not position or not opposition_team or dvp_value is None:
+                    continue
+                rows_by_market.setdefault(market_name, []).append(
+                    {
+                        "market_name": market_name,
+                        "position": position,
+                        "opposition_team": opposition_team,
+                        "dvp": dvp_value,
+                    }
+                )
+
+        matchup_map: dict[tuple[str, str, str], str] = {}
+        for market_name, rows in rows_by_market.items():
+            if market_name == "Player Goals":
+                for row in rows:
+                    opposition_team = str(row["opposition_team"])
+                    position = str(row["position"])
+                    matchup_map[(opposition_team, position, market_name)] = "Neutral"
+                continue
+
+            threshold_values = [float(row["dvp"]) for row in rows]
+            if not threshold_values:
+                continue
+            try:
+                q1, q2, q3, q4 = quantiles(threshold_values, n=5, method="inclusive")
+            except StatisticsError:  # pragma: no cover - extremely small/degenerate datasets
+                q1 = q2 = q3 = q4 = threshold_values[0]
+            for row in rows:
+                dvp_value = float(row["dvp"])
+                opposition_team = str(row["opposition_team"])
+                position = str(row["position"])
+                if dvp_value <= q1:
+                    category = "Terrible"
+                elif dvp_value <= q2:
+                    category = "Bad"
+                elif dvp_value <= q3:
+                    category = "Neutral"
+                elif dvp_value <= q4:
+                    category = "Good"
+                else:
+                    category = "Excellent"
+                matchup_map[(opposition_team, position, market_name)] = category
+        return matchup_map
+
+    def _resolve_matchup_difficulty(
+        self,
+        *,
+        opposition_team: str | None,
+        player_position: str | None,
+        market_name_raw: str,
+    ) -> str | None:
+        normalized_opposition = normalize_team_name(opposition_team)
+        if not normalized_opposition or not player_position:
+            return None
+        return self.matchup_difficulty_by_key.get((normalized_opposition, player_position, market_name_raw))
 
     def _import_player_stats_file(
         self,
@@ -1499,6 +1597,8 @@ class Importer:
                         "diff_last_10": metric.diff_last_10,
                         "prob_2025": metric.prob_2025,
                         "prob_last_10": metric.prob_last_10,
+                        "player_position": metric.player_position,
+                        "matchup_difficulty": metric.matchup_difficulty,
                         "variation": metric.variation,
                     }
                 ),

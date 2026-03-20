@@ -79,6 +79,7 @@ import com.jamesbrown.aflmobile.ui.common.InlineChip
 import com.jamesbrown.aflmobile.ui.common.LoadingCard
 import com.jamesbrown.aflmobile.ui.common.ScreenPadding
 import com.jamesbrown.aflmobile.ui.common.DataStatusNavigationIcons
+import com.jamesbrown.aflmobile.ui.common.PlayerContextTags
 import com.jamesbrown.aflmobile.ui.common.formatDecimalPrice
 import com.jamesbrown.aflmobile.ui.common.simpleViewModelFactory
 import com.jamesbrown.aflmobile.ui.theme.Blue100
@@ -1276,6 +1277,10 @@ private fun PlayerOddsCard(
                         text = odds.marketDisplayName,
                         style = MaterialTheme.typography.labelLarge,
                         color = MaterialTheme.colorScheme.primary,
+                    )
+                    PlayerContextTags(
+                        position = odds.playerPosition,
+                        matchupDifficulty = odds.matchupDifficulty,
                     )
                     Text(
                         text = odds.matchName,

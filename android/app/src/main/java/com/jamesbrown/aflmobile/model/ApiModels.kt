@@ -179,6 +179,8 @@ data class OddsSearchResult(
     @SerialName("edge_pct") val edgePct: Double? = null,
     @SerialName("diff_2025") val diff2025: Double? = null,
     @SerialName("diff_last_10") val diffLast10: Double? = null,
+    @SerialName("player_position") val playerPosition: String? = null,
+    @SerialName("matchup_difficulty") val matchupDifficulty: String? = null,
     @SerialName("is_best_price") val isBestPrice: Boolean = false,
     @SerialName("next_best_prob_diff") val nextBestProbDiff: Double? = null,
     @SerialName("sgm_eligible") val sgmEligible: Boolean,

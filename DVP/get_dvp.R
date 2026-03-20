@@ -17,13 +17,13 @@ player_positions |>
             position = factor(position))
 
 # Read in player stats----------------------------------------------------------
-all_player_stats_2015_2025 <-
+all_player_stats_2015_2026 <-
   read_rds("Data/afl_fantasy_2015_2025_data.rds") |> 
   bind_rows(read_rds("Data/afl_fantasy_2026_data.rds"))
 
 # Select only the columns we need-----------------------------------------------
-all_player_stats_2015_2025 <-
-  all_player_stats_2015_2025 |>
+all_player_stats_2015_2026 <-
+  all_player_stats_2015_2026 |>
   select(
     player_full_name,
     player_team,
@@ -48,12 +48,12 @@ all_player_stats_2015_2025 <-
 
 # Get each team's last 10 games-------------------------------------------------
 home_team_last_10_games <-
-  all_player_stats_2015_2025 |> 
+  all_player_stats_2015_2026 |> 
   distinct(match_name, round, season_name, start_time_utc, home_team) |> 
   rename(team = home_team)
 
 away_team_last_10_games <-
-  all_player_stats_2015_2025 |> 
+  all_player_stats_2015_2026 |> 
   distinct(match_name, round, season_name, start_time_utc, away_team) |> 
   rename(team = away_team)
 
@@ -67,7 +67,7 @@ last_10_games <-
 
 # Filter player stats to only include last 10 games-----------------------------
 all_player_stats_last_10 <-
-  all_player_stats_2015_2025 |> 
+  all_player_stats_2015_2026 |> 
   mutate(match_id = paste(match_name, round, season_name, sep = "_")) |>
   filter(match_id %in% last_10_games$match_id)
 

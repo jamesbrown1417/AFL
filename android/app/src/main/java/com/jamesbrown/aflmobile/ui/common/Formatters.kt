@@ -32,6 +32,39 @@ fun formatDecimalPrice(value: Double?): String = value?.let { String.format(Loca
 fun formatPercentage(value: Double?): String =
     value?.let { String.format(Locale.getDefault(), "%.1f%%", it * 100.0) } ?: "--"
 
+fun formatPlayerPositionTag(value: String?): String? {
+    val normalized = value
+        ?.trim()
+        ?.uppercase(Locale.getDefault())
+        ?.replace('-', '_')
+        ?: return null
+    return when (normalized) {
+        "KEY_DEFENDER" -> "KDEF"
+        "MEDIUM_DEFENDER" -> "MDEF"
+        "KEY_FORWARD" -> "KFWD"
+        "MEDIUM_FORWARD" -> "MFWD"
+        "MIDFIELDER" -> "MID"
+        "MIDFIELDER_FORWARD" -> "MID/F"
+        "RUCK" -> "RUC"
+        else -> normalized.replace('_', ' ')
+    }
+}
+
+fun formatMatchupDifficultyTag(value: String?): String? {
+    val normalized = value?.trim()?.lowercase(Locale.getDefault()) ?: return null
+    if (normalized.isBlank()) {
+        return null
+    }
+    return when (normalized) {
+        "terrible" -> "TERR"
+        "bad" -> "BAD"
+        "neutral" -> "NEUT"
+        "good" -> "GOOD"
+        "excellent" -> "EXCL"
+        else -> normalized.uppercase(Locale.getDefault())
+    }
+}
+
 fun shortAflMatchLabel(matchName: String): String {
     val normalized = matchName.replace(" vs ", " v ", ignoreCase = true)
     val parts = normalized.split(" v ")
