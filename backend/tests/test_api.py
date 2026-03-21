@@ -54,6 +54,7 @@ def test_event_market_selection_flow(client) -> None:
     assert "diff_last_10" in odds_payload[0]
     assert "is_best_price" in odds_payload[0]
     assert "next_best_prob_diff" in odds_payload[0]
+    assert "weather" in odds_payload[0]
     player_rows = [row for row in odds_payload if row["player"] is not None]
     assert player_rows
     player_id = player_rows[0]["player"]["id"]

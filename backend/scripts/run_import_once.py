@@ -6,6 +6,7 @@ import json
 from pathlib import Path
 
 from app.config import get_settings
+from app.services.weather_service import WeatherService
 from ingest.import_csvs import run_import
 
 
@@ -52,7 +53,10 @@ def main() -> None:
         settings,
         triggered_by="manual_full_reset" if args.reset else "manual",
     )
-    print(json.dumps(summary, indent=2, default=str))
+    weather_summary = WeatherService(settings).refresh_upcoming_forecasts()
+    payload = dict(summary)
+    payload["weather_refresh"] = weather_summary
+    print(json.dumps(payload, indent=2, default=str))
 
 
 if __name__ == "__main__":

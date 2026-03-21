@@ -38,6 +38,11 @@ class Settings(BaseSettings):
     bind_port: int = 8000
     quote_ttl_seconds: int = 30
     request_timeout_seconds: float = 10.0
+    weather_request_timeout_seconds: float = 10.0
+    weather_cache_ttl_seconds: int = 7200
+    weather_forecast_days: int = 16
+    weather_refresh_hours_before_event: int = 6
+    weather_api_url: str = "https://api.open-meteo.com/v1/forecast"
     sgm_retry_attempts: int = 3
     sgm_retry_delay_seconds: float = 0.35
     sportsbet_quote_url: str = "https://www.sportsbet.com.au/apigw/multi-pricer/combinations/price"

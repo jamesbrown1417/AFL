@@ -161,6 +161,14 @@ class SelectionSummary(BaseModel):
     edge_pct: float | None
 
 
+class WeatherSummary(BaseModel):
+    temperature_c: float | None = None
+    wind_kph: float | None = None
+    precip_probability: float | None = None
+    label: str | None = None
+    icon_code: str | None = None
+
+
 class OddsSearchResult(BaseModel):
     selection_id: int
     market_id: int
@@ -181,6 +189,7 @@ class OddsSearchResult(BaseModel):
     diff_last_10: float | None = None
     player_position: str | None = None
     matchup_difficulty: str | None = None
+    weather: WeatherSummary | None = None
     is_best_price: bool = False
     next_best_prob_diff: float | None = None
     sgm_eligible: bool

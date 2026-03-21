@@ -161,6 +161,15 @@ data class SelectionSummary(
 )
 
 @Serializable
+data class WeatherSummary(
+    @SerialName("temperature_c") val temperatureC: Double? = null,
+    @SerialName("wind_kph") val windKph: Double? = null,
+    @SerialName("precip_probability") val precipProbability: Double? = null,
+    val label: String? = null,
+    @SerialName("icon_code") val iconCode: String? = null,
+)
+
+@Serializable
 data class OddsSearchResult(
     @SerialName("selection_id") val selectionId: Int,
     @SerialName("market_id") val marketId: Int,
@@ -181,6 +190,7 @@ data class OddsSearchResult(
     @SerialName("diff_last_10") val diffLast10: Double? = null,
     @SerialName("player_position") val playerPosition: String? = null,
     @SerialName("matchup_difficulty") val matchupDifficulty: String? = null,
+    val weather: WeatherSummary? = null,
     @SerialName("is_best_price") val isBestPrice: Boolean = false,
     @SerialName("next_best_prob_diff") val nextBestProbDiff: Double? = null,
     @SerialName("sgm_eligible") val sgmEligible: Boolean,

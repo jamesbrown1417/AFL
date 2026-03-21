@@ -181,6 +181,20 @@ CREATE TABLE IF NOT EXISTS selection_metrics (
 
 ALTER TABLE selection_metrics ADD COLUMN IF NOT EXISTS bookmaker_id BIGINT;
 
+CREATE TABLE IF NOT EXISTS weather_forecasts (
+  venue TEXT NOT NULL,
+  forecast_hour_utc TIMESTAMP NOT NULL,
+  temperature_c DOUBLE,
+  wind_kph DOUBLE,
+  precipitation_probability DOUBLE,
+  weather_code INTEGER,
+  weather_label TEXT,
+  weather_icon_code TEXT,
+  fetched_at TIMESTAMP NOT NULL,
+  expires_at TIMESTAMP NOT NULL,
+  PRIMARY KEY (venue, forecast_hour_utc)
+);
+
 CREATE TABLE IF NOT EXISTS quote_cache (
   quote_id TEXT PRIMARY KEY,
   cache_key TEXT NOT NULL UNIQUE,

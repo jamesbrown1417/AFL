@@ -6,6 +6,7 @@ from typing import Any
 
 from app.config import Settings
 from app.db.duckdb import connection, fetch_all, fetch_one
+from app.utils.time import utc_now
 
 
 PLAYER_STAT_COLUMN_MAP = {
@@ -731,13 +732,45 @@ class QueryService:
             row_where_conditions.append("is_best_price = TRUE")
         row_where_clause = f"WHERE {' AND '.join(row_where_conditions)}" if row_where_conditions else ""
         order_clause = self._build_odds_order_clause(sort_by=sort_by, sort_dir=sort_dir)
-        params = [*universe_params, *row_params, limit, offset]
+        current_utc = utc_now().replace(tzinfo=None)
+        params = [current_utc, *universe_params, *row_params, limit, offset]
 
         with connection(settings=self.settings) as conn:
             rows = fetch_all(
                 conn,
                 f"""
-                WITH base_odds AS (
+                WITH event_weather AS (
+                  SELECT
+                    event_id,
+                    temperature_c,
+                    wind_kph,
+                    precipitation_probability,
+                    weather_label,
+                    weather_icon_code
+                  FROM (
+                    SELECT
+                      e.event_id,
+                      wf.temperature_c,
+                      wf.wind_kph,
+                      wf.precipitation_probability,
+                      wf.weather_label,
+                      wf.weather_icon_code,
+                      ROW_NUMBER() OVER (
+                        PARTITION BY e.event_id
+                        ORDER BY ABS(DATEDIFF('minute', wf.forecast_hour_utc, e.start_time_utc)) ASC
+                      ) AS row_num
+                    FROM events e
+                    JOIN weather_forecasts wf
+                      ON wf.venue = e.venue
+                     AND wf.expires_at > ?
+                     AND wf.forecast_hour_utc BETWEEN e.start_time_utc - INTERVAL 2 HOUR
+                                                  AND e.start_time_utc + INTERVAL 2 HOUR
+                    WHERE e.start_time_utc IS NOT NULL
+                      AND e.venue IS NOT NULL
+                  ) nearest
+                  WHERE row_num = 1
+                ),
+                base_odds AS (
                   SELECT
                     s.selection_id,
                     s.market_id,
@@ -759,10 +792,16 @@ class QueryService:
                     TRY_CAST(json_extract(lm.metrics_json, '$.diff_last_10') AS DOUBLE) AS diff_last_10,
                     json_extract_string(lm.metrics_json, '$.player_position') AS player_position,
                     json_extract_string(lm.metrics_json, '$.matchup_difficulty') AS matchup_difficulty,
+                    ew.temperature_c AS weather_temperature_c,
+                    ew.wind_kph AS weather_wind_kph,
+                    ew.precipitation_probability AS weather_precip_probability,
+                    ew.weather_label,
+                    ew.weather_icon_code,
                     sbm.sgm_eligible
                   FROM selections s
                   JOIN markets m ON m.market_id = s.market_id
                   JOIN events e ON e.event_id = m.event_id
+                  LEFT JOIN event_weather ew ON ew.event_id = e.event_id
                   LEFT JOIN players p ON p.player_id = m.player_id
                   JOIN selection_bookmaker_meta sbm ON sbm.selection_id = s.selection_id
                   JOIN bookmakers b ON b.bookmaker_id = sbm.bookmaker_id
@@ -815,6 +854,11 @@ class QueryService:
                     diff_last_10,
                     player_position,
                     matchup_difficulty,
+                    weather_temperature_c,
+                    weather_wind_kph,
+                    weather_precip_probability,
+                    weather_label,
+                    weather_icon_code,
                     market_price_rank = 1 AS is_best_price,
                     CASE
                       WHEN decimal_price IS NULL OR decimal_price <= 0 THEN NULL
@@ -848,6 +892,11 @@ class QueryService:
                   diff_last_10,
                   player_position,
                   matchup_difficulty,
+                  weather_temperature_c,
+                  weather_wind_kph,
+                  weather_precip_probability,
+                  weather_label,
+                  weather_icon_code,
                   is_best_price,
                   next_best_prob_diff,
                   sgm_eligible
@@ -1137,6 +1186,26 @@ class QueryService:
             "diff_last_10": row["diff_last_10"],
             "player_position": row["player_position"],
             "matchup_difficulty": row["matchup_difficulty"],
+            "weather": (
+                {
+                    "temperature_c": row["weather_temperature_c"],
+                    "wind_kph": row["weather_wind_kph"],
+                    "precip_probability": row["weather_precip_probability"],
+                    "label": row["weather_label"],
+                    "icon_code": row["weather_icon_code"],
+                }
+                if any(
+                    row.get(key) is not None
+                    for key in (
+                        "weather_temperature_c",
+                        "weather_wind_kph",
+                        "weather_precip_probability",
+                        "weather_label",
+                        "weather_icon_code",
+                    )
+                )
+                else None
+            ),
             "is_best_price": row["is_best_price"],
             "next_best_prob_diff": row["next_best_prob_diff"],
             "sgm_eligible": row["sgm_eligible"],

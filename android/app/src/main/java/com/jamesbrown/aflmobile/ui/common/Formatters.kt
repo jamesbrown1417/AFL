@@ -65,6 +65,12 @@ fun formatMatchupDifficultyTag(value: String?): String? {
     }
 }
 
+fun formatWeatherTemperatureTag(value: Double?): String? =
+    value?.let { "${it.toInt()}°" }
+
+fun formatWeatherWindTag(value: Double?): String? =
+    value?.let { "${it.toInt()}k" }
+
 fun shortAflMatchLabel(matchName: String): String {
     val normalized = matchName.replace(" vs ", " v ", ignoreCase = true)
     val parts = normalized.split(" v ")

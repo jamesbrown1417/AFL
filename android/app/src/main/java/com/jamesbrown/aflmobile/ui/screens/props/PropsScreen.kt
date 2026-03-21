@@ -80,6 +80,7 @@ import com.jamesbrown.aflmobile.ui.common.LoadingCard
 import com.jamesbrown.aflmobile.ui.common.ScreenPadding
 import com.jamesbrown.aflmobile.ui.common.DataStatusNavigationIcons
 import com.jamesbrown.aflmobile.ui.common.PlayerContextTags
+import com.jamesbrown.aflmobile.ui.common.WeatherContextTags
 import com.jamesbrown.aflmobile.ui.common.formatDecimalPrice
 import com.jamesbrown.aflmobile.ui.common.simpleViewModelFactory
 import com.jamesbrown.aflmobile.ui.theme.Blue100
@@ -1282,6 +1283,7 @@ private fun PlayerOddsCard(
                         position = odds.playerPosition,
                         matchupDifficulty = odds.matchupDifficulty,
                     )
+                    WeatherContextTags(weather = odds.weather)
                     Text(
                         text = odds.matchName,
                         style = MaterialTheme.typography.bodySmall,
@@ -1525,6 +1527,7 @@ private fun MatchOddsCard(
                     text = odds.matchName,
                     style = MaterialTheme.typography.bodySmall,
                 )
+                WeatherContextTags(weather = odds.weather)
             }
 
             Row(

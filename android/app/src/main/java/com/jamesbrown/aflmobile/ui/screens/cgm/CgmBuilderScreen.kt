@@ -93,6 +93,7 @@ import com.jamesbrown.aflmobile.ui.common.DataStatusNavigationIcons
 import com.jamesbrown.aflmobile.ui.common.PlayerContextTags
 import com.jamesbrown.aflmobile.ui.common.ScreenPadding
 import com.jamesbrown.aflmobile.ui.common.SelectionMetricFilterSheet
+import com.jamesbrown.aflmobile.ui.common.WeatherContextTags
 import com.jamesbrown.aflmobile.ui.common.shortAflMatchLabel
 import com.jamesbrown.aflmobile.ui.common.formatDecimalPrice
 import com.jamesbrown.aflmobile.ui.common.simpleViewModelFactory
@@ -124,6 +125,7 @@ private data class CandidateBoardGroup(
     val subtitle: String,
     val playerPosition: String?,
     val matchupDifficulty: String?,
+    val weather: com.jamesbrown.aflmobile.model.WeatherSummary?,
     val columns: List<CandidateLineColumn>,
 )
 
@@ -1146,6 +1148,7 @@ private fun CandidateBoardCard(
                 position = group.playerPosition,
                 matchupDifficulty = group.matchupDifficulty,
             )
+            WeatherContextTags(weather = group.weather)
             Text(
                 group.subtitle,
                 style = MaterialTheme.typography.bodySmall,
@@ -1250,6 +1253,7 @@ private fun CandidateSelectionRow(
                     position = selection.playerPosition,
                     matchupDifficulty = selection.matchupDifficulty,
                 )
+                WeatherContextTags(weather = selection.weather)
                 Text(
                     buildRowSubtitle(selection),
                     style = MaterialTheme.typography.labelSmall,
@@ -1801,6 +1805,7 @@ private fun buildCandidateBoard(legs: List<OddsSearchResult>): List<CandidateBoa
                 subtitle = "${marketDisplayLabel(first.marketTypeCode)} • ${shortMatchLabel(first.matchName)}",
                 playerPosition = first.playerPosition,
                 matchupDifficulty = first.matchupDifficulty,
+                weather = first.weather,
                 columns = buildLineColumns(selections),
             )
         }
