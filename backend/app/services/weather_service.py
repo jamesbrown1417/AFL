@@ -23,6 +23,7 @@ class WeatherForecastRow:
     temperature_c: float | None
     wind_kph: float | None
     precipitation_probability: float | None
+    precipitation_mm: float | None
     weather_code: int | None
     weather_label: str | None
     weather_icon_code: str | None
@@ -124,7 +125,7 @@ class WeatherService:
             params={
                 "latitude": venue.latitude,
                 "longitude": venue.longitude,
-                "hourly": "temperature_2m,wind_speed_10m,precipitation_probability,weather_code",
+                "hourly": "temperature_2m,wind_speed_10m,precipitation_probability,precipitation,weather_code",
                 "forecast_days": self.settings.weather_forecast_days,
                 "timezone": "GMT",
                 "timeformat": "unixtime",
@@ -138,18 +139,24 @@ class WeatherService:
         temperatures = hourly.get("temperature_2m") or []
         winds = hourly.get("wind_speed_10m") or []
         precipitation = hourly.get("precipitation_probability") or []
+        precipitation_amounts = hourly.get("precipitation") or []
         weather_codes = hourly.get("weather_code") or []
 
         rows: list[WeatherForecastRow] = []
-        for timestamp, temperature_c, wind_kph, precip_probability, weather_code in zip(
+        for timestamp, temperature_c, wind_kph, precip_probability, precipitation_mm, weather_code in zip(
             times,
             temperatures,
             winds,
             precipitation,
+            precipitation_amounts,
             weather_codes,
             strict=False,
         ):
             label, icon_code = interpret_weather_code(weather_code)
+            if venue.indoor:
+                label, icon_code = "Clear", "clear"
+                precip_probability = 0.0
+                precipitation_mm = 0.0
             rows.append(
                 WeatherForecastRow(
                     venue=venue.venue_name,
@@ -157,6 +164,7 @@ class WeatherService:
                     temperature_c=_coerce_float(temperature_c),
                     wind_kph=_coerce_float(wind_kph),
                     precipitation_probability=_coerce_float(precip_probability),
+                    precipitation_mm=_coerce_float(precipitation_mm),
                     weather_code=_coerce_int(weather_code),
                     weather_label=label,
                     weather_icon_code=icon_code,
@@ -197,17 +205,19 @@ class WeatherService:
               temperature_c,
               wind_kph,
               precipitation_probability,
+              precipitation_mm,
               weather_code,
               weather_label,
               weather_icon_code,
               fetched_at,
               expires_at
             )
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             ON CONFLICT (venue, forecast_hour_utc) DO UPDATE SET
               temperature_c = EXCLUDED.temperature_c,
               wind_kph = EXCLUDED.wind_kph,
               precipitation_probability = EXCLUDED.precipitation_probability,
+              precipitation_mm = EXCLUDED.precipitation_mm,
               weather_code = EXCLUDED.weather_code,
               weather_label = EXCLUDED.weather_label,
               weather_icon_code = EXCLUDED.weather_icon_code,
@@ -220,6 +230,7 @@ class WeatherService:
                 row.temperature_c,
                 row.wind_kph,
                 row.precipitation_probability,
+                row.precipitation_mm,
                 row.weather_code,
                 row.weather_label,
                 row.weather_icon_code,

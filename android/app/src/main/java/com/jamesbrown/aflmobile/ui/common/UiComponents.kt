@@ -168,8 +168,8 @@ fun WeatherContextTags(
 ) {
     val icon = weatherIcon(weather?.iconCode)
     val tempLabel = formatWeatherTemperatureTag(weather?.temperatureC)
-    val windLabel = formatWeatherWindTag(weather?.windKph)
-    if (icon == null && tempLabel == null && windLabel == null) {
+    val rainLabel = formatWeatherRainTag(weather?.precipMm)
+    if (icon == null && tempLabel == null && rainLabel == null) {
         return
     }
 
@@ -189,7 +189,7 @@ fun WeatherContextTags(
                 borderColor = Blue200.copy(alpha = 0.9f),
             )
         }
-        windLabel?.let {
+        rainLabel?.let {
             ContextTag(
                 label = it,
                 containerColor = Blue50.copy(alpha = 0.98f),

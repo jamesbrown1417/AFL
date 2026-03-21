@@ -187,6 +187,7 @@ CREATE TABLE IF NOT EXISTS weather_forecasts (
   temperature_c DOUBLE,
   wind_kph DOUBLE,
   precipitation_probability DOUBLE,
+  precipitation_mm DOUBLE,
   weather_code INTEGER,
   weather_label TEXT,
   weather_icon_code TEXT,
@@ -194,6 +195,8 @@ CREATE TABLE IF NOT EXISTS weather_forecasts (
   expires_at TIMESTAMP NOT NULL,
   PRIMARY KEY (venue, forecast_hour_utc)
 );
+
+ALTER TABLE weather_forecasts ADD COLUMN IF NOT EXISTS precipitation_mm DOUBLE;
 
 CREATE TABLE IF NOT EXISTS quote_cache (
   quote_id TEXT PRIMARY KEY,

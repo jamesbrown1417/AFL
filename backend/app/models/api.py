@@ -165,6 +165,7 @@ class WeatherSummary(BaseModel):
     temperature_c: float | None = None
     wind_kph: float | None = None
     precip_probability: float | None = None
+    precip_mm: float | None = None
     label: str | None = None
     icon_code: str | None = None
 

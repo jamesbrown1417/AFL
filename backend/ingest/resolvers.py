@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import csv
 from dataclasses import dataclass
+from datetime import datetime
 from pathlib import Path
 from typing import Any
 
@@ -34,6 +35,12 @@ def build_event_key(home_team_name: str, away_team_name: str, start_time_iso: st
     return sha256_text(key_input)
 
 
+def _naive_utc(value: datetime | None) -> datetime | None:
+    if value is None:
+        return None
+    return value.replace(tzinfo=None)
+
+
 def load_fixture_index(fixture_path: Path) -> dict[tuple[str, str], EventContext]:
     if not fixture_path.exists():
         return {}
@@ -46,7 +53,7 @@ def load_fixture_index(fixture_path: Path) -> dict[tuple[str, str], EventContext
             away_team_name = normalize_team_name(row.get("away_team"))
             if not home_team_name or not away_team_name:
                 continue
-            start_time = parse_iso_datetime(row.get("start_time"))
+            start_time = _naive_utc(parse_iso_datetime(row.get("start_time")))
             start_time_iso = start_time.isoformat() if start_time else None
             index[(home_team_name, away_team_name)] = EventContext(
                 event_key=build_event_key(home_team_name, away_team_name, start_time_iso),
@@ -69,7 +76,7 @@ def resolve_event_context(row: dict[str, str], fixture_index: dict[tuple[str, st
     if fixture_match := fixture_index.get((home_team_name, away_team_name)):
         return fixture_match
 
-    row_start_time = parse_iso_datetime(row.get("start_time"))
+    row_start_time = _naive_utc(parse_iso_datetime(row.get("start_time")))
     start_time_iso = row_start_time.isoformat() if row_start_time else None
     return EventContext(
         event_key=build_event_key(home_team_name, away_team_name, start_time_iso),

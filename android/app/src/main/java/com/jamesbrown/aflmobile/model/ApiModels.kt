@@ -165,6 +165,7 @@ data class WeatherSummary(
     @SerialName("temperature_c") val temperatureC: Double? = null,
     @SerialName("wind_kph") val windKph: Double? = null,
     @SerialName("precip_probability") val precipProbability: Double? = null,
+    @SerialName("precip_mm") val precipMm: Double? = null,
     val label: String? = null,
     @SerialName("icon_code") val iconCode: String? = null,
 )

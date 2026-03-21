@@ -49,17 +49,19 @@ def test_odds_weather_attaches_when_cache_row_exists(client, imported_settings) 
               temperature_c,
               wind_kph,
               precipitation_probability,
+              precipitation_mm,
               weather_code,
               weather_label,
               weather_icon_code,
               fetched_at,
               expires_at
             )
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             ON CONFLICT (venue, forecast_hour_utc) DO UPDATE SET
               temperature_c = EXCLUDED.temperature_c,
               wind_kph = EXCLUDED.wind_kph,
               precipitation_probability = EXCLUDED.precipitation_probability,
+              precipitation_mm = EXCLUDED.precipitation_mm,
               weather_code = EXCLUDED.weather_code,
               weather_label = EXCLUDED.weather_label,
               weather_icon_code = EXCLUDED.weather_icon_code,
@@ -72,6 +74,7 @@ def test_odds_weather_attaches_when_cache_row_exists(client, imported_settings) 
                 23.0,
                 18.0,
                 35.0,
+                0.8,
                 61,
                 "Rain",
                 "rain",
@@ -96,5 +99,6 @@ def test_odds_weather_attaches_when_cache_row_exists(client, imported_settings) 
     assert weather["temperature_c"] == 23.0
     assert weather["wind_kph"] == 18.0
     assert weather["precip_probability"] == 35.0
+    assert weather["precip_mm"] == 0.8
     assert weather["label"] == "Rain"
     assert weather["icon_code"] == "rain"

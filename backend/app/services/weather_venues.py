@@ -9,6 +9,7 @@ class VenueCoordinate:
     latitude: float
     longitude: float
     display_name: str | None = None
+    indoor: bool = False
 
 
 VENUE_COORDINATES: dict[str, VenueCoordinate] = {
@@ -25,7 +26,7 @@ VENUE_COORDINATES: dict[str, VenueCoordinate] = {
     "Gabba": VenueCoordinate("Gabba", -27.4858850, 153.0379847, display_name="Brisbane Cricket Ground"),
     "Hands Oval": VenueCoordinate("Hands Oval", -33.3462568, 115.6427584),
     "MCG": VenueCoordinate("MCG", -37.8199090, 144.9832250, display_name="Melbourne Cricket Ground"),
-    "Marvel Stadium": VenueCoordinate("Marvel Stadium", -37.8165290, 144.9475170),
+    "Marvel Stadium": VenueCoordinate("Marvel Stadium", -37.8165290, 144.9475170, indoor=True),
     "Ninja Stadium": VenueCoordinate("Ninja Stadium", -42.8772971, 147.3737355, display_name="Bellerive Oval"),
     "Norwood Oval": VenueCoordinate("Norwood Oval", -34.9198188, 138.6304715),
     "Optus Stadium": VenueCoordinate("Optus Stadium", -31.9510448, 115.8890756),

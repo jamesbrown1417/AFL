@@ -745,6 +745,7 @@ class QueryService:
                     temperature_c,
                     wind_kph,
                     precipitation_probability,
+                    precipitation_mm,
                     weather_label,
                     weather_icon_code
                   FROM (
@@ -753,6 +754,7 @@ class QueryService:
                       wf.temperature_c,
                       wf.wind_kph,
                       wf.precipitation_probability,
+                      wf.precipitation_mm,
                       wf.weather_label,
                       wf.weather_icon_code,
                       ROW_NUMBER() OVER (
@@ -795,6 +797,7 @@ class QueryService:
                     ew.temperature_c AS weather_temperature_c,
                     ew.wind_kph AS weather_wind_kph,
                     ew.precipitation_probability AS weather_precip_probability,
+                    ew.precipitation_mm AS weather_precip_mm,
                     ew.weather_label,
                     ew.weather_icon_code,
                     sbm.sgm_eligible
@@ -857,6 +860,7 @@ class QueryService:
                     weather_temperature_c,
                     weather_wind_kph,
                     weather_precip_probability,
+                    weather_precip_mm,
                     weather_label,
                     weather_icon_code,
                     market_price_rank = 1 AS is_best_price,
@@ -895,6 +899,7 @@ class QueryService:
                   weather_temperature_c,
                   weather_wind_kph,
                   weather_precip_probability,
+                  weather_precip_mm,
                   weather_label,
                   weather_icon_code,
                   is_best_price,
@@ -1191,6 +1196,7 @@ class QueryService:
                     "temperature_c": row["weather_temperature_c"],
                     "wind_kph": row["weather_wind_kph"],
                     "precip_probability": row["weather_precip_probability"],
+                    "precip_mm": row["weather_precip_mm"],
                     "label": row["weather_label"],
                     "icon_code": row["weather_icon_code"],
                 }
@@ -1200,6 +1206,7 @@ class QueryService:
                         "weather_temperature_c",
                         "weather_wind_kph",
                         "weather_precip_probability",
+                        "weather_precip_mm",
                         "weather_label",
                         "weather_icon_code",
                     )

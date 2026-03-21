@@ -68,8 +68,16 @@ fun formatMatchupDifficultyTag(value: String?): String? {
 fun formatWeatherTemperatureTag(value: Double?): String? =
     value?.let { "${it.toInt()}°" }
 
-fun formatWeatherWindTag(value: Double?): String? =
-    value?.let { "${it.toInt()}k" }
+fun formatWeatherRainTag(value: Double?): String? =
+    value
+        ?.takeIf { it > 0.0 }
+        ?.let {
+            if (it >= 10.0) {
+                String.format(Locale.getDefault(), "%.0fmm", it)
+            } else {
+                String.format(Locale.getDefault(), "%.1fmm", it)
+            }
+        }
 
 fun shortAflMatchLabel(matchName: String): String {
     val normalized = matchName.replace(" vs ", " v ", ignoreCase = true)
