@@ -185,6 +185,7 @@ class BackendApiClient(
         sortBy: String = "diff_last_10",
         sortDirection: String = "desc",
         selectionType: String? = null,
+        matchupDifficulties: List<String> = emptyList(),
         minEdge: Double? = null,
         minPrice: Double? = null,
         maxPrice: Double? = null,
@@ -217,6 +218,7 @@ class BackendApiClient(
             add("sort_by" to sortBy)
             add("sort_dir" to sortDirection)
             selectionType?.takeIf { it.isNotBlank() }?.let { add("selection_type" to it) }
+            matchupDifficulties.forEach { add("matchup_difficulty" to it) }
             minEdge?.let { add("min_edge" to it.toString()) }
             minPrice?.let { add("min_price" to it.toString()) }
             maxPrice?.let { add("max_price" to it.toString()) }

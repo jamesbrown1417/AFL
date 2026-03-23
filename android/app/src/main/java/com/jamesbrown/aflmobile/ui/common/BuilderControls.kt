@@ -1,6 +1,8 @@
 package com.jamesbrown.aflmobile.ui.common
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -15,6 +17,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FilterChip
+import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -36,6 +40,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.jamesbrown.aflmobile.model.BuilderDisplayMode
 import com.jamesbrown.aflmobile.model.BuilderSortField
+import com.jamesbrown.aflmobile.model.MatchupDifficultyOptions
 import com.jamesbrown.aflmobile.model.OddsDiffSliderMax
 import com.jamesbrown.aflmobile.model.OddsDiffSliderMin
 import com.jamesbrown.aflmobile.model.SelectionMetricFilters
@@ -165,7 +170,7 @@ fun BuilderSortSheet(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
 fun SelectionMetricFilterSheet(
     filters: SelectionMetricFilters,
@@ -191,6 +196,40 @@ fun SelectionMetricFilterSheet(
                 fontWeight = FontWeight.SemiBold,
             )
             Spacer(modifier = Modifier.height(16.dp))
+            Text(
+                "Matchup difficulty",
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.SemiBold,
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            FlowRow(
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp),
+            ) {
+                MatchupDifficultyOptions.forEach { difficulty ->
+                    val selected = filters.matchupDifficulties.contains(difficulty)
+                    FilterChip(
+                        selected = selected,
+                        onClick = {
+                            onFiltersChanged(
+                                filters.copy(
+                                    matchupDifficulties = if (selected) {
+                                        filters.matchupDifficulties - difficulty
+                                    } else {
+                                        filters.matchupDifficulties + difficulty
+                                    },
+                                ),
+                            )
+                        },
+                        label = { Text(difficulty) },
+                        colors = FilterChipDefaults.filterChipColors(
+                            selectedContainerColor = MaterialTheme.colorScheme.tertiaryContainer,
+                            selectedLabelColor = MaterialTheme.colorScheme.tertiary,
+                        ),
+                    )
+                }
+            }
+            Spacer(modifier = Modifier.height(20.dp))
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(12.dp),

@@ -8,6 +8,7 @@ data class AppSettings(
 
 const val OddsDiffSliderMin = -1f
 const val OddsDiffSliderMax = 1f
+val MatchupDifficultyOptions = listOf("Terrible", "Bad", "Neutral", "Good", "Excellent")
 
 data class OddsFilters(
     val scope: String = "player",
@@ -20,6 +21,7 @@ data class OddsFilters(
     val sortBy: String = "diff_last_10",
     val sortDirection: String = "desc",
     val selectionType: String? = null,
+    val matchupDifficulties: List<String> = emptyList(),
     val minPriceText: String = "",
     val maxPriceText: String = "",
     val minDiff2025: Float = OddsDiffSliderMin,
@@ -32,6 +34,7 @@ data class OddsFilters(
 )
 
 data class SelectionMetricFilters(
+    val matchupDifficulties: List<String> = emptyList(),
     val minPriceText: String = "",
     val maxPriceText: String = "",
     val minDiff2025: Float = OddsDiffSliderMin,

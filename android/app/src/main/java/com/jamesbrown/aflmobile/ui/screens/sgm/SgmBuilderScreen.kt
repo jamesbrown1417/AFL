@@ -416,6 +416,7 @@ class SgmBuilderViewModel(
                 sortBy = "market",
                 sortDirection = "asc",
                 selectionType = null,
+                matchupDifficulties = metricFilters.matchupDifficulties,
                 minEdge = null,
                 minPrice = metricFilters.minPriceText.toDoubleOrNull(),
                 maxPrice = metricFilters.maxPriceText.toDoubleOrNull(),
@@ -1745,7 +1746,8 @@ private fun SummaryMetricCard(
 }
 
 private fun SelectionMetricFilters.isDefault(): Boolean =
-    minPriceText.isBlank() &&
+    matchupDifficulties.isEmpty() &&
+        minPriceText.isBlank() &&
         maxPriceText.isBlank() &&
         minDiff2025 == OddsDiffSliderMin &&
         maxDiff2025 == OddsDiffSliderMax &&

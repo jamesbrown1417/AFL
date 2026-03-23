@@ -178,6 +178,20 @@ def test_event_market_selection_flow(client) -> None:
         assert -0.05 <= row["diff_last_10"] <= 0.2
         assert -0.2 <= row["diff_2025"] <= 0.2
 
+    matchup_filtered_response = client.get(
+        "/api/v1/odds/search",
+        params={
+            "bookmaker": "sportsbet",
+            "scope": "player",
+            "matchup_difficulty": "Bad",
+            "limit": 50,
+        },
+    )
+    assert matchup_filtered_response.status_code == 200
+    matchup_filtered_payload = matchup_filtered_response.json()
+    if matchup_filtered_payload:
+        assert all(row["matchup_difficulty"] == "Bad" for row in matchup_filtered_payload)
+
     best_only_response = client.get(
         "/api/v1/odds/search",
         params={

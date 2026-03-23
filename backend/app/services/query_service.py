@@ -630,6 +630,7 @@ class QueryService:
         include_player_ids: list[int],
         exclude_player_ids: list[int],
         selection_type: str | None,
+        matchup_difficulties: list[str],
         date_from: str | None,
         date_to: str | None,
         min_edge: float | None,
@@ -686,6 +687,11 @@ class QueryService:
         if selection_type:
             universe_conditions.append("s.selection_type = ?")
             universe_params.append(selection_type)
+        normalized_matchup_difficulties = [difficulty.lower() for difficulty in matchup_difficulties if difficulty.strip()]
+        if normalized_matchup_difficulties:
+            placeholders = ", ".join("?" for _ in normalized_matchup_difficulties)
+            row_conditions.append(f"LOWER(COALESCE(matchup_difficulty, '')) IN ({placeholders})")
+            row_params.extend(normalized_matchup_difficulties)
         if date_from:
             universe_conditions.append("e.start_time_utc >= ?")
             universe_params.append(date_from)

@@ -68,6 +68,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.jamesbrown.aflmobile.data.repository.AflRepository
 import com.jamesbrown.aflmobile.model.BookmakerSummary
 import com.jamesbrown.aflmobile.model.EventSummary
+import com.jamesbrown.aflmobile.model.MatchupDifficultyOptions
 import com.jamesbrown.aflmobile.model.OddsDiffSliderMax
 import com.jamesbrown.aflmobile.model.OddsDiffSliderMin
 import com.jamesbrown.aflmobile.model.OddsFilters
@@ -288,6 +289,7 @@ class OddsViewModel(
                     sortBy = filters.sortBy,
                     sortDirection = filters.sortDirection,
                     selectionType = if (playerScoped) filters.selectionType else null,
+                    matchupDifficulties = if (playerScoped) filters.matchupDifficulties else emptyList(),
                     minEdge = null,
                     minPrice = if (playerScoped) filters.minPriceText.toDoubleOrNull() else null,
                     maxPrice = if (playerScoped) filters.maxPriceText.toDoubleOrNull() else null,
@@ -342,6 +344,7 @@ class OddsViewModel(
                     sortBy = filters.sortBy,
                     sortDirection = filters.sortDirection,
                     selectionType = if (playerScoped) filters.selectionType else null,
+                    matchupDifficulties = if (playerScoped) filters.matchupDifficulties else emptyList(),
                     minEdge = null,
                     minPrice = if (playerScoped) filters.minPriceText.toDoubleOrNull() else null,
                     maxPrice = if (playerScoped) filters.maxPriceText.toDoubleOrNull() else null,
@@ -398,6 +401,7 @@ class OddsViewModel(
                     sortBy = "price",
                     sortDirection = "asc",
                     selectionType = "under",
+                    matchupDifficulties = listOfNotNull(odds.matchupDifficulty),
                     minEdge = null,
                     minPrice = null,
                     maxPrice = null,
@@ -788,6 +792,9 @@ private fun ActiveFilterRow(
         if (filters.scope == OddsScopePlayer && filters.selectionType != null) {
             InlineChip("Side: ${filters.selectionType.replaceFirstChar { it.titlecase(Locale.getDefault()) }}")
         }
+        if (filters.scope == OddsScopePlayer && filters.matchupDifficulties.isNotEmpty()) {
+            InlineChip("Matchup: ${filters.matchupDifficulties.joinToString("/")}")
+        }
         if (filters.scope == OddsScopePlayer && filters.includePlayerIds.isNotEmpty()) {
             InlineChip("Include: ${filters.includePlayerIds.size}")
         }
@@ -916,6 +923,35 @@ private fun OddsFilterSheet(
                                 label = { Text(option.label) },
                                 colors = oddsFilterChipColors(),
                                 border = oddsFilterChipBorder(filters.selectionType == option.code),
+                            )
+                        }
+                    }
+                }
+
+                Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                    Text("Matchup difficulty", style = MaterialTheme.typography.titleMedium)
+                    FlowRow(
+                        horizontalArrangement = Arrangement.spacedBy(8.dp),
+                        verticalArrangement = Arrangement.spacedBy(8.dp),
+                    ) {
+                        MatchupDifficultyOptions.forEach { difficulty ->
+                            val selected = filters.matchupDifficulties.contains(difficulty)
+                            FilterChip(
+                                selected = selected,
+                                onClick = {
+                                    onFiltersChanged(
+                                        filters.copy(
+                                            matchupDifficulties = if (selected) {
+                                                filters.matchupDifficulties - difficulty
+                                            } else {
+                                                filters.matchupDifficulties + difficulty
+                                            },
+                                        ),
+                                    )
+                                },
+                                label = { Text(difficulty) },
+                                colors = oddsFilterChipColors(),
+                                border = oddsFilterChipBorder(selected),
                             )
                         }
                     }

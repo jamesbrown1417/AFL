@@ -409,6 +409,7 @@ class CgmBuilderViewModel(
                 sortBy = "next_best_prob_diff",
                 sortDirection = "desc",
                 selectionType = null,
+                matchupDifficulties = metricFilters.matchupDifficulties,
                 minEdge = null,
                 minPrice = metricFilters.minPriceText.toDoubleOrNull(),
                 maxPrice = metricFilters.maxPriceText.toDoubleOrNull(),
@@ -1679,7 +1680,8 @@ private fun DiffMetricCard(
 }
 
 private fun SelectionMetricFilters.isDefault(): Boolean =
-    minPriceText.isBlank() &&
+    matchupDifficulties.isEmpty() &&
+        minPriceText.isBlank() &&
         maxPriceText.isBlank() &&
         minDiff2025 == OddsDiffSliderMin &&
         maxDiff2025 == OddsDiffSliderMax &&
