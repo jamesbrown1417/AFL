@@ -82,7 +82,7 @@ fun ErrorCard(message: String) {
     ) {
         Text(
             text = message,
-            modifier = Modifier.padding(16.dp),
+            modifier = Modifier.padding(20.dp),
             color = MaterialTheme.colorScheme.onErrorContainer,
             style = MaterialTheme.typography.bodyMedium,
         )

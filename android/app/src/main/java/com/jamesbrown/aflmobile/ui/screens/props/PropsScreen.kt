@@ -1,6 +1,7 @@
 package com.jamesbrown.aflmobile.ui.screens.props
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -22,6 +23,8 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.FilterList
 import androidx.compose.material.icons.outlined.MoreVert
 import androidx.compose.material.icons.outlined.Refresh
+import androidx.compose.material3.Badge
+import androidx.compose.material3.BadgedBox
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -67,6 +70,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.jamesbrown.aflmobile.data.repository.AflRepository
 import com.jamesbrown.aflmobile.model.BookmakerSummary
+import com.jamesbrown.aflmobile.model.hasActiveFilters
 import com.jamesbrown.aflmobile.model.EventSummary
 import com.jamesbrown.aflmobile.model.MatchupDifficultyOptions
 import com.jamesbrown.aflmobile.model.OddsDiffSliderMax
@@ -84,6 +88,7 @@ import com.jamesbrown.aflmobile.ui.common.PlayerContextTags
 import com.jamesbrown.aflmobile.ui.common.WeatherContextTags
 import com.jamesbrown.aflmobile.ui.common.formatDecimalPrice
 import com.jamesbrown.aflmobile.ui.common.simpleViewModelFactory
+import com.jamesbrown.aflmobile.ui.navigation.PlayerLaunchRequest
 import com.jamesbrown.aflmobile.ui.theme.Blue100
 import com.jamesbrown.aflmobile.ui.theme.Blue200
 import com.jamesbrown.aflmobile.ui.theme.Blue700
@@ -451,6 +456,7 @@ class OddsViewModel(
 @Composable
 fun OddsRoute(
     repository: AflRepository,
+    onOpenPlayerRequest: (PlayerLaunchRequest) -> Unit,
     onOpenNavigation: () -> Unit,
 ) {
     val viewModel: OddsViewModel = viewModel(
@@ -466,6 +472,7 @@ fun OddsRoute(
         onLoadMore = viewModel::loadMore,
         onOpenAlternateUnders = viewModel::openAlternateUnders,
         onDismissAlternateUnders = viewModel::closeAlternateUnders,
+        onOpenPlayerRequest = onOpenPlayerRequest,
         onOpenNavigation = onOpenNavigation,
     )
 }
@@ -481,6 +488,7 @@ private fun OddsScreen(
     onLoadMore: () -> Unit,
     onOpenAlternateUnders: (OddsSearchResult) -> Unit,
     onDismissAlternateUnders: () -> Unit,
+    onOpenPlayerRequest: (PlayerLaunchRequest) -> Unit,
     onOpenNavigation: () -> Unit,
 ) {
     var showFilters by remember { mutableStateOf(false) }
@@ -503,8 +511,16 @@ private fun OddsScreen(
                     DataStatusNavigationIcons(repository = repository, onOpenNavigation = onOpenNavigation)
                 },
                 actions = {
-                    IconButton(onClick = { showFilters = true }) {
-                        Icon(Icons.Outlined.FilterList, contentDescription = "Open filters")
+                    BadgedBox(
+                        badge = {
+                            if (uiState.filters.hasActiveFilters(uiState.defaultBookmakerCodes)) {
+                                Badge()
+                            }
+                        }
+                    ) {
+                        IconButton(onClick = { showFilters = true }) {
+                            Icon(Icons.Outlined.FilterList, contentDescription = "Open filters")
+                        }
                     }
                     IconButton(onClick = { showOptions = true }) {
                         Icon(Icons.Outlined.MoreVert, contentDescription = "Open options")
@@ -623,6 +639,7 @@ private fun OddsScreen(
                         odds = odds,
                         scope = uiState.filters.scope,
                         onOpenAlternateUnders = onOpenAlternateUnders,
+                        onOpenPlayerRequest = onOpenPlayerRequest,
                     )
                 }
 
@@ -1271,6 +1288,7 @@ private fun OddsCard(
     odds: OddsSearchResult,
     scope: String,
     onOpenAlternateUnders: (OddsSearchResult) -> Unit,
+    onOpenPlayerRequest: (PlayerLaunchRequest) -> Unit,
 ) {
     if (scope == OddsScopeMatch) {
         MatchOddsCard(odds = odds)
@@ -1279,6 +1297,7 @@ private fun OddsCard(
     PlayerOddsCard(
         odds = odds,
         onOpenAlternateUnders = onOpenAlternateUnders,
+        onOpenPlayerRequest = onOpenPlayerRequest,
     )
 }
 
@@ -1286,6 +1305,7 @@ private fun OddsCard(
 private fun PlayerOddsCard(
     odds: OddsSearchResult,
     onOpenAlternateUnders: (OddsSearchResult) -> Unit,
+    onOpenPlayerRequest: (PlayerLaunchRequest) -> Unit,
 ) {
     Card(
         modifier = Modifier.fillMaxWidth(),
@@ -1307,6 +1327,9 @@ private fun PlayerOddsCard(
                 ) {
                     Text(
                         text = odds.player?.fullName ?: odds.label,
+                        modifier = Modifier.clickable(enabled = odds.player != null) {
+                            odds.toPlayerLaunchRequest()?.let(onOpenPlayerRequest)
+                        },
                         style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.SemiBold,
                     )
@@ -1703,6 +1726,17 @@ private fun isDefaultDiffRange(min: Float, max: Float): Boolean =
 private fun selectedMatchLabel(eventId: Int?, events: List<EventSummary>): String {
     if (eventId == null) return "All matches"
     return events.firstOrNull { it.id == eventId }?.matchName ?: "All matches"
+}
+
+private fun OddsSearchResult.toPlayerLaunchRequest(): PlayerLaunchRequest? {
+    val playerSummary = player ?: return null
+    return PlayerLaunchRequest(
+        requestId = System.nanoTime(),
+        playerId = playerSummary.id,
+        playerName = playerSummary.fullName,
+        marketTypeCode = marketTypeCode,
+        lineValue = lineValue,
+    )
 }
 
 private fun bookmakerLabel(bookmakerCode: String): String =

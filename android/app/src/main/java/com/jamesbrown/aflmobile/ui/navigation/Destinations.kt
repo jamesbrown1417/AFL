@@ -14,6 +14,14 @@ sealed class TopLevelDestination(
     data object Settings : TopLevelDestination("settings", "Settings")
 }
 
+data class PlayerLaunchRequest(
+    val requestId: Long,
+    val playerId: Int,
+    val playerName: String,
+    val marketTypeCode: String,
+    val lineValue: Double?,
+)
+
 object Destinations {
     const val EventDetail = "event/{eventId}/{bookmaker}"
     const val MarketSelections = "market/{marketId}/{eventId}/{bookmaker}/{eventLabel}"

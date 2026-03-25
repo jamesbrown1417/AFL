@@ -41,6 +41,8 @@ import com.jamesbrown.aflmobile.data.repository.AflRepository
 import com.jamesbrown.aflmobile.model.BookmakerSummary
 import com.jamesbrown.aflmobile.model.EventSummary
 import com.jamesbrown.aflmobile.ui.common.EmptyCard
+import com.jamesbrown.aflmobile.ui.theme.appCardColors
+import com.jamesbrown.aflmobile.ui.theme.appGlassBorder
 import com.jamesbrown.aflmobile.ui.common.ErrorCard
 import com.jamesbrown.aflmobile.ui.common.InlineChip
 import com.jamesbrown.aflmobile.ui.common.LoadingCard
@@ -163,7 +165,10 @@ private fun EventsScreen(
             verticalArrangement = Arrangement.spacedBy(12.dp),
         ) {
             item {
-                Card {
+                Card(
+                    colors = appCardColors(),
+                    border = appGlassBorder(),
+                ) {
                     Column(
                         modifier = Modifier.padding(16.dp),
                         verticalArrangement = Arrangement.spacedBy(12.dp),
@@ -246,6 +251,8 @@ private fun EventCard(
         modifier = Modifier
             .fillMaxWidth()
             .clickable(onClick = onClick),
+        colors = appCardColors(),
+        border = appGlassBorder(),
     ) {
         Column(
             modifier = Modifier.padding(16.dp),
@@ -262,7 +269,7 @@ private fun EventCard(
                     event.roundLabel?.let { Text(it, style = MaterialTheme.typography.labelMedium) }
                     event.venue?.let { Text(it, style = MaterialTheme.typography.bodySmall) }
                 }
-                Icon(Icons.AutoMirrored.Outlined.ArrowForward, contentDescription = null)
+                Icon(Icons.AutoMirrored.Outlined.ArrowForward, contentDescription = "View event")
             }
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 event.availableBookmakers.take(4).forEach { bookmaker ->

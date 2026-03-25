@@ -33,6 +33,26 @@ data class OddsFilters(
     val sgmOnly: Boolean = false,
 )
 
+fun OddsFilters.hasActiveFilters(defaultBookmakerCodes: List<String>): Boolean {
+    return query.isNotEmpty()
+        || bookmakerCodes.toSet() != defaultBookmakerCodes.toSet()
+        || marketTypeCode != null
+        || eventId != null
+        || includePlayerIds.isNotEmpty()
+        || excludePlayerIds.isNotEmpty()
+        || selectionType != null
+        || matchupDifficulties.isNotEmpty()
+        || minPriceText.isNotEmpty()
+        || maxPriceText.isNotEmpty()
+        || minDiff2025 != OddsDiffSliderMin
+        || maxDiff2025 != OddsDiffSliderMax
+        || minDiffLast10 != OddsDiffSliderMin
+        || maxDiffLast10 != OddsDiffSliderMax
+        || minEdgeText.isNotEmpty()
+        || bestOnly
+        || sgmOnly
+}
+
 data class SelectionMetricFilters(
     val matchupDifficulties: List<String> = emptyList(),
     val minPriceText: String = "",

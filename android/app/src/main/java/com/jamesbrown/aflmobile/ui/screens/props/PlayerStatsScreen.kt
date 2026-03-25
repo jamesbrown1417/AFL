@@ -89,6 +89,7 @@ import com.jamesbrown.aflmobile.ui.common.formatDateTime
 import com.jamesbrown.aflmobile.ui.common.formatDecimalPrice
 import com.jamesbrown.aflmobile.ui.common.formatPercentage
 import com.jamesbrown.aflmobile.ui.common.simpleViewModelFactory
+import com.jamesbrown.aflmobile.ui.navigation.PlayerLaunchRequest
 import com.jamesbrown.aflmobile.ui.theme.Blue100
 import com.jamesbrown.aflmobile.ui.theme.Blue200
 import com.jamesbrown.aflmobile.ui.theme.Blue700
@@ -129,6 +130,7 @@ class PlayerStatsViewModel(
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(PlayerStatsUiState())
     val uiState: StateFlow<PlayerStatsUiState> = _uiState.asStateFlow()
+    private var pendingLaunchRequest: PlayerLaunchRequest? = null
 
     init {
         bootstrap()
@@ -145,6 +147,11 @@ class PlayerStatsViewModel(
                     searchResults = filterPlayers(players, selected?.fullName ?: "Tim English"),
                     selectedPlayer = selected,
                 )
+            }
+            pendingLaunchRequest?.let { request ->
+                pendingLaunchRequest = null
+                handleLaunchRequest(request)
+                return@launch
             }
             if (selected != null) {
                 loadPlayer(selected)
@@ -175,7 +182,26 @@ class PlayerStatsViewModel(
         loadPlayer(player)
     }
 
-    private fun loadPlayer(player: PlayerSummary) {
+    fun handleLaunchRequest(request: PlayerLaunchRequest) {
+        val state = uiState.value
+        if (state.allPlayers.isEmpty()) {
+            pendingLaunchRequest = request
+            return
+        }
+        val player = state.allPlayers.firstOrNull { it.id == request.playerId }
+            ?: state.allPlayers.firstOrNull { it.fullName.equals(request.playerName, ignoreCase = true) }
+            ?: return
+        _uiState.update {
+            it.copy(
+                selectedPlayer = player,
+                searchQuery = player.fullName,
+                searchResults = filterPlayers(it.allPlayers, player.fullName),
+            )
+        }
+        loadPlayer(player, request)
+    }
+
+    private fun loadPlayer(player: PlayerSummary, launchRequest: PlayerLaunchRequest? = null) {
         viewModelScope.launch {
             _uiState.update {
                 it.copy(
@@ -188,7 +214,11 @@ class PlayerStatsViewModel(
             }
             runCatching { repository.playerStatFilters(player.id) }
                 .onSuccess { options ->
-                    val filters = defaultPlayerStatsFilters(options)
+                    val filters = filtersForLaunchRequest(
+                        options = options,
+                        defaults = defaultPlayerStatsFilters(options),
+                        request = launchRequest,
+                    )
                     _uiState.update {
                         it.copy(
                             filterOptions = options,
@@ -305,12 +335,16 @@ private val PlayerAccentBorder = Orange300
 @Composable
 fun PlayerStatsRoute(
     repository: AflRepository,
+    launchRequest: PlayerLaunchRequest?,
     onOpenNavigation: () -> Unit,
 ) {
     val viewModel: PlayerStatsViewModel = viewModel(
         factory = simpleViewModelFactory { PlayerStatsViewModel(repository) },
     )
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    LaunchedEffect(launchRequest?.requestId) {
+        launchRequest?.let(viewModel::handleLaunchRequest)
+    }
     PlayerStatsScreen(
         repository = repository,
         uiState = uiState,
@@ -2294,6 +2328,42 @@ private fun defaultPlayerStatsFilters(options: PlayerStatFilterOptions): PlayerS
         homeAway = defaultHomeAway,
     )
 }
+
+private fun filtersForLaunchRequest(
+    options: PlayerStatFilterOptions,
+    defaults: PlayerStatsFilters,
+    request: PlayerLaunchRequest?,
+): PlayerStatsFilters {
+    if (request == null) {
+        return defaults
+    }
+    val requestedStatCode = when (request.marketTypeCode) {
+        "player_disposals" -> "disposals"
+        "player_fantasy_points" -> "fantasy_points"
+        "player_tackles" -> "tackles"
+        "player_marks" -> "marks"
+        "player_goals" -> "goals"
+        "player_kicks" -> "kicks"
+        "player_handballs" -> "handballs"
+        "player_hitouts" -> "hitouts"
+        else -> defaults.statCode
+    }
+    val resolvedStatCode = options.stats.firstOrNull { it.code == requestedStatCode }?.code ?: defaults.statCode
+    return defaults.copy(
+        statCode = resolvedStatCode,
+        lineMode = "single",
+        referenceLineText = request.lineValue?.let { formatLineForPrefill(it) } ?: defaults.referenceLineText,
+        lowerBoundText = "",
+        upperBoundText = "",
+    )
+}
+
+private fun formatLineForPrefill(line: Double): String =
+    if (line % 1.0 == 0.0) {
+        line.toInt().toString()
+    } else {
+        String.format(Locale.US, "%.1f", line)
+    }
 
 private fun PlayerStatsFilters.canRequestSummary(): Boolean =
     when (lineMode) {

@@ -22,11 +22,16 @@ import androidx.compose.material3.NavigationDrawerItemDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.jamesbrown.aflmobile.AflApplication
+import com.jamesbrown.aflmobile.ui.navigation.PlayerLaunchRequest
 import com.jamesbrown.aflmobile.ui.navigation.TopLevelDestination
 import com.jamesbrown.aflmobile.ui.screens.cgm.CgmBuilderRoute
 import com.jamesbrown.aflmobile.ui.screens.props.OddsRoute
@@ -54,10 +59,18 @@ fun AflApp() {
         initialPage = 0,
         pageCount = { topLevelDestinations.size },
     )
+    var playerLaunchRequest by remember { mutableStateOf<PlayerLaunchRequest?>(null) }
     val currentDestination = topLevelDestinations[pagerState.currentPage]
 
     fun openDrawer() {
         coroutineScope.launch { drawerState.open() }
+    }
+
+    fun openPlayerRequest(request: PlayerLaunchRequest) {
+        playerLaunchRequest = request
+        coroutineScope.launch {
+            pagerState.animateScrollToPage(topLevelDestinations.indexOf(TopLevelDestination.Player))
+        }
     }
 
     Box(modifier = Modifier.fillMaxSize()) {
@@ -119,6 +132,7 @@ fun AflApp() {
                     TopLevelDestination.Player -> {
                         PlayerStatsRoute(
                             repository = container.repository,
+                            launchRequest = playerLaunchRequest,
                             onOpenNavigation = ::openDrawer,
                         )
                     }
@@ -126,6 +140,7 @@ fun AflApp() {
                     TopLevelDestination.Odds -> {
                         OddsRoute(
                             repository = container.repository,
+                            onOpenPlayerRequest = ::openPlayerRequest,
                             onOpenNavigation = ::openDrawer,
                         )
                     }
@@ -134,6 +149,7 @@ fun AflApp() {
                         SgmBuilderRoute(
                             repository = container.repository,
                             draftStore = container.sgmDraftStore,
+                            onOpenPlayerRequest = ::openPlayerRequest,
                             onOpenNavigation = ::openDrawer,
                         )
                     }
@@ -141,6 +157,7 @@ fun AflApp() {
                     TopLevelDestination.Cgm -> {
                         CgmBuilderRoute(
                             repository = container.repository,
+                            onOpenPlayerRequest = ::openPlayerRequest,
                             onOpenNavigation = ::openDrawer,
                         )
                     }

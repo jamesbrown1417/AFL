@@ -101,6 +101,7 @@ import com.jamesbrown.aflmobile.ui.common.shortAflMatchLabel
 import com.jamesbrown.aflmobile.ui.common.formatDateTime
 import com.jamesbrown.aflmobile.ui.common.formatDecimalPrice
 import com.jamesbrown.aflmobile.ui.common.simpleViewModelFactory
+import com.jamesbrown.aflmobile.ui.navigation.PlayerLaunchRequest
 import com.jamesbrown.aflmobile.ui.theme.Blue100
 import com.jamesbrown.aflmobile.ui.theme.Blue200
 import com.jamesbrown.aflmobile.ui.theme.Blue50
@@ -454,6 +455,7 @@ class SgmBuilderViewModel(
 fun SgmBuilderRoute(
     repository: AflRepository,
     draftStore: SgmDraftStore,
+    onOpenPlayerRequest: (PlayerLaunchRequest) -> Unit,
     onOpenNavigation: () -> Unit,
 ) {
     val viewModel: SgmBuilderViewModel = viewModel(
@@ -473,6 +475,7 @@ fun SgmBuilderRoute(
         onApplyMetricFilters = viewModel::applyMetricFilters,
         onQuote = viewModel::quote,
         onRefresh = viewModel::refresh,
+        onOpenPlayerRequest = onOpenPlayerRequest,
         onOpenNavigation = onOpenNavigation,
     )
 }
@@ -492,6 +495,7 @@ private fun SgmBuilderScreen(
     onApplyMetricFilters: (SelectionMetricFilters) -> Unit,
     onQuote: () -> Unit,
     onRefresh: () -> Unit,
+    onOpenPlayerRequest: (PlayerLaunchRequest) -> Unit,
     onOpenNavigation: () -> Unit,
 ) {
     val draft = uiState.draft
@@ -623,6 +627,7 @@ private fun SgmBuilderScreen(
                             accent = SgmAccent,
                             accentBorder = SgmAccentBorder,
                             titleColor = SgmTitle,
+                            onOpenPlayerRequest = onOpenPlayerRequest,
                             onToggleLeg = onToggleLeg,
                         )
                     }
@@ -631,6 +636,7 @@ private fun SgmBuilderScreen(
                         CandidateBoardCard(
                             group = group,
                             selectedSelectionIds = selectedSelectionIds,
+                            onOpenPlayerRequest = onOpenPlayerRequest,
                             onToggleLeg = onToggleLeg,
                         )
                     }
@@ -1127,6 +1133,7 @@ private fun SgmMarketSelectorRow(
 private fun CandidateBoardCard(
     group: CandidateBoardGroup,
     selectedSelectionIds: Set<Int>,
+    onOpenPlayerRequest: (PlayerLaunchRequest) -> Unit,
     onToggleLeg: (OddsSearchResult) -> Unit,
 ) {
     Card(
@@ -1138,7 +1145,15 @@ private fun CandidateBoardCard(
             modifier = Modifier.padding(14.dp),
             verticalArrangement = Arrangement.spacedBy(10.dp),
         ) {
-            Text(group.title, style = MaterialTheme.typography.titleMedium, color = SgmTitle, fontWeight = FontWeight.SemiBold)
+            Text(
+                text = group.title,
+                modifier = Modifier.clickable(enabled = group.toPlayerLaunchRequest() != null) {
+                    group.toPlayerLaunchRequest()?.let(onOpenPlayerRequest)
+                },
+                style = MaterialTheme.typography.titleMedium,
+                color = SgmTitle,
+                fontWeight = FontWeight.SemiBold,
+            )
             PlayerContextTags(
                 position = group.playerPosition,
                 matchupDifficulty = group.matchupDifficulty,
@@ -1207,6 +1222,7 @@ private fun CandidateSelectionRow(
     accent: Color,
     accentBorder: Color,
     titleColor: Color,
+    onOpenPlayerRequest: (PlayerLaunchRequest) -> Unit,
     onToggleLeg: (OddsSearchResult) -> Unit,
 ) {
     Surface(
@@ -1238,7 +1254,10 @@ private fun CandidateSelectionRow(
                 verticalArrangement = Arrangement.spacedBy(2.dp),
             ) {
                 Text(
-                    selection.player?.fullName ?: selection.label,
+                    text = selection.player?.fullName ?: selection.label,
+                    modifier = Modifier.clickable(enabled = selection.player != null) {
+                        selection.toPlayerLaunchRequest()?.let(onOpenPlayerRequest)
+                    },
                     style = MaterialTheme.typography.bodySmall,
                     fontWeight = FontWeight.SemiBold,
                     color = if (selected) IceWhite else titleColor,
@@ -2020,3 +2039,21 @@ private fun formatLineValue(value: Double?): String =
 
 private fun formatSignedDelta(value: Double): String =
     String.format(Locale.getDefault(), "%+.2f", value)
+
+private fun CandidateBoardGroup.toPlayerLaunchRequest(): PlayerLaunchRequest? =
+    columns.asSequence()
+        .flatMap { column -> column.slots.asSequence() }
+        .map { slot -> slot.selection }
+        .mapNotNull { selection -> selection.toPlayerLaunchRequest() }
+        .firstOrNull()
+
+private fun OddsSearchResult.toPlayerLaunchRequest(): PlayerLaunchRequest? {
+    val playerSummary = player ?: return null
+    return PlayerLaunchRequest(
+        requestId = System.nanoTime(),
+        playerId = playerSummary.id,
+        playerName = playerSummary.fullName,
+        marketTypeCode = marketTypeCode,
+        lineValue = lineValue,
+    )
+}
