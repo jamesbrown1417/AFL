@@ -32,6 +32,10 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -43,7 +47,9 @@ import com.jamesbrown.aflmobile.model.BuilderSortField
 import com.jamesbrown.aflmobile.model.MatchupDifficultyOptions
 import com.jamesbrown.aflmobile.model.OddsDiffSliderMax
 import com.jamesbrown.aflmobile.model.OddsDiffSliderMin
+import com.jamesbrown.aflmobile.model.QuickFilterPreset
 import com.jamesbrown.aflmobile.model.SelectionMetricFilters
+import com.jamesbrown.aflmobile.model.applyQuickFilterPreset
 import java.util.Locale
 
 @Composable
@@ -176,6 +182,7 @@ fun SelectionMetricFilterSheet(
     filters: SelectionMetricFilters,
     onFiltersChanged: (SelectionMetricFilters) -> Unit,
     onApply: () -> Unit,
+    onApplyQuickFilter: (SelectionMetricFilters) -> Unit,
     onClear: () -> Unit,
     onDismiss: () -> Unit,
 ) {
@@ -196,6 +203,12 @@ fun SelectionMetricFilterSheet(
                 fontWeight = FontWeight.SemiBold,
             )
             Spacer(modifier = Modifier.height(16.dp))
+            QuickFilterActionSection(
+                onSelectPreset = { preset ->
+                    onApplyQuickFilter(filters.applyQuickFilterPreset(preset))
+                },
+            )
+            Spacer(modifier = Modifier.height(20.dp))
             Text(
                 "Matchup difficulty",
                 style = MaterialTheme.typography.titleMedium,
@@ -287,6 +300,43 @@ fun SelectionMetricFilterSheet(
                 }
             }
             Spacer(modifier = Modifier.height(12.dp))
+        }
+    }
+}
+
+@OptIn(ExperimentalLayoutApi::class)
+@Composable
+fun QuickFilterActionSection(
+    onSelectPreset: (QuickFilterPreset) -> Unit,
+) {
+    var expanded by remember { mutableStateOf(false) }
+
+    Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+        FilledTonalButton(
+            onClick = { expanded = !expanded },
+            modifier = Modifier.fillMaxWidth(),
+        ) {
+            Text(if (expanded) "Hide quick filters" else "Quick filters")
+        }
+
+        if (expanded) {
+            FlowRow(
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp),
+            ) {
+                QuickFilterPreset.entries.forEach { preset ->
+                    FilterChip(
+                        selected = false,
+                        onClick = { onSelectPreset(preset) },
+                        label = { Text(preset.label()) },
+                        colors = FilterChipDefaults.filterChipColors(
+                            containerColor = MaterialTheme.colorScheme.surfaceContainerLow,
+                            labelColor = MaterialTheme.colorScheme.onSurface,
+                        ),
+                    )
+                }
+            }
+            BuilderSupportText("Tap once to apply immediately.")
         }
     }
 }
@@ -402,3 +452,10 @@ private fun formatMetricRange(min: Float, max: Float): String =
 
 private fun formatMetricValue(value: Float): String =
     String.format(Locale.getDefault(), "%+.2f", value)
+
+private fun QuickFilterPreset.label(): String =
+    when (this) {
+        QuickFilterPreset.LAST10_POSITIVE -> "L10 positive"
+        QuickFilterPreset.LAST10_AND_NB_POSITIVE -> "L10+NB positive"
+        QuickFilterPreset.LAST10_NB_AND_FAVORABLE_MATCHUP -> "L10+NB+fav matchup"
+    }

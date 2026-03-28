@@ -78,6 +78,8 @@ import com.jamesbrown.aflmobile.model.OddsDiffSliderMin
 import com.jamesbrown.aflmobile.model.OddsFilters
 import com.jamesbrown.aflmobile.model.OddsSearchResult
 import com.jamesbrown.aflmobile.model.PlayerSummary
+import com.jamesbrown.aflmobile.model.QuickFilterPreset
+import com.jamesbrown.aflmobile.model.applyQuickFilterPreset
 import com.jamesbrown.aflmobile.ui.common.EmptyCard
 import com.jamesbrown.aflmobile.ui.common.ErrorCard
 import com.jamesbrown.aflmobile.ui.common.InlineChip
@@ -85,6 +87,7 @@ import com.jamesbrown.aflmobile.ui.common.LoadingCard
 import com.jamesbrown.aflmobile.ui.common.ScreenPadding
 import com.jamesbrown.aflmobile.ui.common.DataStatusNavigationIcons
 import com.jamesbrown.aflmobile.ui.common.PlayerContextTags
+import com.jamesbrown.aflmobile.ui.common.QuickFilterActionSection
 import com.jamesbrown.aflmobile.ui.common.WeatherContextTags
 import com.jamesbrown.aflmobile.ui.common.formatDecimalPrice
 import com.jamesbrown.aflmobile.ui.common.simpleViewModelFactory
@@ -302,6 +305,8 @@ class OddsViewModel(
                     maxDiff2025 = if (playerScoped) filters.maxDiff2025.toDouble() else null,
                     minDiffLast10 = if (playerScoped) filters.minDiffLast10.toDouble() else null,
                     maxDiffLast10 = if (playerScoped) filters.maxDiffLast10.toDouble() else null,
+                    minNextBestProbDiff = if (playerScoped) filters.minNextBestProbDiff.toDouble() else null,
+                    maxNextBestProbDiff = if (playerScoped) filters.maxNextBestProbDiff.toDouble() else null,
                     sgmOnly = false,
                     bestOnly = if (playerScoped) filters.bestOnly else false,
                     limit = visibleCount + 1,
@@ -357,6 +362,8 @@ class OddsViewModel(
                     maxDiff2025 = if (playerScoped) filters.maxDiff2025.toDouble() else null,
                     minDiffLast10 = if (playerScoped) filters.minDiffLast10.toDouble() else null,
                     maxDiffLast10 = if (playerScoped) filters.maxDiffLast10.toDouble() else null,
+                    minNextBestProbDiff = if (playerScoped) filters.minNextBestProbDiff.toDouble() else null,
+                    maxNextBestProbDiff = if (playerScoped) filters.maxNextBestProbDiff.toDouble() else null,
                     sgmOnly = false,
                     bestOnly = if (playerScoped) filters.bestOnly else false,
                     limit = nextVisibleCount + 1,
@@ -685,6 +692,11 @@ private fun OddsScreen(
                         onApplyFilters(draftFilters)
                         showFilters = false
                     },
+                    onApplyQuickFilter = { preset ->
+                        draftFilters = preset
+                        onApplyFilters(preset)
+                        showFilters = false
+                    },
                     onClear = {
                         draftFilters = OddsFilters(
                             scope = draftFilters.scope,
@@ -827,6 +839,9 @@ private fun ActiveFilterRow(
         if (!isDefaultDiffRange(filters.minDiff2025, filters.maxDiff2025)) {
             InlineChip("2025: ${formatSliderValue(filters.minDiff2025)} to ${formatSliderValue(filters.maxDiff2025)}")
         }
+        if (!isDefaultDiffRange(filters.minNextBestProbDiff, filters.maxNextBestProbDiff)) {
+            InlineChip("NB: ${formatSliderValue(filters.minNextBestProbDiff)} to ${formatSliderValue(filters.maxNextBestProbDiff)}")
+        }
         if (filters.scope == OddsScopePlayer && filters.bestOnly) {
             InlineChip("Best price only")
         }
@@ -843,6 +858,7 @@ private fun OddsFilterSheet(
     defaultBookmakers: List<String>,
     onFiltersChanged: (OddsFilters) -> Unit,
     onApply: () -> Unit,
+    onApplyQuickFilter: (OddsFilters) -> Unit,
     onClear: () -> Unit,
     onDismiss: () -> Unit,
 ) {
@@ -866,6 +882,14 @@ private fun OddsFilterSheet(
             verticalArrangement = Arrangement.spacedBy(18.dp),
         ) {
             Text("Filters", style = MaterialTheme.typography.headlineSmall)
+
+            if (filters.scope == OddsScopePlayer) {
+                QuickFilterActionSection(
+                    onSelectPreset = { preset ->
+                        onApplyQuickFilter(filters.applyQuickFilterPreset(preset))
+                    },
+                )
+            }
 
             ExposedDropdownMenuBox(
                 expanded = marketExpanded,
@@ -1102,6 +1126,19 @@ private fun OddsFilterSheet(
                             filters.copy(
                                 minDiff2025 = range.start,
                                 maxDiff2025 = range.endInclusive,
+                            ),
+                        )
+                    },
+                )
+
+                DiffRangeSection(
+                    title = "Next best diff",
+                    range = filters.minNextBestProbDiff..filters.maxNextBestProbDiff,
+                    onRangeChange = { range ->
+                        onFiltersChanged(
+                            filters.copy(
+                                minNextBestProbDiff = range.start,
+                                maxNextBestProbDiff = range.endInclusive,
                             ),
                         )
                     },

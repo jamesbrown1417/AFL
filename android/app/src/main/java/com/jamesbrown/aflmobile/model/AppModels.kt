@@ -28,6 +28,8 @@ data class OddsFilters(
     val maxDiff2025: Float = OddsDiffSliderMax,
     val minDiffLast10: Float = OddsDiffSliderMin,
     val maxDiffLast10: Float = OddsDiffSliderMax,
+    val minNextBestProbDiff: Float = OddsDiffSliderMin,
+    val maxNextBestProbDiff: Float = OddsDiffSliderMax,
     val minEdgeText: String = "",
     val bestOnly: Boolean = false,
     val sgmOnly: Boolean = false,
@@ -48,6 +50,8 @@ fun OddsFilters.hasActiveFilters(defaultBookmakerCodes: List<String>): Boolean {
         || maxDiff2025 != OddsDiffSliderMax
         || minDiffLast10 != OddsDiffSliderMin
         || maxDiffLast10 != OddsDiffSliderMax
+        || minNextBestProbDiff != OddsDiffSliderMin
+        || maxNextBestProbDiff != OddsDiffSliderMax
         || minEdgeText.isNotEmpty()
         || bestOnly
         || sgmOnly
@@ -79,6 +83,66 @@ enum class BuilderSortField {
     DIFF_LAST_10,
     DIFF_2025,
 }
+
+enum class QuickFilterPreset {
+    LAST10_POSITIVE,
+    LAST10_AND_NB_POSITIVE,
+    LAST10_NB_AND_FAVORABLE_MATCHUP,
+}
+
+fun OddsFilters.applyQuickFilterPreset(preset: QuickFilterPreset): OddsFilters =
+    when (preset) {
+        QuickFilterPreset.LAST10_POSITIVE -> copy(
+            minDiffLast10 = 0f,
+            maxDiffLast10 = OddsDiffSliderMax,
+            minNextBestProbDiff = OddsDiffSliderMin,
+            maxNextBestProbDiff = OddsDiffSliderMax,
+            matchupDifficulties = emptyList(),
+        )
+
+        QuickFilterPreset.LAST10_AND_NB_POSITIVE -> copy(
+            minDiffLast10 = 0f,
+            maxDiffLast10 = OddsDiffSliderMax,
+            minNextBestProbDiff = 0f,
+            maxNextBestProbDiff = OddsDiffSliderMax,
+            matchupDifficulties = emptyList(),
+        )
+
+        QuickFilterPreset.LAST10_NB_AND_FAVORABLE_MATCHUP -> copy(
+            minDiffLast10 = 0f,
+            maxDiffLast10 = OddsDiffSliderMax,
+            minNextBestProbDiff = 0f,
+            maxNextBestProbDiff = OddsDiffSliderMax,
+            matchupDifficulties = listOf("Neutral", "Good", "Excellent"),
+        )
+    }
+
+fun SelectionMetricFilters.applyQuickFilterPreset(preset: QuickFilterPreset): SelectionMetricFilters =
+    when (preset) {
+        QuickFilterPreset.LAST10_POSITIVE -> copy(
+            minDiffLast10 = 0f,
+            maxDiffLast10 = OddsDiffSliderMax,
+            minNextBestProbDiff = OddsDiffSliderMin,
+            maxNextBestProbDiff = OddsDiffSliderMax,
+            matchupDifficulties = emptyList(),
+        )
+
+        QuickFilterPreset.LAST10_AND_NB_POSITIVE -> copy(
+            minDiffLast10 = 0f,
+            maxDiffLast10 = OddsDiffSliderMax,
+            minNextBestProbDiff = 0f,
+            maxNextBestProbDiff = OddsDiffSliderMax,
+            matchupDifficulties = emptyList(),
+        )
+
+        QuickFilterPreset.LAST10_NB_AND_FAVORABLE_MATCHUP -> copy(
+            minDiffLast10 = 0f,
+            maxDiffLast10 = OddsDiffSliderMax,
+            minNextBestProbDiff = 0f,
+            maxNextBestProbDiff = OddsDiffSliderMax,
+            matchupDifficulties = listOf("Neutral", "Good", "Excellent"),
+        )
+    }
 
 data class PlayerStatsFilters(
     val statCode: String = "disposals",

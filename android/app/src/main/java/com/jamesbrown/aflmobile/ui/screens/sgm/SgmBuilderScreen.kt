@@ -652,6 +652,11 @@ private fun SgmBuilderScreen(
                     onApplyMetricFilters(draftMetricFilters)
                     showFilters = false
                 },
+                onApplyQuickFilter = { preset ->
+                    draftMetricFilters = preset
+                    onApplyMetricFilters(preset)
+                    showFilters = false
+                },
                 onClear = { draftMetricFilters = SelectionMetricFilters() },
                 onDismiss = { showFilters = false },
             )
