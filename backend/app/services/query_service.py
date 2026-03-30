@@ -689,8 +689,29 @@ class QueryService:
             universe_params.append(selection_type)
         normalized_matchup_difficulties = [difficulty.lower() for difficulty in matchup_difficulties if difficulty.strip()]
         if normalized_matchup_difficulties:
-            placeholders = ", ".join("?" for _ in normalized_matchup_difficulties)
-            row_conditions.append(f"LOWER(COALESCE(matchup_difficulty, '')) IN ({placeholders})")
+            under_matchup_map = {
+                "terrible": "excellent",
+                "bad": "good",
+                "neutral": "neutral",
+                "good": "bad",
+                "excellent": "terrible",
+            }
+            normalized_under_matchups = [
+                under_matchup_map.get(difficulty, difficulty)
+                for difficulty in normalized_matchup_difficulties
+            ]
+            over_placeholders = ", ".join("?" for _ in normalized_matchup_difficulties)
+            under_placeholders = ", ".join("?" for _ in normalized_under_matchups)
+            row_conditions.append(
+                f"""
+                (
+                  (LOWER(COALESCE(selection_type, '')) = 'under' AND LOWER(COALESCE(matchup_difficulty, '')) IN ({under_placeholders}))
+                  OR
+                  (LOWER(COALESCE(selection_type, '')) <> 'under' AND LOWER(COALESCE(matchup_difficulty, '')) IN ({over_placeholders}))
+                )
+                """
+            )
+            row_params.extend(normalized_under_matchups)
             row_params.extend(normalized_matchup_difficulties)
         if date_from:
             universe_conditions.append("e.start_time_utc >= ?")

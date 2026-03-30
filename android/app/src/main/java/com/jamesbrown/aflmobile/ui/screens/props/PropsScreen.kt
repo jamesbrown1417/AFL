@@ -413,7 +413,7 @@ class OddsViewModel(
                     sortBy = "price",
                     sortDirection = "asc",
                     selectionType = "under",
-                    matchupDifficulties = listOfNotNull(odds.matchupDifficulty),
+                    matchupDifficulties = emptyList(),
                     minEdge = null,
                     minPrice = null,
                     maxPrice = null,
@@ -981,7 +981,7 @@ private fun OddsFilterSheet(
                                 selected = selected,
                                 onClick = {
                                     onFiltersChanged(
-                                        filters.copy(
+                                    filters.copy(
                                             matchupDifficulties = if (selected) {
                                                 filters.matchupDifficulties - difficulty
                                             } else {

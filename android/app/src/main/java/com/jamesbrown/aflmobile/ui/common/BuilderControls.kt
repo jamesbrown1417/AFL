@@ -457,5 +457,5 @@ private fun QuickFilterPreset.label(): String =
     when (this) {
         QuickFilterPreset.LAST10_POSITIVE -> "L10 positive"
         QuickFilterPreset.LAST10_AND_NB_POSITIVE -> "L10+NB positive"
-        QuickFilterPreset.LAST10_NB_AND_FAVORABLE_MATCHUP -> "L10+NB+fav matchup"
+        QuickFilterPreset.LAST10_NB_AND_FAVORABLE_MATCHUP -> "L10+NB+matchup edge"
     }
