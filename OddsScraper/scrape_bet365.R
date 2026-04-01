@@ -456,8 +456,8 @@ read_bet365_disposals_html <- safely(read_bet365_disposals_html)
 read_bet365_disposal_lines_html <- safely(read_bet365_disposal_lines_html, otherwise = NULL)
 
 # Get all data
-bet365_goals <- map(goals_list, read_bet365_goals_html) |> map_dfr(~.x$result)
-bet365_disposals <- map(disposals_list, read_bet365_disposals_html) |> map_dfr(~.x$result)
+bet365_goals <- map(goals_list, read_bet365_goals_html) |> map_dfr(~.x$result) |> mutate(player_name = str_remove(player_name, "\\d+"))
+bet365_disposals <- map(disposals_list, read_bet365_disposals_html) |> map_dfr(~.x$result) |> mutate(player_name = str_remove(player_name, "\\d+"))
 bet365_disposals_lines <- map(disposal_lines_list, read_bet365_disposal_lines_html) |> map_dfr(~.x$result)
 
 # If empty give columns
