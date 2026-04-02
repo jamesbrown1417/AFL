@@ -1,7 +1,10 @@
 package com.jamesbrown.aflmobile.ui
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
@@ -28,9 +31,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.jamesbrown.aflmobile.AflApplication
+import com.jamesbrown.aflmobile.R
 import com.jamesbrown.aflmobile.ui.navigation.PlayerLaunchRequest
 import com.jamesbrown.aflmobile.ui.navigation.TopLevelDestination
 import com.jamesbrown.aflmobile.ui.screens.cgm.CgmBuilderRoute
@@ -82,11 +88,14 @@ fun AflApp() {
                     drawerContainerColor = MaterialTheme.colorScheme.surface,
                     drawerContentColor = MaterialTheme.colorScheme.onSurface,
                 ) {
-                    Text(
-                        text = "AFL Edge",
-                        modifier = Modifier.padding(horizontal = 20.dp, vertical = 24.dp),
-                        style = MaterialTheme.typography.headlineSmall,
-                        color = MaterialTheme.colorScheme.primary,
+                    Image(
+                        painter = painterResource(id = R.drawable.app_logo_wordmark),
+                        contentDescription = "AFL Edge logo",
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(112.dp)
+                            .padding(horizontal = 18.dp, vertical = 20.dp),
+                        contentScale = ContentScale.Fit,
                     )
                     HorizontalDivider()
                     topLevelDestinations.forEachIndexed { index, destination ->
