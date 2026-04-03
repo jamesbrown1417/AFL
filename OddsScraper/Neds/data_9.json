@@ -1,51 +1,51 @@
 {
     "entrants": {
-        "2bbb68c8-1258-478d-a6d9-6d7dc3bd699b": {
-            "id": "2bbb68c8-1258-478d-a6d9-6d7dc3bd699b",
-            "name": "Sydney Swans",
-            "home_away": "HOME",
-            "visible": true,
-            "sort_order": 10,
-            "market_id": "4e4cbfbe-d57e-4759-a6ea-c86944bb7f6a"
-        },
-        "46c5d7e7-6e9c-461e-8e3b-5b4bcaf549ee": {
-            "id": "46c5d7e7-6e9c-461e-8e3b-5b4bcaf549ee",
-            "name": "Gold Coast Suns",
+        "66e1b254-9a88-4882-81f8-b054d608240f": {
+            "id": "66e1b254-9a88-4882-81f8-b054d608240f",
+            "name": "St Kilda",
             "home_away": "AWAY",
             "visible": true,
             "sort_order": 20,
-            "market_id": "4e4cbfbe-d57e-4759-a6ea-c86944bb7f6a"
+            "market_id": "644bc1c0-c1cc-496d-8ce9-5929667675a9"
+        },
+        "9b128e83-36da-4a55-980d-9c84fec5309d": {
+            "id": "9b128e83-36da-4a55-980d-9c84fec5309d",
+            "name": "Port Adelaide",
+            "home_away": "HOME",
+            "visible": true,
+            "sort_order": 10,
+            "market_id": "644bc1c0-c1cc-496d-8ce9-5929667675a9"
         }
     },
     "event_participants": {
-        "0d33794b-66e8-462e-a022-c98f678d899c": {
-            "id": "0d33794b-66e8-462e-a022-c98f678d899c",
-            "event_id": "6f0168f8-8878-4ad1-962a-8b5438093b42",
-            "name": "Gold Coast Suns",
-            "home_away": "AWAY",
-            "colour": "#A3122F"
-        },
-        "18e7989f-d860-4ac2-b3d8-3bf41b544ae2": {
-            "id": "18e7989f-d860-4ac2-b3d8-3bf41b544ae2",
-            "event_id": "6f0168f8-8878-4ad1-962a-8b5438093b42",
-            "name": "Sydney Swans",
+        "36794bc5-34ce-45c0-986f-8cd14857ce7a": {
+            "id": "36794bc5-34ce-45c0-986f-8cd14857ce7a",
+            "event_id": "890c8cbe-3235-4033-8ad9-60754e9bb355",
+            "name": "Port Adelaide",
             "home_away": "HOME",
+            "colour": "#008A8F"
+        },
+        "9b7f152d-1fa0-4a05-b828-930ce87116bc": {
+            "id": "9b7f152d-1fa0-4a05-b828-930ce87116bc",
+            "event_id": "890c8cbe-3235-4033-8ad9-60754e9bb355",
+            "name": "St Kilda",
+            "home_away": "AWAY",
             "colour": "#C8102E"
         }
     },
     "events": {
-        "6f0168f8-8878-4ad1-962a-8b5438093b42": {
-            "id": "6f0168f8-8878-4ad1-962a-8b5438093b42",
-            "name": "Sydney Swans vs Gold Coast Suns",
+        "890c8cbe-3235-4033-8ad9-60754e9bb355": {
+            "id": "890c8cbe-3235-4033-8ad9-60754e9bb355",
+            "name": "Port Adelaide vs St Kilda",
             "event_type": {
                 "id": "6bfa0efc-05df-4ae1-9b1e-152365290cfd",
                 "name": "Match"
             },
             "match_status": "BettingOpen",
-            "advertised_start": "2026-04-11T06:15:00Z",
-            "actual_start": "2026-04-11T06:15:00Z",
+            "advertised_start": "2026-04-12T09:15:00Z",
+            "actual_start": "2026-04-12T09:15:00Z",
             "visible": true,
-            "slug": "sydney-swans-vs-gold-coast-suns",
+            "slug": "port-adelaide-vs-st-kilda",
             "competition": {
                 "id": "ccff2e9a-5347-41aa-902a-bb6b1886d817",
                 "name": "AFL",
@@ -60,22 +60,22 @@
                 {
                     "market_type_group_id": "29edb5e1-a717-4769-8bcd-2d43ec38d828",
                     "market_ids": [
-                        "4e4cbfbe-d57e-4759-a6ea-c86944bb7f6a"
+                        "644bc1c0-c1cc-496d-8ce9-5929667675a9"
                     ]
                 }
             ],
             "market_count": 1,
             "main_markets": [
-                "4e4cbfbe-d57e-4759-a6ea-c86944bb7f6a"
+                "644bc1c0-c1cc-496d-8ce9-5929667675a9"
             ],
             "market_ids": [
-                "4e4cbfbe-d57e-4759-a6ea-c86944bb7f6a"
+                "644bc1c0-c1cc-496d-8ce9-5929667675a9"
             ],
             "category_id": "23d497e6-8aab-4309-905b-9421f42c9bc5",
             "round_id": "be1cee43-0f1f-4cb0-8038-13d44d8c5e7a",
             "participant_ids": [
-                "0d33794b-66e8-462e-a022-c98f678d899c",
-                "18e7989f-d860-4ac2-b3d8-3bf41b544ae2"
+                "36794bc5-34ce-45c0-986f-8cd14857ce7a",
+                "9b7f152d-1fa0-4a05-b828-930ce87116bc"
             ]
         }
     },
@@ -89,41 +89,41 @@
         }
     },
     "markets": {
-        "4e4cbfbe-d57e-4759-a6ea-c86944bb7f6a": {
-            "id": "4e4cbfbe-d57e-4759-a6ea-c86944bb7f6a",
-            "event_id": "6f0168f8-8878-4ad1-962a-8b5438093b42",
+        "644bc1c0-c1cc-496d-8ce9-5929667675a9": {
+            "id": "644bc1c0-c1cc-496d-8ce9-5929667675a9",
+            "event_id": "890c8cbe-3235-4033-8ad9-60754e9bb355",
             "market_type_id": "be25c37a-71ff-47f6-a1e2-02a494eb5a4d",
             "market_status_id": "4bc8fe96-296b-4b4c-aea4-85c94f63b9c6",
             "name": "Match Betting",
             "advertised_start": {
-                "seconds": 1775888100
+                "seconds": 1775985300
             },
             "actual_start": {
-                "seconds": 1775888100
+                "seconds": 1775985300
             },
             "is_primary": true,
             "visible": true,
             "entrant_ids": [
-                "2bbb68c8-1258-478d-a6d9-6d7dc3bd699b",
-                "46c5d7e7-6e9c-461e-8e3b-5b4bcaf549ee"
+                "9b128e83-36da-4a55-980d-9c84fec5309d",
+                "66e1b254-9a88-4882-81f8-b054d608240f"
             ],
             "num_winners": 1
         }
     },
     "markets_allow_cashout": {
-        "4e4cbfbe-d57e-4759-a6ea-c86944bb7f6a": true
+        "644bc1c0-c1cc-496d-8ce9-5929667675a9": true
     },
     "prices": {
-        "2bbb68c8-1258-478d-a6d9-6d7dc3bd699b:940b8704-e497-4a76-b390-00918ff7d282:": {
+        "66e1b254-9a88-4882-81f8-b054d608240f:940b8704-e497-4a76-b390-00918ff7d282:": {
             "odds": {
-                "numerator": 6,
-                "denominator": 5
+                "numerator": 73,
+                "denominator": 100
             }
         },
-        "46c5d7e7-6e9c-461e-8e3b-5b4bcaf549ee:940b8704-e497-4a76-b390-00918ff7d282:": {
+        "9b128e83-36da-4a55-980d-9c84fec5309d:940b8704-e497-4a76-b390-00918ff7d282:": {
             "odds": {
-                "numerator": 67,
-                "denominator": 100
+                "numerator": 11,
+                "denominator": 10
             }
         }
     }
