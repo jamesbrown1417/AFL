@@ -138,7 +138,7 @@ class PlayerStatsViewModel(
 
     private fun bootstrap() {
         viewModelScope.launch {
-            val players = runCatching { repository.searchPlayers("", limit = 5000) }.getOrDefault(emptyList())
+            val players = runCatching { repository.searchStatPlayers("", limit = 5000) }.getOrDefault(emptyList())
             val selected = players.firstOrNull { it.fullName.equals("Tim English", ignoreCase = true) } ?: players.firstOrNull()
             _uiState.update {
                 it.copy(

@@ -329,6 +329,28 @@ class QueryService:
             )
         return rows
 
+    def search_stat_players(self, *, query: str, limit: int) -> list[dict[str, Any]]:
+        with connection(settings=self.settings) as conn:
+            rows = fetch_all(
+                conn,
+                """
+                SELECT
+                  p.player_id AS id,
+                  p.full_name
+                FROM players p
+                WHERE EXISTS (
+                  SELECT 1
+                  FROM player_game_logs pgl
+                  WHERE pgl.player_id = p.player_id
+                )
+                  AND LOWER(p.full_name) LIKE ?
+                ORDER BY p.full_name
+                LIMIT ?
+                """,
+                [f"%{query.lower()}%", limit],
+            )
+        return rows
+
     def get_player_stat_filter_options(self, *, player_id: int) -> dict[str, Any] | None:
         with connection(settings=self.settings) as conn:
             exists = fetch_one(

@@ -20,3 +20,13 @@ def search_players(
 ) -> list[PlayerSummary]:
     rows = query_service.search_players(query=q, limit=limit)
     return [PlayerSummary.model_validate(row) for row in rows]
+
+
+@router.get("/players/stats/search", response_model=list[PlayerSummary])
+def search_stat_players(
+    query_service: Annotated[QueryService, Depends(get_query_service)],
+    q: str = Query(default=""),
+    limit: int = Query(default=50, ge=1, le=5000),
+) -> list[PlayerSummary]:
+    rows = query_service.search_stat_players(query=q, limit=limit)
+    return [PlayerSummary.model_validate(row) for row in rows]

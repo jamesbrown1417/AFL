@@ -56,6 +56,9 @@ class AflRepository(
     suspend fun searchPlayers(query: String, limit: Int = 50): List<PlayerSummary> =
         apiClient.searchPlayers(query = query, limit = limit)
 
+    suspend fun searchStatPlayers(query: String, limit: Int = 50): List<PlayerSummary> =
+        apiClient.searchStatPlayers(query = query, limit = limit)
+
     suspend fun playerStatFilters(playerId: Int): PlayerStatFilterOptions =
         apiClient.getPlayerStatFilters(playerId)
 

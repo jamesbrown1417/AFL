@@ -99,6 +99,17 @@ class BackendApiClient(
         },
     )
 
+    suspend fun searchStatPlayers(
+        query: String,
+        limit: Int = 50,
+    ): List<PlayerSummary> = get(
+        path = "players/stats/search",
+        query = buildList {
+            add("q" to query)
+            add("limit" to limit.toString())
+        },
+    )
+
     suspend fun getPlayerStatFilters(playerId: Int): PlayerStatFilterOptions =
         get("players/$playerId/stats/filters")
 

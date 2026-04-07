@@ -256,10 +256,19 @@ def test_event_market_selection_flow(client) -> None:
         assert same_event_cgm_response.status_code == 422
         assert same_event_cgm_response.json()["error"]["code"] == "duplicate_game_legs"
 
-    stat_players_response = client.get("/api/v1/players/search", params={"q": "English"})
+    stat_players_response = client.get("/api/v1/players/stats/search", params={"q": "English"})
     assert stat_players_response.status_code == 200
     stat_players_payload = stat_players_response.json()
     assert stat_players_payload
+    assert all(
+        " over " not in player["full_name"].lower()
+        and " under " not in player["full_name"].lower()
+        and "1st-" not in player["full_name"].lower()
+        and "2nd-" not in player["full_name"].lower()
+        and "3rd-" not in player["full_name"].lower()
+        and "4th-" not in player["full_name"].lower()
+        for player in stat_players_payload
+    )
     player_id = stat_players_payload[0]["id"]
 
     filters_response = client.get(f"/api/v1/players/{player_id}/stats/filters")

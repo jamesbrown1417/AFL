@@ -92,7 +92,24 @@ def normalize_player_name(value: Any) -> str | None:
     cleaned = clean_text(value)
     if not cleaned:
         return None
-    return re.sub(r"\s+", " ", cleaned)
+    normalized = re.sub(r"\s+", " ", cleaned)
+    # Some bookmaker feeds encode alternate-line or period-specific prop info into the
+    # player field itself. Strip those market fragments so the canonical player registry
+    # remains player-only.
+    normalized = re.sub(
+        r"\s+(?:1st|2nd|3rd|4th)-(?:quarter|half)-[a-z0-9-]+$",
+        "",
+        normalized,
+        flags=re.IGNORECASE,
+    )
+    normalized = re.sub(
+        r"\s+(?:Over|Under)\s+\d+(?:\.\d+)?\+$",
+        "",
+        normalized,
+        flags=re.IGNORECASE,
+    )
+    normalized = re.sub(r"\s+", " ", normalized).strip()
+    return normalized or None
 
 
 def normalize_team_name(value: Any) -> str | None:
