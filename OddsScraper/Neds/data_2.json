@@ -69,6 +69,7 @@
             "competition_id": "95553dad-b992-4773-b6fe-4b1572dc13df",
             "market_type_group_ids": [
                 "29edb5e1-a717-4769-8bcd-2d43ec38d828",
+                "90e8c4c9-096d-4a5e-b662-edebfdcf9e8b",
                 "68b6bfcc-f17e-42e9-ae36-300a4d98ba5f"
             ],
             "market_type_group_markets": [
@@ -76,8 +77,14 @@
                     "market_type_group_id": "29edb5e1-a717-4769-8bcd-2d43ec38d828",
                     "market_ids": [
                         "b76312d4-3b5d-46a4-8064-bcabd874160c",
-                        "686e13db-2926-4720-b8ee-469a63362d2b",
-                        "5ad361e4-4ce0-4185-95b9-bcf88627bd25"
+                        "5ad361e4-4ce0-4185-95b9-bcf88627bd25",
+                        "686e13db-2926-4720-b8ee-469a63362d2b"
+                    ]
+                },
+                {
+                    "market_type_group_id": "90e8c4c9-096d-4a5e-b662-edebfdcf9e8b",
+                    "market_ids": [
+                        "686e13db-2926-4720-b8ee-469a63362d2b"
                     ]
                 },
                 {
@@ -93,8 +100,8 @@
             ],
             "market_ids": [
                 "b76312d4-3b5d-46a4-8064-bcabd874160c",
-                "686e13db-2926-4720-b8ee-469a63362d2b",
-                "5ad361e4-4ce0-4185-95b9-bcf88627bd25"
+                "5ad361e4-4ce0-4185-95b9-bcf88627bd25",
+                "686e13db-2926-4720-b8ee-469a63362d2b"
             ],
             "category_id": "23d497e6-8aab-4309-905b-9421f42c9bc5"
         }
@@ -112,6 +119,13 @@
             "category_id": "23d497e6-8aab-4309-905b-9421f42c9bc5",
             "name": "Total Markets",
             "priority": 160,
+            "type": "MARKET_TYPE_GROUP_TYPE_EVENT"
+        },
+        "90e8c4c9-096d-4a5e-b662-edebfdcf9e8b": {
+            "id": "90e8c4c9-096d-4a5e-b662-edebfdcf9e8b",
+            "category_id": "23d497e6-8aab-4309-905b-9421f42c9bc5",
+            "name": "Alternate Lines",
+            "priority": 180,
             "type": "MARKET_TYPE_GROUP_TYPE_EVENT"
         }
     },
@@ -139,7 +153,7 @@
         "686e13db-2926-4720-b8ee-469a63362d2b": {
             "id": "686e13db-2926-4720-b8ee-469a63362d2b",
             "event_id": "0e8f890a-2529-41dd-bdfb-7cded518760f",
-            "market_type_id": "d04cddcd-5f42-4d17-ae1c-950dfdaa2c98",
+            "market_type_id": "5b0eb895-e010-4d41-9d13-fc5b99e52bba",
             "market_status_id": "4bc8fe96-296b-4b4c-aea4-85c94f63b9c6",
             "name": "Line",
             "advertised_start": {
@@ -215,8 +229,8 @@
         },
         "ccfb6e67-9f02-4e61-a57f-122e8dc8b88e:940b8704-e497-4a76-b390-00918ff7d282:": {
             "odds": {
-                "numerator": 26,
-                "denominator": 5
+                "numerator": 11,
+                "denominator": 2
             }
         }
     }
