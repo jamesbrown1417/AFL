@@ -94,6 +94,7 @@ private struct PlayerStatsWorkspace: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 14) {
             PlayerSummaryStrip(summary: store.summary, history: store.history)
+            PlayerFilterSummaryCard(filters: store.filters, options: store.filterOptions)
 
             HStack {
                 Picker("View", selection: $store.historyViewMode) {
@@ -105,7 +106,9 @@ private struct PlayerStatsWorkspace: View {
                 .frame(width: 180)
 
                 Spacer()
-                PlayerLineSummary(filters: store.filters)
+                Text("\(store.history.count) games")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
             }
 
             if store.isLoading {
@@ -125,6 +128,7 @@ private struct PlayerStatsWorkspace: View {
                 PlayerGameLogTable(history: store.history, selectedGameId: $store.selectedGameId)
             }
         }
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
     }
 }
 
@@ -194,6 +198,7 @@ private struct PlayerComparisonWorkspace: View {
                 PlayerGameLogTable(history: focusedScenario.history, selectedGameId: .constant(nil))
             }
         }
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
     }
 }
 
@@ -228,50 +233,246 @@ private struct PlayerGameLogTable: View {
     var body: some View {
         Table(sortedHistory, selection: $selectedGameId, sortOrder: $sortOrder) {
             TableColumn("Date", value: \.date) { row in
-                Text(AFLFormatters.dateTime(row.date))
+                PlayerHistoryTextCell(text: AFLFormatters.dateTime(row.date), rowHit: row.hit)
             }
             TableColumn("Round", value: \.roundSort) { row in
-                Text(row.roundLabel ?? "--")
+                PlayerHistoryTextCell(text: row.roundLabel ?? "--", rowHit: row.hit)
             }
             TableColumn("Team", value: \.teamSort) { row in
-                Text(row.team ?? "--")
+                PlayerHistoryTextCell(text: row.team ?? "--", rowHit: row.hit)
             }
             TableColumn("Opponent", value: \.oppositionSort) { row in
-                Text(row.opposition ?? "--")
+                PlayerHistoryTextCell(text: row.opposition ?? "--", rowHit: row.hit)
             }
             TableColumn("Venue", value: \.venueSort) { row in
-                Text(row.venue ?? "--")
+                PlayerHistoryTextCell(text: row.venue ?? "--", rowHit: row.hit)
             }
             TableColumn("Value", value: \.selectedValueSort) { row in
-                Text(row.selectedValue.map { String(format: "%.1f", $0) } ?? "--")
-                    .monospacedDigit()
+                PlayerHistoryTextCell(
+                    text: row.selectedValue.map { String(format: "%.1f", $0) } ?? "--",
+                    rowHit: row.hit,
+                    alignment: .trailing,
+                    emphasized: true
+                )
             }
             TableColumn("Hit", value: \.hitSort) { row in
-                Text(row.hit.map { $0 ? "Yes" : "No" } ?? "--")
+                PlayerHistoryHitBadge(hit: row.hit)
             }
             TableColumn("TOG", value: \.togSort) { row in
-                Text(row.tog.map { String(format: "%.0f%%", $0) } ?? "--")
-                    .monospacedDigit()
+                PlayerHistoryTextCell(
+                    text: row.tog.map { String(format: "%.0f%%", $0) } ?? "--",
+                    rowHit: row.hit,
+                    alignment: .trailing
+                )
             }
             TableColumn("Weather", value: \.weatherSort) { row in
-                Text(row.weather ?? "--")
+                PlayerHistoryTextCell(text: row.weather ?? "--", rowHit: row.hit)
             }
         }
         .aflTableSurface()
     }
 }
 
-private struct PlayerLineSummary: View {
+private struct PlayerFilterSummaryCard: View {
     var filters: PlayerStatsFilters
+    var options: PlayerStatFilterOptions?
 
     var body: some View {
-        HStack(spacing: 8) {
-            Pill(statLabel(filters.statCode))
-            Pill(lineLabel(filters))
-            if !filters.seasons.isEmpty {
-                Pill(filters.seasons.joined(separator: "/"))
+        VStack(alignment: .leading, spacing: 12) {
+            HStack {
+                VStack(alignment: .leading, spacing: 3) {
+                    Text("Current Filters")
+                        .font(.headline)
+                    Text("Stat, sample, and context applied to the current player view.")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+                Spacer()
+                Pill(lineLabel(filters), systemImage: "line.3.horizontal.decrease.circle")
+            }
+
+            LazyVGrid(
+                columns: [GridItem(.adaptive(minimum: 220), spacing: 12, alignment: .top)],
+                alignment: .leading,
+                spacing: 12
+            ) {
+                PlayerFilterBucket(
+                    title: "Market",
+                    tint: AFLColor.orange50,
+                    border: AFLColor.orange300,
+                    rows: [
+                        ("Metric", resolvedStatLabel(filters: filters, options: options)),
+                        ("Line", lineLabel(filters)),
+                        ("Seasons", summarizeFilterValues(filters.seasons, allValues: options?.seasons) ?? "Any"),
+                    ]
+                )
+                PlayerFilterBucket(
+                    title: "Sample",
+                    tint: AFLColor.blue50,
+                    border: AFLColor.blue200,
+                    rows: [
+                        ("Last Games", filters.lastGamesText.trimmedNonEmpty.map { "\($0) games" } ?? "All"),
+                        ("TOG", filters.minutesMinimumText == "0" ? "Any" : "\(filters.minutesMinimumText)%+"),
+                        ("Margin", filters.marginMinText == "-200" && filters.marginMaxText == "200" ? "Full range" : "\(filters.marginMinText) to \(filters.marginMaxText)"),
+                    ]
+                )
+                PlayerFilterBucket(
+                    title: "Context",
+                    tint: AFLColor.blue25,
+                    border: AFLColor.blue300,
+                    rows: [
+                        ("Home/Away", summarizeFilterValues(filters.homeAway, allValues: options?.homeAwayOptions) ?? "All"),
+                        ("Opposition", summarizeFilterValues(filters.oppositions, allValues: options?.oppositions) ?? "All"),
+                        ("Venue", summarizeFilterValues(filters.venues, allValues: options?.venues) ?? "All"),
+                        ("Weather", summarizeFilterValues(filters.weatherCategories, allValues: options?.weatherCategories) ?? "All"),
+                    ]
+                )
             }
         }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .aflCard()
+    }
+}
+
+private struct PlayerFilterBucket: View {
+    var title: String
+    var tint: Color
+    var border: Color
+    var rows: [(String, String)]
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            Text(title)
+                .font(.subheadline.weight(.semibold))
+                .foregroundStyle(AFLTheme.primaryStrong)
+            ForEach(Array(rows.enumerated()), id: \.offset) { _, row in
+                PlayerFilterBucketRow(label: row.0, value: row.1)
+            }
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(12)
+        .background(tint.opacity(0.95), in: .rect(cornerRadius: 8))
+        .overlay(
+            RoundedRectangle(cornerRadius: 8)
+                .stroke(border.opacity(0.88), lineWidth: 1)
+        )
+    }
+}
+
+private struct PlayerFilterBucketRow: View {
+    var label: String
+    var value: String
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 4) {
+            Text(label.uppercased())
+                .font(.caption2.weight(.semibold))
+                .foregroundStyle(AFLColor.navy700)
+            Text(value)
+                .font(.callout)
+                .foregroundStyle(AFLColor.navy950)
+                .fixedSize(horizontal: false, vertical: true)
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(10)
+        .background(Color.white.opacity(0.6), in: .rect(cornerRadius: 8))
+    }
+}
+
+private struct PlayerHistoryTextCell: View {
+    var text: String
+    var rowHit: Bool?
+    var alignment: Alignment = .leading
+    var emphasized = false
+
+    var body: some View {
+        Text(text)
+            .font(emphasized ? .body.weight(.semibold) : .body)
+            .monospacedDigit()
+            .foregroundStyle(historyCellForeground(hit: rowHit, emphasized: emphasized))
+            .frame(maxWidth: .infinity, alignment: alignment)
+            .padding(.horizontal, 8)
+            .padding(.vertical, 6)
+            .background(historyRowTint(hit: rowHit), in: .rect(cornerRadius: 6))
+    }
+}
+
+private struct PlayerHistoryHitBadge: View {
+    var hit: Bool?
+
+    var body: some View {
+        let label: String
+        let icon: String
+        let foreground: Color
+        let background: Color
+
+        switch hit {
+        case true:
+            label = "Hit"
+            icon = "checkmark.circle.fill"
+            foreground = AFLTheme.success
+            background = AFLColor.positiveSurface
+        case false:
+            label = "Miss"
+            icon = "xmark.circle.fill"
+            foreground = AFLTheme.danger
+            background = AFLColor.negativeSurface
+        case nil:
+            label = "--"
+            icon = "minus.circle"
+            foreground = AFLColor.navy700
+            background = AFLColor.blue50
+        }
+
+        return Label(label, systemImage: icon)
+            .font(.caption.weight(.semibold))
+            .labelStyle(.titleAndIcon)
+            .foregroundStyle(foreground)
+            .frame(maxWidth: .infinity, alignment: .center)
+            .padding(.horizontal, 8)
+            .padding(.vertical, 6)
+            .background(background.opacity(0.92), in: .capsule)
+    }
+}
+
+private func resolvedStatLabel(filters: PlayerStatsFilters, options: PlayerStatFilterOptions?) -> String {
+    options?.stats.first(where: { $0.code == filters.statCode })?.label ?? statLabel(filters.statCode)
+}
+
+private func summarizeFilterValues(
+    _ selected: [String],
+    allValues: [String]? = nil,
+    maxVisible: Int = 3
+) -> String? {
+    guard !selected.isEmpty else { return nil }
+    if let allValues, !allValues.isEmpty, Set(selected) == Set(allValues) {
+        return "All"
+    }
+    let visible = selected.prefix(maxVisible)
+    let suffix = selected.count > maxVisible ? " +\(selected.count - maxVisible)" : ""
+    return visible.joined(separator: ", ") + suffix
+}
+
+private func historyRowTint(hit: Bool?) -> Color {
+    switch hit {
+    case true:
+        AFLColor.positiveSurface.opacity(0.86)
+    case false:
+        AFLColor.negativeSurface.opacity(0.86)
+    case nil:
+        AFLColor.blue50.opacity(0.3)
+    }
+}
+
+private func historyCellForeground(hit: Bool?, emphasized: Bool) -> Color {
+    guard emphasized else { return AFLColor.navy950 }
+    return switch hit {
+    case true:
+        AFLTheme.success
+    case false:
+        AFLTheme.danger
+    case nil:
+        AFLColor.navy950
     }
 }
 
@@ -404,6 +605,7 @@ private struct PlayerComparisonSummary: View {
                     .foregroundStyle(AFLTheme.danger)
             }
         }
+        .frame(maxWidth: .infinity, alignment: .leading)
         .aflCard()
     }
 }
@@ -442,7 +644,7 @@ private struct PlayerHistoryGraph: View {
                 Text("\(statLabel(filters.statCode)) Trend")
                     .font(.headline)
                 PlayerHistoryCanvas(history: ordered, filters: filters)
-                    .frame(minHeight: 260, idealHeight: 280, maxHeight: 320)
+                    .frame(maxWidth: .infinity, minHeight: 260, idealHeight: 280, maxHeight: 320)
                 HStack(spacing: 12) {
                     GraphLegendDot(color: AFLTheme.success, label: "Hit")
                     GraphLegendDot(color: AFLTheme.danger, label: "Miss")
@@ -453,6 +655,7 @@ private struct PlayerHistoryGraph: View {
                         .foregroundStyle(.secondary)
                 }
             }
+            .frame(maxWidth: .infinity, alignment: .leading)
             .aflCard()
         }
     }
@@ -473,7 +676,7 @@ private struct PlayerComparisonGraph: View {
                 Text("Scenario Comparison Graph")
                     .font(.headline)
                 PlayerComparisonCanvas(scenarioA: scenarioA, scenarioB: scenarioB)
-                    .frame(minHeight: 260, idealHeight: 280, maxHeight: 320)
+                    .frame(maxWidth: .infinity, minHeight: 260, idealHeight: 280, maxHeight: 320)
                 HStack(spacing: 12) {
                     GraphLegendDot(color: AFLTheme.accent, label: "Scenario A")
                     GraphLegendDot(color: AFLTheme.primary, label: "Scenario B")
@@ -483,6 +686,7 @@ private struct PlayerComparisonGraph: View {
                         .foregroundStyle(.secondary)
                 }
             }
+            .frame(maxWidth: .infinity, alignment: .leading)
             .aflCard()
         }
     }

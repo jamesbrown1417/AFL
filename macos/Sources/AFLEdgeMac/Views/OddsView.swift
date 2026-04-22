@@ -152,6 +152,10 @@ private struct OddsTable: View {
         store.rows.sorted(using: sortOrder)
     }
 
+    private var selectedSelectionIds: Set<Int> {
+        Set(sgmDraftStore.state.legs.map(\.selectionId))
+    }
+
     var body: some View {
         Table(sortedRows, selection: $store.selectedRowId, sortOrder: $sortOrder) {
             TableColumn("Match", value: \.matchName) { row in
@@ -210,42 +214,68 @@ private struct OddsTable: View {
                     }
                 }
             }
-            TableColumn("Actions") { row in
-                HStack {
-                    Button("Player") {
-                        onOpenPlayer(row)
-                    }
-                    .disabled(row.player == nil)
-                    Button("Unders") {
-                        Task { await store.openAlternateUnders(for: row) }
-                    }
-                    .disabled(row.player == nil)
-                    Button("SGM") {
-                        if let price = row.decimalPrice {
-                            _ = sgmDraftStore.addLeg(
-                                DraftLeg(
-                                    selectionId: row.selectionId,
-                                    eventId: row.eventId,
-                                    eventLabel: row.matchName,
-                                    bookmaker: row.bookmaker,
-                                    label: row.label,
-                                    marketTypeCode: row.marketTypeCode,
-                                    selectionType: row.selectionType,
-                                    basePrice: price,
-                                    diff2025: row.diff2025,
-                                    diffLast10: row.diffLast10,
-                                    nextBestProbDiff: row.nextBestProbDiff,
-                                    isBestPrice: row.isBestPrice
-                                )
-                            )
-                        }
-                    }
-                    .disabled(!row.sgmEligible || row.decimalPrice == nil)
-                }
-                .buttonStyle(.borderless)
+        }
+        .contextMenu(forSelectionType: OddsSearchResult.ID.self) { selection in
+            if let row = contextMenuRow(for: selection) {
+                oddsContextMenu(for: row)
             }
         }
         .aflTableSurface()
+    }
+
+    private func contextMenuRow(for selection: Set<OddsSearchResult.ID>) -> OddsSearchResult? {
+        if let selectionId = selection.first {
+            return sortedRows.first { $0.id == selectionId }
+        }
+        if let selectedRowId = store.selectedRowId {
+            return sortedRows.first { $0.id == selectedRowId }
+        }
+        return nil
+    }
+
+    @ViewBuilder
+    private func oddsContextMenu(for row: OddsSearchResult) -> some View {
+        if row.player != nil {
+            Button("Open In Player Lab") {
+                onOpenPlayer(row)
+            }
+
+            Button("Show Alternate Unders") {
+                Task { await store.openAlternateUnders(for: row) }
+            }
+            Divider()
+        }
+
+        if selectedSelectionIds.contains(row.selectionId) {
+            Button("Remove From SGM") {
+                sgmDraftStore.removeLeg(selectionId: row.selectionId)
+            }
+        } else {
+            Button("Add To SGM") {
+                addRowToSgm(row)
+            }
+            .disabled(!row.sgmEligible || row.decimalPrice == nil)
+        }
+    }
+
+    private func addRowToSgm(_ row: OddsSearchResult) {
+        guard let price = row.decimalPrice else { return }
+        _ = sgmDraftStore.addLeg(
+            DraftLeg(
+                selectionId: row.selectionId,
+                eventId: row.eventId,
+                eventLabel: row.matchName,
+                bookmaker: row.bookmaker,
+                label: row.label,
+                marketTypeCode: row.marketTypeCode,
+                selectionType: row.selectionType,
+                basePrice: price,
+                diff2025: row.diff2025,
+                diffLast10: row.diffLast10,
+                nextBestProbDiff: row.nextBestProbDiff,
+                isBestPrice: row.isBestPrice
+            )
+        )
     }
 }
 

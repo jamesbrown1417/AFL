@@ -9,7 +9,8 @@ struct BrandHeader: View {
                 Image(nsImage: image)
                     .resizable()
                     .scaledToFit()
-                    .frame(maxWidth: 150, maxHeight: 62, alignment: .leading)
+                    .frame(maxWidth: 182, maxHeight: 72, alignment: .leading)
+                    .clipShape(RoundedRectangle(cornerRadius: 8))
                     .accessibilityLabel("AFL Edge")
             } else {
                 Text("AFL Edge")
