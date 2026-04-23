@@ -284,6 +284,21 @@ private struct OddsInspector: View {
 
     var body: some View {
         Form {
+            Section {
+                InspectorPrimaryActionBlock(
+                    title: "Apply Filters",
+                    subtitle: "Run the current bookmaker, market, and player filters.",
+                    secondaryTitle: "Reset Filters",
+                    secondarySystemImage: "arrow.uturn.backward",
+                    primaryAction: { store.applyFilters(store.filters) },
+                    secondaryAction: {
+                        var reset = OddsFilters(scope: store.filters.scope)
+                        reset.bookmakerCodes = store.defaultBookmakerCodes
+                        store.applyFilters(reset)
+                    }
+                )
+            }
+
             if let selected = store.rows.first(where: { $0.id == store.selectedRowId }) {
                 SelectedOddsDetail(row: selected)
             }
@@ -373,17 +388,6 @@ private struct OddsInspector: View {
                     Button(preset.label) {
                         store.applyFilters(store.filters.applying(preset))
                     }
-                }
-            }
-
-            Section {
-                Button("Apply Filters") {
-                    store.applyFilters(store.filters)
-                }
-                Button("Reset") {
-                    var reset = OddsFilters(scope: store.filters.scope)
-                    reset.bookmakerCodes = store.defaultBookmakerCodes
-                    store.applyFilters(reset)
                 }
             }
         }

@@ -963,6 +963,17 @@ private struct SgmFiltersInspector: View {
 
     var body: some View {
         Form {
+            Section {
+                InspectorPrimaryActionBlock(
+                    title: "Apply Filters",
+                    subtitle: "Update candidate legs for the current bookmaker, match, and metric filters.",
+                    secondaryTitle: "Refresh Builder Data",
+                    secondarySystemImage: "arrow.clockwise",
+                    primaryAction: { store.applyMetricFilters(store.metricFilters) },
+                    secondaryAction: { Task { await store.refresh() } }
+                )
+            }
+
             Section("Quote Options") {
                 Toggle("Force refresh on next compare", isOn: Binding(
                     get: { store.draft.forceRefresh },
@@ -982,6 +993,17 @@ private struct CgmFiltersInspector: View {
 
     var body: some View {
         Form {
+            Section {
+                InspectorPrimaryActionBlock(
+                    title: "Apply Filters",
+                    subtitle: "Update cross-game candidates for the current bookmaker, match filter, and metrics.",
+                    secondaryTitle: "Refresh Builder Data",
+                    secondarySystemImage: "arrow.clockwise",
+                    primaryAction: { store.applyMetricFilters(store.metricFilters) },
+                    secondaryAction: { Task { await store.refresh() } }
+                )
+            }
+
             Section("Match Filter") {
                 if store.availableEvents.isEmpty {
                     Text("No matches available.")
@@ -1027,9 +1049,6 @@ private struct MetricFiltersForm: View {
                     filters = filters.applying(preset)
                     onApply()
                 }
-            }
-            Button("Apply Filters") {
-                onApply()
             }
         }
     }

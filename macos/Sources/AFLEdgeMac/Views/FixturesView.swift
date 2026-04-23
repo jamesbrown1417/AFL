@@ -193,6 +193,23 @@ private struct FixturesInspector: View {
 
     var body: some View {
         Form {
+            Section {
+                InspectorPrimaryActionBlock(
+                    title: "Apply Filters",
+                    subtitle: "Reload markets using the current bookmaker and player market filter.",
+                    secondaryTitle: "Refresh Fixtures",
+                    secondarySystemImage: "arrow.clockwise",
+                    primaryAction: {
+                        if let event = store.selectedEvent {
+                            Task { await store.loadMarkets(event: event) }
+                        } else {
+                            Task { await store.refreshEvents() }
+                        }
+                    },
+                    secondaryAction: { Task { await store.refreshEvents() } }
+                )
+            }
+
             Section("Filters") {
                 Picker("Bookmaker", selection: Binding(
                     get: { store.selectedBookmaker },
@@ -203,11 +220,6 @@ private struct FixturesInspector: View {
                     }
                 }
                 TextField("Player market filter", text: $store.playerQuery)
-                Button("Reload Markets") {
-                    if let event = store.selectedEvent {
-                        Task { await store.loadMarkets(event: event) }
-                    }
-                }
             }
             if let message = store.infoMessage {
                 Section("Status") {

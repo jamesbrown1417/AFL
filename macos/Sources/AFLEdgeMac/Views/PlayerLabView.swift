@@ -760,6 +760,17 @@ private struct PlayerFilterInspector: View {
 
     var body: some View {
         Form {
+            Section {
+                InspectorPrimaryActionBlock(
+                    title: "Apply Filters",
+                    subtitle: "Update the summary, graph, and game log after editing filters.",
+                    secondaryTitle: "Refresh Player Data",
+                    secondarySystemImage: "arrow.clockwise",
+                    primaryAction: { store.applyFilters(store.filters) },
+                    secondaryAction: { Task { await store.refresh() } }
+                )
+            }
+
             if let player = store.selectedPlayer {
                 Section("Player") {
                     LabeledContent("Name", value: player.fullName)
@@ -799,15 +810,6 @@ private struct PlayerFilterInspector: View {
                 MultiSelectSection(title: "Venues", options: options.venues, selection: $store.filters.venues)
                 MultiSelectSection(title: "Weather", options: options.weatherCategories, selection: $store.filters.weatherCategories)
                 MultiSelectSection(title: "Home/Away", options: options.homeAwayOptions, selection: $store.filters.homeAway)
-            }
-
-            Section {
-                Button("Apply Filters") {
-                    store.applyFilters(store.filters)
-                }
-                Button("Refresh") {
-                    Task { await store.refresh() }
-                }
             }
 
             Section("Comparison") {

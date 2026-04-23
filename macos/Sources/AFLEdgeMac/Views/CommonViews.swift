@@ -176,3 +176,69 @@ struct TogglePillButton: View {
         .buttonStyle(.plain)
     }
 }
+
+struct InspectorPrimaryActionBlock: View {
+    var title: String
+    var systemImage = "line.3.horizontal.decrease.circle.fill"
+    var subtitle: String?
+    var secondaryTitle: String?
+    var secondarySystemImage: String?
+    var secondaryTint: Color = AFLTheme.primaryStrong
+    var primaryAction: () -> Void
+    var secondaryAction: (() -> Void)?
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            Button(action: primaryAction) {
+                HStack(spacing: 10) {
+                    Image(systemName: systemImage)
+                        .font(.body.weight(.semibold))
+                    Text(title)
+                        .font(.headline.weight(.semibold))
+                    Spacer()
+                }
+                .foregroundStyle(AFLColor.iceWhite)
+                .padding(.horizontal, 12)
+                .padding(.vertical, 11)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .background(
+                    LinearGradient(
+                        colors: [AFLColor.orange600, AFLColor.orange700],
+                        startPoint: .topLeading,
+                        endPoint: .bottomTrailing
+                    ),
+                    in: .rect(cornerRadius: 8)
+                )
+                .overlay(
+                    RoundedRectangle(cornerRadius: 8)
+                        .stroke(AFLColor.orange300.opacity(0.95), lineWidth: 1)
+                )
+                .shadow(color: AFLTheme.accent.opacity(0.18), radius: 5, y: 2)
+            }
+            .buttonStyle(.plain)
+
+            if let subtitle {
+                Text(subtitle)
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
+
+            if let secondaryTitle, let secondaryAction {
+                Button(action: secondaryAction) {
+                    Group {
+                        if let secondarySystemImage {
+                            Label(secondaryTitle, systemImage: secondarySystemImage)
+                        } else {
+                            Text(secondaryTitle)
+                        }
+                    }
+                    .font(.caption.weight(.medium))
+                }
+                .buttonStyle(.bordered)
+                .tint(secondaryTint)
+                .controlSize(.small)
+            }
+        }
+        .padding(.vertical, 4)
+    }
+}
