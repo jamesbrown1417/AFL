@@ -806,10 +806,10 @@ private struct PlayerFilterInspector: View {
             }
 
             if let options = store.filterOptions {
-                MultiSelectSection(title: "Seasons", options: options.seasons, selection: $store.filters.seasons)
-                MultiSelectSection(title: "Oppositions", options: options.oppositions, selection: $store.filters.oppositions)
-                MultiSelectSection(title: "Venues", options: options.venues, selection: $store.filters.venues)
-                MultiSelectSection(title: "Weather", options: options.weatherCategories, selection: $store.filters.weatherCategories)
+                MultiSelectSection(title: "Seasons", options: options.seasons, selection: $store.filters.seasons, collapsedByDefault: true)
+                MultiSelectSection(title: "Oppositions", options: options.oppositions, selection: $store.filters.oppositions, collapsedByDefault: true)
+                MultiSelectSection(title: "Venues", options: options.venues, selection: $store.filters.venues, collapsedByDefault: true)
+                MultiSelectSection(title: "Weather", options: options.weatherCategories, selection: $store.filters.weatherCategories, collapsedByDefault: true)
                 MultiSelectSection(title: "Home/Away", options: options.homeAwayOptions, selection: $store.filters.homeAway)
             }
 
@@ -885,10 +885,10 @@ private struct PlayerScenarioFilterEditor: View {
             }
         }
         if let options {
-            MultiSelectSection(title: "\(title) Seasons", options: options.seasons, selection: $filters.seasons)
-            MultiSelectSection(title: "\(title) Oppositions", options: options.oppositions, selection: $filters.oppositions)
-            MultiSelectSection(title: "\(title) Venues", options: options.venues, selection: $filters.venues)
-            MultiSelectSection(title: "\(title) Weather", options: options.weatherCategories, selection: $filters.weatherCategories)
+            MultiSelectSection(title: "\(title) Seasons", options: options.seasons, selection: $filters.seasons, collapsedByDefault: true)
+            MultiSelectSection(title: "\(title) Oppositions", options: options.oppositions, selection: $filters.oppositions, collapsedByDefault: true)
+            MultiSelectSection(title: "\(title) Venues", options: options.venues, selection: $filters.venues, collapsedByDefault: true)
+            MultiSelectSection(title: "\(title) Weather", options: options.weatherCategories, selection: $filters.weatherCategories, collapsedByDefault: true)
             MultiSelectSection(title: "\(title) Home/Away", options: options.homeAwayOptions, selection: $filters.homeAway)
         }
     }
@@ -898,23 +898,73 @@ struct MultiSelectSection: View {
     var title: String
     var options: [String]
     @Binding var selection: [String]
+    var collapsedByDefault: Bool
+    @State private var isExpanded: Bool
+
+    init(
+        title: String,
+        options: [String],
+        selection: Binding<[String]>,
+        collapsedByDefault: Bool = false
+    ) {
+        self.title = title
+        self.options = options
+        self._selection = selection
+        self.collapsedByDefault = collapsedByDefault
+        self._isExpanded = State(initialValue: !collapsedByDefault)
+    }
+
+    private var selectionSummary: String {
+        if selection.isEmpty {
+            "Any"
+        } else if selection.count == options.count {
+            "All"
+        } else {
+            "\(selection.count) selected"
+        }
+    }
 
     var body: some View {
         if !options.isEmpty {
-            Section(title) {
-                ForEach(options, id: \.self) { option in
-                    Toggle(option, isOn: Binding(
-                        get: { selection.contains(option) },
-                        set: { selected in
-                            if selected, !selection.contains(option) {
-                                selection.append(option)
-                            } else if !selected {
-                                selection.removeAll { $0 == option }
-                            }
+            if collapsedByDefault {
+                Section {
+                    DisclosureGroup(isExpanded: $isExpanded) {
+                        MultiSelectToggleList(options: options, selection: $selection)
+                    } label: {
+                        HStack {
+                            Text(title)
+                            Spacer()
+                            Text(selectionSummary)
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
                         }
-                    ))
+                    }
+                }
+            } else {
+                Section(title) {
+                    MultiSelectToggleList(options: options, selection: $selection)
                 }
             }
+        }
+    }
+}
+
+private struct MultiSelectToggleList: View {
+    var options: [String]
+    @Binding var selection: [String]
+
+    var body: some View {
+        ForEach(options, id: \.self) { option in
+            Toggle(option, isOn: Binding(
+                get: { selection.contains(option) },
+                set: { selected in
+                    if selected, !selection.contains(option) {
+                        selection.append(option)
+                    } else if !selected {
+                        selection.removeAll { $0 == option }
+                    }
+                }
+            ))
         }
     }
 }
