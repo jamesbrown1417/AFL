@@ -57,28 +57,39 @@ struct SettingsView: View {
 
                 Section {
                     HStack {
-                        Button("Save Settings") {
+                        Button {
                             save()
+                        } label: {
+                            Label("Save Settings", systemImage: "checkmark.circle.fill")
                         }
+                        .buttonStyle(AFLPrimaryButtonStyle())
                         .keyboardShortcut(.defaultAction)
                         .disabled(isWorking || !AppSettingsStore.includesAPIPrefix(apiBaseURL))
 
-                        Button("Test Connection") {
+                        Button {
                             Task { await testConnection() }
+                        } label: {
+                            Label("Test Connection", systemImage: "network")
                         }
+                        .buttonStyle(AFLSecondaryButtonStyle())
                         .disabled(isWorking)
                     }
                 }
 
                 if let message {
-                    Text(message)
-                        .foregroundStyle(.secondary)
+                    Section {
+                        Label(message, systemImage: "checkmark.circle.fill")
+                            .foregroundStyle(AFLTheme.success)
+                    }
                 }
                 if let errorMessage {
-                    Text(errorMessage)
-                        .foregroundStyle(.red)
+                    Section {
+                        Label(errorMessage, systemImage: "exclamationmark.triangle.fill")
+                            .foregroundStyle(AFLTheme.danger)
+                    }
                 }
             }
+            .formStyle(.grouped)
             .tabItem {
                 Label("Connection", systemImage: "network")
             }
@@ -105,6 +116,7 @@ struct SettingsView: View {
                     }
                 }
             }
+            .formStyle(.grouped)
             .tabItem {
                 Label("Status", systemImage: "externaldrive.badge.checkmark")
             }

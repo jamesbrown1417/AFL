@@ -144,14 +144,75 @@ struct SectionHeader: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 3) {
             Text(title)
-                .font(.title2.weight(.semibold))
+                .font(.title3.weight(.semibold))
                 .foregroundStyle(AFLTheme.primaryStrong)
             if let subtitle {
                 Text(subtitle)
+                    .font(.callout)
                     .foregroundStyle(.secondary)
             }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
+    }
+}
+
+struct AFLPrimaryButtonStyle: ButtonStyle {
+    @Environment(\.isEnabled) private var isEnabled
+
+    var fullWidth = false
+
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .font(.callout.weight(.semibold))
+            .foregroundStyle(isEnabled ? AFLColor.iceWhite : AFLColor.navy700.opacity(0.62))
+            .padding(.horizontal, 12)
+            .padding(.vertical, 8)
+            .frame(maxWidth: fullWidth ? .infinity : nil, alignment: .center)
+            .background(
+                LinearGradient(
+                    colors: [
+                        isEnabled
+                            ? (configuration.isPressed ? AFLColor.orange700 : AFLColor.orange600)
+                            : AFLColor.blue200.opacity(0.72),
+                        isEnabled ? AFLColor.orange700 : AFLColor.blue100.opacity(0.82),
+                    ],
+                    startPoint: .topLeading,
+                    endPoint: .bottomTrailing
+                ),
+                in: .rect(cornerRadius: 8)
+            )
+            .overlay(
+                RoundedRectangle(cornerRadius: 8)
+                    .stroke(AFLColor.orange300.opacity(0.95), lineWidth: 1)
+            )
+            .shadow(color: AFLTheme.accent.opacity(isEnabled ? (configuration.isPressed ? 0.10 : 0.18) : 0), radius: 5, y: 2)
+            .scaleEffect(isEnabled && configuration.isPressed ? 0.985 : 1)
+    }
+}
+
+struct AFLSecondaryButtonStyle: ButtonStyle {
+    @Environment(\.isEnabled) private var isEnabled
+
+    var fullWidth = false
+
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .font(.callout.weight(.medium))
+            .foregroundStyle(isEnabled ? AFLTheme.primaryStrong : AFLColor.navy700.opacity(0.52))
+            .padding(.horizontal, 11)
+            .padding(.vertical, 7)
+            .frame(maxWidth: fullWidth ? .infinity : nil, alignment: .center)
+            .background(
+                isEnabled
+                    ? (configuration.isPressed ? AFLColor.blue200.opacity(0.9) : AFLColor.blue100.opacity(0.86))
+                    : AFLColor.blue100.opacity(0.38),
+                in: .rect(cornerRadius: 8)
+            )
+            .overlay(
+                RoundedRectangle(cornerRadius: 8)
+                    .stroke(AFLColor.blue200.opacity(isEnabled ? 0.95 : 0.52), lineWidth: 1)
+            )
+            .scaleEffect(isEnabled && configuration.isPressed ? 0.985 : 1)
     }
 }
 
@@ -197,25 +258,9 @@ struct InspectorPrimaryActionBlock: View {
                         .font(.headline.weight(.semibold))
                     Spacer()
                 }
-                .foregroundStyle(AFLColor.iceWhite)
-                .padding(.horizontal, 12)
-                .padding(.vertical, 11)
                 .frame(maxWidth: .infinity, alignment: .leading)
-                .background(
-                    LinearGradient(
-                        colors: [AFLColor.orange600, AFLColor.orange700],
-                        startPoint: .topLeading,
-                        endPoint: .bottomTrailing
-                    ),
-                    in: .rect(cornerRadius: 8)
-                )
-                .overlay(
-                    RoundedRectangle(cornerRadius: 8)
-                        .stroke(AFLColor.orange300.opacity(0.95), lineWidth: 1)
-                )
-                .shadow(color: AFLTheme.accent.opacity(0.18), radius: 5, y: 2)
             }
-            .buttonStyle(.plain)
+            .buttonStyle(AFLPrimaryButtonStyle(fullWidth: true))
 
             if let subtitle {
                 Text(subtitle)

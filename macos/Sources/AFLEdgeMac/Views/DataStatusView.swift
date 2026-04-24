@@ -17,6 +17,7 @@ struct DataStatusView: View {
                     } label: {
                         Label("Refresh", systemImage: "arrow.clockwise")
                     }
+                    .buttonStyle(AFLSecondaryButtonStyle())
                 }
 
                 if store.isLoading {
@@ -51,13 +52,15 @@ private struct HealthPanel: View {
     var response: DataStatusResponse?
 
     var body: some View {
-        Grid(horizontalSpacing: 12, verticalSpacing: 12) {
-            GridRow {
-                MetricTile(title: "Backend", value: health?.status ?? "--", detail: "Health endpoint")
-                MetricTile(title: "Database", value: health?.databaseOk == true ? "Reachable" : "--", detail: nil)
-                MetricTile(title: "Last Import", value: AFLFormatters.dateTimeInAdelaide(health?.lastSuccessfulImportAt), detail: nil)
-                MetricTile(title: "Generated", value: AFLFormatters.dateTimeInAdelaide(response?.generatedAt), detail: nil)
-            }
+        LazyVGrid(
+            columns: [GridItem(.adaptive(minimum: 170), spacing: 12, alignment: .top)],
+            alignment: .leading,
+            spacing: 12
+        ) {
+            MetricTile(title: "Backend", value: health?.status ?? "--", detail: "Health endpoint")
+            MetricTile(title: "Database", value: health?.databaseOk == true ? "Reachable" : "--", detail: nil)
+            MetricTile(title: "Last Import", value: AFLFormatters.dateTimeInAdelaide(health?.lastSuccessfulImportAt), detail: nil)
+            MetricTile(title: "Generated", value: AFLFormatters.dateTimeInAdelaide(response?.generatedAt), detail: nil)
         }
     }
 }

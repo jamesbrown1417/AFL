@@ -51,6 +51,7 @@ struct PlayerLabView: View {
 
                     Spacer()
                 }
+                .aflControlSurface()
 
                 if store.mode == .stats {
                     PlayerStatsWorkspace(store: store)
@@ -110,6 +111,7 @@ private struct PlayerStatsWorkspace: View {
                     .font(.caption)
                     .foregroundStyle(.secondary)
             }
+            .aflControlSurface()
 
             if store.isLoading {
                 LoadingStateView(message: "Loading player history")
@@ -161,11 +163,15 @@ private struct PlayerComparisonWorkspace: View {
                 }
 
                 Spacer()
-                Button("Refresh Scenarios") {
+                Button {
                     Task { await store.refreshComparison() }
+                } label: {
+                    Label("Refresh Scenarios", systemImage: "arrow.clockwise")
                 }
+                .buttonStyle(AFLSecondaryButtonStyle())
                 .disabled(store.scenarioA.isLoading || store.scenarioB.isLoading)
             }
+            .aflControlSurface()
 
             HStack(alignment: .top, spacing: 12) {
                 ComparisonScenarioCard(
@@ -207,13 +213,15 @@ private struct PlayerSummaryStrip: View {
     var history: [PlayerGameLogEntry]
 
     var body: some View {
-        Grid(horizontalSpacing: 12, verticalSpacing: 12) {
-            GridRow {
-                MetricTile(title: "Sample", value: "\(summary?.sampleSize ?? history.count)", detail: summary?.statLabel)
-                MetricTile(title: "Over", value: AFLFormatters.percent(summary?.proportionOver), detail: AFLFormatters.decimalPrice(summary?.impliedOddsOver))
-                MetricTile(title: "Under", value: AFLFormatters.percent(summary?.proportionUnder), detail: AFLFormatters.decimalPrice(summary?.impliedOddsUnder))
-                MetricTile(title: "Interval", value: AFLFormatters.percent(summary?.proportionWithinInterval), detail: "Within range")
-            }
+        LazyVGrid(
+            columns: [GridItem(.adaptive(minimum: 160), spacing: 12, alignment: .top)],
+            alignment: .leading,
+            spacing: 12
+        ) {
+            MetricTile(title: "Sample", value: "\(summary?.sampleSize ?? history.count)", detail: summary?.statLabel)
+            MetricTile(title: "Over", value: AFLFormatters.percent(summary?.proportionOver), detail: AFLFormatters.decimalPrice(summary?.impliedOddsOver))
+            MetricTile(title: "Under", value: AFLFormatters.percent(summary?.proportionUnder), detail: AFLFormatters.decimalPrice(summary?.impliedOddsUnder))
+            MetricTile(title: "Interval", value: AFLFormatters.percent(summary?.proportionWithinInterval), detail: "Within range")
         }
     }
 }
@@ -375,7 +383,7 @@ private struct PlayerFilterBucketRow: View {
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(10)
-        .background(Color.white.opacity(0.6), in: .rect(cornerRadius: 8))
+        .background(AFLColor.iceWhite.opacity(0.74), in: .rect(cornerRadius: 8))
     }
 }
 

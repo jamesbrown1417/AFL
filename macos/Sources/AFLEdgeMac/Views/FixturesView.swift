@@ -10,18 +10,21 @@ struct FixturesView: View {
         HSplitView {
             VStack(alignment: .leading, spacing: 12) {
                 SectionHeader(title: "Fixtures", subtitle: "Browse matches, markets, and selections.")
-                TextField("Search event", text: $store.searchQuery)
-                    .textFieldStyle(.roundedBorder)
-                    .focused($searchFocused)
-                    .onSubmit { Task { await store.refreshEvents() } }
-                Picker("Bookmaker", selection: Binding(
-                    get: { store.selectedBookmaker },
-                    set: { store.selectBookmaker($0) }
-                )) {
-                    ForEach(store.bookmakers) { bookmaker in
-                        Text(bookmaker.displayName).tag(bookmaker.code)
+                VStack(alignment: .leading, spacing: 8) {
+                    TextField("Search event", text: $store.searchQuery)
+                        .textFieldStyle(.roundedBorder)
+                        .focused($searchFocused)
+                        .onSubmit { Task { await store.refreshEvents() } }
+                    Picker("Bookmaker", selection: Binding(
+                        get: { store.selectedBookmaker },
+                        set: { store.selectBookmaker($0) }
+                    )) {
+                        ForEach(store.bookmakers) { bookmaker in
+                            Text(bookmaker.displayName).tag(bookmaker.code)
+                        }
                     }
                 }
+                .aflControlSurface()
                 List(store.events, selection: Binding(
                     get: { store.selectedEventId },
                     set: { id in
@@ -55,8 +58,14 @@ struct FixturesView: View {
                 }
                 HSplitView {
                     VStack(alignment: .leading) {
-                        Text("Markets")
-                            .font(.headline)
+                        HStack {
+                            Text("Markets")
+                                .font(.headline)
+                            Text("(\(store.markets.count))")
+                                .foregroundStyle(.secondary)
+                                .monospacedDigit()
+                            Spacer()
+                        }
                         Table(store.markets, selection: $store.selectedMarketId) {
                             TableColumn("Market") { market in
                                 VStack(alignment: .leading) {
@@ -81,8 +90,14 @@ struct FixturesView: View {
                         }
                     }
                     VStack(alignment: .leading) {
-                        Text("Selections")
-                            .font(.headline)
+                        HStack {
+                            Text("Selections")
+                                .font(.headline)
+                            Text("(\(store.selections.count))")
+                                .foregroundStyle(.secondary)
+                                .monospacedDigit()
+                            Spacer()
+                        }
                         if store.isLoadingSelections {
                             LoadingStateView(message: "Loading selections")
                         }
@@ -100,8 +115,10 @@ struct FixturesView: View {
                                 Text(AFLFormatters.edgePercent(selection.edgePct))
                             }
                             TableColumn("Action") { selection in
-                                Button("Add SGM") {
+                                Button {
                                     addSelectionToSgm(selection)
+                                } label: {
+                                    Label("Add SGM", systemImage: "plus.circle")
                                 }
                                 .buttonStyle(.borderless)
                                 .disabled(!selection.sgmEligible || selection.decimalPrice == nil)

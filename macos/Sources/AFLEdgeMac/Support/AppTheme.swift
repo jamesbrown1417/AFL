@@ -60,6 +60,17 @@ enum AFLTheme {
         AFLColor.iceWhite
     }
 
+    static var controlBackground: some ShapeStyle {
+        LinearGradient(
+            colors: [
+                AFLColor.iceWhite.opacity(0.96),
+                AFLColor.blue50.opacity(0.88),
+            ],
+            startPoint: .topLeading,
+            endPoint: .bottomTrailing
+        )
+    }
+
     static var tableSelectionTint: Color {
         AFLColor.orange700
     }
@@ -90,6 +101,23 @@ extension View {
 
     func aflPaneBackground() -> some View {
         background(AFLTheme.paneBackground)
+    }
+
+    func aflControlSurface() -> some View {
+        padding(10)
+            .background(AFLTheme.controlBackground, in: .rect(cornerRadius: 8))
+            .overlay(
+                RoundedRectangle(cornerRadius: 8)
+                    .stroke(AFLColor.blue200.opacity(0.72), lineWidth: 1)
+            )
+    }
+
+    func aflPanelSurface() -> some View {
+        background(AFLTheme.cardBackground, in: .rect(cornerRadius: 8))
+            .overlay(
+                RoundedRectangle(cornerRadius: 8)
+                    .stroke(AFLColor.blue200.opacity(0.72), lineWidth: 1)
+            )
     }
 
     func aflTableSurface() -> some View {

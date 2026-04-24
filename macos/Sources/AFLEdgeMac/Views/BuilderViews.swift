@@ -203,6 +203,7 @@ private struct SgmControlBar: View {
 
             Spacer()
         }
+        .aflControlSurface()
     }
 }
 
@@ -232,11 +233,12 @@ private struct CgmControlBar: View {
                 Button("Clear match filter") {
                     store.draftStore.clearEventSelection()
                 }
-                .buttonStyle(.link)
+                .buttonStyle(AFLSecondaryButtonStyle())
             }
 
             Spacer()
         }
+        .aflControlSurface()
     }
 }
 
@@ -247,21 +249,27 @@ private struct MarketFilterBar: View {
     @Binding var selected: String
 
     var body: some View {
-        ScrollView(.horizontal, showsIndicators: false) {
-            HStack(spacing: 8) {
-                TogglePillButton(title: "All", isSelected: selected == "__all__") {
-                    selected = "__all__"
-                }
-                ForEach(marketCodes, id: \.self) { code in
-                    TogglePillButton(
-                        title: prettyMarketName(code),
-                        isSelected: selected == code
-                    ) {
-                        selected = code
+        HStack(spacing: 8) {
+            Text("Markets")
+                .font(.caption.weight(.semibold))
+                .foregroundStyle(AFLTheme.primaryStrong)
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack(spacing: 8) {
+                    TogglePillButton(title: "All", isSelected: selected == "__all__") {
+                        selected = "__all__"
+                    }
+                    ForEach(marketCodes, id: \.self) { code in
+                        TogglePillButton(
+                            title: prettyMarketName(code),
+                            isSelected: selected == code
+                        ) {
+                            selected = code
+                        }
                     }
                 }
             }
         }
+        .aflControlSurface()
     }
 
     private func prettyMarketName(_ code: String) -> String {
@@ -542,10 +550,10 @@ private struct CandidateLegCard: View {
                 isSelected
                     ? AnyShapeStyle(AFLColor.orange100.opacity(0.92))
                     : AnyShapeStyle(AFLTheme.cardBackground),
-                in: .rect(cornerRadius: 10)
+                in: .rect(cornerRadius: 8)
             )
             .overlay(
-                RoundedRectangle(cornerRadius: 10)
+                RoundedRectangle(cornerRadius: 8)
                     .stroke(isSelected ? AFLTheme.accent.opacity(0.55) : AFLColor.blue200.opacity(0.72), lineWidth: isSelected ? 1.5 : 1)
             )
         }
@@ -687,8 +695,11 @@ private struct DraftSection: View {
                 }
                 Spacer()
                 if let onClear {
-                    Button("Clear", action: onClear)
-                        .buttonStyle(.link)
+                    Button(role: .destructive, action: onClear) {
+                        Label("Clear", systemImage: "trash")
+                    }
+                    .buttonStyle(.borderless)
+                    .controlSize(.small)
                 }
             }
             if let subtitle, !subtitle.isEmpty {
@@ -726,11 +737,7 @@ private struct DraftSection: View {
             }
         }
         .padding(12)
-        .background(AFLTheme.cardBackground, in: .rect(cornerRadius: 10))
-        .overlay(
-            RoundedRectangle(cornerRadius: 10)
-                .stroke(AFLColor.blue200.opacity(0.72))
-        )
+        .aflPanelSurface()
     }
 }
 
@@ -778,10 +785,8 @@ private struct CompareSection: View {
                         .fontWeight(.semibold)
                 }
                 .frame(maxWidth: .infinity)
-                .padding(.vertical, 4)
             }
-            .buttonStyle(.borderedProminent)
-            .controlSize(.large)
+            .buttonStyle(AFLPrimaryButtonStyle(fullWidth: true))
             .disabled(!isEnabled)
             .keyboardShortcut(.return, modifiers: [.command])
 
@@ -800,11 +805,7 @@ private struct CompareSection: View {
         }
         .padding(12)
         .frame(maxHeight: .infinity, alignment: .top)
-        .background(AFLTheme.cardBackground, in: .rect(cornerRadius: 10))
-        .overlay(
-            RoundedRectangle(cornerRadius: 10)
-                .stroke(AFLColor.blue200.opacity(0.72))
-        )
+        .aflPanelSurface()
     }
 }
 
@@ -868,11 +869,7 @@ private struct ComparisonResultsSection: View {
             }
         }
         .padding(12)
-        .background(AFLTheme.cardBackground, in: .rect(cornerRadius: 10))
-        .overlay(
-            RoundedRectangle(cornerRadius: 10)
-                .stroke(AFLColor.blue200.opacity(0.72))
-        )
+        .aflPanelSurface()
     }
 }
 

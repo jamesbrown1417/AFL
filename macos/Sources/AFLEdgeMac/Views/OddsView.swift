@@ -36,14 +36,22 @@ struct OddsView: View {
                     .onSubmit {
                         Task { await store.refresh(resetVisibleCount: true) }
                     }
-                Button("Apply") {
+                Button {
                     Task { await store.refresh(resetVisibleCount: true) }
+                } label: {
+                    Label("Apply", systemImage: "line.3.horizontal.decrease.circle.fill")
                 }
-                Button("Load More") {
+                .buttonStyle(AFLPrimaryButtonStyle())
+
+                Button {
                     Task { await store.loadMore() }
+                } label: {
+                    Label("Load More", systemImage: "plus")
                 }
+                .buttonStyle(AFLSecondaryButtonStyle())
                 .disabled(!store.hasMore || store.isLoading)
             }
+            .aflControlSurface()
 
             activeFilterRow
 
@@ -90,52 +98,58 @@ struct OddsView: View {
     }
 
     private var activeFilterRow: some View {
-        ScrollView(.horizontal, showsIndicators: false) {
-            HStack(spacing: 6) {
-                Pill("\(store.rows.count) rows")
-                Pill(store.filters.scope.label)
-                Pill("Sort: \(sortLabel(store.filters))")
-                if store.filters.bestOnly {
-                    Pill("Best only", systemImage: "star.fill")
-                }
-                if store.filters.sgmOnly {
-                    Pill("SGM-ready")
-                }
-                ForEach(store.filters.bookmakerCodes, id: \.self) { code in
-                    Pill(code)
-                }
-                if let event = store.events.first(where: { $0.id == store.filters.eventId }) {
-                    Pill(AFLFormatters.shortAFLMatchLabel(event.matchName))
-                }
-                if let market = store.filters.marketTypeCode {
-                    Pill(market.replacingOccurrences(of: "_", with: " "))
-                }
-                if let side = store.filters.selectionType {
-                    Pill(side.capitalized)
-                }
-                if !store.filters.includePlayerIds.isEmpty {
-                    Pill("Include \(store.filters.includePlayerIds.count)")
-                }
-                if !store.filters.excludePlayerIds.isEmpty {
-                    Pill("Exclude \(store.filters.excludePlayerIds.count)")
-                }
-                if !store.filters.minPriceText.isEmpty || !store.filters.maxPriceText.isEmpty {
-                    Pill("Odds \(store.filters.minPriceText.ifBlank("-"))-\(store.filters.maxPriceText.ifBlank("-"))")
-                }
-                if !store.filters.minEdgeText.isEmpty {
-                    Pill("Edge \(store.filters.minEdgeText)+")
-                }
-                if !isDefaultDiffRange(store.filters.minDiffLast10, store.filters.maxDiffLast10) {
-                    Pill("L10 \(AFLFormatters.signedMetric(store.filters.minDiffLast10)) to \(AFLFormatters.signedMetric(store.filters.maxDiffLast10))")
-                }
-                if !isDefaultDiffRange(store.filters.minDiff2025, store.filters.maxDiff2025) {
-                    Pill("2025 \(AFLFormatters.signedMetric(store.filters.minDiff2025)) to \(AFLFormatters.signedMetric(store.filters.maxDiff2025))")
-                }
-                if !isDefaultDiffRange(store.filters.minNextBestProbDiff, store.filters.maxNextBestProbDiff) {
-                    Pill("NB \(AFLFormatters.signedMetric(store.filters.minNextBestProbDiff)) to \(AFLFormatters.signedMetric(store.filters.maxNextBestProbDiff))")
+        HStack(spacing: 8) {
+            Text("Active")
+                .font(.caption.weight(.semibold))
+                .foregroundStyle(AFLTheme.primaryStrong)
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack(spacing: 6) {
+                    Pill("\(store.rows.count) rows")
+                    Pill(store.filters.scope.label)
+                    Pill("Sort: \(sortLabel(store.filters))")
+                    if store.filters.bestOnly {
+                        Pill("Best only", systemImage: "star.fill")
+                    }
+                    if store.filters.sgmOnly {
+                        Pill("SGM-ready")
+                    }
+                    ForEach(store.filters.bookmakerCodes, id: \.self) { code in
+                        Pill(code)
+                    }
+                    if let event = store.events.first(where: { $0.id == store.filters.eventId }) {
+                        Pill(AFLFormatters.shortAFLMatchLabel(event.matchName))
+                    }
+                    if let market = store.filters.marketTypeCode {
+                        Pill(market.replacingOccurrences(of: "_", with: " "))
+                    }
+                    if let side = store.filters.selectionType {
+                        Pill(side.capitalized)
+                    }
+                    if !store.filters.includePlayerIds.isEmpty {
+                        Pill("Include \(store.filters.includePlayerIds.count)")
+                    }
+                    if !store.filters.excludePlayerIds.isEmpty {
+                        Pill("Exclude \(store.filters.excludePlayerIds.count)")
+                    }
+                    if !store.filters.minPriceText.isEmpty || !store.filters.maxPriceText.isEmpty {
+                        Pill("Odds \(store.filters.minPriceText.ifBlank("-"))-\(store.filters.maxPriceText.ifBlank("-"))")
+                    }
+                    if !store.filters.minEdgeText.isEmpty {
+                        Pill("Edge \(store.filters.minEdgeText)+")
+                    }
+                    if !isDefaultDiffRange(store.filters.minDiffLast10, store.filters.maxDiffLast10) {
+                        Pill("L10 \(AFLFormatters.signedMetric(store.filters.minDiffLast10)) to \(AFLFormatters.signedMetric(store.filters.maxDiffLast10))")
+                    }
+                    if !isDefaultDiffRange(store.filters.minDiff2025, store.filters.maxDiff2025) {
+                        Pill("2025 \(AFLFormatters.signedMetric(store.filters.minDiff2025)) to \(AFLFormatters.signedMetric(store.filters.maxDiff2025))")
+                    }
+                    if !isDefaultDiffRange(store.filters.minNextBestProbDiff, store.filters.maxNextBestProbDiff) {
+                        Pill("NB \(AFLFormatters.signedMetric(store.filters.minNextBestProbDiff)) to \(AFLFormatters.signedMetric(store.filters.maxNextBestProbDiff))")
+                    }
                 }
             }
         }
+        .aflControlSurface()
     }
 }
 

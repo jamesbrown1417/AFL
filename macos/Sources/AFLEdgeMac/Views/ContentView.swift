@@ -49,15 +49,6 @@ struct ContentView: View {
             .navigationSplitViewColumnWidth(min: 220, ideal: 250, max: 290)
         } detail: {
             detailView
-                .toolbar {
-                    ToolbarItemGroup {
-                        Button {
-                            showInspector.toggle()
-                        } label: {
-                            Label("Inspector", systemImage: "sidebar.right")
-                        }
-                    }
-                }
         }
         .focusedSceneValue(\.toggleInspectorAction, { showInspector.toggle() })
     }
