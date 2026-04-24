@@ -5,6 +5,10 @@ struct PlayerLabView: View {
     @Binding var showInspector: Bool
     @FocusState private var searchFocused: Bool
 
+    private var searchListHeight: CGFloat {
+        CGFloat(min(max(store.searchResults.count * 34 + 14, 112), 360))
+    }
+
     var body: some View {
         HSplitView {
             VStack(alignment: .leading, spacing: 12) {
@@ -19,18 +23,37 @@ struct PlayerLabView: View {
                         store.updateSearchQuery(newValue)
                     }
 
-                List(store.searchResults, selection: Binding(
-                    get: { store.selectedPlayer?.id },
-                    set: { id in
-                        if let id, let player = store.allPlayers.first(where: { $0.id == id }) {
-                            store.selectPlayer(player)
-                        }
+                VStack(alignment: .leading, spacing: 8) {
+                    HStack {
+                        Text("Results")
+                            .font(.caption.weight(.semibold))
+                            .foregroundStyle(AFLTheme.primaryStrong)
+                        Spacer()
+                        Text("\(store.searchResults.count)")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                            .monospacedDigit()
                     }
-                )) { player in
-                    Text(player.fullName)
-                        .tag(player.id)
+
+                    List(store.searchResults, selection: Binding(
+                        get: { store.selectedPlayer?.id },
+                        set: { id in
+                            if let id, let player = store.allPlayers.first(where: { $0.id == id }) {
+                                store.selectPlayer(player)
+                            }
+                        }
+                    )) { player in
+                        Text(player.fullName)
+                            .lineLimit(1)
+                            .tag(player.id)
+                    }
+                    .listStyle(.inset)
+                    .scrollContentBackground(.hidden)
+                    .frame(height: searchListHeight)
                 }
-                .listStyle(.sidebar)
+                .aflPanelSurface()
+
+                Spacer(minLength: 0)
             }
             .frame(minWidth: 230, idealWidth: 280, maxWidth: 340)
             .padding()
@@ -285,8 +308,23 @@ private struct PlayerFilterSummaryCard: View {
     var filters: PlayerStatsFilters
     var options: PlayerStatFilterOptions?
 
+    private var rows: [(String, String, Color, Color)] {
+        [
+            ("Metric", resolvedStatLabel(filters: filters, options: options), AFLColor.orange50, AFLColor.orange300),
+            ("Line", lineLabel(filters), AFLColor.orange50, AFLColor.orange300),
+            ("Seasons", summarizeFilterValues(filters.seasons, allValues: options?.seasons) ?? "Any", AFLColor.orange50, AFLColor.orange300),
+            ("Last Games", filters.lastGamesText.trimmedNonEmpty.map { "\($0) games" } ?? "All", AFLColor.blue50, AFLColor.blue200),
+            ("TOG", filters.minutesMinimumText == "0" ? "Any" : "\(filters.minutesMinimumText)%+", AFLColor.blue50, AFLColor.blue200),
+            ("Margin", filters.marginMinText == "-200" && filters.marginMaxText == "200" ? "Full range" : "\(filters.marginMinText) to \(filters.marginMaxText)", AFLColor.blue50, AFLColor.blue200),
+            ("Home/Away", summarizeFilterValues(filters.homeAway, allValues: options?.homeAwayOptions) ?? "All", AFLColor.blue25, AFLColor.blue300),
+            ("Opposition", summarizeFilterValues(filters.oppositions, allValues: options?.oppositions) ?? "All", AFLColor.blue25, AFLColor.blue300),
+            ("Venue", summarizeFilterValues(filters.venues, allValues: options?.venues) ?? "All", AFLColor.blue25, AFLColor.blue300),
+            ("Weather", summarizeFilterValues(filters.weatherCategories, allValues: options?.weatherCategories) ?? "All", AFLColor.blue25, AFLColor.blue300),
+        ]
+    }
+
     var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
+        VStack(alignment: .leading, spacing: 10) {
             HStack {
                 VStack(alignment: .leading, spacing: 3) {
                     Text("Current Filters")
@@ -300,41 +338,13 @@ private struct PlayerFilterSummaryCard: View {
             }
 
             LazyVGrid(
-                columns: [GridItem(.adaptive(minimum: 220), spacing: 12, alignment: .top)],
+                columns: [GridItem(.adaptive(minimum: 132), spacing: 8, alignment: .top)],
                 alignment: .leading,
-                spacing: 12
+                spacing: 8
             ) {
-                PlayerFilterBucket(
-                    title: "Market",
-                    tint: AFLColor.orange50,
-                    border: AFLColor.orange300,
-                    rows: [
-                        ("Metric", resolvedStatLabel(filters: filters, options: options)),
-                        ("Line", lineLabel(filters)),
-                        ("Seasons", summarizeFilterValues(filters.seasons, allValues: options?.seasons) ?? "Any"),
-                    ]
-                )
-                PlayerFilterBucket(
-                    title: "Sample",
-                    tint: AFLColor.blue50,
-                    border: AFLColor.blue200,
-                    rows: [
-                        ("Last Games", filters.lastGamesText.trimmedNonEmpty.map { "\($0) games" } ?? "All"),
-                        ("TOG", filters.minutesMinimumText == "0" ? "Any" : "\(filters.minutesMinimumText)%+"),
-                        ("Margin", filters.marginMinText == "-200" && filters.marginMaxText == "200" ? "Full range" : "\(filters.marginMinText) to \(filters.marginMaxText)"),
-                    ]
-                )
-                PlayerFilterBucket(
-                    title: "Context",
-                    tint: AFLColor.blue25,
-                    border: AFLColor.blue300,
-                    rows: [
-                        ("Home/Away", summarizeFilterValues(filters.homeAway, allValues: options?.homeAwayOptions) ?? "All"),
-                        ("Opposition", summarizeFilterValues(filters.oppositions, allValues: options?.oppositions) ?? "All"),
-                        ("Venue", summarizeFilterValues(filters.venues, allValues: options?.venues) ?? "All"),
-                        ("Weather", summarizeFilterValues(filters.weatherCategories, allValues: options?.weatherCategories) ?? "All"),
-                    ]
-                )
+                ForEach(Array(rows.enumerated()), id: \.offset) { _, row in
+                    PlayerFilterSummaryTile(label: row.0, value: row.1, tint: row.2, border: row.3)
+                }
             }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
@@ -342,48 +352,31 @@ private struct PlayerFilterSummaryCard: View {
     }
 }
 
-private struct PlayerFilterBucket: View {
-    var title: String
-    var tint: Color
-    var border: Color
-    var rows: [(String, String)]
-
-    var body: some View {
-        VStack(alignment: .leading, spacing: 10) {
-            Text(title)
-                .font(.subheadline.weight(.semibold))
-                .foregroundStyle(AFLTheme.primaryStrong)
-            ForEach(Array(rows.enumerated()), id: \.offset) { _, row in
-                PlayerFilterBucketRow(label: row.0, value: row.1)
-            }
-        }
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .padding(12)
-        .background(tint.opacity(0.95), in: .rect(cornerRadius: 8))
-        .overlay(
-            RoundedRectangle(cornerRadius: 8)
-                .stroke(border.opacity(0.88), lineWidth: 1)
-        )
-    }
-}
-
-private struct PlayerFilterBucketRow: View {
+private struct PlayerFilterSummaryTile: View {
     var label: String
     var value: String
+    var tint: Color
+    var border: Color
 
     var body: some View {
         VStack(alignment: .leading, spacing: 4) {
             Text(label.uppercased())
                 .font(.caption2.weight(.semibold))
                 .foregroundStyle(AFLColor.navy700)
+                .lineLimit(1)
             Text(value)
-                .font(.callout)
+                .font(.callout.weight(.medium))
                 .foregroundStyle(AFLColor.navy950)
+                .lineLimit(2)
                 .fixedSize(horizontal: false, vertical: true)
         }
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .padding(10)
-        .background(AFLColor.iceWhite.opacity(0.74), in: .rect(cornerRadius: 8))
+        .frame(maxWidth: .infinity, minHeight: 54, alignment: .topLeading)
+        .padding(9)
+        .background(tint.opacity(0.82), in: .rect(cornerRadius: 8))
+        .overlay(
+            RoundedRectangle(cornerRadius: 8)
+                .stroke(border.opacity(0.62), lineWidth: 1)
+        )
     }
 }
 
@@ -395,13 +388,13 @@ private struct PlayerHistoryTextCell: View {
 
     var body: some View {
         Text(text)
-            .font(emphasized ? .body.weight(.semibold) : .body)
+            .font(emphasized ? .callout.weight(.semibold) : .callout)
             .monospacedDigit()
             .foregroundStyle(historyCellForeground(hit: rowHit, emphasized: emphasized))
             .frame(maxWidth: .infinity, alignment: alignment)
-            .padding(.horizontal, 8)
-            .padding(.vertical, 6)
-            .background(historyRowTint(hit: rowHit), in: .rect(cornerRadius: 6))
+            .padding(.horizontal, 6)
+            .padding(.vertical, 3)
+            .background(historyRowTint(hit: rowHit), in: .rect(cornerRadius: 4))
     }
 }
 
@@ -437,9 +430,9 @@ private struct PlayerHistoryHitBadge: View {
             .labelStyle(.titleAndIcon)
             .foregroundStyle(foreground)
             .frame(maxWidth: .infinity, alignment: .center)
-            .padding(.horizontal, 8)
-            .padding(.vertical, 6)
-            .background(background.opacity(0.92), in: .capsule)
+            .padding(.horizontal, 7)
+            .padding(.vertical, 4)
+            .background(background.opacity(0.64), in: .capsule)
     }
 }
 
@@ -464,11 +457,11 @@ private func summarizeFilterValues(
 private func historyRowTint(hit: Bool?) -> Color {
     switch hit {
     case true:
-        AFLColor.positiveSurface.opacity(0.86)
+        AFLColor.positiveSurface.opacity(0.32)
     case false:
-        AFLColor.negativeSurface.opacity(0.86)
+        AFLColor.negativeSurface.opacity(0.28)
     case nil:
-        AFLColor.blue50.opacity(0.3)
+        AFLColor.blue50.opacity(0.18)
     }
 }
 
