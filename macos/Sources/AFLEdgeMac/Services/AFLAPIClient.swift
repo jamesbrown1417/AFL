@@ -162,12 +162,12 @@ final class AFLAPIClient {
                 URLQueryItem.optional("min_edge", filters.minEdgeText),
                 URLQueryItem.optional("min_price", filters.minPriceText),
                 URLQueryItem.optional("max_price", filters.maxPriceText),
-                URLQueryItem(name: "min_diff_2025", value: "\(filters.minDiff2025)"),
-                URLQueryItem(name: "max_diff_2025", value: "\(filters.maxDiff2025)"),
-                URLQueryItem(name: "min_diff_last_10", value: "\(filters.minDiffLast10)"),
-                URLQueryItem(name: "max_diff_last_10", value: "\(filters.maxDiffLast10)"),
-                URLQueryItem(name: "min_next_best_prob_diff", value: "\(filters.minNextBestProbDiff)"),
-                URLQueryItem(name: "max_next_best_prob_diff", value: "\(filters.maxNextBestProbDiff)"),
+                metricRangeItem(name: "min_diff_2025", value: filters.minDiff2025, defaultValue: oddsDiffSliderMin),
+                metricRangeItem(name: "max_diff_2025", value: filters.maxDiff2025, defaultValue: oddsDiffSliderMax),
+                metricRangeItem(name: "min_diff_last_10", value: filters.minDiffLast10, defaultValue: oddsDiffSliderMin),
+                metricRangeItem(name: "max_diff_last_10", value: filters.maxDiffLast10, defaultValue: oddsDiffSliderMax),
+                metricRangeItem(name: "min_next_best_prob_diff", value: filters.minNextBestProbDiff, defaultValue: oddsDiffSliderMin),
+                metricRangeItem(name: "max_next_best_prob_diff", value: filters.maxNextBestProbDiff, defaultValue: oddsDiffSliderMax),
             ].compactMap(\.self))
             if filters.bestOnly {
                 query.append(URLQueryItem(name: "best_only", value: "true"))
@@ -200,7 +200,8 @@ final class AFLAPIClient {
         maxNextBestProbDiff: Double? = nil,
         sgmOnly: Bool = false,
         bestOnly: Bool = false,
-        limit: Int = 200
+        limit: Int = 200,
+        offset: Int = 0
     ) async throws -> [OddsSearchResult] {
         var filters = OddsFilters(scope: scope)
         filters.bookmakerCodes = bookmakers
@@ -222,7 +223,64 @@ final class AFLAPIClient {
         filters.maxNextBestProbDiff = maxNextBestProbDiff ?? oddsDiffSliderMax
         filters.sgmOnly = sgmOnly
         filters.bestOnly = bestOnly
-        return try await odds(filters: filters, limit: limit)
+        return try await odds(filters: filters, limit: limit, offset: offset)
+    }
+
+    func allOdds(
+        bookmakers: [String],
+        scope: OddsScope,
+        marketType: String? = nil,
+        eventId: Int? = nil,
+        includePlayerIds: [Int] = [],
+        excludePlayerIds: [Int] = [],
+        sortBy: String,
+        sortDirection: String,
+        selectionType: String? = nil,
+        matchupDifficulties: [String] = [],
+        minPrice: Double? = nil,
+        maxPrice: Double? = nil,
+        minDiff2025: Double? = nil,
+        maxDiff2025: Double? = nil,
+        minDiffLast10: Double? = nil,
+        maxDiffLast10: Double? = nil,
+        minNextBestProbDiff: Double? = nil,
+        maxNextBestProbDiff: Double? = nil,
+        sgmOnly: Bool = false,
+        bestOnly: Bool = false,
+        pageLimit: Int = 5000
+    ) async throws -> [OddsSearchResult] {
+        var offset = 0
+        var allRows: [OddsSearchResult] = []
+        while true {
+            let page = try await odds(
+                bookmakers: bookmakers,
+                scope: scope,
+                marketType: marketType,
+                eventId: eventId,
+                includePlayerIds: includePlayerIds,
+                excludePlayerIds: excludePlayerIds,
+                sortBy: sortBy,
+                sortDirection: sortDirection,
+                selectionType: selectionType,
+                matchupDifficulties: matchupDifficulties,
+                minPrice: minPrice,
+                maxPrice: maxPrice,
+                minDiff2025: minDiff2025,
+                maxDiff2025: maxDiff2025,
+                minDiffLast10: minDiffLast10,
+                maxDiffLast10: maxDiffLast10,
+                minNextBestProbDiff: minNextBestProbDiff,
+                maxNextBestProbDiff: maxNextBestProbDiff,
+                sgmOnly: sgmOnly,
+                bestOnly: bestOnly,
+                limit: pageLimit,
+                offset: offset
+            )
+            allRows.append(contentsOf: page)
+            guard page.count == pageLimit else { break }
+            offset += pageLimit
+        }
+        return allRows
     }
 
     func props(bookmaker: String, query: String? = nil, limit: Int = 100) async throws -> [PropSearchResult] {
@@ -268,6 +326,10 @@ final class AFLAPIClient {
 
     func quote(_ quoteId: String) async throws -> SgmQuoteResponse {
         try await get("quotes/\(quoteId)")
+    }
+
+    private func metricRangeItem(name: String, value: Double, defaultValue: Double) -> URLQueryItem? {
+        value == defaultValue ? nil : URLQueryItem(name: name, value: "\(value)")
     }
 
     func makeRequest(

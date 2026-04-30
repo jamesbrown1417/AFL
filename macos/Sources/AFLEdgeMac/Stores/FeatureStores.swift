@@ -535,7 +535,7 @@ final class SgmBuilderStore {
         }
         isLoadingOptions = true
         do {
-            let rows = try await api.odds(
+            let rows = try await api.allOdds(
                 bookmakers: [selectedBookmaker],
                 scope: .player,
                 eventId: selectedEventId,
@@ -550,8 +550,7 @@ final class SgmBuilderStore {
                 maxDiffLast10: metricFilters.maxDiffLast10,
                 minNextBestProbDiff: metricFilters.minNextBestProbDiff,
                 maxNextBestProbDiff: metricFilters.maxNextBestProbDiff,
-                bestOnly: bestOnly,
-                limit: 5000
+                bestOnly: bestOnly
             )
             candidateLegs = rows.filter { $0.marketTypeCode.hasPrefix("player_") }
             selectedCandidateId = visibleLegs.first?.id
@@ -723,7 +722,7 @@ final class CgmBuilderStore {
         isLoadingOptions = true
         do {
             async let eventResult = api.events(bookmaker: bookmaker)
-            async let oddsResult = api.odds(
+            async let oddsResult = api.allOdds(
                 bookmakers: [bookmaker],
                 scope: .player,
                 sortBy: "next_best_prob_diff",
@@ -737,8 +736,7 @@ final class CgmBuilderStore {
                 maxDiffLast10: metricFilters.maxDiffLast10,
                 minNextBestProbDiff: metricFilters.minNextBestProbDiff,
                 maxNextBestProbDiff: metricFilters.maxNextBestProbDiff,
-                bestOnly: bestOnly,
-                limit: 5000
+                bestOnly: bestOnly
             )
             events = try await eventResult
             let odds = try await oddsResult

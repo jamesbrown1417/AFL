@@ -105,6 +105,26 @@ enum AFLFormatters {
         return String(format: "%.1fmm", value)
     }
 
+    static func bookmakerDisplayName(_ code: String) -> String {
+        switch code.trimmingCharacters(in: .whitespacesAndNewlines).lowercased() {
+        case "bet365":
+            "Bet365"
+        case "neds":
+            "Neds"
+        case "pointsbet":
+            "Pointsbet"
+        case "sportsbet":
+            "Sportsbet"
+        case "tab":
+            "Tab"
+        default:
+            code
+                .replacingOccurrences(of: "_", with: " ")
+                .replacingOccurrences(of: "-", with: " ")
+                .capitalized
+        }
+    }
+
     static func shortAFLMatchLabel(_ matchName: String) -> String {
         let normalized = matchName.replacingOccurrences(of: " vs ", with: " v ", options: .caseInsensitive)
         let parts = normalized.components(separatedBy: " v ")

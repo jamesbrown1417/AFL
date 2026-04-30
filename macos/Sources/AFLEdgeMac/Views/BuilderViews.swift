@@ -201,6 +201,11 @@ private struct SgmControlBar: View {
             ))
             .toggleStyle(.switch)
 
+            BuilderQuickFiltersMenu { preset in
+                store.metricFilters = store.metricFilters.applying(preset)
+                store.applyMetricFilters(store.metricFilters)
+            }
+
             Spacer()
         }
         .aflControlSurface()
@@ -228,6 +233,11 @@ private struct CgmControlBar: View {
             ))
             .toggleStyle(.switch)
 
+            BuilderQuickFiltersMenu { preset in
+                store.metricFilters = store.metricFilters.applying(preset)
+                store.applyMetricFilters(store.metricFilters)
+            }
+
             if !store.state.selectedEventIds.isEmpty {
                 Pill("\(store.state.selectedEventIds.count) match filter")
                 Button("Clear match filter") {
@@ -239,6 +249,25 @@ private struct CgmControlBar: View {
             Spacer()
         }
         .aflControlSurface()
+    }
+}
+
+private struct BuilderQuickFiltersMenu: View {
+    var onApply: (QuickFilterPreset) -> Void
+
+    var body: some View {
+        Menu {
+            ForEach(QuickFilterPreset.allCases) { preset in
+                Button(preset.label) {
+                    onApply(preset)
+                }
+            }
+        } label: {
+            Label("Quick Filters", systemImage: "bolt.fill")
+        }
+        .menuStyle(.button)
+        .buttonStyle(AFLSecondaryButtonStyle())
+        .help("Apply a preset metric filter")
     }
 }
 
@@ -294,14 +323,26 @@ private struct CandidatePane: View {
     var emptyMessage: String
     var onToggle: (OddsSearchResult) -> Void
 
+    @State private var columnFilters = CandidateColumnFilters()
+
+    private var filteredRows: [OddsSearchResult] {
+        columnFilters.apply(to: rows)
+    }
+
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
             CandidatePaneHeader(
-                rowCount: rows.count,
+                rowCount: filteredRows.count,
+                totalRowCount: rows.count,
+                columnFiltersActive: columnFilters.hasActiveFilters,
                 displayMode: displayMode,
                 sortField: $sortField,
                 sortDescending: $sortDescending
             )
+
+            if !rows.isEmpty || columnFilters.hasActiveFilters {
+                CandidateColumnFilterBar(filters: $columnFilters)
+            }
 
             if let errorMessage {
                 ErrorStateView(message: errorMessage)
@@ -312,15 +353,17 @@ private struct CandidatePane: View {
                     LoadingStateView(message: "Loading candidate legs…")
                 } else if rows.isEmpty {
                     EmptyStateView(title: emptyTitle, message: emptyMessage)
+                } else if filteredRows.isEmpty {
+                    EmptyStateView(title: "No column matches", message: "Clear or adjust the column filters above.")
                 } else if displayMode == .tile {
                     CandidateLegGrid(
-                        rows: rows,
+                        rows: filteredRows,
                         selectedSelectionIds: selectedSelectionIds,
                         onToggle: onToggle
                     )
                 } else {
                     CandidateLegTable(
-                        rows: rows,
+                        rows: filteredRows,
                         selectedId: $selectedId,
                         selectedSelectionIds: selectedSelectionIds,
                         onToggle: onToggle
@@ -334,6 +377,8 @@ private struct CandidatePane: View {
 
 private struct CandidatePaneHeader: View {
     var rowCount: Int
+    var totalRowCount: Int
+    var columnFiltersActive: Bool
     var displayMode: BuilderDisplayMode
     @Binding var sortField: BuilderSortField
     @Binding var sortDescending: Bool
@@ -342,9 +387,12 @@ private struct CandidatePaneHeader: View {
         HStack {
             Text("Candidate Legs")
                 .font(.headline)
-            Text("(\(rowCount))")
+            Text(rowCountText)
                 .foregroundStyle(.secondary)
                 .monospacedDigit()
+            if columnFiltersActive {
+                Pill("Filtered", systemImage: "line.3.horizontal.decrease.circle")
+            }
             Spacer()
             if displayMode == .tile {
                 Picker("Sort", selection: $sortField) {
@@ -361,11 +409,158 @@ private struct CandidatePaneHeader: View {
                 .help(sortDescending ? "Sort descending" : "Sort ascending")
                 .buttonStyle(.bordered)
             } else {
-                Text("Click a column header to sort · Double-click a row to add")
+                Text("Type above to filter · Click a column header to sort · Double-click a row to add")
                     .font(.caption)
                     .foregroundStyle(.secondary)
             }
         }
+    }
+
+    private var rowCountText: String {
+        rowCount == totalRowCount ? "(\(rowCount))" : "(\(rowCount) of \(totalRowCount))"
+    }
+}
+
+private struct CandidateColumnFilterBar: View {
+    @Binding var filters: CandidateColumnFilters
+
+    var body: some View {
+        HStack(alignment: .center, spacing: 10) {
+            Label("Column filters", systemImage: "line.3.horizontal.decrease.circle")
+                .font(.caption.weight(.semibold))
+                .foregroundStyle(AFLTheme.primaryStrong)
+
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack(alignment: .bottom, spacing: 8) {
+                    CandidateColumnFilterField(title: "Player", text: $filters.player, width: 150)
+                    CandidateColumnFilterField(title: "Match", text: $filters.match, width: 140)
+                    CandidateColumnFilterField(title: "Market", text: $filters.market, width: 130)
+                    CandidateColumnFilterField(title: "Line", text: $filters.line, width: 70)
+                    CandidateColumnFilterField(title: "Side", text: $filters.side, width: 78)
+                    CandidateColumnFilterField(title: "Price", text: $filters.price, width: 76)
+                    CandidateColumnFilterField(title: "NB", text: $filters.nextBest, width: 74)
+                    CandidateColumnFilterField(title: "L10", text: $filters.diffLast10, width: 74)
+                    CandidateColumnFilterField(title: "2025", text: $filters.diff2025, width: 74)
+                    CandidateColumnFilterField(title: "Tags", text: $filters.tags, width: 110)
+                }
+                .padding(.vertical, 1)
+            }
+
+            Button("Clear") {
+                filters.clear()
+            }
+            .buttonStyle(AFLSecondaryButtonStyle())
+            .disabled(!filters.hasActiveFilters)
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .aflControlSurface()
+    }
+}
+
+private struct CandidateColumnFilterField: View {
+    var title: String
+    @Binding var text: String
+    var width: CGFloat
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 3) {
+            Text(title.uppercased())
+                .font(.caption2.weight(.semibold))
+                .foregroundStyle(.secondary)
+            TextField(title, text: $text)
+                .textFieldStyle(.roundedBorder)
+                .labelsHidden()
+                .frame(width: width)
+        }
+    }
+}
+
+private struct CandidateColumnFilters: Equatable {
+    var player = ""
+    var match = ""
+    var market = ""
+    var line = ""
+    var side = ""
+    var price = ""
+    var nextBest = ""
+    var diffLast10 = ""
+    var diff2025 = ""
+    var tags = ""
+
+    var hasActiveFilters: Bool {
+        [
+            player,
+            match,
+            market,
+            line,
+            side,
+            price,
+            nextBest,
+            diffLast10,
+            diff2025,
+            tags,
+        ].contains { !$0.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty }
+    }
+
+    mutating func clear() {
+        player = ""
+        match = ""
+        market = ""
+        line = ""
+        side = ""
+        price = ""
+        nextBest = ""
+        diffLast10 = ""
+        diff2025 = ""
+        tags = ""
+    }
+
+    func apply(to rows: [OddsSearchResult]) -> [OddsSearchResult] {
+        rows.filter(matches)
+    }
+
+    private func matches(_ row: OddsSearchResult) -> Bool {
+        matches(player, in: row.player?.fullName, row.label)
+            && matches(match, in: row.matchName, row.matchName.replacingOccurrences(of: " vs ", with: " v ", options: .caseInsensitive))
+            && matches(market, in: row.marketDisplayName, row.marketTypeCode, row.marketTypeCode.replacingOccurrences(of: "_", with: " "))
+            && matches(line, in: decimalTexts(row.lineValue, places: 1))
+            && matches(side, in: row.selectionType, row.selectionType.capitalized)
+            && matches(price, in: decimalTexts(row.decimalPrice, places: 2))
+            && matches(nextBest, in: signedDecimalTexts(row.nextBestProbDiff))
+            && matches(diffLast10, in: signedDecimalTexts(row.diffLast10))
+            && matches(diff2025, in: signedDecimalTexts(row.diff2025))
+            && matches(tags, in: tagTexts(row))
+    }
+
+    private func matches(_ filter: String, in values: [String?]) -> Bool {
+        let needle = filter.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !needle.isEmpty else { return true }
+        return values
+            .compactMap { $0 }
+            .contains { $0.localizedCaseInsensitiveContains(needle) }
+    }
+
+    private func matches(_ filter: String, in values: String?...) -> Bool {
+        matches(filter, in: values)
+    }
+
+    private func decimalTexts(_ value: Double?, places: Int) -> [String?] {
+        guard let value else { return ["--"] }
+        return [String(format: "%.\(places)f", value), "\(value)"]
+    }
+
+    private func signedDecimalTexts(_ value: Double?) -> [String?] {
+        guard let value else { return ["--"] }
+        return [String(format: "%+.2f", value), String(format: "%.2f", value), "\(value)"]
+    }
+
+    private func tagTexts(_ row: OddsSearchResult) -> [String?] {
+        [
+            row.isBestPrice ? "Best" : nil,
+            row.sgmEligible ? "SGM" : nil,
+            row.matchupDifficulty,
+            row.playerPosition,
+        ]
     }
 }
 
@@ -857,7 +1052,7 @@ private struct ComparisonResultsSection: View {
                     VStack(spacing: 6) {
                         ForEach(sorted) { result in
                             ComparisonRow(
-                                title: result.bookmaker,
+                                title: AFLFormatters.bookmakerDisplayName(result.bookmaker),
                                 price: result.quotedPrice,
                                 detail: result.detail,
                                 isBest: result.quotedPrice == bestPrice
@@ -977,9 +1172,7 @@ private struct SgmFiltersInspector: View {
                     set: { store.draftStore.setForceRefresh($0) }
                 ))
             }
-            MetricFiltersForm(filters: $store.metricFilters) {
-                store.applyMetricFilters(store.metricFilters)
-            }
+            MetricFiltersForm(filters: $store.metricFilters)
         }
         .formStyle(.grouped)
     }
@@ -1001,27 +1194,8 @@ private struct CgmFiltersInspector: View {
                 )
             }
 
-            Section("Match Filter") {
-                if store.availableEvents.isEmpty {
-                    Text("No matches available.")
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-                } else {
-                    Button("Clear Match Filter") {
-                        store.draftStore.clearEventSelection()
-                    }
-                    .disabled(store.state.selectedEventIds.isEmpty)
-                    ForEach(store.availableEvents) { event in
-                        Toggle(AFLFormatters.shortAFLMatchLabel(event.matchName), isOn: Binding(
-                            get: { store.state.selectedEventIds.contains(event.id) },
-                            set: { _ in store.draftStore.toggleEventSelection(event.id) }
-                        ))
-                    }
-                }
-            }
-            MetricFiltersForm(filters: $store.metricFilters) {
-                store.applyMetricFilters(store.metricFilters)
-            }
+            CgmMatchFilterSection(store: store)
+            MetricFiltersForm(filters: $store.metricFilters)
         }
         .formStyle(.grouped)
     }
@@ -1029,22 +1203,126 @@ private struct CgmFiltersInspector: View {
 
 private struct MetricFiltersForm: View {
     @Binding var filters: SelectionMetricFilters
-    var onApply: () -> Void
 
     var body: some View {
-        MultiSelectSection(title: "Matchup", options: matchupDifficultyOptions, selection: $filters.matchupDifficulties)
-        Section("Price") {
+        MultiSelectSection(
+            title: "Matchup",
+            options: matchupDifficultyOptions,
+            selection: $filters.matchupDifficulties,
+            collapsedByDefault: true
+        )
+        CollapsibleFormSection(title: "Price", summary: priceSummary) {
             TextField("Min price", text: $filters.minPriceText)
             TextField("Max price", text: $filters.maxPriceText)
         }
-        MetricRangeSection(title: "Diff L10", min: $filters.minDiffLast10, max: $filters.maxDiffLast10)
-        MetricRangeSection(title: "Diff 2025", min: $filters.minDiff2025, max: $filters.maxDiff2025)
-        MetricRangeSection(title: "Next best diff", min: $filters.minNextBestProbDiff, max: $filters.maxNextBestProbDiff)
-        Section("Quick Filters") {
-            ForEach(QuickFilterPreset.allCases) { preset in
-                Button(preset.label) {
-                    filters = filters.applying(preset)
-                    onApply()
+        CollapsibleMetricRangeSection(title: "Diff L10", min: $filters.minDiffLast10, max: $filters.maxDiffLast10)
+        CollapsibleMetricRangeSection(title: "Diff 2025", min: $filters.minDiff2025, max: $filters.maxDiff2025)
+        CollapsibleMetricRangeSection(title: "Next best diff", min: $filters.minNextBestProbDiff, max: $filters.maxNextBestProbDiff)
+    }
+
+    private var priceSummary: String {
+        let minPrice = filters.minPriceText.trimmedNonEmpty
+        let maxPrice = filters.maxPriceText.trimmedNonEmpty
+        return switch (minPrice, maxPrice) {
+        case (nil, nil):
+            "Any"
+        case (let min?, nil):
+            "Min \(min)"
+        case (nil, let max?):
+            "Max \(max)"
+        case (let min?, let max?):
+            "\(min) to \(max)"
+        }
+    }
+}
+
+private struct CgmMatchFilterSection: View {
+    @Bindable var store: CgmBuilderStore
+
+    private var summary: String {
+        if store.state.selectedEventIds.isEmpty {
+            "All matches"
+        } else {
+            "\(store.state.selectedEventIds.count) selected"
+        }
+    }
+
+    var body: some View {
+        CollapsibleFormSection(title: "Match Filter", summary: summary) {
+            if store.availableEvents.isEmpty {
+                Text("No matches available.")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            } else {
+                Button("Clear Match Filter") {
+                    store.draftStore.clearEventSelection()
+                }
+                .disabled(store.state.selectedEventIds.isEmpty)
+                ForEach(store.availableEvents) { event in
+                    Toggle(AFLFormatters.shortAFLMatchLabel(event.matchName), isOn: Binding(
+                        get: { store.state.selectedEventIds.contains(event.id) },
+                        set: { _ in store.draftStore.toggleEventSelection(event.id) }
+                    ))
+                }
+            }
+        }
+    }
+}
+
+private struct CollapsibleMetricRangeSection: View {
+    var title: String
+    @Binding var min: Double
+    @Binding var max: Double
+
+    private var summary: String {
+        if min == oddsDiffSliderMin, max == oddsDiffSliderMax {
+            "Any"
+        } else {
+            "\(AFLFormatters.signedMetric(min)) to \(AFLFormatters.signedMetric(max))"
+        }
+    }
+
+    var body: some View {
+        CollapsibleFormSection(title: title, summary: summary) {
+            LabeledContent("Min", value: AFLFormatters.signedMetric(min))
+            Slider(value: $min, in: oddsDiffSliderMin...max, step: 0.05)
+            LabeledContent("Max", value: AFLFormatters.signedMetric(max))
+            Slider(value: $max, in: min...oddsDiffSliderMax, step: 0.05)
+        }
+    }
+}
+
+private struct CollapsibleFormSection<Content: View>: View {
+    var title: String
+    var summary: String?
+    @State private var isExpanded: Bool
+    private let content: Content
+
+    init(
+        title: String,
+        summary: String? = nil,
+        collapsedByDefault: Bool = true,
+        @ViewBuilder content: () -> Content
+    ) {
+        self.title = title
+        self.summary = summary
+        self._isExpanded = State(initialValue: !collapsedByDefault)
+        self.content = content()
+    }
+
+    var body: some View {
+        Section {
+            DisclosureGroup(isExpanded: $isExpanded) {
+                content
+            } label: {
+                HStack {
+                    Text(title)
+                    Spacer()
+                    if let summary {
+                        Text(summary)
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
                 }
             }
         }

@@ -76,6 +76,45 @@ final class AFLAPIClientTests: XCTestCase {
         }
     }
 
+    func testOddsRequestDoesNotSendDefaultMetricRangeFilters() async throws {
+        let payload = "[]"
+        let transport = RequestCapturingTransport(data: Data(payload.utf8), statusCode: 200)
+        let client = AFLAPIClient(
+            settingsProvider: { AppSettings() },
+            transport: transport
+        )
+
+        _ = try await client.odds(filters: OddsFilters(scope: .player), limit: 25)
+
+        let capturedQueryItems = await transport.lastQueryItems()
+        let queryItems = try XCTUnwrap(capturedQueryItems)
+        let names = Set(queryItems.map(\.name))
+        XCTAssertFalse(names.contains("min_diff_2025"))
+        XCTAssertFalse(names.contains("max_diff_2025"))
+        XCTAssertFalse(names.contains("min_diff_last_10"))
+        XCTAssertFalse(names.contains("max_diff_last_10"))
+        XCTAssertFalse(names.contains("min_next_best_prob_diff"))
+        XCTAssertFalse(names.contains("max_next_best_prob_diff"))
+    }
+
+    func testOddsRequestSendsChangedMetricRangeFilters() async throws {
+        let payload = "[]"
+        let transport = RequestCapturingTransport(data: Data(payload.utf8), statusCode: 200)
+        let client = AFLAPIClient(
+            settingsProvider: { AppSettings() },
+            transport: transport
+        )
+        var filters = OddsFilters(scope: .player)
+        filters.minDiffLast10 = 0.2
+
+        _ = try await client.odds(filters: filters, limit: 25)
+
+        let capturedQueryItems = await transport.lastQueryItems()
+        let queryItems = try XCTUnwrap(capturedQueryItems)
+        XCTAssertEqual(queryItems.first(where: { $0.name == "min_diff_last_10" })?.value, "0.2")
+        XCTAssertNil(queryItems.first(where: { $0.name == "max_diff_last_10" }))
+    }
+
     func testOddsResultDecodesSnakeCaseContract() throws {
         let payload = """
         {
@@ -158,6 +197,35 @@ private struct MockTransport: APITransport {
     let statusCode: Int
 
     func data(for request: URLRequest) async throws -> (Data, URLResponse) {
+        let response = HTTPURLResponse(
+            url: request.url ?? URL(string: "http://localhost")!,
+            statusCode: statusCode,
+            httpVersion: "HTTP/1.1",
+            headerFields: ["Content-Type": "application/json"]
+        )!
+        return (data, response)
+    }
+}
+
+private actor RequestCapturingTransport: APITransport {
+    let data: Data
+    let statusCode: Int
+    private var requests: [URLRequest] = []
+
+    init(data: Data, statusCode: Int) {
+        self.data = data
+        self.statusCode = statusCode
+    }
+
+    func lastQueryItems() -> [URLQueryItem]? {
+        guard let url = requests.last?.url,
+              let components = URLComponents(url: url, resolvingAgainstBaseURL: false)
+        else { return nil }
+        return components.queryItems
+    }
+
+    func data(for request: URLRequest) async throws -> (Data, URLResponse) {
+        requests.append(request)
         let response = HTTPURLResponse(
             url: request.url ?? URL(string: "http://localhost")!,
             statusCode: statusCode,
