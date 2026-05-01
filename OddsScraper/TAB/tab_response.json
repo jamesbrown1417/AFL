@@ -73,9 +73,9 @@
         "Wst Bulldogs",
         "Fremantle"
       ],
-      "openMarketCount": 240,
+      "openMarketCount": 238,
       "futureMarketCount": 0,
-      "nonFutureMarketCount": 240,
+      "nonFutureMarketCount": 238,
       "markets": [
         {
           "id": "132594765",
@@ -108,7 +108,7 @@
             {
               "id": "1016",
               "name": "Wst Bulldogs",
-              "returnWin": 2.8,
+              "returnWin": 2.75,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -122,7 +122,7 @@
             {
               "id": "1006",
               "name": "Fremantle",
-              "returnWin": 1.44,
+              "returnWin": 1.45,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -890,6 +890,18 @@
               "sortOrder": 5
             },
             {
+              "id": "33103",
+              "name": "Arthur Jones (WB)",
+              "returnWin": 23,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 33103,
+              "isOpen": true,
+              "sortOrder": 15
+            },
+            {
               "id": "33098",
               "name": "Michael Frederick (FRE)",
               "returnWin": 26,
@@ -902,30 +914,6 @@
               "sortOrder": 10
             },
             {
-              "id": "33103",
-              "name": "Arthur Jones (WB)",
-              "returnWin": 26,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 33103,
-              "isOpen": true,
-              "sortOrder": 15
-            },
-            {
-              "id": "33101",
-              "name": "Josh Dolan (WB)",
-              "returnWin": 34,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 33101,
-              "isOpen": true,
-              "sortOrder": 13
-            },
-            {
               "id": "33097",
               "name": "Mason Cox (FRE)",
               "returnWin": 34,
@@ -936,6 +924,18 @@
               "number": 33097,
               "isOpen": true,
               "sortOrder": 9
+            },
+            {
+              "id": "33101",
+              "name": "Josh Dolan (WB)",
+              "returnWin": 41,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 33101,
+              "isOpen": true,
+              "sortOrder": 13
             },
             {
               "id": "33102",
@@ -952,7 +952,7 @@
             {
               "id": "33104",
               "name": "Lachlan McNeil (WB)",
-              "returnWin": 51,
+              "returnWin": 41,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -1006,7 +1006,7 @@
             {
               "id": "28792",
               "name": "Fremantle 2+ Goals Every Qtr",
-              "returnWin": 1.4,
+              "returnWin": 1.45,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -1018,7 +1018,7 @@
             {
               "id": "28793",
               "name": "W Bulldgs 3+ Goals Every Qtr",
-              "returnWin": 7,
+              "returnWin": 6.5,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -1126,7 +1126,7 @@
             {
               "id": "28802",
               "name": "W Bulldgs 1st Goal Every Qtr",
-              "returnWin": 21,
+              "returnWin": 19,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -1138,7 +1138,7 @@
             {
               "id": "28803",
               "name": "Fremantle 1st Goal Every Qtr",
-              "returnWin": 8,
+              "returnWin": 9,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -1246,13 +1246,13 @@
           ]
         },
         {
-          "id": "132594715",
-          "name": "AFL WBdg-Frem Line +16.5",
-          "shortName": "AFL WBd-Fre Line +16.5",
+          "id": "132620883",
+          "name": "AFL WBdg-Frem Line +15.5",
+          "shortName": "AFL WBd-Fre Line +15.5",
           "betOption": "Line",
           "betOptionSpectrumId": "43",
           "betOptionPriority": 1440,
-          "marketUniqueId": 132594715,
+          "marketUniqueId": 132620883,
           "closeTime": "2026-05-01T09:30:00.000Z",
           "bettingStatus": "Open",
           "message": null,
@@ -1274,32 +1274,36 @@
           "allowBundle": false,
           "propositions": [
             {
-              "id": "5803",
-              "name": "Wst Bulldogs +16.5",
+              "id": "13234",
+              "name": "Wst Bulldogs +15.5",
               "returnWin": 1.9,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
               "allowPlace": false,
-              "number": 5803,
+              "number": 13234,
               "isOpen": true,
               "sortOrder": 1,
-              "line": "+16.5"
+              "line": "+15.5",
+              "sameGame": true
             },
             {
-              "id": "5804",
-              "name": "Fremantle -16.5",
+              "id": "13235",
+              "name": "Fremantle -15.5",
               "returnWin": 1.9,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
               "allowPlace": false,
-              "number": 5804,
+              "number": 13235,
               "isOpen": true,
               "sortOrder": 2,
-              "line": "-16.5"
+              "line": "-15.5",
+              "sameGame": true
             }
-          ]
+          ],
+          "sameGame": true,
+          "sameGameMultipleSelections": false
         },
         {
           "id": "132594781",
@@ -1345,7 +1349,7 @@
             {
               "id": "5806",
               "name": "Wst Bulldogs by 1-39",
-              "returnWin": 3.5,
+              "returnWin": 3.4,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -1384,7 +1388,7 @@
             {
               "id": "5809",
               "name": "Fremantle by 40+",
-              "returnWin": 3.5,
+              "returnWin": 3.6,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -1429,7 +1433,7 @@
             {
               "id": "5653",
               "name": "Wst Bulldogs by 16+",
-              "returnWin": 5,
+              "returnWin": 4.8,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -1455,7 +1459,7 @@
             {
               "id": "5655",
               "name": "Fremantle by 16+",
-              "returnWin": 1.85,
+              "returnWin": 1.9,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -1513,7 +1517,7 @@
             {
               "id": "5640",
               "name": "Wst Bulldogs by 1-24",
-              "returnWin": 4.5,
+              "returnWin": 4.2,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -1552,7 +1556,7 @@
             {
               "id": "5643",
               "name": "Fremantle by 25+",
-              "returnWin": 2.25,
+              "returnWin": 2.3,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -1567,13 +1571,13 @@
           "sameGameMultipleSelections": false
         },
         {
-          "id": "132629040",
+          "id": "132801067",
           "name": "AFL WBd-Fre LnOUDb",
           "shortName": "AFL WBd-Fre LnOUDb",
           "betOption": "Line/Over Under Double",
           "betOptionSpectrumId": "212",
           "betOptionPriority": 2815,
-          "marketUniqueId": 132629040,
+          "marketUniqueId": 132801067,
           "closeTime": "2026-05-01T09:30:00.000Z",
           "bettingStatus": "Open",
           "message": null,
@@ -1595,53 +1599,53 @@
           "allowBundle": false,
           "propositions": [
             {
-              "id": "18709",
-              "name": "WBdg +16.5 /Over 184.5",
+              "id": "29787",
+              "name": "WBdg +14.5 /Over 184.5",
               "returnWin": 3.8,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
               "allowPlace": false,
-              "number": 18709,
+              "number": 29787,
               "isOpen": true,
               "sortOrder": 1,
               "sameGame": true
             },
             {
-              "id": "18710",
-              "name": "WBdg +16.5 /Under 184.5",
+              "id": "29788",
+              "name": "WBdg +14.5 /Under 184.5",
               "returnWin": 3.4,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
               "allowPlace": false,
-              "number": 18710,
+              "number": 29788,
               "isOpen": true,
               "sortOrder": 2,
               "sameGame": true
             },
             {
-              "id": "18711",
-              "name": "Frem -16.5 /Over 184.5",
-              "returnWin": 3.4,
+              "id": "29789",
+              "name": "Frem -14.5 /Over 184.5",
+              "returnWin": 3.3,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
               "allowPlace": false,
-              "number": 18711,
+              "number": 29789,
               "isOpen": true,
               "sortOrder": 3,
               "sameGame": true
             },
             {
-              "id": "18712",
-              "name": "Frem -16.5 /Under 184.5",
+              "id": "29790",
+              "name": "Frem -14.5 /Under 184.5",
               "returnWin": 3.8,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
               "allowPlace": false,
-              "number": 18712,
+              "number": 29790,
               "isOpen": true,
               "sortOrder": 4,
               "sameGame": true
@@ -1694,7 +1698,7 @@
             {
               "id": "15230",
               "name": "Wst Bulldogs /Under 184.5",
-              "returnWin": 5,
+              "returnWin": 4.8,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -1707,7 +1711,7 @@
             {
               "id": "15231",
               "name": "Fremantle /Over 184.5",
-              "returnWin": 2.6,
+              "returnWin": 2.7,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -1720,7 +1724,7 @@
             {
               "id": "15232",
               "name": "Fremantle /Under 184.5",
-              "returnWin": 2.7,
+              "returnWin": 2.8,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -1735,13 +1739,13 @@
           "sameGameMultipleSelections": false
         },
         {
-          "id": "132782825",
+          "id": "132782828",
           "name": "AFL R8 Wst Bulldogs-Fremantle 01/05",
           "shortName": "AFL R8 WBdg-Frem LnTt$2",
           "betOption": "Line/Total Double $2",
           "betOptionSpectrumId": "2657",
           "betOptionPriority": 3215,
-          "marketUniqueId": 132782825,
+          "marketUniqueId": 132782828,
           "closeTime": "2026-05-01T09:30:00.000Z",
           "bettingStatus": "Open",
           "message": null,
@@ -1763,63 +1767,63 @@
           "allowBundle": false,
           "propositions": [
             {
-              "id": "28759",
-              "name": "W Bulldgs +28.5/ Over 176.5",
+              "id": "28763",
+              "name": "W Bulldgs +25.5/ Over 175.5",
               "returnWin": 2,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
               "allowPlace": false,
-              "number": 28759,
+              "number": 28763,
               "isOpen": true,
               "sortOrder": 1
             },
             {
-              "id": "28760",
-              "name": "W Bulldgs +28.5/ Under 194.5",
+              "id": "28764",
+              "name": "W Bulldgs +25.5/ Under 193.5",
               "returnWin": 2,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
               "allowPlace": false,
-              "number": 28760,
+              "number": 28764,
               "isOpen": true,
               "sortOrder": 2
             },
             {
-              "id": "28761",
-              "name": "Fremantle -10.5/ Over 176.5",
+              "id": "28765",
+              "name": "Fremantle -7.5/ Over 175.5",
               "returnWin": 2,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
               "allowPlace": false,
-              "number": 28761,
+              "number": 28765,
               "isOpen": true,
               "sortOrder": 3
             },
             {
-              "id": "28762",
-              "name": "Fremantle -10.5/ Under 194.5",
+              "id": "28766",
+              "name": "Fremantle -7.5/ Under 193.5",
               "returnWin": 2,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
               "allowPlace": false,
-              "number": 28762,
+              "number": 28766,
               "isOpen": true,
               "sortOrder": 4
             }
           ]
         },
         {
-          "id": "132782831",
+          "id": "132782833",
           "name": "AFL R8 Wst Bulldogs-Fremantle 01/05",
           "shortName": "AFL R8 WBdg-Frem LnTt$7",
           "betOption": "Line/Total Double $7",
           "betOptionSpectrumId": "2658",
           "betOptionPriority": 3220,
-          "marketUniqueId": 132782831,
+          "marketUniqueId": 132782833,
           "closeTime": "2026-05-01T09:30:00.000Z",
           "bettingStatus": "Open",
           "message": null,
@@ -1841,50 +1845,50 @@
           "allowBundle": false,
           "propositions": [
             {
-              "id": "28767",
-              "name": "W Bulldgs +4.5/ Over 200.5",
+              "id": "28771",
+              "name": "W Bulldgs +1.5/ Over 199.5",
               "returnWin": 7,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
               "allowPlace": false,
-              "number": 28767,
+              "number": 28771,
               "isOpen": true,
               "sortOrder": 1
             },
             {
-              "id": "28768",
-              "name": "W Bulldgs +4.5/ Under 170.5",
+              "id": "28772",
+              "name": "W Bulldgs +1.5/ Under 169.5",
               "returnWin": 7,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
               "allowPlace": false,
-              "number": 28768,
+              "number": 28772,
               "isOpen": true,
               "sortOrder": 2
             },
             {
-              "id": "28769",
-              "name": "Fremantle -34.5/ Over 200.5",
+              "id": "28773",
+              "name": "Fremantle -31.5/ Over 199.5",
               "returnWin": 7,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
               "allowPlace": false,
-              "number": 28769,
+              "number": 28773,
               "isOpen": true,
               "sortOrder": 3
             },
             {
-              "id": "28770",
-              "name": "Fremantle -34.5/ Under 170.5",
+              "id": "28774",
+              "name": "Fremantle -31.5/ Under 169.5",
               "returnWin": 7,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
               "allowPlace": false,
-              "number": 28770,
+              "number": 28774,
               "isOpen": true,
               "sortOrder": 4
             }
@@ -1979,7 +1983,7 @@
             {
               "id": "5693",
               "name": "Wst Bulldogs -20.5",
-              "returnWin": 6,
+              "returnWin": 5.7,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -1992,7 +1996,7 @@
             {
               "id": "5694",
               "name": "Fremantle +20.5",
-              "returnWin": 1.11,
+              "returnWin": 1.12,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -2005,7 +2009,7 @@
             {
               "id": "5695",
               "name": "Wst Bulldogs -16.5",
-              "returnWin": 5.2,
+              "returnWin": 5,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -2018,7 +2022,7 @@
             {
               "id": "5696",
               "name": "Fremantle +16.5",
-              "returnWin": 1.14,
+              "returnWin": 1.15,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -2031,7 +2035,7 @@
             {
               "id": "5697",
               "name": "Wst Bulldogs -12.5",
-              "returnWin": 4.5,
+              "returnWin": 4.2,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -2044,7 +2048,7 @@
             {
               "id": "5698",
               "name": "Fremantle +12.5",
-              "returnWin": 1.18,
+              "returnWin": 1.2,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -2057,7 +2061,7 @@
             {
               "id": "5699",
               "name": "Wst Bulldogs -8.5",
-              "returnWin": 3.8,
+              "returnWin": 3.7,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -2070,7 +2074,7 @@
             {
               "id": "5700",
               "name": "Fremantle +8.5",
-              "returnWin": 1.24,
+              "returnWin": 1.25,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -2083,7 +2087,7 @@
             {
               "id": "5701",
               "name": "Wst Bulldogs -4.5",
-              "returnWin": 3.3,
+              "returnWin": 3.2,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -2096,7 +2100,7 @@
             {
               "id": "5702",
               "name": "Fremantle +4.5",
-              "returnWin": 1.3,
+              "returnWin": 1.32,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -2109,7 +2113,7 @@
             {
               "id": "5703",
               "name": "Wst Bulldogs +4.5",
-              "returnWin": 2.5,
+              "returnWin": 2.45,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -2122,7 +2126,7 @@
             {
               "id": "5704",
               "name": "Fremantle -4.5",
-              "returnWin": 1.5,
+              "returnWin": 1.52,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -2135,7 +2139,7 @@
             {
               "id": "5705",
               "name": "Wst Bulldogs +8.5",
-              "returnWin": 2.25,
+              "returnWin": 2.2,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -2148,7 +2152,7 @@
             {
               "id": "5706",
               "name": "Fremantle -8.5",
-              "returnWin": 1.6,
+              "returnWin": 1.62,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -2161,7 +2165,7 @@
             {
               "id": "5707",
               "name": "Wst Bulldogs +12.5",
-              "returnWin": 2.05,
+              "returnWin": 2,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -2174,7 +2178,7 @@
             {
               "id": "5708",
               "name": "Fremantle -12.5",
-              "returnWin": 1.72,
+              "returnWin": 1.75,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -2187,7 +2191,7 @@
             {
               "id": "5709",
               "name": "Wst Bulldogs +16.5",
-              "returnWin": 1.9,
+              "returnWin": 1.85,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -2213,7 +2217,7 @@
             {
               "id": "5711",
               "name": "Wst Bulldogs +20.5",
-              "returnWin": 1.72,
+              "returnWin": 1.68,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -2226,7 +2230,7 @@
             {
               "id": "5712",
               "name": "Fremantle -20.5",
-              "returnWin": 2.05,
+              "returnWin": 2.1,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -2239,7 +2243,7 @@
             {
               "id": "5713",
               "name": "Wst Bulldogs +24.5",
-              "returnWin": 1.6,
+              "returnWin": 1.58,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -2252,7 +2256,7 @@
             {
               "id": "5714",
               "name": "Fremantle -24.5",
-              "returnWin": 2.25,
+              "returnWin": 2.3,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -2265,7 +2269,7 @@
             {
               "id": "5715",
               "name": "Wst Bulldogs +28.5",
-              "returnWin": 1.5,
+              "returnWin": 1.46,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -2278,7 +2282,7 @@
             {
               "id": "5716",
               "name": "Fremantle -28.5",
-              "returnWin": 2.5,
+              "returnWin": 2.6,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -2291,7 +2295,7 @@
             {
               "id": "5717",
               "name": "Wst Bulldogs +32.5",
-              "returnWin": 1.4,
+              "returnWin": 1.38,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -2304,7 +2308,7 @@
             {
               "id": "5718",
               "name": "Fremantle -32.5",
-              "returnWin": 2.8,
+              "returnWin": 2.9,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -2317,7 +2321,7 @@
             {
               "id": "5719",
               "name": "Wst Bulldogs +36.5",
-              "returnWin": 1.32,
+              "returnWin": 1.3,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -2330,7 +2334,7 @@
             {
               "id": "5720",
               "name": "Fremantle -36.5",
-              "returnWin": 3.2,
+              "returnWin": 3.3,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -2343,7 +2347,7 @@
             {
               "id": "5721",
               "name": "Wst Bulldogs +40.5",
-              "returnWin": 1.26,
+              "returnWin": 1.24,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -2356,7 +2360,7 @@
             {
               "id": "5722",
               "name": "Fremantle -40.5",
-              "returnWin": 3.6,
+              "returnWin": 3.8,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -2395,7 +2399,7 @@
             {
               "id": "5725",
               "name": "Wst Bulldogs +48.5",
-              "returnWin": 1.16,
+              "returnWin": 1.15,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -2408,7 +2412,7 @@
             {
               "id": "5726",
               "name": "Fremantle -48.5",
-              "returnWin": 4.8,
+              "returnWin": 5,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -2421,7 +2425,7 @@
             {
               "id": "5727",
               "name": "Wst Bulldogs +52.5",
-              "returnWin": 1.12,
+              "returnWin": 1.11,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -2434,7 +2438,7 @@
             {
               "id": "5728",
               "name": "Fremantle -52.5",
-              "returnWin": 5.7,
+              "returnWin": 6,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -3031,7 +3035,7 @@
             {
               "id": "5923",
               "name": "Wst Bulldogs/Wst Bulldogs",
-              "returnWin": 3.8,
+              "returnWin": 3.6,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -3055,7 +3059,7 @@
             {
               "id": "5925",
               "name": "Fremantle/Fremantle",
-              "returnWin": 1.68,
+              "returnWin": 1.72,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -3187,7 +3191,7 @@
             {
               "id": "15263",
               "name": "WBdg +3.5 /Under 45.5",
-              "returnWin": 3.3,
+              "returnWin": 3.4,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -3199,7 +3203,7 @@
             {
               "id": "15265",
               "name": "Frem -3.5 /Over 45.5",
-              "returnWin": 3.2,
+              "returnWin": 3.3,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -3211,168 +3215,12 @@
             {
               "id": "15267",
               "name": "Frem -3.5 /Under 45.5",
-              "returnWin": 3.8,
+              "returnWin": 3.6,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
               "allowPlace": false,
               "number": 15267,
-              "isOpen": true,
-              "sortOrder": 4
-            }
-          ]
-        },
-        {
-          "id": "132782835",
-          "name": "AFL R8 Wst Bulldogs-Fremantle 01/05",
-          "shortName": "AFL R8 WBdg-Frem 1Qtr$2",
-          "betOption": "1st Quarter Line/Total Double $2",
-          "betOptionSpectrumId": "3033",
-          "betOptionPriority": 3565,
-          "marketUniqueId": 132782835,
-          "closeTime": "2026-05-01T09:30:00.000Z",
-          "bettingStatus": "Open",
-          "message": null,
-          "informationMessage": null,
-          "isFuture": false,
-          "onlineBetting": true,
-          "phoneBettingOnly": false,
-          "inPlay": false,
-          "goingInPlay": false,
-          "allowWin": true,
-          "allowPlace": false,
-          "allowEachWay": false,
-          "allowMulti": true,
-          "allowMultiWin": true,
-          "allowMultiPlace": false,
-          "allowMultiEachWay": false,
-          "numberOfPlaces": 0,
-          "cashOutEligibility": "PreMatch",
-          "allowBundle": false,
-          "propositions": [
-            {
-              "id": "28775",
-              "name": "W Bulldgs +8.5/ Over 39.5",
-              "returnWin": 2,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 28775,
-              "isOpen": true,
-              "sortOrder": 1
-            },
-            {
-              "id": "28776",
-              "name": "W Bulldgs +8.5/ Under 49.5",
-              "returnWin": 2,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 28776,
-              "isOpen": true,
-              "sortOrder": 2
-            },
-            {
-              "id": "28777",
-              "name": "Fremantle +0.5/ Over 39.5",
-              "returnWin": 2,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 28777,
-              "isOpen": true,
-              "sortOrder": 3
-            },
-            {
-              "id": "28778",
-              "name": "Fremantle +0.5/ Under 49.5",
-              "returnWin": 2,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 28778,
-              "isOpen": true,
-              "sortOrder": 4
-            }
-          ]
-        },
-        {
-          "id": "132782837",
-          "name": "AFL R8 Wst Bulldogs-Fremantle 01/05",
-          "shortName": "AFL R8 WBdg-Frem 1Qtr$7",
-          "betOption": "1st Quarter Line/Total Double $7",
-          "betOptionSpectrumId": "3034",
-          "betOptionPriority": 3570,
-          "marketUniqueId": 132782837,
-          "closeTime": "2026-05-01T09:30:00.000Z",
-          "bettingStatus": "Open",
-          "message": null,
-          "informationMessage": null,
-          "isFuture": false,
-          "onlineBetting": true,
-          "phoneBettingOnly": false,
-          "inPlay": false,
-          "goingInPlay": false,
-          "allowWin": true,
-          "allowPlace": false,
-          "allowEachWay": false,
-          "allowMulti": true,
-          "allowMultiWin": true,
-          "allowMultiPlace": false,
-          "allowMultiEachWay": false,
-          "numberOfPlaces": 0,
-          "cashOutEligibility": "PreMatch",
-          "allowBundle": false,
-          "propositions": [
-            {
-              "id": "28783",
-              "name": "W Bulldgs -3.5/ Over 53.5",
-              "returnWin": 7,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 28783,
-              "isOpen": true,
-              "sortOrder": 1
-            },
-            {
-              "id": "28784",
-              "name": "W Bulldgs -3.5/ Under 38.5",
-              "returnWin": 7,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 28784,
-              "isOpen": true,
-              "sortOrder": 2
-            },
-            {
-              "id": "28785",
-              "name": "Fremantle -12.5/ Over 53.5",
-              "returnWin": 7,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 28785,
-              "isOpen": true,
-              "sortOrder": 3
-            },
-            {
-              "id": "28786",
-              "name": "Fremantle -12.5/ Under 38.5",
-              "returnWin": 7,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 28786,
               "isOpen": true,
               "sortOrder": 4
             }
@@ -3479,21 +3327,9 @@
               "sortOrder": 85
             },
             {
-              "id": "31452",
-              "name": "Jye Amiss/Bailey Dale",
-              "returnWin": 26,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 31452,
-              "isOpen": true,
-              "sortOrder": 115
-            },
-            {
               "id": "31358",
               "name": "Josh Treacy/Jordan Clark",
-              "returnWin": 26,
+              "returnWin": 23,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -3515,6 +3351,18 @@
               "sortOrder": 13
             },
             {
+              "id": "31452",
+              "name": "Jye Amiss/Bailey Dale",
+              "returnWin": 28,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 31452,
+              "isOpen": true,
+              "sortOrder": 115
+            },
+            {
               "id": "31458",
               "name": "Jye Amiss/Ed Richards",
               "returnWin": 28,
@@ -3529,7 +3377,7 @@
             {
               "id": "31446",
               "name": "Jye Amiss/Jordan Clark",
-              "returnWin": 28,
+              "returnWin": 31,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -3549,18 +3397,6 @@
               "number": 31561,
               "isOpen": true,
               "sortOrder": 173
-            },
-            {
-              "id": "31215",
-              "name": "A Naughton/M Bontempelli",
-              "returnWin": 34,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 31215,
-              "isOpen": true,
-              "sortOrder": 8
             },
             {
               "id": "31377",
@@ -3633,6 +3469,18 @@
               "number": 31383,
               "isOpen": true,
               "sortOrder": 91
+            },
+            {
+              "id": "31215",
+              "name": "A Naughton/M Bontempelli",
+              "returnWin": 41,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 31215,
+              "isOpen": true,
+              "sortOrder": 8
             },
             {
               "id": "31479",
@@ -3839,18 +3687,6 @@
               "sortOrder": 45
             },
             {
-              "id": "31485",
-              "name": "Jye Amiss/Hayden Young",
-              "returnWin": 67,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 31485,
-              "isOpen": true,
-              "sortOrder": 126
-            },
-            {
               "id": "31224",
               "name": "A Naughton/And Brayshaw",
               "returnWin": 67,
@@ -3873,6 +3709,30 @@
               "number": 31321,
               "isOpen": true,
               "sortOrder": 61
+            },
+            {
+              "id": "31217",
+              "name": "A Naughton/M Kennedy",
+              "returnWin": 67,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 31217,
+              "isOpen": true,
+              "sortOrder": 9
+            },
+            {
+              "id": "31220",
+              "name": "A Naughton/Ryley Sanders",
+              "returnWin": 67,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 31220,
+              "isOpen": true,
+              "sortOrder": 10
             },
             {
               "id": "31560",
@@ -3983,6 +3843,30 @@
               "sortOrder": 77
             },
             {
+              "id": "31280",
+              "name": "M Bontempelli/M Bontempelli",
+              "returnWin": 81,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 31280,
+              "isOpen": true,
+              "sortOrder": 40
+            },
+            {
+              "id": "31485",
+              "name": "Jye Amiss/Hayden Young",
+              "returnWin": 81,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 31485,
+              "isOpen": true,
+              "sortOrder": 126
+            },
+            {
               "id": "31558",
               "name": "Patrick Voss/Ryley Sanders",
               "returnWin": 81,
@@ -4007,28 +3891,28 @@
               "sortOrder": 56
             },
             {
-              "id": "31217",
-              "name": "A Naughton/M Kennedy",
+              "id": "31230",
+              "name": "A Naughton/Murphy Reid",
               "returnWin": 81,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
               "allowPlace": false,
-              "number": 31217,
+              "number": 31230,
               "isOpen": true,
-              "sortOrder": 9
+              "sortOrder": 15
             },
             {
-              "id": "31220",
-              "name": "A Naughton/Ryley Sanders",
+              "id": "31404",
+              "name": "Isaiah Dudley/Bailey Dale",
               "returnWin": 81,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
               "allowPlace": false,
-              "number": 31220,
+              "number": 31404,
               "isOpen": true,
-              "sortOrder": 10
+              "sortOrder": 99
             },
             {
               "id": "31573",
@@ -4175,18 +4059,6 @@
               "sortOrder": 152
             },
             {
-              "id": "31404",
-              "name": "Isaiah Dudley/Bailey Dale",
-              "returnWin": 101,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 31404,
-              "isOpen": true,
-              "sortOrder": 99
-            },
-            {
               "id": "31663",
               "name": "Arthur Jones/M Bontempelli",
               "returnWin": 101,
@@ -4209,18 +4081,6 @@
               "number": 31623,
               "isOpen": true,
               "sortOrder": 205
-            },
-            {
-              "id": "31280",
-              "name": "M Bontempelli/M Bontempelli",
-              "returnWin": 101,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 31280,
-              "isOpen": true,
-              "sortOrder": 40
             },
             {
               "id": "31306",
@@ -4283,18 +4143,6 @@
               "sortOrder": 176
             },
             {
-              "id": "31327",
-              "name": "Will Lewis/Jordan Clark",
-              "returnWin": 101,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 31327,
-              "isOpen": true,
-              "sortOrder": 65
-            },
-            {
               "id": "31331",
               "name": "Will Lewis/Bailey Dale",
               "returnWin": 101,
@@ -4355,18 +4203,6 @@
               "sortOrder": 141
             },
             {
-              "id": "31431",
-              "name": "Isaiah Dudley/And Brayshaw",
-              "returnWin": 101,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 31431,
-              "isOpen": true,
-              "sortOrder": 108
-            },
-            {
               "id": "31559",
               "name": "Patrick Voss/Luke Ryan",
               "returnWin": 101,
@@ -4379,16 +4215,28 @@
               "sortOrder": 171
             },
             {
-              "id": "31230",
-              "name": "A Naughton/Murphy Reid",
+              "id": "31334",
+              "name": "Will Lewis/Ed Richards",
               "returnWin": 101,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
               "allowPlace": false,
-              "number": 31230,
+              "number": 31334,
               "isOpen": true,
-              "sortOrder": 15
+              "sortOrder": 69
+            },
+            {
+              "id": "31658",
+              "name": "Arthur Jones/Bailey Dale",
+              "returnWin": 101,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 31658,
+              "isOpen": true,
+              "sortOrder": 227
             },
             {
               "id": "31461",
@@ -4427,16 +4275,16 @@
               "sortOrder": 192
             },
             {
-              "id": "31250",
-              "name": "Luke Jackson/Ryley Sanders",
+              "id": "31357",
+              "name": "Will Lewis/Shai Bolton",
               "returnWin": 126,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
               "allowPlace": false,
-              "number": 31250,
+              "number": 31357,
               "isOpen": true,
-              "sortOrder": 26
+              "sortOrder": 80
             },
             {
               "id": "31583",
@@ -4547,18 +4395,6 @@
               "sortOrder": 145
             },
             {
-              "id": "31326",
-              "name": "Rhylee West/Shai Bolton",
-              "returnWin": 126,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 31326,
-              "isOpen": true,
-              "sortOrder": 64
-            },
-            {
               "id": "31530",
               "name": "Mic Frederick/Ed Richards",
               "returnWin": 126,
@@ -4581,18 +4417,6 @@
               "number": 31281,
               "isOpen": true,
               "sortOrder": 41
-            },
-            {
-              "id": "31295",
-              "name": "M Bontempelli/Shai Bolton",
-              "returnWin": 126,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 31295,
-              "isOpen": true,
-              "sortOrder": 48
             },
             {
               "id": "31364",
@@ -4629,18 +4453,6 @@
               "number": 31237,
               "isOpen": true,
               "sortOrder": 19
-            },
-            {
-              "id": "31211",
-              "name": "A Naughton/Joel Freijah",
-              "returnWin": 126,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 31211,
-              "isOpen": true,
-              "sortOrder": 6
             },
             {
               "id": "31283",
@@ -4703,18 +4515,6 @@
               "sortOrder": 200
             },
             {
-              "id": "31499",
-              "name": "Mason Cox/Bailey Dale",
-              "returnWin": 126,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 31499,
-              "isOpen": true,
-              "sortOrder": 131
-            },
-            {
               "id": "31317",
               "name": "Rhylee West/Luke Ryan",
               "returnWin": 126,
@@ -4763,16 +4563,16 @@
               "sortOrder": 58
             },
             {
-              "id": "31683",
-              "name": "L McNeil/M Bontempelli",
+              "id": "31327",
+              "name": "Will Lewis/Jordan Clark",
               "returnWin": 126,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
               "allowPlace": false,
-              "number": 31683,
+              "number": 31327,
               "isOpen": true,
-              "sortOrder": 248
+              "sortOrder": 65
             },
             {
               "id": "31428",
@@ -4835,6 +4635,18 @@
               "sortOrder": 188
             },
             {
+              "id": "31431",
+              "name": "Isaiah Dudley/And Brayshaw",
+              "returnWin": 126,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 31431,
+              "isOpen": true,
+              "sortOrder": 108
+            },
+            {
               "id": "31234",
               "name": "Luke Jackson/Jordan Clark",
               "returnWin": 126,
@@ -4845,6 +4657,18 @@
               "number": 31234,
               "isOpen": true,
               "sortOrder": 17
+            },
+            {
+              "id": "31348",
+              "name": "Will Lewis/And Brayshaw",
+              "returnWin": 126,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 31348,
+              "isOpen": true,
+              "sortOrder": 76
             },
             {
               "id": "31440",
@@ -4871,42 +4695,6 @@
               "sortOrder": 225
             },
             {
-              "id": "31334",
-              "name": "Will Lewis/Ed Richards",
-              "returnWin": 126,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 31334,
-              "isOpen": true,
-              "sortOrder": 69
-            },
-            {
-              "id": "31361",
-              "name": "Josh Treacy/Luke Jackson",
-              "returnWin": 126,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 31361,
-              "isOpen": true,
-              "sortOrder": 82
-            },
-            {
-              "id": "31658",
-              "name": "Arthur Jones/Bailey Dale",
-              "returnWin": 126,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 31658,
-              "isOpen": true,
-              "sortOrder": 227
-            },
-            {
               "id": "31292",
               "name": "M Bontempelli/Murphy Reid",
               "returnWin": 151,
@@ -4931,16 +4719,16 @@
               "sortOrder": 75
             },
             {
-              "id": "31357",
-              "name": "Will Lewis/Shai Bolton",
+              "id": "31250",
+              "name": "Luke Jackson/Ryley Sanders",
               "returnWin": 151,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
               "allowPlace": false,
-              "number": 31357,
+              "number": 31250,
               "isOpen": true,
-              "sortOrder": 80
+              "sortOrder": 26
             },
             {
               "id": "31263",
@@ -5039,16 +4827,16 @@
               "sortOrder": 234
             },
             {
-              "id": "31677",
-              "name": "L McNeil/Ed Richards",
+              "id": "31326",
+              "name": "Rhylee West/Shai Bolton",
               "returnWin": 151,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
               "allowPlace": false,
-              "number": 31677,
+              "number": 31326,
               "isOpen": true,
-              "sortOrder": 245
+              "sortOrder": 64
             },
             {
               "id": "31290",
@@ -5063,6 +4851,18 @@
               "sortOrder": 46
             },
             {
+              "id": "31540",
+              "name": "Mic Frederick/Luke Ryan",
+              "returnWin": 151,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 31540,
+              "isOpen": true,
+              "sortOrder": 155
+            },
+            {
               "id": "31260",
               "name": "Luke Jackson/Murphy Reid",
               "returnWin": 151,
@@ -5075,16 +4875,16 @@
               "sortOrder": 31
             },
             {
-              "id": "31632",
-              "name": "L Vandermeer/Jordan Clark",
+              "id": "31295",
+              "name": "M Bontempelli/Shai Bolton",
               "returnWin": 151,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
               "allowPlace": false,
-              "number": 31632,
+              "number": 31295,
               "isOpen": true,
-              "sortOrder": 209
+              "sortOrder": 48
             },
             {
               "id": "31602",
@@ -5109,6 +4909,18 @@
               "number": 31494,
               "isOpen": true,
               "sortOrder": 129
+            },
+            {
+              "id": "31211",
+              "name": "A Naughton/Joel Freijah",
+              "returnWin": 151,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 31211,
+              "isOpen": true,
+              "sortOrder": 6
             },
             {
               "id": "31599",
@@ -5171,6 +4983,18 @@
               "sortOrder": 193
             },
             {
+              "id": "31499",
+              "name": "Mason Cox/Bailey Dale",
+              "returnWin": 151,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 31499,
+              "isOpen": true,
+              "sortOrder": 131
+            },
+            {
               "id": "31554",
               "name": "Patrick Voss/Joel Freijah",
               "returnWin": 151,
@@ -5205,6 +5029,18 @@
               "number": 31638,
               "isOpen": true,
               "sortOrder": 211
+            },
+            {
+              "id": "31683",
+              "name": "L McNeil/M Bontempelli",
+              "returnWin": 151,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 31683,
+              "isOpen": true,
+              "sortOrder": 248
             },
             {
               "id": "31644",
@@ -5327,6 +5163,18 @@
               "sortOrder": 73
             },
             {
+              "id": "31205",
+              "name": "A Naughton/B Williams",
+              "returnWin": 151,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 31205,
+              "isOpen": true,
+              "sortOrder": 4
+            },
+            {
               "id": "31464",
               "name": "Jye Amiss/L Bramble",
               "returnWin": 151,
@@ -5349,18 +5197,6 @@
               "number": 31247,
               "isOpen": true,
               "sortOrder": 25
-            },
-            {
-              "id": "31348",
-              "name": "Will Lewis/And Brayshaw",
-              "returnWin": 151,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 31348,
-              "isOpen": true,
-              "sortOrder": 76
             },
             {
               "id": "31322",
@@ -5387,6 +5223,18 @@
               "sortOrder": 160
             },
             {
+              "id": "31361",
+              "name": "Josh Treacy/Luke Jackson",
+              "returnWin": 151,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 31361,
+              "isOpen": true,
+              "sortOrder": 82
+            },
+            {
               "id": "31541",
               "name": "Mic Frederick/And Brayshaw",
               "returnWin": 151,
@@ -5397,6 +5245,18 @@
               "number": 31541,
               "isOpen": true,
               "sortOrder": 156
+            },
+            {
+              "id": "31353",
+              "name": "Will Lewis/Hayden Young",
+              "returnWin": 151,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 31353,
+              "isOpen": true,
+              "sortOrder": 78
             },
             {
               "id": "31258",
@@ -5423,18 +5283,6 @@
               "sortOrder": 159
             },
             {
-              "id": "31353",
-              "name": "Will Lewis/Hayden Young",
-              "returnWin": 201,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 31353,
-              "isOpen": true,
-              "sortOrder": 78
-            },
-            {
               "id": "31670",
               "name": "Arthur Jones/Murphy Reid",
               "returnWin": 201,
@@ -5447,16 +5295,28 @@
               "sortOrder": 239
             },
             {
-              "id": "31540",
-              "name": "Mic Frederick/Luke Ryan",
+              "id": "31677",
+              "name": "L McNeil/Ed Richards",
               "returnWin": 201,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
               "allowPlace": false,
-              "number": 31540,
+              "number": 31677,
               "isOpen": true,
-              "sortOrder": 155
+              "sortOrder": 245
+            },
+            {
+              "id": "31632",
+              "name": "L Vandermeer/Jordan Clark",
+              "returnWin": 201,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 31632,
+              "isOpen": true,
+              "sortOrder": 209
             },
             {
               "id": "31628",
@@ -5481,6 +5341,18 @@
               "number": 31510,
               "isOpen": true,
               "sortOrder": 137
+            },
+            {
+              "id": "31547",
+              "name": "Patrick Voss/Luke Jackson",
+              "returnWin": 201,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 31547,
+              "isOpen": true,
+              "sortOrder": 162
             },
             {
               "id": "31551",
@@ -5579,6 +5451,42 @@
               "sortOrder": 2
             },
             {
+              "id": "31576",
+              "name": "Shai Bolton/Joel Freijah",
+              "returnWin": 201,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 31576,
+              "isOpen": true,
+              "sortOrder": 182
+            },
+            {
+              "id": "31669",
+              "name": "Arthur Jones/Hayden Young",
+              "returnWin": 201,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 31669,
+              "isOpen": true,
+              "sortOrder": 238
+            },
+            {
+              "id": "31213",
+              "name": "A Naughton/L Bramble",
+              "returnWin": 201,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 31213,
+              "isOpen": true,
+              "sortOrder": 7
+            },
+            {
               "id": "31612",
               "name": "Josh Dolan/M Kennedy",
               "returnWin": 201,
@@ -5603,16 +5511,16 @@
               "sortOrder": 220
             },
             {
-              "id": "31205",
-              "name": "A Naughton/B Williams",
+              "id": "31692",
+              "name": "L McNeil/Murphy Reid",
               "returnWin": 201,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
               "allowPlace": false,
-              "number": 31205,
+              "number": 31692,
               "isOpen": true,
-              "sortOrder": 4
+              "sortOrder": 255
             },
             {
               "id": "31543",
@@ -5663,6 +5571,30 @@
               "sortOrder": 144
             },
             {
+              "id": "31689",
+              "name": "L McNeil/And Brayshaw",
+              "returnWin": 201,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 31689,
+              "isOpen": true,
+              "sortOrder": 252
+            },
+            {
+              "id": "31626",
+              "name": "Josh Dolan/Hayden Young",
+              "returnWin": 251,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 31626,
+              "isOpen": true,
+              "sortOrder": 206
+            },
+            {
               "id": "31687",
               "name": "L McNeil/Ryley Sanders",
               "returnWin": 251,
@@ -5711,18 +5643,6 @@
               "sortOrder": 249
             },
             {
-              "id": "31547",
-              "name": "Patrick Voss/Luke Jackson",
-              "returnWin": 251,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 31547,
-              "isOpen": true,
-              "sortOrder": 162
-            },
-            {
               "id": "31652",
               "name": "L Vandermeer/Hayden Young",
               "returnWin": 251,
@@ -5747,30 +5667,6 @@
               "sortOrder": 219
             },
             {
-              "id": "31576",
-              "name": "Shai Bolton/Joel Freijah",
-              "returnWin": 251,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 31576,
-              "isOpen": true,
-              "sortOrder": 182
-            },
-            {
-              "id": "31669",
-              "name": "Arthur Jones/Hayden Young",
-              "returnWin": 251,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 31669,
-              "isOpen": true,
-              "sortOrder": 238
-            },
-            {
               "id": "31654",
               "name": "L Vandermeer/Murphy Reid",
               "returnWin": 251,
@@ -5793,18 +5689,6 @@
               "number": 31276,
               "isOpen": true,
               "sortOrder": 38
-            },
-            {
-              "id": "31213",
-              "name": "A Naughton/L Bramble",
-              "returnWin": 251,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 31213,
-              "isOpen": true,
-              "sortOrder": 7
             },
             {
               "id": "31413",
@@ -5843,18 +5727,6 @@
               "sortOrder": 217
             },
             {
-              "id": "31692",
-              "name": "L McNeil/Murphy Reid",
-              "returnWin": 251,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 31692,
-              "isOpen": true,
-              "sortOrder": 255
-            },
-            {
               "id": "31688",
               "name": "L McNeil/Luke Ryan",
               "returnWin": 251,
@@ -5865,18 +5737,6 @@
               "number": 31688,
               "isOpen": true,
               "sortOrder": 251
-            },
-            {
-              "id": "31689",
-              "name": "L McNeil/And Brayshaw",
-              "returnWin": 251,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 31689,
-              "isOpen": true,
-              "sortOrder": 252
             },
             {
               "id": "31693",
@@ -5927,28 +5787,16 @@
               "sortOrder": 224
             },
             {
-              "id": "31626",
-              "name": "Josh Dolan/Hayden Young",
-              "returnWin": 301,
+              "id": "31691",
+              "name": "L McNeil/Hayden Young",
+              "returnWin": 251,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
               "allowPlace": false,
-              "number": 31626,
+              "number": 31691,
               "isOpen": true,
-              "sortOrder": 206
-            },
-            {
-              "id": "31273",
-              "name": "M Bontempelli/B Williams",
-              "returnWin": 301,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 31273,
-              "isOpen": true,
-              "sortOrder": 36
+              "sortOrder": 254
             },
             {
               "id": "31407",
@@ -5961,18 +5809,6 @@
               "number": 31407,
               "isOpen": true,
               "sortOrder": 100
-            },
-            {
-              "id": "31571",
-              "name": "Shai Bolton/B Williams",
-              "returnWin": 301,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 31571,
-              "isOpen": true,
-              "sortOrder": 180
             },
             {
               "id": "31336",
@@ -5999,16 +5835,40 @@
               "sortOrder": 150
             },
             {
-              "id": "31242",
-              "name": "Luke Jackson/Joel Freijah",
+              "id": "31304",
+              "name": "Rhylee West/B Williams",
               "returnWin": 301,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
               "allowPlace": false,
-              "number": 31242,
+              "number": 31304,
               "isOpen": true,
-              "sortOrder": 22
+              "sortOrder": 52
+            },
+            {
+              "id": "31571",
+              "name": "Shai Bolton/B Williams",
+              "returnWin": 351,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 31571,
+              "isOpen": true,
+              "sortOrder": 180
+            },
+            {
+              "id": "31661",
+              "name": "Arthur Jones/Joel Freijah",
+              "returnWin": 351,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 31661,
+              "isOpen": true,
+              "sortOrder": 230
             },
             {
               "id": "31401",
@@ -6021,18 +5881,6 @@
               "number": 31401,
               "isOpen": true,
               "sortOrder": 98
-            },
-            {
-              "id": "31659",
-              "name": "Arthur Jones/B Williams",
-              "returnWin": 351,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 31659,
-              "isOpen": true,
-              "sortOrder": 228
             },
             {
               "id": "31566",
@@ -6059,76 +5907,52 @@
               "sortOrder": 50
             },
             {
-              "id": "31416",
-              "name": "Isaiah Dudley/L Bramble",
+              "id": "31242",
+              "name": "Luke Jackson/Joel Freijah",
               "returnWin": 351,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
               "allowPlace": false,
-              "number": 31416,
+              "number": 31242,
               "isOpen": true,
-              "sortOrder": 103
+              "sortOrder": 22
             },
             {
-              "id": "31691",
-              "name": "L McNeil/Hayden Young",
-              "returnWin": 351,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 31691,
-              "isOpen": true,
-              "sortOrder": 254
-            },
-            {
-              "id": "31310",
-              "name": "Rhylee West/L Bramble",
+              "id": "31273",
+              "name": "M Bontempelli/B Williams",
               "returnWin": 401,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
               "allowPlace": false,
-              "number": 31310,
+              "number": 31273,
               "isOpen": true,
-              "sortOrder": 55
+              "sortOrder": 36
             },
             {
-              "id": "31662",
-              "name": "Arthur Jones/L Bramble",
+              "id": "31239",
+              "name": "Luke Jackson/B Williams",
               "returnWin": 401,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
               "allowPlace": false,
-              "number": 31662,
+              "number": 31239,
               "isOpen": true,
-              "sortOrder": 231
+              "sortOrder": 20
             },
             {
-              "id": "31661",
-              "name": "Arthur Jones/Joel Freijah",
+              "id": "31659",
+              "name": "Arthur Jones/B Williams",
               "returnWin": 401,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
               "allowPlace": false,
-              "number": 31661,
+              "number": 31659,
               "isOpen": true,
-              "sortOrder": 230
-            },
-            {
-              "id": "31525",
-              "name": "Mic Frederick/Luke Jackson",
-              "returnWin": 401,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 31525,
-              "isOpen": true,
-              "sortOrder": 146
+              "sortOrder": 228
             },
             {
               "id": "31579",
@@ -6143,6 +5967,18 @@
               "sortOrder": 183
             },
             {
+              "id": "31329",
+              "name": "Will Lewis/Luke Jackson",
+              "returnWin": 401,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 31329,
+              "isOpen": true,
+              "sortOrder": 66
+            },
+            {
               "id": "31332",
               "name": "Will Lewis/B Williams",
               "returnWin": 401,
@@ -6155,40 +5991,28 @@
               "sortOrder": 68
             },
             {
-              "id": "31278",
-              "name": "M Bontempelli/L Bramble",
+              "id": "31416",
+              "name": "Isaiah Dudley/L Bramble",
               "returnWin": 401,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
               "allowPlace": false,
-              "number": 31278,
+              "number": 31416,
               "isOpen": true,
-              "sortOrder": 39
+              "sortOrder": 103
             },
             {
-              "id": "31304",
-              "name": "Rhylee West/B Williams",
-              "returnWin": 401,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 31304,
-              "isOpen": true,
-              "sortOrder": 52
-            },
-            {
-              "id": "31642",
-              "name": "L Vandermeer/Joel Freijah",
+              "id": "31528",
+              "name": "Mic Frederick/B Williams",
               "returnWin": 451,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
               "allowPlace": false,
-              "number": 31642,
+              "number": 31528,
               "isOpen": true,
-              "sortOrder": 214
+              "sortOrder": 148
             },
             {
               "id": "31337",
@@ -6203,16 +6027,16 @@
               "sortOrder": 71
             },
             {
-              "id": "31329",
-              "name": "Will Lewis/Luke Jackson",
+              "id": "31505",
+              "name": "Mason Cox/Joel Freijah",
               "returnWin": 451,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
               "allowPlace": false,
-              "number": 31329,
+              "number": 31505,
               "isOpen": true,
-              "sortOrder": 66
+              "sortOrder": 134
             },
             {
               "id": "31604",
@@ -6225,6 +6049,18 @@
               "number": 31604,
               "isOpen": true,
               "sortOrder": 198
+            },
+            {
+              "id": "31278",
+              "name": "M Bontempelli/L Bramble",
+              "returnWin": 451,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 31278,
+              "isOpen": true,
+              "sortOrder": 39
             },
             {
               "id": "31268",
@@ -6287,16 +6123,16 @@
               "sortOrder": 212
             },
             {
-              "id": "31528",
-              "name": "Mic Frederick/B Williams",
+              "id": "31310",
+              "name": "Rhylee West/L Bramble",
               "returnWin": 501,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
               "allowPlace": false,
-              "number": 31528,
+              "number": 31310,
               "isOpen": true,
-              "sortOrder": 148
+              "sortOrder": 55
             },
             {
               "id": "31236",
@@ -6335,6 +6171,18 @@
               "sortOrder": 246
             },
             {
+              "id": "31642",
+              "name": "L Vandermeer/Joel Freijah",
+              "returnWin": 501,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 31642,
+              "isOpen": true,
+              "sortOrder": 214
+            },
+            {
               "id": "31533",
               "name": "Mic Frederick/L Bramble",
               "returnWin": 501,
@@ -6345,6 +6193,18 @@
               "number": 31533,
               "isOpen": true,
               "sortOrder": 151
+            },
+            {
+              "id": "31662",
+              "name": "Arthur Jones/L Bramble",
+              "returnWin": 501,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 31662,
+              "isOpen": true,
+              "sortOrder": 231
             },
             {
               "id": "31597",
@@ -6407,6 +6267,18 @@
               "sortOrder": 130
             },
             {
+              "id": "31525",
+              "name": "Mic Frederick/Luke Jackson",
+              "returnWin": 501,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 31525,
+              "isOpen": true,
+              "sortOrder": 146
+            },
+            {
               "id": "31600",
               "name": "Josh Dolan/B Williams",
               "returnWin": 501,
@@ -6417,30 +6289,6 @@
               "number": 31600,
               "isOpen": true,
               "sortOrder": 196
-            },
-            {
-              "id": "31239",
-              "name": "Luke Jackson/B Williams",
-              "returnWin": 501,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 31239,
-              "isOpen": true,
-              "sortOrder": 20
-            },
-            {
-              "id": "31505",
-              "name": "Mason Cox/Joel Freijah",
-              "returnWin": 501,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 31505,
-              "isOpen": true,
-              "sortOrder": 134
             },
             {
               "id": "31675",
@@ -6511,7 +6359,7 @@
             {
               "id": "29574",
               "name": "Aaron Naughton 1+ Gls/WB Win",
-              "returnWin": 2.9,
+              "returnWin": 2.8,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -6523,7 +6371,7 @@
             {
               "id": "29581",
               "name": "Aaron Naughton 2+ Gls/WB Win",
-              "returnWin": 4.2,
+              "returnWin": 4,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -6559,7 +6407,7 @@
             {
               "id": "29598",
               "name": "Aaron Naughton 5+ Gls/WB Win",
-              "returnWin": 34,
+              "returnWin": 31,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -6571,7 +6419,7 @@
             {
               "id": "29599",
               "name": "M Bontempelli 1+Gls/WB Win",
-              "returnWin": 3.6,
+              "returnWin": 3.5,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -6595,7 +6443,7 @@
             {
               "id": "29601",
               "name": "M Bontempelli 3+Gls/WB Win",
-              "returnWin": 18,
+              "returnWin": 17,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -6631,7 +6479,7 @@
             {
               "id": "29604",
               "name": "Rhylee West 1+ Gls/WB Win",
-              "returnWin": 3.6,
+              "returnWin": 3.5,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -6643,7 +6491,7 @@
             {
               "id": "29605",
               "name": "Rhylee West 2+ Gls/WB Win",
-              "returnWin": 7.5,
+              "returnWin": 7,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -6691,7 +6539,7 @@
             {
               "id": "29609",
               "name": "Will Lewis 1+ Gls/WB Win",
-              "returnWin": 3.8,
+              "returnWin": 3.6,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -6811,7 +6659,7 @@
             {
               "id": "29619",
               "name": "L Vandermeer 1+Gls/WB Win",
-              "returnWin": 5,
+              "returnWin": 4.8,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -6823,7 +6671,7 @@
             {
               "id": "29620",
               "name": "L Vandermeer 2+Gls/WB Win",
-              "returnWin": 14,
+              "returnWin": 13,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -6895,7 +6743,7 @@
             {
               "id": "29626",
               "name": "Arthur Jones 3+ Gls/WB Win",
-              "returnWin": 26,
+              "returnWin": 23,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -6931,7 +6779,7 @@
             {
               "id": "29629",
               "name": "Lachlan McNeil 1+ Gls/WB Win",
-              "returnWin": 5,
+              "returnWin": 4.8,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -7051,7 +6899,7 @@
             {
               "id": "29639",
               "name": "Josh Treacy 1+ Gls/FRE Win",
-              "returnWin": 1.38,
+              "returnWin": 1.4,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -7063,7 +6911,7 @@
             {
               "id": "29640",
               "name": "Josh Treacy 2+ Gls/FRE Win",
-              "returnWin": 1.65,
+              "returnWin": 1.68,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -7171,7 +7019,7 @@
             {
               "id": "29649",
               "name": "Jye Amiss 1+ Gls/FRE Win",
-              "returnWin": 1.4,
+              "returnWin": 1.42,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -7219,7 +7067,7 @@
             {
               "id": "29653",
               "name": "Jye Amiss 5+ Gls/FRE Win",
-              "returnWin": 8,
+              "returnWin": 8.5,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -7231,7 +7079,7 @@
             {
               "id": "29654",
               "name": "Mason Cox 1+ Gls/FRE Win",
-              "returnWin": 2.4,
+              "returnWin": 2.5,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -7291,7 +7139,7 @@
             {
               "id": "29659",
               "name": "Mic Frederick 1+Gls/FRE Win",
-              "returnWin": 2.2,
+              "returnWin": 2.25,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -7303,7 +7151,7 @@
             {
               "id": "29660",
               "name": "Mic Frederick 2+Gls/FRE Win",
-              "returnWin": 5,
+              "returnWin": 5.5,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -7351,7 +7199,7 @@
             {
               "id": "29664",
               "name": "Patrick Voss 1+ Gls/FRE Win",
-              "returnWin": 1.58,
+              "returnWin": 1.6,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -7363,7 +7211,7 @@
             {
               "id": "29665",
               "name": "Patrick Voss 2+ Gls/FRE Win",
-              "returnWin": 2.4,
+              "returnWin": 2.5,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -7577,6 +7425,19 @@
               "sameGame": true
             },
             {
+              "id": "12486",
+              "name": "Rhylee West (WB)",
+              "returnWin": 1.38,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 12486,
+              "isOpen": true,
+              "sortOrder": 23,
+              "sameGame": true
+            },
+            {
               "id": "12482",
               "name": "Marcus Bontempelli (WB)",
               "returnWin": 1.38,
@@ -7587,19 +7448,6 @@
               "number": 12482,
               "isOpen": true,
               "sortOrder": 19,
-              "sameGame": true
-            },
-            {
-              "id": "12486",
-              "name": "Rhylee West (WB)",
-              "returnWin": 1.4,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 12486,
-              "isOpen": true,
-              "sortOrder": 23,
               "sameGame": true
             },
             {
@@ -8941,19 +8789,6 @@
               "sameGame": true
             },
             {
-              "id": "12848",
-              "name": "Jeremy Sharp (FRE)",
-              "returnWin": 21,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 12848,
-              "isOpen": true,
-              "sortOrder": 55,
-              "sameGame": true
-            },
-            {
               "id": "12838",
               "name": "Murphy Reid (FRE)",
               "returnWin": 23,
@@ -8990,6 +8825,19 @@
               "number": 12805,
               "isOpen": true,
               "sortOrder": 12,
+              "sameGame": true
+            },
+            {
+              "id": "12848",
+              "name": "Jeremy Sharp (FRE)",
+              "returnWin": 23,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 12848,
+              "isOpen": true,
+              "sortOrder": 55,
               "sameGame": true
             },
             {
@@ -10008,7 +9856,7 @@
             {
               "id": "12706",
               "name": "Rhylee West (WB)",
-              "returnWin": 67,
+              "returnWin": 61,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -15369,7 +15217,7 @@
             {
               "id": "33509",
               "name": "A Naught/R West 5+ Goals",
-              "returnWin": 4.25,
+              "returnWin": 4.2,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -15573,7 +15421,7 @@
             {
               "id": "33478",
               "name": "Jordan Clark/Rhylee West",
-              "returnWin": 2.3,
+              "returnWin": 2.25,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -15669,7 +15517,7 @@
             {
               "id": "33486",
               "name": "M Bontempelli/Rhylee West",
-              "returnWin": 2.05,
+              "returnWin": 2,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -15843,7 +15691,7 @@
             {
               "id": "30931",
               "name": "Bailey Dale/Rhylee West",
-              "returnWin": 4.5,
+              "returnWin": 4.25,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -16017,7 +15865,7 @@
             {
               "id": "33664",
               "name": "Jordan Clark/Rhylee West",
-              "returnWin": 21,
+              "returnWin": 19,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -16065,7 +15913,7 @@
             {
               "id": "33668",
               "name": "Bailey Dale/Rhylee West",
-              "returnWin": 19,
+              "returnWin": 18,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -16227,7 +16075,7 @@
             {
               "id": "32389",
               "name": "Bailey Dale 15+ Dis/WB Win",
-              "returnWin": 2.3,
+              "returnWin": 2.25,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -16239,7 +16087,7 @@
             {
               "id": "32391",
               "name": "Bailey Dale 20+ Dis/WB Win",
-              "returnWin": 2.6,
+              "returnWin": 2.5,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -16251,7 +16099,7 @@
             {
               "id": "32393",
               "name": "Bailey Dale 25+ Dis/WB Win",
-              "returnWin": 3.5,
+              "returnWin": 3.4,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -16275,7 +16123,7 @@
             {
               "id": "32397",
               "name": "Bailey Dale 35+ Dis/WB Win",
-              "returnWin": 15,
+              "returnWin": 14,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -16287,7 +16135,7 @@
             {
               "id": "32398",
               "name": "B Williams 15+Dis/WB Win",
-              "returnWin": 2.6,
+              "returnWin": 2.5,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -16311,7 +16159,7 @@
             {
               "id": "32402",
               "name": "B Williams 25+Dis/WB Win",
-              "returnWin": 9,
+              "returnWin": 8.5,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -16347,7 +16195,7 @@
             {
               "id": "32408",
               "name": "Ed Richards 15+ Dis/WB Win",
-              "returnWin": 2.3,
+              "returnWin": 2.25,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -16359,7 +16207,7 @@
             {
               "id": "32410",
               "name": "Ed Richards 20+ Dis/WB Win",
-              "returnWin": 2.6,
+              "returnWin": 2.5,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -16371,7 +16219,7 @@
             {
               "id": "32412",
               "name": "Ed Richards 25+ Dis/WB Win",
-              "returnWin": 3.5,
+              "returnWin": 3.4,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -16383,7 +16231,7 @@
             {
               "id": "32414",
               "name": "Ed Richards 30+ Dis/WB Win",
-              "returnWin": 6.5,
+              "returnWin": 6,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -16395,7 +16243,7 @@
             {
               "id": "32416",
               "name": "Ed Richards 35+ Dis/WB Win",
-              "returnWin": 16,
+              "returnWin": 15,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -16407,7 +16255,7 @@
             {
               "id": "32418",
               "name": "Joel Freijah 15+ Dis/WB Win",
-              "returnWin": 2.5,
+              "returnWin": 2.4,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -16419,7 +16267,7 @@
             {
               "id": "32420",
               "name": "Joel Freijah 20+ Dis/WB Win",
-              "returnWin": 3.6,
+              "returnWin": 3.5,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -16431,7 +16279,7 @@
             {
               "id": "32422",
               "name": "Joel Freijah 25+ Dis/WB Win",
-              "returnWin": 7.5,
+              "returnWin": 7,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -16443,7 +16291,7 @@
             {
               "id": "32424",
               "name": "Joel Freijah 30+ Dis/WB Win",
-              "returnWin": 23,
+              "returnWin": 21,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -16467,7 +16315,7 @@
             {
               "id": "32428",
               "name": "L Bramble 15+Dis/WB Win",
-              "returnWin": 2.7,
+              "returnWin": 2.6,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -16479,7 +16327,7 @@
             {
               "id": "32430",
               "name": "L Bramble 20+Dis/WB Win",
-              "returnWin": 4.5,
+              "returnWin": 4.25,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -16527,7 +16375,7 @@
             {
               "id": "32437",
               "name": "M Bontempelli 15+Dis/WB Win",
-              "returnWin": 2.3,
+              "returnWin": 2.25,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -16539,7 +16387,7 @@
             {
               "id": "32439",
               "name": "M Bontempelli 20+Dis/WB Win",
-              "returnWin": 2.5,
+              "returnWin": 2.4,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -16551,7 +16399,7 @@
             {
               "id": "32441",
               "name": "M Bontempelli 25+Dis/WB Win",
-              "returnWin": 3.2,
+              "returnWin": 3.1,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -16563,7 +16411,7 @@
             {
               "id": "32443",
               "name": "M Bontempelli 30+Dis/WB Win",
-              "returnWin": 5.5,
+              "returnWin": 5,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -16575,7 +16423,7 @@
             {
               "id": "32445",
               "name": "M Bontempelli 35+Dis/WB Win",
-              "returnWin": 12,
+              "returnWin": 11,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -16599,7 +16447,7 @@
             {
               "id": "32449",
               "name": "M Kennedy 20+Dis/WB Win",
-              "returnWin": 2.75,
+              "returnWin": 2.7,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -16611,7 +16459,7 @@
             {
               "id": "32451",
               "name": "M Kennedy 25+Dis/WB Win",
-              "returnWin": 4.2,
+              "returnWin": 4,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -16635,7 +16483,7 @@
             {
               "id": "32455",
               "name": "M Kennedy 35+Dis/WB Win",
-              "returnWin": 26,
+              "returnWin": 23,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -16659,7 +16507,7 @@
             {
               "id": "32459",
               "name": "Ryley Sanders 20+ Dis/WB Win",
-              "returnWin": 2.75,
+              "returnWin": 2.7,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -16671,7 +16519,7 @@
             {
               "id": "32461",
               "name": "Ryley Sanders 25+ Dis/WB Win",
-              "returnWin": 4.2,
+              "returnWin": 4,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -16695,7 +16543,7 @@
             {
               "id": "32465",
               "name": "Ryley Sanders 35+ Dis/WB Win",
-              "returnWin": 26,
+              "returnWin": 23,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -16707,7 +16555,7 @@
             {
               "id": "32467",
               "name": "Jordan Clark 15+ Dis/FRE Win",
-              "returnWin": 1.13,
+              "returnWin": 1.15,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -16719,7 +16567,7 @@
             {
               "id": "32469",
               "name": "Jordan Clark 20+ Dis/FRE Win",
-              "returnWin": 1.26,
+              "returnWin": 1.28,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -16731,7 +16579,7 @@
             {
               "id": "32471",
               "name": "Jordan Clark 25+ Dis/FRE Win",
-              "returnWin": 1.75,
+              "returnWin": 1.8,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -16743,7 +16591,7 @@
             {
               "id": "32473",
               "name": "Jordan Clark 30+ Dis/FRE Win",
-              "returnWin": 3.2,
+              "returnWin": 3.25,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -16767,7 +16615,7 @@
             {
               "id": "32477",
               "name": "Luke Jackson 15+ Dis/FRE Win",
-              "returnWin": 1.3,
+              "returnWin": 1.32,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -16779,7 +16627,7 @@
             {
               "id": "32479",
               "name": "Luke Jackson 20+ Dis/FRE Win",
-              "returnWin": 2.05,
+              "returnWin": 2.1,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -16803,7 +16651,7 @@
             {
               "id": "32483",
               "name": "Luke Jackson 30+ Dis/FRE Win",
-              "returnWin": 18,
+              "returnWin": 19,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -16815,7 +16663,7 @@
             {
               "id": "32485",
               "name": "Luke Jackson 35+ Dis/FRE Win",
-              "returnWin": 81,
+              "returnWin": 101,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -16827,7 +16675,7 @@
             {
               "id": "32487",
               "name": "Luke Ryan 15+ Dis/FRE Win",
-              "returnWin": 1.15,
+              "returnWin": 1.17,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -16839,7 +16687,7 @@
             {
               "id": "32488",
               "name": "Luke Ryan 20+ Dis/FRE Win",
-              "returnWin": 1.38,
+              "returnWin": 1.4,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -16851,7 +16699,7 @@
             {
               "id": "32490",
               "name": "Luke Ryan 25+ Dis/FRE Win",
-              "returnWin": 2.15,
+              "returnWin": 2.2,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -16887,7 +16735,7 @@
             {
               "id": "32496",
               "name": "And Brayshaw 15+Dis/FRE Win",
-              "returnWin": 1.14,
+              "returnWin": 1.16,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -16899,7 +16747,7 @@
             {
               "id": "32497",
               "name": "And Brayshaw 20+Dis/FRE Win",
-              "returnWin": 1.33,
+              "returnWin": 1.35,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -16911,7 +16759,7 @@
             {
               "id": "32498",
               "name": "And Brayshaw 25+Dis/FRE Win",
-              "returnWin": 2,
+              "returnWin": 2.05,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -16947,7 +16795,7 @@
             {
               "id": "32501",
               "name": "Caleb Serong 15+ Dis/FRE Win",
-              "returnWin": 1.12,
+              "returnWin": 1.13,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -16959,7 +16807,7 @@
             {
               "id": "32502",
               "name": "Caleb Serong 20+ Dis/FRE Win",
-              "returnWin": 1.18,
+              "returnWin": 1.2,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -16971,7 +16819,7 @@
             {
               "id": "32504",
               "name": "Caleb Serong 25+ Dis/FRE Win",
-              "returnWin": 1.42,
+              "returnWin": 1.45,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -16983,7 +16831,7 @@
             {
               "id": "32505",
               "name": "Caleb Serong 30+ Dis/FRE Win",
-              "returnWin": 2.15,
+              "returnWin": 2.2,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -16995,7 +16843,7 @@
             {
               "id": "32506",
               "name": "Caleb Serong 35+ Dis/FRE Win",
-              "returnWin": 4.2,
+              "returnWin": 4.25,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -17007,7 +16855,7 @@
             {
               "id": "32508",
               "name": "Hayden Young 15+ Dis/FRE Win",
-              "returnWin": 1.17,
+              "returnWin": 1.19,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -17019,7 +16867,7 @@
             {
               "id": "32510",
               "name": "Hayden Young 20+ Dis/FRE Win",
-              "returnWin": 1.48,
+              "returnWin": 1.5,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -17055,7 +16903,7 @@
             {
               "id": "32513",
               "name": "Hayden Young 35+ Dis/FRE Win",
-              "returnWin": 21,
+              "returnWin": 23,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -17067,7 +16915,7 @@
             {
               "id": "32514",
               "name": "Murphy Reid 15+ Dis/FRE Win",
-              "returnWin": 1.16,
+              "returnWin": 1.17,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -17103,7 +16951,7 @@
             {
               "id": "32518",
               "name": "Murphy Reid 30+ Dis/FRE Win",
-              "returnWin": 5,
+              "returnWin": 5.5,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -17115,7 +16963,7 @@
             {
               "id": "32519",
               "name": "Murphy Reid 35+ Dis/FRE Win",
-              "returnWin": 16,
+              "returnWin": 17,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -17127,7 +16975,7 @@
             {
               "id": "32521",
               "name": "Shai Bolton 15+ Dis/FRE Win",
-              "returnWin": 1.15,
+              "returnWin": 1.17,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -17139,7 +16987,7 @@
             {
               "id": "32522",
               "name": "Shai Bolton 20+ Dis/FRE Win",
-              "returnWin": 1.38,
+              "returnWin": 1.4,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -17151,7 +16999,7 @@
             {
               "id": "32523",
               "name": "Shai Bolton 25+ Dis/FRE Win",
-              "returnWin": 2.15,
+              "returnWin": 2.2,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -17227,6 +17075,18 @@
               "sortOrder": 5
             },
             {
+              "id": "30952",
+              "name": "Bailey Williams (WB)",
+              "returnWin": 5.5,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 30952,
+              "isOpen": true,
+              "sortOrder": 3
+            },
+            {
               "id": "30955",
               "name": "Brennan Cox (FRE)",
               "returnWin": 6.5,
@@ -17237,18 +17097,6 @@
               "number": 30955,
               "isOpen": true,
               "sortOrder": 4
-            },
-            {
-              "id": "30952",
-              "name": "Bailey Williams (WB)",
-              "returnWin": 6.5,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 30952,
-              "isOpen": true,
-              "sortOrder": 3
             },
             {
               "id": "30950",
@@ -17289,7 +17137,7 @@
             {
               "id": "30961",
               "name": "Heath Chapman (FRE)",
-              "returnWin": 8.5,
+              "returnWin": 9,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -17652,19 +17500,6 @@
               "number": 31091,
               "isOpen": true,
               "sortOrder": 29,
-              "sameGame": true
-            },
-            {
-              "id": "31013",
-              "name": "Bailey Williams (WB)",
-              "returnWin": 1.02,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 31013,
-              "isOpen": true,
-              "sortOrder": 9,
               "sameGame": true
             },
             {
@@ -18064,6 +17899,19 @@
           "allowBundle": false,
           "propositions": [
             {
+              "id": "31716",
+              "name": "Bailey Williams (WB)",
+              "returnWin": 1.28,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 31716,
+              "isOpen": true,
+              "sortOrder": 9,
+              "sameGame": true
+            },
+            {
               "id": "31710",
               "name": "Jordan Clark (FRE)",
               "returnWin": 1.33,
@@ -18087,19 +17935,6 @@
               "number": 31766,
               "isOpen": true,
               "sortOrder": 29,
-              "sameGame": true
-            },
-            {
-              "id": "31716",
-              "name": "Bailey Williams (WB)",
-              "returnWin": 1.36,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 31716,
-              "isOpen": true,
-              "sortOrder": 9,
               "sameGame": true
             },
             {
@@ -18512,6 +18347,19 @@
               "sameGame": true
             },
             {
+              "id": "30703",
+              "name": "Bailey Williams (WB)",
+              "returnWin": 2.1,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 30703,
+              "isOpen": true,
+              "sortOrder": 9,
+              "sameGame": true
+            },
+            {
               "id": "30784",
               "name": "Brennan Cox (FRE)",
               "returnWin": 2.25,
@@ -18535,19 +18383,6 @@
               "number": 30693,
               "isOpen": true,
               "sortOrder": 6,
-              "sameGame": true
-            },
-            {
-              "id": "30703",
-              "name": "Bailey Williams (WB)",
-              "returnWin": 2.4,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 30703,
-              "isOpen": true,
-              "sortOrder": 9,
               "sameGame": true
             },
             {
@@ -18960,6 +18795,19 @@
               "sameGame": true
             },
             {
+              "id": "31006",
+              "name": "Bailey Williams (WB)",
+              "returnWin": 4,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 31006,
+              "isOpen": true,
+              "sortOrder": 9,
+              "sameGame": true
+            },
+            {
               "id": "31076",
               "name": "Brennan Cox (FRE)",
               "returnWin": 4.5,
@@ -18983,19 +18831,6 @@
               "number": 30998,
               "isOpen": true,
               "sortOrder": 6,
-              "sameGame": true
-            },
-            {
-              "id": "31006",
-              "name": "Bailey Williams (WB)",
-              "returnWin": 4.8,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 31006,
-              "isOpen": true,
-              "sortOrder": 9,
               "sameGame": true
             },
             {
@@ -21278,7 +21113,7 @@
             {
               "id": "33206",
               "name": "Aaron Naughton/WB 1-39",
-              "returnWin": 31,
+              "returnWin": 28,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -21314,7 +21149,7 @@
             {
               "id": "33209",
               "name": "Aaron Naughton/FRE 40+",
-              "returnWin": 41,
+              "returnWin": 51,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -21698,7 +21533,7 @@
             {
               "id": "33241",
               "name": "Luke Jackson/FRE 40+",
-              "returnWin": 51,
+              "returnWin": 61,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -21722,7 +21557,7 @@
             {
               "id": "33243",
               "name": "Josh Treacy/WB 40+",
-              "returnWin": 126,
+              "returnWin": 101,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -21794,7 +21629,7 @@
             {
               "id": "33249",
               "name": "Isaiah Dudley/FRE 40+",
-              "returnWin": 41,
+              "returnWin": 51,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -21854,7 +21689,7 @@
             {
               "id": "33254",
               "name": "Mason Cox/WB 1-39",
-              "returnWin": 101,
+              "returnWin": 81,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -22034,7 +21869,7 @@
             {
               "id": "33269",
               "name": "Shai Bolton/FRE 40+",
-              "returnWin": 41,
+              "returnWin": 51,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -22101,7 +21936,7 @@
             {
               "id": "5659",
               "name": "Wst Bulldogs by 40-59",
-              "returnWin": 19,
+              "returnWin": 18,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -22114,7 +21949,7 @@
             {
               "id": "5660",
               "name": "Wst Bulldogs by 20-39",
-              "returnWin": 8,
+              "returnWin": 7.5,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -22192,7 +22027,7 @@
             {
               "id": "5666",
               "name": "Fremantle by 60+",
-              "returnWin": 7.5,
+              "returnWin": 8,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -22289,7 +22124,7 @@
             {
               "id": "5215",
               "name": "Wst Bulldogs by 25-36",
-              "returnWin": 13,
+              "returnWin": 12,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -22490,7 +22325,7 @@
             {
               "id": "5522",
               "name": "Wst Bulldogs by 80-89",
-              "returnWin": 201,
+              "returnWin": 151,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -22529,7 +22364,7 @@
             {
               "id": "5525",
               "name": "Wst Bulldogs by 50-59",
-              "returnWin": 51,
+              "returnWin": 41,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -22555,7 +22390,7 @@
             {
               "id": "5527",
               "name": "Wst Bulldogs by 30-39",
-              "returnWin": 18,
+              "returnWin": 17,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -22711,7 +22546,7 @@
             {
               "id": "5539",
               "name": "Fremantle by 70-79",
-              "returnWin": 23,
+              "returnWin": 26,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -22737,7 +22572,7 @@
             {
               "id": "5541",
               "name": "Fremantle by 90-99",
-              "returnWin": 67,
+              "returnWin": 81,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -22990,7 +22825,7 @@
             {
               "id": "5832",
               "name": "Wst Bulldogs by 31-32",
-              "returnWin": 67,
+              "returnWin": 51,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -23081,7 +22916,7 @@
             {
               "id": "5839",
               "name": "Wst Bulldogs by 17-18",
-              "returnWin": 41,
+              "returnWin": 34,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -23120,7 +22955,7 @@
             {
               "id": "5842",
               "name": "Wst Bulldogs by 11-12",
-              "returnWin": 34,
+              "returnWin": 31,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -23159,7 +22994,7 @@
             {
               "id": "5845",
               "name": "Wst Bulldogs by 5-6",
-              "returnWin": 31,
+              "returnWin": 26,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -23367,7 +23202,7 @@
             {
               "id": "5861",
               "name": "Fremantle by 25-26",
-              "returnWin": 23,
+              "returnWin": 26,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -23445,7 +23280,7 @@
             {
               "id": "5867",
               "name": "Fremantle by 37-38",
-              "returnWin": 26,
+              "returnWin": 31,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -23484,7 +23319,7 @@
             {
               "id": "5870",
               "name": "Fremantle by 43-44",
-              "returnWin": 31,
+              "returnWin": 34,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -23523,7 +23358,7 @@
             {
               "id": "5873",
               "name": "Fremantle by 49-50",
-              "returnWin": 34,
+              "returnWin": 41,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -23646,7 +23481,7 @@
             {
               "id": "5226",
               "name": "Wst Bulldogs by 10+",
-              "returnWin": 3.9,
+              "returnWin": 3.8,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -23672,7 +23507,7 @@
             {
               "id": "5228",
               "name": "Fremantle by 10+",
-              "returnWin": 1.62,
+              "returnWin": 1.65,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -23717,7 +23552,7 @@
             {
               "id": "5636",
               "name": "Wst Bulldogs by 20+",
-              "returnWin": 5.7,
+              "returnWin": 5.5,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -23743,7 +23578,7 @@
             {
               "id": "5638",
               "name": "Fremantle by 20+",
-              "returnWin": 2,
+              "returnWin": 2.05,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -23814,7 +23649,7 @@
             {
               "id": "5572",
               "name": "Fremantle by 30+",
-              "returnWin": 2.6,
+              "returnWin": 2.65,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -23872,7 +23707,7 @@
             {
               "id": "5813",
               "name": "Either Team By 39 or Less",
-              "returnWin": 1.33,
+              "returnWin": 1.32,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -23885,7 +23720,7 @@
             {
               "id": "5814",
               "name": "Fremantle by 40+",
-              "returnWin": 3.5,
+              "returnWin": 3.6,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -23990,7 +23825,7 @@
             {
               "id": "5506",
               "name": "WBdg 1-12 / WBdg 1-24",
-              "returnWin": 13,
+              "returnWin": 12,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -24038,7 +23873,7 @@
             {
               "id": "5510",
               "name": "Frem 1-12 / WBdg 1-24",
-              "returnWin": 17,
+              "returnWin": 16,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -24110,7 +23945,7 @@
             {
               "id": "5516",
               "name": "Frem 13+ / Frem 25+",
-              "returnWin": 2.9,
+              "returnWin": 3,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -24164,7 +23999,7 @@
             {
               "id": "15320",
               "name": "WBdg 40+ /201 or more",
-              "returnWin": 41,
+              "returnWin": 34,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -24176,7 +24011,7 @@
             {
               "id": "15321",
               "name": "WBdg 40+ /181-200",
-              "returnWin": 51,
+              "returnWin": 41,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -24236,7 +24071,7 @@
             {
               "id": "15326",
               "name": "WBdg 1-39 /161-180",
-              "returnWin": 11,
+              "returnWin": 10,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -24356,7 +24191,7 @@
             {
               "id": "15336",
               "name": "Frem 40+ /201 or more",
-              "returnWin": 8.5,
+              "returnWin": 9,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -24551,7 +24386,7 @@
             {
               "id": "15416",
               "name": "WBd 60-79 / Fre 120+",
-              "returnWin": 9,
+              "returnWin": 10,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -24577,7 +24412,7 @@
             {
               "id": "15418",
               "name": "WBd 80-99 / Fre 60-79",
-              "returnWin": 14,
+              "returnWin": 13,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -24642,7 +24477,7 @@
             {
               "id": "15423",
               "name": "WBd 100-119 / Fre 60-79",
-              "returnWin": 18,
+              "returnWin": 17,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -24815,7 +24650,7 @@
             {
               "id": "25452",
               "name": "Fremantle score 90+ only",
-              "returnWin": 2.15,
+              "returnWin": 2.2,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -24827,7 +24662,7 @@
             {
               "id": "25455",
               "name": "Neither Team Score 90+",
-              "returnWin": 5,
+              "returnWin": 4.8,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -25517,13 +25352,13 @@
           ]
         },
         {
-          "id": "132782645",
-          "name": "AFL WBd-Fre HmPtOU 83.5",
-          "shortName": "AFL WBd-Fre HmPtOU 83.5",
+          "id": "132782721",
+          "name": "AFL WBd-Fre HmPtOU 84.5",
+          "shortName": "AFL WBd-Fre HmPtOU 84.5",
           "betOption": "Home Total Points O/U",
           "betOptionSpectrumId": "1756",
           "betOptionPriority": 6890,
-          "marketUniqueId": 132782645,
+          "marketUniqueId": 132782721,
           "closeTime": "2026-05-01T09:30:00.000Z",
           "bettingStatus": "Open",
           "message": null,
@@ -25545,26 +25380,26 @@
           "allowBundle": false,
           "propositions": [
             {
-              "id": "25132",
-              "name": "WBdg Over 83.5",
+              "id": "25433",
+              "name": "WBdg Over 84.5",
               "returnWin": 1.9,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
               "allowPlace": false,
-              "number": 25132,
+              "number": 25433,
               "isOpen": true,
               "sortOrder": 1
             },
             {
-              "id": "25134",
-              "name": "WBdg Under 83.5",
+              "id": "25434",
+              "name": "WBdg Under 84.5",
               "returnWin": 1.9,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
               "allowPlace": false,
-              "number": 25134,
+              "number": 25434,
               "isOpen": true,
               "sortOrder": 2
             }
@@ -25655,7 +25490,7 @@
             {
               "id": "25407",
               "name": "Wst Bulldogs 0 to 60",
-              "returnWin": 4.8,
+              "returnWin": 5,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -25757,7 +25592,7 @@
             {
               "id": "25044",
               "name": "Wst Bulldogs 0 to 60",
-              "returnWin": 4.8,
+              "returnWin": 5,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -25841,7 +25676,7 @@
             {
               "id": "25054",
               "name": "Wst Bulldogs 91 to 95",
-              "returnWin": 10,
+              "returnWin": 9,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -25907,7 +25742,7 @@
             {
               "id": "25366",
               "name": "Fremantle 0 to 80",
-              "returnWin": 3.8,
+              "returnWin": 3.6,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -26009,7 +25844,7 @@
             {
               "id": "25564",
               "name": "Fremantle 0 to 80",
-              "returnWin": 3.8,
+              "returnWin": 3.6,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -26993,7 +26828,7 @@
             {
               "id": "32887",
               "name": "Marcus Bontempelli (WB)",
-              "returnWin": 8,
+              "returnWin": 8.5,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -27393,6 +27228,18 @@
               "sortOrder": 25
             },
             {
+              "id": "33600",
+              "name": "Sam Switkowski (FRE)",
+              "returnWin": 18,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 33600,
+              "isOpen": true,
+              "sortOrder": 23
+            },
+            {
               "id": "33597",
               "name": "Murphy Reid (FRE)",
               "returnWin": 18,
@@ -27403,18 +27250,6 @@
               "number": 33597,
               "isOpen": true,
               "sortOrder": 20
-            },
-            {
-              "id": "33600",
-              "name": "Sam Switkowski (FRE)",
-              "returnWin": 19,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 33600,
-              "isOpen": true,
-              "sortOrder": 23
             },
             {
               "id": "33585",
@@ -28725,7 +28560,7 @@
             {
               "id": "32820",
               "name": "Rhylee West (WB)",
-              "returnWin": 2.2,
+              "returnWin": 2.15,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -29521,7 +29356,7 @@
             {
               "id": "5656",
               "name": "Wst Bulldogs",
-              "returnWin": 2.6,
+              "returnWin": 2.5,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -29533,7 +29368,7 @@
             {
               "id": "5657",
               "name": "Fremantle",
-              "returnWin": 1.5,
+              "returnWin": 1.53,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -29575,7 +29410,7 @@
             {
               "id": "5589",
               "name": "Wst Bulldogs",
-              "returnWin": 2.6,
+              "returnWin": 2.5,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -29601,7 +29436,7 @@
             {
               "id": "5591",
               "name": "Fremantle",
-              "returnWin": 1.5,
+              "returnWin": 1.52,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -29616,13 +29451,13 @@
           "sameGameMultipleSelections": false
         },
         {
-          "id": "132594773",
-          "name": "AFL WBdg-Frem 1stHlfLn +8.5",
-          "shortName": "AFL WBd-Fre 1stHlfLn +8.5",
+          "id": "132594720",
+          "name": "AFL WBdg-Frem 1stHlfLn +7.5",
+          "shortName": "AFL WBd-Fre 1stHlfLn +7.5",
           "betOption": "1st Half Line",
           "betOptionSpectrumId": "280",
           "betOptionPriority": 11420,
-          "marketUniqueId": 132594773,
+          "marketUniqueId": 132594720,
           "closeTime": "2026-05-01T09:30:00.000Z",
           "bettingStatus": "Open",
           "message": null,
@@ -29644,27 +29479,27 @@
           "allowBundle": false,
           "propositions": [
             {
-              "id": "5585",
-              "name": "Wst Bulldogs +8.5",
+              "id": "5907",
+              "name": "Wst Bulldogs +7.5",
               "returnWin": 1.9,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
               "allowPlace": false,
-              "number": 5585,
+              "number": 5907,
               "isOpen": true,
               "sortOrder": 1,
               "sameGame": true
             },
             {
-              "id": "5586",
-              "name": "Fremantle -8.5",
+              "id": "5908",
+              "name": "Fremantle -7.5",
               "returnWin": 1.9,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
               "allowPlace": false,
-              "number": 5586,
+              "number": 5908,
               "isOpen": true,
               "sortOrder": 2,
               "sameGame": true
@@ -29674,13 +29509,13 @@
           "sameGameMultipleSelections": false
         },
         {
-          "id": "132626046",
+          "id": "132801064",
           "name": "AFL WBdg-Frem 1HlfLnOU",
           "shortName": "AFL WBd-Fre 1HlfLnOU",
           "betOption": "1st Half Line/OverUnder Double",
           "betOptionSpectrumId": "379",
           "betOptionPriority": 11440,
-          "marketUniqueId": 132626046,
+          "marketUniqueId": 132801064,
           "closeTime": "2026-05-01T09:30:00.000Z",
           "bettingStatus": "Open",
           "message": null,
@@ -29702,50 +29537,50 @@
           "allowBundle": false,
           "propositions": [
             {
-              "id": "15113",
-              "name": "WBdg +8.5 /Over 91.5",
-              "returnWin": 3.6,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 15113,
-              "isOpen": true,
-              "sortOrder": 1
-            },
-            {
-              "id": "15115",
-              "name": "WBdg +8.5 /Under 91.5",
-              "returnWin": 3.4,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 15115,
-              "isOpen": true,
-              "sortOrder": 2
-            },
-            {
-              "id": "15117",
-              "name": "Frem -8.5 /Over 91.5",
-              "returnWin": 3.3,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 15117,
-              "isOpen": true,
-              "sortOrder": 3
-            },
-            {
-              "id": "15118",
-              "name": "Frem -8.5 /Under 91.5",
+              "id": "29777",
+              "name": "WBdg +6.5 /Over 91.5",
               "returnWin": 3.8,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
               "allowPlace": false,
-              "number": 15118,
+              "number": 29777,
+              "isOpen": true,
+              "sortOrder": 1
+            },
+            {
+              "id": "29778",
+              "name": "WBdg +6.5 /Under 91.5",
+              "returnWin": 3.5,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 29778,
+              "isOpen": true,
+              "sortOrder": 2
+            },
+            {
+              "id": "29779",
+              "name": "Frem -6.5 /Over 91.5",
+              "returnWin": 3.1,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 29779,
+              "isOpen": true,
+              "sortOrder": 3
+            },
+            {
+              "id": "29780",
+              "name": "Frem -6.5 /Under 91.5",
+              "returnWin": 3.6,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 29780,
               "isOpen": true,
               "sortOrder": 4
             }
@@ -29782,7 +29617,7 @@
             {
               "id": "15275",
               "name": "Wst Bulldogs /Over 91.5",
-              "returnWin": 5,
+              "returnWin": 4.8,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -29794,7 +29629,7 @@
             {
               "id": "15278",
               "name": "Wst Bulldogs /Under 91.5",
-              "returnWin": 4.8,
+              "returnWin": 4.5,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -29806,7 +29641,7 @@
             {
               "id": "15280",
               "name": "Fremantle /Over 91.5",
-              "returnWin": 2.7,
+              "returnWin": 2.8,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -29818,7 +29653,7 @@
             {
               "id": "15281",
               "name": "Fremantle /Under 91.5",
-              "returnWin": 2.9,
+              "returnWin": 3,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -29886,7 +29721,7 @@
             {
               "id": "5607",
               "name": "Wst Bulldogs -7.5",
-              "returnWin": 3.5,
+              "returnWin": 3.4,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -29899,7 +29734,7 @@
             {
               "id": "5608",
               "name": "Fremantle +7.5",
-              "returnWin": 1.27,
+              "returnWin": 1.28,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -29912,7 +29747,7 @@
             {
               "id": "5609",
               "name": "Wst Bulldogs -1.5",
-              "returnWin": 2.7,
+              "returnWin": 2.65,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -29925,7 +29760,7 @@
             {
               "id": "5610",
               "name": "Fremantle +1.5",
-              "returnWin": 1.44,
+              "returnWin": 1.45,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -29964,7 +29799,7 @@
             {
               "id": "5613",
               "name": "Wst Bulldogs +10.5",
-              "returnWin": 1.75,
+              "returnWin": 1.72,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -29977,7 +29812,7 @@
             {
               "id": "5614",
               "name": "Fremantle -10.5",
-              "returnWin": 2,
+              "returnWin": 2.05,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -29990,7 +29825,7 @@
             {
               "id": "5615",
               "name": "Wst Bulldogs +16.5",
-              "returnWin": 1.5,
+              "returnWin": 1.48,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -30003,7 +29838,7 @@
             {
               "id": "5616",
               "name": "Fremantle -16.5",
-              "returnWin": 2.5,
+              "returnWin": 2.55,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -30016,7 +29851,7 @@
             {
               "id": "5617",
               "name": "Wst Bulldogs +22.5",
-              "returnWin": 1.32,
+              "returnWin": 1.3,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -30029,7 +29864,7 @@
             {
               "id": "5618",
               "name": "Fremantle -22.5",
-              "returnWin": 3.2,
+              "returnWin": 3.3,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -30063,32 +29898,6 @@
               "number": 5620,
               "isOpen": true,
               "sortOrder": 24,
-              "sameGame": true
-            },
-            {
-              "id": "5621",
-              "name": "Wst Bulldogs +34.5",
-              "returnWin": 1.1,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 5621,
-              "isOpen": true,
-              "sortOrder": 25,
-              "sameGame": true
-            },
-            {
-              "id": "5622",
-              "name": "Fremantle -34.5",
-              "returnWin": 6.2,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 5622,
-              "isOpen": true,
-              "sortOrder": 26,
               "sameGame": true
             }
           ],
@@ -30288,7 +30097,7 @@
             {
               "id": "5631",
               "name": "Wst Bulldogs by 10+",
-              "returnWin": 3.9,
+              "returnWin": 3.8,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -30340,7 +30149,7 @@
             {
               "id": "5635",
               "name": "Fremantle by 10+",
-              "returnWin": 1.95,
+              "returnWin": 2,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -30385,7 +30194,7 @@
             {
               "id": "5909",
               "name": "Wst Bulldogs by 20+",
-              "returnWin": 7,
+              "returnWin": 6.5,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -30398,7 +30207,7 @@
             {
               "id": "5910",
               "name": "Wst Bulldogs by 1-19",
-              "returnWin": 3.5,
+              "returnWin": 3.4,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -30424,7 +30233,7 @@
             {
               "id": "5912",
               "name": "Fremantle by 1-19",
-              "returnWin": 2.6,
+              "returnWin": 2.7,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -30437,7 +30246,7 @@
             {
               "id": "5913",
               "name": "Fremantle by 20+",
-              "returnWin": 2.8,
+              "returnWin": 2.9,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -30670,7 +30479,7 @@
             {
               "id": "5546",
               "name": "Wst Bulldogs by 31-36",
-              "returnWin": 34,
+              "returnWin": 31,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -30683,7 +30492,7 @@
             {
               "id": "5547",
               "name": "Wst Bulldogs by 25-30",
-              "returnWin": 23,
+              "returnWin": 21,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -30696,7 +30505,7 @@
             {
               "id": "5548",
               "name": "Wst Bulldogs by 19-24",
-              "returnWin": 16,
+              "returnWin": 15,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -30722,7 +30531,7 @@
             {
               "id": "5550",
               "name": "Wst Bulldogs by 7-12",
-              "returnWin": 10,
+              "returnWin": 9,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -30735,7 +30544,7 @@
             {
               "id": "5551",
               "name": "Wst Bulldogs by 1-6",
-              "returnWin": 8.5,
+              "returnWin": 8,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -30852,7 +30661,7 @@
             {
               "id": "5560",
               "name": "Fremantle by 43-48",
-              "returnWin": 23,
+              "returnWin": 26,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -30865,7 +30674,7 @@
             {
               "id": "5561",
               "name": "Fremantle by 49+",
-              "returnWin": 13,
+              "returnWin": 15,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -31234,7 +31043,7 @@
             {
               "id": "25374",
               "name": "Wst Bulldogs 11 to 20",
-              "returnWin": 12,
+              "returnWin": 13,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -31294,7 +31103,7 @@
             {
               "id": "25382",
               "name": "Wst Bulldogs 61 to 70",
-              "returnWin": 9,
+              "returnWin": 8.5,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -31348,7 +31157,7 @@
             {
               "id": "25425",
               "name": "Wst Bulldogs Over 42.5",
-              "returnWin": 1.9,
+              "returnWin": 1.85,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -31360,7 +31169,7 @@
             {
               "id": "25428",
               "name": "Wst Bulldogs Under 42.5",
-              "returnWin": 1.9,
+              "returnWin": 1.95,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -31402,7 +31211,7 @@
             {
               "id": "25125",
               "name": "Fremantle 0 to 20",
-              "returnWin": 12,
+              "returnWin": 11,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -31498,13 +31307,13 @@
           ]
         },
         {
-          "id": "132782779",
-          "name": "AFL WBd-Fre 1HAwPtOU 49.5",
-          "shortName": "AFL WBd-Fre 1HAwP 49.5",
+          "id": "132782639",
+          "name": "AFL WBd-Fre 1HAwPtOU 48.5",
+          "shortName": "AFL WBd-Fre 1HAwP 48.5",
           "betOption": "1st Half Away Points O/U",
           "betOptionSpectrumId": "1744",
           "betOptionPriority": 11625,
-          "marketUniqueId": 132782779,
+          "marketUniqueId": 132782639,
           "closeTime": "2026-05-01T09:30:00.000Z",
           "bettingStatus": "Open",
           "message": null,
@@ -31526,26 +31335,26 @@
           "allowBundle": false,
           "propositions": [
             {
-              "id": "25679",
-              "name": "Fremantle Over 49.5",
-              "returnWin": 1.95,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 25679,
-              "isOpen": true,
-              "sortOrder": 1
-            },
-            {
-              "id": "25681",
-              "name": "Fremantle Under 49.5",
+              "id": "25105",
+              "name": "Fremantle Over 48.5",
               "returnWin": 1.85,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
               "allowPlace": false,
-              "number": 25681,
+              "number": 25105,
+              "isOpen": true,
+              "sortOrder": 1
+            },
+            {
+              "id": "25107",
+              "name": "Fremantle Under 48.5",
+              "returnWin": 1.95,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 25107,
               "isOpen": true,
               "sortOrder": 2
             }
@@ -31636,7 +31445,7 @@
             {
               "id": "5204",
               "name": "Wst Bulldogs",
-              "returnWin": 2.6,
+              "returnWin": 2.55,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -31660,7 +31469,7 @@
             {
               "id": "5206",
               "name": "Fremantle",
-              "returnWin": 1.5,
+              "returnWin": 1.52,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -31702,7 +31511,7 @@
             {
               "id": "5644",
               "name": "Wst Bulldogs",
-              "returnWin": 2.6,
+              "returnWin": 2.55,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -31714,7 +31523,7 @@
             {
               "id": "5645",
               "name": "Fremantle",
-              "returnWin": 1.5,
+              "returnWin": 1.52,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -31726,13 +31535,13 @@
           ]
         },
         {
-          "id": "132782848",
-          "name": "AFL WBd-Fre 2HlfLn +8.5",
-          "shortName": "AFL WBd-Fre 2HlfLn +8.5",
+          "id": "132782700",
+          "name": "AFL WBd-Fre 2HlfLn +7.5",
+          "shortName": "AFL WBd-Fre 2HlfLn +7.5",
           "betOption": "2nd Half Line",
           "betOptionSpectrumId": "270",
           "betOptionPriority": 11975,
-          "marketUniqueId": 132782848,
+          "marketUniqueId": 132782700,
           "closeTime": "2026-05-01T09:30:00.000Z",
           "bettingStatus": "Open",
           "message": null,
@@ -31754,26 +31563,26 @@
           "allowBundle": false,
           "propositions": [
             {
-              "id": "25043",
-              "name": "Wst Bulldogs +8.5",
+              "id": "25323",
+              "name": "Wst Bulldogs +7.5",
               "returnWin": 1.9,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
               "allowPlace": false,
-              "number": 25043,
+              "number": 25323,
               "isOpen": true,
               "sortOrder": 1
             },
             {
-              "id": "25046",
-              "name": "Fremantle -8.5",
+              "id": "25326",
+              "name": "Fremantle -7.5",
               "returnWin": 1.9,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
               "allowPlace": false,
-              "number": 25046,
+              "number": 25326,
               "isOpen": true,
               "sortOrder": 2
             }
@@ -31810,7 +31619,7 @@
             {
               "id": "5279",
               "name": "Wst Bulldogs by 10+",
-              "returnWin": 4,
+              "returnWin": 3.8,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -31846,7 +31655,7 @@
             {
               "id": "5282",
               "name": "Fremantle by 1-9",
-              "returnWin": 4.5,
+              "returnWin": 4.8,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -31858,7 +31667,7 @@
             {
               "id": "5283",
               "name": "Fremantle by 10+",
-              "returnWin": 1.95,
+              "returnWin": 2,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -32014,7 +31823,7 @@
             {
               "id": "5759",
               "name": "Wst Bulldogs by 13-24",
-              "returnWin": 8,
+              "returnWin": 7.5,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -32086,7 +31895,7 @@
             {
               "id": "5765",
               "name": "Fremantle by 37+",
-              "returnWin": 7,
+              "returnWin": 7.5,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -32164,7 +31973,7 @@
             {
               "id": "5889",
               "name": "Wst Bulldogs by 31-36",
-              "returnWin": 34,
+              "returnWin": 31,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -32176,7 +31985,7 @@
             {
               "id": "5890",
               "name": "Wst Bulldogs by 25-30",
-              "returnWin": 23,
+              "returnWin": 21,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -32188,7 +31997,7 @@
             {
               "id": "5891",
               "name": "Wst Bulldogs by 19-24",
-              "returnWin": 16,
+              "returnWin": 15,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -32212,7 +32021,7 @@
             {
               "id": "5893",
               "name": "Wst Bulldogs by 7-12",
-              "returnWin": 10,
+              "returnWin": 9,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -32224,7 +32033,7 @@
             {
               "id": "5894",
               "name": "Wst Bulldogs by 1-6",
-              "returnWin": 8.5,
+              "returnWin": 8,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -32518,7 +32327,7 @@
             {
               "id": "25073",
               "name": "Wst Bulldogs 11 to 20",
-              "returnWin": 11,
+              "returnWin": 12,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -32530,7 +32339,7 @@
             {
               "id": "25075",
               "name": "Wst Bulldogs 21 to 30",
-              "returnWin": 5.5,
+              "returnWin": 6,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -32812,7 +32621,7 @@
             {
               "id": "25637",
               "name": "Fremantle Over 51.5",
-              "returnWin": 1.9,
+              "returnWin": 1.95,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -32824,7 +32633,7 @@
             {
               "id": "25639",
               "name": "Fremantle Under 51.5",
-              "returnWin": 1.9,
+              "returnWin": 1.85,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -32866,7 +32675,7 @@
             {
               "id": "5646",
               "name": "Wst Bulldogs",
-              "returnWin": 2.4,
+              "returnWin": 2.3,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -32892,7 +32701,7 @@
             {
               "id": "5648",
               "name": "Fremantle",
-              "returnWin": 1.6,
+              "returnWin": 1.62,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -32937,7 +32746,7 @@
             {
               "id": "5298",
               "name": "Wst Bulldogs",
-              "returnWin": 2.35,
+              "returnWin": 2.3,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -32949,7 +32758,7 @@
             {
               "id": "5299",
               "name": "Fremantle",
-              "returnWin": 1.6,
+              "returnWin": 1.62,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -32961,13 +32770,13 @@
           ]
         },
         {
-          "id": "132594789",
+          "id": "132594786",
           "name": "AFL WBdg-Frem 1stQtrLn",
-          "shortName": "AFL WBd-Fre 1stQtrLn +4.5",
+          "shortName": "AFL WBd-Fre 1stQtrLn +3.5",
           "betOption": "1st Quarter Line",
           "betOptionSpectrumId": "408",
           "betOptionPriority": 12415,
-          "marketUniqueId": 132594789,
+          "marketUniqueId": 132594786,
           "closeTime": "2026-05-01T09:30:00.000Z",
           "bettingStatus": "Open",
           "message": null,
@@ -32989,27 +32798,27 @@
           "allowBundle": false,
           "propositions": [
             {
-              "id": "5755",
-              "name": "Wst Bulldogs +4.5",
-              "returnWin": 1.85,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 5755,
-              "isOpen": true,
-              "sortOrder": 1,
-              "sameGame": true
-            },
-            {
-              "id": "5756",
-              "name": "Fremantle -4.5",
+              "id": "5275",
+              "name": "Wst Bulldogs +3.5",
               "returnWin": 1.95,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
               "allowPlace": false,
-              "number": 5756,
+              "number": 5275,
+              "isOpen": true,
+              "sortOrder": 1,
+              "sameGame": true
+            },
+            {
+              "id": "5276",
+              "name": "Fremantle -3.5",
+              "returnWin": 1.85,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 5276,
               "isOpen": true,
               "sortOrder": 2,
               "sameGame": true
@@ -33073,7 +32882,7 @@
             {
               "id": "15136",
               "name": "Fremantle /Over 45.5",
-              "returnWin": 2.9,
+              "returnWin": 3,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -33231,7 +33040,7 @@
             {
               "id": "5320",
               "name": "Wst Bulldogs -0.5",
-              "returnWin": 2.4,
+              "returnWin": 2.35,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -33244,7 +33053,7 @@
             {
               "id": "5321",
               "name": "Fremantle +0.5",
-              "returnWin": 1.53,
+              "returnWin": 1.55,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -33335,7 +33144,7 @@
             {
               "id": "5449",
               "name": "Wst Bulldogs +11.5",
-              "returnWin": 1.42,
+              "returnWin": 1.4,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -33348,7 +33157,7 @@
             {
               "id": "5450",
               "name": "Fremantle -11.5",
-              "returnWin": 2.75,
+              "returnWin": 2.8,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -33413,7 +33222,7 @@
             {
               "id": "5455",
               "name": "Wst Bulldogs +20.5",
-              "returnWin": 1.14,
+              "returnWin": 1.13,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -33426,7 +33235,7 @@
             {
               "id": "5456",
               "name": "Fremantle -20.5",
-              "returnWin": 5.2,
+              "returnWin": 5.5,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -33827,7 +33636,7 @@
             {
               "id": "30470",
               "name": "Wst Bulldogs",
-              "returnWin": 2.1,
+              "returnWin": 2.05,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -33851,7 +33660,7 @@
             {
               "id": "30475",
               "name": "Fremantle",
-              "returnWin": 1.7,
+              "returnWin": 1.72,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -33893,7 +33702,7 @@
             {
               "id": "11488",
               "name": "Wst Bulldogs",
-              "returnWin": 2.3,
+              "returnWin": 2.25,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -33905,7 +33714,7 @@
             {
               "id": "11489",
               "name": "Fremantle",
-              "returnWin": 1.72,
+              "returnWin": 1.75,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -34037,7 +33846,7 @@
             {
               "id": "11492",
               "name": "Fremantle",
-              "returnWin": 2.25,
+              "returnWin": 2.3,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -34529,7 +34338,7 @@
             {
               "id": "25232",
               "name": "Wst Bulldogs 31+",
-              "returnWin": 4.4,
+              "returnWin": 4.2,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -34835,7 +34644,7 @@
             {
               "id": "5252",
               "name": "Wst Bulldogs by 41+",
-              "returnWin": 101,
+              "returnWin": 81,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -34939,7 +34748,7 @@
             {
               "id": "5260",
               "name": "Wst Bulldogs by 1-5",
-              "returnWin": 7.5,
+              "returnWin": 7,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -35017,7 +34826,7 @@
             {
               "id": "5266",
               "name": "Fremantle by 21-25",
-              "returnWin": 12,
+              "returnWin": 13,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -35114,7 +34923,7 @@
             {
               "id": "25493",
               "name": "Wst Bulldogs",
-              "returnWin": 2,
+              "returnWin": 1.95,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -35126,7 +34935,7 @@
             {
               "id": "25494",
               "name": "Fremantle",
-              "returnWin": 1.8,
+              "returnWin": 1.85,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -35168,7 +34977,7 @@
             {
               "id": "5577",
               "name": "Wst Bulldogs Goal",
-              "returnWin": 3.5,
+              "returnWin": 3.4,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -35252,7 +35061,7 @@
             {
               "id": "30271",
               "name": "Wst Bulldogs",
-              "returnWin": 2.05,
+              "returnWin": 2,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -35264,7 +35073,7 @@
             {
               "id": "30274",
               "name": "Fremantle",
-              "returnWin": 1.75,
+              "returnWin": 1.8,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -35306,7 +35115,7 @@
             {
               "id": "25556",
               "name": "Western Bulldogs",
-              "returnWin": 2,
+              "returnWin": 1.95,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -35318,7 +35127,7 @@
             {
               "id": "25558",
               "name": "Fremantle Dockers",
-              "returnWin": 1.8,
+              "returnWin": 1.85,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -35360,7 +35169,7 @@
             {
               "id": "25284",
               "name": "Wst Bulldogs Goal",
-              "returnWin": 3.5,
+              "returnWin": 3.4,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -35498,7 +35307,7 @@
             {
               "id": "32766",
               "name": "Wst Bulldogs",
-              "returnWin": 2.4,
+              "returnWin": 2.3,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -35522,7 +35331,7 @@
             {
               "id": "32770",
               "name": "Fremantle",
-              "returnWin": 1.6,
+              "returnWin": 1.62,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -35564,7 +35373,7 @@
             {
               "id": "5928",
               "name": "Wst Bulldogs",
-              "returnWin": 2.35,
+              "returnWin": 2.3,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -35576,7 +35385,7 @@
             {
               "id": "5929",
               "name": "Fremantle",
-              "returnWin": 1.58,
+              "returnWin": 1.6,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -35588,13 +35397,13 @@
           ]
         },
         {
-          "id": "132594731",
-          "name": "AFL WBdg-Frem 2ndQLine +4.5",
-          "shortName": "AFL WBd-Fre 2QLine +4.5",
+          "id": "132594737",
+          "name": "AFL WBdg-Frem 2ndQLine +3.5",
+          "shortName": "AFL WBd-Fre 2QLine +3.5",
           "betOption": "2nd Quarter Line",
           "betOptionSpectrumId": "644",
           "betOptionPriority": 16315,
-          "marketUniqueId": 132594731,
+          "marketUniqueId": 132594737,
           "closeTime": "2026-05-01T09:30:00.000Z",
           "bettingStatus": "Open",
           "message": null,
@@ -35616,26 +35425,26 @@
           "allowBundle": false,
           "propositions": [
             {
-              "id": "5880",
-              "name": "Wst Bulldogs +4.5",
-              "returnWin": 1.85,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 5880,
-              "isOpen": true,
-              "sortOrder": 1
-            },
-            {
-              "id": "5881",
-              "name": "Fremantle -4.5",
+              "id": "5564",
+              "name": "Wst Bulldogs +3.5",
               "returnWin": 1.95,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
               "allowPlace": false,
-              "number": 5881,
+              "number": 5564,
+              "isOpen": true,
+              "sortOrder": 1
+            },
+            {
+              "id": "5565",
+              "name": "Fremantle -3.5",
+              "returnWin": 1.85,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 5565,
               "isOpen": true,
               "sortOrder": 2
             }
@@ -35862,18 +35671,6 @@
               "sortOrder": 36
             },
             {
-              "id": "30400",
-              "name": "Jeremy Sharp (FRE)",
-              "returnWin": 31,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 30400,
-              "isOpen": true,
-              "sortOrder": 55
-            },
-            {
               "id": "30319",
               "name": "Joel Freijah (WB)",
               "returnWin": 31,
@@ -35896,6 +35693,18 @@
               "number": 30415,
               "isOpen": true,
               "sortOrder": 60
+            },
+            {
+              "id": "30400",
+              "name": "Jeremy Sharp (FRE)",
+              "returnWin": 34,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 30400,
+              "isOpen": true,
+              "sortOrder": 55
             },
             {
               "id": "30314",
@@ -36656,7 +36465,7 @@
             {
               "id": "25715",
               "name": "Wst Bulldogs by 7+",
-              "returnWin": 3.6,
+              "returnWin": 3.4,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -36668,7 +36477,7 @@
             {
               "id": "25717",
               "name": "Wst Bulldogs by 1-6",
-              "returnWin": 5,
+              "returnWin": 5.5,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -36704,7 +36513,7 @@
             {
               "id": "25723",
               "name": "Fremantle by 7+",
-              "returnWin": 2.1,
+              "returnWin": 2.15,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -36836,7 +36645,7 @@
             {
               "id": "5233",
               "name": "Wst Bulldogs by 41+",
-              "returnWin": 101,
+              "returnWin": 81,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -36884,7 +36693,7 @@
             {
               "id": "5237",
               "name": "Wst Bulldogs by 21-25",
-              "returnWin": 26,
+              "returnWin": 23,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -37004,7 +36813,7 @@
             {
               "id": "5247",
               "name": "Fremantle by 21-25",
-              "returnWin": 12,
+              "returnWin": 13,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -37028,7 +36837,7 @@
             {
               "id": "5249",
               "name": "Fremantle by 31-35",
-              "returnWin": 26,
+              "returnWin": 31,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -37394,7 +37203,7 @@
             {
               "id": "25114",
               "name": "Wst Bulldogs 16 to 20",
-              "returnWin": 4.8,
+              "returnWin": 5,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -37430,7 +37239,7 @@
             {
               "id": "25118",
               "name": "Wst Bulldogs 31+",
-              "returnWin": 4.2,
+              "returnWin": 4,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -37682,7 +37491,7 @@
             {
               "id": "5566",
               "name": "Wst Bulldogs Goal",
-              "returnWin": 3.5,
+              "returnWin": 3.4,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -37976,7 +37785,7 @@
             {
               "id": "33493",
               "name": "Wst Bulldogs Goal",
-              "returnWin": 3.5,
+              "returnWin": 3.4,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -38054,7 +37863,7 @@
             {
               "id": "33282",
               "name": "Wst Bulldogs",
-              "returnWin": 2.4,
+              "returnWin": 2.3,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -38078,7 +37887,7 @@
             {
               "id": "33284",
               "name": "Fremantle",
-              "returnWin": 1.6,
+              "returnWin": 1.62,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -38120,7 +37929,7 @@
             {
               "id": "5273",
               "name": "Wst Bulldogs",
-              "returnWin": 2.35,
+              "returnWin": 2.3,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -38132,7 +37941,7 @@
             {
               "id": "5274",
               "name": "Fremantle",
-              "returnWin": 1.58,
+              "returnWin": 1.6,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -38144,13 +37953,13 @@
           ]
         },
         {
-          "id": "132594743",
-          "name": "AFL WBdg-Frem 3rdQLine +4.5",
-          "shortName": "AFL WBd-Fre 3QLine +4.5",
+          "id": "132594741",
+          "name": "AFL WBdg-Frem 3rdQLine +3.5",
+          "shortName": "AFL WBd-Fre 3QLine +3.5",
           "betOption": "3rd Quarter Line",
           "betOptionSpectrumId": "645",
           "betOptionPriority": 16585,
-          "marketUniqueId": 132594743,
+          "marketUniqueId": 132594741,
           "closeTime": "2026-05-01T09:30:00.000Z",
           "bettingStatus": "Open",
           "message": null,
@@ -38172,26 +37981,26 @@
           "allowBundle": false,
           "propositions": [
             {
-              "id": "5815",
-              "name": "Wst Bulldogs +4.5",
-              "returnWin": 1.85,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 5815,
-              "isOpen": true,
-              "sortOrder": 1
-            },
-            {
-              "id": "5816",
-              "name": "Fremantle -4.5",
+              "id": "5562",
+              "name": "Wst Bulldogs +3.5",
               "returnWin": 1.95,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
               "allowPlace": false,
-              "number": 5816,
+              "number": 5562,
+              "isOpen": true,
+              "sortOrder": 1
+            },
+            {
+              "id": "5563",
+              "name": "Fremantle -3.5",
+              "returnWin": 1.85,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 5563,
               "isOpen": true,
               "sortOrder": 2
             }
@@ -38430,18 +38239,6 @@
               "sortOrder": 14
             },
             {
-              "id": "32379",
-              "name": "Jeremy Sharp (FRE)",
-              "returnWin": 31,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 32379,
-              "isOpen": true,
-              "sortOrder": 55
-            },
-            {
               "id": "32387",
               "name": "Lachlan McNeil (WB)",
               "returnWin": 31,
@@ -38512,6 +38309,18 @@
               "number": 32362,
               "isOpen": true,
               "sortOrder": 45
+            },
+            {
+              "id": "32379",
+              "name": "Jeremy Sharp (FRE)",
+              "returnWin": 34,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 32379,
+              "isOpen": true,
+              "sortOrder": 55
             },
             {
               "id": "32313",
@@ -39212,7 +39021,7 @@
             {
               "id": "25417",
               "name": "Wst Bulldogs by 7+",
-              "returnWin": 3.6,
+              "returnWin": 3.4,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -39224,7 +39033,7 @@
             {
               "id": "25420",
               "name": "Wst Bulldogs by 1-6",
-              "returnWin": 5,
+              "returnWin": 5.5,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -39260,7 +39069,7 @@
             {
               "id": "25426",
               "name": "Fremantle by 7+",
-              "returnWin": 2.1,
+              "returnWin": 2.15,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -39392,7 +39201,7 @@
             {
               "id": "5482",
               "name": "Wst Bulldogs by 41+",
-              "returnWin": 101,
+              "returnWin": 81,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -39440,7 +39249,7 @@
             {
               "id": "5486",
               "name": "Wst Bulldogs by 21-25",
-              "returnWin": 26,
+              "returnWin": 23,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -39560,7 +39369,7 @@
             {
               "id": "5496",
               "name": "Fremantle by 21-25",
-              "returnWin": 12,
+              "returnWin": 13,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -39584,7 +39393,7 @@
             {
               "id": "5498",
               "name": "Fremantle by 31-35",
-              "returnWin": 26,
+              "returnWin": 31,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -40184,7 +39993,7 @@
             {
               "id": "25355",
               "name": "Fremantle Over 25.5",
-              "returnWin": 1.9,
+              "returnWin": 1.95,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -40196,7 +40005,7 @@
             {
               "id": "25358",
               "name": "Fremantle Under 25.5",
-              "returnWin": 1.9,
+              "returnWin": 1.85,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -40251,7 +40060,7 @@
             {
               "id": "5230",
               "name": "Fremantle Goal",
-              "returnWin": 2.9,
+              "returnWin": 3,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -40264,7 +40073,7 @@
             {
               "id": "5231",
               "name": "Wst Bulldogs Behind",
-              "returnWin": 4,
+              "returnWin": 3.8,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -40277,7 +40086,7 @@
             {
               "id": "5232",
               "name": "Fremantle Behind",
-              "returnWin": 3.6,
+              "returnWin": 3.8,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -40544,7 +40353,7 @@
             {
               "id": "33354",
               "name": "Fremantle Goal",
-              "returnWin": 2.9,
+              "returnWin": 3,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -40556,7 +40365,7 @@
             {
               "id": "33355",
               "name": "Wst Bulldogs Behind",
-              "returnWin": 4,
+              "returnWin": 3.8,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -40568,7 +40377,7 @@
             {
               "id": "33356",
               "name": "Fremantle Behind",
-              "returnWin": 3.6,
+              "returnWin": 3.8,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -40610,7 +40419,7 @@
             {
               "id": "33108",
               "name": "Wst Bulldogs",
-              "returnWin": 2.4,
+              "returnWin": 2.3,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -40634,7 +40443,7 @@
             {
               "id": "33110",
               "name": "Fremantle",
-              "returnWin": 1.6,
+              "returnWin": 1.62,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -40676,7 +40485,7 @@
             {
               "id": "5587",
               "name": "Wst Bulldogs",
-              "returnWin": 2.35,
+              "returnWin": 2.3,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -40688,7 +40497,7 @@
             {
               "id": "5588",
               "name": "Fremantle",
-              "returnWin": 1.58,
+              "returnWin": 1.6,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -40700,13 +40509,13 @@
           ]
         },
         {
-          "id": "132594751",
-          "name": "AFL WBdg-Frem 4thQLine +4.5",
-          "shortName": "AFL WBd-Fre 4QLine +4.5",
+          "id": "132594755",
+          "name": "AFL WBdg-Frem 4thQLine +3.5",
+          "shortName": "AFL WBd-Fre 4QLine +3.5",
           "betOption": "4th Quarter Line",
           "betOptionSpectrumId": "646",
           "betOptionPriority": 16830,
-          "marketUniqueId": 132594751,
+          "marketUniqueId": 132594755,
           "closeTime": "2026-05-01T09:30:00.000Z",
           "bettingStatus": "Open",
           "message": null,
@@ -40728,26 +40537,26 @@
           "allowBundle": false,
           "propositions": [
             {
-              "id": "5773",
-              "name": "Wst Bulldogs +4.5",
-              "returnWin": 1.85,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 5773,
-              "isOpen": true,
-              "sortOrder": 1
-            },
-            {
-              "id": "5774",
-              "name": "Fremantle -4.5",
+              "id": "5296",
+              "name": "Wst Bulldogs +3.5",
               "returnWin": 1.95,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
               "allowPlace": false,
-              "number": 5774,
+              "number": 5296,
+              "isOpen": true,
+              "sortOrder": 1
+            },
+            {
+              "id": "5297",
+              "name": "Fremantle -3.5",
+              "returnWin": 1.85,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 5297,
               "isOpen": true,
               "sortOrder": 2
             }
@@ -40998,18 +40807,6 @@
               "sortOrder": 60
             },
             {
-              "id": "30633",
-              "name": "Jeremy Sharp (FRE)",
-              "returnWin": 31,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 30633,
-              "isOpen": true,
-              "sortOrder": 55
-            },
-            {
               "id": "30613",
               "name": "Sam Switkowski (FRE)",
               "returnWin": 34,
@@ -41080,6 +40877,18 @@
               "number": 30492,
               "isOpen": true,
               "sortOrder": 4
+            },
+            {
+              "id": "30633",
+              "name": "Jeremy Sharp (FRE)",
+              "returnWin": 34,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 30633,
+              "isOpen": true,
+              "sortOrder": 55
             },
             {
               "id": "30539",
@@ -41768,7 +41577,7 @@
             {
               "id": "25390",
               "name": "Wst Bulldogs by 7+",
-              "returnWin": 3.6,
+              "returnWin": 3.4,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -41780,7 +41589,7 @@
             {
               "id": "25392",
               "name": "Wst Bulldogs by 1-6",
-              "returnWin": 5,
+              "returnWin": 5.5,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -41816,7 +41625,7 @@
             {
               "id": "25399",
               "name": "Fremantle by 7+",
-              "returnWin": 2.1,
+              "returnWin": 2.15,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -41948,7 +41757,7 @@
             {
               "id": "5775",
               "name": "Wst Bulldogs by 41+",
-              "returnWin": 101,
+              "returnWin": 81,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -41996,7 +41805,7 @@
             {
               "id": "5779",
               "name": "Wst Bulldogs by 21-25",
-              "returnWin": 26,
+              "returnWin": 23,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -42116,7 +41925,7 @@
             {
               "id": "5789",
               "name": "Fremantle by 21-25",
-              "returnWin": 12,
+              "returnWin": 13,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -42482,7 +42291,7 @@
             {
               "id": "25302",
               "name": "Wst Bulldogs 0 to 10",
-              "returnWin": 4.4,
+              "returnWin": 4.6,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -42542,7 +42351,7 @@
             {
               "id": "25310",
               "name": "Wst Bulldogs 31+",
-              "returnWin": 4.8,
+              "returnWin": 4.6,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -42584,7 +42393,7 @@
             {
               "id": "25438",
               "name": "Wst Bulldogs Over 20.5",
-              "returnWin": 1.95,
+              "returnWin": 1.9,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -42596,7 +42405,7 @@
             {
               "id": "25441",
               "name": "Wst Bulldogs Under 20.5",
-              "returnWin": 1.85,
+              "returnWin": 1.9,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -42698,7 +42507,7 @@
             {
               "id": "25611",
               "name": "Fremantle 31+",
-              "returnWin": 2.55,
+              "returnWin": 2.6,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -42710,13 +42519,13 @@
           ]
         },
         {
-          "id": "132782699",
-          "name": "AFL WBd-Fre 4QAwPtOU 26.5",
-          "shortName": "AFL WBd-Fre 4QAwOU 26.5",
+          "id": "132782787",
+          "name": "AFL WBd-Fre 4QAwPtOU 25.5",
+          "shortName": "AFL WBd-Fre 4QAwOU 25.5",
           "betOption": "4th Quarter Away Points O/U",
           "betOptionSpectrumId": "3150",
           "betOptionPriority": 16960,
-          "marketUniqueId": 132782699,
+          "marketUniqueId": 132782787,
           "closeTime": "2026-05-01T09:30:00.000Z",
           "bettingStatus": "Open",
           "message": null,
@@ -42738,26 +42547,26 @@
           "allowBundle": false,
           "propositions": [
             {
-              "id": "25318",
-              "name": "Fremantle Over 26.5",
-              "returnWin": 1.95,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 25318,
-              "isOpen": true,
-              "sortOrder": 1
-            },
-            {
-              "id": "25320",
-              "name": "Fremantle Under 26.5",
+              "id": "25725",
+              "name": "Fremantle Over 25.5",
               "returnWin": 1.85,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
               "allowPlace": false,
-              "number": 25320,
+              "number": 25725,
+              "isOpen": true,
+              "sortOrder": 1
+            },
+            {
+              "id": "25727",
+              "name": "Fremantle Under 25.5",
+              "returnWin": 1.95,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 25727,
               "isOpen": true,
               "sortOrder": 2
             }
@@ -42980,7 +42789,7 @@
             {
               "id": "25192",
               "name": "Western Bulldogs",
-              "returnWin": 2.1,
+              "returnWin": 2.05,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -42992,7 +42801,7 @@
             {
               "id": "25194",
               "name": "Fremantle Dockers",
-              "returnWin": 1.7,
+              "returnWin": 1.75,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -43321,7 +43130,7 @@
             {
               "id": "25189",
               "name": "Wst Bulldogs",
-              "returnWin": 3.1,
+              "returnWin": 2.9,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -43333,7 +43142,7 @@
             {
               "id": "25190",
               "name": "Fremantle",
-              "returnWin": 1.36,
+              "returnWin": 1.4,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -43507,7 +43316,7 @@
             {
               "id": "25334",
               "name": "Wst Bulldogs",
-              "returnWin": 2.7,
+              "returnWin": 2.6,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -43519,7 +43328,7 @@
             {
               "id": "25338",
               "name": "Fremantle",
-              "returnWin": 1.45,
+              "returnWin": 1.48,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -44951,6 +44760,18 @@
               "sortOrder": 25
             },
             {
+              "id": "37693",
+              "name": "Sam Switkowski (FRE)",
+              "returnWin": 18,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 37693,
+              "isOpen": true,
+              "sortOrder": 23
+            },
+            {
               "id": "37687",
               "name": "Murphy Reid (FRE)",
               "returnWin": 18,
@@ -44961,18 +44782,6 @@
               "number": 37687,
               "isOpen": true,
               "sortOrder": 20
-            },
-            {
-              "id": "37693",
-              "name": "Sam Switkowski (FRE)",
-              "returnWin": 19,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 37693,
-              "isOpen": true,
-              "sortOrder": 23
             },
             {
               "id": "37689",
@@ -45137,18 +44946,6 @@
               "sortOrder": 1
             },
             {
-              "id": "33186",
-              "name": "Marcus Bontempelli (WB)",
-              "returnWin": 8,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 33186,
-              "isOpen": true,
-              "sortOrder": 16
-            },
-            {
               "id": "33190",
               "name": "Rhylee West (WB)",
               "returnWin": 8.5,
@@ -45159,6 +44956,18 @@
               "number": 33190,
               "isOpen": true,
               "sortOrder": 20
+            },
+            {
+              "id": "33186",
+              "name": "Marcus Bontempelli (WB)",
+              "returnWin": 8.5,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 33186,
+              "isOpen": true,
+              "sortOrder": 16
             },
             {
               "id": "33195",
@@ -238108,7 +237917,8 @@
               "allowPlace": false,
               "number": 39997,
               "isOpen": true,
-              "sortOrder": 54
+              "sortOrder": 54,
+              "sameGame": true
             },
             {
               "id": "20551",
@@ -238668,7 +238478,8 @@
               "allowPlace": false,
               "number": 39987,
               "isOpen": true,
-              "sortOrder": 54
+              "sortOrder": 54,
+              "sameGame": true
             },
             {
               "id": "20445",
@@ -239267,7 +239078,8 @@
               "allowPlace": false,
               "number": 39991,
               "isOpen": true,
-              "sortOrder": 54
+              "sortOrder": 54,
+              "sameGame": true
             },
             {
               "id": "20339",
@@ -240124,7 +239936,8 @@
               "allowPlace": false,
               "number": 39989,
               "isOpen": true,
-              "sortOrder": 54
+              "sortOrder": 54,
+              "sameGame": true
             },
             {
               "id": "39990",
@@ -240735,7 +240548,8 @@
               "allowPlace": false,
               "number": 39999,
               "isOpen": true,
-              "sortOrder": 54
+              "sortOrder": 54,
+              "sameGame": true
             }
           ],
           "sameGame": true,
@@ -244182,7 +243996,8 @@
               "allowPlace": false,
               "number": 22376,
               "isOpen": true,
-              "sortOrder": 54
+              "sortOrder": 54,
+              "sameGame": true
             },
             {
               "id": "22373",
@@ -244588,7 +244403,8 @@
               "allowPlace": false,
               "number": 22624,
               "isOpen": true,
-              "sortOrder": 54
+              "sortOrder": 54,
+              "sameGame": true
             },
             {
               "id": "22615",
@@ -245033,7 +244849,8 @@
               "allowPlace": false,
               "number": 22797,
               "isOpen": true,
-              "sortOrder": 54
+              "sortOrder": 54,
+              "sameGame": true
             },
             {
               "id": "22788",
@@ -245465,7 +245282,8 @@
               "allowPlace": false,
               "number": 22514,
               "isOpen": true,
-              "sortOrder": 54
+              "sortOrder": 54,
+              "sameGame": true
             },
             {
               "id": "22512",
@@ -245923,7 +245741,8 @@
               "allowPlace": false,
               "number": 22742,
               "isOpen": true,
-              "sortOrder": 54
+              "sortOrder": 54,
+              "sameGame": true
             },
             {
               "id": "22733",
@@ -246424,7 +246243,8 @@
               "allowPlace": false,
               "number": 22679,
               "isOpen": true,
-              "sortOrder": 54
+              "sortOrder": 54,
+              "sameGame": true
             },
             {
               "id": "22627",
@@ -246855,7 +246675,8 @@
               "allowPlace": false,
               "number": 22569,
               "isOpen": true,
-              "sortOrder": 54
+              "sortOrder": 54,
+              "sameGame": true
             },
             {
               "id": "22566",
@@ -247299,7 +247120,8 @@
               "allowPlace": false,
               "number": 22237,
               "isOpen": true,
-              "sortOrder": 54
+              "sortOrder": 54,
+              "sameGame": true
             },
             {
               "id": "22186",
@@ -356593,7 +356415,7 @@
     {
       "name": "1st Quarter Line/Total Double $2",
       "hasFutureMarket": false,
-      "openMarketCount": 8,
+      "openMarketCount": 7,
       "_links": {
         "markets": "https://api.beta.tab.com.au/v1/tab-info-service/sports/AFL%20Football/competitions/AFL/markets?jurisdiction=SA&amp;betOptionName=1st%20Quarter%20Line%2FTotal%20Double%20%242&amp;homeState=SA"
       }
@@ -356601,7 +356423,7 @@
     {
       "name": "1st Quarter Line/Total Double $7",
       "hasFutureMarket": false,
-      "openMarketCount": 8,
+      "openMarketCount": 7,
       "_links": {
         "markets": "https://api.beta.tab.com.au/v1/tab-info-service/sports/AFL%20Football/competitions/AFL/markets?jurisdiction=SA&amp;betOptionName=1st%20Quarter%20Line%2FTotal%20Double%20%247&amp;homeState=SA"
       }
