@@ -108,7 +108,7 @@
             {
               "id": "5733",
               "name": "Brisbane",
-              "returnWin": 1.09,
+              "returnWin": 1.08,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -122,7 +122,7 @@
             {
               "id": "5736",
               "name": "Carlton",
-              "returnWin": 7.5,
+              "returnWin": 8,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -1284,7 +1284,8 @@
               "number": 5722,
               "isOpen": true,
               "sortOrder": 1,
-              "line": "-41.5"
+              "line": "-41.5",
+              "sameGame": true
             },
             {
               "id": "5725",
@@ -1297,9 +1298,12 @@
               "number": 5725,
               "isOpen": true,
               "sortOrder": 2,
-              "line": "+41.5"
+              "line": "+41.5",
+              "sameGame": true
             }
-          ]
+          ],
+          "sameGame": true,
+          "sameGameMultipleSelections": false
         },
         {
           "id": "132954874",
@@ -1694,7 +1698,7 @@
             {
               "id": "25223",
               "name": "Brisbane /Under 183.5",
-              "returnWin": 2.1,
+              "returnWin": 2.05,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -1707,7 +1711,7 @@
             {
               "id": "25224",
               "name": "Carlton /Over 183.5",
-              "returnWin": 16,
+              "returnWin": 17,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -1720,7 +1724,7 @@
             {
               "id": "25225",
               "name": "Carlton /Under 183.5",
-              "returnWin": 14,
+              "returnWin": 15,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -92342,7 +92346,8 @@
               "number": 28887,
               "isOpen": true,
               "sortOrder": 1,
-              "line": "+21.5"
+              "line": "+21.5",
+              "sameGame": true
             },
             {
               "id": "28888",
@@ -92355,9 +92360,12 @@
               "number": 28888,
               "isOpen": true,
               "sortOrder": 2,
-              "line": "-21.5"
+              "line": "-21.5",
+              "sameGame": true
             }
-          ]
+          ],
+          "sameGame": true,
+          "sameGameMultipleSelections": false
         },
         {
           "id": "132995975",
@@ -228976,7 +228984,7 @@
             {
               "id": "8654",
               "name": "Either Team By 15 or Less",
-              "returnWin": 2.6,
+              "returnWin": 2.7,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -229215,7 +229223,7 @@
             {
               "id": "25390",
               "name": "Geelong /Over 175.5",
-              "returnWin": 2.6,
+              "returnWin": 2.7,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -231021,6 +231029,30 @@
               "sortOrder": 145
             },
             {
+              "id": "40409",
+              "name": "Daniel McStay/Max Holmes",
+              "returnWin": 28,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 40409,
+              "isOpen": true,
+              "sortOrder": 148
+            },
+            {
+              "id": "40294",
+              "name": "Jack Martin/Bailey Smith",
+              "returnWin": 31,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 40294,
+              "isOpen": true,
+              "sortOrder": 33
+            },
+            {
               "id": "40486",
               "name": "Jordan D Goey/Bailey Smith",
               "returnWin": 31,
@@ -231031,18 +231063,6 @@
               "number": 40486,
               "isOpen": true,
               "sortOrder": 225
-            },
-            {
-              "id": "40409",
-              "name": "Daniel McStay/Max Holmes",
-              "returnWin": 31,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 40409,
-              "isOpen": true,
-              "sortOrder": 148
             },
             {
               "id": "40433",
@@ -231057,18 +231077,6 @@
               "sortOrder": 172
             },
             {
-              "id": "40297",
-              "name": "Jack Martin/Max Holmes",
-              "returnWin": 34,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 40297,
-              "isOpen": true,
-              "sortOrder": 36
-            },
-            {
               "id": "40342",
               "name": "Oliver Henry/Bailey Smith",
               "returnWin": 34,
@@ -231079,18 +231087,6 @@
               "number": 40342,
               "isOpen": true,
               "sortOrder": 81
-            },
-            {
-              "id": "40294",
-              "name": "Jack Martin/Bailey Smith",
-              "returnWin": 34,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 40294,
-              "isOpen": true,
-              "sortOrder": 33
             },
             {
               "id": "40390",
@@ -231105,16 +231101,16 @@
               "sortOrder": 129
             },
             {
-              "id": "40319",
-              "name": "J Cameron/Dan Houston",
+              "id": "40358",
+              "name": "P Dangerfield/Bailey Smith",
               "returnWin": 41,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
               "allowPlace": false,
-              "number": 40319,
+              "number": 40358,
               "isOpen": true,
-              "sortOrder": 58
+              "sortOrder": 97
             },
             {
               "id": "40457",
@@ -231165,16 +231161,16 @@
               "sortOrder": 132
             },
             {
-              "id": "40358",
-              "name": "P Dangerfield/Bailey Smith",
+              "id": "40297",
+              "name": "Jack Martin/Max Holmes",
               "returnWin": 41,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
               "allowPlace": false,
-              "number": 40358,
+              "number": 40297,
               "isOpen": true,
-              "sortOrder": 97
+              "sortOrder": 36
             },
             {
               "id": "40385",
@@ -231225,16 +231221,16 @@
               "sortOrder": 63
             },
             {
-              "id": "40361",
-              "name": "P Dangerfield/Max Holmes",
+              "id": "40319",
+              "name": "J Cameron/Dan Houston",
               "returnWin": 51,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
               "allowPlace": false,
-              "number": 40361,
+              "number": 40319,
               "isOpen": true,
-              "sortOrder": 100
+              "sortOrder": 58
             },
             {
               "id": "40402",
@@ -231297,18 +231293,6 @@
               "sortOrder": 45
             },
             {
-              "id": "40431",
-              "name": "Jamie Elliott/Dan Houston",
-              "returnWin": 61,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 40431,
-              "isOpen": true,
-              "sortOrder": 170
-            },
-            {
               "id": "40466",
               "name": "Nick Daicos/Nick Daicos",
               "returnWin": 61,
@@ -231321,16 +231305,16 @@
               "sortOrder": 205
             },
             {
-              "id": "40314",
-              "name": "J Cameron/Tanner Bruhn",
+              "id": "40361",
+              "name": "P Dangerfield/Max Holmes",
               "returnWin": 61,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
               "allowPlace": false,
-              "number": 40314,
+              "number": 40361,
               "isOpen": true,
-              "sortOrder": 53
+              "sortOrder": 100
             },
             {
               "id": "40441",
@@ -231381,6 +231365,42 @@
               "sortOrder": 1
             },
             {
+              "id": "40370",
+              "name": "P Dangerfield/Nick Daicos",
+              "returnWin": 67,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 40370,
+              "isOpen": true,
+              "sortOrder": 109
+            },
+            {
+              "id": "40431",
+              "name": "Jamie Elliott/Dan Houston",
+              "returnWin": 67,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 40431,
+              "isOpen": true,
+              "sortOrder": 170
+            },
+            {
+              "id": "40314",
+              "name": "J Cameron/Tanner Bruhn",
+              "returnWin": 67,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 40314,
+              "isOpen": true,
+              "sortOrder": 53
+            },
+            {
               "id": "40329",
               "name": "O Dempsey/Max Holmes",
               "returnWin": 67,
@@ -231405,6 +231425,18 @@
               "sortOrder": 4
             },
             {
+              "id": "40383",
+              "name": "Shannon Neale/Dan Houston",
+              "returnWin": 81,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 40383,
+              "isOpen": true,
+              "sortOrder": 122
+            },
+            {
               "id": "40465",
               "name": "Nick Daicos/Josh Daicos",
               "returnWin": 81,
@@ -231417,18 +231449,6 @@
               "sortOrder": 204
             },
             {
-              "id": "40370",
-              "name": "P Dangerfield/Nick Daicos",
-              "returnWin": 81,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 40370,
-              "isOpen": true,
-              "sortOrder": 109
-            },
-            {
               "id": "40450",
               "name": "L Schultz/Nick Daicos",
               "returnWin": 81,
@@ -231439,18 +231459,6 @@
               "number": 40450,
               "isOpen": true,
               "sortOrder": 189
-            },
-            {
-              "id": "40470",
-              "name": "Beau McCreery/Bailey Smith",
-              "returnWin": 81,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 40470,
-              "isOpen": true,
-              "sortOrder": 209
             },
             {
               "id": "40426",
@@ -231499,18 +231507,6 @@
               "number": 40274,
               "isOpen": true,
               "sortOrder": 13
-            },
-            {
-              "id": "40383",
-              "name": "Shannon Neale/Dan Houston",
-              "returnWin": 81,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 40383,
-              "isOpen": true,
-              "sortOrder": 122
             },
             {
               "id": "40436",
@@ -231571,6 +231567,18 @@
               "number": 40353,
               "isOpen": true,
               "sortOrder": 92
+            },
+            {
+              "id": "40351",
+              "name": "Oliver Henry/Dan Houston",
+              "returnWin": 101,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 40351,
+              "isOpen": true,
+              "sortOrder": 90
             },
             {
               "id": "40432",
@@ -231693,6 +231701,18 @@
               "sortOrder": 20
             },
             {
+              "id": "40470",
+              "name": "Beau McCreery/Bailey Smith",
+              "returnWin": 101,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 40470,
+              "isOpen": true,
+              "sortOrder": 209
+            },
+            {
               "id": "40482",
               "name": "Beau McCreery/Nick Daicos",
               "returnWin": 101,
@@ -231777,18 +231797,6 @@
               "sortOrder": 241
             },
             {
-              "id": "40351",
-              "name": "Oliver Henry/Dan Houston",
-              "returnWin": 101,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 40351,
-              "isOpen": true,
-              "sortOrder": 90
-            },
-            {
               "id": "40420",
               "name": "Daniel McStay/S Pendlebury",
               "returnWin": 101,
@@ -231811,6 +231819,42 @@
               "number": 40378,
               "isOpen": true,
               "sortOrder": 117
+            },
+            {
+              "id": "40315",
+              "name": "J Cameron/Tom Atkins",
+              "returnWin": 126,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 40315,
+              "isOpen": true,
+              "sortOrder": 54
+            },
+            {
+              "id": "40399",
+              "name": "Shaun Mannagh/Dan Houston",
+              "returnWin": 126,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 40399,
+              "isOpen": true,
+              "sortOrder": 138
+            },
+            {
+              "id": "40410",
+              "name": "Daniel McStay/Tanner Bruhn",
+              "returnWin": 126,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 40410,
+              "isOpen": true,
+              "sortOrder": 149
             },
             {
               "id": "40505",
@@ -231861,18 +231905,6 @@
               "sortOrder": 95
             },
             {
-              "id": "40410",
-              "name": "Daniel McStay/Tanner Bruhn",
-              "returnWin": 126,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 40410,
-              "isOpen": true,
-              "sortOrder": 149
-            },
-            {
               "id": "40384",
               "name": "Shannon Neale/Jack Crisp",
               "returnWin": 126,
@@ -231919,18 +231951,6 @@
               "number": 40500,
               "isOpen": true,
               "sortOrder": 239
-            },
-            {
-              "id": "40399",
-              "name": "Shaun Mannagh/Dan Houston",
-              "returnWin": 126,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 40399,
-              "isOpen": true,
-              "sortOrder": 138
             },
             {
               "id": "40463",
@@ -232005,18 +232025,6 @@
               "sortOrder": 119
             },
             {
-              "id": "40289",
-              "name": "Jack Bowes/Josh Daicos",
-              "returnWin": 126,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 40289,
-              "isOpen": true,
-              "sortOrder": 28
-            },
-            {
               "id": "40298",
               "name": "Jack Martin/Tanner Bruhn",
               "returnWin": 126,
@@ -232039,6 +232047,78 @@
               "number": 40308,
               "isOpen": true,
               "sortOrder": 47
+            },
+            {
+              "id": "40289",
+              "name": "Jack Bowes/Josh Daicos",
+              "returnWin": 151,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 40289,
+              "isOpen": true,
+              "sortOrder": 28
+            },
+            {
+              "id": "40304",
+              "name": "Jack Martin/Jack Crisp",
+              "returnWin": 151,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 40304,
+              "isOpen": true,
+              "sortOrder": 43
+            },
+            {
+              "id": "40352",
+              "name": "Oliver Henry/Jack Crisp",
+              "returnWin": 151,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 40352,
+              "isOpen": true,
+              "sortOrder": 91
+            },
+            {
+              "id": "40496",
+              "name": "Jordan D Goey/Jack Crisp",
+              "returnWin": 151,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 40496,
+              "isOpen": true,
+              "sortOrder": 235
+            },
+            {
+              "id": "40427",
+              "name": "Jamie Elliott/Tom Atkins",
+              "returnWin": 151,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 40427,
+              "isOpen": true,
+              "sortOrder": 166
+            },
+            {
+              "id": "40340",
+              "name": "O Dempsey/S Pendlebury",
+              "returnWin": 151,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 40340,
+              "isOpen": true,
+              "sortOrder": 79
             },
             {
               "id": "40513",
@@ -232077,18 +232157,6 @@
               "sortOrder": 85
             },
             {
-              "id": "40315",
-              "name": "J Cameron/Tom Atkins",
-              "returnWin": 151,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 40315,
-              "isOpen": true,
-              "sortOrder": 54
-            },
-            {
               "id": "40362",
               "name": "P Dangerfield/Tanner Bruhn",
               "returnWin": 151,
@@ -232123,18 +232191,6 @@
               "number": 40452,
               "isOpen": true,
               "sortOrder": 191
-            },
-            {
-              "id": "40442",
-              "name": "L Schultz/Tanner Bruhn",
-              "returnWin": 151,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 40442,
-              "isOpen": true,
-              "sortOrder": 181
             },
             {
               "id": "40372",
@@ -232173,18 +232229,6 @@
               "sortOrder": 231
             },
             {
-              "id": "40496",
-              "name": "Jordan D Goey/Jack Crisp",
-              "returnWin": 151,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 40496,
-              "isOpen": true,
-              "sortOrder": 235
-            },
-            {
               "id": "40416",
               "name": "Daniel McStay/Jack Crisp",
               "returnWin": 151,
@@ -232197,18 +232241,6 @@
               "sortOrder": 155
             },
             {
-              "id": "40340",
-              "name": "O Dempsey/S Pendlebury",
-              "returnWin": 151,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 40340,
-              "isOpen": true,
-              "sortOrder": 79
-            },
-            {
               "id": "40330",
               "name": "O Dempsey/Tanner Bruhn",
               "returnWin": 151,
@@ -232219,6 +232251,18 @@
               "number": 40330,
               "isOpen": true,
               "sortOrder": 69
+            },
+            {
+              "id": "40379",
+              "name": "Shannon Neale/Tom Atkins",
+              "returnWin": 151,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 40379,
+              "isOpen": true,
+              "sortOrder": 118
             },
             {
               "id": "40271",
@@ -232257,16 +232301,112 @@
               "sortOrder": 50
             },
             {
-              "id": "40352",
-              "name": "Oliver Henry/Jack Crisp",
+              "id": "40292",
+              "name": "Jack Bowes/S Pendlebury",
               "returnWin": 201,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
               "allowPlace": false,
-              "number": 40352,
+              "number": 40292,
               "isOpen": true,
-              "sortOrder": 91
+              "sortOrder": 31
+            },
+            {
+              "id": "40312",
+              "name": "J Cameron/James Worpel",
+              "returnWin": 201,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 40312,
+              "isOpen": true,
+              "sortOrder": 51
+            },
+            {
+              "id": "40318",
+              "name": "J Cameron/B Maynard",
+              "returnWin": 201,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 40318,
+              "isOpen": true,
+              "sortOrder": 57
+            },
+            {
+              "id": "40423",
+              "name": "Jamie Elliott/Jack Bowes",
+              "returnWin": 201,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 40423,
+              "isOpen": true,
+              "sortOrder": 162
+            },
+            {
+              "id": "40325",
+              "name": "J Cameron/Ned Long",
+              "returnWin": 201,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 40325,
+              "isOpen": true,
+              "sortOrder": 64
+            },
+            {
+              "id": "40448",
+              "name": "L Schultz/Jack Crisp",
+              "returnWin": 201,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 40448,
+              "isOpen": true,
+              "sortOrder": 187
+            },
+            {
+              "id": "40442",
+              "name": "L Schultz/Tanner Bruhn",
+              "returnWin": 201,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 40442,
+              "isOpen": true,
+              "sortOrder": 181
+            },
+            {
+              "id": "40300",
+              "name": "Jack Martin/Tom Stewart",
+              "returnWin": 201,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 40300,
+              "isOpen": true,
+              "sortOrder": 39
+            },
+            {
+              "id": "40400",
+              "name": "Shaun Mannagh/Jack Crisp",
+              "returnWin": 201,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 40400,
+              "isOpen": true,
+              "sortOrder": 139
             },
             {
               "id": "40396",
@@ -232305,28 +232445,16 @@
               "sortOrder": 5
             },
             {
-              "id": "40437",
-              "name": "Jamie Elliott/Ned Long",
+              "id": "40491",
+              "name": "Jordan D Goey/Tom Atkins",
               "returnWin": 201,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
               "allowPlace": false,
-              "number": 40437,
+              "number": 40491,
               "isOpen": true,
-              "sortOrder": 176
-            },
-            {
-              "id": "40474",
-              "name": "Beau McCreery/Tanner Bruhn",
-              "returnWin": 201,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 40474,
-              "isOpen": true,
-              "sortOrder": 213
+              "sortOrder": 230
             },
             {
               "id": "40364",
@@ -232339,6 +232467,18 @@
               "number": 40364,
               "isOpen": true,
               "sortOrder": 103
+            },
+            {
+              "id": "40411",
+              "name": "Daniel McStay/Tom Atkins",
+              "returnWin": 201,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 40411,
+              "isOpen": true,
+              "sortOrder": 150
             },
             {
               "id": "40464",
@@ -232365,18 +232505,6 @@
               "sortOrder": 199
             },
             {
-              "id": "40400",
-              "name": "Shaun Mannagh/Jack Crisp",
-              "returnWin": 201,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 40400,
-              "isOpen": true,
-              "sortOrder": 139
-            },
-            {
               "id": "40484",
               "name": "Beau McCreery/S Pendlebury",
               "returnWin": 201,
@@ -232387,18 +232515,6 @@
               "number": 40484,
               "isOpen": true,
               "sortOrder": 223
-            },
-            {
-              "id": "40427",
-              "name": "Jamie Elliott/Tom Atkins",
-              "returnWin": 201,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 40427,
-              "isOpen": true,
-              "sortOrder": 166
             },
             {
               "id": "40368",
@@ -232423,30 +232539,6 @@
               "number": 40479,
               "isOpen": true,
               "sortOrder": 218
-            },
-            {
-              "id": "40379",
-              "name": "Shannon Neale/Tom Atkins",
-              "returnWin": 201,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 40379,
-              "isOpen": true,
-              "sortOrder": 118
-            },
-            {
-              "id": "40304",
-              "name": "Jack Martin/Jack Crisp",
-              "returnWin": 201,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 40304,
-              "isOpen": true,
-              "sortOrder": 43
             },
             {
               "id": "40348",
@@ -232485,28 +232577,76 @@
               "sortOrder": 62
             },
             {
-              "id": "40300",
-              "name": "Jack Martin/Tom Stewart",
-              "returnWin": 201,
+              "id": "40282",
+              "name": "Jack Bowes/Tanner Bruhn",
+              "returnWin": 251,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
               "allowPlace": false,
-              "number": 40300,
+              "number": 40282,
               "isOpen": true,
-              "sortOrder": 39
+              "sortOrder": 21
             },
             {
-              "id": "40325",
-              "name": "J Cameron/Ned Long",
-              "returnWin": 201,
+              "id": "40444",
+              "name": "L Schultz/Tom Stewart",
+              "returnWin": 251,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
               "allowPlace": false,
-              "number": 40325,
+              "number": 40444,
               "isOpen": true,
-              "sortOrder": 64
+              "sortOrder": 183
+            },
+            {
+              "id": "40437",
+              "name": "Jamie Elliott/Ned Long",
+              "returnWin": 251,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 40437,
+              "isOpen": true,
+              "sortOrder": 176
+            },
+            {
+              "id": "40299",
+              "name": "Jack Martin/Tom Atkins",
+              "returnWin": 251,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 40299,
+              "isOpen": true,
+              "sortOrder": 38
+            },
+            {
+              "id": "40395",
+              "name": "Shaun Mannagh/Tom Atkins",
+              "returnWin": 251,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 40395,
+              "isOpen": true,
+              "sortOrder": 134
+            },
+            {
+              "id": "40430",
+              "name": "Jamie Elliott/B Maynard",
+              "returnWin": 251,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 40430,
+              "isOpen": true,
+              "sortOrder": 169
             },
             {
               "id": "40435",
@@ -232557,28 +232697,28 @@
               "sortOrder": 163
             },
             {
-              "id": "40387",
-              "name": "Shannon Neale/P Lipinski",
+              "id": "40459",
+              "name": "Nick Daicos/Tom Atkins",
               "returnWin": 251,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
               "allowPlace": false,
-              "number": 40387,
+              "number": 40459,
               "isOpen": true,
-              "sortOrder": 126
+              "sortOrder": 198
             },
             {
-              "id": "40292",
-              "name": "Jack Bowes/S Pendlebury",
+              "id": "40474",
+              "name": "Beau McCreery/Tanner Bruhn",
               "returnWin": 251,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
               "allowPlace": false,
-              "number": 40292,
+              "number": 40474,
               "isOpen": true,
-              "sortOrder": 31
+              "sortOrder": 213
             },
             {
               "id": "40375",
@@ -232591,42 +232731,6 @@
               "number": 40375,
               "isOpen": true,
               "sortOrder": 114
-            },
-            {
-              "id": "40407",
-              "name": "Daniel McStay/Jack Bowes",
-              "returnWin": 251,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 40407,
-              "isOpen": true,
-              "sortOrder": 146
-            },
-            {
-              "id": "40411",
-              "name": "Daniel McStay/Tom Atkins",
-              "returnWin": 251,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 40411,
-              "isOpen": true,
-              "sortOrder": 150
-            },
-            {
-              "id": "40487",
-              "name": "Jordan D Goey/Jack Bowes",
-              "returnWin": 251,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 40487,
-              "isOpen": true,
-              "sortOrder": 226
             },
             {
               "id": "40511",
@@ -232653,30 +232757,6 @@
               "sortOrder": 75
             },
             {
-              "id": "40448",
-              "name": "L Schultz/Jack Crisp",
-              "returnWin": 251,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 40448,
-              "isOpen": true,
-              "sortOrder": 187
-            },
-            {
-              "id": "40516",
-              "name": "Oscar Steene/S Pendlebury",
-              "returnWin": 251,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 40516,
-              "isOpen": true,
-              "sortOrder": 255
-            },
-            {
               "id": "40272",
               "name": "Jack Buller/Jack Crisp",
               "returnWin": 251,
@@ -232689,148 +232769,52 @@
               "sortOrder": 11
             },
             {
-              "id": "40389",
-              "name": "Shannon Neale/Ned Long",
-              "returnWin": 251,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 40389,
-              "isOpen": true,
-              "sortOrder": 128
-            },
-            {
-              "id": "40312",
-              "name": "J Cameron/James Worpel",
-              "returnWin": 251,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 40312,
-              "isOpen": true,
-              "sortOrder": 51
-            },
-            {
-              "id": "40268",
-              "name": "Jack Buller/Tom Stewart",
-              "returnWin": 251,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 40268,
-              "isOpen": true,
-              "sortOrder": 7
-            },
-            {
-              "id": "40318",
-              "name": "J Cameron/B Maynard",
-              "returnWin": 251,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 40318,
-              "isOpen": true,
-              "sortOrder": 57
-            },
-            {
-              "id": "40430",
-              "name": "Jamie Elliott/B Maynard",
-              "returnWin": 251,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 40430,
-              "isOpen": true,
-              "sortOrder": 169
-            },
-            {
-              "id": "40423",
-              "name": "Jamie Elliott/Jack Bowes",
-              "returnWin": 251,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 40423,
-              "isOpen": true,
-              "sortOrder": 162
-            },
-            {
-              "id": "40332",
-              "name": "O Dempsey/Tom Stewart",
+              "id": "40421",
+              "name": "Daniel McStay/Ned Long",
               "returnWin": 301,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
               "allowPlace": false,
-              "number": 40332,
+              "number": 40421,
               "isOpen": true,
-              "sortOrder": 71
+              "sortOrder": 160
             },
             {
-              "id": "40391",
-              "name": "Shaun Mannagh/Jack Bowes",
+              "id": "40387",
+              "name": "Shannon Neale/P Lipinski",
               "returnWin": 301,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
               "allowPlace": false,
-              "number": 40391,
+              "number": 40387,
               "isOpen": true,
-              "sortOrder": 130
+              "sortOrder": 126
             },
             {
-              "id": "40363",
-              "name": "P Dangerfield/Tom Atkins",
+              "id": "40516",
+              "name": "Oscar Steene/S Pendlebury",
               "returnWin": 301,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
               "allowPlace": false,
-              "number": 40363,
+              "number": 40516,
               "isOpen": true,
-              "sortOrder": 102
+              "sortOrder": 255
             },
             {
-              "id": "40444",
-              "name": "L Schultz/Tom Stewart",
+              "id": "40382",
+              "name": "Shannon Neale/B Maynard",
               "returnWin": 301,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
               "allowPlace": false,
-              "number": 40444,
+              "number": 40382,
               "isOpen": true,
-              "sortOrder": 183
-            },
-            {
-              "id": "40491",
-              "name": "Jordan D Goey/Tom Atkins",
-              "returnWin": 301,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 40491,
-              "isOpen": true,
-              "sortOrder": 230
-            },
-            {
-              "id": "40288",
-              "name": "Jack Bowes/Jack Crisp",
-              "returnWin": 301,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 40288,
-              "isOpen": true,
-              "sortOrder": 27
+              "sortOrder": 121
             },
             {
               "id": "40284",
@@ -232845,6 +232829,78 @@
               "sortOrder": 23
             },
             {
+              "id": "40455",
+              "name": "Nick Daicos/Jack Bowes",
+              "returnWin": 301,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 40455,
+              "isOpen": true,
+              "sortOrder": 194
+            },
+            {
+              "id": "40363",
+              "name": "P Dangerfield/Tom Atkins",
+              "returnWin": 301,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 40363,
+              "isOpen": true,
+              "sortOrder": 102
+            },
+            {
+              "id": "40332",
+              "name": "O Dempsey/Tom Stewart",
+              "returnWin": 301,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 40332,
+              "isOpen": true,
+              "sortOrder": 71
+            },
+            {
+              "id": "40480",
+              "name": "Beau McCreery/Jack Crisp",
+              "returnWin": 301,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 40480,
+              "isOpen": true,
+              "sortOrder": 219
+            },
+            {
+              "id": "40295",
+              "name": "Jack Martin/Jack Bowes",
+              "returnWin": 301,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 40295,
+              "isOpen": true,
+              "sortOrder": 34
+            },
+            {
+              "id": "40407",
+              "name": "Daniel McStay/Jack Bowes",
+              "returnWin": 301,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 40407,
+              "isOpen": true,
+              "sortOrder": 146
+            },
+            {
               "id": "40347",
               "name": "Oliver Henry/Tom Atkins",
               "returnWin": 301,
@@ -232857,16 +232913,16 @@
               "sortOrder": 86
             },
             {
-              "id": "40282",
-              "name": "Jack Bowes/Tanner Bruhn",
+              "id": "40389",
+              "name": "Shannon Neale/Ned Long",
               "returnWin": 301,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
               "allowPlace": false,
-              "number": 40282,
+              "number": 40389,
               "isOpen": true,
-              "sortOrder": 21
+              "sortOrder": 128
             },
             {
               "id": "40506",
@@ -232881,16 +232937,64 @@
               "sortOrder": 245
             },
             {
-              "id": "40299",
-              "name": "Jack Martin/Tom Atkins",
+              "id": "40268",
+              "name": "Jack Buller/Tom Stewart",
               "returnWin": 301,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
               "allowPlace": false,
-              "number": 40299,
+              "number": 40268,
               "isOpen": true,
-              "sortOrder": 38
+              "sortOrder": 7
+            },
+            {
+              "id": "40267",
+              "name": "Jack Buller/Tom Atkins",
+              "returnWin": 351,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 40267,
+              "isOpen": true,
+              "sortOrder": 6
+            },
+            {
+              "id": "40391",
+              "name": "Shaun Mannagh/Jack Bowes",
+              "returnWin": 351,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 40391,
+              "isOpen": true,
+              "sortOrder": 130
+            },
+            {
+              "id": "40331",
+              "name": "O Dempsey/Tom Atkins",
+              "returnWin": 351,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 40331,
+              "isOpen": true,
+              "sortOrder": 70
+            },
+            {
+              "id": "40309",
+              "name": "Jack Martin/Ned Long",
+              "returnWin": 351,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 40309,
+              "isOpen": true,
+              "sortOrder": 48
             },
             {
               "id": "40413",
@@ -232905,52 +233009,16 @@
               "sortOrder": 152
             },
             {
-              "id": "40395",
-              "name": "Shaun Mannagh/Tom Atkins",
+              "id": "40443",
+              "name": "L Schultz/Tom Atkins",
               "returnWin": 351,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
               "allowPlace": false,
-              "number": 40395,
+              "number": 40443,
               "isOpen": true,
-              "sortOrder": 134
-            },
-            {
-              "id": "40382",
-              "name": "Shannon Neale/B Maynard",
-              "returnWin": 351,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 40382,
-              "isOpen": true,
-              "sortOrder": 121
-            },
-            {
-              "id": "40459",
-              "name": "Nick Daicos/Tom Atkins",
-              "returnWin": 351,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 40459,
-              "isOpen": true,
-              "sortOrder": 198
-            },
-            {
-              "id": "40480",
-              "name": "Beau McCreery/Jack Crisp",
-              "returnWin": 351,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 40480,
-              "isOpen": true,
-              "sortOrder": 219
+              "sortOrder": 182
             },
             {
               "id": "40343",
@@ -232965,16 +233033,40 @@
               "sortOrder": 82
             },
             {
-              "id": "40295",
-              "name": "Jack Martin/Jack Bowes",
+              "id": "40512",
+              "name": "Oscar Steene/Jack Crisp",
               "returnWin": 351,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
               "allowPlace": false,
-              "number": 40295,
+              "number": 40512,
               "isOpen": true,
-              "sortOrder": 34
+              "sortOrder": 251
+            },
+            {
+              "id": "40405",
+              "name": "Shaun Mannagh/Ned Long",
+              "returnWin": 351,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 40405,
+              "isOpen": true,
+              "sortOrder": 144
+            },
+            {
+              "id": "40487",
+              "name": "Jordan D Goey/Jack Bowes",
+              "returnWin": 351,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 40487,
+              "isOpen": true,
+              "sortOrder": 226
             },
             {
               "id": "40476",
@@ -232989,45 +233081,9 @@
               "sortOrder": 215
             },
             {
-              "id": "40376",
-              "name": "Shannon Neale/James Worpel",
-              "returnWin": 351,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 40376,
-              "isOpen": true,
-              "sortOrder": 115
-            },
-            {
-              "id": "40421",
-              "name": "Daniel McStay/Ned Long",
-              "returnWin": 351,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 40421,
-              "isOpen": true,
-              "sortOrder": 160
-            },
-            {
-              "id": "40508",
-              "name": "Oscar Steene/Tom Stewart",
-              "returnWin": 351,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 40508,
-              "isOpen": true,
-              "sortOrder": 247
-            },
-            {
               "id": "40419",
               "name": "Daniel McStay/P Lipinski",
-              "returnWin": 351,
+              "returnWin": 401,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -233037,76 +233093,16 @@
               "sortOrder": 158
             },
             {
-              "id": "40307",
-              "name": "Jack Martin/P Lipinski",
+              "id": "40508",
+              "name": "Oscar Steene/Tom Stewart",
               "returnWin": 401,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
               "allowPlace": false,
-              "number": 40307,
+              "number": 40508,
               "isOpen": true,
-              "sortOrder": 46
-            },
-            {
-              "id": "40309",
-              "name": "Jack Martin/Ned Long",
-              "returnWin": 401,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 40309,
-              "isOpen": true,
-              "sortOrder": 48
-            },
-            {
-              "id": "40263",
-              "name": "Jack Buller/Jack Bowes",
-              "returnWin": 401,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 40263,
-              "isOpen": true,
-              "sortOrder": 2
-            },
-            {
-              "id": "40443",
-              "name": "L Schultz/Tom Atkins",
-              "returnWin": 401,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 40443,
-              "isOpen": true,
-              "sortOrder": 182
-            },
-            {
-              "id": "40499",
-              "name": "Jordan D Goey/P Lipinski",
-              "returnWin": 401,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 40499,
-              "isOpen": true,
-              "sortOrder": 238
-            },
-            {
-              "id": "40301",
-              "name": "Jack Martin/Zach Guthrie",
-              "returnWin": 401,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 40301,
-              "isOpen": true,
-              "sortOrder": 40
+              "sortOrder": 247
             },
             {
               "id": "40357",
@@ -233121,64 +233117,88 @@
               "sortOrder": 96
             },
             {
-              "id": "40405",
-              "name": "Shaun Mannagh/Ned Long",
+              "id": "40288",
+              "name": "Jack Bowes/Jack Crisp",
               "returnWin": 401,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
               "allowPlace": false,
-              "number": 40405,
+              "number": 40288,
               "isOpen": true,
-              "sortOrder": 144
+              "sortOrder": 27
             },
             {
-              "id": "40469",
-              "name": "Nick Daicos/Ned Long",
+              "id": "40302",
+              "name": "Jack Martin/B Maynard",
               "returnWin": 401,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
               "allowPlace": false,
-              "number": 40469,
+              "number": 40302,
               "isOpen": true,
-              "sortOrder": 208
+              "sortOrder": 41
             },
             {
-              "id": "40455",
-              "name": "Nick Daicos/Jack Bowes",
+              "id": "40501",
+              "name": "Jordan D Goey/Ned Long",
               "returnWin": 401,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
               "allowPlace": false,
-              "number": 40455,
+              "number": 40501,
               "isOpen": true,
-              "sortOrder": 194
+              "sortOrder": 240
             },
             {
-              "id": "40467",
-              "name": "Nick Daicos/P Lipinski",
+              "id": "40414",
+              "name": "Daniel McStay/B Maynard",
+              "returnWin": 401,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 40414,
+              "isOpen": true,
+              "sortOrder": 153
+            },
+            {
+              "id": "40376",
+              "name": "Shannon Neale/James Worpel",
+              "returnWin": 401,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 40376,
+              "isOpen": true,
+              "sortOrder": 115
+            },
+            {
+              "id": "40494",
+              "name": "Jordan D Goey/B Maynard",
+              "returnWin": 401,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 40494,
+              "isOpen": true,
+              "sortOrder": 233
+            },
+            {
+              "id": "40307",
+              "name": "Jack Martin/P Lipinski",
               "returnWin": 451,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
               "allowPlace": false,
-              "number": 40467,
+              "number": 40307,
               "isOpen": true,
-              "sortOrder": 206
-            },
-            {
-              "id": "40462",
-              "name": "Nick Daicos/B Maynard",
-              "returnWin": 451,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 40462,
-              "isOpen": true,
-              "sortOrder": 201
+              "sortOrder": 46
             },
             {
               "id": "40371",
@@ -233193,16 +233213,16 @@
               "sortOrder": 110
             },
             {
-              "id": "40302",
-              "name": "Jack Martin/B Maynard",
+              "id": "40493",
+              "name": "Jordan D Goey/Zach Guthrie",
               "returnWin": 451,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
               "allowPlace": false,
-              "number": 40302,
+              "number": 40493,
               "isOpen": true,
-              "sortOrder": 41
+              "sortOrder": 232
             },
             {
               "id": "40359",
@@ -233217,18 +233237,6 @@
               "sortOrder": 98
             },
             {
-              "id": "40501",
-              "name": "Jordan D Goey/Ned Long",
-              "returnWin": 451,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 40501,
-              "isOpen": true,
-              "sortOrder": 240
-            },
-            {
               "id": "40349",
               "name": "Oliver Henry/Zach Guthrie",
               "returnWin": 451,
@@ -233241,33 +233249,33 @@
               "sortOrder": 88
             },
             {
-              "id": "40355",
-              "name": "Oliver Henry/P Lipinski",
+              "id": "40365",
+              "name": "P Dangerfield/Zach Guthrie",
               "returnWin": 451,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
               "allowPlace": false,
-              "number": 40355,
+              "number": 40365,
               "isOpen": true,
-              "sortOrder": 94
+              "sortOrder": 104
             },
             {
-              "id": "40493",
-              "name": "Jordan D Goey/Zach Guthrie",
+              "id": "40408",
+              "name": "Daniel McStay/James Worpel",
               "returnWin": 451,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
               "allowPlace": false,
-              "number": 40493,
+              "number": 40408,
               "isOpen": true,
-              "sortOrder": 232
+              "sortOrder": 147
             },
             {
               "id": "40445",
               "name": "L Schultz/Zach Guthrie",
-              "returnWin": 451,
+              "returnWin": 501,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -233277,40 +233285,76 @@
               "sortOrder": 184
             },
             {
-              "id": "40327",
-              "name": "O Dempsey/Jack Bowes",
-              "returnWin": 451,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 40327,
-              "isOpen": true,
-              "sortOrder": 66
-            },
-            {
-              "id": "40331",
-              "name": "O Dempsey/Tom Atkins",
-              "returnWin": 451,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 40331,
-              "isOpen": true,
-              "sortOrder": 70
-            },
-            {
-              "id": "40414",
-              "name": "Daniel McStay/B Maynard",
+              "id": "40467",
+              "name": "Nick Daicos/P Lipinski",
               "returnWin": 501,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
               "allowPlace": false,
-              "number": 40414,
+              "number": 40467,
               "isOpen": true,
-              "sortOrder": 153
+              "sortOrder": 206
+            },
+            {
+              "id": "40462",
+              "name": "Nick Daicos/B Maynard",
+              "returnWin": 501,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 40462,
+              "isOpen": true,
+              "sortOrder": 201
+            },
+            {
+              "id": "40301",
+              "name": "Jack Martin/Zach Guthrie",
+              "returnWin": 501,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 40301,
+              "isOpen": true,
+              "sortOrder": 40
+            },
+            {
+              "id": "40488",
+              "name": "Jordan D Goey/James Worpel",
+              "returnWin": 501,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 40488,
+              "isOpen": true,
+              "sortOrder": 227
+            },
+            {
+              "id": "40398",
+              "name": "Shaun Mannagh/B Maynard",
+              "returnWin": 501,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 40398,
+              "isOpen": true,
+              "sortOrder": 137
+            },
+            {
+              "id": "40403",
+              "name": "Shaun Mannagh/P Lipinski",
+              "returnWin": 501,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 40403,
+              "isOpen": true,
+              "sortOrder": 142
             },
             {
               "id": "40439",
@@ -233323,6 +233367,18 @@
               "number": 40439,
               "isOpen": true,
               "sortOrder": 178
+            },
+            {
+              "id": "40263",
+              "name": "Jack Buller/Jack Bowes",
+              "returnWin": 501,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 40263,
+              "isOpen": true,
+              "sortOrder": 2
             },
             {
               "id": "40392",
@@ -233349,16 +233405,16 @@
               "sortOrder": 200
             },
             {
-              "id": "40512",
-              "name": "Oscar Steene/Jack Crisp",
+              "id": "40499",
+              "name": "Jordan D Goey/P Lipinski",
               "returnWin": 501,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
               "allowPlace": false,
-              "number": 40512,
+              "number": 40499,
               "isOpen": true,
-              "sortOrder": 251
+              "sortOrder": 238
             },
             {
               "id": "40293",
@@ -233373,28 +233429,28 @@
               "sortOrder": 32
             },
             {
-              "id": "40365",
-              "name": "P Dangerfield/Zach Guthrie",
+              "id": "40355",
+              "name": "Oliver Henry/P Lipinski",
               "returnWin": 501,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
               "allowPlace": false,
-              "number": 40365,
+              "number": 40355,
               "isOpen": true,
-              "sortOrder": 104
+              "sortOrder": 94
             },
             {
-              "id": "40408",
-              "name": "Daniel McStay/James Worpel",
+              "id": "40469",
+              "name": "Nick Daicos/Ned Long",
               "returnWin": 501,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
               "allowPlace": false,
-              "number": 40408,
+              "number": 40469,
               "isOpen": true,
-              "sortOrder": 147
+              "sortOrder": 208
             },
             {
               "id": "40485",
@@ -233493,18 +233549,6 @@
               "sortOrder": 19
             },
             {
-              "id": "40494",
-              "name": "Jordan D Goey/B Maynard",
-              "returnWin": 501,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 40494,
-              "isOpen": true,
-              "sortOrder": 233
-            },
-            {
               "id": "40446",
               "name": "L Schultz/B Maynard",
               "returnWin": 501,
@@ -233601,18 +233645,6 @@
               "sortOrder": 136
             },
             {
-              "id": "40488",
-              "name": "Jordan D Goey/James Worpel",
-              "returnWin": 501,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 40488,
-              "isOpen": true,
-              "sortOrder": 227
-            },
-            {
               "id": "40483",
               "name": "Beau McCreery/P Lipinski",
               "returnWin": 501,
@@ -233625,18 +233657,6 @@
               "sortOrder": 222
             },
             {
-              "id": "40267",
-              "name": "Jack Buller/Tom Atkins",
-              "returnWin": 501,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 40267,
-              "isOpen": true,
-              "sortOrder": 6
-            },
-            {
               "id": "40341",
               "name": "O Dempsey/Ned Long",
               "returnWin": 501,
@@ -233647,6 +233667,18 @@
               "number": 40341,
               "isOpen": true,
               "sortOrder": 80
+            },
+            {
+              "id": "40327",
+              "name": "O Dempsey/Jack Bowes",
+              "returnWin": 501,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 40327,
+              "isOpen": true,
+              "sortOrder": 66
             },
             {
               "id": "40477",
@@ -233781,18 +233813,6 @@
               "sortOrder": 3
             },
             {
-              "id": "40403",
-              "name": "Shaun Mannagh/P Lipinski",
-              "returnWin": 501,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 40403,
-              "isOpen": true,
-              "sortOrder": 142
-            },
-            {
               "id": "40475",
               "name": "Beau McCreery/Tom Atkins",
               "returnWin": 501,
@@ -233887,18 +233907,6 @@
               "number": 40366,
               "isOpen": true,
               "sortOrder": 105
-            },
-            {
-              "id": "40398",
-              "name": "Shaun Mannagh/B Maynard",
-              "returnWin": 501,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 40398,
-              "isOpen": true,
-              "sortOrder": 137
             },
             {
               "id": "40503",
@@ -238723,7 +238731,7 @@
             {
               "id": "17723",
               "name": "Tom Atkins (GEE)",
-              "returnWin": 1.13,
+              "returnWin": 1.07,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -239275,7 +239283,7 @@
             {
               "id": "17931",
               "name": "Tom Atkins (GEE)",
-              "returnWin": 1.87,
+              "returnWin": 1.65,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -239879,7 +239887,7 @@
             {
               "id": "17567",
               "name": "Tom Atkins (GEE)",
-              "returnWin": 4.5,
+              "returnWin": 3.5,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -240483,7 +240491,7 @@
             {
               "id": "17775",
               "name": "Tom Atkins (GEE)",
-              "returnWin": 16,
+              "returnWin": 11,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -241085,6 +241093,19 @@
               "sameGame": true
             },
             {
+              "id": "17515",
+              "name": "Tom Atkins (GEE)",
+              "returnWin": 51,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 17515,
+              "isOpen": true,
+              "sortOrder": 23,
+              "sameGame": true
+            },
+            {
               "id": "17521",
               "name": "Daniel McStay (COL)",
               "returnWin": 81,
@@ -241329,19 +241350,6 @@
               "number": 17542,
               "isOpen": true,
               "sortOrder": 50,
-              "sameGame": true
-            },
-            {
-              "id": "17515",
-              "name": "Tom Atkins (GEE)",
-              "returnWin": 81,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 17515,
-              "isOpen": true,
-              "sortOrder": 23,
               "sameGame": true
             },
             {
@@ -242258,7 +242266,7 @@
             {
               "id": "39428",
               "name": "Jack Crisp (COL)",
-              "returnWin": 3.1,
+              "returnWin": 3.2,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -242270,7 +242278,7 @@
             {
               "id": "39425",
               "name": "Tom Atkins (GEE)",
-              "returnWin": 5.5,
+              "returnWin": 4.5,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -242292,18 +242300,6 @@
               "sortOrder": 2
             },
             {
-              "id": "39430",
-              "name": "Ned Long (COL)",
-              "returnWin": 7,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 39430,
-              "isOpen": true,
-              "sortOrder": 8
-            },
-            {
               "id": "39423",
               "name": "Lawson Humphries (GEE)",
               "returnWin": 7,
@@ -242314,6 +242310,18 @@
               "number": 39423,
               "isOpen": true,
               "sortOrder": 1
+            },
+            {
+              "id": "39430",
+              "name": "Ned Long (COL)",
+              "returnWin": 7.5,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 39430,
+              "isOpen": true,
+              "sortOrder": 8
             },
             {
               "id": "39426",
@@ -242328,18 +242336,6 @@
               "sortOrder": 4
             },
             {
-              "id": "39427",
-              "name": "Brayden Maynard (COL)",
-              "returnWin": 8,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 39427,
-              "isOpen": true,
-              "sortOrder": 5
-            },
-            {
               "id": "39429",
               "name": "Patrick Lipinski (COL)",
               "returnWin": 8,
@@ -242350,6 +242346,18 @@
               "number": 39429,
               "isOpen": true,
               "sortOrder": 7
+            },
+            {
+              "id": "39427",
+              "name": "Brayden Maynard (COL)",
+              "returnWin": 9,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 39427,
+              "isOpen": true,
+              "sortOrder": 5
             }
           ]
         },
@@ -244022,7 +244030,7 @@
             {
               "id": "40612",
               "name": "Tom Atkins 15+ Dis/GEE Win",
-              "returnWin": 1.36,
+              "returnWin": 1.32,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -244034,7 +244042,7 @@
             {
               "id": "40613",
               "name": "Tom Atkins 20+ Dis/GEE Win",
-              "returnWin": 2.25,
+              "returnWin": 1.95,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -244046,7 +244054,7 @@
             {
               "id": "40614",
               "name": "Tom Atkins 25+ Dis/GEE Win",
-              "returnWin": 5.5,
+              "returnWin": 4.25,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -244058,7 +244066,7 @@
             {
               "id": "40615",
               "name": "Tom Atkins 30+ Dis/GEE Win",
-              "returnWin": 21,
+              "returnWin": 14,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -244070,7 +244078,7 @@
             {
               "id": "40616",
               "name": "Tom Atkins 35+ Dis/GEE Win",
-              "returnWin": 101,
+              "returnWin": 67,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -249479,7 +249487,7 @@
             {
               "id": "8643",
               "name": "Geelong by 40-59",
-              "returnWin": 5.5,
+              "returnWin": 6,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -249505,7 +249513,7 @@
             {
               "id": "8645",
               "name": "Geelong by 1-19",
-              "returnWin": 3.5,
+              "returnWin": 3.6,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -249544,7 +249552,7 @@
             {
               "id": "8648",
               "name": "Collingwood by 20-39",
-              "returnWin": 7,
+              "returnWin": 7.5,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -249641,7 +249649,7 @@
             {
               "id": "8984",
               "name": "Geelong by 49-60",
-              "returnWin": 10,
+              "returnWin": 11,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -249680,7 +249688,7 @@
             {
               "id": "8987",
               "name": "Geelong by 13-24",
-              "returnWin": 5,
+              "returnWin": 5.5,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -249881,7 +249889,7 @@
             {
               "id": "9148",
               "name": "Geelong by 70-79",
-              "returnWin": 26,
+              "returnWin": 31,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -249933,7 +249941,7 @@
             {
               "id": "9152",
               "name": "Geelong by 30-39",
-              "returnWin": 7,
+              "returnWin": 7.5,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -249946,7 +249954,7 @@
             {
               "id": "9153",
               "name": "Geelong by 20-29",
-              "returnWin": 6,
+              "returnWin": 6.5,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -249972,7 +249980,7 @@
             {
               "id": "9155",
               "name": "Geelong by 1-9",
-              "returnWin": 6.5,
+              "returnWin": 7,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -250050,7 +250058,7 @@
             {
               "id": "9161",
               "name": "Collingwood by 40-49",
-              "returnWin": 23,
+              "returnWin": 26,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -250225,7 +250233,7 @@
             {
               "id": "8787",
               "name": "Geelong by 53-54",
-              "returnWin": 41,
+              "returnWin": 51,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -250264,7 +250272,7 @@
             {
               "id": "8790",
               "name": "Geelong by 47-48",
-              "returnWin": 34,
+              "returnWin": 41,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -250303,7 +250311,7 @@
             {
               "id": "8793",
               "name": "Geelong by 41-42",
-              "returnWin": 31,
+              "returnWin": 34,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -250342,7 +250350,7 @@
             {
               "id": "8796",
               "name": "Geelong by 35-36",
-              "returnWin": 26,
+              "returnWin": 31,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -250407,7 +250415,7 @@
             {
               "id": "8801",
               "name": "Geelong by 25-26",
-              "returnWin": 23,
+              "returnWin": 26,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -250563,7 +250571,7 @@
             {
               "id": "8813",
               "name": "Geelong by 1-2",
-              "returnWin": 23,
+              "returnWin": 26,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -250641,7 +250649,7 @@
             {
               "id": "8819",
               "name": "Collingwood by 9-10",
-              "returnWin": 26,
+              "returnWin": 31,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -250680,7 +250688,7 @@
             {
               "id": "8822",
               "name": "Collingwood by 15-16",
-              "returnWin": 31,
+              "returnWin": 34,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -250797,7 +250805,7 @@
             {
               "id": "8831",
               "name": "Collingwood by 33-34",
-              "returnWin": 51,
+              "returnWin": 67,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -250953,7 +250961,7 @@
             {
               "id": "8843",
               "name": "Collingwood by 57-58",
-              "returnWin": 101,
+              "returnWin": 151,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -251308,7 +251316,7 @@
             {
               "id": "9168",
               "name": "Geel 13+ / Geel 25+",
-              "returnWin": 3.1,
+              "returnWin": 3.2,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -251332,7 +251340,7 @@
             {
               "id": "9170",
               "name": "Geel 13+ / Coll 1-24",
-              "returnWin": 26,
+              "returnWin": 31,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -251368,7 +251376,7 @@
             {
               "id": "9173",
               "name": "Geel 1-12 / Geel 1-24",
-              "returnWin": 8.5,
+              "returnWin": 9,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -251428,7 +251436,7 @@
             {
               "id": "9178",
               "name": "Coll 1-12 / Coll 1-24",
-              "returnWin": 11,
+              "returnWin": 12,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -251464,7 +251472,7 @@
             {
               "id": "9181",
               "name": "Coll 13+ / Geel 1-24",
-              "returnWin": 21,
+              "returnWin": 23,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -251476,7 +251484,7 @@
             {
               "id": "9182",
               "name": "Coll 13+ / Coll 1-24",
-              "returnWin": 10,
+              "returnWin": 11,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -251500,7 +251508,7 @@
             {
               "id": "9184",
               "name": "Draw At HT Or FT",
-              "returnWin": 23,
+              "returnWin": 26,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -251566,7 +251574,7 @@
             {
               "id": "19216",
               "name": "Geel 40+ /161-180",
-              "returnWin": 12,
+              "returnWin": 13,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -251838,7 +251846,7 @@
             {
               "id": "19346",
               "name": "Gee 0-59 / Col 80-99",
-              "returnWin": 21,
+              "returnWin": 23,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -251916,7 +251924,7 @@
             {
               "id": "19352",
               "name": "Gee 60-79 / Col 100-119",
-              "returnWin": 16,
+              "returnWin": 17,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -251929,7 +251937,7 @@
             {
               "id": "19353",
               "name": "Gee 60-79 / Col 120+",
-              "returnWin": 34,
+              "returnWin": 41,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -251968,7 +251976,7 @@
             {
               "id": "19356",
               "name": "Gee 80-99 / Col 80-99",
-              "returnWin": 7.5,
+              "returnWin": 8,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -252072,7 +252080,7 @@
             {
               "id": "19364",
               "name": "Gee 120+ / Col 0-59",
-              "returnWin": 13,
+              "returnWin": 14,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -252475,7 +252483,7 @@
             {
               "id": "19185",
               "name": "151 to 153",
-              "returnWin": 17,
+              "returnWin": 18,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -252523,7 +252531,7 @@
             {
               "id": "19189",
               "name": "163 to 165",
-              "returnWin": 13,
+              "returnWin": 14,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -252559,7 +252567,7 @@
             {
               "id": "19192",
               "name": "172 to 174",
-              "returnWin": 12,
+              "returnWin": 13,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -252571,7 +252579,7 @@
             {
               "id": "19193",
               "name": "175 to 177",
-              "returnWin": 12,
+              "returnWin": 13,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -252583,7 +252591,7 @@
             {
               "id": "19194",
               "name": "178 to 180",
-              "returnWin": 12,
+              "returnWin": 13,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -252595,7 +252603,7 @@
             {
               "id": "19195",
               "name": "181 to 183",
-              "returnWin": 12,
+              "returnWin": 13,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -252619,7 +252627,7 @@
             {
               "id": "19197",
               "name": "187 to 189",
-              "returnWin": 13,
+              "returnWin": 14,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -252679,7 +252687,7 @@
             {
               "id": "19202",
               "name": "202 to 204",
-              "returnWin": 18,
+              "returnWin": 19,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -252769,7 +252777,7 @@
             {
               "id": "19284",
               "name": "31 to 33 Goals",
-              "returnWin": 7,
+              "returnWin": 7.5,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -253069,7 +253077,7 @@
             {
               "id": "27628",
               "name": "Geelong 101 to 110",
-              "returnWin": 5.5,
+              "returnWin": 6,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -253159,7 +253167,7 @@
             {
               "id": "27668",
               "name": "Geelong 86 to 90",
-              "returnWin": 9,
+              "returnWin": 10,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -253435,7 +253443,7 @@
             {
               "id": "27836",
               "name": "Collingwood 76 to 80",
-              "returnWin": 8.5,
+              "returnWin": 9,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -253447,7 +253455,7 @@
             {
               "id": "27837",
               "name": "Collingwood 81 to 85",
-              "returnWin": 8.5,
+              "returnWin": 9,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -256941,7 +256949,7 @@
             {
               "id": "19116",
               "name": "Coll +7.5 /Over 88.5",
-              "returnWin": 3.6,
+              "returnWin": 3.8,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -257793,7 +257801,7 @@
             {
               "id": "8776",
               "name": "Collingwood by 1-19",
-              "returnWin": 3.2,
+              "returnWin": 3.3,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -258052,7 +258060,7 @@
             {
               "id": "9202",
               "name": "Geelong by 25-30",
-              "returnWin": 10,
+              "returnWin": 11,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -258104,7 +258112,7 @@
             {
               "id": "9206",
               "name": "Geelong by 1-6",
-              "returnWin": 7,
+              "returnWin": 7.5,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -258169,7 +258177,7 @@
             {
               "id": "9211",
               "name": "Collingwood by 19-24",
-              "returnWin": 14,
+              "returnWin": 15,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -258303,7 +258311,7 @@
             {
               "id": "19373",
               "name": "61 to 70",
-              "returnWin": 7.5,
+              "returnWin": 8,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -258315,7 +258323,7 @@
             {
               "id": "19374",
               "name": "71 to 80",
-              "returnWin": 5,
+              "returnWin": 5.5,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -258351,7 +258359,7 @@
             {
               "id": "19377",
               "name": "101 to 110",
-              "returnWin": 6,
+              "returnWin": 6.5,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -259305,7 +259313,7 @@
             {
               "id": "8680",
               "name": "Collingwood by 1-19",
-              "returnWin": 3.2,
+              "returnWin": 3.3,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -259593,7 +259601,7 @@
             {
               "id": "9117",
               "name": "Geelong by 1-6",
-              "returnWin": 7,
+              "returnWin": 7.5,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -259653,7 +259661,7 @@
             {
               "id": "9122",
               "name": "Collingwood by 19-24",
-              "returnWin": 14,
+              "returnWin": 15,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -259911,7 +259919,7 @@
             {
               "id": "27823",
               "name": "Geelong 41 to 50",
-              "returnWin": 3.8,
+              "returnWin": 4,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -259923,7 +259931,7 @@
             {
               "id": "27824",
               "name": "Geelong 51 to 60",
-              "returnWin": 4.2,
+              "returnWin": 4.5,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -260091,7 +260099,7 @@
             {
               "id": "27918",
               "name": "Collingwood 31 to 40",
-              "returnWin": 3.8,
+              "returnWin": 4,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -260261,7 +260269,7 @@
             {
               "id": "8674",
               "name": "Collingwood",
-              "returnWin": 2.25,
+              "returnWin": 2.3,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -261112,7 +261120,7 @@
             {
               "id": "8657",
               "name": "Geelong by 1-12",
-              "returnWin": 2.8,
+              "returnWin": 2.9,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -261138,7 +261146,7 @@
             {
               "id": "8659",
               "name": "Collingwood by 1-12",
-              "returnWin": 3.3,
+              "returnWin": 3.4,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -261196,7 +261204,7 @@
             {
               "id": "39963",
               "name": "Geelong",
-              "returnWin": 1.72,
+              "returnWin": 1.75,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -261328,7 +261336,7 @@
             {
               "id": "14933",
               "name": "Geelong",
-              "returnWin": 1.95,
+              "returnWin": 2,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -261406,7 +261414,7 @@
             {
               "id": "14931",
               "name": "Collingwood",
-              "returnWin": 3.3,
+              "returnWin": 3.4,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -261460,7 +261468,7 @@
             {
               "id": "19142",
               "name": "0:00-1:00",
-              "returnWin": 5,
+              "returnWin": 5.5,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -261484,7 +261492,7 @@
             {
               "id": "19144",
               "name": "2:01-3:00",
-              "returnWin": 4.5,
+              "returnWin": 4.8,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -261520,7 +261528,7 @@
             {
               "id": "19147",
               "name": "5:01 or Later",
-              "returnWin": 3.4,
+              "returnWin": 3.5,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -261652,7 +261660,7 @@
             {
               "id": "19109",
               "name": "41 to 50",
-              "returnWin": 3,
+              "returnWin": 3.1,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -261874,7 +261882,7 @@
             {
               "id": "27910",
               "name": "Geelong 21 to 25",
-              "returnWin": 4.8,
+              "returnWin": 5,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -262018,7 +262026,7 @@
             {
               "id": "27881",
               "name": "Collingwood 16 to 20",
-              "returnWin": 4.5,
+              "returnWin": 4.8,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -262269,7 +262277,7 @@
             {
               "id": "9002",
               "name": "Geelong by 16-20",
-              "returnWin": 9,
+              "returnWin": 10,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -262295,7 +262303,7 @@
             {
               "id": "9004",
               "name": "Geelong by 6-10",
-              "returnWin": 6.5,
+              "returnWin": 7,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -262347,7 +262355,7 @@
             {
               "id": "9008",
               "name": "Collingwood by 6-10",
-              "returnWin": 8,
+              "returnWin": 8.5,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -262867,7 +262875,7 @@
             {
               "id": "40259",
               "name": "Geelong",
-              "returnWin": 1.62,
+              "returnWin": 1.65,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -264001,7 +264009,7 @@
             {
               "id": "27605",
               "name": "Geelong by 1-6",
-              "returnWin": 4.5,
+              "returnWin": 4.8,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -264229,7 +264237,7 @@
             {
               "id": "8945",
               "name": "Geelong by 16-20",
-              "returnWin": 9,
+              "returnWin": 10,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -264253,7 +264261,7 @@
             {
               "id": "8947",
               "name": "Geelong by 6-10",
-              "returnWin": 6.5,
+              "returnWin": 7,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -264301,7 +264309,7 @@
             {
               "id": "8951",
               "name": "Collingwood by 6-10",
-              "returnWin": 8,
+              "returnWin": 8.5,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -264361,7 +264369,7 @@
             {
               "id": "8956",
               "name": "Collingwood by 31-35",
-              "returnWin": 67,
+              "returnWin": 81,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -264547,7 +264555,7 @@
             {
               "id": "19384",
               "name": "21 to 30",
-              "returnWin": 7,
+              "returnWin": 7.5,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -264739,7 +264747,7 @@
             {
               "id": "27655",
               "name": "Geelong 21 to 25",
-              "returnWin": 4.8,
+              "returnWin": 5,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -264883,7 +264891,7 @@
             {
               "id": "27737",
               "name": "Collingwood 16 to 20",
-              "returnWin": 4.5,
+              "returnWin": 4.8,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -264907,7 +264915,7 @@
             {
               "id": "27739",
               "name": "Collingwood 26 to 30",
-              "returnWin": 5.5,
+              "returnWin": 6,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -265054,7 +265062,7 @@
             {
               "id": "9083",
               "name": "Collingwood Behind",
-              "returnWin": 4.2,
+              "returnWin": 4.5,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -265267,7 +265275,7 @@
             {
               "id": "19095",
               "name": "5:01 or Later",
-              "returnWin": 3.6,
+              "returnWin": 3.8,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -265345,7 +265353,7 @@
             {
               "id": "39704",
               "name": "Collingwood Behind",
-              "returnWin": 4.2,
+              "returnWin": 4.5,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -265387,7 +265395,7 @@
             {
               "id": "39327",
               "name": "Geelong",
-              "returnWin": 1.62,
+              "returnWin": 1.65,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -266521,7 +266529,7 @@
             {
               "id": "27573",
               "name": "Geelong by 1-6",
-              "returnWin": 4.5,
+              "returnWin": 4.8,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -266749,7 +266757,7 @@
             {
               "id": "8759",
               "name": "Geelong by 16-20",
-              "returnWin": 9,
+              "returnWin": 10,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -266773,7 +266781,7 @@
             {
               "id": "8761",
               "name": "Geelong by 6-10",
-              "returnWin": 6.5,
+              "returnWin": 7,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -266821,7 +266829,7 @@
             {
               "id": "8765",
               "name": "Collingwood by 6-10",
-              "returnWin": 8,
+              "returnWin": 8.5,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -266881,7 +266889,7 @@
             {
               "id": "8770",
               "name": "Collingwood by 31-35",
-              "returnWin": 67,
+              "returnWin": 81,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -267013,7 +267021,7 @@
             {
               "id": "19175",
               "name": "21 to 30",
-              "returnWin": 7,
+              "returnWin": 7.5,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -267561,7 +267569,7 @@
             {
               "id": "8967",
               "name": "Geelong Behind",
-              "returnWin": 3.3,
+              "returnWin": 3.4,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -267787,7 +267795,7 @@
             {
               "id": "19169",
               "name": "5:01 or Later",
-              "returnWin": 3.6,
+              "returnWin": 3.8,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -267853,7 +267861,7 @@
             {
               "id": "39418",
               "name": "Geelong Behind",
-              "returnWin": 3.3,
+              "returnWin": 3.4,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -269041,7 +269049,7 @@
             {
               "id": "27642",
               "name": "Geelong by 1-6",
-              "returnWin": 4.5,
+              "returnWin": 4.8,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -269269,7 +269277,7 @@
             {
               "id": "8687",
               "name": "Geelong by 16-20",
-              "returnWin": 9,
+              "returnWin": 10,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -269293,7 +269301,7 @@
             {
               "id": "8689",
               "name": "Geelong by 6-10",
-              "returnWin": 6.5,
+              "returnWin": 7,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -269341,7 +269349,7 @@
             {
               "id": "8693",
               "name": "Collingwood by 6-10",
-              "returnWin": 8,
+              "returnWin": 8.5,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -269401,7 +269409,7 @@
             {
               "id": "8698",
               "name": "Collingwood by 31-35",
-              "returnWin": 67,
+              "returnWin": 81,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -269767,7 +269775,7 @@
             {
               "id": "27564",
               "name": "Geelong 16 to 20",
-              "returnWin": 5,
+              "returnWin": 5.5,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -269791,7 +269799,7 @@
             {
               "id": "27566",
               "name": "Geelong 26 to 30",
-              "returnWin": 5,
+              "returnWin": 5.5,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -269935,7 +269943,7 @@
             {
               "id": "27872",
               "name": "Collingwood 21 to 25",
-              "returnWin": 4.5,
+              "returnWin": 4.8,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -270081,7 +270089,7 @@
             {
               "id": "9191",
               "name": "Geelong Behind",
-              "returnWin": 3.4,
+              "returnWin": 3.5,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -270373,7 +270381,7 @@
             {
               "id": "27786",
               "name": "Geelong Behind",
-              "returnWin": 3.4,
+              "returnWin": 3.5,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -314802,6 +314810,19 @@
               "sameGame": true
             },
             {
+              "id": "21058",
+              "name": "Toby Murray (ADE)",
+              "returnWin": 16,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 21058,
+              "isOpen": true,
+              "sortOrder": 45,
+              "sameGame": true
+            },
+            {
               "id": "21025",
               "name": "Mykelti Lefau (RIC)",
               "returnWin": 17,
@@ -314838,6 +314859,19 @@
               "number": 21023,
               "isOpen": true,
               "sortOrder": 10,
+              "sameGame": true
+            },
+            {
+              "id": "21064",
+              "name": "Alex Neal-Bullen (ADE)",
+              "returnWin": 21,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 21064,
+              "isOpen": true,
+              "sortOrder": 51,
               "sameGame": true
             },
             {
@@ -314880,19 +314914,6 @@
               "sameGame": true
             },
             {
-              "id": "21064",
-              "name": "Alex Neal-Bullen (ADE)",
-              "returnWin": 23,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 21064,
-              "isOpen": true,
-              "sortOrder": 51,
-              "sameGame": true
-            },
-            {
               "id": "21046",
               "name": "Jordan Dawson (ADE)",
               "returnWin": 26,
@@ -314903,19 +314924,6 @@
               "number": 21046,
               "isOpen": true,
               "sortOrder": 33,
-              "sameGame": true
-            },
-            {
-              "id": "21058",
-              "name": "Toby Murray (ADE)",
-              "returnWin": 26,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 21058,
-              "isOpen": true,
-              "sortOrder": 45,
               "sameGame": true
             },
             {
@@ -315413,7 +315421,7 @@
             {
               "id": "40951",
               "name": "Noah Balta (RIC)",
-              "returnWin": 17,
+              "returnWin": 16,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -317638,18 +317646,6 @@
           "allowBundle": false,
           "propositions": [
             {
-              "id": "41591",
-              "name": "R Thilthorpe/Wayne Milera",
-              "returnWin": 17,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 41591,
-              "isOpen": true,
-              "sortOrder": 173
-            },
-            {
               "id": "41586",
               "name": "R Thilthorpe/Jordan Dawson",
               "returnWin": 17,
@@ -317674,9 +317670,21 @@
               "sortOrder": 176
             },
             {
+              "id": "41591",
+              "name": "R Thilthorpe/Wayne Milera",
+              "returnWin": 18,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 41591,
+              "isOpen": true,
+              "sortOrder": 173
+            },
+            {
               "id": "41592",
               "name": "R Thilthorpe/Jayden Short",
-              "returnWin": 23,
+              "returnWin": 21,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -317720,18 +317728,6 @@
               "number": 41589,
               "isOpen": true,
               "sortOrder": 171
-            },
-            {
-              "id": "41580",
-              "name": "R Thilthorpe/Jacob Hopper",
-              "returnWin": 34,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 41580,
-              "isOpen": true,
-              "sortOrder": 162
             },
             {
               "id": "41590",
@@ -317830,6 +317826,18 @@
               "sortOrder": 125
             },
             {
+              "id": "41580",
+              "name": "R Thilthorpe/Jacob Hopper",
+              "returnWin": 41,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 41580,
+              "isOpen": true,
+              "sortOrder": 162
+            },
+            {
               "id": "41562",
               "name": "Josh Rachele/Tim Taranto",
               "returnWin": 41,
@@ -317914,6 +317922,18 @@
               "sortOrder": 122
             },
             {
+              "id": "41560",
+              "name": "Josh Rachele/Jayden Short",
+              "returnWin": 51,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 41560,
+              "isOpen": true,
+              "sortOrder": 142
+            },
+            {
               "id": "41511",
               "name": "Tom Lynch/Wayne Milera",
               "returnWin": 51,
@@ -317926,16 +317946,16 @@
               "sortOrder": 93
             },
             {
-              "id": "41531",
-              "name": "Izak Rankine/Jack Ross",
+              "id": "41512",
+              "name": "Tom Lynch/Jayden Short",
               "returnWin": 51,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
               "allowPlace": false,
-              "number": 41531,
+              "number": 41512,
               "isOpen": true,
-              "sortOrder": 113
+              "sortOrder": 94
             },
             {
               "id": "41585",
@@ -318022,28 +318042,16 @@
               "sortOrder": 138
             },
             {
-              "id": "41560",
-              "name": "Josh Rachele/Jayden Short",
+              "id": "41531",
+              "name": "Izak Rankine/Jack Ross",
               "returnWin": 61,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
               "allowPlace": false,
-              "number": 41560,
+              "number": 41531,
               "isOpen": true,
-              "sortOrder": 142
-            },
-            {
-              "id": "41512",
-              "name": "Tom Lynch/Jayden Short",
-              "returnWin": 61,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 41512,
-              "isOpen": true,
-              "sortOrder": 94
+              "sortOrder": 113
             },
             {
               "id": "41547",
@@ -318080,6 +318088,18 @@
               "number": 41482,
               "isOpen": true,
               "sortOrder": 64
+            },
+            {
+              "id": "41570",
+              "name": "Luke Pedlar/Jordan Dawson",
+              "returnWin": 67,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 41570,
+              "isOpen": true,
+              "sortOrder": 152
             },
             {
               "id": "41541",
@@ -318142,18 +318162,6 @@
               "sortOrder": 48
             },
             {
-              "id": "41467",
-              "name": "Seth Campbell/Jack Ross",
-              "returnWin": 81,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 41467,
-              "isOpen": true,
-              "sortOrder": 49
-            },
-            {
               "id": "41479",
               "name": "Seth Campbell/Wayne Milera",
               "returnWin": 81,
@@ -318212,18 +318220,6 @@
               "number": 41526,
               "isOpen": true,
               "sortOrder": 108
-            },
-            {
-              "id": "41570",
-              "name": "Luke Pedlar/Jordan Dawson",
-              "returnWin": 81,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 41570,
-              "isOpen": true,
-              "sortOrder": 152
             },
             {
               "id": "41575",
@@ -318370,18 +318366,6 @@
               "sortOrder": 114
             },
             {
-              "id": "41463",
-              "name": "Noah Balta/Wayne Milera",
-              "returnWin": 81,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 41463,
-              "isOpen": true,
-              "sortOrder": 45
-            },
-            {
               "id": "41480",
               "name": "Seth Campbell/Jayden Short",
               "returnWin": 81,
@@ -318464,6 +318448,18 @@
               "number": 41468,
               "isOpen": true,
               "sortOrder": 50
+            },
+            {
+              "id": "41467",
+              "name": "Seth Campbell/Jack Ross",
+              "returnWin": 101,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 41467,
+              "isOpen": true,
+              "sortOrder": 49
             },
             {
               "id": "41477",
@@ -318586,6 +318582,18 @@
               "sortOrder": 216
             },
             {
+              "id": "41640",
+              "name": "Alex N-Bullen/Jayden Short",
+              "returnWin": 101,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 41640,
+              "isOpen": true,
+              "sortOrder": 222
+            },
+            {
               "id": "41536",
               "name": "Izak Rankine/Izak Rankine",
               "returnWin": 101,
@@ -318680,6 +318688,18 @@
               "number": 41639,
               "isOpen": true,
               "sortOrder": 221
+            },
+            {
+              "id": "41564",
+              "name": "Luke Pedlar/Jacob Hopper",
+              "returnWin": 101,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 41564,
+              "isOpen": true,
+              "sortOrder": 146
             },
             {
               "id": "41428",
@@ -318838,6 +318858,18 @@
               "sortOrder": 192
             },
             {
+              "id": "41463",
+              "name": "Noah Balta/Wayne Milera",
+              "returnWin": 101,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 41463,
+              "isOpen": true,
+              "sortOrder": 45
+            },
+            {
               "id": "41432",
               "name": "Jonty Faull/Jayden Short",
               "returnWin": 101,
@@ -318982,18 +319014,6 @@
               "sortOrder": 208
             },
             {
-              "id": "41640",
-              "name": "Alex N-Bullen/Jayden Short",
-              "returnWin": 126,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 41640,
-              "isOpen": true,
-              "sortOrder": 222
-            },
-            {
               "id": "41636",
               "name": "Alex N-Bullen/Josh Worrell",
               "returnWin": 126,
@@ -319004,18 +319024,6 @@
               "number": 41636,
               "isOpen": true,
               "sortOrder": 218
-            },
-            {
-              "id": "41643",
-              "name": "Daniel Curtin/Jack Ross",
-              "returnWin": 126,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 41643,
-              "isOpen": true,
-              "sortOrder": 225
             },
             {
               "id": "41655",
@@ -319078,6 +319086,18 @@
               "sortOrder": 131
             },
             {
+              "id": "41604",
+              "name": "Zac Taylor/Josh Worrell",
+              "returnWin": 126,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 41604,
+              "isOpen": true,
+              "sortOrder": 186
+            },
+            {
               "id": "41618",
               "name": "Tyler Sonsie/Jordan Dawson",
               "returnWin": 126,
@@ -319088,6 +319108,18 @@
               "number": 41618,
               "isOpen": true,
               "sortOrder": 200
+            },
+            {
+              "id": "41623",
+              "name": "Tyler Sonsie/Wayne Milera",
+              "returnWin": 126,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 41623,
+              "isOpen": true,
+              "sortOrder": 205
             },
             {
               "id": "41555",
@@ -319186,16 +319218,16 @@
               "sortOrder": 12
             },
             {
-              "id": "41564",
-              "name": "Luke Pedlar/Jacob Hopper",
+              "id": "41637",
+              "name": "Alex N-Bullen/Rory Laird",
               "returnWin": 126,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
               "allowPlace": false,
-              "number": 41564,
+              "number": 41637,
               "isOpen": true,
-              "sortOrder": 146
+              "sortOrder": 219
             },
             {
               "id": "41452",
@@ -319342,6 +319374,18 @@
               "sortOrder": 6
             },
             {
+              "id": "41443",
+              "name": "Mykelti Lefau/Josh Rachele",
+              "returnWin": 151,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 41443,
+              "isOpen": true,
+              "sortOrder": 25
+            },
+            {
               "id": "41437",
               "name": "Mykelti Lefau/K McAuliffe",
               "returnWin": 151,
@@ -319474,40 +319518,28 @@
               "sortOrder": 220
             },
             {
-              "id": "41654",
-              "name": "Daniel Curtin/Sam Berry",
+              "id": "41644",
+              "name": "Daniel Curtin/Jacob Hopper",
               "returnWin": 151,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
               "allowPlace": false,
-              "number": 41654,
+              "number": 41644,
               "isOpen": true,
-              "sortOrder": 236
+              "sortOrder": 226
             },
             {
-              "id": "41604",
-              "name": "Zac Taylor/Josh Worrell",
+              "id": "41643",
+              "name": "Daniel Curtin/Jack Ross",
               "returnWin": 151,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
               "allowPlace": false,
-              "number": 41604,
+              "number": 41643,
               "isOpen": true,
-              "sortOrder": 186
-            },
-            {
-              "id": "41623",
-              "name": "Tyler Sonsie/Wayne Milera",
-              "returnWin": 151,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 41623,
-              "isOpen": true,
-              "sortOrder": 205
+              "sortOrder": 225
             },
             {
               "id": "41565",
@@ -319532,18 +319564,6 @@
               "number": 41561,
               "isOpen": true,
               "sortOrder": 143
-            },
-            {
-              "id": "41606",
-              "name": "Zac Taylor/Sam Berry",
-              "returnWin": 151,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 41606,
-              "isOpen": true,
-              "sortOrder": 188
             },
             {
               "id": "41571",
@@ -319582,18 +319602,6 @@
               "sortOrder": 111
             },
             {
-              "id": "41637",
-              "name": "Alex N-Bullen/Rory Laird",
-              "returnWin": 151,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 41637,
-              "isOpen": true,
-              "sortOrder": 219
-            },
-            {
               "id": "41440",
               "name": "Mykelti Lefau/Izak Rankine",
               "returnWin": 151,
@@ -319604,6 +319612,18 @@
               "number": 41440,
               "isOpen": true,
               "sortOrder": 22
+            },
+            {
+              "id": "41453",
+              "name": "Noah Balta/K McAuliffe",
+              "returnWin": 151,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 41453,
+              "isOpen": true,
+              "sortOrder": 35
             },
             {
               "id": "41605",
@@ -319726,42 +319746,6 @@
               "sortOrder": 3
             },
             {
-              "id": "41443",
-              "name": "Mykelti Lefau/Josh Rachele",
-              "returnWin": 201,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 41443,
-              "isOpen": true,
-              "sortOrder": 25
-            },
-            {
-              "id": "41449",
-              "name": "Mykelti Lefau/Tyler Sonsie",
-              "returnWin": 201,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 41449,
-              "isOpen": true,
-              "sortOrder": 31
-            },
-            {
-              "id": "41485",
-              "name": "Steely Green/K McAuliffe",
-              "returnWin": 201,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 41485,
-              "isOpen": true,
-              "sortOrder": 67
-            },
-            {
               "id": "41488",
               "name": "Steely Green/Izak Rankine",
               "returnWin": 201,
@@ -319772,6 +319756,18 @@
               "number": 41488,
               "isOpen": true,
               "sortOrder": 70
+            },
+            {
+              "id": "41489",
+              "name": "Steely Green/J Peatling",
+              "returnWin": 201,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 41489,
+              "isOpen": true,
+              "sortOrder": 71
             },
             {
               "id": "41519",
@@ -319810,18 +319806,6 @@
               "sortOrder": 194
             },
             {
-              "id": "41644",
-              "name": "Daniel Curtin/Jacob Hopper",
-              "returnWin": 201,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 41644,
-              "isOpen": true,
-              "sortOrder": 226
-            },
-            {
               "id": "41649",
               "name": "Daniel Curtin/J Peatling",
               "returnWin": 201,
@@ -319846,16 +319830,16 @@
               "sortOrder": 85
             },
             {
-              "id": "41671",
-              "name": "Tim Taranto/Wayne Milera",
+              "id": "41654",
+              "name": "Daniel Curtin/Sam Berry",
               "returnWin": 201,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
               "allowPlace": false,
-              "number": 41671,
+              "number": 41654,
               "isOpen": true,
-              "sortOrder": 253
+              "sortOrder": 236
             },
             {
               "id": "41550",
@@ -319868,6 +319852,18 @@
               "number": 41550,
               "isOpen": true,
               "sortOrder": 132
+            },
+            {
+              "id": "41459",
+              "name": "Noah Balta/Josh Rachele",
+              "returnWin": 201,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 41459,
+              "isOpen": true,
+              "sortOrder": 41
             },
             {
               "id": "41666",
@@ -319892,6 +319888,18 @@
               "number": 41535,
               "isOpen": true,
               "sortOrder": 117
+            },
+            {
+              "id": "41606",
+              "name": "Zac Taylor/Sam Berry",
+              "returnWin": 201,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 41606,
+              "isOpen": true,
+              "sortOrder": 188
             },
             {
               "id": "41621",
@@ -319930,18 +319938,6 @@
               "sortOrder": 84
             },
             {
-              "id": "41577",
-              "name": "Luke Pedlar/Tyler Sonsie",
-              "returnWin": 201,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 41577,
-              "isOpen": true,
-              "sortOrder": 159
-            },
-            {
               "id": "41674",
               "name": "Tim Taranto/Tim Taranto",
               "returnWin": 201,
@@ -319954,16 +319950,28 @@
               "sortOrder": 256
             },
             {
-              "id": "41648",
-              "name": "Daniel Curtin/Izak Rankine",
+              "id": "41600",
+              "name": "Zac Taylor/Izak Rankine",
               "returnWin": 201,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
               "allowPlace": false,
-              "number": 41648,
+              "number": 41600,
               "isOpen": true,
-              "sortOrder": 230
+              "sortOrder": 182
+            },
+            {
+              "id": "41629",
+              "name": "Alex N-Bullen/K McAuliffe",
+              "returnWin": 201,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 41629,
+              "isOpen": true,
+              "sortOrder": 211
             },
             {
               "id": "41551",
@@ -320014,18 +320022,6 @@
               "sortOrder": 204
             },
             {
-              "id": "41453",
-              "name": "Noah Balta/K McAuliffe",
-              "returnWin": 201,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 41453,
-              "isOpen": true,
-              "sortOrder": 35
-            },
-            {
               "id": "41427",
               "name": "Jonty Faull/Josh Rachele",
               "returnWin": 201,
@@ -320050,28 +320046,40 @@
               "sortOrder": 116
             },
             {
-              "id": "41465",
-              "name": "Noah Balta/Tyler Sonsie",
+              "id": "41603",
+              "name": "Zac Taylor/Josh Rachele",
               "returnWin": 251,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
               "allowPlace": false,
-              "number": 41465,
+              "number": 41603,
               "isOpen": true,
-              "sortOrder": 47
+              "sortOrder": 185
             },
             {
-              "id": "41471",
-              "name": "Seth Campbell/Tom Brown",
+              "id": "41422",
+              "name": "Jonty Faull/P Retschko",
               "returnWin": 251,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
               "allowPlace": false,
-              "number": 41471,
+              "number": 41422,
               "isOpen": true,
-              "sortOrder": 53
+              "sortOrder": 4
+            },
+            {
+              "id": "41470",
+              "name": "Seth Campbell/P Retschko",
+              "returnWin": 251,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 41470,
+              "isOpen": true,
+              "sortOrder": 52
             },
             {
               "id": "41481",
@@ -320086,6 +320094,18 @@
               "sortOrder": 63
             },
             {
+              "id": "41485",
+              "name": "Steely Green/K McAuliffe",
+              "returnWin": 251,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 41485,
+              "isOpen": true,
+              "sortOrder": 67
+            },
+            {
               "id": "41491",
               "name": "Steely Green/Josh Rachele",
               "returnWin": 251,
@@ -320096,18 +320116,6 @@
               "number": 41491,
               "isOpen": true,
               "sortOrder": 73
-            },
-            {
-              "id": "41489",
-              "name": "Steely Green/J Peatling",
-              "returnWin": 251,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 41489,
-              "isOpen": true,
-              "sortOrder": 71
             },
             {
               "id": "41567",
@@ -320122,6 +320130,18 @@
               "sortOrder": 149
             },
             {
+              "id": "41613",
+              "name": "Tyler Sonsie/K McAuliffe",
+              "returnWin": 251,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 41613,
+              "isOpen": true,
+              "sortOrder": 195
+            },
+            {
               "id": "41616",
               "name": "Tyler Sonsie/Izak Rankine",
               "returnWin": 251,
@@ -320132,6 +320152,18 @@
               "number": 41616,
               "isOpen": true,
               "sortOrder": 198
+            },
+            {
+              "id": "41651",
+              "name": "Daniel Curtin/Josh Rachele",
+              "returnWin": 251,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 41651,
+              "isOpen": true,
+              "sortOrder": 233
             },
             {
               "id": "41566",
@@ -320146,6 +320178,30 @@
               "sortOrder": 148
             },
             {
+              "id": "41671",
+              "name": "Tim Taranto/Wayne Milera",
+              "returnWin": 251,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 41671,
+              "isOpen": true,
+              "sortOrder": 253
+            },
+            {
+              "id": "41617",
+              "name": "Tyler Sonsie/J Peatling",
+              "returnWin": 251,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 41617,
+              "isOpen": true,
+              "sortOrder": 199
+            },
+            {
               "id": "41672",
               "name": "Tim Taranto/Jayden Short",
               "returnWin": 251,
@@ -320158,16 +320214,16 @@
               "sortOrder": 254
             },
             {
-              "id": "41459",
-              "name": "Noah Balta/Josh Rachele",
+              "id": "41668",
+              "name": "Tim Taranto/Josh Worrell",
               "returnWin": 251,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
               "allowPlace": false,
-              "number": 41459,
+              "number": 41668,
               "isOpen": true,
-              "sortOrder": 41
+              "sortOrder": 250
             },
             {
               "id": "41635",
@@ -320182,16 +320238,16 @@
               "sortOrder": 217
             },
             {
-              "id": "41600",
-              "name": "Zac Taylor/Izak Rankine",
+              "id": "41577",
+              "name": "Luke Pedlar/Tyler Sonsie",
               "returnWin": 251,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
               "allowPlace": false,
-              "number": 41600,
+              "number": 41577,
               "isOpen": true,
-              "sortOrder": 182
+              "sortOrder": 159
             },
             {
               "id": "41597",
@@ -320206,40 +320262,52 @@
               "sortOrder": 179
             },
             {
-              "id": "41629",
-              "name": "Alex N-Bullen/K McAuliffe",
+              "id": "41648",
+              "name": "Daniel Curtin/Izak Rankine",
               "returnWin": 251,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
               "allowPlace": false,
-              "number": 41629,
+              "number": 41648,
               "isOpen": true,
-              "sortOrder": 211
+              "sortOrder": 230
             },
             {
-              "id": "41433",
-              "name": "Jonty Faull/Tyler Sonsie",
+              "id": "41659",
+              "name": "Tim Taranto/Jack Ross",
               "returnWin": 251,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
               "allowPlace": false,
-              "number": 41433,
+              "number": 41659,
               "isOpen": true,
-              "sortOrder": 15
+              "sortOrder": 241
             },
             {
-              "id": "41645",
-              "name": "Daniel Curtin/K McAuliffe",
-              "returnWin": 251,
+              "id": "41670",
+              "name": "Tim Taranto/Sam Berry",
+              "returnWin": 301,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
               "allowPlace": false,
-              "number": 41645,
+              "number": 41670,
               "isOpen": true,
-              "sortOrder": 227
+              "sortOrder": 252
+            },
+            {
+              "id": "41423",
+              "name": "Jonty Faull/Tom Brown",
+              "returnWin": 301,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 41423,
+              "isOpen": true,
+              "sortOrder": 5
             },
             {
               "id": "41439",
@@ -320254,64 +320322,64 @@
               "sortOrder": 21
             },
             {
-              "id": "41470",
-              "name": "Seth Campbell/P Retschko",
+              "id": "41454",
+              "name": "Noah Balta/P Retschko",
               "returnWin": 301,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
               "allowPlace": false,
-              "number": 41470,
+              "number": 41454,
               "isOpen": true,
-              "sortOrder": 52
+              "sortOrder": 36
             },
             {
-              "id": "41497",
-              "name": "Steely Green/Tyler Sonsie",
+              "id": "41449",
+              "name": "Mykelti Lefau/Tyler Sonsie",
               "returnWin": 301,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
               "allowPlace": false,
-              "number": 41497,
+              "number": 41449,
               "isOpen": true,
-              "sortOrder": 79
+              "sortOrder": 31
             },
             {
-              "id": "41613",
-              "name": "Tyler Sonsie/K McAuliffe",
+              "id": "41465",
+              "name": "Noah Balta/Tyler Sonsie",
               "returnWin": 301,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
               "allowPlace": false,
-              "number": 41613,
+              "number": 41465,
               "isOpen": true,
-              "sortOrder": 195
+              "sortOrder": 47
             },
             {
-              "id": "41651",
-              "name": "Daniel Curtin/Josh Rachele",
+              "id": "41471",
+              "name": "Seth Campbell/Tom Brown",
               "returnWin": 301,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
               "allowPlace": false,
-              "number": 41651,
+              "number": 41471,
               "isOpen": true,
-              "sortOrder": 233
+              "sortOrder": 53
             },
             {
-              "id": "41617",
-              "name": "Tyler Sonsie/J Peatling",
+              "id": "41641",
+              "name": "Alex N-Bullen/Tyler Sonsie",
               "returnWin": 301,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
               "allowPlace": false,
-              "number": 41617,
+              "number": 41641,
               "isOpen": true,
-              "sortOrder": 199
+              "sortOrder": 223
             },
             {
               "id": "41619",
@@ -320326,30 +320394,6 @@
               "sortOrder": 201
             },
             {
-              "id": "41668",
-              "name": "Tim Taranto/Josh Worrell",
-              "returnWin": 301,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 41668,
-              "isOpen": true,
-              "sortOrder": 250
-            },
-            {
-              "id": "41660",
-              "name": "Tim Taranto/Jacob Hopper",
-              "returnWin": 301,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 41660,
-              "isOpen": true,
-              "sortOrder": 242
-            },
-            {
               "id": "41669",
               "name": "Tim Taranto/Rory Laird",
               "returnWin": 301,
@@ -320362,16 +320406,28 @@
               "sortOrder": 251
             },
             {
-              "id": "41659",
-              "name": "Tim Taranto/Jack Ross",
+              "id": "41433",
+              "name": "Jonty Faull/Tyler Sonsie",
               "returnWin": 301,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
               "allowPlace": false,
-              "number": 41659,
+              "number": 41433,
               "isOpen": true,
-              "sortOrder": 241
+              "sortOrder": 15
+            },
+            {
+              "id": "41645",
+              "name": "Daniel Curtin/K McAuliffe",
+              "returnWin": 301,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 41645,
+              "isOpen": true,
+              "sortOrder": 227
             },
             {
               "id": "41438",
@@ -320386,42 +320442,6 @@
               "sortOrder": 20
             },
             {
-              "id": "41603",
-              "name": "Zac Taylor/Josh Rachele",
-              "returnWin": 301,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 41603,
-              "isOpen": true,
-              "sortOrder": 185
-            },
-            {
-              "id": "41423",
-              "name": "Jonty Faull/Tom Brown",
-              "returnWin": 351,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 41423,
-              "isOpen": true,
-              "sortOrder": 5
-            },
-            {
-              "id": "41454",
-              "name": "Noah Balta/P Retschko",
-              "returnWin": 351,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 41454,
-              "isOpen": true,
-              "sortOrder": 36
-            },
-            {
               "id": "41455",
               "name": "Noah Balta/Tom Brown",
               "returnWin": 351,
@@ -320434,93 +320454,21 @@
               "sortOrder": 37
             },
             {
-              "id": "41641",
-              "name": "Alex N-Bullen/Tyler Sonsie",
+              "id": "41660",
+              "name": "Tim Taranto/Jacob Hopper",
               "returnWin": 351,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
               "allowPlace": false,
-              "number": 41641,
+              "number": 41660,
               "isOpen": true,
-              "sortOrder": 223
-            },
-            {
-              "id": "41670",
-              "name": "Tim Taranto/Sam Berry",
-              "returnWin": 351,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 41670,
-              "isOpen": true,
-              "sortOrder": 252
-            },
-            {
-              "id": "41486",
-              "name": "Steely Green/P Retschko",
-              "returnWin": 351,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 41486,
-              "isOpen": true,
-              "sortOrder": 68
-            },
-            {
-              "id": "41609",
-              "name": "Zac Taylor/Tyler Sonsie",
-              "returnWin": 351,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 41609,
-              "isOpen": true,
-              "sortOrder": 191
-            },
-            {
-              "id": "41664",
-              "name": "Tim Taranto/Izak Rankine",
-              "returnWin": 351,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 41664,
-              "isOpen": true,
-              "sortOrder": 246
-            },
-            {
-              "id": "41422",
-              "name": "Jonty Faull/P Retschko",
-              "returnWin": 401,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 41422,
-              "isOpen": true,
-              "sortOrder": 4
-            },
-            {
-              "id": "41665",
-              "name": "Tim Taranto/J Peatling",
-              "returnWin": 401,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 41665,
-              "isOpen": true,
-              "sortOrder": 247
+              "sortOrder": 242
             },
             {
               "id": "41487",
               "name": "Steely Green/Tom Brown",
-              "returnWin": 401,
+              "returnWin": 351,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -320530,28 +320478,52 @@
               "sortOrder": 69
             },
             {
-              "id": "41625",
-              "name": "Tyler Sonsie/Tyler Sonsie",
+              "id": "41486",
+              "name": "Steely Green/P Retschko",
               "returnWin": 401,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
               "allowPlace": false,
-              "number": 41625,
+              "number": 41486,
               "isOpen": true,
-              "sortOrder": 207
+              "sortOrder": 68
             },
             {
-              "id": "41657",
-              "name": "Daniel Curtin/Tyler Sonsie",
+              "id": "41598",
+              "name": "Zac Taylor/P Retschko",
+              "returnWin": 401,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 41598,
+              "isOpen": true,
+              "sortOrder": 180
+            },
+            {
+              "id": "41664",
+              "name": "Tim Taranto/Izak Rankine",
+              "returnWin": 401,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 41664,
+              "isOpen": true,
+              "sortOrder": 246
+            },
+            {
+              "id": "41665",
+              "name": "Tim Taranto/J Peatling",
               "returnWin": 451,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
               "allowPlace": false,
-              "number": 41657,
+              "number": 41665,
               "isOpen": true,
-              "sortOrder": 239
+              "sortOrder": 247
             },
             {
               "id": "41630",
@@ -320564,6 +320536,42 @@
               "number": 41630,
               "isOpen": true,
               "sortOrder": 212
+            },
+            {
+              "id": "41609",
+              "name": "Zac Taylor/Tyler Sonsie",
+              "returnWin": 451,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 41609,
+              "isOpen": true,
+              "sortOrder": 191
+            },
+            {
+              "id": "41631",
+              "name": "Alex N-Bullen/Tom Brown",
+              "returnWin": 451,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 41631,
+              "isOpen": true,
+              "sortOrder": 213
+            },
+            {
+              "id": "41497",
+              "name": "Steely Green/Tyler Sonsie",
+              "returnWin": 501,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 41497,
+              "isOpen": true,
+              "sortOrder": 79
             },
             {
               "id": "41615",
@@ -320588,6 +320596,18 @@
               "number": 41646,
               "isOpen": true,
               "sortOrder": 228
+            },
+            {
+              "id": "41657",
+              "name": "Daniel Curtin/Tyler Sonsie",
+              "returnWin": 501,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 41657,
+              "isOpen": true,
+              "sortOrder": 239
             },
             {
               "id": "41673",
@@ -320662,28 +320682,16 @@
               "sortOrder": 249
             },
             {
-              "id": "41598",
-              "name": "Zac Taylor/P Retschko",
+              "id": "41625",
+              "name": "Tyler Sonsie/Tyler Sonsie",
               "returnWin": 501,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
               "allowPlace": false,
-              "number": 41598,
+              "number": 41625,
               "isOpen": true,
-              "sortOrder": 180
-            },
-            {
-              "id": "41631",
-              "name": "Alex N-Bullen/Tom Brown",
-              "returnWin": 501,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 41631,
-              "isOpen": true,
-              "sortOrder": 213
+              "sortOrder": 207
             },
             {
               "id": "41614",
@@ -321582,7 +321590,7 @@
             {
               "id": "41800",
               "name": "Alex N-Bullen 1+Gls/ADE Win",
-              "returnWin": 1.9,
+              "returnWin": 1.8,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -321594,7 +321602,7 @@
             {
               "id": "41801",
               "name": "Alex N-Bullen 2+Gls/ADE Win",
-              "returnWin": 4.5,
+              "returnWin": 4.2,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -321606,7 +321614,7 @@
             {
               "id": "41802",
               "name": "Alex N-Bullen 3+Gls/ADE Win",
-              "returnWin": 14,
+              "returnWin": 12,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -321821,6 +321829,19 @@
               "sameGame": true
             },
             {
+              "id": "21223",
+              "name": "Toby Murray (ADE)",
+              "returnWin": 1.33,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 21223,
+              "isOpen": true,
+              "sortOrder": 45,
+              "sameGame": true
+            },
+            {
               "id": "21190",
               "name": "Mykelti Lefau (RIC)",
               "returnWin": 1.38,
@@ -321860,6 +321881,19 @@
               "sameGame": true
             },
             {
+              "id": "21229",
+              "name": "Alex Neal-Bullen (ADE)",
+              "returnWin": 1.58,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 21229,
+              "isOpen": true,
+              "sortOrder": 51,
+              "sameGame": true
+            },
+            {
               "id": "21199",
               "name": "Steely Green (RIC)",
               "returnWin": 1.6,
@@ -321870,19 +321904,6 @@
               "number": 21199,
               "isOpen": true,
               "sortOrder": 21,
-              "sameGame": true
-            },
-            {
-              "id": "21229",
-              "name": "Alex Neal-Bullen (ADE)",
-              "returnWin": 1.65,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 21229,
-              "isOpen": true,
-              "sortOrder": 51,
               "sameGame": true
             },
             {
@@ -321909,19 +321930,6 @@
               "number": 21225,
               "isOpen": true,
               "sortOrder": 47,
-              "sameGame": true
-            },
-            {
-              "id": "21223",
-              "name": "Toby Murray (ADE)",
-              "returnWin": 1.75,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 21223,
-              "isOpen": true,
-              "sortOrder": 45,
               "sameGame": true
             },
             {
@@ -322096,7 +322104,7 @@
             {
               "id": "21215",
               "name": "Lachlan McAndrew (ADE)",
-              "returnWin": 3.5,
+              "returnWin": 3.6,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -322425,6 +322433,19 @@
               "sameGame": true
             },
             {
+              "id": "20948",
+              "name": "Toby Murray (ADE)",
+              "returnWin": 2.6,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 20948,
+              "isOpen": true,
+              "sortOrder": 45,
+              "sameGame": true
+            },
+            {
               "id": "20915",
               "name": "Mykelti Lefau (RIC)",
               "returnWin": 2.75,
@@ -322464,6 +322485,19 @@
               "sameGame": true
             },
             {
+              "id": "20954",
+              "name": "Alex Neal-Bullen (ADE)",
+              "returnWin": 3.6,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 20954,
+              "isOpen": true,
+              "sortOrder": 51,
+              "sameGame": true
+            },
+            {
               "id": "20924",
               "name": "Steely Green (RIC)",
               "returnWin": 3.8,
@@ -322474,19 +322508,6 @@
               "number": 20924,
               "isOpen": true,
               "sortOrder": 21,
-              "sameGame": true
-            },
-            {
-              "id": "20954",
-              "name": "Alex Neal-Bullen (ADE)",
-              "returnWin": 4,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 20954,
-              "isOpen": true,
-              "sortOrder": 51,
               "sameGame": true
             },
             {
@@ -322513,19 +322534,6 @@
               "number": 20950,
               "isOpen": true,
               "sortOrder": 47,
-              "sameGame": true
-            },
-            {
-              "id": "20948",
-              "name": "Toby Murray (ADE)",
-              "returnWin": 4.5,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 20948,
-              "isOpen": true,
-              "sortOrder": 45,
               "sameGame": true
             },
             {
@@ -323016,6 +323024,19 @@
               "sameGame": true
             },
             {
+              "id": "21168",
+              "name": "Toby Murray (ADE)",
+              "returnWin": 6,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 21168,
+              "isOpen": true,
+              "sortOrder": 45,
+              "sameGame": true
+            },
+            {
               "id": "21143",
               "name": "Seth Campbell (RIC)",
               "returnWin": 6,
@@ -323083,7 +323104,7 @@
             {
               "id": "21174",
               "name": "Alex Neal-Bullen (ADE)",
-              "returnWin": 12,
+              "returnWin": 11,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -323117,19 +323138,6 @@
               "number": 21170,
               "isOpen": true,
               "sortOrder": 47,
-              "sameGame": true
-            },
-            {
-              "id": "21168",
-              "name": "Toby Murray (ADE)",
-              "returnWin": 14,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 21168,
-              "isOpen": true,
-              "sortOrder": 45,
               "sameGame": true
             },
             {
@@ -323633,6 +323641,19 @@
               "sameGame": true
             },
             {
+              "id": "21113",
+              "name": "Toby Murray (ADE)",
+              "returnWin": 18,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 21113,
+              "isOpen": true,
+              "sortOrder": 45,
+              "sameGame": true
+            },
+            {
               "id": "21080",
               "name": "Mykelti Lefau (RIC)",
               "returnWin": 19,
@@ -323672,6 +323693,19 @@
               "sameGame": true
             },
             {
+              "id": "21119",
+              "name": "Alex Neal-Bullen (ADE)",
+              "returnWin": 34,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 21119,
+              "isOpen": true,
+              "sortOrder": 51,
+              "sameGame": true
+            },
+            {
               "id": "21089",
               "name": "Steely Green (RIC)",
               "returnWin": 41,
@@ -323682,19 +323716,6 @@
               "number": 21089,
               "isOpen": true,
               "sortOrder": 21,
-              "sameGame": true
-            },
-            {
-              "id": "21119",
-              "name": "Alex Neal-Bullen (ADE)",
-              "returnWin": 41,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 21119,
-              "isOpen": true,
-              "sortOrder": 51,
               "sameGame": true
             },
             {
@@ -324062,19 +324083,6 @@
               "sameGame": true
             },
             {
-              "id": "21113",
-              "name": "Toby Murray (ADE)",
-              "returnWin": 51,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 21113,
-              "isOpen": true,
-              "sortOrder": 45,
-              "sameGame": true
-            },
-            {
               "id": "21087",
               "name": "Samuel Grlj (RIC)",
               "returnWin": 51,
@@ -324221,6 +324229,19 @@
               "number": 20996,
               "isOpen": true,
               "sortOrder": 38,
+              "sameGame": true
+            },
+            {
+              "id": "21003",
+              "name": "Toby Murray (ADE)",
+              "returnWin": 51,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 21003,
+              "isOpen": true,
+              "sortOrder": 45,
               "sameGame": true
             },
             {
@@ -324377,19 +324398,6 @@
               "number": 21008,
               "isOpen": true,
               "sortOrder": 50,
-              "sameGame": true
-            },
-            {
-              "id": "21003",
-              "name": "Toby Murray (ADE)",
-              "returnWin": 81,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 21003,
-              "isOpen": true,
-              "sortOrder": 45,
               "sameGame": true
             },
             {
@@ -336382,6 +336390,18 @@
               "sortOrder": 31
             },
             {
+              "id": "40813",
+              "name": "Toby Murray (ADE)",
+              "returnWin": 16,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 40813,
+              "isOpen": true,
+              "sortOrder": 45
+            },
+            {
               "id": "40806",
               "name": "Luke Pedlar (ADE)",
               "returnWin": 16,
@@ -336442,6 +336462,18 @@
               "sortOrder": 10
             },
             {
+              "id": "40819",
+              "name": "Alex Neal-Bullen (ADE)",
+              "returnWin": 21,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 40819,
+              "isOpen": true,
+              "sortOrder": 51
+            },
+            {
               "id": "40820",
               "name": "Daniel Curtin (ADE)",
               "returnWin": 23,
@@ -336466,18 +336498,6 @@
               "sortOrder": 47
             },
             {
-              "id": "40819",
-              "name": "Alex Neal-Bullen (ADE)",
-              "returnWin": 23,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 40819,
-              "isOpen": true,
-              "sortOrder": 51
-            },
-            {
               "id": "40789",
               "name": "Steely Green (RIC)",
               "returnWin": 23,
@@ -336488,18 +336508,6 @@
               "number": 40789,
               "isOpen": true,
               "sortOrder": 21
-            },
-            {
-              "id": "40813",
-              "name": "Toby Murray (ADE)",
-              "returnWin": 26,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 40813,
-              "isOpen": true,
-              "sortOrder": 45
             },
             {
               "id": "40817",
@@ -337498,6 +337506,30 @@
               "sortOrder": 15
             },
             {
+              "id": "40884",
+              "name": "Toby Murray (ADE)",
+              "returnWin": 10,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 40884,
+              "isOpen": true,
+              "sortOrder": 22
+            },
+            {
+              "id": "40887",
+              "name": "Alex Neal-Bullen (ADE)",
+              "returnWin": 13,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 40887,
+              "isOpen": true,
+              "sortOrder": 25
+            },
+            {
               "id": "40888",
               "name": "Daniel Curtin (ADE)",
               "returnWin": 14,
@@ -337508,18 +337540,6 @@
               "number": 40888,
               "isOpen": true,
               "sortOrder": 26
-            },
-            {
-              "id": "40887",
-              "name": "Alex Neal-Bullen (ADE)",
-              "returnWin": 14,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 40887,
-              "isOpen": true,
-              "sortOrder": 25
             },
             {
               "id": "40886",
@@ -337544,18 +337564,6 @@
               "number": 40872,
               "isOpen": true,
               "sortOrder": 10
-            },
-            {
-              "id": "40884",
-              "name": "Toby Murray (ADE)",
-              "returnWin": 15,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 40884,
-              "isOpen": true,
-              "sortOrder": 22
             },
             {
               "id": "40865",
@@ -337823,6 +337831,19 @@
               "sameGame": true
             },
             {
+              "id": "41983",
+              "name": "Toby Murray (ADE)",
+              "returnWin": 5.5,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 41983,
+              "isOpen": true,
+              "sortOrder": 45,
+              "sameGame": true
+            },
+            {
               "id": "41976",
               "name": "Luke Pedlar (ADE)",
               "returnWin": 5.5,
@@ -337862,6 +337883,19 @@
               "sameGame": true
             },
             {
+              "id": "41989",
+              "name": "Alex Neal-Bullen (ADE)",
+              "returnWin": 7,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 41989,
+              "isOpen": true,
+              "sortOrder": 51,
+              "sameGame": true
+            },
+            {
               "id": "41959",
               "name": "Steely Green (RIC)",
               "returnWin": 7.5,
@@ -337872,19 +337906,6 @@
               "number": 41959,
               "isOpen": true,
               "sortOrder": 21,
-              "sameGame": true
-            },
-            {
-              "id": "41989",
-              "name": "Alex Neal-Bullen (ADE)",
-              "returnWin": 7.5,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 41989,
-              "isOpen": true,
-              "sortOrder": 51,
               "sameGame": true
             },
             {
@@ -337911,19 +337932,6 @@
               "number": 41990,
               "isOpen": true,
               "sortOrder": 52,
-              "sameGame": true
-            },
-            {
-              "id": "41983",
-              "name": "Toby Murray (ADE)",
-              "returnWin": 8.5,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 41983,
-              "isOpen": true,
-              "sortOrder": 45,
               "sameGame": true
             },
             {
@@ -338427,6 +338435,19 @@
               "sameGame": true
             },
             {
+              "id": "41182",
+              "name": "Toby Murray (ADE)",
+              "returnWin": 3.5,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 41182,
+              "isOpen": true,
+              "sortOrder": 45,
+              "sameGame": true
+            },
+            {
               "id": "41149",
               "name": "Mykelti Lefau (RIC)",
               "returnWin": 3.6,
@@ -338468,7 +338489,7 @@
             {
               "id": "41188",
               "name": "Alex Neal-Bullen (ADE)",
-              "returnWin": 4.5,
+              "returnWin": 4.25,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -338528,19 +338549,6 @@
               "number": 41170,
               "isOpen": true,
               "sortOrder": 33,
-              "sameGame": true
-            },
-            {
-              "id": "41182",
-              "name": "Toby Murray (ADE)",
-              "returnWin": 5,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 41182,
-              "isOpen": true,
-              "sortOrder": 45,
               "sameGame": true
             },
             {
@@ -338700,19 +338708,6 @@
               "sameGame": true
             },
             {
-              "id": "41174",
-              "name": "Lachlan McAndrew (ADE)",
-              "returnWin": 11,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 41174,
-              "isOpen": true,
-              "sortOrder": 37,
-              "sameGame": true
-            },
-            {
               "id": "41185",
               "name": "Jayden Short (RIC)",
               "returnWin": 12,
@@ -338736,6 +338731,19 @@
               "number": 41145,
               "isOpen": true,
               "sortOrder": 8,
+              "sameGame": true
+            },
+            {
+              "id": "41174",
+              "name": "Lachlan McAndrew (ADE)",
+              "returnWin": 12,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 41174,
+              "isOpen": true,
+              "sortOrder": 37,
               "sameGame": true
             }
           ],
@@ -338862,6 +338870,19 @@
               "sameGame": true
             },
             {
+              "id": "41408",
+              "name": "Toby Murray (ADE)",
+              "returnWin": 2.1,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 41408,
+              "isOpen": true,
+              "sortOrder": 45,
+              "sameGame": true
+            },
+            {
               "id": "41375",
               "name": "Mykelti Lefau (RIC)",
               "returnWin": 2.15,
@@ -338901,6 +338922,19 @@
               "sameGame": true
             },
             {
+              "id": "41414",
+              "name": "Alex Neal-Bullen (ADE)",
+              "returnWin": 2.6,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 41414,
+              "isOpen": true,
+              "sortOrder": 51,
+              "sameGame": true
+            },
+            {
               "id": "41384",
               "name": "Steely Green (RIC)",
               "returnWin": 2.6,
@@ -338911,19 +338945,6 @@
               "number": 41384,
               "isOpen": true,
               "sortOrder": 21,
-              "sameGame": true
-            },
-            {
-              "id": "41414",
-              "name": "Alex Neal-Bullen (ADE)",
-              "returnWin": 2.7,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 41414,
-              "isOpen": true,
-              "sortOrder": 51,
               "sameGame": true
             },
             {
@@ -338950,19 +338971,6 @@
               "number": 41410,
               "isOpen": true,
               "sortOrder": 47,
-              "sameGame": true
-            },
-            {
-              "id": "41408",
-              "name": "Toby Murray (ADE)",
-              "returnWin": 2.9,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 41408,
-              "isOpen": true,
-              "sortOrder": 45,
               "sameGame": true
             },
             {
@@ -339225,6 +339233,18 @@
               "sortOrder": 38
             },
             {
+              "id": "41295",
+              "name": "Toby Murray (ADE)",
+              "returnWin": 2,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 41295,
+              "isOpen": true,
+              "sortOrder": 45
+            },
+            {
               "id": "41262",
               "name": "Mykelti Lefau (RIC)",
               "returnWin": 2.05,
@@ -339275,7 +339295,7 @@
             {
               "id": "41301",
               "name": "Alex Neal-Bullen (ADE)",
-              "returnWin": 2.6,
+              "returnWin": 2.5,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -339307,18 +339327,6 @@
               "number": 41302,
               "isOpen": true,
               "sortOrder": 52
-            },
-            {
-              "id": "41295",
-              "name": "Toby Murray (ADE)",
-              "returnWin": 2.75,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 41295,
-              "isOpen": true,
-              "sortOrder": 45
             },
             {
               "id": "41283",
@@ -345586,6 +345594,18 @@
               "sortOrder": 20
             },
             {
+              "id": "41046",
+              "name": "Toby Murray (ADE)",
+              "returnWin": 17,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 41046,
+              "isOpen": true,
+              "sortOrder": 45
+            },
+            {
               "id": "41013",
               "name": "Mykelti Lefau (RIC)",
               "returnWin": 17,
@@ -345622,6 +345642,18 @@
               "sortOrder": 10
             },
             {
+              "id": "41052",
+              "name": "Alex Neal-Bullen (ADE)",
+              "returnWin": 21,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 41052,
+              "isOpen": true,
+              "sortOrder": 51
+            },
+            {
               "id": "41053",
               "name": "Daniel Curtin (ADE)",
               "returnWin": 23,
@@ -345632,18 +345664,6 @@
               "number": 41053,
               "isOpen": true,
               "sortOrder": 52
-            },
-            {
-              "id": "41052",
-              "name": "Alex Neal-Bullen (ADE)",
-              "returnWin": 23,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 41052,
-              "isOpen": true,
-              "sortOrder": 51
             },
             {
               "id": "41022",
@@ -345680,18 +345700,6 @@
               "number": 41050,
               "isOpen": true,
               "sortOrder": 49
-            },
-            {
-              "id": "41046",
-              "name": "Toby Murray (ADE)",
-              "returnWin": 26,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 41046,
-              "isOpen": true,
-              "sortOrder": 45
             },
             {
               "id": "41034",
@@ -346144,6 +346152,18 @@
               "sortOrder": 38
             },
             {
+              "id": "41240",
+              "name": "Toby Murray (ADE)",
+              "returnWin": 3.4,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 41240,
+              "isOpen": true,
+              "sortOrder": 45
+            },
+            {
               "id": "41207",
               "name": "Mykelti Lefau (RIC)",
               "returnWin": 3.5,
@@ -346182,7 +346202,7 @@
             {
               "id": "41246",
               "name": "Alex Neal-Bullen (ADE)",
-              "returnWin": 4.5,
+              "returnWin": 4.25,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -346238,18 +346258,6 @@
               "number": 41228,
               "isOpen": true,
               "sortOrder": 33
-            },
-            {
-              "id": "41240",
-              "name": "Toby Murray (ADE)",
-              "returnWin": 5,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 41240,
-              "isOpen": true,
-              "sortOrder": 45
             },
             {
               "id": "41244",
@@ -348130,6 +348138,18 @@
               "sortOrder": 12
             },
             {
+              "id": "40938",
+              "name": "Toby Murray (ADE)",
+              "returnWin": 17,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 40938,
+              "isOpen": true,
+              "sortOrder": 45
+            },
+            {
               "id": "40907",
               "name": "Noah Balta (RIC)",
               "returnWin": 18,
@@ -348152,6 +348172,18 @@
               "number": 40903,
               "isOpen": true,
               "sortOrder": 10
+            },
+            {
+              "id": "40944",
+              "name": "Alex Neal-Bullen (ADE)",
+              "returnWin": 21,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 40944,
+              "isOpen": true,
+              "sortOrder": 51
             },
             {
               "id": "40914",
@@ -348178,18 +348210,6 @@
               "sortOrder": 47
             },
             {
-              "id": "40944",
-              "name": "Alex Neal-Bullen (ADE)",
-              "returnWin": 23,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 40944,
-              "isOpen": true,
-              "sortOrder": 51
-            },
-            {
               "id": "40945",
               "name": "Daniel Curtin (ADE)",
               "returnWin": 23,
@@ -348212,18 +348232,6 @@
               "number": 40926,
               "isOpen": true,
               "sortOrder": 33
-            },
-            {
-              "id": "40938",
-              "name": "Toby Murray (ADE)",
-              "returnWin": 26,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 40938,
-              "isOpen": true,
-              "sortOrder": 45
             },
             {
               "id": "40942",
@@ -348676,6 +348684,18 @@
               "sortOrder": 38
             },
             {
+              "id": "41350",
+              "name": "Toby Murray (ADE)",
+              "returnWin": 3.25,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 41350,
+              "isOpen": true,
+              "sortOrder": 45
+            },
+            {
               "id": "41317",
               "name": "Mykelti Lefau (RIC)",
               "returnWin": 3.4,
@@ -348726,7 +348746,7 @@
             {
               "id": "41356",
               "name": "Alex Neal-Bullen (ADE)",
-              "returnWin": 4.25,
+              "returnWin": 4.2,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -348770,18 +348790,6 @@
               "number": 41338,
               "isOpen": true,
               "sortOrder": 33
-            },
-            {
-              "id": "41350",
-              "name": "Toby Murray (ADE)",
-              "returnWin": 4.75,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 41350,
-              "isOpen": true,
-              "sortOrder": 45
             },
             {
               "id": "41354",
@@ -350674,6 +350682,18 @@
               "sortOrder": 12
             },
             {
+              "id": "42137",
+              "name": "Toby Murray (ADE)",
+              "returnWin": 17,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 42137,
+              "isOpen": true,
+              "sortOrder": 45
+            },
+            {
               "id": "42106",
               "name": "Noah Balta (RIC)",
               "returnWin": 18,
@@ -350698,6 +350718,18 @@
               "sortOrder": 10
             },
             {
+              "id": "42143",
+              "name": "Alex Neal-Bullen (ADE)",
+              "returnWin": 21,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 42143,
+              "isOpen": true,
+              "sortOrder": 51
+            },
+            {
               "id": "42139",
               "name": "Zac Taylor (ADE)",
               "returnWin": 23,
@@ -350708,18 +350740,6 @@
               "number": 42139,
               "isOpen": true,
               "sortOrder": 47
-            },
-            {
-              "id": "42143",
-              "name": "Alex Neal-Bullen (ADE)",
-              "returnWin": 23,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 42143,
-              "isOpen": true,
-              "sortOrder": 51
             },
             {
               "id": "42144",
@@ -350768,18 +350788,6 @@
               "number": 42125,
               "isOpen": true,
               "sortOrder": 33
-            },
-            {
-              "id": "42137",
-              "name": "Toby Murray (ADE)",
-              "returnWin": 26,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 42137,
-              "isOpen": true,
-              "sortOrder": 45
             },
             {
               "id": "42118",
@@ -351220,6 +351228,18 @@
               "sortOrder": 20
             },
             {
+              "id": "41719",
+              "name": "Toby Murray (ADE)",
+              "returnWin": 3.3,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 41719,
+              "isOpen": true,
+              "sortOrder": 45
+            },
+            {
               "id": "41686",
               "name": "Mykelti Lefau (RIC)",
               "returnWin": 3.4,
@@ -351258,7 +351278,7 @@
             {
               "id": "41725",
               "name": "Alex Neal-Bullen (ADE)",
-              "returnWin": 4.25,
+              "returnWin": 4.2,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -351314,18 +351334,6 @@
               "number": 41707,
               "isOpen": true,
               "sortOrder": 33
-            },
-            {
-              "id": "41719",
-              "name": "Toby Murray (ADE)",
-              "returnWin": 4.75,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 41719,
-              "isOpen": true,
-              "sortOrder": 45
             },
             {
               "id": "41723",
@@ -353583,6 +353591,18 @@
               "sortOrder": 38
             },
             {
+              "id": "41925",
+              "name": "Toby Murray (ADE)",
+              "returnWin": 16,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 41925,
+              "isOpen": true,
+              "sortOrder": 45
+            },
+            {
               "id": "41892",
               "name": "Mykelti Lefau (RIC)",
               "returnWin": 17,
@@ -353617,6 +353637,18 @@
               "number": 41890,
               "isOpen": true,
               "sortOrder": 10
+            },
+            {
+              "id": "41931",
+              "name": "Alex Neal-Bullen (ADE)",
+              "returnWin": 21,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 41931,
+              "isOpen": true,
+              "sortOrder": 51
             },
             {
               "id": "41927",
@@ -353655,18 +353687,6 @@
               "sortOrder": 21
             },
             {
-              "id": "41931",
-              "name": "Alex Neal-Bullen (ADE)",
-              "returnWin": 23,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 41931,
-              "isOpen": true,
-              "sortOrder": 51
-            },
-            {
               "id": "41913",
               "name": "Jordan Dawson (ADE)",
               "returnWin": 26,
@@ -353677,18 +353697,6 @@
               "number": 41913,
               "isOpen": true,
               "sortOrder": 33
-            },
-            {
-              "id": "41925",
-              "name": "Toby Murray (ADE)",
-              "returnWin": 26,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 41925,
-              "isOpen": true,
-              "sortOrder": 45
             },
             {
               "id": "41929",
@@ -354117,6 +354125,18 @@
               "sortOrder": 24
             },
             {
+              "id": "41870",
+              "name": "Toby Murray (ADE)",
+              "returnWin": 16,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 41870,
+              "isOpen": true,
+              "sortOrder": 45
+            },
+            {
               "id": "41863",
               "name": "Luke Pedlar (ADE)",
               "returnWin": 16,
@@ -354177,6 +354197,18 @@
               "sortOrder": 10
             },
             {
+              "id": "41876",
+              "name": "Alex Neal-Bullen (ADE)",
+              "returnWin": 21,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 41876,
+              "isOpen": true,
+              "sortOrder": 51
+            },
+            {
               "id": "41846",
               "name": "Steely Green (RIC)",
               "returnWin": 23,
@@ -354201,18 +354233,6 @@
               "sortOrder": 47
             },
             {
-              "id": "41876",
-              "name": "Alex Neal-Bullen (ADE)",
-              "returnWin": 23,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 41876,
-              "isOpen": true,
-              "sortOrder": 51
-            },
-            {
               "id": "41877",
               "name": "Daniel Curtin (ADE)",
               "returnWin": 23,
@@ -354223,18 +354243,6 @@
               "number": 41877,
               "isOpen": true,
               "sortOrder": 52
-            },
-            {
-              "id": "41870",
-              "name": "Toby Murray (ADE)",
-              "returnWin": 26,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 41870,
-              "isOpen": true,
-              "sortOrder": 45
             },
             {
               "id": "41858",
@@ -354675,9 +354683,21 @@
               "sortOrder": 15
             },
             {
+              "id": "40986",
+              "name": "Toby Murray (ADE)",
+              "returnWin": 10,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 40986,
+              "isOpen": true,
+              "sortOrder": 22
+            },
+            {
               "id": "40989",
               "name": "Alex Neal-Bullen (ADE)",
-              "returnWin": 14,
+              "returnWin": 13,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -354721,18 +354741,6 @@
               "number": 40974,
               "isOpen": true,
               "sortOrder": 10
-            },
-            {
-              "id": "40986",
-              "name": "Toby Murray (ADE)",
-              "returnWin": 15,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 40986,
-              "isOpen": true,
-              "sortOrder": 22
             },
             {
               "id": "40967",
