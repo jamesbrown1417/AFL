@@ -25,8 +25,14 @@ run_scraping <- function(script_name) {
   })
 }
 
+ignored_scraper_prefixes <- c("betr_", "unibet_")
+
+active_scraped_odds_files <- function(pattern) {
+  list.files("Data/scraped_odds", full.names = TRUE, pattern = pattern) |>
+    discard(~str_detect(basename(.x), paste0("^(", paste(ignored_scraper_prefixes, collapse = "|"), ")")))
+}
+
 # Run all odds scraping scripts
-run_scraping("OddsScraper/H2H-Only//scrape_betr_h2h.R")
 run_scraping("OddsScraper/H2H-Only//scrape_BetRight_h2h.R")
 run_scraping("OddsScraper/H2H-Only//scrape_pointsbet_h2h.R")
 run_scraping("OddsScraper/H2H-Only//scrape_sportsbet_h2h.R")
@@ -34,7 +40,6 @@ run_scraping("OddsScraper/H2H-Only//scrape_TAB_h2h.R")
 run_scraping("OddsScraper/H2H-Only//scrape_TopSport_h2h.R")
 # run_scraping("OddsScraper/H2H-Only//scrape_bet365_h2h.R")
 # run_scraping("OddsScraper/H2H-Only//Neds/scrape_neds_h2h.R")
-run_scraping("OddsScraper/H2H-Only//scrape_unibet.R")
 run_scraping("OddsScraper/H2H-Only//scrape_dabble_h2h.R")
 
 ##%######################################################%##
@@ -45,7 +50,7 @@ run_scraping("OddsScraper/H2H-Only//scrape_dabble_h2h.R")
 
 # Get all scraped odds files and combine
 all_odds_files <-
-  list.files("Data/scraped_odds", full.names = TRUE, pattern = "h2h") |>
+  active_scraped_odds_files("h2h") |>
   map(read_csv) |>
   # Keep if nrow of dataframe greater than 0
   keep(~nrow(.x) > 0) |>

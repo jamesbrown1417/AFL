@@ -12,6 +12,63 @@ source("Functions/fix_team_names.R")
 player_names <- read_rds("Data/2026_start_positions_and_prices.rds")
 player_names <- player_names |> select(player_full_name, team_name)
 
+# PointsBet embeds thresholds in some outcome names, e.g. "Darcy Cameron 14+".
+# Strip those suffixes and join on a normalized key so casing/punctuation variants
+# still resolve to the canonical player list.
+normalise_pointsbet_player_key <- function(player_name) {
+  player_name |>
+    str_to_lower() |>
+    str_replace_all("[^a-z0-9]", "")
+}
+
+clean_pointsbet_player_name <- function(player_name) {
+  cleaned <-
+    player_name |>
+    str_remove("\\s+(Over|Under)\\s+\\d+(\\.\\d+)?\\+?$") |>
+    str_remove("\\s+\\d+(\\.\\d+)?\\+$") |>
+    str_squish()
+  
+  case_when(
+    cleaned == "Lebron James" ~ "LeBron James",
+    .default = cleaned
+  )
+}
+
+player_lookup <-
+  player_names |>
+  mutate(player_key = normalise_pointsbet_player_key(player_full_name)) |>
+  distinct(player_key, .keep_all = TRUE)
+
+add_pointsbet_player_team_info <- function(data) {
+  if (!"side" %in% names(data)) {
+    data <- data |> mutate(side = NA_character_)
+  }
+  
+  data |>
+    mutate(
+      player_name = clean_pointsbet_player_name(player_name),
+      player_key = normalise_pointsbet_player_key(player_name),
+      pointsbet_player_team = case_when(
+        str_to_lower(side) == "home" ~ home_team,
+        str_to_lower(side) == "away" ~ away_team,
+        .default = NA_character_
+      )
+    ) |>
+    left_join(player_lookup, by = "player_key") |>
+    mutate(
+      player_name = coalesce(player_full_name, player_name),
+      player_team = coalesce(pointsbet_player_team, team_name)
+    ) |>
+    mutate(
+      opposition_team = case_when(
+        is.na(player_team) ~ NA_character_,
+        home_team == player_team ~ away_team,
+        .default = home_team
+      )
+    ) |>
+    select(-player_key, -player_full_name, -team_name, -pointsbet_player_team)
+}
+
 pointsbet_h2h_main <- function() {
   # URL of website
   pointsbet_url = "https://api.pointsbet.com/api/v2/competitions/7523/events/featured?includeLive=false&page=1"
@@ -206,6 +263,10 @@ pointsbet_h2h_main <- function() {
     outcome_names <- c()
     outcome_types <- c()
     outcome_prices <- c()
+    outcome_points <- c()
+    outcome_sides <- c()
+    outcome_team_ids <- c()
+    outcome_player_ids <- c()
     event_key <- c()
     market_key <- c()
     outcome_key <- c()
@@ -240,6 +301,30 @@ pointsbet_h2h_main <- function() {
           outcome_prices <- c(outcome_prices, NA)
         }
         
+        if (!is.null(outcome$points)) {
+          outcome_points <- c(outcome_points, outcome$points)
+        } else {
+          outcome_points <- c(outcome_points, NA)
+        }
+        
+        if (!is.null(outcome$side)) {
+          outcome_sides <- c(outcome_sides, outcome$side)
+        } else {
+          outcome_sides <- c(outcome_sides, NA)
+        }
+        
+        if (!is.null(outcome$teamId)) {
+          outcome_team_ids <- c(outcome_team_ids, outcome$teamId)
+        } else {
+          outcome_team_ids <- c(outcome_team_ids, NA)
+        }
+        
+        if (!is.null(outcome$playerId)) {
+          outcome_player_ids <- c(outcome_player_ids, outcome$playerId)
+        } else {
+          outcome_player_ids <- c(outcome_player_ids, NA)
+        }
+        
         event_key <- c(event_key, pointsbet_response$key)
         
         if (!is.null(market$key)) {
@@ -263,6 +348,10 @@ pointsbet_h2h_main <- function() {
       outcome = outcome_names,
       outcome_type = outcome_types,
       price = outcome_prices,
+      points = outcome_points,
+      side = outcome_sides,
+      team_id = outcome_team_ids,
+      player_id = outcome_player_ids,
       EventKey = event_key,
       MarketKey = market_key,
       OutcomeKey = outcome_key
@@ -295,16 +384,15 @@ pointsbet_h2h_main <- function() {
     mutate(home_team = fix_team_names(home_team),
            away_team = fix_team_names(away_team)) |>
     mutate(match = paste(home_team, "v", away_team)) |>
-    mutate(outcome = str_remove_all(outcome, " Over.*$")) |>
-    left_join(player_names[, c("player_full_name", "team_name")], by = c("outcome" = "player_full_name")) |>
-    mutate(opposition_team = if_else(home_team == team_name, away_team, home_team)) |>
+    mutate(player_name = outcome) |>
+    add_pointsbet_player_team_info() |>
     transmute(
       match,
       home_team,
       away_team,
       market_name = "Player Disposals",
-      player_name = outcome,
-      player_team = team_name,
+      player_name,
+      player_team,
       opposition_team,
       line,
       over_price = price,
@@ -329,7 +417,7 @@ pointsbet_h2h_main <- function() {
     separate(outcome,
              into = c("player_name", "line"),
              sep = " Over ") |>
-    mutate(line = as.numeric(line)) |>
+    mutate(line = as.numeric(str_extract(line, "\\d+(\\.\\d+)?"))) |>
     mutate(match = str_replace(match, "@", "v")) |>
     separate(
       match,
@@ -340,21 +428,14 @@ pointsbet_h2h_main <- function() {
     mutate(home_team = fix_team_names(home_team),
            away_team = fix_team_names(away_team)) |>
     mutate(match = paste(home_team, "v", away_team)) |>
-    mutate(
-      player_name = case_when(
-        player_name == "Lebron James" ~ "LeBron James",
-        .default = player_name
-      )
-    ) |>
-    left_join(player_names[, c("player_full_name", "team_name")], by = c("player_name" = "player_full_name")) |>
-    mutate(opposition_team = if_else(home_team == team_name, away_team, home_team)) |>
+    add_pointsbet_player_team_info() |>
     transmute(
       match,
       home_team,
       away_team,
       market_name = "Player Disposals",
       player_name,
-      player_team = team_name,
+      player_team,
       opposition_team,
       line,
       over_price = price,
@@ -372,7 +453,7 @@ pointsbet_h2h_main <- function() {
     separate(outcome,
              into = c("player_name", "line"),
              sep = " Under ") |>
-    mutate(line = as.numeric(line)) |>
+    mutate(line = as.numeric(str_extract(line, "\\d+(\\.\\d+)?"))) |>
     mutate(match = str_replace(match, "@", "v")) |>
     separate(
       match,
@@ -383,21 +464,14 @@ pointsbet_h2h_main <- function() {
     mutate(home_team = fix_team_names(home_team),
            away_team = fix_team_names(away_team)) |>
     mutate(match = paste(home_team, "v", away_team)) |>
-    mutate(
-      player_name = case_when(
-        player_name == "Lebron James" ~ "LeBron James",
-        .default = player_name
-      )
-    ) |>
-    left_join(player_names[, c("player_full_name", "team_name")], by = c("player_name" = "player_full_name")) |>
-    mutate(opposition_team = if_else(home_team == team_name, away_team, home_team)) |>
+    add_pointsbet_player_team_info() |>
     transmute(
       match,
       home_team,
       away_team,
       market_name = "Player Disposals",
       player_name,
-      player_team = team_name,
+      player_team,
       opposition_team,
       line,
       under_price = price,
@@ -437,7 +511,10 @@ pointsbet_h2h_main <- function() {
     pointsbet_data_player_props |>
     filter(str_detect(market, "Fantasy")) |>
     filter(str_detect(market, "To Get")) |>
-    mutate(line = str_extract(market, "[0-9]{1,3}")) |>
+    mutate(line = coalesce(
+      str_extract(market, "\\d{1,3}(?=\\+)"),
+      str_extract(outcome, "\\d{1,3}(?=\\+)")
+    )) |>
     mutate(line = as.numeric(line) - 0.5) |>
     separate(
       match,
@@ -448,21 +525,15 @@ pointsbet_h2h_main <- function() {
     mutate(home_team = fix_team_names(home_team),
            away_team = fix_team_names(away_team)) |>
     mutate(match = paste(home_team, "v", away_team)) |>
-    mutate(
-      outcome = case_when(
-        outcome == "Lebron James" ~ "LeBron James",
-        .default = outcome
-      )
-    ) |>
-    left_join(player_names[, c("player_full_name", "team_name")], by = c("outcome" = "player_full_name")) |>
-    mutate(opposition_team = if_else(home_team == team_name, away_team, home_team)) |>
+    mutate(player_name = outcome) |>
+    add_pointsbet_player_team_info() |>
     transmute(
       match,
       home_team,
       away_team,
       market_name = "Player Fantasy",
-      player_name = outcome,
-      player_team = team_name,
+      player_name,
+      player_team,
       opposition_team,
       line,
       over_price = price,
@@ -487,7 +558,7 @@ pointsbet_h2h_main <- function() {
     separate(outcome,
              into = c("player_name", "line"),
              sep = " Over ") |>
-    mutate(line = as.numeric(line)) |>
+    mutate(line = as.numeric(str_extract(line, "\\d+(\\.\\d+)?"))) |>
     mutate(match = str_replace(match, "@", "v")) |>
     separate(
       match,
@@ -498,21 +569,14 @@ pointsbet_h2h_main <- function() {
     mutate(home_team = fix_team_names(home_team),
            away_team = fix_team_names(away_team)) |>
     mutate(match = paste(home_team, "v", away_team)) |>
-    mutate(
-      player_name = case_when(
-        player_name == "Lebron James" ~ "LeBron James",
-        .default = player_name
-      )
-    ) |>
-    left_join(player_names[, c("player_full_name", "team_name")], by = c("player_name" = "player_full_name")) |>
-    mutate(opposition_team = if_else(home_team == team_name, away_team, home_team)) |>
+    add_pointsbet_player_team_info() |>
     transmute(
       match,
       home_team,
       away_team,
       market_name = "Player Fantasy",
       player_name,
-      player_team = team_name,
+      player_team,
       opposition_team,
       line,
       over_price = price,
@@ -530,7 +594,7 @@ pointsbet_h2h_main <- function() {
     separate(outcome,
              into = c("player_name", "line"),
              sep = " Under ") |>
-    mutate(line = as.numeric(line)) |>
+    mutate(line = as.numeric(str_extract(line, "\\d+(\\.\\d+)?"))) |>
     mutate(match = str_replace(match, "@", "v")) |>
     separate(
       match,
@@ -541,21 +605,14 @@ pointsbet_h2h_main <- function() {
     mutate(home_team = fix_team_names(home_team),
            away_team = fix_team_names(away_team)) |>
     mutate(match = paste(home_team, "v", away_team)) |>
-    mutate(
-      player_name = case_when(
-        player_name == "Lebron James" ~ "LeBron James",
-        .default = player_name
-      )
-    ) |>
-    left_join(player_names[, c("player_full_name", "team_name")], by = c("player_name" = "player_full_name")) |>
-    mutate(opposition_team = if_else(home_team == team_name, away_team, home_team)) |>
+    add_pointsbet_player_team_info() |>
     transmute(
       match,
       home_team,
       away_team,
       market_name = "Player Fantasy",
       player_name,
-      player_team = team_name,
+      player_team,
       opposition_team,
       line,
       under_price = price,
@@ -593,20 +650,31 @@ pointsbet_h2h_main <- function() {
   # Filter list to player goals
   pointsbet_player_goals_lines <-
     pointsbet_data_player_props |>
-    mutate(market = ifelse(str_detect(market, "Anytime Goalscorer"), "To Kick 1+ Goals", market)) |>
-    filter(str_detect(market, "^To Kick \\d+\\+ Goals|^To Kick Goals")) |>
+    filter(
+      str_detect(market, "^To Kick \\d+\\+ Goals") |
+        str_detect(market, "^To Kick Goals") |
+        str_detect(market, "Anytime Goalscorer")
+    ) |>
     mutate(
       line_from_market = str_extract(market, "(?<=To Kick )\\d{1,2}(?=\\+ Goals)"),
-      line_from_outcome = str_extract(outcome, "(?<= Over )\\d{1,2}(?=\\+)"),
-      line = coalesce(line_from_market, line_from_outcome),
+      line_from_outcome_over = str_extract(outcome, "(?<= Over )\\d+(\\.\\d+)?(?=\\+?$)"),
+      line_from_outcome_plus = str_extract(outcome, "\\d+(\\.\\d+)?(?=\\+\\s*$)"),
+      line_from_points = if_else(!is.na(points) & points > 0, as.character(points), NA_character_),
+      line = coalesce(
+        line_from_market,
+        line_from_outcome_over,
+        line_from_outcome_plus,
+        line_from_points
+      ),
       line = as.numeric(line) - 0.5,
       player_name = case_when(
-        !is.na(line_from_outcome) ~ str_remove(outcome, " Over \\d{1,2}\\+$"),
+        !is.na(line_from_outcome_over) ~ str_remove(outcome, "\\s+Over\\s+\\d+(\\.\\d+)?\\+?$"),
+        !is.na(line_from_outcome_plus) ~ str_remove(outcome, "\\s+\\d+(\\.\\d+)?\\+$"),
         .default = outcome
       ),
       player_name = str_squish(player_name)
     ) |>
-    filter(!is.na(line)) |>
+    filter(!is.na(line), !is.na(player_name), player_name != "") |>
     separate(
       match,
       into = c("home_team", "away_team"),
@@ -616,21 +684,14 @@ pointsbet_h2h_main <- function() {
     mutate(home_team = fix_team_names(home_team),
            away_team = fix_team_names(away_team)) |>
     mutate(match = paste(home_team, "v", away_team)) |>
-    mutate(
-      player_name = case_when(
-        player_name == "Lebron James" ~ "LeBron James",
-        .default = player_name
-      )
-    ) |>
-    left_join(player_names[, c("player_full_name", "team_name")], by = c("player_name" = "player_full_name")) |>
-    mutate(opposition_team = if_else(home_team == team_name, away_team, home_team)) |>
+    add_pointsbet_player_team_info() |>
     transmute(
       match,
       home_team,
       away_team,
       market_name = "Player Goals",
       player_name,
-      player_team = team_name,
+      player_team,
       opposition_team,
       line,
       over_price = price,
@@ -655,7 +716,7 @@ pointsbet_h2h_main <- function() {
     separate(outcome,
              into = c("player_name", "line"),
              sep = " Over ") |>
-    mutate(line = as.numeric(line)) |>
+    mutate(line = as.numeric(str_extract(line, "\\d+(\\.\\d+)?"))) |>
     mutate(match = str_replace(match, "@", "v")) |>
     separate(
       match,
@@ -663,21 +724,17 @@ pointsbet_h2h_main <- function() {
       sep = " v ",
       remove = FALSE
     ) |>
-    mutate(
-      player_name = case_when(
-        player_name == "Lebron James" ~ "LeBron James",
-        .default = player_name
-      )
-    ) |>
-    left_join(player_names[, c("player_full_name", "team_name")], by = c("player_name" = "player_full_name")) |>
-    mutate(opposition_team = if_else(home_team == team_name, away_team, home_team)) |>
+    mutate(home_team = fix_team_names(home_team),
+           away_team = fix_team_names(away_team)) |>
+    mutate(match = paste(home_team, "v", away_team)) |>
+    add_pointsbet_player_team_info() |>
     transmute(
       match,
       home_team,
       away_team,
       market_name = "Player Goals",
       player_name,
-      player_team = team_name,
+      player_team,
       opposition_team,
       line,
       over_price = price,
@@ -695,7 +752,7 @@ pointsbet_h2h_main <- function() {
     separate(outcome,
              into = c("player_name", "line"),
              sep = " Under ") |>
-    mutate(line = as.numeric(line)) |>
+    mutate(line = as.numeric(str_extract(line, "\\d+(\\.\\d+)?"))) |>
     mutate(match = str_replace(match, "@", "v")) |>
     separate(
       match,
@@ -703,21 +760,17 @@ pointsbet_h2h_main <- function() {
       sep = " v ",
       remove = FALSE
     ) |>
-    mutate(
-      player_name = case_when(
-        player_name == "Lebron James" ~ "LeBron James",
-        .default = player_name
-      )
-    ) |>
-    left_join(player_names[, c("player_full_name", "team_name")], by = c("player_name" = "player_full_name")) |>
-    mutate(opposition_team = if_else(home_team == team_name, away_team, home_team)) |>
+    mutate(home_team = fix_team_names(home_team),
+           away_team = fix_team_names(away_team)) |>
+    mutate(match = paste(home_team, "v", away_team)) |>
+    add_pointsbet_player_team_info() |>
     transmute(
       match,
       home_team,
       away_team,
       market_name = "Player Goals",
       player_name,
-      player_team = team_name,
+      player_team,
       opposition_team,
       line,
       under_price = price,
@@ -768,15 +821,14 @@ pointsbet_h2h_main <- function() {
     mutate(home_team = fix_team_names(home_team),
            away_team = fix_team_names(away_team)) |>
     mutate(match = paste(home_team, "v", away_team)) |>
-    left_join(player_names[, c("player_full_name", "team_name")], by = c("player_name" = "player_full_name")) |>
-    mutate(opposition_team = if_else(home_team == team_name, away_team, home_team)) |>
+    add_pointsbet_player_team_info() |>
     transmute(
       match,
       home_team,
       away_team,
       market_name = "Player Marks",
       player_name,
-      player_team = team_name,
+      player_team,
       opposition_team,
       line,
       over_price = price,
@@ -808,15 +860,14 @@ pointsbet_h2h_main <- function() {
     mutate(home_team = fix_team_names(home_team),
            away_team = fix_team_names(away_team)) |>
     mutate(match = paste(home_team, "v", away_team)) |>
-    left_join(player_names[, c("player_full_name", "team_name")], by = c("player_name" = "player_full_name")) |>
-    mutate(opposition_team = if_else(home_team == team_name, away_team, home_team)) |>
+    add_pointsbet_player_team_info() |>
     transmute(
       match,
       home_team,
       away_team,
       market_name = "Player Tackles",
       player_name,
-      player_team = team_name,
+      player_team,
       opposition_team,
       line,
       over_price = price,

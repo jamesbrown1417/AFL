@@ -23,9 +23,15 @@ run_scraping <- function(script_name) {
   })
 }
 
+ignored_scraper_prefixes <- c("betr_", "unibet_")
+
+active_scraped_odds_files <- function(pattern) {
+  list.files("Data/scraped_odds", full.names = TRUE, pattern = pattern) |>
+    discard(~str_detect(basename(.x), paste0("^(", paste(ignored_scraper_prefixes, collapse = "|"), ")")))
+}
+
 # List of scripts to run
 scraping_scripts <- c(
-  "OddsScraper/scrape_betr.R",
   "OddsScraper/scrape_BetRight.R",
   # "OddsScraper/scrape_Palmerbet.R",
   "OddsScraper/scrape_pointsbet.R",
@@ -34,9 +40,7 @@ scraping_scripts <- c(
   "OddsScraper/scrape_bet365.R",
   # "OddsScraper/scrape_bluebet.R",
   "OddsScraper/Neds/scrape_neds.R",
-  # "OddsScraper/scrape_unibet.R",
   "OddsScraper/scrape_dabble.R",
-  "OddsScraper/scrape_unibet.R",
   "OddsScraper/scrape_betfair.R"
 )
 
@@ -51,7 +55,7 @@ future_map(scraping_scripts, run_scraping)
 
 # Get all scraped odds files and combine
 all_odds_files <-
-  list.files("Data/scraped_odds", full.names = TRUE, pattern = "h2h") |>
+  active_scraped_odds_files("h2h") |>
   map(read_csv) |>
   # Keep if nrow of dataframe greater than 0
   keep(~nrow(.x) > 0) |>
@@ -106,7 +110,7 @@ all_odds_h2h |> write_rds("Data/processed_odds/all_h2h.rds")
 
 # Get all scraped odds files and combine
 all_odds_files <-
-  list.files("Data/scraped_odds", full.names = TRUE, pattern = "line") |>
+  active_scraped_odds_files("line") |>
   map(read_csv) |>
   # Keep if nrow of dataframe greater than 0
   keep(~nrow(.x) > 0) |>
@@ -134,7 +138,7 @@ all_odds_line |> write_rds("Data/processed_odds/all_line.rds")
 
 # Get all scraped odds files and combine
 all_player_disposals <-
-  list.files("Data/scraped_odds", full.names = TRUE, pattern = "disposals") |>
+  active_scraped_odds_files("disposals") |>
   map(read_csv) |>
   # Ignore null elements
   keep(~nrow(.x) > 0) |>
@@ -203,7 +207,7 @@ all_player_disposals |> write_rds("Data/processed_odds/all_player_disposals.rds"
 
 # Get all scraped odds files and combine
 all_player_goals <-
-  list.files("Data/scraped_odds", full.names = TRUE, pattern = "goals") |>
+  active_scraped_odds_files("goals") |>
   map(read_csv) |>
   # Ignore null elements
   keep(~nrow(.x) > 0) |>
@@ -275,7 +279,7 @@ all_player_goals |> write_rds("Data/processed_odds/all_player_goals.rds")
 
 # Get all scraped odds files and combine
 all_player_fantasy_points <-
-  list.files("Data/scraped_odds", full.names = TRUE, pattern = "fantasy_points") |>
+  active_scraped_odds_files("fantasy_points") |>
   map(read_csv) |>
   # Ignore null elements
   keep(~nrow(.x) > 0) |>
@@ -338,7 +342,7 @@ all_player_fantasy_points |> write_rds("Data/processed_odds/all_player_fantasy_p
 
 # Get all scraped odds files and combine
 all_player_marks <-
-  list.files("Data/scraped_odds", full.names = TRUE, pattern = "marks") |>
+  active_scraped_odds_files("marks") |>
   map(read_csv) |>
   # Ignore null elements
   keep(~nrow(.x) > 0) |>
@@ -396,7 +400,7 @@ all_player_marks |> write_rds("Data/processed_odds/all_player_marks.rds")
 
 # Get all scraped odds files and combine
 all_player_tackles <-
-  list.files("Data/scraped_odds", full.names = TRUE, pattern = "tackles") |>
+  active_scraped_odds_files("tackles") |>
   map(read_csv) |>
   # Ignore null elements
   keep(~nrow(.x) > 0) |>
@@ -454,7 +458,7 @@ all_player_tackles |> write_rds("Data/processed_odds/all_player_tackles.rds")
 
 # Get all scraped odds files and combine
 all_player_kicks <-
-  list.files("Data/scraped_odds", full.names = TRUE, pattern = "kicks") |>
+  active_scraped_odds_files("kicks") |>
   map(read_csv) |>
   # Ignore null elements
   keep(~nrow(.x) > 0) |>
@@ -512,7 +516,7 @@ all_player_kicks |> write_rds("Data/processed_odds/all_player_kicks.rds")
 
 # Get all scraped odds files and combine
 all_player_handballs <-
-  list.files("Data/scraped_odds", full.names = TRUE, pattern = "handballs") |>
+  active_scraped_odds_files("handballs") |>
   map(read_csv) |>
   # Ignore null elements
   keep(~nrow(.x) > 0) |>

@@ -1,0 +1,337 @@
+version: 1
+
+market_types:
+  h2h:
+    label: H2H
+    required_columns:
+      - match
+      - market_name
+      - home_team
+      - away_team
+      - home_win
+      - away_win
+      - agency
+  line:
+    label: Line
+    required_columns:
+      - match
+      - market_name
+      - home_team
+      - away_team
+      - home_line
+      - away_line
+      - home_win
+      - away_win
+      - agency
+  totals:
+    label: Totals
+    required_columns:
+      - match
+      - market_name
+      - home_team
+      - away_team
+      - line
+      - over_price
+      - under_price
+      - agency
+  player_props:
+    label: Player Props
+    required_columns:
+      - match
+      - home_team
+      - away_team
+      - market_name
+      - player_name
+      - line
+      - agency
+
+prefetch:
+  - code: tab_response
+    name: TAB cached response
+    bookmaker: tab
+    command: ["python3", "OddsScraper/TAB/get-TAB-response.py"]
+    timeout_seconds: 180
+    prerequisites:
+      python_modules: ["playwright"]
+    outputs:
+      - path: OddsScraper/TAB/tab_response.json
+
+  - code: neds_event_list
+    name: Neds event list response
+    bookmaker: neds
+    command: ["python3", "OddsScraper/Neds/get_neds_urls.py"]
+    timeout_seconds: 180
+    prerequisites:
+      python_modules: ["playwright"]
+    outputs:
+      - path: OddsScraper/Neds/neds_response.json
+
+  - code: neds_match_urls
+    name: Neds match URL derivation
+    bookmaker: neds
+    command: ["Rscript", "OddsScraper/Neds/get_neds_match_urls.R"]
+    timeout_seconds: 90
+    prerequisites:
+      r_packages: ["tidyverse", "rvest", "httr2", "jsonlite"]
+    outputs:
+      - path: OddsScraper/Neds/neds_afl_match_urls.csv
+
+  - code: neds_match_json
+    name: Neds per-match event cards
+    bookmaker: neds
+    command: ["python3", "OddsScraper/Neds/get_match_json.py"]
+    timeout_seconds: 360
+    prerequisites:
+      python_modules: ["playwright", "pandas"]
+    outputs:
+      - glob: OddsScraper/Neds/data_*.json
+
+  - code: bet365_browser_artifacts
+    name: Bet365 browser HTML artifacts
+    bookmaker: bet365
+    command: ["python3", "OddsScraper/bet365_afl_single.py"]
+    timeout_seconds: 900
+    prerequisites:
+      env:
+        - BET365USER
+        - BET365PW
+      python_modules: ["selenium_driverless", "dotenv", "pandas"]
+    outputs:
+      - path: Data/BET365_HTML/h2h_html.txt
+      - path: Data/BET365_HTML/urls.csv
+      - glob: Data/BET365_HTML/body_html_players_a_match_*.txt
+      - glob: Data/BET365_HTML/body_html_players_b_match_*.txt
+
+bookmakers:
+  - code: betright
+    name: BetRight
+    script: OddsScraper/scrape_BetRight.R
+    command: ["Rscript", "OddsScraper/scrape_BetRight.R"]
+    timeout_seconds: 240
+    prerequisites:
+      r_packages: ["tidyverse", "rvest", "httr2", "glue"]
+    outputs:
+      - path: Data/scraped_odds/betright_h2h.csv
+        market: h2h
+        market_type: h2h
+      - path: Data/scraped_odds/betright_line.csv
+        market: line
+        market_type: line
+      - path: Data/scraped_odds/betright_player_disposals.csv
+        market: player_disposals
+        market_type: player_props
+      - path: Data/scraped_odds/betright_player_goals.csv
+        market: player_goals
+        market_type: player_props
+      - path: Data/scraped_odds/betright_player_marks.csv
+        market: player_marks
+        market_type: player_props
+      - path: Data/scraped_odds/betright_player_tackles.csv
+        market: player_tackles
+        market_type: player_props
+      - path: Data/scraped_odds/betright_player_fantasy_points.csv
+        market: player_fantasy_points
+        market_type: player_props
+
+  - code: pointsbet
+    name: PointsBet
+    script: OddsScraper/scrape_pointsbet.R
+    command: ["Rscript", "OddsScraper/scrape_pointsbet.R"]
+    timeout_seconds: 300
+    prerequisites:
+      r_packages: ["tidyverse", "rvest", "httr2", "jsonlite", "tidyjson"]
+    outputs:
+      - path: Data/scraped_odds/pointsbet_h2h.csv
+        market: h2h
+        market_type: h2h
+      - path: Data/scraped_odds/pointsbet_line.csv
+        market: line
+        market_type: line
+      - path: Data/scraped_odds/pointsbet_player_disposals.csv
+        market: player_disposals
+        market_type: player_props
+      - path: Data/scraped_odds/pointsbet_player_goals.csv
+        market: player_goals
+        market_type: player_props
+      - path: Data/scraped_odds/pointsbet_player_fantasy_points.csv
+        market: player_fantasy_points
+        market_type: player_props
+      - path: Data/scraped_odds/pointsbet_player_tackles.csv
+        market: player_tackles
+        market_type: player_props
+      - path: Data/scraped_odds/pointsbet_player_marks.csv
+        market: player_marks
+        market_type: player_props
+
+  - code: sportsbet
+    name: Sportsbet
+    script: OddsScraper/scrape_sportsbet.R
+    command: ["Rscript", "OddsScraper/scrape_sportsbet.R"]
+    timeout_seconds: 420
+    prerequisites:
+      r_packages: ["tidyverse", "rvest", "httr2", "jsonlite", "glue"]
+    outputs:
+      - path: Data/scraped_odds/sportsbet_line.csv
+        market: line
+        market_type: line
+      - path: Data/scraped_odds/sportsbet_line_markets.csv
+        market: line
+        market_type: line
+      - path: Data/scraped_odds/sportsbet_total_points.csv
+        market: totals
+        market_type: totals
+      - path: Data/scraped_odds/sportsbet_player_disposals.csv
+        market: player_disposals
+        market_type: player_props
+      - path: Data/scraped_odds/sportsbet_player_goals.csv
+        market: player_goals
+        market_type: player_props
+      - path: Data/scraped_odds/sportsbet_player_marks.csv
+        market: player_marks
+        market_type: player_props
+      - path: Data/scraped_odds/sportsbet_player_tackles.csv
+        market: player_tackles
+        market_type: player_props
+      - path: Data/scraped_odds/sportsbet_player_kicks.csv
+        market: player_kicks
+        market_type: player_props
+      - path: Data/scraped_odds/sportsbet_player_handballs.csv
+        market: player_handballs
+        market_type: player_props
+      - path: Data/scraped_odds/sportsbet_player_fantasy_points.csv
+        market: player_fantasy_points
+        market_type: player_props
+      - path: Data/scraped_odds/sportsbet_player_hitouts.csv
+        market: player_hitouts
+        market_type: player_props
+
+  - code: tab
+    name: TAB
+    script: OddsScraper/TAB/scrape_TAB.R
+    command: ["Rscript", "OddsScraper/TAB/scrape_TAB.R"]
+    timeout_seconds: 240
+    prerequisites:
+      r_packages: ["tidyverse", "rvest", "httr2", "httr", "jsonlite"]
+    cached_inputs:
+      - path: OddsScraper/TAB/tab_response.json
+    outputs:
+      - path: Data/scraped_odds/tab_h2h.csv
+        market: h2h
+        market_type: h2h
+      - path: Data/scraped_odds/tab_line.csv
+        market: line
+        market_type: line
+      - path: Data/scraped_odds/tab_totals.csv
+        market: totals
+        market_type: totals
+      - path: Data/scraped_odds/tab_player_disposals.csv
+        market: player_disposals
+        market_type: player_props
+      - path: Data/scraped_odds/tab_player_goals.csv
+        market: player_goals
+        market_type: player_props
+      - path: Data/scraped_odds/tab_player_marks.csv
+        market: player_marks
+        market_type: player_props
+      - path: Data/scraped_odds/tab_player_tackles.csv
+        market: player_tackles
+        market_type: player_props
+
+  - code: bet365
+    name: Bet365
+    script: OddsScraper/scrape_bet365.R
+    command: ["Rscript", "OddsScraper/scrape_bet365.R"]
+    timeout_seconds: 240
+    prerequisites:
+      r_packages: ["tidyverse", "rvest", "httr", "jsonlite", "glue"]
+    cached_inputs:
+      - path: Data/BET365_HTML/h2h_html.txt
+      - path: Data/BET365_HTML/urls.csv
+      - glob: Data/BET365_HTML/body_html_players_a_match_*.txt
+      - glob: Data/BET365_HTML/body_html_players_b_match_*.txt
+    outputs:
+      - path: Data/scraped_odds/bet365_h2h.csv
+        market: h2h
+        market_type: h2h
+      - path: Data/scraped_odds/bet365_line.csv
+        market: line
+        market_type: line
+      - path: Data/scraped_odds/bet365_player_disposals.csv
+        market: player_disposals
+        market_type: player_props
+      - path: Data/scraped_odds/bet365_player_goals.csv
+        market: player_goals
+        market_type: player_props
+
+  - code: neds
+    name: Neds
+    script: OddsScraper/Neds/scrape_neds.R
+    command: ["Rscript", "OddsScraper/Neds/scrape_neds.R"]
+    timeout_seconds: 240
+    prerequisites:
+      r_packages: ["tidyverse", "rvest", "httr2", "jsonlite"]
+    cached_inputs:
+      - path: OddsScraper/Neds/neds_afl_match_urls.csv
+      - glob: OddsScraper/Neds/data_*.json
+    outputs:
+      - path: Data/scraped_odds/neds_h2h.csv
+        market: h2h
+        market_type: h2h
+      - path: Data/scraped_odds/neds_player_disposals.csv
+        market: player_disposals
+        market_type: player_props
+      - path: Data/scraped_odds/neds_player_goals.csv
+        market: player_goals
+        market_type: player_props
+      - path: Data/scraped_odds/neds_player_fantasy_points.csv
+        market: player_fantasy_points
+        market_type: player_props
+
+  - code: dabble
+    name: Dabble
+    script: OddsScraper/scrape_dabble.R
+    command: ["Rscript", "OddsScraper/scrape_dabble.R"]
+    timeout_seconds: 300
+    prerequisites:
+      r_packages: ["tidyverse", "rvest", "httr2", "jsonlite"]
+    outputs:
+      - path: Data/scraped_odds/dabble_h2h.csv
+        market: h2h
+        market_type: h2h
+      - path: Data/scraped_odds/dabble_player_disposals.csv
+        market: player_disposals
+        market_type: player_props
+      - path: Data/scraped_odds/dabble_player_goals.csv
+        market: player_goals
+        market_type: player_props
+      - path: Data/scraped_odds/dabble_player_fantasy_points.csv
+        market: player_fantasy_points
+        market_type: player_props
+      - path: Data/scraped_odds/dabble_player_marks.csv
+        market: player_marks
+        market_type: player_props
+      - path: Data/scraped_odds/dabble_player_tackles.csv
+        market: player_tackles
+        market_type: player_props
+
+  - code: betfair
+    name: Betfair
+    script: OddsScraper/scrape_betfair.R
+    command: ["Rscript", "OddsScraper/scrape_betfair.R"]
+    timeout_seconds: 300
+    prerequisites:
+      env:
+        - BETFAIR_USER
+        - BETFAIR_PASS
+        - BETFAIR_APP
+      r_packages: ["tidyverse", "httr2", "jsonlite", "abettor"]
+    outputs:
+      - path: Data/scraped_odds/betfair_h2h.csv
+        market: h2h
+        market_type: h2h
+      - path: Data/scraped_odds/betfair_player_disposals.csv
+        market: player_disposals
+        market_type: player_props
+      - path: Data/scraped_odds/betfair_player_goals.csv
+        market: player_goals
+        market_type: player_props
