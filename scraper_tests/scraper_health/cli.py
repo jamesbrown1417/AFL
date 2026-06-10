@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import shutil
 from pathlib import Path
 from typing import Any
@@ -50,6 +51,7 @@ def main(argv: list[str] | None = None) -> int:
     args = parser.parse_args(argv)
 
     source_root = Path(__file__).resolve().parents[2]
+    _load_dotenv(source_root)
     manifest_path = source_root / "scraper_tests" / "manifest.yml"
     manifest = load_manifest(manifest_path)
     source_artifact_snapshot = snapshot_source_artifacts(source_root, manifest)
@@ -140,6 +142,50 @@ def main(argv: list[str] | None = None) -> int:
     if args.no_fail:
         return 0
     return 1 if overall_status in {"blocked", "error"} else 0
+
+
+def _load_dotenv(source_root: Path) -> None:
+    """Load credentials from the repo's .env (then `env`) and ~/.Renviron.
+
+    Mirrors how the production scrapers load secrets: the Python scrapers call
+    load_dotenv() (.env), and the R scrapers read ~/.Renviron automatically.
+    Loading both here lets credential-gated scrapers like Bet365 (BET365USER/PW
+    in .env) and Betfair (BETFAIR_USER/PASS/APP in ~/.Renviron) pass their
+    prerequisite checks and inherit the vars in their subprocess env. Existing
+    environment variables are never overridden.
+    """
+    try:
+        from dotenv import load_dotenv
+    except ImportError:
+        load_dotenv = None
+    if load_dotenv is not None:
+        for candidate in (source_root / ".env", source_root / "env"):
+            if candidate.exists():
+                load_dotenv(candidate, override=False)
+    _load_renviron(Path.home() / ".Renviron")
+
+
+def _load_renviron(path: Path) -> None:
+    """Load `KEY=VALUE` pairs from an R-style .Renviron into os.environ.
+
+    Only sets keys that are not already present, so real environment variables
+    take precedence. Best-effort: malformed lines and a missing file are ignored.
+    """
+    if not path.exists():
+        return
+    try:
+        lines = path.read_text(encoding="utf-8", errors="ignore").splitlines()
+    except OSError:
+        return
+    for raw in lines:
+        line = raw.strip()
+        if not line or line.startswith("#") or "=" not in line:
+            continue
+        key, _, value = line.partition("=")
+        key = key.strip()
+        value = value.strip().strip('"').strip("'")
+        if key and key not in os.environ:
+            os.environ[key] = value
 
 
 def _attach_prefetch_statuses(

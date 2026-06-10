@@ -28,8 +28,14 @@ if os.getenv('BET365USER') is None or os.getenv('BET365PW') is None:
 username = os.getenv('BET365USER')
 password = os.getenv('BET365PW')
 
-# Validate credentials early with a clear error
-if not username or not password:
+# Login bypass switch: when enabled, skip the Bet365 login flow entirely and
+# scrape the public (logged-out) markets. Use this when the configured account
+# is inactive and triggers email-verification interstitials that hide markets.
+# Set to "yes" for now. Override with env BET365_BYPASS_LOGIN (yes/no).
+BYPASS_LOGIN = os.getenv("BET365_BYPASS_LOGIN", "yes").strip().lower() in ("1", "true", "yes", "on")
+
+# Validate credentials early with a clear error (only needed when actually logging in)
+if not BYPASS_LOGIN and (not username or not password):
     raise RuntimeError(
         "Missing Bet365 credentials. Set BET365USER and BET365PW in .env or env, or export them in the environment."
     )
@@ -72,62 +78,65 @@ async def collect_h2h_and_urls(driver):
     await driver.get("https://www.bet365.com.au/#/AC/B36/C21101752/D48/E360013/F48/")
     await driver.sleep(2)
 
-    # Always perform login each run
-    print("Attempting login...")
-    login_locator_candidates = [
-        # Most stable header container when logged out.
-        (By.XPATH, "//div[contains(@class, 'hm-MainHeaderRHSLoggedOutWide_Login')]"),
-        # Dynamic hrm-* class token, matched by prefix and label text.
-        (
-            By.XPATH,
-            f"//span[contains(@class, 'hrm-') and (contains({XPATH_LOWER_TEXT}, 'log in') or contains({XPATH_LOWER_TEXT}, 'login'))]",
-        ),
-        # Generic clickable fallback based on visible label.
-        (
-            By.XPATH,
-            f"//*[self::button or self::a][contains({XPATH_LOWER_TEXT}, 'log in') or contains({XPATH_LOWER_TEXT}, 'login')]",
-        ),
-    ]
-    login_element = await find_first_element(
-        driver, login_locator_candidates, timeout_per_candidate=4
-    )
-    await driver.sleep(2)
-    try:
-        await login_element.click()
-    except Exception:
-        await driver.execute_script("arguments[0].click();", login_element)
-    await driver.sleep(1)
+    # Login each run, unless bypassed (Bet365 odds are public when logged out)
+    if BYPASS_LOGIN:
+        print("BYPASS_LOGIN enabled - skipping login, scraping logged-out markets")
+    else:
+        print("Attempting login...")
+        login_locator_candidates = [
+            # Most stable header container when logged out.
+            (By.XPATH, "//div[contains(@class, 'hm-MainHeaderRHSLoggedOutWide_Login')]"),
+            # Dynamic hrm-* class token, matched by prefix and label text.
+            (
+                By.XPATH,
+                f"//span[contains(@class, 'hrm-') and (contains({XPATH_LOWER_TEXT}, 'log in') or contains({XPATH_LOWER_TEXT}, 'login'))]",
+            ),
+            # Generic clickable fallback based on visible label.
+            (
+                By.XPATH,
+                f"//*[self::button or self::a][contains({XPATH_LOWER_TEXT}, 'log in') or contains({XPATH_LOWER_TEXT}, 'login')]",
+            ),
+        ]
+        login_element = await find_first_element(
+            driver, login_locator_candidates, timeout_per_candidate=4
+        )
+        await driver.sleep(2)
+        try:
+            await login_element.click()
+        except Exception:
+            await driver.execute_script("arguments[0].click();", login_element)
+        await driver.sleep(1)
 
-    username_field = await driver.find_element(By.XPATH, "//input[@placeholder='Username or email address']", timeout=10)
-    await username_field.clear()
-    await driver.sleep(0.3)
-    await username_field.send_keys(username)
-    print("Entered username")
+        username_field = await driver.find_element(By.XPATH, "//input[@placeholder='Username or email address']", timeout=10)
+        await username_field.clear()
+        await driver.sleep(0.3)
+        await username_field.send_keys(username)
+        print("Entered username")
 
-    password_field = await driver.find_element(By.XPATH, "//input[@placeholder='Password']", timeout=10)
-    await password_field.clear()
-    await driver.sleep(0.3)
-    await password_field.send_keys(password)
-    print("Entered password")
+        password_field = await driver.find_element(By.XPATH, "//input[@placeholder='Password']", timeout=10)
+        await password_field.clear()
+        await driver.sleep(0.3)
+        await password_field.send_keys(password)
+        print("Entered password")
 
-    login_submit_locator_candidates = [
-        (
-            By.XPATH,
-            f"//input[@placeholder='Password']/ancestor::form//*[self::button or self::span][contains({XPATH_LOWER_TEXT}, 'log in') or contains({XPATH_LOWER_TEXT}, 'login')]",
-        ),
-        (By.XPATH, "//span[starts-with(@class, 'slm')]"),
-    ]
-    login_button = await find_first_element(
-        driver, login_submit_locator_candidates, timeout_per_candidate=3
-    )
-    try:
-        await login_button.click()
-    except Exception:
-        await driver.execute_script("arguments[0].click();", login_button)
-    print("Clicked login button")
+        login_submit_locator_candidates = [
+            (
+                By.XPATH,
+                f"//input[@placeholder='Password']/ancestor::form//*[self::button or self::span][contains({XPATH_LOWER_TEXT}, 'log in') or contains({XPATH_LOWER_TEXT}, 'login')]",
+            ),
+            (By.XPATH, "//span[starts-with(@class, 'slm')]"),
+        ]
+        login_button = await find_first_element(
+            driver, login_submit_locator_candidates, timeout_per_candidate=3
+        )
+        try:
+            await login_button.click()
+        except Exception:
+            await driver.execute_script("arguments[0].click();", login_button)
+        print("Clicked login button")
 
-    print("Waiting 2 seconds...")
-    await driver.sleep(2)
+        print("Waiting 2 seconds...")
+        await driver.sleep(2)
 
     await driver.minimize_window()
 

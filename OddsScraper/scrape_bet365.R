@@ -158,13 +158,29 @@ read_bet365_disposals_html <- function(html_path) {
     # Read in the txt data as html
     bet365 <- read_html(html_path)
     
-    # Get match name
-    bet365_match_name <-
+    # Get match name (logged-out player pages use .cm-MatchBettingReactHeader,
+    # which reads like "AFL 11 Jun 20:30 Home v Away"; fall back to the legacy
+    # logged-in header selector when present)
+    bet365_match_header <-
         bet365 |>
-        html_nodes(".sph-FixturePodHeader_TeamName ") |>
-        html_text()
-    
-    bet365_match_name <- glue_collapse(bet365_match_name,sep = " v ")
+        html_nodes(".cm-MatchBettingReactHeader") |>
+        html_text2() |>
+        str_squish()
+
+    # Bet365 renders the separator as either " v " or "vs"; normalise to " v "
+    bet365_match_header <- str_replace_all(bet365_match_header, "\\s+vs?\\s+", " v ")
+    bet365_match_name <- str_match(bet365_match_header, "\\d{1,2}:\\d{2}\\s+(.*)$")[, 2]
+    bet365_match_name <- bet365_match_name[!is.na(bet365_match_name)]
+
+    if (length(bet365_match_name) == 0) {
+        bet365_match_name <-
+            bet365 |>
+            html_nodes(".sph-FixturePodHeader_TeamName ") |>
+            html_text() |>
+            glue_collapse(sep = " v ")
+    } else {
+        bet365_match_name <- bet365_match_name[1]
+    }
     
     # Extract the disposals data table----------------------------------------------
     # Get the disposals table
@@ -266,13 +282,29 @@ read_bet365_goals_html <- function(html_path) {
     # Read in the txt data as html
     bet365 <- read_html(html_path)
     
-    # Get match name
-    bet365_match_name <-
+    # Get match name (logged-out player pages use .cm-MatchBettingReactHeader,
+    # which reads like "AFL 11 Jun 20:30 Home v Away"; fall back to the legacy
+    # logged-in header selector when present)
+    bet365_match_header <-
         bet365 |>
-        html_nodes(".sph-FixturePodHeader_TeamName ") |>
-        html_text()
-    
-    bet365_match_name <- glue_collapse(bet365_match_name,sep = " v ")
+        html_nodes(".cm-MatchBettingReactHeader") |>
+        html_text2() |>
+        str_squish()
+
+    # Bet365 renders the separator as either " v " or "vs"; normalise to " v "
+    bet365_match_header <- str_replace_all(bet365_match_header, "\\s+vs?\\s+", " v ")
+    bet365_match_name <- str_match(bet365_match_header, "\\d{1,2}:\\d{2}\\s+(.*)$")[, 2]
+    bet365_match_name <- bet365_match_name[!is.na(bet365_match_name)]
+
+    if (length(bet365_match_name) == 0) {
+        bet365_match_name <-
+            bet365 |>
+            html_nodes(".sph-FixturePodHeader_TeamName ") |>
+            html_text() |>
+            glue_collapse(sep = " v ")
+    } else {
+        bet365_match_name <- bet365_match_name[1]
+    }
     
     # Extract the goals data table----------------------------------------------
     # Get the goals table
@@ -381,13 +413,29 @@ read_bet365_disposal_lines_html <- function(html_path) {
   # Read in the txt data as html
   bet365 <- read_html(html_path)
   
-  # Get match name
-  bet365_match_name <-
+  # Get match name (logged-out player pages use .cm-MatchBettingReactHeader,
+  # which reads like "AFL 11 Jun 20:30 Home v Away"; fall back to the legacy
+  # logged-in header selector when present)
+  bet365_match_header <-
     bet365 |>
-    html_nodes(".sph-FixturePodHeader_TeamName ") |>
-    html_text()
-  
-  bet365_match_name <- glue_collapse(bet365_match_name,sep = " v ")
+    html_nodes(".cm-MatchBettingReactHeader") |>
+    html_text2() |>
+    str_squish()
+
+  # Bet365 renders the separator as either " v " or "vs"; normalise to " v "
+  bet365_match_header <- str_replace_all(bet365_match_header, "\\s+vs?\\s+", " v ")
+  bet365_match_name <- str_match(bet365_match_header, "\\d{1,2}:\\d{2}\\s+(.*)$")[, 2]
+  bet365_match_name <- bet365_match_name[!is.na(bet365_match_name)]
+
+  if (length(bet365_match_name) == 0) {
+    bet365_match_name <-
+      bet365 |>
+      html_nodes(".sph-FixturePodHeader_TeamName ") |>
+      html_text() |>
+      glue_collapse(sep = " v ")
+  } else {
+    bet365_match_name <- bet365_match_name[1]
+  }
   
   # Extract the disposals data table----------------------------------------------
   # Get the disposals table
