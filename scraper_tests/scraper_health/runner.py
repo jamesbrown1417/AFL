@@ -1,14 +1,15 @@
 from __future__ import annotations
 
-import importlib.util
 import os
 import subprocess
-import sys
 import time
 from pathlib import Path
 from typing import Any
 
 from .models import finding, status_from_findings, utc_now_iso, worst_status
+
+
+PYTHON_EXECUTABLE = Path("/Users/jamesbrown/.pyenv/versions/3.12.5/bin/python3")
 
 
 class PrerequisiteChecker:
@@ -58,7 +59,20 @@ class PrerequisiteChecker:
 
     def _has_python_module(self, module: str) -> bool:
         if module not in self._python_cache:
-            self._python_cache[module] = importlib.util.find_spec(module) is not None
+            check = (
+                "import importlib.util, sys; "
+                f"sys.exit(0 if importlib.util.find_spec({module!r}) else 1)"
+            )
+            try:
+                completed = subprocess.run(
+                    [str(PYTHON_EXECUTABLE), "-c", check],
+                    text=True,
+                    capture_output=True,
+                    timeout=20,
+                )
+                self._python_cache[module] = completed.returncode == 0
+            except (FileNotFoundError, subprocess.TimeoutExpired):
+                self._python_cache[module] = False
         return self._python_cache[module]
 
     def _has_r_package(self, package: str) -> bool:
@@ -163,6 +177,7 @@ def run_prefetches(
                     "kind": "prefetch",
                     "status": "pass",
                     "skipped": True,
+                    "command": _resolve_command(entry.get("command", [])),
                     "message": "Prefetch mode is off; helper was not run and artifacts were not checked.",
                     "findings": [],
                     "artifacts": [],
@@ -184,6 +199,7 @@ def run_prefetches(
                     "kind": "prefetch",
                     "status": status_from_findings(artifact_findings),
                     "skipped": True,
+                    "command": _resolve_command(entry.get("command", [])),
                     "message": "Prefetch mode is cached; helper was not run.",
                     "findings": artifact_findings,
                     "artifacts": artifacts,
@@ -207,6 +223,7 @@ def run_prefetches(
                     "kind": "prefetch",
                     "status": "blocked",
                     "skipped": True,
+                    "command": _resolve_command(entry.get("command", [])),
                     "message": "Helper was not run because prerequisites are missing.",
                     "findings": all_findings,
                     "artifacts": artifacts,
@@ -265,7 +282,7 @@ def run_bookmakers(
                     "kind": "scraper",
                     "status": "blocked",
                     "skipped": True,
-                    "command": entry.get("command", []),
+                    "command": _resolve_command(entry.get("command", [])),
                     "message": "Scraper was not run because prerequisites or cached inputs are missing.",
                     "findings": blocking_findings,
                     "cached_artifacts": cached_artifacts,
@@ -399,7 +416,7 @@ def _resolve_command(command: list[str]) -> list[str]:
         raise ValueError("Command cannot be empty")
     resolved = list(command)
     if resolved[0] in {"python", "python3"}:
-        resolved[0] = sys.executable
+        resolved[0] = str(PYTHON_EXECUTABLE)
     return resolved
 
 
@@ -407,4 +424,3 @@ def _command_env() -> dict[str, str]:
     env = os.environ.copy()
     env.setdefault("PYTHONUNBUFFERED", "1")
     return env
-

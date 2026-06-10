@@ -540,6 +540,50 @@ REPORT_TEMPLATE = r"""<!doctype html>
       <section class="panel">
         <div class="panel-header">
           <div>
+            <h2>Production Workflow Parity</h2>
+            <p class="muted">The shadow run mirrors afl_update_file.sh prefetch cleanup and checks that production artifacts were not modified.</p>
+          </div>
+          <span class="badge status-{{ 'pass' if summary.source_write_findings|length == 0 else 'error' }}">
+            {{ 'isolated' if summary.source_write_findings|length == 0 else 'source writes detected' }}
+          </span>
+        </div>
+        <div class="scroll-x">
+          <table>
+            <thead>
+              <tr>
+                <th>Check</th>
+                <th>Status</th>
+                <th>Detail</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Production cache cleanup</td>
+                <td><span class="badge status-pass">mirrored</span></td>
+                <td>{{ summary.production_cache_cleanup|length }} stale workspace artifact{{ "" if summary.production_cache_cleanup|length == 1 else "s" }} removed before prefetch.</td>
+              </tr>
+              <tr>
+                <td>Source artifact writes</td>
+                <td>
+                  <span class="badge status-{{ 'pass' if summary.source_write_findings|length == 0 else 'error' }}">
+                    {{ 'pass' if summary.source_write_findings|length == 0 else 'error' }}
+                  </span>
+                </td>
+                <td>{{ "No production Data/OddsScraper artifacts changed during the isolated run." if summary.source_write_findings|length == 0 else summary.source_write_findings|length ~ " production artifact mutation(s) detected." }}</td>
+              </tr>
+              <tr>
+                <td>Workspace</td>
+                <td><span class="badge status-pass">shadow</span></td>
+                <td class="mono">{{ summary.workspace }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="panel-header">
+          <div>
             <h2>Target Round Timeline</h2>
             <p class="muted">Future games selected from the first upcoming fixture's round.</p>
           </div>

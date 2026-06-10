@@ -17,6 +17,11 @@ COPY_IGNORE = shutil.ignore_patterns(
     "*.pyc",
 )
 
+PRODUCTION_CACHE_CLEANUP_GLOBS = (
+    "OddsScraper/Neds/*.json",
+    "Data/BET365_HTML/*.txt",
+)
+
 
 def create_latest_run_dir(source_root: Path) -> Path:
     latest_dir = source_root / "scraper_tests" / "latest"
@@ -58,6 +63,84 @@ def prepare_workspace(source_root: Path, run_dir: Path) -> tuple[Path, list[str]
     (data_dir / "scraped_odds").mkdir(parents=True, exist_ok=True)
     (data_dir / "BET365_HTML").mkdir(parents=True, exist_ok=True)
     return workspace, copied
+
+
+def apply_production_cache_cleanup(workspace: Path) -> list[dict[str, Any]]:
+    """Mirror the cache cleanup at the top of afl_update_file.sh inside workspace."""
+    removed: list[dict[str, Any]] = []
+    for pattern in PRODUCTION_CACHE_CLEANUP_GLOBS:
+        for path in sorted(workspace.glob(pattern)):
+            if not path.is_file():
+                continue
+            relative = path.relative_to(workspace).as_posix()
+            size = path.stat().st_size
+            path.unlink()
+            removed.append({"path": relative, "bytes": size})
+    return removed
+
+
+def snapshot_source_artifacts(source_root: Path, manifest: dict[str, Any]) -> dict[str, dict[str, Any]]:
+    snapshot: dict[str, dict[str, Any]] = {}
+    for pattern in _production_managed_patterns(manifest):
+        for path in _expand_artifact_pattern(source_root, pattern):
+            if path.is_file():
+                snapshot[path.relative_to(source_root).as_posix()] = _file_fingerprint(path)
+    return snapshot
+
+
+def detect_source_artifact_mutations(
+    source_root: Path,
+    manifest: dict[str, Any],
+    before: dict[str, dict[str, Any]],
+) -> list[dict[str, Any]]:
+    after = snapshot_source_artifacts(source_root, manifest)
+    findings: list[dict[str, Any]] = []
+    for relative in sorted(set(before) | set(after)):
+        if before.get(relative) == after.get(relative):
+            continue
+        if relative.startswith("scraper_tests/"):
+            continue
+        findings.append(
+            finding(
+                "error",
+                "Source artifact modified during isolated run",
+                "The health suite should only write inside scraper_tests/latest/workspace.",
+                file=relative,
+                context={"before": before.get(relative), "after": after.get(relative)},
+            )
+        )
+    return findings
+
+
+def _production_managed_patterns(manifest: dict[str, Any]) -> set[str]:
+    patterns = set(PRODUCTION_CACHE_CLEANUP_GLOBS)
+    for entry in manifest.get("prefetch", []) or []:
+        for spec in entry.get("outputs", []) or []:
+            _add_artifact_pattern(patterns, spec)
+    for entry in manifest.get("bookmakers", []) or []:
+        for collection in ("cached_inputs", "outputs"):
+            for spec in entry.get(collection, []) or []:
+                _add_artifact_pattern(patterns, spec)
+    return patterns
+
+
+def _add_artifact_pattern(patterns: set[str], spec: dict[str, Any]) -> None:
+    if "path" in spec:
+        patterns.add(spec["path"])
+    elif "glob" in spec:
+        patterns.add(spec["glob"])
+
+
+def _expand_artifact_pattern(root: Path, pattern: str) -> list[Path]:
+    if any(char in pattern for char in "*?[]"):
+        return sorted(root.glob(pattern))
+    path = root / pattern
+    return [path] if path.exists() else []
+
+
+def _file_fingerprint(path: Path) -> dict[str, Any]:
+    stat = path.stat()
+    return {"mtime_ns": stat.st_mtime_ns, "size": stat.st_size}
 
 
 def detect_repo_warnings(source_root: Path) -> list[dict[str, Any]]:

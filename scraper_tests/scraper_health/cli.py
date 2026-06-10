@@ -12,7 +12,14 @@ from .models import utc_now_iso, worst_status
 from .report import build_counters, build_coverage_matrix, collect_findings, write_report
 from .runner import PrerequisiteChecker, run_bookmakers, run_prefetches
 from .validators import attach_output_statuses
-from .workspace import create_latest_run_dir, detect_repo_warnings, prepare_workspace
+from .workspace import (
+    apply_production_cache_cleanup,
+    create_latest_run_dir,
+    detect_repo_warnings,
+    detect_source_artifact_mutations,
+    prepare_workspace,
+    snapshot_source_artifacts,
+)
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -45,9 +52,13 @@ def main(argv: list[str] | None = None) -> int:
     source_root = Path(__file__).resolve().parents[2]
     manifest_path = source_root / "scraper_tests" / "manifest.yml"
     manifest = load_manifest(manifest_path)
+    source_artifact_snapshot = snapshot_source_artifacts(source_root, manifest)
 
     run_dir = create_latest_run_dir(source_root)
     workspace, copied_inputs = prepare_workspace(source_root, run_dir)
+    production_cache_cleanup = (
+        apply_production_cache_cleanup(workspace) if args.prefetch == "auto" else []
+    )
     logs_dir = run_dir / "logs"
     repo_warnings = detect_repo_warnings(source_root)
     target = select_target_round(workspace / "Data" / "current_fixture.csv")
@@ -76,14 +87,20 @@ def main(argv: list[str] | None = None) -> int:
         target_matches=[fixture["match"] for fixture in target["fixtures"]],
     )
     _attach_prefetch_statuses(bookmaker_results, prefetch_results)
+    source_write_findings = detect_source_artifact_mutations(
+        source_root,
+        manifest,
+        source_artifact_snapshot,
+    )
+    repo_findings = repo_warnings + source_write_findings
 
     coverage = build_coverage_matrix(manifest, bookmaker_results)
-    counters = build_counters(prefetch_results, bookmaker_results, repo_warnings)
-    findings = collect_findings(prefetch_results, bookmaker_results, repo_warnings)
+    counters = build_counters(prefetch_results, bookmaker_results, repo_findings)
+    findings = collect_findings(prefetch_results, bookmaker_results, repo_findings)
     overall_status = worst_status(
         [result["status"] for result in prefetch_results]
         + [result["status"] for result in bookmaker_results]
-        + [item["severity"] for item in repo_warnings]
+        + [item["severity"] for item in repo_findings]
     )
 
     summary: dict[str, Any] = {
@@ -95,8 +112,10 @@ def main(argv: list[str] | None = None) -> int:
         "manifest_path": str(manifest_path),
         "prefetch_mode": args.prefetch,
         "copied_inputs": copied_inputs,
+        "production_cache_cleanup": production_cache_cleanup,
         "target": target,
         "repo_warnings": repo_warnings,
+        "source_write_findings": source_write_findings,
         "prefetch": prefetch_results,
         "bookmakers": bookmaker_results,
         "coverage": coverage,

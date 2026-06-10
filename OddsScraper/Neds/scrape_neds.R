@@ -21,6 +21,10 @@ df <- read_csv("OddsScraper/Neds/neds_afl_match_urls.csv")
 # Get match json files
 json_match_files <- list.files("OddsScraper/Neds/", pattern = "^data_.*.json", full.names = TRUE)
 
+if (length(json_match_files) == 0) {
+  stop("No Neds per-match JSON files were found in OddsScraper/Neds/. Run get_match_json.py first.")
+}
+
 event_json_list <- map(json_match_files, ~fromJSON(.x))
 
 #===============================================================================
@@ -437,17 +441,6 @@ player_goals_data <-
   player_goals_data |>
   left_join(event_ids_df, by = c("match")) |>
   relocate(event_id, .after = match)
-
-##%######################################################%##
-#                                                          #
-####                  Write out as CSV                  ####
-#                                                          #
-##%######################################################%##
-
-h2h_data |> write_csv("Data/scraped_odds/neds_h2h.csv")
-player_disposals_data |> write_csv("Data/scraped_odds/neds_player_disposals.csv")
-player_goals_data |> write_csv("Data/scraped_odds/neds_player_goals.csv")
-player_fantasy_data |> write_csv("Data/scraped_odds/neds_player_fantasy_points.csv")
 
 ##%######################################################%##
 #                                                          #

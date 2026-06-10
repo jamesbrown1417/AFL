@@ -2,8 +2,9 @@ from selenium_driverless import webdriver
 import asyncio
 import json
 import os
+from pathlib import Path
 
-OUTPUT_PATH = "/Users/jamesbrown/Projects/AFL/OddsScraper/TAB/tab_response.json"
+OUTPUT_PATH = Path("OddsScraper/TAB/tab_response.json")
 
 async def main():
     options = webdriver.ChromeOptions()
@@ -40,7 +41,7 @@ async def main():
             data = json.loads(json_str)
             
             # Create directory if it doesn't exist
-            os.makedirs(os.path.dirname(OUTPUT_PATH), exist_ok=True)
+            OUTPUT_PATH.parent.mkdir(parents=True, exist_ok=True)
             
             # Save to the specified path
             with open(OUTPUT_PATH, "w", encoding='utf-8') as f:
@@ -54,7 +55,7 @@ async def main():
         except json.JSONDecodeError:
             print("[ERROR] Could not parse JSON from response")
             # Save debug file in same directory
-            debug_path = OUTPUT_PATH.replace('.json', '_debug.html')
+            debug_path = OUTPUT_PATH.with_name(f"{OUTPUT_PATH.stem}_debug.html")
             with open(debug_path, "w", encoding='utf-8') as f:
                 f.write(page_content)
             print(f"[DEBUG] Saved raw response to {debug_path}")
