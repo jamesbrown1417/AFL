@@ -23,7 +23,7 @@ run_scraping <- function(script_name) {
   })
 }
 
-ignored_scraper_prefixes <- c("betr_", "unibet_")
+ignored_scraper_prefixes <- c("betr_", "unibet_", "dabble_")
 
 active_scraped_odds_files <- function(pattern) {
   list.files("Data/scraped_odds", full.names = TRUE, pattern = pattern) |>
@@ -40,7 +40,7 @@ scraping_scripts <- c(
   "OddsScraper/scrape_bet365.R",
   # "OddsScraper/scrape_bluebet.R",
   "OddsScraper/Neds/scrape_neds.R",
-  "OddsScraper/scrape_dabble.R",
+  # "OddsScraper/scrape_dabble.R", # Disabled: api.dabble.com.au is behind a Cloudflare bot block (HTTP 403)
   "OddsScraper/scrape_betfair.R"
 )
 

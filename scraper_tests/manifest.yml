@@ -80,9 +80,9 @@ prefetch:
     name: Neds per-match event cards
     bookmaker: neds
     command: ["python3", "OddsScraper/Neds/get_match_json.py"]
-    timeout_seconds: 360
+    timeout_seconds: 240
     prerequisites:
-      python_modules: ["playwright", "pandas"]
+      python_modules: ["playwright"]
     outputs:
       - glob: OddsScraper/Neds/data_*.json
 
@@ -285,33 +285,6 @@ bookmakers:
         market_type: player_props
       - path: Data/scraped_odds/neds_player_fantasy_points.csv
         market: player_fantasy_points
-        market_type: player_props
-
-  - code: dabble
-    name: Dabble
-    script: OddsScraper/scrape_dabble.R
-    command: ["Rscript", "OddsScraper/scrape_dabble.R"]
-    timeout_seconds: 300
-    prerequisites:
-      r_packages: ["tidyverse", "rvest", "httr2", "jsonlite"]
-    outputs:
-      - path: Data/scraped_odds/dabble_h2h.csv
-        market: h2h
-        market_type: h2h
-      - path: Data/scraped_odds/dabble_player_disposals.csv
-        market: player_disposals
-        market_type: player_props
-      - path: Data/scraped_odds/dabble_player_goals.csv
-        market: player_goals
-        market_type: player_props
-      - path: Data/scraped_odds/dabble_player_fantasy_points.csv
-        market: player_fantasy_points
-        market_type: player_props
-      - path: Data/scraped_odds/dabble_player_marks.csv
-        market: player_marks
-        market_type: player_props
-      - path: Data/scraped_odds/dabble_player_tackles.csv
-        market: player_tackles
         market_type: player_props
 
   - code: betfair
