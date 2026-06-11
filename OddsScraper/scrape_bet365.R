@@ -190,13 +190,13 @@ read_bet365_disposals_html <- function(html_path) {
     
     # Player names
     bet365_disposals_player_names <-
-        bet365_disposals[[2]] |>
-        html_nodes(".bbl-BetBuilderParticipantLabel") |>
+        bet365_disposals[[1]] |>
+        html_nodes(".bbl-BetBuilderParticipantLabel_Name") |>
         html_text()
     
     # Odds
     bet365_disposals_odds <-
-        bet365_disposals[[2]] |>
+        bet365_disposals[[1]] |>
         html_nodes(".bbl-BetBuilderParticipant") |>
         html_text()
     
@@ -315,7 +315,7 @@ read_bet365_goals_html <- function(html_path) {
     # Player names
     bet365_goals_player_names <-
         bet365_goals[[1]] |>
-        html_nodes(".bbl-BetBuilderParticipantLabel") |>
+        html_nodes(".bbl-BetBuilderParticipantLabel_Name") |>
         html_text()
     
     # Determine if multi scorer is selected
@@ -442,11 +442,21 @@ read_bet365_disposal_lines_html <- function(html_path) {
   bet365_disposal_lines <-
     bet365 |>
     html_nodes(".bbl-BetBuilderMarketGroupContainer ")
+
+  if (length(bet365_disposal_lines) == 0) {
+    return(tibble(
+      match = character(),
+      player_name = character(),
+      number_of_disposals = character(),
+      over_price = numeric(),
+      under_price = numeric()
+    ))
+  }
   
   # Player names
   bet365_disposals_player_names <-
     bet365_disposal_lines[[1]] |>
-    html_nodes(".bbl-BetBuilderParticipantLabel") |>
+    html_nodes(".bbl-BetBuilderParticipantLabel_Name") |>
     html_text()
   
   # Odds
@@ -495,7 +505,7 @@ read_bet365_disposal_lines_html <- function(html_path) {
 
 # Map Over the Files------------------------------------------------------------
 goals_list <- list.files("Data/BET365_HTML", pattern = "players_a", full.names = TRUE)
-disposals_list <- list.files("Data/BET365_HTML", pattern = "players", full.names = TRUE)
+disposals_list <- list.files("Data/BET365_HTML", pattern = "players_b", full.names = TRUE)
 disposal_lines_list <- list.files("Data/BET365_HTML", pattern = "players_b", full.names = TRUE)
 
 # Create safe versions of each function
@@ -503,10 +513,69 @@ read_bet365_goals_html <- safely(read_bet365_goals_html)
 read_bet365_disposals_html <- safely(read_bet365_disposals_html)
 read_bet365_disposal_lines_html <- safely(read_bet365_disposal_lines_html, otherwise = NULL)
 
+empty_bet365_goals_raw <- tibble(
+  match = character(),
+  player_name = character(),
+  number_of_goals = character(),
+  price = numeric(),
+  implied_probability = numeric()
+)
+
+empty_bet365_disposals_raw <- tibble(
+  match = character(),
+  player_name = character(),
+  number_of_disposals = character(),
+  price = numeric(),
+  implied_probability = numeric()
+)
+
+empty_bet365_disposal_lines_raw <- tibble(
+  match = character(),
+  player_name = character(),
+  number_of_disposals = character(),
+  over_price = numeric(),
+  under_price = numeric()
+)
+
+bind_safe_results <- function(results, label, empty_result) {
+  errors <-
+    results |>
+    keep(~ !is.null(.x$error)) |>
+    map_chr(~ conditionMessage(.x$error))
+
+  if (length(errors) > 0) {
+    warning(
+      glue(
+        "Bet365 {label}: {length(errors)} HTML file(s) could not be parsed: ",
+        "{glue_collapse(unique(errors), sep = '; ')}"
+      ),
+      call. = FALSE
+    )
+  }
+
+  parsed <- results |> map_dfr(~ .x$result)
+
+  if (ncol(parsed) == 0) {
+    return(empty_result)
+  }
+
+  parsed
+}
+
 # Get all data
-bet365_goals <- map(goals_list, read_bet365_goals_html) |> map_dfr(~.x$result) |> mutate(player_name = str_remove(player_name, "\\d+"))
-bet365_disposals <- map(disposals_list, read_bet365_disposals_html) |> map_dfr(~.x$result) |> mutate(player_name = str_remove(player_name, "\\d+"))
-bet365_disposals_lines <- map(disposal_lines_list, read_bet365_disposal_lines_html) |> map_dfr(~.x$result)
+bet365_goals <-
+  map(goals_list, read_bet365_goals_html) |>
+  bind_safe_results("goals", empty_bet365_goals_raw) |>
+  mutate(player_name = str_remove(player_name, "\\d+"))
+
+bet365_disposals <-
+  map(disposals_list, read_bet365_disposals_html) |>
+  bind_safe_results("disposals", empty_bet365_disposals_raw) |>
+  mutate(player_name = str_remove(player_name, "\\d+"))
+
+bet365_disposals_lines <-
+  map(disposal_lines_list, read_bet365_disposal_lines_html) |>
+  bind_safe_results("disposal lines", empty_bet365_disposal_lines_raw)
 
 # If empty give columns
 if (nrow(bet365_disposals_lines) == 0) {
@@ -531,6 +600,7 @@ bet365_goals |>
             player_name == "Matthew Roberts" ~ "Matt Roberts",
             player_name == "Jacob Van Rooyen" ~ "Jacob van Rooyen",
             player_name == "Kamdyn Mcintosh" ~ "Kamdyn McIntosh",
+            player_name == "Malcolm Rosas Jnr" ~ "Malcolm Rosas",
             .default = player_name
         )
     ) |>
@@ -538,7 +608,7 @@ bet365_goals |>
     mutate(line = as.numeric(str_extract(number_of_goals, "\\d+"))) |>
     mutate(line = line - 0.5) |> 
     rename(player_team = team_name) |> 
-    mutate(opposition_team = ifelse(home_team == player_team, away_team, home_team)) |> 
+    mutate(opposition_team = if_else(home_team == player_team, away_team, home_team)) |> 
     transmute(match,
               home_team,
               away_team,
@@ -561,6 +631,7 @@ bet365_disposals |>
             player_name == "Matthew Roberts" ~ "Matt Roberts",
             player_name == "Jacob Van Rooyen" ~ "Jacob van Rooyen",
             player_name == "Kamdyn Mcintosh" ~ "Kamdyn McIntosh",
+            player_name == "Malcolm Rosas Jnr" ~ "Malcolm Rosas",
             .default = player_name
         )
     ) |>
@@ -568,7 +639,7 @@ bet365_disposals |>
     mutate(line = as.numeric(str_extract(number_of_disposals, "\\d+"))) |>
     mutate(line = line - 0.5) |> 
     rename(player_team = team_name) |> 
-    mutate(opposition_team = ifelse(home_team == player_team, away_team, home_team)) |> 
+    mutate(opposition_team = if_else(home_team == player_team, away_team, home_team)) |> 
     transmute(match,
               home_team,
               away_team,
@@ -588,16 +659,17 @@ bet365_disposals_lines <-
   mutate(match = paste(home_team, "v", away_team)) |>
   mutate(
     player_name = case_when(
-      player_name == "Matthew Roberts" ~ "Matt Roberts",
-      player_name == "Jacob Van Rooyen" ~ "Jacob van Rooyen",
-      player_name == "Kamdyn Mcintosh" ~ "Kamdyn McIntosh",
-      .default = player_name
-    )
+    player_name == "Matthew Roberts" ~ "Matt Roberts",
+    player_name == "Jacob Van Rooyen" ~ "Jacob van Rooyen",
+    player_name == "Kamdyn Mcintosh" ~ "Kamdyn McIntosh",
+    player_name == "Malcolm Rosas Jnr" ~ "Malcolm Rosas",
+    .default = player_name
+  )
   ) |>
   left_join(player_names, by = c("player_name" = "player_full_name")) |>
   mutate(line = as.numeric(number_of_disposals)) |> 
   rename(player_team = team_name) |> 
-  mutate(opposition_team = ifelse(home_team == player_team, away_team, home_team)) |> 
+  mutate(opposition_team = if_else(home_team == player_team, away_team, home_team)) |> 
   mutate(over_price = as.numeric(over_price),
  under_price = as.numeric(under_price)) |>
   transmute(match,

@@ -5,6 +5,13 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 
+/**
+ * Tabular (fixed-width) numerals. Apply to every odds, price, and diff cell so
+ * columns of numbers align vertically and don't jitter when values change.
+ */
+val TextStyle.tabular: TextStyle
+    get() = copy(fontFeatureSettings = "tnum")
+
 
 val AflTypography = Typography(
     displaySmall = TextStyle(

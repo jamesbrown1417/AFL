@@ -351,6 +351,49 @@ class QueryService:
             )
         return rows
 
+    def get_player_available_venues(
+        self,
+        *,
+        player_id: int,
+        seasons: list[str] | None,
+        oppositions: list[str] | None,
+        weather_categories: list[str] | None,
+        home_away: list[str] | None,
+        margin_min: int,
+        margin_max: int,
+        last_games: int | None,
+        minutes_minimum: float,
+    ) -> list[str]:
+        """Venues the player actually has games at under the given filters.
+
+        Reuses the exact same filtering pipeline as the history endpoint
+        (including the last-N-games ordering), so the option list can never
+        drift from what the history query would return. The venue filter
+        itself is deliberately excluded so it doesn't constrain its own
+        option list.
+        """
+        rows = self._load_filtered_player_stats(
+            player_id=player_id,
+            seasons=seasons,
+            oppositions=oppositions,
+            venues=None,
+            weather_categories=weather_categories,
+            home_away=home_away,
+            margin_min=margin_min,
+            margin_max=margin_max,
+            last_games=last_games,
+            minutes_minimum=minutes_minimum,
+            stat_column="disposals",
+            stat_label="Disposals",
+            line_mode=None,
+            reference_line=None,
+            lower_bound=None,
+            upper_bound=None,
+        )
+        if not rows:
+            return []
+        return sorted({row["venue"] for row in rows if row["venue"] is not None})
+
     def get_player_stat_filter_options(self, *, player_id: int) -> dict[str, Any] | None:
         with connection(settings=self.settings) as conn:
             exists = fetch_one(
@@ -648,7 +691,7 @@ class QueryService:
         scope: str,
         query: str | None,
         market_type: str | None,
-        event_id: int | None,
+        event_ids: list[int],
         include_player_ids: list[int],
         exclude_player_ids: list[int],
         selection_type: str | None,
@@ -695,9 +738,10 @@ class QueryService:
         if market_type:
             universe_conditions.append("m.market_type_code = ?")
             universe_params.append(market_type)
-        if event_id:
-            universe_conditions.append("m.event_id = ?")
-            universe_params.append(event_id)
+        if event_ids:
+            placeholders = ", ".join("?" for _ in event_ids)
+            universe_conditions.append(f"m.event_id IN ({placeholders})")
+            universe_params.extend(event_ids)
         if include_player_ids:
             placeholders = ", ".join("?" for _ in include_player_ids)
             universe_conditions.append(f"m.player_id IN ({placeholders})")
@@ -711,29 +755,10 @@ class QueryService:
             universe_params.append(selection_type)
         normalized_matchup_difficulties = [difficulty.lower() for difficulty in matchup_difficulties if difficulty.strip()]
         if normalized_matchup_difficulties:
-            under_matchup_map = {
-                "terrible": "excellent",
-                "bad": "good",
-                "neutral": "neutral",
-                "good": "bad",
-                "excellent": "terrible",
-            }
-            normalized_under_matchups = [
-                under_matchup_map.get(difficulty, difficulty)
-                for difficulty in normalized_matchup_difficulties
-            ]
-            over_placeholders = ", ".join("?" for _ in normalized_matchup_difficulties)
-            under_placeholders = ", ".join("?" for _ in normalized_under_matchups)
+            placeholders = ", ".join("?" for _ in normalized_matchup_difficulties)
             row_conditions.append(
-                f"""
-                (
-                  (LOWER(COALESCE(selection_type, '')) = 'under' AND LOWER(COALESCE(matchup_difficulty, '')) IN ({under_placeholders}))
-                  OR
-                  (LOWER(COALESCE(selection_type, '')) <> 'under' AND LOWER(COALESCE(matchup_difficulty, '')) IN ({over_placeholders}))
-                )
-                """
+                f"LOWER(COALESCE(matchup_difficulty, '')) IN ({placeholders})"
             )
-            row_params.extend(normalized_under_matchups)
             row_params.extend(normalized_matchup_difficulties)
         if date_from:
             universe_conditions.append("e.start_time_utc >= ?")
@@ -843,6 +868,18 @@ class QueryService:
                     TRY_CAST(json_extract(lm.metrics_json, '$.diff_last_10') AS DOUBLE) AS diff_last_10,
                     json_extract_string(lm.metrics_json, '$.player_position') AS player_position,
                     json_extract_string(lm.metrics_json, '$.matchup_difficulty') AS matchup_difficulty,
+                    json_extract_string(lm.metrics_json, '$.over_matchup_difficulty') AS over_matchup_difficulty,
+                    json_extract_string(lm.metrics_json, '$.under_matchup_difficulty') AS under_matchup_difficulty,
+                    TRY_CAST(json_extract(lm.metrics_json, '$.dvp') AS DOUBLE) AS dvp,
+                    TRY_CAST(json_extract(lm.metrics_json, '$.raw_dvp') AS DOUBLE) AS raw_dvp,
+                    TRY_CAST(json_extract(lm.metrics_json, '$.dvp_standard_error') AS DOUBLE) AS dvp_standard_error,
+                    TRY_CAST(json_extract(lm.metrics_json, '$.dvp_bootstrap_ci_low') AS DOUBLE) AS dvp_bootstrap_ci_low,
+                    TRY_CAST(json_extract(lm.metrics_json, '$.dvp_bootstrap_ci_high') AS DOUBLE) AS dvp_bootstrap_ci_high,
+                    TRY_CAST(json_extract(lm.metrics_json, '$.dvp_sample_count') AS BIGINT) AS dvp_sample_count,
+                    TRY_CAST(json_extract(lm.metrics_json, '$.dvp_match_count') AS BIGINT) AS dvp_match_count,
+                    TRY_CAST(json_extract(lm.metrics_json, '$.dvp_observation_count') AS BIGINT) AS dvp_observation_count,
+                    json_extract_string(lm.metrics_json, '$.dvp_model_version') AS dvp_model_version,
+                    json_extract_string(lm.metrics_json, '$.dvp_generated_at') AS dvp_generated_at,
                     ew.temperature_c AS weather_temperature_c,
                     ew.wind_kph AS weather_wind_kph,
                     ew.precipitation_probability AS weather_precip_probability,
@@ -906,6 +943,18 @@ class QueryService:
                     diff_last_10,
                     player_position,
                     matchup_difficulty,
+                    over_matchup_difficulty,
+                    under_matchup_difficulty,
+                    dvp,
+                    raw_dvp,
+                    dvp_standard_error,
+                    dvp_bootstrap_ci_low,
+                    dvp_bootstrap_ci_high,
+                    dvp_sample_count,
+                    dvp_match_count,
+                    dvp_observation_count,
+                    dvp_model_version,
+                    dvp_generated_at,
                     weather_temperature_c,
                     weather_wind_kph,
                     weather_precip_probability,
@@ -945,6 +994,18 @@ class QueryService:
                   diff_last_10,
                   player_position,
                   matchup_difficulty,
+                  over_matchup_difficulty,
+                  under_matchup_difficulty,
+                  dvp,
+                  raw_dvp,
+                  dvp_standard_error,
+                  dvp_bootstrap_ci_low,
+                  dvp_bootstrap_ci_high,
+                  dvp_sample_count,
+                  dvp_match_count,
+                  dvp_observation_count,
+                  dvp_model_version,
+                  dvp_generated_at,
                   weather_temperature_c,
                   weather_wind_kph,
                   weather_precip_probability,
@@ -1240,6 +1301,18 @@ class QueryService:
             "diff_last_10": row["diff_last_10"],
             "player_position": row["player_position"],
             "matchup_difficulty": row["matchup_difficulty"],
+            "over_matchup_difficulty": row["over_matchup_difficulty"],
+            "under_matchup_difficulty": row["under_matchup_difficulty"],
+            "dvp": row["dvp"],
+            "raw_dvp": row["raw_dvp"],
+            "dvp_standard_error": row["dvp_standard_error"],
+            "dvp_bootstrap_ci_low": row["dvp_bootstrap_ci_low"],
+            "dvp_bootstrap_ci_high": row["dvp_bootstrap_ci_high"],
+            "dvp_sample_count": row["dvp_sample_count"],
+            "dvp_match_count": row["dvp_match_count"],
+            "dvp_observation_count": row["dvp_observation_count"],
+            "dvp_model_version": row["dvp_model_version"],
+            "dvp_generated_at": row["dvp_generated_at"],
             "weather": (
                 {
                     "temperature_c": row["weather_temperature_c"],

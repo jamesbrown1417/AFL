@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<network-security-config>
+    <!-- Debug builds may talk to any host over HTTP so the app can hit a
+         backend on the local network during development. -->
+    <base-config cleartextTrafficPermitted="true" />
+</network-security-config>

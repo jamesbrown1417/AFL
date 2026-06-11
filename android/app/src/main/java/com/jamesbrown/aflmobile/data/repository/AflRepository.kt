@@ -3,6 +3,7 @@ package com.jamesbrown.aflmobile.data.repository
 import com.jamesbrown.aflmobile.data.network.BackendApiClient
 import com.jamesbrown.aflmobile.data.settings.AppSettingsStore
 import com.jamesbrown.aflmobile.model.AppSettings
+import com.jamesbrown.aflmobile.model.AppThemeMode
 import com.jamesbrown.aflmobile.model.BookmakerSummary
 import com.jamesbrown.aflmobile.model.CgmCompareRequestPayload
 import com.jamesbrown.aflmobile.model.CgmCompareResponse
@@ -10,6 +11,7 @@ import com.jamesbrown.aflmobile.model.DataStatusResponse
 import com.jamesbrown.aflmobile.model.EventSummary
 import com.jamesbrown.aflmobile.model.HealthResponse
 import com.jamesbrown.aflmobile.model.MarketSummary
+import com.jamesbrown.aflmobile.model.OddsQuery
 import com.jamesbrown.aflmobile.model.OddsSearchResult
 import com.jamesbrown.aflmobile.model.PlayerGameLogEntry
 import com.jamesbrown.aflmobile.model.PlayerStatFilterOptions
@@ -17,13 +19,12 @@ import com.jamesbrown.aflmobile.model.PlayerStatSummary
 import com.jamesbrown.aflmobile.model.PlayerSummary
 import com.jamesbrown.aflmobile.model.PlayerStatsFilters
 import com.jamesbrown.aflmobile.model.PropSearchResult
-import com.jamesbrown.aflmobile.model.RequestedLeg
 import com.jamesbrown.aflmobile.model.SelectionSummary
 import com.jamesbrown.aflmobile.model.SgmCompareRequestPayload
 import com.jamesbrown.aflmobile.model.SgmCompareResponse
-import com.jamesbrown.aflmobile.model.SgmQuoteRequestPayload
-import com.jamesbrown.aflmobile.model.SgmQuoteResponse
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 
 
 class AflRepository(
@@ -32,15 +33,43 @@ class AflRepository(
 ) {
     val settingsFlow: Flow<AppSettings> = settingsStore.settingsFlow
 
+    private val bookmakerCacheMutex = Mutex()
+    private var bookmakerCache: List<BookmakerSummary>? = null
+    private var bookmakerCacheAtMillis: Long = 0L
+
     suspend fun currentSettings(): AppSettings = settingsStore.current()
 
     suspend fun saveSettings(settings: AppSettings) = settingsStore.save(settings)
+
+    suspend fun saveThemeMode(themeMode: AppThemeMode) = settingsStore.saveThemeMode(themeMode)
+
+    suspend fun saveLastViewedPlayer(player: PlayerSummary) =
+        settingsStore.saveLastViewedPlayer(player)
+
+    suspend fun lastViewedPlayer(): PlayerSummary? = settingsStore.lastViewedPlayer()
 
     suspend fun health(): HealthResponse = apiClient.getHealth()
 
     suspend fun dataStatus(): DataStatusResponse = apiClient.getDataStatus()
 
-    suspend fun bookmakers(): List<BookmakerSummary> = apiClient.getBookmakers()
+    /**
+     * Bookmakers change rarely but four screens request them on entry; a short
+     * in-memory cache stops the repeated round-trips. Pass [forceRefresh] from
+     * explicit user refreshes.
+     */
+    suspend fun bookmakers(forceRefresh: Boolean = false): List<BookmakerSummary> =
+        bookmakerCacheMutex.withLock {
+            val cached = bookmakerCache
+            val fresh = System.currentTimeMillis() - bookmakerCacheAtMillis < BOOKMAKER_CACHE_TTL_MILLIS
+            if (!forceRefresh && cached != null && fresh) {
+                cached
+            } else {
+                apiClient.getBookmakers().also {
+                    bookmakerCache = it
+                    bookmakerCacheAtMillis = System.currentTimeMillis()
+                }
+            }
+        }
 
     suspend fun events(bookmaker: String?, query: String?): List<EventSummary> =
         apiClient.getEvents(bookmaker = bookmaker, query = query)
@@ -61,6 +90,22 @@ class AflRepository(
 
     suspend fun playerStatFilters(playerId: Int): PlayerStatFilterOptions =
         apiClient.getPlayerStatFilters(playerId)
+
+    /** Venues that survive the given filters, computed server-side. */
+    suspend fun playerVenueOptions(
+        playerId: Int,
+        filters: PlayerStatsFilters,
+    ): List<String> = apiClient.getPlayerStatFiltersNarrowed(
+        playerId = playerId,
+        seasons = filters.seasons,
+        oppositions = filters.oppositions,
+        weatherCategories = filters.weatherCategories,
+        homeAway = filters.homeAway,
+        marginMin = filters.marginMinText.toIntOrNull() ?: -200,
+        marginMax = filters.marginMaxText.toIntOrNull() ?: 200,
+        lastGames = filters.lastGamesText.toIntOrNull(),
+        minutesMinimum = filters.minutesMinimumText.toDoubleOrNull() ?: 0.0,
+    ).venues
 
     suspend fun playerStatHistory(
         playerId: Int,
@@ -104,74 +149,10 @@ class AflRepository(
         minutesMinimum = filters.minutesMinimumText.toDoubleOrNull() ?: 0.0,
     )
 
-    suspend fun odds(
-        bookmakers: List<String>,
-        scope: String,
-        query: String?,
-        marketType: String?,
-        eventId: Int?,
-        includePlayerIds: List<Int>,
-        excludePlayerIds: List<Int>,
-        sortBy: String,
-        sortDirection: String,
-        selectionType: String?,
-        matchupDifficulties: List<String>,
-        minEdge: Double?,
-        minPrice: Double?,
-        maxPrice: Double?,
-        minDiff2025: Double?,
-        maxDiff2025: Double?,
-        minDiffLast10: Double?,
-        maxDiffLast10: Double?,
-        minNextBestProbDiff: Double? = null,
-        maxNextBestProbDiff: Double? = null,
-        sgmOnly: Boolean,
-        bestOnly: Boolean,
-        limit: Int = 200,
-        offset: Int = 0,
-    ): List<OddsSearchResult> = apiClient.searchOdds(
-        bookmakers = bookmakers,
-        scope = scope,
-        query = query,
-        marketType = marketType,
-        eventId = eventId,
-        includePlayerIds = includePlayerIds,
-        excludePlayerIds = excludePlayerIds,
-        sortBy = sortBy,
-        sortDirection = sortDirection,
-        selectionType = selectionType,
-        matchupDifficulties = matchupDifficulties,
-        minEdge = minEdge,
-        minPrice = minPrice,
-        maxPrice = maxPrice,
-        minDiff2025 = minDiff2025,
-        maxDiff2025 = maxDiff2025,
-        minDiffLast10 = minDiffLast10,
-        maxDiffLast10 = maxDiffLast10,
-        minNextBestProbDiff = minNextBestProbDiff,
-        maxNextBestProbDiff = maxNextBestProbDiff,
-        sgmOnly = sgmOnly,
-        bestOnly = bestOnly,
-        limit = limit,
-        offset = offset,
-    )
+    suspend fun odds(query: OddsQuery): List<OddsSearchResult> = apiClient.searchOdds(query)
 
     suspend fun props(bookmaker: String, query: String?): List<PropSearchResult> =
         apiClient.searchProps(bookmaker = bookmaker, query = query)
-
-    suspend fun quoteSgm(
-        bookmaker: String,
-        eventId: Int,
-        selectionIds: List<Int>,
-        forceRefresh: Boolean,
-    ): SgmQuoteResponse = apiClient.priceSgm(
-        SgmQuoteRequestPayload(
-            bookmaker = bookmaker,
-            eventId = eventId,
-            legs = selectionIds.map { RequestedLeg(it) },
-            forceRefresh = forceRefresh,
-        ),
-    )
 
     suspend fun compareSgm(
         eventId: Int,
@@ -192,7 +173,9 @@ class AflRepository(
             ),
         )
 
-    suspend fun quote(quoteId: String): SgmQuoteResponse = apiClient.getQuote(quoteId)
+    private companion object {
+        const val BOOKMAKER_CACHE_TTL_MILLIS = 5 * 60 * 1000L
+    }
 }
 
 private fun PlayerStatsFilters.resolvedLineModeOrNull(): String? =

@@ -494,7 +494,12 @@ REPORT_TEMPLATE = r"""<!doctype html>
       <div>
         <h1>AFL Scraper Health Report</h1>
         <p class="muted">
-          Generated {{ summary.generated_at }} from an isolated shadow workspace.
+          Generated {{ summary.generated_at }}
+          {% if summary.execution_mode == "production" %}
+            from currently existing production output files.
+          {% else %}
+            from an isolated shadow workspace.
+          {% endif %}
         </p>
       </div>
       <div class="hero-meta">
@@ -540,11 +545,21 @@ REPORT_TEMPLATE = r"""<!doctype html>
       <section class="panel">
         <div class="panel-header">
           <div>
-            <h2>Production Workflow Parity</h2>
-            <p class="muted">The shadow run mirrors afl_update_file.sh prefetch cleanup and checks that production artifacts were not modified.</p>
+            <h2>{{ "Production Output Audit" if summary.execution_mode == "production" else "Production Workflow Parity" }}</h2>
+            <p class="muted">
+              {% if summary.execution_mode == "production" %}
+                No scraper or prefetch commands were run; this report validates files already present under the project root.
+              {% else %}
+                The shadow run mirrors afl_update_file.sh prefetch cleanup and checks that production artifacts were not modified.
+              {% endif %}
+            </p>
           </div>
-          <span class="badge status-{{ 'pass' if summary.source_write_findings|length == 0 else 'error' }}">
-            {{ 'isolated' if summary.source_write_findings|length == 0 else 'source writes detected' }}
+          <span class="badge status-{{ 'pass' if summary.execution_mode == 'production' or summary.source_write_findings|length == 0 else 'error' }}">
+            {% if summary.execution_mode == "production" %}
+              read-only
+            {% else %}
+              {{ 'isolated' if summary.source_write_findings|length == 0 else 'source writes detected' }}
+            {% endif %}
           </span>
         </div>
         <div class="scroll-x">
@@ -558,9 +573,26 @@ REPORT_TEMPLATE = r"""<!doctype html>
             </thead>
             <tbody>
               <tr>
+                <td>Execution mode</td>
+                <td><span class="badge status-pass">{{ summary.execution_mode }}</span></td>
+                <td>
+                  {% if summary.execution_mode == "production" %}
+                    Existing production outputs were validated in place; no scraper outputs were updated by this suite.
+                  {% else %}
+                    Scrapers ran in a copied workspace below scraper_tests/latest.
+                  {% endif %}
+                </td>
+              </tr>
+              <tr>
                 <td>Production cache cleanup</td>
-                <td><span class="badge status-pass">mirrored</span></td>
-                <td>{{ summary.production_cache_cleanup|length }} stale workspace artifact{{ "" if summary.production_cache_cleanup|length == 1 else "s" }} removed before prefetch.</td>
+                <td><span class="badge status-pass">{{ "skipped" if summary.execution_mode == "production" else "mirrored" }}</span></td>
+                <td>
+                  {% if summary.execution_mode == "production" %}
+                    Not run in production-output mode.
+                  {% else %}
+                    {{ summary.production_cache_cleanup|length }} stale workspace artifact{{ "" if summary.production_cache_cleanup|length == 1 else "s" }} removed before prefetch.
+                  {% endif %}
+                </td>
               </tr>
               <tr>
                 <td>Source artifact writes</td>
@@ -569,12 +601,18 @@ REPORT_TEMPLATE = r"""<!doctype html>
                     {{ 'pass' if summary.source_write_findings|length == 0 else 'error' }}
                   </span>
                 </td>
-                <td>{{ "No production Data/OddsScraper artifacts changed during the isolated run." if summary.source_write_findings|length == 0 else summary.source_write_findings|length ~ " production artifact mutation(s) detected." }}</td>
+                <td>
+                  {% if summary.execution_mode == "production" %}
+                    No scraper commands were run by the suite.
+                  {% else %}
+                    {{ "No production Data/OddsScraper artifacts changed during the isolated run." if summary.source_write_findings|length == 0 else summary.source_write_findings|length ~ " production artifact mutation(s) detected." }}
+                  {% endif %}
+                </td>
               </tr>
               <tr>
-                <td>Workspace</td>
-                <td><span class="badge status-pass">shadow</span></td>
-                <td class="mono">{{ summary.workspace }}</td>
+                <td>Validation root</td>
+                <td><span class="badge status-pass">{{ "production" if summary.execution_mode == "production" else "shadow" }}</span></td>
+                <td class="mono">{{ summary.validation_root or summary.workspace }}</td>
               </tr>
             </tbody>
           </table>
@@ -671,7 +709,13 @@ REPORT_TEMPLATE = r"""<!doctype html>
         <div class="panel-header">
           <div>
             <h2>Scraper Runs</h2>
-            <p class="muted">Sequential isolated execution. Raw logs are shown only for command failures/timeouts; normal R package attach messages are stored in log files but hidden here.</p>
+            <p class="muted">
+              {% if summary.execution_mode == "production" %}
+                Commands are listed for traceability but were not run; statuses come from validating existing output files.
+              {% else %}
+                Sequential isolated execution. Raw logs are shown only for command failures/timeouts; normal R package attach messages are stored in log files but hidden here.
+              {% endif %}
+            </p>
           </div>
         </div>
         <div class="scroll-x">
@@ -690,7 +734,7 @@ REPORT_TEMPLATE = r"""<!doctype html>
               <tr>
                 <td><strong>{{ result.name }}</strong></td>
                 <td><span class="badge status-{{ result.status }}">{{ result.status }}</span></td>
-                <td>{{ result.duration_seconds if result.duration_seconds is not none else "-" }}s</td>
+                <td>{{ "skipped" if result.skipped else result.duration_seconds ~ "s" }}</td>
                 <td>{{ result.exit_code if result.exit_code is not none else "-" }}</td>
                 <td class="mono">{{ result.command|join(" ") }}</td>
               </tr>
@@ -792,7 +836,13 @@ REPORT_TEMPLATE = r"""<!doctype html>
         <div class="panel-header">
           <div>
             <h2>Prefetch Helpers</h2>
-            <p class="muted">Browser or cached-response steps that feed parser-style scrapers.</p>
+            <p class="muted">
+              {% if summary.execution_mode == "production" %}
+                Helpers were not run; cached helper artifacts are inspected read-only where applicable.
+              {% else %}
+                Browser or cached-response steps that feed parser-style scrapers.
+              {% endif %}
+            </p>
           </div>
         </div>
         <div class="scroll-x">

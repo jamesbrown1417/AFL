@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 from collections import defaultdict
 
 from app.bookmakers.base import ResolvedLeg
@@ -73,8 +74,16 @@ def test_tab_adapter_builds_expected_request() -> None:
     )
 
     assert request_spec["url"] == settings.tab_quote_url
-    assert request_spec["json"]["clientDetails"] == {"jurisdiction": "SA", "channel": "web"}
-    propositions = request_spec["json"]["bets"][0]["legs"][0]["propositions"]
+    # The v2 adapter sends a pre-serialised body with browser-like headers.
+    assert request_spec["headers"]["content-type"] == "application/json;charset=UTF-8"
+    assert request_spec["headers"]["origin"] == settings.tab_origin
+    payload = json.loads(request_spec["body"])
+    assert payload["clientDetails"] == {
+        "jurisdiction": settings.tab_jurisdiction,
+        "channel": settings.tab_channel,
+    }
+    assert payload["returnValidationMatrix"] is True
+    propositions = payload["bets"][0]["legs"][0]["propositions"]
     assert propositions == [
         {"type": "WIN", "propositionId": 12345},
         {"type": "WIN", "propositionId": 67890},

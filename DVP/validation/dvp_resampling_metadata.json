@@ -1,0 +1,16 @@
+{
+  "generated_at": "2026-06-11T23:05:34.391351+00:00",
+  "inputs": {
+    "current_stats_path": "/Users/jamesbrown/Projects/AFL/Data/afl_fantasy_2026_data.rds",
+    "detailed_positions_path": "/Users/jamesbrown/Projects/AFL/DVP/AFL-Players-Positions-2026.csv",
+    "dvp_data_path": "/Users/jamesbrown/Projects/AFL/DVP/dvp_data.csv",
+    "fantasy_start_positions_path": "/Users/jamesbrown/Projects/AFL/Data/2026_start_positions_and_prices.rds",
+    "history_stats_path": "/Users/jamesbrown/Projects/AFL/Data/afl_fantasy_2015_2025_data.rds"
+  },
+  "iterations": 1000,
+  "method": "For each market, bootstrap favorable player effects (Good/Excellent over matchup) against difficult effects (Bad/Terrible over matchup). Positive differences mean favorable labels produced higher player-vs-baseline effects in the model window.",
+  "outputs": {
+    "summary_path": "/Users/jamesbrown/Projects/AFL/DVP/validation/dvp_resampling_summary.csv"
+  },
+  "random_seed": 20260612
+}

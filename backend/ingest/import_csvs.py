@@ -6,7 +6,6 @@ import math
 from dataclasses import dataclass
 from datetime import UTC, datetime
 from pathlib import Path
-from statistics import StatisticsError, quantiles
 from typing import Any, Callable, TypedDict
 
 from app.config import Settings, get_settings
@@ -35,6 +34,14 @@ from ingest.resolvers import EventContext, LEAGUE_CODE, load_fixture_index, reso
 
 LOGGER = logging.getLogger(__name__)
 
+UNDER_MATCHUP_MAP = {
+    "Terrible": "Excellent",
+    "Bad": "Good",
+    "Neutral": "Neutral",
+    "Good": "Bad",
+    "Excellent": "Terrible",
+}
+
 
 class ImportSummary(TypedDict):
     files_scanned: int
@@ -56,6 +63,34 @@ class ProcessedSelectionMetric:
     variation: float | None
     player_position: str | None
     matchup_difficulty: str | None
+    over_matchup_difficulty: str | None
+    under_matchup_difficulty: str | None
+    dvp: float | None
+    raw_dvp: float | None
+    dvp_standard_error: float | None
+    dvp_bootstrap_ci_low: float | None
+    dvp_bootstrap_ci_high: float | None
+    dvp_sample_count: int | None
+    dvp_match_count: int | None
+    dvp_observation_count: int | None
+    dvp_model_version: str | None
+    dvp_generated_at: str | None
+
+
+@dataclass(frozen=True, slots=True)
+class DvpMatchupInfo:
+    over_matchup_difficulty: str | None
+    under_matchup_difficulty: str | None
+    dvp: float | None
+    raw_dvp: float | None
+    standard_error: float | None
+    bootstrap_ci_low: float | None
+    bootstrap_ci_high: float | None
+    sample_count: int | None
+    match_count: int | None
+    observation_count: int | None
+    model_version: str | None
+    generated_at: str | None
 
 
 @dataclass(frozen=True, slots=True)
@@ -524,7 +559,7 @@ class Importer:
         if not market_type_code.startswith("player_"):
             return []
         player_position = self.player_positions_by_name.get(player_name)
-        matchup_difficulty = self._resolve_matchup_difficulty(
+        matchup_info = self._resolve_matchup_info(
             opposition_team=row.get("opposition_team"),
             player_position=player_position,
             market_name_raw=market_name_raw,
@@ -562,6 +597,13 @@ class Importer:
         ) in metric_specs:
             if parse_float(row.get(price_column)) is None:
                 continue
+            matchup_difficulty = None
+            if matchup_info is not None:
+                matchup_difficulty = (
+                    matchup_info.under_matchup_difficulty
+                    if selection_type == "under"
+                    else matchup_info.over_matchup_difficulty
+                )
             metrics.append(
                 ProcessedSelectionMetric(
                     bookmaker_code=bookmaker_code,
@@ -573,6 +615,22 @@ class Importer:
                     variation=variation,
                     player_position=player_position,
                     matchup_difficulty=matchup_difficulty,
+                    over_matchup_difficulty=(
+                        matchup_info.over_matchup_difficulty if matchup_info else None
+                    ),
+                    under_matchup_difficulty=(
+                        matchup_info.under_matchup_difficulty if matchup_info else None
+                    ),
+                    dvp=matchup_info.dvp if matchup_info else None,
+                    raw_dvp=matchup_info.raw_dvp if matchup_info else None,
+                    dvp_standard_error=matchup_info.standard_error if matchup_info else None,
+                    dvp_bootstrap_ci_low=matchup_info.bootstrap_ci_low if matchup_info else None,
+                    dvp_bootstrap_ci_high=matchup_info.bootstrap_ci_high if matchup_info else None,
+                    dvp_sample_count=matchup_info.sample_count if matchup_info else None,
+                    dvp_match_count=matchup_info.match_count if matchup_info else None,
+                    dvp_observation_count=matchup_info.observation_count if matchup_info else None,
+                    dvp_model_version=matchup_info.model_version if matchup_info else None,
+                    dvp_generated_at=matchup_info.generated_at if matchup_info else None,
                 )
             )
         return metrics
@@ -592,20 +650,20 @@ class Importer:
                     positions[player_name] = position
         return positions
 
-    def _load_matchup_difficulty_map(self) -> dict[tuple[str, str, str], str]:
+    def _load_matchup_difficulty_map(self) -> dict[tuple[str, str, str], DvpMatchupInfo]:
         path = self.settings.dvp_data_path
         if not path.exists():
             LOGGER.warning("DVP file not found: %s", path)
             return {}
 
-        rows_by_market: dict[str, list[dict[str, str | float]]] = {}
+        rows_by_market: dict[str, list[dict[str, Any]]] = {}
         with path.open(newline="", encoding="utf-8") as handle:
             for row in csv.DictReader(handle):
                 market_name = clean_text(row.get("market_name"))
                 position = clean_text(row.get("Pos"))
                 opposition_team = normalize_team_name(row.get("Opponent"))
                 dvp_value = parse_float(row.get("dvp"))
-                if not market_name or not position or not opposition_team or dvp_value is None:
+                if not market_name or not position or not opposition_team:
                     continue
                 rows_by_market.setdefault(market_name, []).append(
                     {
@@ -613,49 +671,69 @@ class Importer:
                         "position": position,
                         "opposition_team": opposition_team,
                         "dvp": dvp_value,
+                        "raw_dvp": parse_float(row.get("raw_dvp")),
+                        "over_matchup_difficulty": clean_text(
+                            row.get("over_matchup_difficulty") or row.get("matchup_difficulty")
+                        ),
+                        "under_matchup_difficulty": clean_text(row.get("under_matchup_difficulty")),
+                        "standard_error": parse_float(row.get("standard_error")),
+                        "bootstrap_ci_low": parse_float(row.get("bootstrap_ci_low")),
+                        "bootstrap_ci_high": parse_float(row.get("bootstrap_ci_high")),
+                        "sample_count": _parse_optional_int(row.get("sample_count")),
+                        "match_count": _parse_optional_int(row.get("match_count") or row.get("games")),
+                        "observation_count": _parse_optional_int(row.get("observation_count")),
+                        "model_version": clean_text(row.get("model_version")),
+                        "generated_at": clean_text(row.get("generated_at")),
                     }
                 )
 
-        matchup_map: dict[tuple[str, str, str], str] = {}
+        matchup_map: dict[tuple[str, str, str], DvpMatchupInfo] = {}
         for market_name, rows in rows_by_market.items():
-            if market_name == "Player Goals":
-                for row in rows:
-                    opposition_team = str(row["opposition_team"])
-                    position = str(row["position"])
-                    matchup_map[(opposition_team, position, market_name)] = "Neutral"
-                continue
-
-            threshold_values = [float(row["dvp"]) for row in rows]
-            if not threshold_values:
-                continue
-            try:
-                q1, q2, q3, q4 = quantiles(threshold_values, n=5, method="inclusive")
-            except StatisticsError:  # pragma: no cover - extremely small/degenerate datasets
-                q1 = q2 = q3 = q4 = threshold_values[0]
+            threshold_values = [
+                float(row["dvp"]) for row in rows if row.get("dvp") is not None
+            ]
+            thresholds = None
+            if threshold_values:
+                sorted_values = sorted(threshold_values)
+                thresholds = [
+                    _percentile(sorted_values, percentile)
+                    for percentile in (0.2, 0.4, 0.6, 0.8)
+                ]
             for row in rows:
-                dvp_value = float(row["dvp"])
                 opposition_team = str(row["opposition_team"])
                 position = str(row["position"])
-                if dvp_value <= q1:
-                    category = "Terrible"
-                elif dvp_value <= q2:
-                    category = "Bad"
-                elif dvp_value <= q3:
-                    category = "Neutral"
-                elif dvp_value <= q4:
-                    category = "Good"
-                else:
-                    category = "Excellent"
-                matchup_map[(opposition_team, position, market_name)] = category
+                over_matchup = clean_text(row.get("over_matchup_difficulty"))
+                if not over_matchup and row.get("dvp") is not None and thresholds is not None:
+                    over_matchup = _label_from_thresholds(float(row["dvp"]), thresholds)
+                over_matchup = over_matchup or "Neutral"
+                under_matchup = (
+                    clean_text(row.get("under_matchup_difficulty"))
+                    or UNDER_MATCHUP_MAP.get(over_matchup)
+                    or "Neutral"
+                )
+                matchup_map[(opposition_team, position, market_name)] = DvpMatchupInfo(
+                    over_matchup_difficulty=over_matchup,
+                    under_matchup_difficulty=under_matchup,
+                    dvp=row.get("dvp"),
+                    raw_dvp=row.get("raw_dvp"),
+                    standard_error=row.get("standard_error"),
+                    bootstrap_ci_low=row.get("bootstrap_ci_low"),
+                    bootstrap_ci_high=row.get("bootstrap_ci_high"),
+                    sample_count=row.get("sample_count"),
+                    match_count=row.get("match_count"),
+                    observation_count=row.get("observation_count"),
+                    model_version=row.get("model_version"),
+                    generated_at=row.get("generated_at"),
+                )
         return matchup_map
 
-    def _resolve_matchup_difficulty(
+    def _resolve_matchup_info(
         self,
         *,
         opposition_team: str | None,
         player_position: str | None,
         market_name_raw: str,
-    ) -> str | None:
+    ) -> DvpMatchupInfo | None:
         normalized_opposition = normalize_team_name(opposition_team)
         if not normalized_opposition or not player_position:
             return None
@@ -1599,6 +1677,18 @@ class Importer:
                         "prob_last_10": metric.prob_last_10,
                         "player_position": metric.player_position,
                         "matchup_difficulty": metric.matchup_difficulty,
+                        "over_matchup_difficulty": metric.over_matchup_difficulty,
+                        "under_matchup_difficulty": metric.under_matchup_difficulty,
+                        "dvp": metric.dvp,
+                        "raw_dvp": metric.raw_dvp,
+                        "dvp_standard_error": metric.dvp_standard_error,
+                        "dvp_bootstrap_ci_low": metric.dvp_bootstrap_ci_low,
+                        "dvp_bootstrap_ci_high": metric.dvp_bootstrap_ci_high,
+                        "dvp_sample_count": metric.dvp_sample_count,
+                        "dvp_match_count": metric.dvp_match_count,
+                        "dvp_observation_count": metric.dvp_observation_count,
+                        "dvp_model_version": metric.dvp_model_version,
+                        "dvp_generated_at": metric.dvp_generated_at,
                         "variation": metric.variation,
                     }
                 ),
@@ -1611,3 +1701,37 @@ def run_import(
 ) -> ImportSummary:
     importer = Importer(settings or get_settings())
     return importer.run(triggered_by=triggered_by)
+
+
+def _parse_optional_int(value: Any) -> int | None:
+    parsed = parse_float(value)
+    if parsed is None:
+        return None
+    return int(parsed)
+
+
+def _percentile(sorted_values: list[float], percentile: float) -> float:
+    if not sorted_values:
+        return 0.0
+    if len(sorted_values) == 1:
+        return sorted_values[0]
+    index = percentile * (len(sorted_values) - 1)
+    lower = math.floor(index)
+    upper = math.ceil(index)
+    if lower == upper:
+        return sorted_values[int(index)]
+    weight = index - lower
+    return sorted_values[lower] * (1 - weight) + sorted_values[upper] * weight
+
+
+def _label_from_thresholds(value: float, thresholds: list[float]) -> str:
+    q1, q2, q3, q4 = thresholds
+    if value < q1:
+        return "Terrible"
+    if value < q2:
+        return "Bad"
+    if value <= q3:
+        return "Neutral"
+    if value <= q4:
+        return "Good"
+    return "Excellent"

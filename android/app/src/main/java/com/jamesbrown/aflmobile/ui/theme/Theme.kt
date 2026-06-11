@@ -1,96 +1,124 @@
 package com.jamesbrown.aflmobile.ui.theme
 
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Shapes
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.ReadOnlyComposable
+import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.dp
 
 
 private val LightColors = lightColorScheme(
-    primary = Blue700,
+    primary = Teal700,
     onPrimary = IceWhite,
-    primaryContainer = Blue200,
-    onPrimaryContainer = Navy950,
-    secondary = Blue600,
+    primaryContainer = Teal100,
+    onPrimaryContainer = Teal950,
+    secondary = Indigo600,
     onSecondary = IceWhite,
-    secondaryContainer = Blue100,
+    secondaryContainer = Indigo100,
     onSecondaryContainer = Navy900,
-    tertiary = Orange700,
+    tertiary = Amber700,
     onTertiary = IceWhite,
-    tertiaryContainer = Orange100,
-    onTertiaryContainer = Navy950,
-    background = Color.White,
+    tertiaryContainer = Amber100,
+    onTertiaryContainer = Amber950,
+    background = Paper50,
     onBackground = Navy950,
-    surface = IceWhite,
+    surface = Color.White,
     onSurface = Navy950,
-    surfaceVariant = Color(0xFFF4F8FF),
-    onSurfaceVariant = Navy700,
-    surfaceTint = Blue600,
-    outline = Blue300,
-    outlineVariant = Color(0xFFD9E4F2),
+    surfaceVariant = Mist100,
+    onSurfaceVariant = Slate600,
+    surfaceTint = Teal700,
+    outline = Mist400,
+    outlineVariant = Mist200,
     error = Rose500,
     onError = IceWhite,
     errorContainer = Color(0xFFFFE6E7),
     onErrorContainer = Color(0xFF6A1B1B),
     inverseSurface = Navy900,
-    inverseOnSurface = Blue50,
-    inversePrimary = Blue300,
+    inverseOnSurface = Paper50,
+    inversePrimary = Teal300,
     surfaceBright = IceWhite,
-    surfaceDim = Blue100,
+    surfaceDim = Mist100,
     surfaceContainerLowest = Color.White,
-    surfaceContainerLow = Color(0xFFF9FBFF),
-    surfaceContainer = Color(0xFFF3F7FD),
-    surfaceContainerHigh = Color(0xFFEDF3FB),
-    surfaceContainerHighest = Color(0xFFE7EFFA),
+    surfaceContainerLow = Color(0xFFFBFCFE),
+    surfaceContainer = Color(0xFFF5F8FB),
+    surfaceContainerHigh = Color(0xFFEFF4F8),
+    surfaceContainerHighest = Color(0xFFE8EEF5),
 )
 
 private val DarkColors = darkColorScheme(
-    primary = Blue300,
-    onPrimary = Navy950,
-    primaryContainer = Blue800,
-    onPrimaryContainer = IceWhite,
-    secondary = Blue400,
+    primary = Teal300,
+    onPrimary = Teal950,
+    primaryContainer = Teal800,
+    onPrimaryContainer = Color(0xFFE4FFFA),
+    secondary = Blue300,
     onSecondary = Navy950,
-    secondaryContainer = Color(0xFF1C3551),
-    onSecondaryContainer = Blue50,
-    tertiary = Orange600,
-    onTertiary = Navy950,
-    tertiaryContainer = Color(0xFF5A3411),
-    onTertiaryContainer = Color(0xFFFFEFD9),
-    background = Navy950,
-    onBackground = Blue50,
-    surface = Color(0xEE13253A),
-    onSurface = Blue50,
-    surfaceVariant = Color(0xFF223B56),
-    onSurfaceVariant = Color(0xFFC4D8EE),
-    surfaceTint = Blue400,
-    outline = Color(0xFF5F7C99),
-    outlineVariant = Color(0xFF33516E),
+    secondaryContainer = Color(0xFF1D3B64),
+    onSecondaryContainer = Color(0xFFEAF3FF),
+    tertiary = Amber300,
+    onTertiary = Amber950,
+    tertiaryContainer = Color(0xFF5B3B0D),
+    onTertiaryContainer = Color(0xFFFFF1CF),
+    background = Ink950,
+    onBackground = Color(0xFFEAF0F7),
+    surface = Ink900,
+    onSurface = Color(0xFFEAF0F7),
+    surfaceVariant = Ink700,
+    onSurfaceVariant = Color(0xFFC9D4E2),
+    surfaceTint = Teal300,
+    outline = Color(0xFF66778B),
+    outlineVariant = Color(0xFF314154),
     error = Color(0xFFFF8A86),
-    onError = Navy950,
+    onError = Ink950,
     errorContainer = Color(0xFF5B2223),
     onErrorContainer = Color(0xFFFFDAD8),
-    inverseSurface = Blue50,
-    inverseOnSurface = Navy950,
-    inversePrimary = Blue700,
-    surfaceBright = Color(0xFF19324A),
-    surfaceDim = Color(0xFF0E1D2E),
-    surfaceContainerLowest = Color(0xFF102131),
-    surfaceContainerLow = Color(0xFF13283E),
-    surfaceContainer = Color(0xFF17304A),
-    surfaceContainerHigh = Color(0xFF1B3855),
-    surfaceContainerHighest = Color(0xFF20405F),
+    inverseSurface = Paper50,
+    inverseOnSurface = Ink950,
+    inversePrimary = Teal700,
+    surfaceBright = Color(0xFF202C3C),
+    surfaceDim = Color(0xFF0A1422),
+    surfaceContainerLowest = Color(0xFF08111D),
+    surfaceContainerLow = Color(0xFF0E1928),
+    surfaceContainer = Color(0xFF132033),
+    surfaceContainerHigh = Color(0xFF19283C),
+    surfaceContainerHighest = Color(0xFF213249),
 )
+
+private val AflShapes = Shapes(
+    extraSmall = RoundedCornerShape(6.dp),
+    small = RoundedCornerShape(10.dp),
+    medium = RoundedCornerShape(16.dp),
+    large = RoundedCornerShape(24.dp),
+    extraLarge = RoundedCornerShape(28.dp),
+)
+
+val LocalAppColors = staticCompositionLocalOf { LightAppColors }
+
+/** Access point for the app's semantic (non-Material) colors. */
+object AppTheme {
+    val colors: AppColors
+        @Composable
+        @ReadOnlyComposable
+        get() = LocalAppColors.current
+}
 
 @Composable
 fun AflEdgeTheme(
     darkTheme: Boolean = false,
     content: @Composable () -> Unit,
 ) {
-    MaterialTheme(
-        colorScheme = if (darkTheme) DarkColors else LightColors,
-        typography = AflTypography,
-        content = content,
-    )
+    val appColors = if (darkTheme) DarkAppColors else LightAppColors
+    CompositionLocalProvider(LocalAppColors provides appColors) {
+        MaterialTheme(
+            colorScheme = if (darkTheme) DarkColors else LightColors,
+            typography = AflTypography,
+            shapes = AflShapes,
+            content = content,
+        )
+    }
 }

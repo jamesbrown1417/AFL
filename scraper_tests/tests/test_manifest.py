@@ -20,7 +20,6 @@ class ManifestTests(unittest.TestCase):
                 "tab",
                 "bet365",
                 "neds",
-                "dabble",
                 "betfair",
             },
         )

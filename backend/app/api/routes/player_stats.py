@@ -33,10 +33,54 @@ def _validate_line_inputs(
 def get_player_stat_filters(
     player_id: int,
     query_service: Annotated[QueryService, Depends(get_query_service)],
+    seasons: Annotated[list[str] | None, Query()] = None,
+    oppositions: Annotated[list[str] | None, Query()] = None,
+    weather_categories: Annotated[list[str] | None, Query()] = None,
+    home_away: Annotated[list[str] | None, Query()] = None,
+    margin_min: int = Query(default=-200),
+    margin_max: int = Query(default=200),
+    last_games: int | None = Query(default=None, ge=1, le=100),
+    minutes_minimum: float = Query(default=0, ge=0),
 ) -> PlayerStatFilterOptions:
+    """Filter options for a player.
+
+    When any game-log filter parameters are supplied, the venue list is
+    narrowed to venues that survive those filters — computed with the same
+    pipeline as the history endpoint, so clients never have to re-implement
+    the filtering logic locally.
+    """
     response = query_service.get_player_stat_filter_options(player_id=player_id)
     if response is None:
         raise AppError(404, "player_not_found", f"Player {player_id} was not found.")
+
+    filters_provided = any(
+        [
+            seasons,
+            oppositions,
+            weather_categories,
+            home_away,
+            last_games is not None,
+            margin_min != -200,
+            margin_max != 200,
+            minutes_minimum != 0,
+        ],
+    )
+    if filters_provided:
+        narrowed = query_service.get_player_available_venues(
+            player_id=player_id,
+            seasons=seasons,
+            oppositions=oppositions,
+            weather_categories=weather_categories,
+            home_away=home_away,
+            margin_min=margin_min,
+            margin_max=margin_max,
+            last_games=last_games,
+            minutes_minimum=minutes_minimum,
+        )
+        # An empty narrowed list means nothing matches; keep the full list so
+        # the client can still loosen the venue selection.
+        if narrowed:
+            response["venues"] = narrowed
     return PlayerStatFilterOptions.model_validate(response)
 
 

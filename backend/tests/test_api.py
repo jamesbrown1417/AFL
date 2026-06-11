@@ -289,3 +289,68 @@ def test_event_market_selection_flow(client) -> None:
     assert summary_response.status_code == 200
     summary_payload = summary_response.json()
     assert "sample_size" in summary_payload
+
+
+def test_odds_search_accepts_multiple_event_ids(client) -> None:
+    events_response = client.get("/api/v1/events", params={"bookmaker": "sportsbet", "limit": 10})
+    assert events_response.status_code == 200
+    events = events_response.json()
+    assert events
+
+    event_ids = [event["id"] for event in events[:2]]
+
+    # Single event_id keeps working (backwards compatible).
+    single_response = client.get(
+        "/api/v1/odds/search",
+        params={"bookmaker": "sportsbet", "event_id": event_ids[0], "limit": 200},
+    )
+    assert single_response.status_code == 200
+    single_rows = single_response.json()
+    assert all(row["event_id"] == event_ids[0] for row in single_rows)
+
+    # Repeated event_id params restrict to exactly that set of events.
+    multi_response = client.get(
+        "/api/v1/odds/search",
+        params={"bookmaker": "sportsbet", "event_id": event_ids, "limit": 500},
+    )
+    assert multi_response.status_code == 200
+    multi_rows = multi_response.json()
+    assert multi_rows
+    assert all(row["event_id"] in event_ids for row in multi_rows)
+    if len(event_ids) > 1 and single_rows:
+        returned_event_ids = {row["event_id"] for row in multi_rows}
+        assert returned_event_ids.issubset(set(event_ids))
+
+
+def test_player_stat_filters_narrow_venues(client) -> None:
+    stat_players_response = client.get("/api/v1/players/stats/search", params={"limit": 1})
+    assert stat_players_response.status_code == 200
+    players = stat_players_response.json()
+    assert players
+    player_id = players[0]["id"]
+
+    full_response = client.get(f"/api/v1/players/{player_id}/stats/filters")
+    assert full_response.status_code == 200
+    full_payload = full_response.json()
+    all_venues = full_payload["venues"]
+    assert all_venues
+
+    # Narrowing by the most recent season may only ever shrink the venue list,
+    # and must agree exactly with the venues present in the history endpoint's
+    # response for the same filters.
+    season = full_payload["seasons"][0]
+    narrowed_response = client.get(
+        f"/api/v1/players/{player_id}/stats/filters",
+        params={"seasons": [season]},
+    )
+    assert narrowed_response.status_code == 200
+    narrowed_venues = narrowed_response.json()["venues"]
+    assert set(narrowed_venues).issubset(set(all_venues))
+
+    history_response = client.get(
+        f"/api/v1/players/{player_id}/stats/history",
+        params={"stat": "disposals", "seasons": [season]},
+    )
+    assert history_response.status_code == 200
+    history_venues = {row["venue"] for row in history_response.json() if row["venue"] is not None}
+    assert set(narrowed_venues) == history_venues

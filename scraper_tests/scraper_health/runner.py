@@ -306,6 +306,68 @@ def run_bookmakers(
     return results
 
 
+def inspect_prefetch_artifacts(
+    manifest: dict[str, Any],
+    *,
+    workspace: Path,
+) -> list[dict[str, Any]]:
+    """Inspect cached helper artifacts without running any prefetch commands."""
+    results: list[dict[str, Any]] = []
+    for entry in manifest.get("prefetch", []) or []:
+        artifacts, artifact_findings = check_artifacts(
+            workspace,
+            entry.get("outputs", []),
+            missing_severity="warning",
+        )
+        results.append(
+            {
+                "code": entry["code"],
+                "name": entry["name"],
+                "bookmaker": entry.get("bookmaker"),
+                "kind": "prefetch",
+                "status": status_from_findings(artifact_findings),
+                "skipped": True,
+                "command": _resolve_command(entry.get("command", [])),
+                "message": "Production-output mode: helper was not run; cached artifacts were inspected.",
+                "findings": artifact_findings,
+                "artifacts": artifacts,
+            }
+        )
+    return results
+
+
+def build_report_only_bookmaker_results(manifest: dict[str, Any]) -> list[dict[str, Any]]:
+    """Create skipped scraper rows so existing production outputs can be validated."""
+    results: list[dict[str, Any]] = []
+    for entry in manifest.get("bookmakers", []):
+        results.append(
+            {
+                "code": entry["code"],
+                "name": entry["name"],
+                "bookmaker": entry.get("bookmaker", entry["code"]),
+                "kind": "scraper",
+                "status": "pass",
+                "skipped": True,
+                "command": _resolve_command(entry.get("command", [])),
+                "message": "Production-output mode: scraper was not run; existing outputs were validated.",
+                "findings": [],
+                "cached_artifacts": [],
+                "started_at": None,
+                "started_at_epoch": None,
+                "finished_at": None,
+                "finished_at_epoch": None,
+                "duration_seconds": None,
+                "exit_code": None,
+                "timed_out": False,
+                "stdout_log": None,
+                "stderr_log": None,
+                "stdout_excerpt": "",
+                "stderr_excerpt": "",
+            }
+        )
+    return results
+
+
 def run_command(
     entry: dict[str, Any],
     *,

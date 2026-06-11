@@ -22,6 +22,12 @@ Rscript OddsScraper/Neds/get_neds_match_urls.R
 Rscript OddsScraper/master_processing_script.R
 Rscript Scripts/get_arbs.R
 
+# Refresh DVP before backend import so matchup labels in metrics_json stay current.
+backend/.venv/bin/python backend/scripts/generate_dvp.py --refresh-fantasy-positions --refresh-detailed-positions
+
+# Generate a read-only health report from the production output files just created.
+/Users/jamesbrown/.pyenv/versions/3.12.5/bin/python3 scraper_tests/run.py --mode production --no-fail
+
 # Refresh backend DuckDB state from the newly scraped/processed files.
 if ! (
     cd /Users/jamesbrown/Projects/AFL/backend || exit 1

@@ -1,5 +1,6 @@
 package com.jamesbrown.aflmobile.data.network
 
+import com.jamesbrown.aflmobile.BuildConfig
 import com.jamesbrown.aflmobile.data.settings.AppSettingsStore
 import com.jamesbrown.aflmobile.model.ApiErrorEnvelope
 import com.jamesbrown.aflmobile.model.BookmakerSummary
@@ -9,6 +10,7 @@ import com.jamesbrown.aflmobile.model.DataStatusResponse
 import com.jamesbrown.aflmobile.model.EventSummary
 import com.jamesbrown.aflmobile.model.HealthResponse
 import com.jamesbrown.aflmobile.model.MarketSummary
+import com.jamesbrown.aflmobile.model.OddsQuery
 import com.jamesbrown.aflmobile.model.OddsSearchResult
 import com.jamesbrown.aflmobile.model.PlayerGameLogEntry
 import com.jamesbrown.aflmobile.model.PlayerStatFilterOptions
@@ -18,8 +20,7 @@ import com.jamesbrown.aflmobile.model.PropSearchResult
 import com.jamesbrown.aflmobile.model.SelectionSummary
 import com.jamesbrown.aflmobile.model.SgmCompareRequestPayload
 import com.jamesbrown.aflmobile.model.SgmCompareResponse
-import com.jamesbrown.aflmobile.model.SgmQuoteRequestPayload
-import com.jamesbrown.aflmobile.model.SgmQuoteResponse
+import java.time.Duration
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.SerializationException
@@ -38,11 +39,18 @@ class BackendApiClient(
     private val json: Json = Json { ignoreUnknownKeys = true; explicitNulls = false },
 ) {
     private val client: OkHttpClient = OkHttpClient.Builder()
-        .addInterceptor(
-            HttpLoggingInterceptor().apply {
-                level = HttpLoggingInterceptor.Level.BASIC
-            },
-        )
+        .connectTimeout(Duration.ofSeconds(10))
+        .readTimeout(Duration.ofSeconds(30))
+        .callTimeout(Duration.ofSeconds(45))
+        .apply {
+            if (BuildConfig.DEBUG) {
+                addInterceptor(
+                    HttpLoggingInterceptor().apply {
+                        level = HttpLoggingInterceptor.Level.BASIC
+                    },
+                )
+            }
+        }
         .build()
 
     suspend fun getHealth(): HealthResponse = get("health")
@@ -112,6 +120,35 @@ class BackendApiClient(
 
     suspend fun getPlayerStatFilters(playerId: Int): PlayerStatFilterOptions =
         get("players/$playerId/stats/filters")
+
+    /**
+     * Filter options narrowed by the current game-log filters. The backend
+     * computes the venue list with the same pipeline as the history endpoint,
+     * so the app never re-implements that filtering locally.
+     */
+    suspend fun getPlayerStatFiltersNarrowed(
+        playerId: Int,
+        seasons: List<String>,
+        oppositions: List<String>,
+        weatherCategories: List<String>,
+        homeAway: List<String>,
+        marginMin: Int,
+        marginMax: Int,
+        lastGames: Int?,
+        minutesMinimum: Double,
+    ): PlayerStatFilterOptions = get(
+        path = "players/$playerId/stats/filters",
+        query = buildList {
+            seasons.forEach { add("seasons" to it) }
+            oppositions.forEach { add("oppositions" to it) }
+            weatherCategories.forEach { add("weather_categories" to it) }
+            homeAway.forEach { add("home_away" to it) }
+            add("margin_min" to marginMin.toString())
+            add("margin_max" to marginMax.toString())
+            add("minutes_minimum" to minutesMinimum.toString())
+            lastGames?.let { add("last_games" to it.toString()) }
+        },
+    )
 
     suspend fun getPlayerStatHistory(
         playerId: Int,
@@ -185,62 +222,35 @@ class BackendApiClient(
         },
     )
 
-    suspend fun searchOdds(
-        bookmakers: List<String>,
-        scope: String = "player",
-        query: String? = null,
-        marketType: String? = null,
-        eventId: Int? = null,
-        includePlayerIds: List<Int> = emptyList(),
-        excludePlayerIds: List<Int> = emptyList(),
-        sortBy: String = "diff_last_10",
-        sortDirection: String = "desc",
-        selectionType: String? = null,
-        matchupDifficulties: List<String> = emptyList(),
-        minEdge: Double? = null,
-        minPrice: Double? = null,
-        maxPrice: Double? = null,
-        minDiff2025: Double? = null,
-        maxDiff2025: Double? = null,
-        minDiffLast10: Double? = null,
-        maxDiffLast10: Double? = null,
-        minNextBestProbDiff: Double? = null,
-        maxNextBestProbDiff: Double? = null,
-        sgmOnly: Boolean = false,
-        bestOnly: Boolean = false,
-        limit: Int = 200,
-        offset: Int = 0,
-    ): List<OddsSearchResult> = get(
+    suspend fun searchOdds(oddsQuery: OddsQuery): List<OddsSearchResult> = get(
         path = "odds/search",
         query = buildList {
-            add("limit" to limit.toString())
-            add("offset" to offset.toString())
-            add("scope" to scope)
-            bookmakers.forEach { bookmaker ->
+            add("limit" to oddsQuery.limit.toString())
+            add("offset" to oddsQuery.offset.toString())
+            add("scope" to oddsQuery.scope)
+            oddsQuery.bookmakers.forEach { bookmaker ->
                 if (bookmaker.isNotBlank()) {
                     add("bookmaker" to bookmaker)
                 }
             }
-            query?.takeIf { it.isNotBlank() }?.let { add("q" to it) }
-            marketType?.takeIf { it.isNotBlank() }?.let { add("market_type" to it) }
-            eventId?.let { add("event_id" to it.toString()) }
-            includePlayerIds.forEach { add("include_player_id" to it.toString()) }
-            excludePlayerIds.forEach { add("exclude_player_id" to it.toString()) }
-            add("sort_by" to sortBy)
-            add("sort_dir" to sortDirection)
-            selectionType?.takeIf { it.isNotBlank() }?.let { add("selection_type" to it) }
-            matchupDifficulties.forEach { add("matchup_difficulty" to it) }
-            minEdge?.let { add("min_edge" to it.toString()) }
-            minPrice?.let { add("min_price" to it.toString()) }
-            maxPrice?.let { add("max_price" to it.toString()) }
-            minDiff2025?.let { add("min_diff_2025" to it.toString()) }
-            maxDiff2025?.let { add("max_diff_2025" to it.toString()) }
-            minDiffLast10?.let { add("min_diff_last_10" to it.toString()) }
-            maxDiffLast10?.let { add("max_diff_last_10" to it.toString()) }
-            minNextBestProbDiff?.let { add("min_next_best_prob_diff" to it.toString()) }
-            maxNextBestProbDiff?.let { add("max_next_best_prob_diff" to it.toString()) }
-            if (sgmOnly) add("sgm_only" to "true")
-            if (bestOnly) add("best_only" to "true")
+            oddsQuery.marketType?.takeIf { it.isNotBlank() }?.let { add("market_type" to it) }
+            oddsQuery.eventIds.forEach { add("event_id" to it.toString()) }
+            oddsQuery.includePlayerIds.forEach { add("include_player_id" to it.toString()) }
+            oddsQuery.excludePlayerIds.forEach { add("exclude_player_id" to it.toString()) }
+            add("sort_by" to oddsQuery.sortBy)
+            add("sort_dir" to oddsQuery.sortDirection)
+            oddsQuery.selectionType?.takeIf { it.isNotBlank() }?.let { add("selection_type" to it) }
+            oddsQuery.matchupDifficulties.forEach { add("matchup_difficulty" to it) }
+            oddsQuery.minPrice?.let { add("min_price" to it.toString()) }
+            oddsQuery.maxPrice?.let { add("max_price" to it.toString()) }
+            oddsQuery.minDiff2025?.let { add("min_diff_2025" to it.toString()) }
+            oddsQuery.maxDiff2025?.let { add("max_diff_2025" to it.toString()) }
+            oddsQuery.minDiffLast10?.let { add("min_diff_last_10" to it.toString()) }
+            oddsQuery.maxDiffLast10?.let { add("max_diff_last_10" to it.toString()) }
+            oddsQuery.minNextBestProbDiff?.let { add("min_next_best_prob_diff" to it.toString()) }
+            oddsQuery.maxNextBestProbDiff?.let { add("max_next_best_prob_diff" to it.toString()) }
+            if (oddsQuery.sgmOnly) add("sgm_only" to "true")
+            if (oddsQuery.bestOnly) add("best_only" to "true")
         },
     )
 
@@ -257,16 +267,11 @@ class BackendApiClient(
         },
     )
 
-    suspend fun priceSgm(request: SgmQuoteRequestPayload): SgmQuoteResponse =
-        post("pricing/sgm", request)
-
     suspend fun compareSgm(request: SgmCompareRequestPayload): SgmCompareResponse =
         post("pricing/sgm/compare", request)
 
     suspend fun compareCgm(request: CgmCompareRequestPayload): CgmCompareResponse =
         post("pricing/cgm", request)
-
-    suspend fun getQuote(quoteId: String): SgmQuoteResponse = get("quotes/$quoteId")
 
     private suspend inline fun <reified T> get(
         path: String,

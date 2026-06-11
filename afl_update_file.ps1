@@ -15,9 +15,11 @@ Remove-Item -Path "C:\Users\james\OneDrive\Desktop\Projects\AFL-2024\Data\BET365
 # Execute R script for getting arbs
 & "Rscript" "OddsScraper\master_processing_script.R"
 
+# Refresh DVP before publishing/importing downstream artifacts
+& "python" "backend\scripts\generate_dvp.py" "--refresh-fantasy-positions" "--refresh-detailed-positions"
+
 # Publish report using Quarto
-echo "1" | & "quarto" "publish" "quarto-pub" "Reports\outlier-odds.qmd"
-echo "1" | & "quarto" "publish" "quarto-pub" "Reports\arbs.qmd"
+echo "1" | & "quarto" "publish" "quarto-pub" "Reports\afl-odds.qmd"
 
 # Automatically stage all changes
 git add .

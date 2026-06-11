@@ -50,25 +50,38 @@ dvp_data <-
 
 # Read in position data---------------------------------------------------------
 player_positions <-
-  read_csv("../../DVP/AFL-Players-Positions-2025.csv") |>
+  read_csv("../../DVP/AFL-Players-Positions-2026.csv") |>
   rename(Position = position, player_name = player_full_name)
 
-dvp_data <-
-  dvp_data %>%
-  mutate(dvp = ifelse(market_name == "Player Goals", rnorm(nrow(dvp_data)), dvp)) |>
-  group_by(market_name) %>%
-  mutate(
-    DVP_Category = cut(
-      dvp,
-      breaks = quantile(dvp, probs = 0:5 / 5, na.rm = TRUE),
-      include.lowest = TRUE,
-      labels = c("Terrible", "Bad", "Neutral", "Good", "Excellent")
+if ("over_matchup_difficulty" %in% names(dvp_data)) {
+  dvp_data <-
+    dvp_data |>
+    transmute(
+      Position = Pos,
+      opposition_team = Opponent,
+      market_name,
+      DVP_Category = over_matchup_difficulty
     )
-  ) %>%
-  mutate(DVP_Category = as.character(DVP_Category)) |>
-  mutate(DVP_Category = ifelse(market_name == "Player Goals", "Neutral", DVP_Category)) |>
-  ungroup() %>%
-  select(Position = Pos, opposition_team = Opponent, market_name, DVP_Category)
+} else {
+  dvp_data <-
+    dvp_data |>
+    group_by(market_name) |>
+    mutate(
+      q20 = quantile(dvp, 0.2, na.rm = TRUE),
+      q40 = quantile(dvp, 0.4, na.rm = TRUE),
+      q60 = quantile(dvp, 0.6, na.rm = TRUE),
+      q80 = quantile(dvp, 0.8, na.rm = TRUE),
+      DVP_Category = case_when(
+        dvp <= q20 ~ "Terrible",
+        dvp <= q40 ~ "Bad",
+        dvp <= q60 ~ "Neutral",
+        dvp <= q80 ~ "Good",
+        TRUE ~ "Excellent"
+      )
+    ) |>
+    ungroup() |>
+    select(Position = Pos, opposition_team = Opponent, market_name, DVP_Category)
+}
 
 # ===============================================================================
 # Read in odds data

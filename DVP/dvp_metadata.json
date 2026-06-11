@@ -1,0 +1,72 @@
+{
+  "coverage": {
+    "model_stat_rows": 4292,
+    "player_effect_rows": 29520,
+    "positioned_players": 814,
+    "source_stat_rows": 106688,
+    "unpositioned_source_rows": 0
+  },
+  "generated_at": "2026-06-11T23:05:12.959015+00:00",
+  "inputs": {
+    "current_stats_path": "/Users/jamesbrown/Projects/AFL/Data/afl_fantasy_2026_data.rds",
+    "current_stats_sha256": "0c54d5ba4f9dcf29ce5c8ff2fd9de9e3292986e1ab7d355311fcdcf9e835af9a",
+    "detailed_positions_path": "/Users/jamesbrown/Projects/AFL/DVP/AFL-Players-Positions-2026.csv",
+    "detailed_positions_sha256": "c46133ba079fc902d5603a8951343442cf9be3a129ca46d57203d34a63f4455d",
+    "fantasy_start_positions_path": "/Users/jamesbrown/Projects/AFL/Data/2026_start_positions_and_prices.rds",
+    "fantasy_start_positions_sha256": "f183e0aeeb90dee1f4193155813f99ba90dc533920dbd7fae4e59df1d4b7478d",
+    "history_stats_path": "/Users/jamesbrown/Projects/AFL/Data/afl_fantasy_2015_2025_data.rds",
+    "history_stats_sha256": "8e99cae46532c66412db394ca90c0caf6f952eca9c977248363b789047acff48"
+  },
+  "model_version": "dvp_v2_2026_positions_shrunk_per100tog",
+  "outputs": {
+    "dvp_data_path": "/Users/jamesbrown/Projects/AFL/DVP/dvp_data.csv",
+    "markets": [
+      "Player Clearances",
+      "Player Disposals",
+      "Player Fantasy Points",
+      "Player Goals",
+      "Player Handballs",
+      "Player Hitouts",
+      "Player Kicks",
+      "Player Marks",
+      "Player Tackles"
+    ],
+    "opponents": [
+      "Adelaide Crows",
+      "Brisbane Lions",
+      "Carlton",
+      "Collingwood Magpies",
+      "Essendon Bombers",
+      "Fremantle Dockers",
+      "GWS Giants",
+      "Geelong Cats",
+      "Gold Coast Suns",
+      "Hawthorn Hawks",
+      "Melbourne Demons",
+      "North Melbourne Kangaroos",
+      "Port Adelaide Power",
+      "Richmond Tigers",
+      "St Kilda Saints",
+      "Sydney Swans",
+      "West Coast Eagles",
+      "Western Bulldogs"
+    ],
+    "positions": [
+      "KEY_DEFENDER",
+      "KEY_FORWARD",
+      "MEDIUM_DEFENDER",
+      "MEDIUM_FORWARD",
+      "MIDFIELDER",
+      "MIDFIELDER_FORWARD",
+      "RUCK"
+    ],
+    "row_count": 1134
+  },
+  "parameters": {
+    "bootstrap_iterations": 400,
+    "min_tog_percentage": 30.0,
+    "random_seed": 20260612,
+    "shrinkage_prior_samples": 12.0,
+    "team_window_games": 10
+  }
+}

@@ -1,10 +1,18 @@
 package com.jamesbrown.aflmobile.model
 
+import kotlinx.serialization.Serializable
+
 data class AppSettings(
     val apiBaseUrl: String = "http://10.0.2.2:8000/api/v1/",
     val authToken: String = "",
     val defaultBookmaker: String = "sportsbet",
+    val themeMode: AppThemeMode = AppThemeMode.LIGHT,
 )
+
+enum class AppThemeMode {
+    LIGHT,
+    DARK,
+}
 
 const val OddsDiffSliderMin = -1f
 const val OddsDiffSliderMax = 1f
@@ -12,12 +20,11 @@ val MatchupDifficultyOptions = listOf("Terrible", "Bad", "Neutral", "Good", "Exc
 
 data class OddsFilters(
     val scope: String = "player",
-    val query: String = "",
     val bookmakerCodes: List<String> = emptyList(),
     val marketTypeCode: String? = null,
     val eventId: Int? = null,
-    val includePlayerIds: List<Int> = emptyList(),
-    val excludePlayerIds: List<Int> = emptyList(),
+    val includePlayers: List<PlayerSummary> = emptyList(),
+    val excludePlayers: List<PlayerSummary> = emptyList(),
     val sortBy: String = "diff_last_10",
     val sortDirection: String = "desc",
     val selectionType: String? = null,
@@ -30,18 +37,16 @@ data class OddsFilters(
     val maxDiffLast10: Float = OddsDiffSliderMax,
     val minNextBestProbDiff: Float = OddsDiffSliderMin,
     val maxNextBestProbDiff: Float = OddsDiffSliderMax,
-    val minEdgeText: String = "",
     val bestOnly: Boolean = false,
     val sgmOnly: Boolean = false,
 )
 
 fun OddsFilters.hasActiveFilters(defaultBookmakerCodes: List<String>): Boolean {
-    return query.isNotEmpty()
-        || bookmakerCodes.toSet() != defaultBookmakerCodes.toSet()
+    return bookmakerCodes.toSet() != defaultBookmakerCodes.toSet()
         || marketTypeCode != null
         || eventId != null
-        || includePlayerIds.isNotEmpty()
-        || excludePlayerIds.isNotEmpty()
+        || includePlayers.isNotEmpty()
+        || excludePlayers.isNotEmpty()
         || selectionType != null
         || matchupDifficulties.isNotEmpty()
         || minPriceText.isNotEmpty()
@@ -52,7 +57,6 @@ fun OddsFilters.hasActiveFilters(defaultBookmakerCodes: List<String>): Boolean {
         || maxDiffLast10 != OddsDiffSliderMax
         || minNextBestProbDiff != OddsDiffSliderMin
         || maxNextBestProbDiff != OddsDiffSliderMax
-        || minEdgeText.isNotEmpty()
         || bestOnly
         || sgmOnly
 }
@@ -77,7 +81,6 @@ enum class BuilderDisplayMode {
 enum class BuilderSortField {
     PLAYER,
     LINE,
-    TYPE,
     NEXT_BEST,
     PRICE,
     DIFF_LAST_10,
@@ -161,6 +164,7 @@ data class PlayerStatsFilters(
     val upperBoundText: String = "25.5",
 )
 
+@Serializable
 data class DraftLeg(
     val selectionId: Int,
     val eventId: Int,
@@ -182,7 +186,6 @@ data class SgmDraftState(
     val eventLabel: String? = null,
     val legs: List<DraftLeg> = emptyList(),
     val forceRefresh: Boolean = false,
-    val latestQuote: SgmQuoteResponse? = null,
     val latestComparisons: List<SgmAgencyComparison> = emptyList(),
     val latestError: String? = null,
 )

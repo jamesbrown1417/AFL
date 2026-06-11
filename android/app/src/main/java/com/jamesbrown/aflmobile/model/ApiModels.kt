@@ -216,40 +216,12 @@ data class PropSearchResult(
 )
 
 @Serializable
-data class RequestedLeg(
-    @SerialName("selection_id") val selectionId: Int,
-)
-
-@Serializable
-data class SgmQuoteRequestPayload(
-    val bookmaker: String,
-    @SerialName("event_id") val eventId: Int,
-    val legs: List<RequestedLeg>,
-    @SerialName("force_refresh") val forceRefresh: Boolean,
-)
-
-@Serializable
 data class QuoteLeg(
     @SerialName("selection_id") val selectionId: Int,
     val label: String,
     @SerialName("market_type_code") val marketTypeCode: String,
     @SerialName("selection_type") val selectionType: String,
     @SerialName("base_price") val basePrice: Double,
-)
-
-@Serializable
-data class SgmQuoteResponse(
-    @SerialName("quote_id") val quoteId: String,
-    val bookmaker: String,
-    @SerialName("event_id") val eventId: Int,
-    val legs: List<QuoteLeg>,
-    @SerialName("unadjusted_price") val unadjustedPrice: Double,
-    @SerialName("quoted_price") val quotedPrice: Double,
-    @SerialName("adjustment_factor") val adjustmentFactor: Double,
-    @SerialName("from_cache") val fromCache: Boolean,
-    @SerialName("quoted_at") val quotedAt: String,
-    @SerialName("expires_at") val expiresAt: String,
-    val status: String,
 )
 
 @Serializable

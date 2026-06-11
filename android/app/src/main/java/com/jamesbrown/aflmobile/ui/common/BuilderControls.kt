@@ -275,7 +275,7 @@ fun SelectionMetricFilterSheet(
                 },
             )
             SelectionMetricRangeSection(
-                title = "Diff 2025",
+                title = "Season diff",
                 range = filters.minDiff2025..filters.maxDiff2025,
                 onRangeChange = { range ->
                     onFiltersChanged(filters.copy(minDiff2025 = range.start, maxDiff2025 = range.endInclusive))
@@ -338,6 +338,25 @@ fun QuickFilterActionSection(
             }
             BuilderSupportText("Tap once to apply immediately.")
         }
+    }
+}
+
+/** Labelled +/- range slider shared by the odds and builder filter sheets. */
+@Composable
+fun DiffRangeSection(
+    title: String,
+    range: ClosedFloatingPointRange<Float>,
+    onRangeChange: (ClosedFloatingPointRange<Float>) -> Unit,
+) {
+    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+        Text(title, style = MaterialTheme.typography.titleMedium)
+        BuilderSupportText(formatMetricRange(range.start, range.endInclusive))
+        RangeSlider(
+            value = range.start..range.endInclusive,
+            onValueChange = { onRangeChange(it.start..it.endInclusive) },
+            valueRange = OddsDiffSliderMin..OddsDiffSliderMax,
+            steps = 39,
+        )
     }
 }
 
@@ -429,22 +448,20 @@ private fun BuilderSortField.shortLabel(): String =
     when (this) {
         BuilderSortField.PLAYER -> "Player"
         BuilderSortField.LINE -> "Line"
-        BuilderSortField.TYPE -> "Type"
-        BuilderSortField.NEXT_BEST -> "NB"
+        BuilderSortField.NEXT_BEST -> "Next best"
         BuilderSortField.PRICE -> "Price"
-        BuilderSortField.DIFF_LAST_10 -> "L10"
-        BuilderSortField.DIFF_2025 -> "25"
+        BuilderSortField.DIFF_LAST_10 -> "Last 10"
+        BuilderSortField.DIFF_2025 -> "Season"
     }
 
 private fun BuilderSortField.description(): String =
     when (this) {
         BuilderSortField.PLAYER -> "Alphabetical by player name."
         BuilderSortField.LINE -> "Sort by line value."
-        BuilderSortField.TYPE -> "Sort by selection type."
         BuilderSortField.NEXT_BEST -> "Largest next-best probability gap first."
         BuilderSortField.PRICE -> "Highest current price first."
         BuilderSortField.DIFF_LAST_10 -> "Strongest last-10 edge first."
-        BuilderSortField.DIFF_2025 -> "Strongest 2025 edge first."
+        BuilderSortField.DIFF_2025 -> "Strongest season edge first."
     }
 
 private fun formatMetricRange(min: Float, max: Float): String =

@@ -12,7 +12,6 @@ import androidx.compose.material3.TopAppBarColors
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 
 
@@ -26,21 +25,18 @@ fun AppBackdrop(modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun appGlassSurfaceColor(): Color = MaterialTheme.colorScheme.surface.copy(alpha = 0.98f)
+fun appCardBorder(): BorderStroke =
+    BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
 
 @Composable
-fun appGlassBorder(): BorderStroke =
-    BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.9f))
-
-@Composable
-fun appCardColors() = CardDefaults.cardColors(containerColor = appGlassSurfaceColor())
+fun appCardColors() = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
 
 @Composable
 fun appTopBarColors(): TopAppBarColors = TopAppBarDefaults.topAppBarColors(
-    containerColor = Color(0xFFF2F7FF),
-    scrolledContainerColor = Color(0xFFE9F1FF),
-    titleContentColor = Blue800,
-    navigationIconContentColor = Blue800,
+    containerColor = MaterialTheme.colorScheme.surfaceContainer,
+    scrolledContainerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
+    titleContentColor = MaterialTheme.colorScheme.primary,
+    navigationIconContentColor = MaterialTheme.colorScheme.primary,
     actionIconContentColor = MaterialTheme.colorScheme.tertiary,
 )
 
@@ -48,7 +44,7 @@ fun appTopBarColors(): TopAppBarColors = TopAppBarDefaults.topAppBarColors(
 fun appNavigationBarItemColors(): NavigationBarItemColors = NavigationBarItemDefaults.colors(
     selectedIconColor = MaterialTheme.colorScheme.tertiary,
     selectedTextColor = MaterialTheme.colorScheme.tertiary,
-    indicatorColor = MaterialTheme.colorScheme.tertiaryContainer.copy(alpha = 0.98f),
+    indicatorColor = MaterialTheme.colorScheme.tertiaryContainer,
     unselectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
     unselectedTextColor = MaterialTheme.colorScheme.onSurfaceVariant,
 )

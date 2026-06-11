@@ -11,7 +11,13 @@ from .fixture import select_target_round
 from .manifest import load_manifest
 from .models import utc_now_iso, worst_status
 from .report import build_counters, build_coverage_matrix, collect_findings, write_report
-from .runner import PrerequisiteChecker, run_bookmakers, run_prefetches
+from .runner import (
+    PrerequisiteChecker,
+    build_report_only_bookmaker_results,
+    inspect_prefetch_artifacts,
+    run_bookmakers,
+    run_prefetches,
+)
 from .validators import attach_output_statuses
 from .workspace import (
     apply_production_cache_cleanup,
@@ -25,6 +31,22 @@ from .workspace import (
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="Run AFL scraper health diagnostics.")
+    parser.add_argument(
+        "--mode",
+        choices=("shadow", "production"),
+        default="shadow",
+        help=(
+            "shadow runs scrapers in an isolated copied workspace; production validates "
+            "the currently existing production output files without running scrapers."
+        ),
+    )
+    parser.add_argument(
+        "--production-outputs",
+        action="store_const",
+        dest="mode",
+        const="production",
+        help="Alias for --mode production.",
+    )
     parser.add_argument(
         "--prefetch",
         choices=("auto", "cached", "off"),
@@ -57,31 +79,47 @@ def main(argv: list[str] | None = None) -> int:
     source_artifact_snapshot = snapshot_source_artifacts(source_root, manifest)
 
     run_dir = create_latest_run_dir(source_root)
-    workspace, copied_inputs = prepare_workspace(source_root, run_dir)
-    production_cache_cleanup = (
-        apply_production_cache_cleanup(workspace) if args.prefetch == "auto" else []
-    )
     logs_dir = run_dir / "logs"
     repo_warnings = detect_repo_warnings(source_root)
-    target = select_target_round(workspace / "Data" / "current_fixture.csv")
 
-    checker = PrerequisiteChecker()
-    prefetch_results = run_prefetches(
-        manifest,
-        mode=args.prefetch,
-        workspace=workspace,
-        logs_dir=logs_dir,
-        timeout_override=args.timeout_seconds,
-        checker=checker,
-    )
-    raw_bookmaker_results = run_bookmakers(
-        manifest,
-        prefetch_mode=args.prefetch,
-        workspace=workspace,
-        logs_dir=logs_dir,
-        timeout_override=args.timeout_seconds,
-        checker=checker,
-    )
+    if args.mode == "production":
+        workspace = source_root
+        copied_inputs: list[str] = []
+        production_cache_cleanup: list[dict[str, Any]] = []
+        target = select_target_round(source_root / "Data" / "current_fixture.csv")
+        prefetch_results = inspect_prefetch_artifacts(manifest, workspace=workspace)
+        raw_bookmaker_results = build_report_only_bookmaker_results(manifest)
+        source_write_findings: list[dict[str, Any]] = []
+    else:
+        workspace, copied_inputs = prepare_workspace(source_root, run_dir)
+        production_cache_cleanup = (
+            apply_production_cache_cleanup(workspace) if args.prefetch == "auto" else []
+        )
+        target = select_target_round(workspace / "Data" / "current_fixture.csv")
+
+        checker = PrerequisiteChecker()
+        prefetch_results = run_prefetches(
+            manifest,
+            mode=args.prefetch,
+            workspace=workspace,
+            logs_dir=logs_dir,
+            timeout_override=args.timeout_seconds,
+            checker=checker,
+        )
+        raw_bookmaker_results = run_bookmakers(
+            manifest,
+            prefetch_mode=args.prefetch,
+            workspace=workspace,
+            logs_dir=logs_dir,
+            timeout_override=args.timeout_seconds,
+            checker=checker,
+        )
+        source_write_findings = detect_source_artifact_mutations(
+            source_root,
+            manifest,
+            source_artifact_snapshot,
+        )
+
     bookmaker_results = attach_output_statuses(
         manifest,
         raw_bookmaker_results,
@@ -89,11 +127,6 @@ def main(argv: list[str] | None = None) -> int:
         target_matches=[fixture["match"] for fixture in target["fixtures"]],
     )
     _attach_prefetch_statuses(bookmaker_results, prefetch_results)
-    source_write_findings = detect_source_artifact_mutations(
-        source_root,
-        manifest,
-        source_artifact_snapshot,
-    )
     repo_findings = repo_warnings + source_write_findings
 
     coverage = build_coverage_matrix(manifest, bookmaker_results)
@@ -111,6 +144,8 @@ def main(argv: list[str] | None = None) -> int:
         "source_root": str(source_root),
         "run_dir": str(run_dir),
         "workspace": str(workspace),
+        "validation_root": str(workspace),
+        "execution_mode": args.mode,
         "manifest_path": str(manifest_path),
         "prefetch_mode": args.prefetch,
         "copied_inputs": copied_inputs,

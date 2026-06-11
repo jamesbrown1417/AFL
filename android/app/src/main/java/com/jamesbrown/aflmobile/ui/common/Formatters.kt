@@ -79,6 +79,30 @@ fun formatWeatherRainTag(value: Double?): String? =
             }
         }
 
+fun bookmakerLabel(bookmakerCode: String): String =
+    bookmakerCode.replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }
+
+fun formatLineValue(value: Double?): String =
+    when {
+        value == null -> "-"
+        value % 1.0 == 0.0 -> String.format(Locale.getDefault(), "%.0f", value)
+        else -> String.format(Locale.getDefault(), "%.1f", value)
+    }
+
+fun formatSignedDelta(value: Double): String =
+    String.format(Locale.getDefault(), "%+.2f", value)
+
+fun selectionTypeLabel(selectionType: String): String =
+    when (selectionType) {
+        "over" -> "Over"
+        "under" -> "Under"
+        "home" -> "Home"
+        "away" -> "Away"
+        else -> selectionType.replaceFirstChar {
+            if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString()
+        }
+    }
+
 fun shortAflMatchLabel(matchName: String): String {
     val normalized = matchName.replace(" vs ", " v ", ignoreCase = true)
     val parts = normalized.split(" v ")
