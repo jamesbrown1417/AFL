@@ -40,15 +40,23 @@ import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import com.jamesbrown.aflmobile.model.BuilderSortField
 import com.jamesbrown.aflmobile.model.DraftLeg
 import com.jamesbrown.aflmobile.model.OddsSearchResult
-import com.jamesbrown.aflmobile.ui.common.PlayerContextTags
-import com.jamesbrown.aflmobile.ui.common.WeatherContextTags
+import com.jamesbrown.aflmobile.model.WeatherSummary
 import com.jamesbrown.aflmobile.ui.common.formatDecimalPrice
+import com.jamesbrown.aflmobile.ui.common.formatMatchupDifficultyTag
+import com.jamesbrown.aflmobile.ui.common.formatPlayerPositionTag
+import com.jamesbrown.aflmobile.ui.common.formatWeatherRainTag
+import com.jamesbrown.aflmobile.ui.common.formatWeatherTemperatureTag
+import com.jamesbrown.aflmobile.ui.common.matchupAccentColor
+import com.jamesbrown.aflmobile.ui.common.shortAflMatchLabel
 import com.jamesbrown.aflmobile.ui.common.formatSignedDelta
 import com.jamesbrown.aflmobile.ui.navigation.PlayerLaunchRequest
 import com.jamesbrown.aflmobile.ui.theme.AppTheme
@@ -131,6 +139,7 @@ fun CandidateSelectionRow(
     onOpenPlayerRequest: (PlayerLaunchRequest) -> Unit,
     onToggleLeg: (OddsSearchResult) -> Unit,
     modifier: Modifier = Modifier,
+    showMatchContext: Boolean = true,
 ) {
     val haptics = LocalHapticFeedback.current
     val containerColor by animateColorAsState(
@@ -174,47 +183,134 @@ fun CandidateSelectionRow(
         color = containerColor,
         border = BorderStroke(1.dp, borderColor),
     ) {
-        Row(
+        Column(
             modifier = Modifier.padding(horizontal = 14.dp, vertical = 10.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
+            verticalArrangement = Arrangement.spacedBy(4.dp),
         ) {
-            Column(
-                modifier = Modifier.weight(3.4f),
-                verticalArrangement = Arrangement.spacedBy(2.dp),
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
             ) {
-                Text(
-                    text = selection.player?.fullName ?: selection.label,
-                    style = MaterialTheme.typography.bodySmall,
-                    fontWeight = FontWeight.SemiBold,
-                    color = primaryTextColor,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
-                )
-                PlayerContextTags(
-                    position = selection.playerPosition,
-                    matchupDifficulty = selection.matchupDifficulty,
-                )
-                WeatherContextTags(weather = selection.weather)
-                Text(
-                    buildRowSubtitle(selection),
-                    style = MaterialTheme.typography.labelSmall,
-                    color = if (selected) {
-                        MaterialTheme.colorScheme.onTertiary.copy(alpha = 0.84f)
-                    } else {
-                        MaterialTheme.colorScheme.onSurfaceVariant
-                    },
+                Column(
+                    modifier = Modifier.weight(3.4f),
+                    verticalArrangement = Arrangement.spacedBy(2.dp),
+                ) {
+                    Text(
+                        text = selection.player?.fullName ?: selection.label,
+                        style = MaterialTheme.typography.bodySmall,
+                        fontWeight = FontWeight.SemiBold,
+                        color = primaryTextColor,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                    )
+                    CandidateMetaLine(
+                        marketLabel = marketDisplayLabel(selection.marketTypeCode),
+                        position = selection.playerPosition,
+                        matchupDifficulty = selection.matchupDifficulty,
+                        fixtureLabel = null,
+                        weather = null,
+                        selected = selected,
+                    )
+                }
+                MetricCell(lineWithSideLabel(selection), Modifier.weight(1.2f), selected)
+                MetricCell(formatDecimalPrice(selection.decimalPrice), Modifier.weight(1.0f), selected, emphasize = true)
+                MetricCell(selection.diffLast10?.let(::formatSignedDelta) ?: "--", Modifier.weight(1.0f), selected, value = selection.diffLast10)
+                MetricCell(selection.diff2025?.let(::formatSignedDelta) ?: "--", Modifier.weight(1.0f), selected, value = selection.diff2025)
+                MetricCell(selection.nextBestProbDiff?.let(::formatSignedDelta) ?: "--", Modifier.weight(1.0f), selected, value = selection.nextBestProbDiff)
+            }
+            if (showMatchContext) {
+                // Cross-game lists: fixture and weather span the full row width
+                // (below the metric columns) so they are never truncated.
+                CandidateMetaLine(
+                    marketLabel = null,
+                    position = null,
+                    matchupDifficulty = null,
+                    fixtureLabel = shortAflMatchLabel(selection.matchName),
+                    weather = selection.weather,
+                    selected = selected,
                     maxLines = 2,
-                    overflow = TextOverflow.Ellipsis,
                 )
             }
-            MetricCell(lineWithSideLabel(selection), Modifier.weight(1.2f), selected)
-            MetricCell(formatDecimalPrice(selection.decimalPrice), Modifier.weight(1.0f), selected, emphasize = true)
-            MetricCell(selection.diffLast10?.let(::formatSignedDelta) ?: "--", Modifier.weight(1.0f), selected, value = selection.diffLast10)
-            MetricCell(selection.diff2025?.let(::formatSignedDelta) ?: "--", Modifier.weight(1.0f), selected, value = selection.diff2025)
-            MetricCell(selection.nextBestProbDiff?.let(::formatSignedDelta) ?: "--", Modifier.weight(1.0f), selected, value = selection.nextBestProbDiff)
         }
     }
+}
+
+/**
+ * Everything contextual about a selection on one line: market, position,
+ * matchup, fixture and weather. Position and matchup keep their semantic
+ * colours as text spans, so the row stays compact without losing meaning.
+ */
+@Composable
+private fun CandidateMetaLine(
+    marketLabel: String?,
+    position: String?,
+    matchupDifficulty: String?,
+    fixtureLabel: String?,
+    weather: WeatherSummary?,
+    selected: Boolean,
+    modifier: Modifier = Modifier,
+    maxLines: Int = 1,
+) {
+    val positionTag = formatPlayerPositionTag(position)
+    val matchupTag = formatMatchupDifficultyTag(matchupDifficulty)
+    val weatherText = weather?.let { summary ->
+        listOfNotNull(
+            summary.label,
+            formatWeatherTemperatureTag(summary.temperatureC),
+            formatWeatherRainTag(summary.precipMm),
+        ).joinToString(" ").ifBlank { null }
+    }
+    if (marketLabel.isNullOrBlank() && positionTag == null && matchupTag == null &&
+        fixtureLabel == null && weatherText == null
+    ) {
+        return
+    }
+    val baseColor = if (selected) {
+        MaterialTheme.colorScheme.onTertiary.copy(alpha = 0.84f)
+    } else {
+        MaterialTheme.colorScheme.onSurfaceVariant
+    }
+    val positionColor = if (selected) MaterialTheme.colorScheme.onTertiary else MaterialTheme.colorScheme.primary
+    val matchupColor = if (selected) {
+        MaterialTheme.colorScheme.onTertiary
+    } else {
+        matchupAccentColor(matchupDifficulty ?: matchupTag.orEmpty())
+    }
+    Text(
+        text = buildAnnotatedString {
+            var first = true
+            fun separator() {
+                if (!first) append(" · ")
+                first = false
+            }
+            marketLabel?.takeIf { it.isNotBlank() }?.let {
+                separator()
+                append(it)
+            }
+            positionTag?.let {
+                separator()
+                withStyle(SpanStyle(color = positionColor, fontWeight = FontWeight.SemiBold)) { append(it) }
+            }
+            matchupTag?.let {
+                separator()
+                withStyle(SpanStyle(color = matchupColor, fontWeight = FontWeight.SemiBold)) { append(it) }
+            }
+            fixtureLabel?.let {
+                separator()
+                append(it)
+            }
+            weatherText?.let {
+                separator()
+                append(it)
+            }
+        },
+        modifier = modifier,
+        style = MaterialTheme.typography.labelSmall,
+        color = baseColor,
+        maxLines = maxLines,
+        overflow = TextOverflow.Ellipsis,
+    )
 }
 
 @Composable
@@ -278,15 +374,13 @@ fun CandidateBoardCard(
                 color = MaterialTheme.colorScheme.primary,
                 fontWeight = FontWeight.SemiBold,
             )
-            PlayerContextTags(
+            CandidateMetaLine(
+                marketLabel = group.subtitle,
                 position = group.playerPosition,
                 matchupDifficulty = group.matchupDifficulty,
-            )
-            WeatherContextTags(weather = group.weather)
-            Text(
-                group.subtitle,
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                fixtureLabel = null,
+                weather = group.weather,
+                selected = false,
             )
             HorizontalDivider()
             val scrollState = rememberScrollState()

@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
@@ -288,6 +289,56 @@ private data class MatchupTagStyle(
     val containerColor: Color,
     val contentColor: Color,
 )
+
+/** Accent colour for a matchup difficulty when rendered as inline text rather than a tag. */
+@Composable
+fun matchupAccentColor(matchupLabel: String): Color = matchupTagStyle(matchupLabel).contentColor
+
+/**
+ * One-line match context: weather icon plus a dot-separated venue / round /
+ * conditions summary. Used where the match is fixed (e.g. the SGM header) so
+ * the per-selection rows don't have to repeat it.
+ */
+@Composable
+fun MatchContextLine(
+    venue: String?,
+    roundLabel: String?,
+    weather: WeatherSummary?,
+    modifier: Modifier = Modifier,
+) {
+    val icon = weatherIcon(weather?.iconCode)
+    val parts = listOfNotNull(
+        venue,
+        roundLabel,
+        weather?.label,
+        formatWeatherTemperatureTag(weather?.temperatureC),
+        formatWeatherRainTag(weather?.precipMm),
+    )
+    if (icon == null && parts.isEmpty()) {
+        return
+    }
+    Row(
+        modifier = modifier,
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(6.dp),
+    ) {
+        icon?.let {
+            Icon(
+                imageVector = it,
+                contentDescription = weather?.label ?: "Weather",
+                modifier = Modifier.size(16.dp),
+                tint = MaterialTheme.colorScheme.primary,
+            )
+        }
+        Text(
+            text = parts.joinToString(" · "),
+            style = MaterialTheme.typography.labelMedium,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+        )
+    }
+}
 
 @Composable
 private fun matchupTagStyle(matchupLabel: String): MatchupTagStyle {

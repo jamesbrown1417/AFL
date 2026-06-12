@@ -78,6 +78,7 @@ import com.jamesbrown.aflmobile.model.BuilderDisplayMode
 import com.jamesbrown.aflmobile.model.BuilderSortField
 import com.jamesbrown.aflmobile.model.DraftLeg
 import com.jamesbrown.aflmobile.model.EventSummary
+import com.jamesbrown.aflmobile.model.WeatherSummary
 import com.jamesbrown.aflmobile.model.OddsQuery
 import com.jamesbrown.aflmobile.model.OddsSearchResult
 import com.jamesbrown.aflmobile.model.SelectionMetricFilters
@@ -90,6 +91,7 @@ import com.jamesbrown.aflmobile.ui.common.ErrorCard
 import com.jamesbrown.aflmobile.ui.common.LoadingCard
 import com.jamesbrown.aflmobile.ui.common.ScreenPadding
 import com.jamesbrown.aflmobile.ui.common.SelectionMetricFilterSheet
+import com.jamesbrown.aflmobile.ui.common.MatchContextLine
 import com.jamesbrown.aflmobile.ui.common.bookmakerLabel
 import com.jamesbrown.aflmobile.ui.common.builder.AllMarketCode
 import com.jamesbrown.aflmobile.ui.common.builder.CandidateBoardCard
@@ -605,6 +607,7 @@ private fun SgmBuilderScreen(
                         events = uiState.events,
                         selectedBookmaker = selectedBookmaker,
                         selectedEventId = uiState.selectedEventId,
+                        matchWeather = uiState.candidateLegs.firstNotNullOfOrNull { it.weather },
                         bestOnly = uiState.bestOnly,
                         onSelectBookmaker = { code ->
                             if (draft.legs.isNotEmpty() && draft.bookmaker != code) {
@@ -687,6 +690,8 @@ private fun SgmBuilderScreen(
                                 onOpenPlayerRequest = onOpenPlayerRequest,
                                 onToggleLeg = onToggleLeg,
                                 modifier = Modifier.animateItem(),
+                                // Single match - fixture and weather live in the header card.
+                                showMatchContext = false,
                             )
                         }
                     } else {
@@ -792,6 +797,7 @@ private fun SgmControlCard(
     events: List<EventSummary>,
     selectedBookmaker: String?,
     selectedEventId: Int?,
+    matchWeather: WeatherSummary?,
     bestOnly: Boolean,
     onSelectBookmaker: (String) -> Unit,
     onSelectEvent: (Int) -> Unit,
@@ -888,6 +894,15 @@ private fun SgmControlCard(
                         )
                     }
                 }
+            }
+
+            val selectedEvent = events.firstOrNull { it.id == selectedEventId }
+            if (selectedEvent != null) {
+                MatchContextLine(
+                    venue = selectedEvent.venue,
+                    roundLabel = selectedEvent.roundLabel,
+                    weather = matchWeather,
+                )
             }
 
             Row(

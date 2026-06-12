@@ -384,6 +384,19 @@ class PlayerStatsViewModel(
         loadComparison(force = false)
     }
 
+    fun applyComparisonQuickFilters(
+        scenarioAFilters: PlayerStatsFilters,
+        scenarioBFilters: PlayerStatsFilters,
+    ) {
+        _uiState.update {
+            it.copy(
+                scenarioA = it.scenarioA.copy(filters = scenarioAFilters),
+                scenarioB = it.scenarioB.copy(filters = scenarioBFilters),
+            )
+        }
+        loadComparison(force = false)
+    }
+
     /**
      * Loads both scenarios in parallel. Skipped when the loaded data already
      * matches the current filters (e.g. re-entering the tab), unless [force].
@@ -504,6 +517,7 @@ fun PlayerStatsRoute(
         onApplyFilters = viewModel::applyFilters,
         onSetScenarioFilters = viewModel::setScenarioFilters,
         onApplySharedComparisonControls = viewModel::applySharedComparisonControls,
+        onApplyComparisonQuickFilters = viewModel::applyComparisonQuickFilters,
         onLoadComparison = viewModel::loadComparison,
         onRefreshVenueOptions = viewModel::refreshVenueOptions,
         onRefresh = viewModel::refresh,
@@ -519,6 +533,7 @@ private fun PlayerStatsScreen(
     onApplyFilters: (PlayerStatsFilters) -> Unit,
     onSetScenarioFilters: (PlayerComparisonFocus, PlayerStatsFilters) -> Unit,
     onApplySharedComparisonControls: (PlayerStatsFilters) -> Unit,
+    onApplyComparisonQuickFilters: (PlayerStatsFilters, PlayerStatsFilters) -> Unit,
     onLoadComparison: (Boolean) -> Unit,
     onRefreshVenueOptions: (PlayerStatsFilters) -> Unit,
     onRefresh: () -> Unit,
@@ -639,8 +654,10 @@ private fun PlayerStatsScreen(
                         item {
                             ComparisonSharedControlsCard(
                                 filterOptions = uiState.filterOptions,
-                                filters = scenarioA.filters,
+                                scenarioAFilters = scenarioA.filters,
+                                scenarioBFilters = scenarioB.filters,
                                 onFiltersChanged = onApplySharedComparisonControls,
+                                onApplyQuickFilters = onApplyComparisonQuickFilters,
                             )
                         }
                     }
@@ -875,14 +892,22 @@ private fun PlayerFilterChipFlow(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
 private fun ComparisonSharedControlsCard(
     filterOptions: PlayerStatFilterOptions?,
-    filters: PlayerStatsFilters,
+    scenarioAFilters: PlayerStatsFilters,
+    scenarioBFilters: PlayerStatsFilters,
     onFiltersChanged: (PlayerStatsFilters) -> Unit,
+    onApplyQuickFilters: (PlayerStatsFilters, PlayerStatsFilters) -> Unit,
 ) {
     var statExpanded by remember { mutableStateOf(false) }
+    var quickFiltersExpanded by rememberSaveable { mutableStateOf(false) }
+    val quickFilterRotation by animateFloatAsState(
+        targetValue = if (quickFiltersExpanded) 180f else 0f,
+        label = "comparisonQuickFilterRotation",
+    )
+    val filters = scenarioAFilters
 
     Card(
         modifier = Modifier.fillMaxWidth(),
@@ -938,8 +963,103 @@ private fun ComparisonSharedControlsCard(
                     filters = filters,
                     onFiltersChanged = onFiltersChanged,
                 )
+                HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.6f))
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clip(MaterialTheme.shapes.small)
+                        .clickable { quickFiltersExpanded = !quickFiltersExpanded }
+                        .padding(horizontal = 4.dp, vertical = 4.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                ) {
+                    Text(
+                        "Comparison quick filters",
+                        modifier = Modifier.weight(1f),
+                        style = MaterialTheme.typography.labelLarge,
+                        fontWeight = FontWeight.SemiBold,
+                        color = MaterialTheme.colorScheme.primary,
+                    )
+                    Icon(
+                        imageVector = Icons.Outlined.ExpandMore,
+                        contentDescription = if (quickFiltersExpanded) {
+                            "Hide comparison quick filters"
+                        } else {
+                            "Show comparison quick filters"
+                        },
+                        modifier = Modifier.rotate(quickFilterRotation),
+                        tint = MaterialTheme.colorScheme.primary,
+                    )
+                }
+                AnimatedVisibility(visible = quickFiltersExpanded) {
+                    ComparisonQuickFilterRow(
+                        filterOptions = filterOptions,
+                        scenarioAFilters = scenarioAFilters,
+                        scenarioBFilters = scenarioBFilters,
+                        onApplyQuickFilters = onApplyQuickFilters,
+                    )
+                }
             }
         }
+    }
+}
+
+@OptIn(ExperimentalLayoutApi::class)
+@Composable
+private fun ComparisonQuickFilterRow(
+    filterOptions: PlayerStatFilterOptions,
+    scenarioAFilters: PlayerStatsFilters,
+    scenarioBFilters: PlayerStatsFilters,
+    onApplyQuickFilters: (PlayerStatsFilters, PlayerStatsFilters) -> Unit,
+) {
+    val defaultHomeAway = filterOptions.homeAwayOptions.ifEmpty { listOf("Home", "Away") }
+    val homeAwaySelected = scenarioAFilters.homeAway == listOf("Home") &&
+        scenarioBFilters.homeAway == listOf("Away")
+    val winLossSelected = scenarioAFilters.marginMinText == "0" &&
+        scenarioAFilters.marginMaxText == "200" &&
+        scenarioBFilters.marginMinText == "-200" &&
+        scenarioBFilters.marginMaxText == "-1"
+    FlowRow(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        verticalArrangement = Arrangement.spacedBy(6.dp),
+    ) {
+        if (defaultHomeAway.contains("Home") && defaultHomeAway.contains("Away")) {
+            QuickFilterChip(
+                label = "Home vs Away",
+                selected = homeAwaySelected,
+                onClick = {
+                    if (homeAwaySelected) {
+                        onApplyQuickFilters(
+                            scenarioAFilters.copy(homeAway = defaultHomeAway),
+                            scenarioBFilters.copy(homeAway = defaultHomeAway),
+                        )
+                    } else {
+                        onApplyQuickFilters(
+                            scenarioAFilters.copy(homeAway = listOf("Home")),
+                            scenarioBFilters.copy(homeAway = listOf("Away")),
+                        )
+                    }
+                },
+            )
+        }
+        QuickFilterChip(
+            label = "Win vs Loss",
+            selected = winLossSelected,
+            onClick = {
+                if (winLossSelected) {
+                    onApplyQuickFilters(
+                        scenarioAFilters.copy(marginMinText = "-200", marginMaxText = "200"),
+                        scenarioBFilters.copy(marginMinText = "-200", marginMaxText = "200"),
+                    )
+                } else {
+                    onApplyQuickFilters(
+                        scenarioAFilters.copy(marginMinText = "0", marginMaxText = "200"),
+                        scenarioBFilters.copy(marginMinText = "-200", marginMaxText = "-1"),
+                    )
+                }
+            },
+        )
     }
 }
 
@@ -1011,6 +1131,11 @@ private fun PlayerStatsFilterSummary(
     onEditFilters: () -> Unit,
     onApplyFilters: (PlayerStatsFilters) -> Unit,
 ) {
+    var quickFiltersExpanded by rememberSaveable { mutableStateOf(false) }
+    val quickFilterRotation by animateFloatAsState(
+        targetValue = if (quickFiltersExpanded) 180f else 0f,
+        label = "quickFilterRotation",
+    )
     Card(
         modifier = Modifier.fillMaxWidth(),
         colors = appCardColors(),
@@ -1045,11 +1170,36 @@ private fun PlayerStatsFilterSummary(
                 filterOptions = filterOptions,
             )
             HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.6f))
-            QuickPlayerFilterRow(
-                filters = filters,
-                filterOptions = filterOptions,
-                onApplyFilters = onApplyFilters,
-            )
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clip(MaterialTheme.shapes.small)
+                    .clickable { quickFiltersExpanded = !quickFiltersExpanded }
+                    .padding(horizontal = 4.dp, vertical = 4.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+            ) {
+                Text(
+                    "Quick filters",
+                    modifier = Modifier.weight(1f),
+                    style = MaterialTheme.typography.labelLarge,
+                    fontWeight = FontWeight.SemiBold,
+                    color = MaterialTheme.colorScheme.primary,
+                )
+                Icon(
+                    imageVector = Icons.Outlined.ExpandMore,
+                    contentDescription = if (quickFiltersExpanded) "Hide quick filters" else "Show quick filters",
+                    modifier = Modifier.rotate(quickFilterRotation),
+                    tint = MaterialTheme.colorScheme.primary,
+                )
+            }
+            AnimatedVisibility(visible = quickFiltersExpanded) {
+                QuickPlayerFilterRow(
+                    filters = filters,
+                    filterOptions = filterOptions,
+                    onApplyFilters = onApplyFilters,
+                )
+            }
         }
     }
 }
