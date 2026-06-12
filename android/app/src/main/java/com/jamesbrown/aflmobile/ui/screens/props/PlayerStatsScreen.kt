@@ -1,9 +1,11 @@
 package com.jamesbrown.aflmobile.ui.screens.props
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectTapGestures
-import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -15,6 +17,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
@@ -23,6 +26,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Close
+import androidx.compose.material.icons.outlined.ExpandMore
 import androidx.compose.material.icons.outlined.FilterList
 import androidx.compose.material3.Badge
 import androidx.compose.material3.BadgedBox
@@ -61,6 +65,8 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
@@ -74,8 +80,10 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextMeasurer
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.drawText
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
@@ -83,6 +91,7 @@ import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
@@ -767,68 +776,57 @@ private fun PlayerSearchCard(
     var expanded by remember { mutableStateOf(false) }
     val focusManager = LocalFocusManager.current
 
-    Card(
-        modifier = Modifier.fillMaxWidth(),
-        colors = appCardColors(),
-        border = appCardBorder(),
+    ExposedDropdownMenuBox(
+        expanded = expanded,
+        onExpandedChange = { expanded = !expanded },
     ) {
-        Column(
-            modifier = Modifier.padding(14.dp),
-            verticalArrangement = Arrangement.spacedBy(10.dp),
+        OutlinedTextField(
+            value = uiState.searchQuery,
+            onValueChange = {
+                onSearchQueryChanged(it)
+                // Typing should surface suggestions immediately.
+                expanded = true
+            },
+            modifier = Modifier
+                .menuAnchor(ExposedDropdownMenuAnchorType.PrimaryEditable)
+                .fillMaxWidth(),
+            singleLine = true,
+            label = { Text("Search players") },
+            keyboardOptions = KeyboardOptions(
+                autoCorrectEnabled = false,
+                capitalization = KeyboardCapitalization.Words,
+                imeAction = ImeAction.Search,
+            ),
+            keyboardActions = KeyboardActions(
+                onSearch = { focusManager.clearFocus() },
+                onDone = { focusManager.clearFocus() },
+            ),
+            trailingIcon = {
+                if (uiState.searchQuery.isNotEmpty()) {
+                    IconButton(onClick = { onSearchQueryChanged("") }) {
+                        Icon(Icons.Outlined.Close, contentDescription = "Clear search")
+                    }
+                } else {
+                    ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded)
+                }
+            },
+        )
+        // ExposedDropdownMenu (unlike DropdownMenu) doesn't take focus,
+        // so the keyboard stays up and typing is never interrupted.
+        ExposedDropdownMenu(
+            expanded = expanded && uiState.searchResults.isNotEmpty(),
+            onDismissRequest = { expanded = false },
+            modifier = Modifier.heightIn(max = 360.dp),
         ) {
-            ExposedDropdownMenuBox(
-                expanded = expanded,
-                onExpandedChange = { expanded = !expanded },
-            ) {
-                OutlinedTextField(
-                    value = uiState.searchQuery,
-                    onValueChange = {
-                        onSearchQueryChanged(it)
-                        // Typing should surface suggestions immediately.
-                        expanded = true
-                    },
-                    modifier = Modifier
-                        .menuAnchor(ExposedDropdownMenuAnchorType.PrimaryEditable)
-                        .fillMaxWidth(),
-                    singleLine = true,
-                    label = { Text("Search players") },
-                    keyboardOptions = KeyboardOptions(
-                        autoCorrectEnabled = false,
-                        capitalization = KeyboardCapitalization.Words,
-                        imeAction = ImeAction.Search,
-                    ),
-                    keyboardActions = KeyboardActions(
-                        onSearch = { focusManager.clearFocus() },
-                        onDone = { focusManager.clearFocus() },
-                    ),
-                    trailingIcon = {
-                        if (uiState.searchQuery.isNotEmpty()) {
-                            IconButton(onClick = { onSearchQueryChanged("") }) {
-                                Icon(Icons.Outlined.Close, contentDescription = "Clear search")
-                            }
-                        } else {
-                            ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded)
-                        }
+            uiState.searchResults.forEach { player ->
+                DropdownMenuItem(
+                    text = { Text(player.fullName) },
+                    onClick = {
+                        onSelectPlayer(player)
+                        expanded = false
+                        focusManager.clearFocus()
                     },
                 )
-                // ExposedDropdownMenu (unlike DropdownMenu) doesn't take focus,
-                // so the keyboard stays up and typing is never interrupted.
-                ExposedDropdownMenu(
-                    expanded = expanded && uiState.searchResults.isNotEmpty(),
-                    onDismissRequest = { expanded = false },
-                    modifier = Modifier.heightIn(max = 360.dp),
-                ) {
-                    uiState.searchResults.forEach { player ->
-                        DropdownMenuItem(
-                            text = { Text(player.fullName) },
-                            onClick = {
-                                onSelectPlayer(player)
-                                expanded = false
-                                focusManager.clearFocus()
-                            },
-                        )
-                    }
-                }
             }
         }
     }
@@ -843,8 +841,8 @@ private fun PlayerFilterChipFlow(
 ) {
     val statLabel = filterOptions?.stats?.firstOrNull { it.code == filters.statCode }?.label ?: filters.statCode
     val lineLabel = playerLineLabel(filters)
-    val seasonLabel = summarizeFilterValues(filters.seasons)
-    val homeAwayLabel = summarizeFilterValues(filters.homeAway)
+    val seasonLabel = summarizeFilterValues(filters.seasons, filterOptions?.seasons.orEmpty())
+    val homeAwayLabel = summarizeFilterValues(filters.homeAway, filterOptions?.homeAwayOptions.orEmpty())
     val oppositionLabel = summarizeFilterValues(filters.oppositions, filterOptions?.oppositions.orEmpty())
     val venueLabel = summarizeFilterValues(filters.venues, filterOptions?.venues.orEmpty())
     val weatherLabel = summarizeFilterValues(filters.weatherCategories, filterOptions?.weatherCategories.orEmpty())
@@ -856,14 +854,15 @@ private fun PlayerFilterChipFlow(
         if (showStatAndLine) {
             InlineChip("Stat: $statLabel")
         }
-        seasonLabel?.let { InlineChip("Seasons: $it") }
         if (showStatAndLine) {
             InlineChip("Line: $lineLabel")
         }
-        homeAwayLabel?.let { InlineChip("Home/Away: $it") }
-        oppositionLabel?.let { InlineChip("Opp: $it") }
-        venueLabel?.let { InlineChip("Venue: $it") }
-        weatherLabel?.let { InlineChip("Weather: $it") }
+        // A filter that matches every option is no filter at all - don't show it.
+        seasonLabel?.takeIf { it != "All" }?.let { InlineChip("Seasons: $it") }
+        homeAwayLabel?.takeIf { it != "All" }?.let { InlineChip(it) }
+        oppositionLabel?.takeIf { it != "All" }?.let { InlineChip("Opp: $it") }
+        venueLabel?.takeIf { it != "All" }?.let { InlineChip("Venue: $it") }
+        weatherLabel?.takeIf { it != "All" }?.let { InlineChip("Weather: $it") }
         if (filters.marginMinText != "-200" || filters.marginMaxText != "200") {
             InlineChip("Margin: ${filters.marginMinText} to ${filters.marginMaxText}")
         }
@@ -1045,6 +1044,7 @@ private fun PlayerStatsFilterSummary(
                 filters = filters,
                 filterOptions = filterOptions,
             )
+            HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.6f))
             QuickPlayerFilterRow(
                 filters = filters,
                 filterOptions = filterOptions,
@@ -1054,6 +1054,7 @@ private fun PlayerStatsFilterSummary(
     }
 }
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 private fun QuickPlayerFilterRow(
     filters: PlayerStatsFilters,
@@ -1063,11 +1064,10 @@ private fun QuickPlayerFilterRow(
     val latestSeason = filterOptions?.seasons?.firstOrNull()
     val defaultFilters = filterOptions?.let(::defaultPlayerStatsFilters)
     val homeAwayOptions = filterOptions?.homeAwayOptions.orEmpty()
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .horizontalScroll(rememberScrollState()),
+    FlowRow(
+        modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.spacedBy(8.dp),
+        verticalArrangement = Arrangement.spacedBy(6.dp),
     ) {
         QuickFilterChip(
             label = "Last 5",
@@ -1188,12 +1188,19 @@ private fun PlayerSummaryCard(summary: PlayerStatSummary?) {
             modifier = Modifier.padding(14.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp),
         ) {
-            Text(
-                "${summary.statLabel} summary",
-                modifier = Modifier.semantics { heading() },
-                style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.SemiBold,
-            )
+            Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
+                Text(
+                    "${summary.statLabel} summary",
+                    modifier = Modifier.semantics { heading() },
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.SemiBold,
+                )
+                Text(
+                    text = summaryLineDescription(summary),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+            }
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.Bottom,
@@ -1212,7 +1219,7 @@ private fun PlayerSummaryCard(summary: PlayerStatSummary?) {
                     )
                     Text(
                         text = if (primaryHits != null) {
-                            "$primaryHits of ${summary.sampleSize} games ${primary.caption.lowercase(Locale.getDefault())}"
+                            "$primaryHits of ${summary.sampleSize} ${primary.caption.lowercase(Locale.getDefault())}"
                         } else {
                             "Across ${summary.sampleSize} games"
                         },
@@ -1226,11 +1233,6 @@ private fun PlayerSummaryCard(summary: PlayerStatSummary?) {
                     modifier = Modifier.width(118.dp),
                 )
             }
-            Text(
-                text = summaryLineDescription(summary),
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-            )
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
@@ -1293,9 +1295,9 @@ private fun secondarySummaryOutcome(summary: PlayerStatSummary): SummaryOutcome 
 
 private fun summaryLineDescription(summary: PlayerStatSummary): String =
     if (summary.lineMode == "interval") {
-        "Interval ${summary.lowerBound} to ${summary.upperBound} across ${summary.sampleSize} games."
+        "Interval ${summary.lowerBound}–${summary.upperBound} · ${summary.sampleSize} games"
     } else {
-        "Line ${summary.referenceLine} across ${summary.sampleSize} games."
+        "Line ${summary.referenceLine} · ${summary.sampleSize} games"
     }
 
 @Composable
@@ -1639,21 +1641,14 @@ private fun CompactHistoryHeader() {
     ) {
         Text(
             "Date",
-            modifier = Modifier.weight(0.95f),
-            style = MaterialTheme.typography.labelMedium,
-            fontWeight = FontWeight.Bold,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-        )
-        Text(
-            "Opponent",
-            modifier = Modifier.weight(1.35f),
-            style = MaterialTheme.typography.labelMedium,
-            fontWeight = FontWeight.Bold,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-        )
-        Text(
-            "Venue",
             modifier = Modifier.weight(1f),
+            style = MaterialTheme.typography.labelMedium,
+            fontWeight = FontWeight.Bold,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+        )
+        Text(
+            "Match",
+            modifier = Modifier.weight(1.9f),
             style = MaterialTheme.typography.labelMedium,
             fontWeight = FontWeight.Bold,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
@@ -1676,8 +1671,8 @@ private fun CompactHistoryRow(
     colors: com.jamesbrown.aflmobile.ui.theme.AppColors,
 ) {
     val rowTint = when (entry.hit) {
-        true -> colors.positiveContainer.copy(alpha = 0.62f)
-        false -> colors.negativeContainer.copy(alpha = 0.62f)
+        true -> colors.positiveContainer.copy(alpha = 0.32f)
+        false -> colors.negativeContainer.copy(alpha = 0.32f)
         null -> if (index % 2 == 1) {
             MaterialTheme.colorScheme.surfaceContainerLow
         } else {
@@ -1689,19 +1684,31 @@ private fun CompactHistoryRow(
         false -> "Miss"
         null -> null
     }
+    val hitColor = when (entry.hit) {
+        true -> colors.positive
+        false -> colors.negative
+        null -> MaterialTheme.colorScheme.onSurface
+    }
+    var expanded by remember(entry) { mutableStateOf(false) }
+    val chevronRotation by animateFloatAsState(
+        targetValue = if (expanded) 180f else 0f,
+        label = "gameLogChevron",
+    )
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .background(color = rowTint, shape = MaterialTheme.shapes.small)
+            .clip(MaterialTheme.shapes.small)
+            .background(color = rowTint)
+            .clickable { expanded = !expanded }
             .padding(horizontal = 8.dp, vertical = 9.dp),
         verticalArrangement = Arrangement.spacedBy(4.dp),
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.spacedBy(10.dp),
-            verticalAlignment = Alignment.CenterVertically,
+            verticalAlignment = Alignment.Top,
         ) {
-            Column(modifier = Modifier.weight(0.95f)) {
+            Column(modifier = Modifier.weight(1f)) {
                 Text(
                     text = formatGameDate(entry.date),
                     style = MaterialTheme.typography.bodySmall.tabular,
@@ -1716,49 +1723,117 @@ private fun CompactHistoryRow(
                     overflow = TextOverflow.Ellipsis,
                 )
             }
-            Text(
-                text = entry.opposition ?: "--",
-                modifier = Modifier.weight(1.35f),
-                style = MaterialTheme.typography.bodySmall,
-                maxLines = 2,
-                overflow = TextOverflow.Ellipsis,
-            )
-            Text(
-                text = entry.venue ?: "--",
-                modifier = Modifier.weight(1f),
-                style = MaterialTheme.typography.bodySmall,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis,
-            )
+            Column(modifier = Modifier.weight(1.9f)) {
+                Text(
+                    text = entry.opposition ?: "--",
+                    style = MaterialTheme.typography.bodySmall,
+                    fontWeight = FontWeight.SemiBold,
+                    maxLines = 2,
+                    overflow = TextOverflow.Ellipsis,
+                )
+                Text(
+                    text = entry.venue ?: "--",
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                )
+            }
             Text(
                 text = formatNumber(entry.selectedValue),
                 modifier = Modifier.width(48.dp),
                 style = MaterialTheme.typography.titleSmall.tabular,
                 fontWeight = FontWeight.Bold,
+                color = hitColor,
                 textAlign = TextAlign.End,
             )
         }
+        val metaParts = listOfNotNull(
+            entry.weather?.let(::formatMetaLabel),
+            entry.margin?.let { "Margin $it" },
+            entry.tog?.let { "TOG ${formatNumber(it)}%" },
+        )
         Row(
             modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
+            horizontalArrangement = Arrangement.spacedBy(6.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            InlineChip(entry.selectedStat.replace('_', ' ').replaceFirstChar { it.titlecase(Locale.getDefault()) })
-            hitLabel?.let {
-                InlineChip(it)
-            }
             Text(
-                text = compactGameMeta(entry),
+                text = buildAnnotatedString {
+                    if (hitLabel != null) {
+                        withStyle(SpanStyle(color = hitColor, fontWeight = FontWeight.SemiBold)) {
+                            append(hitLabel)
+                        }
+                        if (metaParts.isNotEmpty()) {
+                            append("  ·  ")
+                        }
+                    }
+                    append(metaParts.joinToString("  ·  "))
+                },
                 modifier = Modifier.weight(1f),
                 style = MaterialTheme.typography.labelSmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
-                textAlign = TextAlign.End,
             )
+            Icon(
+                Icons.Outlined.ExpandMore,
+                contentDescription = if (expanded) "Hide full game stats" else "Show full game stats",
+                modifier = Modifier
+                    .size(16.dp)
+                    .rotate(chevronRotation),
+                tint = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+        }
+        AnimatedVisibility(visible = expanded) {
+            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f))
+                FlowRow(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(12.dp),
+                    verticalArrangement = Arrangement.spacedBy(8.dp),
+                ) {
+                    val selectedCode = if (entry.selectedStat == "fantasy_points") "fantasy" else entry.selectedStat
+                    gameStatBreakdown(entry).forEach { stat ->
+                        val isSelected = stat.code == selectedCode
+                        Column(modifier = Modifier.width(76.dp)) {
+                            Text(
+                                text = stat.label,
+                                style = MaterialTheme.typography.labelSmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                maxLines = 1,
+                            )
+                            Text(
+                                text = stat.value,
+                                style = MaterialTheme.typography.bodySmall.tabular,
+                                fontWeight = if (isSelected) FontWeight.Bold else FontWeight.SemiBold,
+                                color = if (isSelected) hitColor else MaterialTheme.colorScheme.onSurface,
+                            )
+                        }
+                    }
+                }
+            }
         }
     }
 }
+
+private data class GameStatCell(val code: String, val label: String, val value: String)
+
+private fun gameStatBreakdown(entry: PlayerGameLogEntry): List<GameStatCell> = listOfNotNull(
+    entry.disposals?.let { GameStatCell("disposals", "Disposals", formatNumber(it)) },
+    entry.kicks?.let { GameStatCell("kicks", "Kicks", formatNumber(it)) },
+    entry.handballs?.let { GameStatCell("handballs", "Handballs", formatNumber(it)) },
+    entry.marks?.let { GameStatCell("marks", "Marks", formatNumber(it)) },
+    entry.goals?.let { GameStatCell("goals", "Goals", formatNumber(it)) },
+    entry.behinds?.let { GameStatCell("behinds", "Behinds", formatNumber(it)) },
+    entry.tackles?.let { GameStatCell("tackles", "Tackles", formatNumber(it)) },
+    entry.hitouts?.let { GameStatCell("hitouts", "Hitouts", formatNumber(it)) },
+    entry.freesFor?.let { GameStatCell("frees_for", "Frees for", formatNumber(it)) },
+    entry.freesAgainst?.let { GameStatCell("frees_against", "Frees agst", formatNumber(it)) },
+    entry.fantasy?.let { GameStatCell("fantasy", "Fantasy", formatNumber(it)) },
+    entry.cba?.let { GameStatCell("cba", "CBA %", formatNumber(it)) },
+    entry.tog?.let { GameStatCell("tog", "TOG %", formatNumber(it)) },
+)
 
 // ---------------------------------------------------------------------------
 // Charts
@@ -2980,12 +3055,12 @@ private fun formatNumber(value: Double?): String =
         }
     } ?: "--"
 
-private fun compactGameMeta(entry: PlayerGameLogEntry): String =
-    listOfNotNull(
-        entry.weather,
-        entry.margin?.let { "Margin $it" },
-        entry.tog?.let { "TOG ${formatNumber(it)}" },
-    ).joinToString("  •  ").ifBlank { " " }
+private fun formatMetaLabel(value: String): String =
+    value.replace('_', ' ')
+        .lowercase(Locale.getDefault())
+        .split(' ')
+        .filter { it.isNotBlank() }
+        .joinToString(" ") { it.replaceFirstChar { char -> char.titlecase(Locale.getDefault()) } }
 
 private fun formatGameDate(value: String): String =
     runCatching {
@@ -2997,4 +3072,4 @@ private fun formatGameDate(value: String): String =
     }.getOrElse { formatDateTime(value) }
 
 private val CompactDateFormatter: DateTimeFormatter =
-    DateTimeFormatter.ofPattern("d MMM", Locale.getDefault())
+    DateTimeFormatter.ofPattern("d MMM ''yy", Locale.getDefault())
