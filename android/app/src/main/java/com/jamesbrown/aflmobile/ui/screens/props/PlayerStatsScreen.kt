@@ -4,8 +4,8 @@ import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.horizontalScroll
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
@@ -22,7 +22,10 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Close
 import androidx.compose.material.icons.outlined.FilterList
+import androidx.compose.material3.Badge
+import androidx.compose.material3.BadgedBox
 import androidx.compose.material3.Card
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
@@ -76,10 +79,10 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.drawText
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
@@ -99,6 +102,7 @@ import com.jamesbrown.aflmobile.ui.common.ErrorCard
 import com.jamesbrown.aflmobile.ui.common.InlineChip
 import com.jamesbrown.aflmobile.ui.common.LoadingCard
 import com.jamesbrown.aflmobile.ui.common.ScreenPadding
+import com.jamesbrown.aflmobile.ui.common.StepperField
 import com.jamesbrown.aflmobile.ui.common.appScreenInsets
 import com.jamesbrown.aflmobile.ui.common.formatDateTime
 import com.jamesbrown.aflmobile.ui.common.formatDecimalPrice
@@ -110,6 +114,7 @@ import com.jamesbrown.aflmobile.ui.theme.appCardBorder
 import com.jamesbrown.aflmobile.ui.theme.appCardColors
 import com.jamesbrown.aflmobile.ui.theme.appTopBarColors
 import com.jamesbrown.aflmobile.ui.theme.tabular
+import java.time.LocalDateTime
 import java.time.OffsetDateTime
 import java.time.format.DateTimeFormatter
 import java.util.Locale
@@ -122,6 +127,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlin.math.roundToInt
 
 
 data class ComparisonScenarioState(
@@ -518,6 +524,9 @@ private fun PlayerStatsScreen(
     val isStatsTab = PlayerSubtab.valueOf(activeTab) == PlayerSubtab.Stats
     val scenarioA = uiState.scenarioA
     val scenarioB = uiState.scenarioB
+    val activeFilterCount = remember(uiState.filters, uiState.filterOptions) {
+        activePlayerFilterCount(uiState.filters, uiState.filterOptions)
+    }
 
     LaunchedEffect(activeFilterTarget, uiState.filters, scenarioA.filters, scenarioB.filters) {
         draftFilters = when (activeFilterTarget) {
@@ -559,7 +568,15 @@ private fun PlayerStatsScreen(
                 actions = {
                     if (isStatsTab) {
                         IconButton(onClick = { activeFilterTarget = PlayerFilterTarget.Stats }) {
-                            Icon(Icons.Outlined.FilterList, contentDescription = "Filters")
+                            BadgedBox(
+                                badge = {
+                                    if (activeFilterCount > 0) {
+                                        Badge { Text(activeFilterCount.toString()) }
+                                    }
+                                },
+                            ) {
+                                Icon(Icons.Outlined.FilterList, contentDescription = "Filters")
+                            }
                         }
                     }
                 },
@@ -605,6 +622,8 @@ private fun PlayerStatsScreen(
                                 playerName = selectedPlayer.fullName,
                                 filters = uiState.filters,
                                 filterOptions = uiState.filterOptions,
+                                onEditFilters = { activeFilterTarget = PlayerFilterTarget.Stats },
+                                onApplyFilters = onApplyFilters,
                             )
                         }
                     } else {
@@ -754,8 +773,8 @@ private fun PlayerSearchCard(
         border = appCardBorder(),
     ) {
         Column(
-            modifier = Modifier.padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(12.dp),
+            modifier = Modifier.padding(14.dp),
+            verticalArrangement = Arrangement.spacedBy(10.dp),
         ) {
             ExposedDropdownMenuBox(
                 expanded = expanded,
@@ -773,16 +792,28 @@ private fun PlayerSearchCard(
                         .fillMaxWidth(),
                     singleLine = true,
                     label = { Text("Search players") },
-                    keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
+                    keyboardOptions = KeyboardOptions(
+                        autoCorrectEnabled = false,
+                        capitalization = KeyboardCapitalization.Words,
+                        imeAction = ImeAction.Search,
+                    ),
                     keyboardActions = KeyboardActions(
                         onSearch = { focusManager.clearFocus() },
                         onDone = { focusManager.clearFocus() },
                     ),
                     trailingIcon = {
-                        ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded)
+                        if (uiState.searchQuery.isNotEmpty()) {
+                            IconButton(onClick = { onSearchQueryChanged("") }) {
+                                Icon(Icons.Outlined.Close, contentDescription = "Clear search")
+                            }
+                        } else {
+                            ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded)
+                        }
                     },
                 )
-                DropdownMenu(
+                // ExposedDropdownMenu (unlike DropdownMenu) doesn't take focus,
+                // so the keyboard stays up and typing is never interrupted.
+                ExposedDropdownMenu(
                     expanded = expanded && uiState.searchResults.isNotEmpty(),
                     onDismissRequest = { expanded = false },
                     modifier = Modifier.heightIn(max = 360.dp),
@@ -798,9 +829,6 @@ private fun PlayerSearchCard(
                         )
                     }
                 }
-            }
-            uiState.selectedPlayer?.let { player ->
-                InlineChip("Selected: ${player.fullName}")
             }
         }
     }
@@ -946,31 +974,31 @@ private fun LineModeControls(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.spacedBy(12.dp),
         ) {
-            OutlinedTextField(
+            StepperField(
                 value = filters.lowerBoundText,
                 onValueChange = { onFiltersChanged(filters.copy(lowerBoundText = it)) },
+                label = "Lower",
                 modifier = Modifier.weight(1f),
-                label = { Text("Lower") },
-                singleLine = true,
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
+                step = 0.5,
+                minValue = 0.0,
             )
-            OutlinedTextField(
+            StepperField(
                 value = filters.upperBoundText,
                 onValueChange = { onFiltersChanged(filters.copy(upperBoundText = it)) },
+                label = "Upper",
                 modifier = Modifier.weight(1f),
-                label = { Text("Upper") },
-                singleLine = true,
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
+                step = 0.5,
+                minValue = 0.0,
             )
         }
     } else {
-        OutlinedTextField(
+        StepperField(
             value = filters.referenceLineText,
             onValueChange = { onFiltersChanged(filters.copy(referenceLineText = it)) },
+            label = "Reference line",
             modifier = Modifier.fillMaxWidth(),
-            label = { Text("Reference line") },
-            singleLine = true,
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
+            step = 0.5,
+            minValue = 0.0,
         )
     }
 }
@@ -981,6 +1009,8 @@ private fun PlayerStatsFilterSummary(
     playerName: String,
     filters: PlayerStatsFilters,
     filterOptions: PlayerStatFilterOptions?,
+    onEditFilters: () -> Unit,
+    onApplyFilters: (PlayerStatsFilters) -> Unit,
 ) {
     Card(
         modifier = Modifier.fillMaxWidth(),
@@ -989,20 +1019,140 @@ private fun PlayerStatsFilterSummary(
     ) {
         Column(
             modifier = Modifier.padding(14.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp),
+            verticalArrangement = Arrangement.spacedBy(10.dp),
         ) {
-            Text(
-                playerName,
-                modifier = Modifier.semantics { heading() },
-                style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.SemiBold,
-            )
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(10.dp),
+            ) {
+                Text(
+                    playerName,
+                    modifier = Modifier
+                        .weight(1f)
+                        .semantics { heading() },
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.SemiBold,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                )
+                TextButton(onClick = onEditFilters) {
+                    Icon(Icons.Outlined.FilterList, contentDescription = null)
+                    Text("Edit", modifier = Modifier.padding(start = 6.dp))
+                }
+            }
             PlayerFilterChipFlow(
                 filters = filters,
                 filterOptions = filterOptions,
             )
+            QuickPlayerFilterRow(
+                filters = filters,
+                filterOptions = filterOptions,
+                onApplyFilters = onApplyFilters,
+            )
         }
     }
+}
+
+@Composable
+private fun QuickPlayerFilterRow(
+    filters: PlayerStatsFilters,
+    filterOptions: PlayerStatFilterOptions?,
+    onApplyFilters: (PlayerStatsFilters) -> Unit,
+) {
+    val latestSeason = filterOptions?.seasons?.firstOrNull()
+    val defaultFilters = filterOptions?.let(::defaultPlayerStatsFilters)
+    val homeAwayOptions = filterOptions?.homeAwayOptions.orEmpty()
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .horizontalScroll(rememberScrollState()),
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+    ) {
+        QuickFilterChip(
+            label = "Last 5",
+            selected = filters.lastGamesText == "5",
+            onClick = { onApplyFilters(filters.copy(lastGamesText = if (filters.lastGamesText == "5") "" else "5")) },
+        )
+        QuickFilterChip(
+            label = "Last 10",
+            selected = filters.lastGamesText == "10",
+            onClick = { onApplyFilters(filters.copy(lastGamesText = if (filters.lastGamesText == "10") "" else "10")) },
+        )
+        if (latestSeason != null) {
+            QuickFilterChip(
+                label = "$latestSeason only",
+                selected = filters.seasons == listOf(latestSeason),
+                onClick = {
+                    onApplyFilters(
+                        filters.copy(
+                            seasons = if (filters.seasons == listOf(latestSeason)) {
+                                defaultFilters?.seasons ?: filters.seasons
+                            } else {
+                                listOf(latestSeason)
+                            },
+                        ),
+                    )
+                },
+            )
+        }
+        if (homeAwayOptions.contains("Home")) {
+            QuickFilterChip(
+                label = "Home",
+                selected = filters.homeAway == listOf("Home"),
+                onClick = {
+                    onApplyFilters(
+                        filters.copy(
+                            homeAway = if (filters.homeAway == listOf("Home")) {
+                                defaultFilters?.homeAway ?: homeAwayOptions
+                            } else {
+                                listOf("Home")
+                            },
+                        ),
+                    )
+                },
+            )
+        }
+        if (homeAwayOptions.contains("Away")) {
+            QuickFilterChip(
+                label = "Away",
+                selected = filters.homeAway == listOf("Away"),
+                onClick = {
+                    onApplyFilters(
+                        filters.copy(
+                            homeAway = if (filters.homeAway == listOf("Away")) {
+                                defaultFilters?.homeAway ?: homeAwayOptions
+                            } else {
+                                listOf("Away")
+                            },
+                        ),
+                    )
+                },
+            )
+        }
+        if (defaultFilters != null && filters != defaultFilters) {
+            QuickFilterChip(
+                label = "Reset",
+                selected = false,
+                onClick = { onApplyFilters(defaultFilters) },
+            )
+        }
+    }
+}
+
+@Composable
+private fun QuickFilterChip(
+    label: String,
+    selected: Boolean,
+    onClick: () -> Unit,
+) {
+    FilterChip(
+        selected = selected,
+        onClick = onClick,
+        label = { Text(label, maxLines = 1) },
+        colors = playerAccentFilterChipColors(),
+        border = playerAccentFilterChipBorder(selected),
+    )
 }
 
 private fun summarizeFilterValues(
@@ -1026,6 +1176,9 @@ private fun PlayerSummaryCard(summary: PlayerStatSummary?) {
         )
         return
     }
+    val primary = primarySummaryOutcome(summary)
+    val secondary = secondarySummaryOutcome(summary)
+    val primaryHits = primary.probability?.let { (it * summary.sampleSize).roundToInt() }
     Card(
         modifier = Modifier.fillMaxWidth(),
         colors = appCardColors(),
@@ -1033,7 +1186,7 @@ private fun PlayerSummaryCard(summary: PlayerStatSummary?) {
     ) {
         Column(
             modifier = Modifier.padding(14.dp),
-            verticalArrangement = Arrangement.spacedBy(10.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp),
         ) {
             Text(
                 "${summary.statLabel} summary",
@@ -1041,47 +1194,109 @@ private fun PlayerSummaryCard(summary: PlayerStatSummary?) {
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.SemiBold,
             )
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.Bottom,
+                horizontalArrangement = Arrangement.spacedBy(14.dp),
+            ) {
+                Column(modifier = Modifier.weight(1f)) {
+                    Text(
+                        text = "${primary.label} hit rate",
+                        style = MaterialTheme.typography.labelLarge,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
+                    Text(
+                        text = formatPercentage(primary.probability),
+                        style = MaterialTheme.typography.headlineMedium.tabular,
+                        fontWeight = FontWeight.Bold,
+                    )
+                    Text(
+                        text = if (primaryHits != null) {
+                            "$primaryHits of ${summary.sampleSize} games ${primary.caption.lowercase(Locale.getDefault())}"
+                        } else {
+                            "Across ${summary.sampleSize} games"
+                        },
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
+                }
+                DenseSummaryCell(
+                    label = "${primary.label.uppercase(Locale.getDefault())} PRICE",
+                    value = formatDecimalPrice(primary.price),
+                    modifier = Modifier.width(118.dp),
+                )
+            }
             Text(
-                if (summary.lineMode == "interval") {
-                    "Interval ${summary.lowerBound} to ${summary.upperBound} across ${summary.sampleSize} games."
-                } else {
-                    "Line ${summary.referenceLine} across ${summary.sampleSize} games."
-                },
+                text = summaryLineDescription(summary),
                 style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
             ) {
                 DenseSummaryCell(
-                    label = if (summary.lineMode == "interval") "WITHIN" else "OVER",
-                    value = formatPercentage(summary.proportionWithinInterval ?: summary.proportionOver),
+                    label = "${secondary.label.uppercase(Locale.getDefault())} RATE",
+                    value = formatPercentage(secondary.probability),
                     modifier = Modifier.weight(1f),
                 )
                 DenseSummaryCell(
-                    label = if (summary.lineMode == "interval") "OUTSIDE" else "UNDER",
-                    value = formatPercentage(summary.proportionOutsideInterval ?: summary.proportionUnder),
-                    modifier = Modifier.weight(1f),
-                )
-            }
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
-            ) {
-                DenseSummaryCell(
-                    label = if (summary.lineMode == "interval") "IMPLIED IN" else "IMPLIED O",
-                    value = formatDecimalPrice(summary.impliedOddsWithinInterval ?: summary.impliedOddsOver),
-                    modifier = Modifier.weight(1f),
-                )
-                DenseSummaryCell(
-                    label = if (summary.lineMode == "interval") "IMPLIED OUT" else "IMPLIED U",
-                    value = formatDecimalPrice(summary.impliedOddsOutsideInterval ?: summary.impliedOddsUnder),
+                    label = "${secondary.label.uppercase(Locale.getDefault())} PRICE",
+                    value = formatDecimalPrice(secondary.price),
                     modifier = Modifier.weight(1f),
                 )
             }
         }
     }
 }
+
+private data class SummaryOutcome(
+    val label: String,
+    val caption: String,
+    val probability: Double?,
+    val price: Double?,
+)
+
+private fun primarySummaryOutcome(summary: PlayerStatSummary): SummaryOutcome =
+    if (summary.lineMode == "interval") {
+        SummaryOutcome(
+            label = "Within",
+            caption = "inside the interval",
+            probability = summary.proportionWithinInterval,
+            price = summary.impliedOddsWithinInterval,
+        )
+    } else {
+        SummaryOutcome(
+            label = "Over",
+            caption = "over the line",
+            probability = summary.proportionOver,
+            price = summary.impliedOddsOver,
+        )
+    }
+
+private fun secondarySummaryOutcome(summary: PlayerStatSummary): SummaryOutcome =
+    if (summary.lineMode == "interval") {
+        SummaryOutcome(
+            label = "Outside",
+            caption = "outside the interval",
+            probability = summary.proportionOutsideInterval,
+            price = summary.impliedOddsOutsideInterval,
+        )
+    } else {
+        SummaryOutcome(
+            label = "Under",
+            caption = "under the line",
+            probability = summary.proportionUnder,
+            price = summary.impliedOddsUnder,
+        )
+    }
+
+private fun summaryLineDescription(summary: PlayerStatSummary): String =
+    if (summary.lineMode == "interval") {
+        "Interval ${summary.lowerBound} to ${summary.upperBound} across ${summary.sampleSize} games."
+    } else {
+        "Line ${summary.referenceLine} across ${summary.sampleSize} games."
+    }
 
 @Composable
 private fun PlayerComparisonContent(
@@ -1389,152 +1604,160 @@ private fun DenseSummaryCell(
     }
 }
 
-/**
- * History table with a pinned date column: only the right-hand stat columns
- * scroll horizontally (all rows share one scroll state), and rows are
- * zebra-striped independent of the hit/miss tint.
- */
 @Composable
 private fun PlayerHistoryTable(history: List<PlayerGameLogEntry>) {
-    val scrollState = rememberScrollState()
     val colors = AppTheme.colors
     Card(
         modifier = Modifier.fillMaxWidth(),
         colors = appCardColors(),
         border = appCardBorder(),
     ) {
-        Column(modifier = Modifier.padding(12.dp)) {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 8.dp),
-            ) {
-                HistoryCell("Date", PinnedColumnWidth, header = true)
-                Row(
-                    modifier = Modifier
-                        .weight(1f)
-                        .horizontalScroll(scrollState),
-                    horizontalArrangement = Arrangement.spacedBy(8.dp),
-                ) {
-                    scrollableHistoryColumns.forEach { column ->
-                        HistoryCell(column.title, column.width, header = true)
-                    }
-                }
-            }
+        Column(
+            modifier = Modifier.padding(12.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp),
+        ) {
+            CompactHistoryHeader()
             history.forEachIndexed { index, entry ->
-                val rowTint = when (entry.hit) {
-                    true -> colors.positiveContainer.copy(alpha = 0.6f)
-                    false -> colors.negativeContainer.copy(alpha = 0.6f)
-                    null -> if (index % 2 == 1) {
-                        MaterialTheme.colorScheme.surfaceContainerLow
-                    } else {
-                        Color.Transparent
-                    }
-                }
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .background(color = rowTint, shape = MaterialTheme.shapes.extraSmall)
-                        .padding(vertical = 8.dp),
-                ) {
-                    HistoryCell(formatGameDate(entry.date), PinnedColumnWidth)
-                    Row(
-                        modifier = Modifier
-                            .weight(1f)
-                            .horizontalScroll(scrollState),
-                        horizontalArrangement = Arrangement.spacedBy(8.dp),
-                    ) {
-                        scrollableHistoryColumns.forEach { column ->
-                            val cellValue = column.value(entry)
-                            HistoryCell(
-                                text = cellValue,
-                                width = column.width,
-                                highlighted = column.highlighted,
-                                color = column.color(entry, colors)
-                                    ?: MaterialTheme.colorScheme.onSurface,
-                            )
-                        }
-                    }
-                }
+                CompactHistoryRow(
+                    entry = entry,
+                    index = index,
+                    colors = colors,
+                )
             }
         }
     }
 }
 
-private val PinnedColumnWidth = 84.dp
-
-private class HistoryColumn(
-    val title: String,
-    val width: Dp,
-    val highlighted: Boolean = false,
-    val value: (PlayerGameLogEntry) -> String,
-    val color: (PlayerGameLogEntry, com.jamesbrown.aflmobile.ui.theme.AppColors) -> Color? = { _, _ -> null },
-)
-
-private val scrollableHistoryColumns = listOf(
-    HistoryColumn("Round", 78.dp, value = { it.roundLabel ?: "--" }),
-    HistoryColumn("Opp", 104.dp, value = { it.opposition ?: "--" }),
-    HistoryColumn("Venue", 120.dp, value = { it.venue ?: "--" }),
-    HistoryColumn(
-        "H/A",
-        52.dp,
-        value = { entry ->
-            when {
-                entry.team != null && entry.home != null && entry.team == entry.home -> "H"
-                entry.team != null -> "A"
-                else -> "--"
-            }
-        },
-    ),
-    HistoryColumn("Weather", 110.dp, value = { it.weather ?: "--" }),
-    HistoryColumn("Margin", 64.dp, value = { it.margin?.toString() ?: "--" }),
-    HistoryColumn("TOG", 60.dp, value = { formatNumber(it.tog) }),
-    HistoryColumn("Disp", 60.dp, value = { formatNumber(it.disposals) }),
-    HistoryColumn("Fantasy", 72.dp, value = { formatNumber(it.fantasy) }),
-    HistoryColumn("Marks", 64.dp, value = { formatNumber(it.marks) }),
-    HistoryColumn("Goals", 64.dp, value = { formatNumber(it.goals) }),
-    HistoryColumn("Tackles", 72.dp, value = { formatNumber(it.tackles) }),
-    HistoryColumn("Hitouts", 72.dp, value = { formatNumber(it.hitouts) }),
-    HistoryColumn("Selected", 72.dp, highlighted = true, value = { formatNumber(it.selectedValue) }),
-    HistoryColumn(
-        "Hit",
-        56.dp,
-        value = { entry ->
-            when (entry.hit) {
-                true -> "Yes"
-                false -> "No"
-                null -> "--"
-            }
-        },
-        color = { entry, colors ->
-            when (entry.hit) {
-                true -> colors.positive
-                false -> colors.negative
-                null -> null
-            }
-        },
-    ),
-)
+@Composable
+private fun CompactHistoryHeader() {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 8.dp, vertical = 2.dp),
+        horizontalArrangement = Arrangement.spacedBy(10.dp),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Text(
+            "Date",
+            modifier = Modifier.weight(0.95f),
+            style = MaterialTheme.typography.labelMedium,
+            fontWeight = FontWeight.Bold,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+        )
+        Text(
+            "Opponent",
+            modifier = Modifier.weight(1.35f),
+            style = MaterialTheme.typography.labelMedium,
+            fontWeight = FontWeight.Bold,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+        )
+        Text(
+            "Venue",
+            modifier = Modifier.weight(1f),
+            style = MaterialTheme.typography.labelMedium,
+            fontWeight = FontWeight.Bold,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+        )
+        Text(
+            "Value",
+            modifier = Modifier.width(48.dp),
+            style = MaterialTheme.typography.labelMedium,
+            fontWeight = FontWeight.Bold,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            textAlign = TextAlign.End,
+        )
+    }
+}
 
 @Composable
-private fun HistoryCell(
-    text: String,
-    width: Dp,
-    header: Boolean = false,
-    highlighted: Boolean = false,
-    color: Color = MaterialTheme.colorScheme.onSurface,
+private fun CompactHistoryRow(
+    entry: PlayerGameLogEntry,
+    index: Int,
+    colors: com.jamesbrown.aflmobile.ui.theme.AppColors,
 ) {
-    Text(
-        text = text,
-        modifier = Modifier.width(width),
-        style = if (header) MaterialTheme.typography.labelMedium else MaterialTheme.typography.bodySmall.tabular,
-        fontWeight = when {
-            header -> FontWeight.Bold
-            highlighted -> FontWeight.SemiBold
-            else -> FontWeight.Normal
-        },
-        color = if (header) MaterialTheme.colorScheme.onSurfaceVariant else color,
-    )
+    val rowTint = when (entry.hit) {
+        true -> colors.positiveContainer.copy(alpha = 0.62f)
+        false -> colors.negativeContainer.copy(alpha = 0.62f)
+        null -> if (index % 2 == 1) {
+            MaterialTheme.colorScheme.surfaceContainerLow
+        } else {
+            MaterialTheme.colorScheme.surfaceContainerLowest
+        }
+    }
+    val hitLabel = when (entry.hit) {
+        true -> "Hit"
+        false -> "Miss"
+        null -> null
+    }
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(color = rowTint, shape = MaterialTheme.shapes.small)
+            .padding(horizontal = 8.dp, vertical = 9.dp),
+        verticalArrangement = Arrangement.spacedBy(4.dp),
+    ) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(10.dp),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Column(modifier = Modifier.weight(0.95f)) {
+                Text(
+                    text = formatGameDate(entry.date),
+                    style = MaterialTheme.typography.bodySmall.tabular,
+                    fontWeight = FontWeight.SemiBold,
+                    maxLines = 1,
+                )
+                Text(
+                    text = entry.roundLabel ?: "--",
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                )
+            }
+            Text(
+                text = entry.opposition ?: "--",
+                modifier = Modifier.weight(1.35f),
+                style = MaterialTheme.typography.bodySmall,
+                maxLines = 2,
+                overflow = TextOverflow.Ellipsis,
+            )
+            Text(
+                text = entry.venue ?: "--",
+                modifier = Modifier.weight(1f),
+                style = MaterialTheme.typography.bodySmall,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+            )
+            Text(
+                text = formatNumber(entry.selectedValue),
+                modifier = Modifier.width(48.dp),
+                style = MaterialTheme.typography.titleSmall.tabular,
+                fontWeight = FontWeight.Bold,
+                textAlign = TextAlign.End,
+            )
+        }
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            InlineChip(entry.selectedStat.replace('_', ' ').replaceFirstChar { it.titlecase(Locale.getDefault()) })
+            hitLabel?.let {
+                InlineChip(it)
+            }
+            Text(
+                text = compactGameMeta(entry),
+                modifier = Modifier.weight(1f),
+                style = MaterialTheme.typography.labelSmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+                textAlign = TextAlign.End,
+            )
+        }
+    }
 }
 
 // ---------------------------------------------------------------------------
@@ -2237,21 +2460,23 @@ private fun PlayerStatsFilterSheet(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.spacedBy(12.dp),
                 ) {
-                    OutlinedTextField(
+                    StepperField(
                         value = filters.marginMinText,
                         onValueChange = { onFiltersChanged(filters.copy(marginMinText = it)) },
+                        label = "Margin min",
                         modifier = Modifier.weight(1f),
-                        label = { Text("Margin min") },
-                        singleLine = true,
-                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                        step = 6.0,
+                        allowDecimal = false,
+                        allowNegative = true,
                     )
-                    OutlinedTextField(
+                    StepperField(
                         value = filters.marginMaxText,
                         onValueChange = { onFiltersChanged(filters.copy(marginMaxText = it)) },
+                        label = "Margin max",
                         modifier = Modifier.weight(1f),
-                        label = { Text("Margin max") },
-                        singleLine = true,
-                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                        step = 6.0,
+                        allowDecimal = false,
+                        allowNegative = true,
                     )
                 }
 
@@ -2259,21 +2484,23 @@ private fun PlayerStatsFilterSheet(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.spacedBy(12.dp),
                 ) {
-                    OutlinedTextField(
+                    StepperField(
                         value = filters.lastGamesText,
                         onValueChange = { onFiltersChanged(filters.copy(lastGamesText = it)) },
+                        label = "Last N games",
                         modifier = Modifier.weight(1f),
-                        label = { Text("Last N games") },
-                        singleLine = true,
-                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                        step = 1.0,
+                        minValue = 1.0,
+                        allowDecimal = false,
                     )
-                    OutlinedTextField(
+                    StepperField(
                         value = filters.minutesMinimumText,
                         onValueChange = { onFiltersChanged(filters.copy(minutesMinimumText = it)) },
+                        label = "Min TOG %",
                         modifier = Modifier.weight(1f),
-                        label = { Text("Min TOG %") },
-                        singleLine = true,
-                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
+                        step = 5.0,
+                        minValue = 0.0,
+                        maxValue = 100.0,
                     )
                 }
 
@@ -2402,6 +2629,31 @@ private fun defaultPlayerStatsFilters(options: PlayerStatFilterOptions): PlayerS
         seasons = defaultSeasons,
         homeAway = defaultHomeAway,
     )
+}
+
+private fun activePlayerFilterCount(
+    filters: PlayerStatsFilters,
+    filterOptions: PlayerStatFilterOptions?,
+): Int {
+    val defaults = filterOptions?.let(::defaultPlayerStatsFilters) ?: PlayerStatsFilters()
+    var count = 0
+    if (filters.statCode != defaults.statCode) count += 1
+    if (filters.lineMode != defaults.lineMode ||
+        filters.referenceLineText != defaults.referenceLineText ||
+        filters.lowerBoundText != defaults.lowerBoundText ||
+        filters.upperBoundText != defaults.upperBoundText
+    ) {
+        count += 1
+    }
+    if (filters.seasons.toSet() != defaults.seasons.toSet()) count += 1
+    if (filters.homeAway.toSet() != defaults.homeAway.toSet()) count += 1
+    if (filters.oppositions.isNotEmpty()) count += 1
+    if (filters.venues.isNotEmpty()) count += 1
+    if (filters.weatherCategories.isNotEmpty()) count += 1
+    if (filters.marginMinText != defaults.marginMinText || filters.marginMaxText != defaults.marginMaxText) count += 1
+    if (filters.lastGamesText.isNotBlank()) count += 1
+    if (filters.minutesMinimumText != defaults.minutesMinimumText) count += 1
+    return count
 }
 
 private fun filtersForLaunchRequest(
@@ -2728,8 +2980,21 @@ private fun formatNumber(value: Double?): String =
         }
     } ?: "--"
 
+private fun compactGameMeta(entry: PlayerGameLogEntry): String =
+    listOfNotNull(
+        entry.weather,
+        entry.margin?.let { "Margin $it" },
+        entry.tog?.let { "TOG ${formatNumber(it)}" },
+    ).joinToString("  •  ").ifBlank { " " }
+
 private fun formatGameDate(value: String): String =
     runCatching {
         OffsetDateTime.parse(value, DateTimeFormatter.ISO_OFFSET_DATE_TIME)
-            .format(DateTimeFormatter.ofPattern("d MMM yy", Locale.getDefault()))
+            .format(CompactDateFormatter)
+    }.recoverCatching {
+        LocalDateTime.parse(value, DateTimeFormatter.ISO_LOCAL_DATE_TIME)
+            .format(CompactDateFormatter)
     }.getOrElse { formatDateTime(value) }
+
+private val CompactDateFormatter: DateTimeFormatter =
+    DateTimeFormatter.ofPattern("d MMM", Locale.getDefault())

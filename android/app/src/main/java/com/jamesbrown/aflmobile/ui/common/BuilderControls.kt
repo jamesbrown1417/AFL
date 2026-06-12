@@ -3,7 +3,6 @@ package com.jamesbrown.aflmobile.ui.common
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
@@ -23,7 +22,6 @@ import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.RangeSlider
 import androidx.compose.material3.SegmentedButton
 import androidx.compose.material3.SegmentedButtonDefaults
@@ -247,23 +245,23 @@ fun SelectionMetricFilterSheet(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(12.dp),
             ) {
-                OutlinedTextField(
+                StepperField(
                     value = filters.minPriceText,
                     onValueChange = { onFiltersChanged(filters.copy(minPriceText = it)) },
+                    label = "Min price",
                     modifier = Modifier.weight(1f),
-                    label = { Text("Min price") },
-                    singleLine = true,
-                    leadingIcon = { Text("$") },
-                    keyboardOptions = KeyboardOptions(keyboardType = androidx.compose.ui.text.input.KeyboardType.Decimal),
+                    step = 0.25,
+                    minValue = 1.0,
+                    prefix = "$",
                 )
-                OutlinedTextField(
+                StepperField(
                     value = filters.maxPriceText,
                     onValueChange = { onFiltersChanged(filters.copy(maxPriceText = it)) },
+                    label = "Max price",
                     modifier = Modifier.weight(1f),
-                    label = { Text("Max price") },
-                    singleLine = true,
-                    leadingIcon = { Text("$") },
-                    keyboardOptions = KeyboardOptions(keyboardType = androidx.compose.ui.text.input.KeyboardType.Decimal),
+                    step = 0.25,
+                    minValue = 1.0,
+                    prefix = "$",
                 )
             }
             Spacer(modifier = Modifier.height(20.dp))

@@ -19,6 +19,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.HelpOutline
+import androidx.compose.material.icons.outlined.Close
 import androidx.compose.material.icons.outlined.FilterList
 import androidx.compose.material.icons.outlined.SwapVert
 import androidx.compose.material3.Badge
@@ -61,6 +62,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
@@ -90,6 +93,7 @@ import com.jamesbrown.aflmobile.ui.common.LoadingCard
 import com.jamesbrown.aflmobile.ui.common.PlayerContextTags
 import com.jamesbrown.aflmobile.ui.common.QuickFilterActionSection
 import com.jamesbrown.aflmobile.ui.common.ScreenPadding
+import com.jamesbrown.aflmobile.ui.common.StepperField
 import com.jamesbrown.aflmobile.ui.common.WeatherContextTags
 import com.jamesbrown.aflmobile.ui.common.appScreenInsets
 import com.jamesbrown.aflmobile.ui.common.bookmakerLabel
@@ -1047,21 +1051,21 @@ private fun OddsFilterSheet(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.spacedBy(12.dp),
                 ) {
-                    OutlinedTextField(
+                    StepperField(
                         value = filters.minPriceText,
                         onValueChange = { onFiltersChanged(filters.copy(minPriceText = it)) },
+                        label = "Min odds",
                         modifier = Modifier.weight(1f),
-                        singleLine = true,
-                        label = { Text("Min odds") },
-                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
+                        step = 0.25,
+                        minValue = 1.0,
                     )
-                    OutlinedTextField(
+                    StepperField(
                         value = filters.maxPriceText,
                         onValueChange = { onFiltersChanged(filters.copy(maxPriceText = it)) },
+                        label = "Max odds",
                         modifier = Modifier.weight(1f),
-                        singleLine = true,
-                        label = { Text("Max odds") },
-                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
+                        step = 0.25,
+                        minValue = 1.0,
                     )
                 }
 
@@ -1215,11 +1219,24 @@ private fun PlayerMultiSelectDropdown(
             singleLine = true,
             label = { Text(label) },
             placeholder = { Text("Type to search players") },
+            keyboardOptions = KeyboardOptions(
+                autoCorrectEnabled = false,
+                capitalization = KeyboardCapitalization.Words,
+                imeAction = ImeAction.Search,
+            ),
             trailingIcon = {
-                ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded)
+                if (query.isNotEmpty()) {
+                    IconButton(onClick = { onQueryChanged("") }) {
+                        Icon(Icons.Outlined.Close, contentDescription = "Clear $label search")
+                    }
+                } else {
+                    ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded)
+                }
             },
         )
-        DropdownMenu(
+        // ExposedDropdownMenu (unlike DropdownMenu) doesn't take focus,
+        // so the keyboard stays up and typing is never interrupted.
+        ExposedDropdownMenu(
             expanded = expanded,
             onDismissRequest = onExpandedChange,
             modifier = Modifier.heightIn(max = 360.dp),
