@@ -456,6 +456,10 @@
   min-width: 760px;
 }
 
+.player-workspace .data-table {
+  min-width: 1480px;
+}
+
 .odds-workspace .data-table th,
 .odds-workspace .data-table td {
   padding: 9px 8px;
@@ -489,6 +493,19 @@
   display: inline-flex;
   align-items: center;
   gap: 5px;
+}
+
+.data-table th.stat-column-highlight,
+.data-table td.stat-column-highlight {
+  background: color-mix(in srgb, var(--teal-soft) 72%, white);
+}
+
+.data-table th.stat-column-highlight {
+  color: var(--teal-strong);
+}
+
+.data-table td.stat-column-highlight {
+  box-shadow: inset 2px 0 0 var(--teal);
 }
 
 .sort-header {
@@ -1108,10 +1125,159 @@
   font-weight: 700;
 }
 
+.player-controls-bar {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.player-controls-bar .autocomplete {
+  width: min(320px, 100%);
+}
+
+.filter-summary {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+}
+
+.filter-summary--empty {
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.filter-count-badge {
+  display: inline-grid;
+  place-items: center;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  border-radius: 999px;
+  background: var(--teal);
+  color: #ffffff;
+  font-size: 11px;
+  font-weight: 750;
+}
+
+.drawer-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 70;
+  display: flex;
+  justify-content: flex-end;
+  background: color-mix(in srgb, #0b1422 55%, transparent);
+}
+
+.drawer {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  width: min(440px, 100%);
+  height: 100%;
+  background: var(--surface);
+  border-left: 1px solid var(--border);
+  box-shadow: var(--shadow);
+  animation: drawer-in 180ms ease;
+}
+
+@keyframes drawer-in {
+  from { transform: translateX(24px); opacity: 0.4; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+.drawer-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 16px 18px;
+  border-bottom: 1px solid var(--border);
+}
+
+.drawer-head h2 {
+  font-size: 17px;
+}
+
+.drawer-body {
+  display: grid;
+  gap: 18px;
+  align-content: start;
+  overflow-y: auto;
+  padding: 18px;
+}
+
+.drawer-foot {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 10px;
+  padding: 14px 18px;
+  border-top: 1px solid var(--border);
+}
+
+.drawer-foot .button {
+  width: 100%;
+}
+
+.filter-pair {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.filter-group {
+  display: grid;
+  gap: 9px;
+}
+
+.filter-group-title {
+  color: var(--text);
+  font-size: 13px;
+  font-weight: 750;
+}
+
+.link-button {
+  justify-self: start;
+  border: 0;
+  background: transparent;
+  color: var(--teal-strong);
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 750;
+  padding: 0;
+}
+
 .chart-frame {
   width: 100%;
   min-height: 280px;
   margin-top: 12px;
+}
+
+.chart-tooltip {
+  display: grid;
+  gap: 3px;
+  min-width: 86px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface);
+  box-shadow: var(--shadow);
+  padding: 8px 10px;
+}
+
+.chart-tooltip b {
+  color: var(--ink);
+  font-size: 12px;
+}
+
+.chart-tooltip span {
+  color: var(--ink);
+  font-size: 15px;
+  font-weight: 800;
+}
+
+.chart-tooltip small {
+  color: var(--muted);
+  font-size: 11px;
 }
 
 .settings-actions {

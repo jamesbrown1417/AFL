@@ -11,6 +11,20 @@ export function formatDateTime(value?: string | null) {
   }).format(date)
 }
 
+export function formatMatchDateTime(value?: string | null) {
+  if (!value) return 'TBA'
+  const date = new Date(value)
+  if (Number.isNaN(date.getTime())) return value
+  return new Intl.DateTimeFormat(undefined, {
+    weekday: 'short',
+    day: 'numeric',
+    month: 'short',
+    year: 'numeric',
+    hour: 'numeric',
+    minute: '2-digit',
+  }).format(date)
+}
+
 export function formatShortDate(value?: string | null) {
   if (!value) return 'TBA'
   const date = new Date(value)
