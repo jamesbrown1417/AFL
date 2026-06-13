@@ -1,10 +1,12 @@
-import { useMemo, useState } from 'react'
-import { Check, Filter, Trash2, X } from 'lucide-react'
+import { useEffect, useMemo, useState } from 'react'
+import clsx from 'clsx'
+import { ArrowDown, ArrowUp, BarChart3, Check, Filter, LineChart, Trash2, X } from 'lucide-react'
+import type { ClientSettings } from '../api/client'
 import type { BookmakerSummary, BuilderMode, CgmAgencyComparison, DraftLeg, EventSummary, OddsSearchResult, SgmAgencyComparison, SortField } from '../api/types'
-import { useBuilderOdds, useCompareCgm, useCompareSgm } from '../api/queries'
-import { defaultMetricFilters, useAppStore, useClientSettings } from '../store/useAppStore'
-import { allMarketCode, buildCandidateGroups, combinedBasePrice, defaultDescending, orderedMarketCodes, sortCandidateRows, toDraftLeg } from '../lib/builder'
-import { bookmakerLabel, formatDateTime, formatPrice, formatSigned, marketLabel, selectionTypeLabel, shortMatchLabel } from '../lib/formatters'
+import { useBuilderOdds, useCompareCgm, useCompareSgm, useSelectionAgencyPrices } from '../api/queries'
+import { defaultMetricFilters, defaultPlayerFilters, useAppStore, useClientSettings } from '../store/useAppStore'
+import { allMarketCode, buildCandidateGroups, combinedBasePrice, defaultDescending, lineWithSideLabel, marketTypeToStatCode, orderedMarketCodes, sortCandidateRows, toDraftLeg } from '../lib/builder'
+import { bookmakerLabel, formatDateTime, formatLine, formatPrice, formatSigned, marketLabel, selectionTypeLabel, shortMatchLabel } from '../lib/formatters'
 import { Button, Chip, EmptyState, ErrorBanner, Field, Panel, Segmented, Select, StatPill, Toggle } from '../components/ui'
 
 export function BuilderWorkspace({
@@ -32,22 +34,31 @@ export function BuilderWorkspace({
   const clearCgm = useAppStore((state) => state.clearCgm)
   const forceRefresh = useAppStore((state) => state.sgmForceRefresh)
   const setForceRefresh = useAppStore((state) => state.setSgmForceRefresh)
+  const setSelectedPlayer = useAppStore((state) => state.setSelectedPlayer)
+  const setPlayerFilters = useAppStore((state) => state.setPlayerFilters)
 
   const enabledBookmakers = useMemo(() => bookmakers.filter((bookmaker) => bookmaker.enabled), [bookmakers])
   const firstBookmaker = enabledBookmakers.find((bookmaker) => bookmaker.code === selectedDefault)?.code ?? enabledBookmakers[0]?.code ?? ''
-  const [bookmaker, setBookmaker] = useState(firstBookmaker)
-  const [sgmEventId, setSgmEventId] = useState<number | null>(events[0]?.id ?? null)
+  const [bookmaker, setBookmaker] = useState('')
+  // Fall back to the preferred/first agency until the user explicitly picks one (agencies load async).
+  const effectiveBookmaker = bookmaker || firstBookmaker
+  const [sgmEventId, setSgmEventId] = useState<number | null>(null)
   const [selectedEventIds, setSelectedEventIds] = useState<Set<number>>(new Set())
   const [bestOnly, setBestOnly] = useState(false)
   const [selectedMarket, setSelectedMarket] = useState(allMarketCode)
   const [sortField, setSortField] = useState<SortField>('next_best')
   const [descending, setDescending] = useState(true)
+  const [notice, setNotice] = useState<string | null>(null)
+  const [contextMenu, setContextMenu] = useState<{ x: number; y: number; selection: OddsSearchResult } | null>(null)
+  const [priceDialogSelection, setPriceDialogSelection] = useState<OddsSearchResult | null>(null)
 
   const legs = mode === 'sgm' ? sgmLegs : cgmLegs
   const selectedSelectionIds = useMemo(() => new Set(legs.map((leg) => leg.selection_id)), [legs])
-  const eventIds = mode === 'sgm' ? (sgmEventId == null ? [] : [sgmEventId]) : Array.from(selectedEventIds)
+  // SGM always has one match in focus: the user's explicit pick, otherwise the first fixture.
+  const effectiveSgmEventId = sgmEventId ?? events[0]?.id ?? null
+  const eventIds = mode === 'sgm' ? (effectiveSgmEventId == null ? [] : [effectiveSgmEventId]) : Array.from(selectedEventIds)
   const effectiveEventIds = mode === 'cgm' && eventIds.length === 0 ? [] : eventIds
-  const candidateQuery = useBuilderOdds(settings, bookmaker, effectiveEventIds, metricFilters, bestOnly, Boolean(bookmaker) && (mode === 'cgm' || sgmEventId != null))
+  const candidateQuery = useBuilderOdds(settings, effectiveBookmaker, effectiveEventIds, metricFilters, bestOnly, Boolean(effectiveBookmaker) && (mode === 'cgm' || effectiveSgmEventId != null))
   const candidates = useMemo(() => {
     const rows = candidateQuery.data ?? []
     if (mode === 'cgm') {
@@ -67,15 +78,98 @@ export function BuilderWorkspace({
   const compareCgm = useCompareCgm(settings)
 
   const toggleLeg = (selection: OddsSearchResult) => {
+    setNotice(null)
     const draftLeg = toDraftLeg(selection)
-    if (!draftLeg) return
-    if (mode === 'sgm') addSgmLeg(draftLeg)
-    else addCgmLeg(draftLeg)
+    if (!draftLeg) {
+      setNotice('That leg does not have a current price.')
+      return
+    }
+    if (mode === 'sgm') {
+      if (!selection.sgm_eligible) {
+        setNotice('That leg is not ready for SGM pricing.')
+        return
+      }
+      addSgmLeg(draftLeg)
+      return
+    }
+    const alreadySelected = cgmLegs.some((leg) => leg.selection_id === draftLeg.selection_id)
+    if (!alreadySelected && cgmLegs.some((leg) => leg.event_id === draftLeg.event_id)) {
+      setNotice('Cross-game multis allow one leg per match. Pick a different game.')
+      return
+    }
+    addCgmLeg(draftLeg)
   }
+
+  const confirmDraftSwitch = () => {
+    if (legs.length === 0) return true
+    return window.confirm(`Switching clears your current draft. You currently have ${legs.length} leg${legs.length === 1 ? '' : 's'} selected.`)
+  }
+
+  const handleSelectBookmaker = (code: string) => {
+    if (code === effectiveBookmaker) return
+    if (!confirmDraftSwitch()) return
+    if (mode === 'sgm') clearSgm()
+    else {
+      clearCgm()
+      setSelectedEventIds(new Set())
+    }
+    setNotice(null)
+    setBookmaker(code)
+  }
+
+  const handleSelectSgmEvent = (eventId: number | null) => {
+    if (eventId === effectiveSgmEventId) return
+    if (sgmLegs.length > 0 && !confirmDraftSwitch()) return
+    if (sgmLegs.length > 0) clearSgm()
+    setNotice(null)
+    setSgmEventId(eventId)
+  }
+
+  const selectedSgmEvent = mode === 'sgm' ? events.find((event) => event.id === effectiveSgmEventId) ?? null : null
+  const sgmWeather = mode === 'sgm' ? candidates.find((row) => row.weather)?.weather ?? null : null
+
+  const handleSort = (field: SortField) => {
+    if (field === sortField) {
+      setDescending((current) => !current)
+    } else {
+      setSortField(field)
+      setDescending(defaultDescending(field))
+    }
+  }
+
+  const openContextMenu = (event: React.MouseEvent, selection: OddsSearchResult) => {
+    event.preventDefault()
+    setContextMenu({ x: event.clientX, y: event.clientY, selection })
+  }
+
+  const viewPlayerStat = (selection: OddsSearchResult) => {
+    if (!selection.player) return
+    const stat = marketTypeToStatCode(selection.market_type_code)
+    setPlayerFilters({
+      ...defaultPlayerFilters,
+      stat: stat ?? defaultPlayerFilters.stat,
+      lineMode: 'single',
+      referenceLine: selection.line_value != null ? formatLine(selection.line_value) : defaultPlayerFilters.referenceLine,
+    })
+    setSelectedPlayer(selection.player.id, selection.player.full_name)
+  }
+
+  useEffect(() => {
+    if (!contextMenu) return
+    const close = () => setContextMenu(null)
+    window.addEventListener('click', close)
+    window.addEventListener('scroll', close, true)
+    window.addEventListener('resize', close)
+    return () => {
+      window.removeEventListener('click', close)
+      window.removeEventListener('scroll', close, true)
+      window.removeEventListener('resize', close)
+    }
+  }, [contextMenu])
 
   const compare = () => {
     if (mode === 'sgm') {
-      const eventId = legs[0]?.event_id ?? sgmEventId
+      const eventId = legs[0]?.event_id ?? effectiveSgmEventId
       if (eventId != null && legs.length >= 2) {
         compareSgm.mutate({ eventId, selectionIds: legs.map((leg) => leg.selection_id), forceRefresh })
       }
@@ -106,15 +200,15 @@ export function BuilderWorkspace({
         <Panel className="builder-controls">
           <div className="filter-grid">
             <Field label="Source agency">
-              <Select value={bookmaker} onChange={(event) => setBookmaker(event.currentTarget.value)}>
+              <Select value={effectiveBookmaker} onChange={(event) => handleSelectBookmaker(event.currentTarget.value)}>
                 {enabledBookmakers.map((item) => (
-                  <option key={item.code} value={item.code}>{item.display_name}</option>
+                  <option key={item.code} value={item.code}>{item.live_pricing_enabled ? `${item.display_name} • live` : item.display_name}</option>
                 ))}
               </Select>
             </Field>
             {mode === 'sgm' ? (
               <Field label="Match">
-                <Select value={sgmEventId ?? ''} onChange={(event) => setSgmEventId(event.currentTarget.value ? Number(event.currentTarget.value) : null)}>
+                <Select value={effectiveSgmEventId ?? ''} onChange={(event) => handleSelectSgmEvent(event.currentTarget.value ? Number(event.currentTarget.value) : null)}>
                   {events.map((event) => (
                     <option key={event.id} value={event.id}>{shortMatchLabel(event.match_name)} | {formatDateTime(event.start_time)}</option>
                   ))}
@@ -146,23 +240,6 @@ export function BuilderWorkspace({
                 ))}
               </Select>
             </Field>
-            <Field label="Sort">
-              <Select
-                value={sortField}
-                onChange={(event) => {
-                  const field = event.currentTarget.value as SortField
-                  setSortField(field)
-                  setDescending(defaultDescending(field))
-                }}
-              >
-                <option value="next_best">Next best diff</option>
-                <option value="diff_last_10">Last-10 diff</option>
-                <option value="diff_2025">Season diff</option>
-                <option value="price">Price</option>
-                <option value="player">Player</option>
-                <option value="line">Line</option>
-              </Select>
-            </Field>
           </div>
           <div className="quick-filter-grid">
             <Chip
@@ -192,6 +269,19 @@ export function BuilderWorkspace({
             {mode === 'sgm' && <Toggle checked={forceRefresh} onChange={setForceRefresh} label="Force quote refresh" />}
             <Button variant="ghost" onClick={() => setMetricFilters(defaultMetricFilters)}><Filter size={15} /> Reset filters</Button>
           </div>
+          {mode === 'sgm' && selectedSgmEvent && (
+            <p className="match-context">
+              {[
+                selectedSgmEvent.venue,
+                selectedSgmEvent.round_label,
+                sgmWeather?.label,
+                sgmWeather?.temperature_c != null ? `${Math.round(sgmWeather.temperature_c)}°C` : null,
+                sgmWeather?.wind_kph != null ? `${Math.round(sgmWeather.wind_kph)} km/h wind` : null,
+              ]
+                .filter(Boolean)
+                .join(' · ') || 'Match details unavailable'}
+            </p>
+          )}
           {mode === 'cgm' && selectedEventIds.size > 0 && (
             <div className="chip-row">
               {Array.from(selectedEventIds).map((eventId) => {
@@ -213,19 +303,24 @@ export function BuilderWorkspace({
             <h2>{marketLabel(selectedMarket)} options</h2>
             <span>{candidateQuery.isFetching ? 'Loading' : `${visibleCandidates.length} selections`}</span>
           </div>
+          {notice ? <p className="builder-notice" role="status">{notice}</p> : null}
           {visibleCandidates.length === 0 && !candidateQuery.isFetching ? (
             <EmptyState title="No eligible legs" body="Change agency, match, market, or metric filters." />
           ) : displayMode === 'row' ? (
-            <div className="candidate-list">
-              {rowCandidates.map((selection) => (
-                <CandidateRow
-                  key={`${selection.selection_id}-${selection.bookmaker}`}
-                  selection={selection}
-                  selected={selectedSelectionIds.has(selection.selection_id)}
-                  onToggle={() => toggleLeg(selection)}
-                  disabled={selection.decimal_price == null || (mode === 'sgm' && !selection.sgm_eligible)}
-                />
-              ))}
+            <div className="candidate-table">
+              <CandidateHeader sortField={sortField} descending={descending} onSort={handleSort} />
+              <div className="candidate-list">
+                {rowCandidates.map((selection) => (
+                  <CandidateRow
+                    key={`${selection.selection_id}-${selection.bookmaker}`}
+                    selection={selection}
+                    selected={selectedSelectionIds.has(selection.selection_id)}
+                    onToggle={() => toggleLeg(selection)}
+                    onContextMenu={(event) => openContextMenu(event, selection)}
+                    disabled={selection.decimal_price == null || (mode === 'sgm' && !selection.sgm_eligible)}
+                  />
+                ))}
+              </div>
             </div>
           ) : (
             <div className="candidate-grid">
@@ -243,6 +338,7 @@ export function BuilderWorkspace({
                         className={selectedSelectionIds.has(selection.selection_id) ? 'is-selected' : ''}
                         disabled={selection.decimal_price == null || (mode === 'sgm' && !selection.sgm_eligible)}
                         onClick={() => toggleLeg(selection)}
+                        onContextMenu={(event) => openContextMenu(event, selection)}
                       >
                         <span>{selectionTypeLabel(selection.selection_type)} {formatPrice(selection.decimal_price)}</span>
                         <b>{selection.line_value ?? '-'}</b>
@@ -267,7 +363,145 @@ export function BuilderWorkspace({
         onClear={mode === 'sgm' ? clearSgm : clearCgm}
         onRemove={mode === 'sgm' ? removeSgmLeg : removeCgmLeg}
       />
+
+      {contextMenu ? (
+        <CandidateContextMenu
+          x={contextMenu.x}
+          y={contextMenu.y}
+          selection={contextMenu.selection}
+          onViewPlayer={() => {
+            viewPlayerStat(contextMenu.selection)
+            setContextMenu(null)
+          }}
+          onCompareAgencies={() => {
+            setPriceDialogSelection(contextMenu.selection)
+            setContextMenu(null)
+          }}
+        />
+      ) : null}
+
+      {priceDialogSelection ? (
+        <AgencyPriceDialog
+          settings={settings}
+          selection={priceDialogSelection}
+          onClose={() => setPriceDialogSelection(null)}
+        />
+      ) : null}
     </main>
+  )
+}
+
+function CandidateHeader({
+  sortField,
+  descending,
+  onSort,
+}: {
+  sortField: SortField
+  descending: boolean
+  onSort: (field: SortField) => void
+}) {
+  const columns: { label: string; field: SortField; numeric: boolean }[] = [
+    { label: 'Player', field: 'player', numeric: false },
+    { label: 'Line', field: 'line', numeric: true },
+    { label: 'Price', field: 'price', numeric: true },
+    { label: 'L10', field: 'diff_last_10', numeric: true },
+    { label: 'Szn', field: 'diff_2025', numeric: true },
+    { label: 'NB', field: 'next_best', numeric: true },
+  ]
+  return (
+    <div className="candidate-head-row">
+      {columns.map((column) => {
+        const active = sortField === column.field
+        return (
+          <button
+            key={column.field}
+            type="button"
+            className={clsx('candidate-head-cell', column.numeric && 'col-num', active && 'is-active')}
+            onClick={() => onSort(column.field)}
+            aria-sort={active ? (descending ? 'descending' : 'ascending') : 'none'}
+          >
+            {column.label}
+            {active ? (descending ? <ArrowDown size={12} /> : <ArrowUp size={12} />) : null}
+          </button>
+        )
+      })}
+    </div>
+  )
+}
+
+function CandidateContextMenu({
+  x,
+  y,
+  selection,
+  onViewPlayer,
+  onCompareAgencies,
+}: {
+  x: number
+  y: number
+  selection: OddsSearchResult
+  onViewPlayer: () => void
+  onCompareAgencies: () => void
+}) {
+  const left = Math.min(x, window.innerWidth - 240)
+  const top = Math.min(y, window.innerHeight - 120)
+  return (
+    <div className="context-menu" style={{ left, top }} role="menu" onClick={(event) => event.stopPropagation()}>
+      <button type="button" role="menuitem" onClick={onViewPlayer} disabled={selection.player == null}>
+        <LineChart size={15} /> View in Player tab
+      </button>
+      <button type="button" role="menuitem" onClick={onCompareAgencies}>
+        <BarChart3 size={15} /> Compare agency prices
+      </button>
+    </div>
+  )
+}
+
+function AgencyPriceDialog({
+  settings,
+  selection,
+  onClose,
+}: {
+  settings: ClientSettings
+  selection: OddsSearchResult
+  onClose: () => void
+}) {
+  const pricesQuery = useSelectionAgencyPrices(settings, selection)
+  const rows = pricesQuery.data ?? []
+  const bestPrice = rows[0]?.decimal_price ?? null
+  return (
+    <div className="modal-overlay" onClick={onClose}>
+      <div className="modal" role="dialog" aria-modal="true" onClick={(event) => event.stopPropagation()}>
+        <div className="modal-head">
+          <div>
+            <strong>{selection.player?.full_name ?? selection.label}</strong>
+            <span>{marketLabel(selection.market_type_code)} · {lineWithSideLabel(selection)} · {shortMatchLabel(selection.match_name)}</span>
+          </div>
+          <button type="button" className="modal-close" onClick={onClose} aria-label="Close">
+            <X size={16} />
+          </button>
+        </div>
+        {pricesQuery.isLoading ? (
+          <p className="modal-status">Loading agency prices…</p>
+        ) : pricesQuery.error ? (
+          <ErrorBanner message={pricesQuery.error instanceof Error ? pricesQuery.error.message : 'Failed to load agency prices.'} />
+        ) : rows.length === 0 ? (
+          <EmptyState title="No prices" body="No agency currently lists this exact selection." />
+        ) : (
+          <div className="agency-price-list">
+            {rows.map((row) => {
+              const isBest = row.decimal_price != null && row.decimal_price === bestPrice
+              return (
+                <div className={clsx('agency-price-row', isBest && 'is-best')} key={`${row.bookmaker}-${row.selection_id}`}>
+                  <span>{bookmakerLabel(row.bookmaker)}</span>
+                  <b className="tabular">{formatPrice(row.decimal_price)}</b>
+                  {isBest ? <small className="agency-best">Best</small> : <small>{formatSigned(row.next_best_prob_diff)}</small>}
+                </div>
+              )
+            })}
+          </div>
+        )}
+      </div>
+    </div>
   )
 }
 
@@ -276,26 +510,45 @@ function CandidateRow({
   selected,
   disabled,
   onToggle,
+  onContextMenu,
 }: {
   selection: OddsSearchResult
   selected: boolean
   disabled: boolean
   onToggle: () => void
+  onContextMenu: (event: React.MouseEvent) => void
 }) {
   return (
-    <div className="candidate-row">
+    <div
+      className={clsx('candidate-row', selected && 'is-selected', disabled && 'is-disabled')}
+      role="button"
+      tabIndex={disabled ? -1 : 0}
+      aria-pressed={selected}
+      aria-disabled={disabled}
+      title={disabled ? 'Not available for this builder' : selected ? 'Click to remove from draft' : 'Click to add to draft'}
+      onClick={() => {
+        if (!disabled) onToggle()
+      }}
+      onContextMenu={onContextMenu}
+      onKeyDown={(event) => {
+        if (!disabled && (event.key === 'Enter' || event.key === ' ')) {
+          event.preventDefault()
+          onToggle()
+        }
+      }}
+    >
       <div className="candidate-primary">
-        <strong>{selection.player?.full_name ?? selection.label}</strong>
+        <strong>
+          {selected ? <Check size={13} className="candidate-check" /> : null}
+          {selection.player?.full_name ?? selection.label}
+        </strong>
         <span>{marketLabel(selection.market_type_code)} | {shortMatchLabel(selection.match_name)}</span>
       </div>
-      <span>{selectionTypeLabel(selection.selection_type)} {selection.line_value ?? ''}</span>
-      <b className="tabular">{formatPrice(selection.decimal_price)}</b>
-      <span className={(selection.diff_last_10 ?? -1) >= 0 ? 'delta delta--good' : 'delta delta--bad'}>{formatSigned(selection.diff_last_10)}</span>
-      <span className={(selection.next_best_prob_diff ?? -1) >= 0 ? 'delta delta--good' : 'delta delta--bad'}>{formatSigned(selection.next_best_prob_diff)}</span>
-      <Button variant={selected ? 'primary' : 'secondary'} disabled={disabled} onClick={onToggle}>
-        {selected ? <Check size={15} /> : null}
-        {selected ? 'Selected' : 'Add'}
-      </Button>
+      <span className="col-num">{lineWithSideLabel(selection)}</span>
+      <b className="col-num tabular">{formatPrice(selection.decimal_price)}</b>
+      <span className={clsx('col-num delta', (selection.diff_last_10 ?? -1) >= 0 ? 'delta--good' : 'delta--bad')}>{formatSigned(selection.diff_last_10)}</span>
+      <span className={clsx('col-num delta', (selection.diff_2025 ?? -1) >= 0 ? 'delta--good' : 'delta--bad')}>{formatSigned(selection.diff_2025)}</span>
+      <span className={clsx('col-num delta', (selection.next_best_prob_diff ?? -1) >= 0 ? 'delta--good' : 'delta--bad')}>{formatSigned(selection.next_best_prob_diff)}</span>
     </div>
   )
 }
@@ -357,14 +610,67 @@ function BuilderPanel({
         {isComparing ? 'Comparing' : 'Compare agencies'}
       </Button>
       <div className="quote-results">
-        {(mode === 'sgm' ? sgmResults : cgmResults).map((result) => (
-          <div className="quote-row" key={'quote_id' in result ? result.quote_id : result.bookmaker}>
-            <span>{bookmakerLabel(result.bookmaker)}</span>
-            <b>{formatPrice(result.quoted_price)}</b>
-            {'adjustment_factor' in result ? <small>{result.from_cache ? 'cache' : 'live'} | x{result.adjustment_factor.toFixed(3)}</small> : null}
+        {mode === 'sgm'
+          ? sgmResults.map((result, index) => (
+              <SgmComparisonCard key={result.quote_id} result={result} rank={index + 1} />
+            ))
+          : cgmResults.map((result, index) => (
+              <CgmComparisonCard key={result.bookmaker} result={result} rank={index + 1} />
+            ))}
+      </div>
+    </aside>
+  )
+}
+
+function SgmComparisonCard({ result, rank }: { result: SgmAgencyComparison; rank: number }) {
+  return (
+    <div className={clsx('comparison-card', rank === 1 && 'comparison-card--best')}>
+      <div className="comparison-head">
+        <div>
+          <strong>#{rank} {bookmakerLabel(result.bookmaker)}</strong>
+          <span>{result.legs.length} legs priced</span>
+        </div>
+        <b className="comparison-price tabular">{formatPrice(result.quoted_price)}</b>
+      </div>
+      <div className="comparison-metrics">
+        <StatPill label="Local" value={formatPrice(result.unadjusted_price)} />
+        <StatPill label="Factor" value={result.adjustment_factor.toFixed(3)} />
+        <StatPill label="Cache" value={result.from_cache ? 'Yes' : 'No'} />
+      </div>
+      <div className="comparison-legs">
+        {result.legs.map((leg) => (
+          <div className="comparison-leg" key={leg.selection_id}>
+            <span>{leg.label}</span>
+            <b className="tabular">{formatPrice(leg.base_price)}</b>
           </div>
         ))}
       </div>
-    </aside>
+      <small className="comparison-foot">Quoted {formatDateTime(result.quoted_at)}</small>
+    </div>
+  )
+}
+
+function CgmComparisonCard({ result, rank }: { result: CgmAgencyComparison; rank: number }) {
+  return (
+    <div className={clsx('comparison-card', rank === 1 && 'comparison-card--best')}>
+      <div className="comparison-head">
+        <div>
+          <strong>#{rank} {bookmakerLabel(result.bookmaker)}</strong>
+          <span>{result.selection_count} legs priced</span>
+        </div>
+        <b className="comparison-price tabular">{formatPrice(result.quoted_price)}</b>
+      </div>
+      <div className="comparison-legs">
+        {result.legs.map((leg) => (
+          <div className="comparison-leg comparison-leg--stacked" key={leg.selection_id}>
+            <div>
+              <span>{leg.label}</span>
+              <small>{shortMatchLabel(leg.match_name)}</small>
+            </div>
+            <b className="tabular">{formatPrice(leg.base_price)}</b>
+          </div>
+        ))}
+      </div>
+    </div>
   )
 }

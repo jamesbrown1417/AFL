@@ -1,6 +1,6 @@
 import { keepPreviousData, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { api, type ClientSettings } from './client'
-import type { MetricFilters, OddsFilters, OddsQuery, PlayerStatsFilters } from './types'
+import type { MetricFilters, OddsFilters, OddsQuery, OddsSearchResult, PlayerStatsFilters } from './types'
 
 export const queryKeys = {
   health: (settings: ClientSettings) => ['health', settings] as const,
@@ -90,6 +90,38 @@ export function useBuilderOdds(
     queryFn: () => api.odds(settings, query).then((rows) => rows.filter((row) => row.market_type_code.startsWith('player_'))),
     enabled: enabled && Boolean(bookmaker),
     placeholderData: keepPreviousData,
+    retry: 1,
+  })
+}
+
+export function useSelectionAgencyPrices(settings: ClientSettings, selection: OddsSearchResult | null) {
+  return useQuery({
+    queryKey: ['selection-agency-prices', settings, selection?.event_id ?? null, selection?.market_type_code ?? null, selection?.player?.id ?? null, selection?.selection_type ?? null, selection?.line_value ?? null] as const,
+    queryFn: () => {
+      const target = selection as OddsSearchResult
+      const query: OddsQuery = {
+        scope: 'player',
+        event_id: [target.event_id],
+        market_type: target.market_type_code,
+        include_player_id: target.player ? [target.player.id] : [],
+        selection_type: target.selection_type,
+        sort_by: 'price',
+        sort_dir: 'desc',
+        limit: 200,
+      }
+      return api.odds(settings, query).then((rows) =>
+        rows
+          .filter(
+            (row) =>
+              row.market_type_code === target.market_type_code &&
+              row.selection_type === target.selection_type &&
+              (row.line_value ?? null) === (target.line_value ?? null),
+          )
+          .toSorted((a, b) => (b.decimal_price ?? -Infinity) - (a.decimal_price ?? -Infinity)),
+      )
+    },
+    enabled: selection != null,
+    staleTime: 30_000,
     retry: 1,
   })
 }

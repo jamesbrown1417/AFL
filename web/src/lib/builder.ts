@@ -108,6 +108,21 @@ export function combinedBasePrice(legs: DraftLeg[]) {
   return legs.reduce((price, leg) => price * leg.base_price, legs.length ? 1 : 0)
 }
 
+const marketStatCodes: Record<string, string> = {
+  player_disposals: 'disposals',
+  player_fantasy_points: 'fantasy_points',
+  player_tackles: 'tackles',
+  player_marks: 'marks',
+  player_goals: 'goals',
+  player_kicks: 'kicks',
+  player_handballs: 'handballs',
+  player_hitouts: 'hitouts',
+}
+
+export function marketTypeToStatCode(marketTypeCode: string): string | null {
+  return marketStatCodes[marketTypeCode] ?? null
+}
+
 function sortValue(selection: OddsSearchResult, field: SortField) {
   switch (field) {
     case 'player':
