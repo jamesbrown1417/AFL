@@ -29,6 +29,7 @@ class Settings(BaseSettings):
     scraped_odds_dir: Path = Field(default=REPO_ROOT / "Data" / "scraped_odds")
     processed_odds_dir: Path = Field(default=REPO_ROOT / "Data" / "processed_odds")
     fixture_path: Path = Field(default=REPO_ROOT / "Data" / "current_fixture.csv")
+    arbs_path: Path = Field(default=REPO_ROOT / "Data" / "all_arbs.csv")
     dvp_data_path: Path = Field(default=REPO_ROOT / "DVP" / "dvp_data.csv")
     player_positions_path: Path = Field(default=REPO_ROOT / "DVP" / "AFL-Players-Positions-2026.csv")
     runtime_dir: Path = Field(default=REPO_ROOT / "runtime")

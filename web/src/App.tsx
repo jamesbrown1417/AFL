@@ -5,6 +5,7 @@ import { useAppStore, useClientSettings } from './store/useAppStore'
 import './App.css'
 
 const OddsWorkspace = lazy(() => import('./features/OddsWorkspace').then((module) => ({ default: module.OddsWorkspace })))
+const ArbWorkspace = lazy(() => import('./features/ArbWorkspace').then((module) => ({ default: module.ArbWorkspace })))
 const PlayerLab = lazy(() => import('./features/PlayerLab').then((module) => ({ default: module.PlayerLab })))
 const BuilderWorkspace = lazy(() => import('./features/BuilderWorkspace').then((module) => ({ default: module.BuilderWorkspace })))
 const SettingsView = lazy(() => import('./features/SettingsView').then((module) => ({ default: module.SettingsView })))
@@ -26,7 +27,7 @@ function App() {
 
   useEffect(() => {
     if (activeView === 'sgm' || activeView === 'cgm') return
-    if (!['player', 'odds', 'settings'].includes(activeView)) setActiveView('odds')
+    if (!['player', 'odds', 'arbs', 'settings'].includes(activeView)) setActiveView('odds')
   }, [activeView, setActiveView])
 
   const bookmakerRows = bookmakers.data ?? []
@@ -36,6 +37,7 @@ function App() {
     <AppShell health={health.data} dataStatus={dataStatus.data}>
       <Suspense fallback={<div className="screen-loading">Loading workspace</div>}>
         {activeView === 'odds' ? <OddsWorkspace bookmakers={bookmakerRows} events={eventRows} /> : null}
+        {activeView === 'arbs' ? <ArbWorkspace bookmakers={bookmakerRows} /> : null}
         {activeView === 'player' ? <PlayerLab /> : null}
         {activeView === 'sgm' ? <BuilderWorkspace mode="sgm" bookmakers={bookmakerRows} events={eventRows} /> : null}
         {activeView === 'cgm' ? <BuilderWorkspace mode="cgm" bookmakers={bookmakerRows} events={eventRows} /> : null}

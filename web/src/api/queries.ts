@@ -1,11 +1,12 @@
 import { keepPreviousData, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { api, type ClientSettings } from './client'
-import type { MetricFilters, OddsFilters, OddsQuery, OddsSearchResult, PlayerStatsFilters } from './types'
+import type { ArbFilters, ArbQuery, MetricFilters, OddsFilters, OddsQuery, OddsSearchResult, PlayerStatsFilters } from './types'
 
 export const queryKeys = {
   health: (settings: ClientSettings) => ['health', settings] as const,
   dataStatus: (settings: ClientSettings) => ['data-status', settings] as const,
   bookmakers: (settings: ClientSettings) => ['bookmakers', settings] as const,
+  arbs: (settings: ClientSettings, query: ArbQuery) => ['arbs', settings, query] as const,
   events: (settings: ClientSettings, bookmaker?: string | null) => ['events', settings, bookmaker ?? 'all'] as const,
   odds: (settings: ClientSettings, query: OddsQuery) => ['odds', settings, query] as const,
   statPlayers: (settings: ClientSettings, query: string, filters: PlayerStatsFilters) => ['stat-players', settings, query, filters] as const,
@@ -37,6 +38,16 @@ export function useBookmakers(settings: ClientSettings) {
     queryKey: queryKeys.bookmakers(settings),
     queryFn: () => api.bookmakers(settings),
     staleTime: 5 * 60_000,
+    retry: 1,
+  })
+}
+
+export function useArbs(settings: ClientSettings, filters: ArbFilters, limit = 250) {
+  const query = arbFiltersToQuery(filters, limit)
+  return useQuery({
+    queryKey: queryKeys.arbs(settings, query),
+    queryFn: () => api.arbs(settings, query),
+    placeholderData: keepPreviousData,
     retry: 1,
   })
 }
@@ -176,6 +187,18 @@ export function useCompareCgm(settings: ClientSettings) {
   return useMutation({
     mutationFn: ({ selectionIds }: { selectionIds: number[] }) => api.compareCgm(settings, selectionIds),
   })
+}
+
+export function arbFiltersToQuery(filters: ArbFilters, limit = 250): ArbQuery {
+  return {
+    q: filters.query.trim() || null,
+    market: filters.markets,
+    agency: filters.agencies,
+    min_margin: numberOrNull(filters.minMargin),
+    max_margin: numberOrNull(filters.maxMargin),
+    limit,
+    offset: 0,
+  }
 }
 
 export function oddsFiltersToQuery(filters: OddsFilters, limit = 100): OddsQuery {

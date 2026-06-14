@@ -32,8 +32,15 @@ password = os.getenv('BET365PW')
 # Login bypass switch: when enabled, skip the Bet365 login flow entirely and
 # scrape public (logged-out) markets. The logged-out shell is currently not
 # hydrating AFL/player markets reliably, so production defaults to logging in.
-# Override with env BET365_BYPASS_LOGIN=yes only when needed.
-BYPASS_LOGIN = os.getenv("BET365_BYPASS_LOGIN", "no").strip().lower() in ("1", "true", "yes", "on")
+# Override with env BET365_BYPASS_LOGIN=yes/no when needed.
+def env_bool(name, default=False):
+    raw = os.getenv(name)
+    if raw is None:
+        return default
+    return raw.strip().lower() in {"1", "true", "t", "yes", "y", "on"}
+
+
+BYPASS_LOGIN = env_bool("BET365_BYPASS_LOGIN", default=True)
 
 # Validate credentials early with a clear error (only needed when actually logging in)
 if not BYPASS_LOGIN and (not username or not password):
@@ -116,8 +123,24 @@ async def wait_for_player_container_html(driver, timeout=30):
             )
             last_html = await elem.get_attribute("outerHTML")
             has_header = "cm-MatchBettingReactHeader" in last_html
-            has_market = "gl-MarketGroupButton_Text" in last_html
-            has_player_rows = "bbl-BetBuilderParticipantLabel" in last_html
+            has_market = any(
+                token in last_html
+                for token in (
+                    "gl-MarketGroupButton_Text",
+                    "cm-MarketGroupWithIconsButton_Text",
+                    "srb-HScrollPlaceColumnMarket",
+                    "gl-MarketGroupPod",
+                )
+            )
+            has_player_rows = any(
+                token in last_html
+                for token in (
+                    "bbl-BetBuilderParticipantLabel",
+                    "srb-ParticipantLabel",
+                    "srb-ParticipantLabelWithTeam",
+                    "gl-ParticipantCenteredStacked",
+                )
+            )
             if len(last_html) > 1000 and has_header and (has_market or has_player_rows):
                 return elem, last_html
         except Exception as exc:
@@ -138,15 +161,110 @@ async def save_player_container_html(driver, path):
     return html
 
 
+async def save_player_disposals_html(driver, path, timeout=20):
+    """Save Player-tab disposals HTML only after line and milestone markets exist."""
+    loop = asyncio.get_event_loop()
+    deadline = loop.time() + timeout
+    last_html = ""
+    last_metrics = {}
+
+    while loop.time() < deadline:
+        elem, last_html = await wait_for_player_container_html(driver, timeout=5)
+        has_total_lines = "Total Player Disposals" in last_html
+        has_milestones = (
+            "Player Disposals Milestones" in last_html
+            or "srb-HScrollPlaceColumnMarket" in last_html
+            or "bbl-FilteredMarketGroupWithHScrollerContainer_Wide" in last_html
+        )
+        last_metrics = await driver.execute_script(
+            """
+            const pods = Array.from(document.querySelectorAll('.gl-MarketGroupPod'));
+            const totalPod = pods.find((pod) => (pod.innerText || '').includes('Total Player Disposals'));
+            if (!totalPod) {
+                return { totalNames: 0, totalPrices: 0, totalHasShowMore: false };
+            }
+            const totalNames = totalPod.querySelectorAll(
+                '.srb-ParticipantLabelWithTeam_Name, .srb-ParticipantLabel_Name'
+            ).length;
+            const totalPrices = totalPod.querySelectorAll('.gl-ParticipantCenteredStacked').length;
+            const totalHasShowMore = Array.from(totalPod.querySelectorAll('.msl-ShowMore_Link, .bbl-ShowMoreForHScroll, .bbl-ShowMore'))
+                .some((node) => ((node.innerText || node.textContent || '').trim().toLowerCase() === 'show more'));
+            return { totalNames, totalPrices, totalHasShowMore };
+            """
+        )
+        total_lines_complete = (
+            last_metrics.get("totalNames", 0) > 0
+            and last_metrics.get("totalPrices", 0) >= last_metrics.get("totalNames", 0) * 2
+            and not last_metrics.get("totalHasShowMore", True)
+        )
+        if has_total_lines and has_milestones and total_lines_complete:
+            Path(path).write_text(last_html)
+            print(f"  Saved: {path} ({len(last_html)} bytes)")
+            return last_html
+        await driver.sleep(1)
+
+    raise RuntimeError(
+        "Player disposals HTML did not contain both milestone and Total Player Disposals markets "
+        f"with complete line rows (last_html_bytes={len(last_html)}; metrics={last_metrics})"
+    )
+
+
 async def click_market_group(driver, label, timeout=10):
     label_lower = label.lower()
-    group_xpath = (
-        "//div[contains(@class, 'gl-MarketGroupPod') "
-        f"and .//div[contains(@class, 'gl-MarketGroupButton_Text') and {XPATH_LOWER_TEXT}='{label_lower}']]"
+    has_content_before_click = await driver.execute_script(
+        """
+        const label = arguments[0].toLowerCase();
+        const pods = Array.from(document.querySelectorAll('.gl-MarketGroupPod'));
+        return pods.some((pod) => {
+            const text = (pod.innerText || '').toLowerCase();
+            return text.includes(label) && Boolean(
+                pod.querySelector('.bbl-FilteredMarketGroupWithHScrollerContainer_Wide') ||
+                pod.querySelector('.bbl-BetBuilderMarketGroupContainer') ||
+                pod.querySelector('.srb-HScrollPlaceColumnMarket') ||
+                pod.querySelector('.gl-ParticipantCenteredStacked')
+            );
+        });
+        """,
+        label_lower,
     )
-    button_xpath = group_xpath + "//div[contains(@class, 'gl-MarketGroupButton')]"
+    if has_content_before_click:
+        print(f"  '{label}' market content already available")
+        return
 
-    button = await driver.find_element(By.XPATH, button_xpath, timeout=timeout)
+    button_xpath = (
+        "//div[contains(@class, 'gl-MarketGroupPod') "
+        "and .//*[("
+        "contains(@class, 'gl-MarketGroupButton_Text') or "
+        "contains(@class, 'cm-MarketGroupWithIconsButton_Text')"
+        f") and contains({XPATH_LOWER_TEXT}, '{label_lower}')]]"
+        "//*[contains(@class, 'gl-MarketGroupButton') or "
+        "contains(@class, 'cm-MarketGroupWithIconsButton')]"
+    )
+
+    try:
+        button = await driver.find_element(By.XPATH, button_xpath, timeout=timeout)
+    except Exception:
+        already_available = await driver.execute_script(
+            """
+            const label = arguments[0].toLowerCase();
+            const pods = Array.from(document.querySelectorAll('.gl-MarketGroupPod'));
+            return pods.some((pod) => {
+                const text = (pod.innerText || '').toLowerCase();
+                return text.includes(label) && Boolean(
+                    pod.querySelector('.bbl-FilteredMarketGroupWithHScrollerContainer_Wide') ||
+                    pod.querySelector('.bbl-BetBuilderMarketGroupContainer') ||
+                    pod.querySelector('.srb-HScrollPlaceColumnMarket') ||
+                    pod.querySelector('.gl-ParticipantCenteredStacked')
+                );
+            });
+            """,
+            label_lower,
+        )
+        if already_available:
+            print(f"  '{label}' market content already available")
+            return
+        raise
+
     await driver.execute_script("arguments[0].scrollIntoView(true);", button)
     await driver.execute_script("window.scrollBy(0, -150)")
     await driver.execute_script("arguments[0].click();", button)
@@ -161,16 +279,18 @@ async def click_market_group(driver, label, timeout=10):
             const pods = Array.from(document.querySelectorAll('.gl-MarketGroupPod'));
             const pod = pods.find((node) => {
                 const text = (node.innerText || '').toLowerCase();
-                return text.split('\\n').some((line) => line.trim() === label);
+                return text.includes(label);
             });
             if (!pod) return false;
             const hasOpenClass = pod.className.includes('gl-MarketGroup_Open') ||
                 Boolean(pod.querySelector('.gl-MarketGroup_Open'));
             const hasMarketContent = Boolean(
                 pod.querySelector('.bbl-FilteredMarketGroupWithHScrollerContainer_Wide') ||
-                pod.querySelector('.bbl-BetBuilderMarketGroupContainer')
+                pod.querySelector('.bbl-BetBuilderMarketGroupContainer') ||
+                pod.querySelector('.srb-HScrollPlaceColumnMarket') ||
+                pod.querySelector('.gl-ParticipantCenteredStacked')
             );
-            return hasOpenClass && hasMarketContent;
+            return hasMarketContent || hasOpenClass;
             """,
             label_lower,
         )
@@ -179,6 +299,54 @@ async def click_market_group(driver, label, timeout=10):
         await driver.sleep(0.5)
 
     raise RuntimeError(f"Timed out waiting for '{label}' market group to open")
+
+
+async def click_market_nav(driver, label, timeout=10):
+    label_lower = label.lower()
+    nav_xpath = (
+        "//div[contains(@class, 'sph-MarketGroupNavBarButton') "
+        f"and .//div[contains(@class, 'sph-MarketGroupNavBarButton_Content') and {XPATH_LOWER_TEXT}='{label_lower}']]"
+    )
+
+    selected = await driver.execute_script(
+        """
+        const label = arguments[0].toLowerCase();
+        const buttons = Array.from(document.querySelectorAll('.sph-MarketGroupNavBarButton'));
+        return buttons.some((button) => {
+            const text = (button.innerText || '').trim().toLowerCase();
+            return text === label && button.className.includes('sph-MarketGroupNavBarButton_Selected');
+        });
+        """,
+        label_lower,
+    )
+    if selected:
+        print(f"  '{label}' tab already selected")
+        return
+
+    nav_button = await driver.find_element(By.XPATH, nav_xpath, timeout=timeout)
+    await driver.execute_script("arguments[0].scrollIntoView({block: 'center', inline: 'center'});", nav_button)
+    await driver.execute_script("arguments[0].click();", nav_button)
+    print(f"  Clicked '{label}' tab")
+
+    loop = asyncio.get_event_loop()
+    deadline = loop.time() + timeout
+    while loop.time() < deadline:
+        selected = await driver.execute_script(
+            """
+            const label = arguments[0].toLowerCase();
+            const buttons = Array.from(document.querySelectorAll('.sph-MarketGroupNavBarButton'));
+            return buttons.some((button) => {
+                const text = (button.innerText || '').trim().toLowerCase();
+                return text === label && button.className.includes('sph-MarketGroupNavBarButton_Selected');
+            });
+            """,
+            label_lower,
+        )
+        if selected:
+            return
+        await driver.sleep(0.5)
+
+    raise RuntimeError(f"Timed out waiting for '{label}' tab to become selected")
 
 
 async def dump_debug_html(driver, path):
@@ -372,33 +540,92 @@ async def scrape_player_pages(driver, player_urls):
     failures = []
 
     async def safe_click_show_more_all():
-        # Click horizontal carousels "Show more" buttons
-        try:
-            buttons = await driver.find_elements(By.XPATH, "//div[contains(@class, 'bbl-ShowMoreForHScroll ') and contains(text(), 'Show more')]")
-            for b in buttons:
-                try:
-                    await driver.execute_script("arguments[0].scrollIntoView(true);", b)
-                    await driver.execute_script("window.scrollBy(0, -150)")
-                    await b.click()
-                    await driver.sleep(1)
-                except Exception:
-                    pass
-        except Exception:
-            pass
+        total_clicked = 0
+        idle_passes = 0
 
-        # Click vertical section "Show more" buttons (e.g., specials)
-        try:
-            v_buttons = await driver.find_elements(By.XPATH, "//div[contains(@class, 'bbl-ShowMore ') and text()='Show more']")
-            for vb in v_buttons:
+        for _ in range(50):
+            result = await driver.execute_script(
+                """
+                const candidates = Array.from(document.querySelectorAll(
+                    '.bbl-ShowMoreForHScroll, .bbl-ShowMore, .msl-ShowMore_Link'
+                ));
+                const buttons = candidates.filter((node) => {
+                    const text = (node.innerText || node.textContent || '').trim().toLowerCase();
+                    return text === 'show more';
+                });
+                if (buttons.length === 0) {
+                    return { clicked: false, remaining: 0 };
+                }
+                const button = buttons[0];
+                const clickTarget = button.closest('.msl-ShowMore') || button;
+                button.scrollIntoView({ block: 'center', inline: 'center' });
+                clickTarget.click();
+                return { clicked: true, remaining: buttons.length - 1 };
+                """
+            )
+
+            if result and result.get("clicked"):
+                total_clicked += 1
+                idle_passes = 0
+                await driver.sleep(2)
+                continue
+
+            if idle_passes >= 4:
+                break
+
+            idle_passes += 1
+            await driver.execute_script("window.scrollBy(0, Math.floor(window.innerHeight * 0.85));")
+            await driver.sleep(1.25)
+
+        if total_clicked > 0:
+            print(f"  Clicked {total_clicked} show-more control(s)")
+
+        remaining = await driver.execute_script(
+            """
+            return Array.from(document.querySelectorAll(
+                '.bbl-ShowMoreForHScroll, .bbl-ShowMore, .msl-ShowMore_Link'
+            )).filter((node) => {
+                const text = (node.innerText || node.textContent || '').trim().toLowerCase();
+                return text === 'show more';
+            }).length;
+            """
+        )
+        if remaining:
+            print(f"  {remaining} show-more control(s) still present after expansion pass")
+
+    async def scroll_page_to_load_markets():
+        for _ in range(4):
+            await driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+            await driver.sleep(0.8)
+        await driver.execute_script("window.scrollTo(0, 0);")
+        await driver.sleep(0.5)
+
+    async def load_usable_player_page(url):
+        last_error = None
+        event_base_url = url.split("/I")[0].rstrip("/") + "/"
+        candidate_urls = [url, event_base_url, url]
+
+        for attempt, candidate_url in enumerate(candidate_urls, start=1):
+            if attempt == 1 and BYPASS_LOGIN:
+                await driver.get("https://www.bet365.com.au/")
+                await driver.sleep(4)
+
+            await driver.get(candidate_url)
+            await driver.sleep(2 + attempt)
+            try:
+                return await wait_for_player_container_html(driver, timeout=25)
+            except Exception as exc:
+                last_error = exc
+                print(
+                    f"  Player page load attempt {attempt} failed: "
+                    f"{describe_exception(exc)}; url={candidate_url}"
+                )
                 try:
-                    await driver.execute_script("arguments[0].scrollIntoView(true);", vb)
-                    await driver.execute_script("window.scrollBy(0, -150)")
-                    await vb.click()
-                    await driver.sleep(1)
+                    await driver.refresh()
                 except Exception:
                     pass
-        except Exception:
-            pass
+                await driver.sleep(3)
+        raise last_error
 
     for index, url in enumerate(player_urls, start=1):
         try:
@@ -407,22 +634,25 @@ async def scrape_player_pages(driver, player_urls):
             print(f"{'='*60}")
             print(f"URL: {url}")
 
-            await driver.get(url)
-            await driver.sleep(2)
-            await wait_for_player_container_html(driver, timeout=30)
+            await load_usable_player_page(url)
 
             # The default SGM page opens Goalscorer. Save it first, then open
-            # Disposals explicitly and save that market separately.
+            # the Player tab so player milestone and line markets are saved.
             await safe_click_show_more_all()
             await save_player_container_html(
                 driver,
                 f"Data/BET365_HTML/body_html_players_a_match_{index}.txt",
             )
 
-            await click_market_group(driver, "Disposals")
+            await click_market_nav(driver, "Player")
+            await driver.sleep(2)
+            await scroll_page_to_load_markets()
+            await click_market_group(driver, "Total Player Disposals")
             await driver.sleep(2)
             await safe_click_show_more_all()
-            await save_player_container_html(
+            await scroll_page_to_load_markets()
+            await safe_click_show_more_all()
+            await save_player_disposals_html(
                 driver,
                 f"Data/BET365_HTML/body_html_players_b_match_{index}.txt",
             )

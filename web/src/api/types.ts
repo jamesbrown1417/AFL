@@ -167,6 +167,43 @@ export interface OddsSearchResult {
   sgm_eligible: boolean
 }
 
+export interface ArbSearchResult {
+  id: string
+  match_name: string
+  market_name: string
+  player_name: string
+  player_team: string | null
+  opposition_team: string | null
+  over_line: number | null
+  under_line: number | null
+  over_price: number
+  over_agency: string
+  under_price: number
+  under_agency: string
+  margin: number
+  implied_probability_sum: number
+  status: 'Arb' | 'Near' | string
+  source_modified_at: string | null
+}
+
+export interface ArbQuery {
+  q?: string | null
+  market?: string[]
+  agency?: string[]
+  min_margin?: number | null
+  max_margin?: number | null
+  limit?: number
+  offset?: number
+}
+
+export interface ArbFilters {
+  query: string
+  markets: string[]
+  agencies: string[]
+  minMargin: string
+  maxMargin: string
+}
+
 export interface DraftLeg {
   selection_id: number
   event_id: number

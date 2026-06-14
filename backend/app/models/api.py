@@ -208,6 +208,25 @@ class OddsSearchResult(BaseModel):
     sgm_eligible: bool
 
 
+class ArbSearchResult(BaseModel):
+    id: str
+    match_name: str
+    market_name: str
+    player_name: str
+    player_team: str | None = None
+    opposition_team: str | None = None
+    over_line: float | None = None
+    under_line: float | None = None
+    over_price: float
+    over_agency: str
+    under_price: float
+    under_agency: str
+    margin: float
+    implied_probability_sum: float
+    status: str
+    source_modified_at: datetime | None = None
+
+
 class PropSearchResult(BaseModel):
     selection_id: int
     event_id: int

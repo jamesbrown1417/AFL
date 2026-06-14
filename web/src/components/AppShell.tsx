@@ -1,4 +1,4 @@
-import { Activity, BarChart3, Database, GitCompareArrows, RefreshCw, Settings, SlidersHorizontal, Trophy, UserRound } from 'lucide-react'
+import { Activity, BarChart3, Database, GitCompareArrows, Percent, RefreshCw, Settings, SlidersHorizontal, Trophy, UserRound } from 'lucide-react'
 import clsx from 'clsx'
 import { useQueryClient } from '@tanstack/react-query'
 import type { ReactNode } from 'react'
@@ -10,6 +10,7 @@ import { IconButton } from './ui'
 const nav = [
   { key: 'player', label: 'Player', icon: UserRound },
   { key: 'odds', label: 'Odds', icon: BarChart3 },
+  { key: 'arbs', label: 'Arbs', icon: Percent },
   { key: 'sgm', label: 'SGM', icon: Trophy },
   { key: 'cgm', label: 'CGM', icon: GitCompareArrows },
   { key: 'settings', label: 'Settings', icon: Settings },

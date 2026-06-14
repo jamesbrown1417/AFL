@@ -1,5 +1,7 @@
 import type {
   ApiErrorEnvelope,
+  ArbQuery,
+  ArbSearchResult,
   BookmakerSummary,
   CgmCompareResponse,
   DataStatusResponse,
@@ -97,6 +99,8 @@ export const api = {
   health: (settings: ClientSettings) => request<HealthResponse>(settings, 'health'),
   dataStatus: (settings: ClientSettings) => request<DataStatusResponse>(settings, 'data/status'),
   bookmakers: (settings: ClientSettings) => request<BookmakerSummary[]>(settings, 'bookmakers'),
+  arbs: (settings: ClientSettings, query: ArbQuery) =>
+    request<ArbSearchResult[]>(settings, 'arbs', { query }),
   events: (settings: ClientSettings, bookmaker?: string | null, q?: string | null, limit = 50) =>
     request<EventSummary[]>(settings, 'events', { query: { bookmaker, q, limit } }),
   searchPlayers: (settings: ClientSettings, q: string, limit = 50) =>

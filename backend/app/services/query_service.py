@@ -1,11 +1,13 @@
 from __future__ import annotations
 
+import csv
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
 from app.config import Settings
 from app.db.duckdb import connection, fetch_all, fetch_one
+from app.utils.hashing import sha256_text
 from app.utils.time import utc_now
 
 
@@ -1129,6 +1131,117 @@ class QueryService:
                 params,
             )
         return [self._shape_odds_result(row) for row in rows]
+
+    def search_arbs(
+        self,
+        *,
+        query: str | None,
+        markets: list[str],
+        agencies: list[str],
+        min_margin: float,
+        max_margin: float | None,
+        limit: int,
+        offset: int,
+    ) -> list[dict[str, Any]]:
+        rows = self._load_script_arbs()
+        normalized_query = (query or "").strip().lower()
+        market_set = {market.lower() for market in markets}
+        agency_set = {agency.lower() for agency in agencies}
+
+        filtered: list[dict[str, Any]] = []
+        for row in rows:
+            margin = row["margin"]
+            if margin < min_margin:
+                continue
+            if max_margin is not None and margin > max_margin:
+                continue
+            if market_set and row["market_name"].lower() not in market_set:
+                continue
+            if agency_set and row["over_agency"].lower() not in agency_set and row["under_agency"].lower() not in agency_set:
+                continue
+            if normalized_query:
+                searchable = " ".join(
+                    str(value)
+                    for value in (
+                        row["match_name"],
+                        row["market_name"],
+                        row["player_name"],
+                        row["player_team"],
+                        row["opposition_team"],
+                        row["over_agency"],
+                        row["under_agency"],
+                    )
+                    if value is not None
+                ).lower()
+                if normalized_query not in searchable:
+                    continue
+            filtered.append(row)
+
+        filtered.sort(key=lambda item: item["margin"], reverse=True)
+        return filtered[offset : offset + limit]
+
+    def _load_script_arbs(self) -> list[dict[str, Any]]:
+        path = self.settings.arbs_path
+        if not path.exists():
+            return []
+        source_modified_at = datetime.fromtimestamp(path.stat().st_mtime, timezone.utc)
+        rows: list[dict[str, Any]] = []
+        with path.open(newline="", encoding="utf-8-sig") as csv_file:
+            reader = csv.DictReader(csv_file)
+            for index, row in enumerate(reader, start=1):
+                margin = self._parse_optional_float(row.get("margin"))
+                over_price = self._parse_optional_float(row.get("over_price"))
+                under_price = self._parse_optional_float(row.get("under_price"))
+                if margin is None or over_price is None or under_price is None:
+                    continue
+                rows.append(
+                    {
+                        "id": self._arb_row_id(row, index),
+                        "match_name": row.get("match") or "",
+                        "market_name": row.get("market_name") or "",
+                        "player_name": row.get("player_name") or "",
+                        "player_team": row.get("player_team") or None,
+                        "opposition_team": row.get("opposition_team") or None,
+                        "over_line": self._parse_optional_float(row.get("over_line")),
+                        "under_line": self._parse_optional_float(row.get("under_line")),
+                        "over_price": over_price,
+                        "over_agency": row.get("over_agency") or "",
+                        "under_price": under_price,
+                        "under_agency": row.get("under_agency") or "",
+                        "margin": margin,
+                        "implied_probability_sum": (1 / over_price) + (1 / under_price),
+                        "status": "Arb" if margin > 0 else "Near",
+                        "source_modified_at": source_modified_at,
+                    }
+                )
+        return rows
+
+    @staticmethod
+    def _parse_optional_float(value: Any) -> float | None:
+        if value is None or str(value).strip() == "":
+            return None
+        try:
+            return float(value)
+        except ValueError:
+            return None
+
+    @staticmethod
+    def _arb_row_id(row: dict[str, str], index: int) -> str:
+        key = "|".join(
+            [
+                row.get("match") or "",
+                row.get("market_name") or "",
+                row.get("player_name") or "",
+                row.get("over_line") or "",
+                row.get("under_line") or "",
+                row.get("over_agency") or "",
+                row.get("under_agency") or "",
+                row.get("over_price") or "",
+                row.get("under_price") or "",
+                str(index),
+            ]
+        )
+        return sha256_text(key)
 
     def _build_odds_order_clause(self, *, sort_by: str, sort_dir: str) -> str:
         sort_column = ODDS_SORT_COLUMNS.get(sort_by, "diff_last_10")

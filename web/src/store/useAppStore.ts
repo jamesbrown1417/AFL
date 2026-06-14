@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
-import type { BuilderMode, DisplayMode, DraftLeg, MetricFilters, OddsFilters, PlayerStatsFilters, ThemeMode } from '../api/types'
+import type { ArbFilters, BuilderMode, DisplayMode, DraftLeg, MetricFilters, OddsFilters, PlayerStatsFilters, ThemeMode } from '../api/types'
 
 export const defaultOddsFilters: OddsFilters = {
   scope: 'player',
@@ -18,6 +18,14 @@ export const defaultOddsFilters: OddsFilters = {
   minNextBestProbDiff: -1,
   bestOnly: false,
   sgmOnly: false,
+}
+
+export const defaultArbFilters: ArbFilters = {
+  query: '',
+  markets: [],
+  agencies: [],
+  minMargin: '-5',
+  maxMargin: '',
 }
 
 export const defaultMetricFilters: MetricFilters = {
@@ -51,9 +59,10 @@ interface AppStore {
   authToken: string
   defaultBookmaker: string
   themeMode: ThemeMode
-  activeView: 'odds' | 'player' | 'sgm' | 'cgm' | 'settings'
+  activeView: 'odds' | 'arbs' | 'player' | 'sgm' | 'cgm' | 'settings'
   builderMode: BuilderMode
   displayMode: DisplayMode
+  arbFilters: ArbFilters
   oddsFilters: OddsFilters
   metricFilters: MetricFilters
   playerFilters: PlayerStatsFilters
@@ -66,6 +75,8 @@ interface AppStore {
   setActiveView: (view: AppStore['activeView']) => void
   setBuilderMode: (mode: BuilderMode) => void
   setDisplayMode: (mode: DisplayMode) => void
+  setArbFilters: (filters: ArbFilters) => void
+  patchArbFilters: (filters: Partial<ArbFilters>) => void
   setOddsFilters: (filters: OddsFilters) => void
   patchOddsFilters: (filters: Partial<OddsFilters>) => void
   setMetricFilters: (filters: MetricFilters) => void
@@ -90,6 +101,7 @@ export const useAppStore = create<AppStore>()(
       activeView: 'odds',
       builderMode: 'sgm',
       displayMode: 'row',
+      arbFilters: defaultArbFilters,
       oddsFilters: defaultOddsFilters,
       metricFilters: defaultMetricFilters,
       playerFilters: defaultPlayerFilters,
@@ -102,6 +114,8 @@ export const useAppStore = create<AppStore>()(
       setActiveView: (activeView) => set({ activeView }),
       setBuilderMode: (builderMode) => set({ builderMode }),
       setDisplayMode: (displayMode) => set({ displayMode }),
+      setArbFilters: (arbFilters) => set({ arbFilters }),
+      patchArbFilters: (filters) => set((state) => ({ arbFilters: { ...state.arbFilters, ...filters } })),
       setOddsFilters: (oddsFilters) => set({ oddsFilters }),
       patchOddsFilters: (filters) => set((state) => ({ oddsFilters: { ...state.oddsFilters, ...filters } })),
       setMetricFilters: (metricFilters) => set({ metricFilters }),
@@ -137,9 +151,16 @@ export const useAppStore = create<AppStore>()(
         if (!persistedState || typeof persistedState !== 'object') return persistedState
         const state = persistedState as Partial<AppStore>
         const playerFilters = state.playerFilters
-        if (!playerFilters || playerFilters.seasons.length > 0) return state
-        return {
+        const nextState = {
           ...state,
+          arbFilters: {
+            ...defaultArbFilters,
+            ...state.arbFilters,
+          },
+        }
+        if (!playerFilters || playerFilters.seasons.length > 0) return nextState
+        return {
+          ...nextState,
           playerFilters: {
             ...defaultPlayerFilters,
             ...playerFilters,
@@ -155,6 +176,7 @@ export const useAppStore = create<AppStore>()(
         activeView: state.activeView,
         builderMode: state.builderMode,
         displayMode: state.displayMode,
+        arbFilters: state.arbFilters,
         oddsFilters: state.oddsFilters,
         metricFilters: state.metricFilters,
         playerFilters: state.playerFilters,

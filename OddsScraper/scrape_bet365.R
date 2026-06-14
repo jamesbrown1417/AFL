@@ -152,125 +152,269 @@ tryCatch(get_head_to_head(), error = function(e) print("Error in get_head_to_hea
 #                                                          #
 ##%######################################################%##
 
-# Function to read in disposals html and output table
-read_bet365_disposals_html <- function(html_path) {
-    
-    # Read in the txt data as html
-    bet365 <- read_html(html_path)
-    
-    # Get match name (logged-out player pages use .cm-MatchBettingReactHeader,
-    # which reads like "AFL 11 Jun 20:30 Home v Away"; fall back to the legacy
-    # logged-in header selector when present)
+clean_bet365_player_name <- function(player_name) {
+    player_name |>
+        str_remove("^\\s*\\d+\\s+") |>
+        str_squish()
+}
+
+extract_bet365_match_name <- function(bet365) {
     bet365_match_header <-
         bet365 |>
         html_nodes(".cm-MatchBettingReactHeader") |>
         html_text2() |>
         str_squish()
 
-    # Bet365 renders the separator as either " v " or "vs"; normalise to " v "
     bet365_match_header <- str_replace_all(bet365_match_header, "\\s+vs?\\s+", " v ")
     bet365_match_name <- str_match(bet365_match_header, "\\d{1,2}:\\d{2}\\s+(.*)$")[, 2]
     bet365_match_name <- bet365_match_name[!is.na(bet365_match_name)]
 
     if (length(bet365_match_name) == 0) {
-        bet365_match_name <-
-            bet365 |>
+        bet365 |>
             html_nodes(".sph-FixturePodHeader_TeamName ") |>
             html_text() |>
             glue_collapse(sep = " v ")
     } else {
-        bet365_match_name <- bet365_match_name[1]
+        bet365_match_name[1]
     }
+}
+
+bet365_ancestor_text <- function(node, levels = 8) {
+    current <- node
+    for (i in seq_len(levels)) {
+        parent <- xml2::xml_parent(current)
+        if (inherits(parent, "xml_missing")) {
+            break
+        }
+        current <- parent
+    }
+
+    current |>
+        html_text2() |>
+        str_squish()
+}
+
+select_bet365_market_node <- function(nodes, include, exclude = character()) {
+    if (length(nodes) == 0) {
+        return(NULL)
+    }
+
+    exclude_pattern <- if (length(exclude) > 0) as.character(glue_collapse(exclude, sep = "|")) else NULL
+
+    for (level in 0:8) {
+        node_text <- map_chr(seq_along(nodes), \(index) bet365_ancestor_text(nodes[[index]], levels = level))
+        matches <- str_detect(node_text, regex(include, ignore_case = TRUE))
+
+        if (!is.null(exclude_pattern)) {
+            matches <- matches & !str_detect(node_text, regex(exclude_pattern, ignore_case = TRUE))
+        }
+
+        if (any(matches)) {
+            return(nodes[[which(matches)[1]]])
+        }
+    }
+
+    NULL
+}
+
+read_bet365_disposals_modern <- function(bet365, bet365_match_name) {
+    market_pod <-
+        bet365 |>
+        html_nodes(".gl-MarketGroupPod") |>
+        select_bet365_market_node(
+            include = "Player Disposals Milestones|Disposals Milestones",
+            exclude = c("Total Player Disposals", "Match Ups", "Most Disposals")
+        )
+
+    if (is.null(market_pod)) {
+        stop("Could not find Bet365 Player Disposals Milestones market")
+    }
+
+    player_names <-
+        market_pod |>
+        html_nodes(".srb-ParticipantLabelWithTeam_Name, .srb-ParticipantLabel_Name") |>
+        html_text2() |>
+        clean_bet365_player_name()
+
+    odds_columns <- market_pod |> html_nodes(".srb-HScrollPlaceColumnMarket")
+
+    headers <-
+        odds_columns |>
+        map_chr(\(column) {
+            header <- column |> html_node(".srb-HScrollPlaceHeader") |> html_text2()
+            if (length(header) == 0 || is.na(header)) "" else str_squish(header)
+        })
+
+    keep_columns <- str_detect(headers, "^\\d+\\+$")
+    odds_columns <- odds_columns[keep_columns]
+    headers <- headers[keep_columns]
+
+    if (length(player_names) == 0 || length(headers) == 0) {
+        stop("Bet365 modern disposals market is missing player names or disposal columns")
+    }
+
+    map2_dfr(headers, seq_along(headers), \(header, index) {
+        odds <-
+            odds_columns[[index]] |>
+            html_nodes(".gl-ParticipantOddsOnly_Odds") |>
+            html_text2() |>
+            str_squish()
+
+        if (length(odds) != length(player_names)) {
+            stop(glue(
+                "Bet365 modern disposals count mismatch for {header}: ",
+                "{length(odds)} odds for {length(player_names)} players"
+            ))
+        }
+
+        tibble(
+            match = bet365_match_name,
+            player_name = player_names,
+            number_of_disposals = header,
+            price = parse_number(na_if(odds, ""))
+        )
+    }) |>
+        filter(!is.na(price)) |>
+        mutate(implied_probability = 1 / price)
+}
+
+read_bet365_disposal_lines_modern <- function(bet365, bet365_match_name) {
+    market_pod <-
+        bet365 |>
+        html_nodes(".gl-MarketGroupPod") |>
+        select_bet365_market_node(include = "Total Player Disposals")
+
+    if (is.null(market_pod)) {
+        return(tibble(
+            match = character(),
+            player_name = character(),
+            number_of_disposals = character(),
+            over_price = numeric(),
+            under_price = numeric()
+        ))
+    }
+
+    player_names <-
+        market_pod |>
+        html_nodes(".srb-ParticipantLabelWithTeam_Name, .srb-ParticipantLabel_Name") |>
+        html_text2() |>
+        clean_bet365_player_name()
+
+    participants <- market_pod |> html_nodes(".gl-ParticipantCenteredStacked")
+    n_players <- length(player_names)
+
+    if (n_players == 0 || length(participants) < n_players * 2) {
+        stop(glue(
+            "Bet365 modern disposal line count mismatch: ",
+            "{length(participants)} line prices for {n_players} players"
+        ))
+    }
+
+    handicaps <-
+        participants |>
+        html_node(".gl-ParticipantCenteredStacked_Handicap") |>
+        html_text2() |>
+        str_squish()
+
+    odds <-
+        participants |>
+        html_node(".gl-ParticipantCenteredStacked_Odds") |>
+        html_text2() |>
+        str_squish()
+
+    over_index <- seq_len(n_players)
+    under_index <- n_players + seq_len(n_players)
+
+    if (!all(handicaps[over_index] == handicaps[under_index])) {
+        warning("Bet365 modern disposal line over/under handicaps do not align", call. = FALSE)
+    }
+
+    tibble(
+        match = bet365_match_name,
+        player_name = player_names,
+        number_of_disposals = handicaps[over_index],
+        over_price = parse_number(odds[over_index]),
+        under_price = parse_number(odds[under_index])
+    )
+}
+
+# Function to read in disposals html and output table
+read_bet365_disposals_html <- function(html_path) {
+    
+    # Read in the txt data as html
+    bet365 <- read_html(html_path)
+    
+    bet365_match_name <- extract_bet365_match_name(bet365)
     
     # Extract the disposals data table----------------------------------------------
     # Get the disposals table
     bet365_disposals <-
         bet365 |>
         html_nodes(".bbl-FilteredMarketGroupWithHScrollerContainer_Wide")
+
+    if (length(bet365_disposals) == 0) {
+        return(read_bet365_disposals_modern(bet365, bet365_match_name))
+    }
+
+    bet365_disposals <-
+        bet365_disposals |>
+        select_bet365_market_node(include = "Disposals", exclude = c("Goalscorer", "Goal"))
+
+    if (is.null(bet365_disposals)) {
+        stop("Could not find Bet365 Disposals milestone table")
+    }
     
     # Player names
     bet365_disposals_player_names <-
-        bet365_disposals[[1]] |>
+        bet365_disposals |>
         html_nodes(".bbl-BetBuilderParticipantLabel_Name") |>
-        html_text()
-    
-    # Odds
-    bet365_disposals_odds <-
-        bet365_disposals[[1]] |>
-        html_nodes(".bbl-BetBuilderParticipant") |>
-        html_text()
-    
-    # Get indices for each player
-    bet365_indices <- seq_along(bet365_disposals_player_names)
-    
-    # Get 10+ disposals odds
-    bet365_disposals_odds_10plus <-
-        bet365_disposals_odds[bet365_indices]
-    
-    # Get 15+ disposals odds
-    bet365_disposals_odds_15plus <-
-        bet365_disposals_odds[bet365_indices + length(bet365_disposals_player_names)]
-    
-    # Get 20+ disposals odds
-    bet365_disposals_odds_20plus <-
-        bet365_disposals_odds[bet365_indices + length(bet365_disposals_player_names) * 2]
-    
-    # Get 25+ disposals odds
-    bet365_disposals_odds_25plus <-
-        bet365_disposals_odds[bet365_indices + length(bet365_disposals_player_names) * 3]
-    
-    # Get 30+ disposals odds
-    bet365_disposals_odds_30plus <-
-        bet365_disposals_odds[bet365_indices + length(bet365_disposals_player_names) * 4]
-    
-    # Get 35+ disposals odds
-    bet365_disposals_odds_35plus <-
-        bet365_disposals_odds[bet365_indices + length(bet365_disposals_player_names) * 5]
-    
-    # Get 40+ disposals odds
-    bet365_disposals_odds_40plus <-
-        bet365_disposals_odds[bet365_indices + length(bet365_disposals_player_names) * 6]
-    
-    # Create data frame
+        html_text2() |>
+        clean_bet365_player_name()
+
+    headers <-
+        bet365_disposals |>
+        html_nodes(".bbl-MarketColumnHeader40Scrolled_Label, .bbl-MarketColumnHeader40Scrolled") |>
+        html_text2() |>
+        str_squish() |>
+        unique()
+
+    headers <- headers[str_detect(headers, "^\\d+\\+$")]
+    odds_columns <- bet365_disposals |> html_nodes(".bbl-Market40Scrolled")
+
+    if (length(bet365_disposals_player_names) == 0 || length(headers) == 0 || length(odds_columns) == 0) {
+        stop("Bet365 Disposals milestone table is missing player names or odds columns")
+    }
+
+    n_columns <- min(length(headers), length(odds_columns))
+
     bet365_disposals_odds_df <-
-        tibble(
-            player = bet365_disposals_player_names,
-            odds_10plus = bet365_disposals_odds_10plus,
-            odds_15plus = bet365_disposals_odds_15plus,
-            odds_20plus = bet365_disposals_odds_20plus,
-            odds_25plus = bet365_disposals_odds_25plus,
-            odds_30plus = bet365_disposals_odds_30plus,
-            odds_35plus = bet365_disposals_odds_35plus,
-            odds_40plus = bet365_disposals_odds_40plus
-        )
-    
-    # Pivot longer
-    bet365_disposals_odds_df <-
-        bet365_disposals_odds_df |>
-        pivot_longer(
-            cols = odds_10plus:odds_40plus,
-            names_to = "disposals",
-            values_to = "odds"
-        ) |>
-        mutate(
-            disposals = str_remove(disposals, "odds_"),
-            disposals = str_replace(disposals, "plus", "+"),
-            odds = as.numeric(odds)
-        ) |>
-        filter(!is.na(odds)) |>
-        mutate(match = bet365_match_name) |>
-        select(
-            match,
-            player_name = player,
-            number_of_disposals = disposals,
-            price = odds
-        ) |>
+        map2_dfr(headers[seq_len(n_columns)], seq_len(n_columns), \(header, index) {
+            odds_nodes <- odds_columns[[index]] |> html_nodes(".bbl-BetBuilderParticipant_Odds")
+            if (length(odds_nodes) == 0) {
+                odds_nodes <- odds_columns[[index]] |> html_nodes(".bbl-BetBuilderParticipant")
+            }
+
+            odds <-
+                odds_nodes |>
+                html_text(trim = TRUE) |>
+                str_squish()
+
+            n_odds <- min(length(odds), length(bet365_disposals_player_names))
+
+            tibble(
+                match = bet365_match_name,
+                player_name = bet365_disposals_player_names[seq_len(n_odds)],
+                number_of_disposals = header,
+                price = parse_number(odds[seq_len(n_odds)])
+            )
+        }) |>
+        filter(!is.na(price)) |>
         mutate(implied_probability = 1 / price)
     
     # Remove any numbers from player_name
     bet365_disposals_odds_df <-
         bet365_disposals_odds_df |>
-        mutate(player_name = str_remove(player_name, "\\d+"))
+        mutate(player_name = clean_bet365_player_name(player_name))
   
     # Return table
     bet365_disposals_odds_df
@@ -282,39 +426,29 @@ read_bet365_goals_html <- function(html_path) {
     # Read in the txt data as html
     bet365 <- read_html(html_path)
     
-    # Get match name (logged-out player pages use .cm-MatchBettingReactHeader,
-    # which reads like "AFL 11 Jun 20:30 Home v Away"; fall back to the legacy
-    # logged-in header selector when present)
-    bet365_match_header <-
-        bet365 |>
-        html_nodes(".cm-MatchBettingReactHeader") |>
-        html_text2() |>
-        str_squish()
-
-    # Bet365 renders the separator as either " v " or "vs"; normalise to " v "
-    bet365_match_header <- str_replace_all(bet365_match_header, "\\s+vs?\\s+", " v ")
-    bet365_match_name <- str_match(bet365_match_header, "\\d{1,2}:\\d{2}\\s+(.*)$")[, 2]
-    bet365_match_name <- bet365_match_name[!is.na(bet365_match_name)]
-
-    if (length(bet365_match_name) == 0) {
-        bet365_match_name <-
-            bet365 |>
-            html_nodes(".sph-FixturePodHeader_TeamName ") |>
-            html_text() |>
-            glue_collapse(sep = " v ")
-    } else {
-        bet365_match_name <- bet365_match_name[1]
-    }
+    bet365_match_name <- extract_bet365_match_name(bet365)
     
     # Extract the goals data table----------------------------------------------
     # Get the goals table
     bet365_goals <-
         bet365 |>
         html_nodes(".bbl-FilteredMarketGroupWithHScrollerContainer_Wide")
+
+    if (length(bet365_goals) == 0) {
+        return(NULL)
+    }
+
+    bet365_goals <-
+        bet365_goals |>
+        select_bet365_market_node(include = "Goalscorer|Multi Scorer", exclude = "Disposals")
+
+    if (is.null(bet365_goals)) {
+        return(NULL)
+    }
     
     # Player names
     bet365_goals_player_names <-
-        bet365_goals[[1]] |>
+        bet365_goals |>
         html_nodes(".bbl-BetBuilderParticipantLabel_Name") |>
         html_text()
     
@@ -327,10 +461,14 @@ read_bet365_goals_html <- function(html_path) {
     multi_scorer <- "Multi Scorer" %in% selected
     
     # Odds
+    bet365_goal_odds_nodes <- bet365_goals |> html_nodes(".bbl-BetBuilderParticipant_Odds")
+    if (length(bet365_goal_odds_nodes) == 0) {
+        bet365_goal_odds_nodes <- bet365_goals |> html_nodes(".bbl-BetBuilderParticipant")
+    }
+
     bet365_goal_odds <-
-        bet365_goals[[1]] |>
-        html_nodes(".bbl-BetBuilderParticipant") |>
-        html_text()
+        bet365_goal_odds_nodes |>
+        html_text(trim = TRUE)
     
     # Get indices for each player
     bet365_indices <- seq_along(bet365_goals_player_names)
@@ -413,29 +551,7 @@ read_bet365_disposal_lines_html <- function(html_path) {
   # Read in the txt data as html
   bet365 <- read_html(html_path)
   
-  # Get match name (logged-out player pages use .cm-MatchBettingReactHeader,
-  # which reads like "AFL 11 Jun 20:30 Home v Away"; fall back to the legacy
-  # logged-in header selector when present)
-  bet365_match_header <-
-    bet365 |>
-    html_nodes(".cm-MatchBettingReactHeader") |>
-    html_text2() |>
-    str_squish()
-
-  # Bet365 renders the separator as either " v " or "vs"; normalise to " v "
-  bet365_match_header <- str_replace_all(bet365_match_header, "\\s+vs?\\s+", " v ")
-  bet365_match_name <- str_match(bet365_match_header, "\\d{1,2}:\\d{2}\\s+(.*)$")[, 2]
-  bet365_match_name <- bet365_match_name[!is.na(bet365_match_name)]
-
-  if (length(bet365_match_name) == 0) {
-    bet365_match_name <-
-      bet365 |>
-      html_nodes(".sph-FixturePodHeader_TeamName ") |>
-      html_text() |>
-      glue_collapse(sep = " v ")
-  } else {
-    bet365_match_name <- bet365_match_name[1]
-  }
+  bet365_match_name <- extract_bet365_match_name(bet365)
   
   # Extract the disposals data table----------------------------------------------
   # Get the disposals table
@@ -444,6 +560,14 @@ read_bet365_disposal_lines_html <- function(html_path) {
     html_nodes(".bbl-BetBuilderMarketGroupContainer ")
 
   if (length(bet365_disposal_lines) == 0) {
+    return(read_bet365_disposal_lines_modern(bet365, bet365_match_name))
+  }
+
+  bet365_disposal_lines <-
+    bet365_disposal_lines |>
+    select_bet365_market_node(include = "Player Disposals|Total Player Disposals|Disposals", exclude = c("Goalscorer", "Goal"))
+
+  if (is.null(bet365_disposal_lines)) {
     return(tibble(
       match = character(),
       player_name = character(),
@@ -455,29 +579,44 @@ read_bet365_disposal_lines_html <- function(html_path) {
   
   # Player names
   bet365_disposals_player_names <-
-    bet365_disposal_lines[[1]] |>
+    bet365_disposal_lines |>
     html_nodes(".bbl-BetBuilderParticipantLabel_Name") |>
-    html_text()
+    html_text2() |>
+    clean_bet365_player_name()
   
   # Odds
   bet365_disposals_odds <-
-    bet365_disposal_lines[[1]] |>
+    bet365_disposal_lines |>
     html_nodes(".bbl-BetBuilderParticipant_Odds") |>
-    html_text()
+    html_text2() |>
+    str_squish()
   
   # Lines
   bet365_disposals_lines <-
-    bet365_disposal_lines[[1]] |>
+    bet365_disposal_lines |>
     html_nodes(".bbl-BetBuilderParticipant_Handicap") |>
-    html_text()
+    html_text2() |>
+    str_squish()
+
+  n_players <- length(bet365_disposals_player_names)
+
+  if (n_players == 0 || length(bet365_disposals_lines) < n_players * 2 || length(bet365_disposals_odds) < n_players * 2) {
+    stop(glue(
+      "Bet365 disposal line count mismatch: ",
+      "{length(bet365_disposals_odds)} odds and {length(bet365_disposals_lines)} lines for {n_players} players"
+    ))
+  }
+
+  over_index <- seq_len(n_players)
+  under_index <- n_players + seq_len(n_players)
 
   # Create data frame for Overs
   bet365_disposal_lines_odds_df_overs <-
     tibble(
       match = bet365_match_name,
       player_name = bet365_disposals_player_names,
-      number_of_disposals = bet365_disposals_lines[1:(length(bet365_disposals_lines) / 2)],
-      over_price = bet365_disposals_odds[1:(length(bet365_disposals_odds) / 2)],
+      number_of_disposals = bet365_disposals_lines[over_index],
+      over_price = bet365_disposals_odds[over_index],
     )
   
   # Create data frame for Unders
@@ -485,8 +624,8 @@ read_bet365_disposal_lines_html <- function(html_path) {
     tibble(
       match = bet365_match_name,
       player_name = bet365_disposals_player_names,
-      number_of_disposals = bet365_disposals_lines[(length(bet365_disposals_lines) / 2 + 1):length(bet365_disposals_lines)],
-      under_price = bet365_disposals_odds[(length(bet365_disposals_odds) / 2 + 1):length(bet365_disposals_odds)],
+      number_of_disposals = bet365_disposals_lines[under_index],
+      under_price = bet365_disposals_odds[under_index],
     )
   
   # Merge the two data frames
@@ -497,7 +636,7 @@ read_bet365_disposal_lines_html <- function(html_path) {
   # Remove any numbers from player_name
   bet365_disposal_lines_odds_df <-
     bet365_disposal_lines_odds_df |>
-    mutate(player_name = str_remove(player_name, "\\d+"))
+    mutate(player_name = clean_bet365_player_name(player_name))
 
   # Return table
   bet365_disposal_lines_odds_df
