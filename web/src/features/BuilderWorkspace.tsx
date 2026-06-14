@@ -1,13 +1,13 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useDeferredValue, useEffect, useMemo, useState } from 'react'
 import clsx from 'clsx'
-import { ArrowDown, ArrowUp, BarChart3, Check, Filter, LineChart, Trash2, X } from 'lucide-react'
+import { ArrowDown, ArrowUp, BarChart3, Check, Filter, LineChart, Search, Trash2, X } from 'lucide-react'
 import type { ClientSettings } from '../api/client'
 import type { BookmakerSummary, BuilderMode, CgmAgencyComparison, DraftLeg, EventSummary, OddsSearchResult, SgmAgencyComparison, SortField } from '../api/types'
 import { useBuilderOdds, useCompareCgm, useCompareSgm, useSelectionAgencyPrices } from '../api/queries'
 import { defaultMetricFilters, defaultPlayerFilters, useAppStore, useClientSettings } from '../store/useAppStore'
 import { allMarketCode, buildCandidateGroups, combinedBasePrice, defaultDescending, lineWithSideLabel, marketTypeToStatCode, orderedMarketCodes, sortCandidateRows, toDraftLeg } from '../lib/builder'
-import { bookmakerLabel, formatDateTime, formatLine, formatPrice, formatSigned, marketLabel, selectionTypeLabel, shortMatchLabel } from '../lib/formatters'
-import { Button, Chip, EmptyState, ErrorBanner, Field, Panel, Segmented, Select, StatPill, Toggle } from '../components/ui'
+import { bookmakerLabel, formatDateTime, formatLine, formatPrice, formatSigned, marketLabel, playerPositionTag, selectionTypeLabel, shortMatchLabel } from '../lib/formatters'
+import { Button, Chip, EmptyState, ErrorBanner, Field, Panel, Segmented, Select, StatPill, TextInput, Toggle } from '../components/ui'
 
 export function BuilderWorkspace({
   mode,
@@ -46,6 +46,7 @@ export function BuilderWorkspace({
   const [selectedEventIds, setSelectedEventIds] = useState<Set<number>>(new Set())
   const [bestOnly, setBestOnly] = useState(false)
   const [selectedMarket, setSelectedMarket] = useState(allMarketCode)
+  const [playerQuery, setPlayerQuery] = useState('')
   const [sortField, setSortField] = useState<SortField>('next_best')
   const [descending, setDescending] = useState(true)
   const [notice, setNotice] = useState<string | null>(null)
@@ -67,11 +68,19 @@ export function BuilderWorkspace({
     }
     return rows
   }, [candidateQuery.data, cgmLegs, mode])
+  const deferredPlayerQuery = useDeferredValue(playerQuery)
   const marketCodes = useMemo(() => [allMarketCode, ...orderedMarketCodes(candidates)], [candidates])
-  const visibleCandidates = useMemo(
-    () => candidates.filter((row) => selectedMarket === allMarketCode || row.market_type_code === selectedMarket),
-    [candidates, selectedMarket],
-  )
+  const visibleCandidates = useMemo(() => {
+    const normalizedQuery = deferredPlayerQuery.trim().toLowerCase()
+    return candidates.filter((row) => {
+      const marketMatches = selectedMarket === allMarketCode || row.market_type_code === selectedMarket
+      if (!marketMatches) return false
+      if (!normalizedQuery) return true
+      return [row.player?.full_name, row.label]
+        .filter(Boolean)
+        .some((value) => value!.toLowerCase().includes(normalizedQuery))
+    })
+  }, [candidates, deferredPlayerQuery, selectedMarket])
   const rowCandidates = useMemo(() => sortCandidateRows(visibleCandidates, sortField, descending), [visibleCandidates, sortField, descending])
   const groups = useMemo(() => buildCandidateGroups(visibleCandidates), [visibleCandidates])
   const compareSgm = useCompareSgm(settings)
@@ -240,6 +249,12 @@ export function BuilderWorkspace({
                 ))}
               </Select>
             </Field>
+            <Field label="Player search">
+              <div className="input-with-icon">
+                <Search size={16} />
+                <TextInput value={playerQuery} onChange={(event) => setPlayerQuery(event.currentTarget.value)} placeholder="Player name" />
+              </div>
+            </Field>
           </div>
           <div className="quick-filter-grid">
             <Chip
@@ -305,7 +320,7 @@ export function BuilderWorkspace({
           </div>
           {notice ? <p className="builder-notice" role="status">{notice}</p> : null}
           {visibleCandidates.length === 0 && !candidateQuery.isFetching ? (
-            <EmptyState title="No eligible legs" body="Change agency, match, market, or metric filters." />
+            <EmptyState title="No eligible legs" body="Change agency, match, market, player search, or metric filters." />
           ) : displayMode === 'row' ? (
             <div className="candidate-table">
               <CandidateHeader sortField={sortField} descending={descending} onSort={handleSort} />
@@ -329,6 +344,10 @@ export function BuilderWorkspace({
                   <div className="tile-head">
                     <strong>{group.title}</strong>
                     <span>{group.subtitle}</span>
+                    <div className="tag-row">
+                      {playerPositionTag(group.playerPosition) ? <span className="tag">{playerPositionTag(group.playerPosition)}</span> : null}
+                      <MatchupBadge value={group.matchupDifficulty} />
+                    </div>
                   </div>
                   <div className="tile-lines">
                     {group.selections.map((selection) => (
@@ -401,15 +420,25 @@ function CandidateHeader({
   onSort: (field: SortField) => void
 }) {
   const columns: { label: string; field: SortField; numeric: boolean }[] = [
-    { label: 'Player', field: 'player', numeric: false },
     { label: 'Line', field: 'line', numeric: true },
     { label: 'Price', field: 'price', numeric: true },
     { label: 'L10', field: 'diff_last_10', numeric: true },
     { label: 'Szn', field: 'diff_2025', numeric: true },
     { label: 'NB', field: 'next_best', numeric: true },
   ]
+  const playerActive = sortField === 'player'
   return (
     <div className="candidate-head-row">
+      <button
+        type="button"
+        className={clsx('candidate-head-cell', playerActive && 'is-active')}
+        onClick={() => onSort('player')}
+        aria-sort={playerActive ? (descending ? 'descending' : 'ascending') : 'none'}
+      >
+        Player
+        {playerActive ? (descending ? <ArrowDown size={12} /> : <ArrowUp size={12} />) : null}
+      </button>
+      <div className="candidate-head-cell">Matchup</div>
       {columns.map((column) => {
         const active = sortField === column.field
         return (
@@ -454,6 +483,12 @@ function CandidateContextMenu({
       </button>
     </div>
   )
+}
+
+function MatchupBadge({ value }: { value?: string | null }) {
+  if (!value) return null
+  const normalized = value.trim().toLowerCase()
+  return <span className={clsx('tag', 'matchup-tag', `matchup-tag--${normalized.replaceAll(/\s+/g, '-')}`)}>{value}</span>
 }
 
 function AgencyPriceDialog({
@@ -544,6 +579,10 @@ function CandidateRow({
         </strong>
         <span>{marketLabel(selection.market_type_code)} | {shortMatchLabel(selection.match_name)}</span>
       </div>
+      <div className="candidate-context">
+        {playerPositionTag(selection.player_position) ? <span className="tag">{playerPositionTag(selection.player_position)}</span> : null}
+        <MatchupBadge value={selection.matchup_difficulty} />
+      </div>
       <span className="col-num">{lineWithSideLabel(selection)}</span>
       <b className="col-num tabular">{formatPrice(selection.decimal_price)}</b>
       <span className={clsx('col-num delta', (selection.diff_last_10 ?? -1) >= 0 ? 'delta--good' : 'delta--bad')}>{formatSigned(selection.diff_last_10)}</span>
@@ -574,6 +613,7 @@ function BuilderPanel({
   onClear: () => void
   onRemove: (selectionId: number) => void
 }) {
+  const legBySelectionId = useMemo(() => new Map(legs.map((leg) => [leg.selection_id, leg])), [legs])
   return (
     <aside className="builder-panel">
       <div className="builder-panel-head">
@@ -596,6 +636,10 @@ function BuilderPanel({
               <div>
                 <strong>{leg.label}</strong>
                 <span>{marketLabel(leg.market_type_code)} | {shortMatchLabel(leg.event_label)} | {bookmakerLabel(leg.bookmaker)}</span>
+                <div className="tag-row">
+                  {playerPositionTag(leg.player_position) ? <span className="tag">{playerPositionTag(leg.player_position)}</span> : null}
+                  <MatchupBadge value={leg.matchup_difficulty} />
+                </div>
               </div>
               <b>{formatPrice(leg.base_price)}</b>
               <button type="button" onClick={() => onRemove(leg.selection_id)} aria-label="Remove leg">
@@ -612,17 +656,17 @@ function BuilderPanel({
       <div className="quote-results">
         {mode === 'sgm'
           ? sgmResults.map((result, index) => (
-              <SgmComparisonCard key={result.quote_id} result={result} rank={index + 1} />
+              <SgmComparisonCard key={result.quote_id} result={result} rank={index + 1} legBySelectionId={legBySelectionId} />
             ))
           : cgmResults.map((result, index) => (
-              <CgmComparisonCard key={result.bookmaker} result={result} rank={index + 1} />
+              <CgmComparisonCard key={result.bookmaker} result={result} rank={index + 1} legBySelectionId={legBySelectionId} />
             ))}
       </div>
     </aside>
   )
 }
 
-function SgmComparisonCard({ result, rank }: { result: SgmAgencyComparison; rank: number }) {
+function SgmComparisonCard({ result, rank, legBySelectionId }: { result: SgmAgencyComparison; rank: number; legBySelectionId: Map<number, DraftLeg> }) {
   return (
     <div className={clsx('comparison-card', rank === 1 && 'comparison-card--best')}>
       <div className="comparison-head">
@@ -641,6 +685,7 @@ function SgmComparisonCard({ result, rank }: { result: SgmAgencyComparison; rank
         {result.legs.map((leg) => (
           <div className="comparison-leg" key={leg.selection_id}>
             <span>{leg.label}</span>
+            <MatchupBadge value={legBySelectionId.get(leg.selection_id)?.matchup_difficulty} />
             <b className="tabular">{formatPrice(leg.base_price)}</b>
           </div>
         ))}
@@ -650,7 +695,7 @@ function SgmComparisonCard({ result, rank }: { result: SgmAgencyComparison; rank
   )
 }
 
-function CgmComparisonCard({ result, rank }: { result: CgmAgencyComparison; rank: number }) {
+function CgmComparisonCard({ result, rank, legBySelectionId }: { result: CgmAgencyComparison; rank: number; legBySelectionId: Map<number, DraftLeg> }) {
   return (
     <div className={clsx('comparison-card', rank === 1 && 'comparison-card--best')}>
       <div className="comparison-head">
@@ -666,6 +711,7 @@ function CgmComparisonCard({ result, rank }: { result: CgmAgencyComparison; rank
             <div>
               <span>{leg.label}</span>
               <small>{shortMatchLabel(leg.match_name)}</small>
+              <MatchupBadge value={legBySelectionId.get(leg.selection_id)?.matchup_difficulty} />
             </div>
             <b className="tabular">{formatPrice(leg.base_price)}</b>
           </div>

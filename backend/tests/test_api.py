@@ -260,6 +260,9 @@ def test_event_market_selection_flow(client) -> None:
     assert stat_players_response.status_code == 200
     stat_players_payload = stat_players_response.json()
     assert stat_players_payload
+    filtered_out_response = client.get("/api/v1/players/stats/search", params={"q": "English", "stat": "disposals", "seasons": "2999"})
+    assert filtered_out_response.status_code == 200
+    assert filtered_out_response.json() == []
     assert all(
         " over " not in player["full_name"].lower()
         and " under " not in player["full_name"].lower()

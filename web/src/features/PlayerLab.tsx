@@ -22,9 +22,14 @@ export function PlayerLab() {
     key: 'date',
     direction: 'desc',
   })
-  const playersQuery = useStatPlayers(settings, query)
-  const firstPlayer = playersQuery.data?.[0]
-  const playerOptions = playersQuery.data?.slice(0, 10) ?? []
+  const playersQuery = useStatPlayers(settings, query, filters)
+  const playerOptions = useMemo(() => {
+    const normalizedQuery = query.trim().toLowerCase()
+    return (playersQuery.data ?? [])
+      .filter((player) => !normalizedQuery || player.full_name.toLowerCase().includes(normalizedQuery))
+      .slice(0, 10)
+  }, [playersQuery.data, query])
+  const firstPlayer = playerOptions[0]
 
   useEffect(() => {
     if (selectedPlayerId == null && firstPlayer) {
@@ -115,10 +120,15 @@ export function PlayerLab() {
                   onBlur={() => window.setTimeout(() => setSearchOpen(false), 120)}
                   placeholder="Search players"
                   aria-autocomplete="list"
-                  aria-expanded={searchOpen && playerOptions.length > 0}
+                  aria-expanded={searchOpen && !playersQuery.isFetching && playerOptions.length > 0}
                 />
               </div>
-              {searchOpen && playerOptions.length > 0 && (
+              {searchOpen && playersQuery.isFetching && (
+                <div className="autocomplete-menu autocomplete-menu--status" role="status">
+                  Searching...
+                </div>
+              )}
+              {searchOpen && !playersQuery.isFetching && playerOptions.length > 0 && (
                 <div className="autocomplete-menu" role="listbox" aria-label="Player suggestions">
                   {playerOptions.map((player) => (
                     <button
@@ -257,7 +267,10 @@ export function PlayerLab() {
                     {PLAYER_STAT_COLUMNS.map((column) => {
                       const highlighted = column.key === selectedStatKey
                       return (
-                        <td key={column.key} className={highlighted ? 'stat-column-highlight' : undefined}>
+                        <td
+                          key={column.key}
+                          className={highlighted ? `stat-column-highlight${entry.hit === false ? ' stat-column-highlight--miss' : ''}` : undefined}
+                        >
                           <b className="tabular">{formatStatCell(statValue(entry, column.key), column.suffix)}</b>
                         </td>
                       )

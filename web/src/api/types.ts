@@ -179,6 +179,8 @@ export interface DraftLeg {
   diff_2025: number | null
   diff_last_10: number | null
   next_best_prob_diff: number | null
+  player_position?: string | null
+  matchup_difficulty?: string | null
   is_best_price: boolean
 }
 

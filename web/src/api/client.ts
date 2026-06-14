@@ -101,8 +101,14 @@ export const api = {
     request<EventSummary[]>(settings, 'events', { query: { bookmaker, q, limit } }),
   searchPlayers: (settings: ClientSettings, q: string, limit = 50) =>
     request<PlayerSummary[]>(settings, 'players/search', { query: { q, limit } }),
-  searchStatPlayers: (settings: ClientSettings, q: string, limit = 50) =>
-    request<PlayerSummary[]>(settings, 'players/stats/search', { query: { q, limit } }),
+  searchStatPlayers: (settings: ClientSettings, q: string, limit = 50, filters?: PlayerStatsFilters) =>
+    request<PlayerSummary[]>(settings, 'players/stats/search', {
+      query: {
+        q,
+        limit,
+        ...(filters ? playerFiltersToQuery(filters, true) : {}),
+      },
+    }),
   playerStatFilters: (settings: ClientSettings, playerId: number, filters?: Partial<PlayerStatsFilters>) =>
     request<PlayerStatFilterOptions>(settings, `players/${playerId}/stats/filters`, {
       query: filters ? playerFiltersToQuery(filters) : {},

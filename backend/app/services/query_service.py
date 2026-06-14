@@ -39,6 +39,48 @@ class QueryService:
     def __init__(self, settings: Settings):
         self.settings = settings
 
+    @staticmethod
+    def _derived_opposition_sql(table_alias: str | None = None) -> str:
+        prefix = f"{table_alias}." if table_alias else ""
+        player_team = f"{prefix}player_team"
+        home_team = f"{prefix}home_team"
+        away_team = f"{prefix}away_team"
+        opposition_team = f"{prefix}opposition_team"
+        return f"""
+        CASE
+          WHEN {player_team} IS NOT NULL
+            AND {home_team} IS NOT NULL
+            AND LOWER(TRIM({player_team})) = LOWER(TRIM({home_team}))
+            THEN {away_team}
+          WHEN {player_team} IS NOT NULL
+            AND {away_team} IS NOT NULL
+            AND LOWER(TRIM({player_team})) = LOWER(TRIM({away_team}))
+            THEN {home_team}
+          ELSE {opposition_team}
+        END
+        """
+
+    @staticmethod
+    def _derived_home_away_sql(table_alias: str | None = None) -> str:
+        prefix = f"{table_alias}." if table_alias else ""
+        player_team = f"{prefix}player_team"
+        home_team = f"{prefix}home_team"
+        away_team = f"{prefix}away_team"
+        home_away = f"{prefix}home_away"
+        return f"""
+        CASE
+          WHEN {player_team} IS NOT NULL
+            AND {home_team} IS NOT NULL
+            AND LOWER(TRIM({player_team})) = LOWER(TRIM({home_team}))
+            THEN 'Home'
+          WHEN {player_team} IS NOT NULL
+            AND {away_team} IS NOT NULL
+            AND LOWER(TRIM({player_team})) = LOWER(TRIM({away_team}))
+            THEN 'Away'
+          ELSE {home_away}
+        END
+        """
+
     def get_health(self) -> dict[str, Any]:
         with connection(settings=self.settings) as conn:
             last_run = fetch_one(
@@ -329,25 +371,86 @@ class QueryService:
             )
         return rows
 
-    def search_stat_players(self, *, query: str, limit: int) -> list[dict[str, Any]]:
+    def search_stat_players(
+        self,
+        *,
+        query: str,
+        limit: int,
+        stat: str = "disposals",
+        seasons: list[str] | None = None,
+        oppositions: list[str] | None = None,
+        venues: list[str] | None = None,
+        weather_categories: list[str] | None = None,
+        home_away: list[str] | None = None,
+        margin_min: int = -200,
+        margin_max: int = 200,
+        last_games: int | None = None,
+        minutes_minimum: float = 0,
+    ) -> list[dict[str, Any]] | None:
+        resolved = self._resolve_player_stat(stat)
+        if resolved is None:
+            return None
+        conditions = [
+            "LOWER(p.full_name) LIKE ?",
+            "pgl.tog_percentage >= ?",
+            "COALESCE(pgl.margin, 0) >= ?",
+            "COALESCE(pgl.margin, 0) <= ?",
+        ]
+        params: list[Any] = [f"%{query.lower()}%", minutes_minimum, margin_min, margin_max]
+        if seasons:
+            placeholders = ", ".join("?" for _ in seasons)
+            conditions.append(f"pgl.season_name IN ({placeholders})")
+            params.extend(seasons)
+        if home_away:
+            placeholders = ", ".join("?" for _ in home_away)
+            conditions.append(f"{self._derived_home_away_sql('pgl')} IN ({placeholders})")
+            params.extend(home_away)
+
+        post_conditions = [f"{resolved['column']} IS NOT NULL"]
+        if last_games is not None:
+            post_conditions.append("recent_rank <= ?")
+            params.append(last_games)
+        if oppositions:
+            placeholders = ", ".join("?" for _ in oppositions)
+            post_conditions.append(f"derived_opposition_team IN ({placeholders})")
+            params.extend(oppositions)
+        if weather_categories:
+            placeholders = ", ".join("?" for _ in weather_categories)
+            post_conditions.append(f"weather_category IN ({placeholders})")
+            params.extend(weather_categories)
+        if venues:
+            placeholders = ", ".join("?" for _ in venues)
+            post_conditions.append(f"venue IN ({placeholders})")
+            params.extend(venues)
+
+        params.append(limit)
         with connection(settings=self.settings) as conn:
             rows = fetch_all(
                 conn,
-                """
-                SELECT
-                  p.player_id AS id,
-                  p.full_name
-                FROM players p
-                WHERE EXISTS (
-                  SELECT 1
-                  FROM player_game_logs pgl
-                  WHERE pgl.player_id = p.player_id
+                f"""
+                WITH ranked AS (
+                  SELECT
+                    p.player_id AS id,
+                    p.full_name,
+                    {self._derived_opposition_sql("pgl")} AS derived_opposition_team,
+                    pgl.weather_category,
+                    pgl.venue,
+                    pgl.{resolved["column"]},
+                    ROW_NUMBER() OVER (
+                      PARTITION BY p.player_id
+                      ORDER BY pgl.start_time_utc DESC
+                    ) AS recent_rank
+                  FROM players p
+                  JOIN player_game_logs pgl ON pgl.player_id = p.player_id
+                  WHERE {' AND '.join(conditions)}
                 )
-                  AND LOWER(p.full_name) LIKE ?
-                ORDER BY p.full_name
+                SELECT DISTINCT id, full_name
+                FROM ranked
+                WHERE {' AND '.join(post_conditions)}
+                ORDER BY full_name
                 LIMIT ?
                 """,
-                [f"%{query.lower()}%", limit],
+                params,
             )
         return rows
 
@@ -415,10 +518,12 @@ class QueryService:
             )
             oppositions = fetch_all(
                 conn,
-                """
-                SELECT DISTINCT opposition_team
+                f"""
+                SELECT DISTINCT {self._derived_opposition_sql()} AS opposition_team
                 FROM player_game_logs
-                WHERE player_id = ? AND opposition_team IS NOT NULL
+                WHERE
+                  player_id = ?
+                  AND {self._derived_opposition_sql()} IS NOT NULL
                 ORDER BY opposition_team
                 """,
                 [player_id],
@@ -1080,7 +1185,7 @@ class QueryService:
             params.extend(seasons)
         if home_away:
             placeholders = ", ".join("?" for _ in home_away)
-            conditions.append(f"home_away IN ({placeholders})")
+            conditions.append(f"{self._derived_home_away_sql()} IN ({placeholders})")
             params.extend(home_away)
 
         with connection(settings=self.settings) as conn:
@@ -1095,7 +1200,8 @@ class QueryService:
                   weather_category,
                   away_team,
                   player_team,
-                  opposition_team,
+                  {self._derived_opposition_sql()} AS derived_opposition_team,
+                  {self._derived_home_away_sql()} AS derived_home_away,
                   margin,
                   tog_percentage,
                   disposals,
@@ -1131,7 +1237,8 @@ class QueryService:
                     "weather": row["weather_category"],
                     "away": row["away_team"],
                     "team": row["player_team"],
-                    "opposition": row["opposition_team"],
+                    "opposition": row["derived_opposition_team"],
+                    "home_away": row["derived_home_away"],
                     "margin": row["margin"],
                     "tog": row["tog_percentage"],
                     "disposals": row["disposals"],

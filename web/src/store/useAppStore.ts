@@ -31,7 +31,7 @@ export const defaultMetricFilters: MetricFilters = {
 
 export const defaultPlayerFilters: PlayerStatsFilters = {
   stat: 'disposals',
-  seasons: [],
+  seasons: ['2026'],
   oppositions: [],
   venues: [],
   weatherCategories: [],
@@ -132,6 +132,21 @@ export const useAppStore = create<AppStore>()(
     }),
     {
       name: 'afl-edge-web-v1',
+      version: 1,
+      migrate: (persistedState) => {
+        if (!persistedState || typeof persistedState !== 'object') return persistedState
+        const state = persistedState as Partial<AppStore>
+        const playerFilters = state.playerFilters
+        if (!playerFilters || playerFilters.seasons.length > 0) return state
+        return {
+          ...state,
+          playerFilters: {
+            ...defaultPlayerFilters,
+            ...playerFilters,
+            seasons: defaultPlayerFilters.seasons,
+          },
+        }
+      },
       partialize: (state) => ({
         apiBaseUrl: state.apiBaseUrl,
         authToken: state.authToken,

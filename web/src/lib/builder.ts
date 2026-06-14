@@ -100,6 +100,8 @@ export function toDraftLeg(selection: OddsSearchResult): DraftLeg | null {
     diff_2025: selection.diff_2025,
     diff_last_10: selection.diff_last_10,
     next_best_prob_diff: selection.next_best_prob_diff,
+    player_position: selection.player_position,
+    matchup_difficulty: selection.matchup_difficulty,
     is_best_price: selection.is_best_price,
   }
 }

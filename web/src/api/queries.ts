@@ -8,7 +8,7 @@ export const queryKeys = {
   bookmakers: (settings: ClientSettings) => ['bookmakers', settings] as const,
   events: (settings: ClientSettings, bookmaker?: string | null) => ['events', settings, bookmaker ?? 'all'] as const,
   odds: (settings: ClientSettings, query: OddsQuery) => ['odds', settings, query] as const,
-  statPlayers: (settings: ClientSettings, query: string) => ['stat-players', settings, query] as const,
+  statPlayers: (settings: ClientSettings, query: string, filters: PlayerStatsFilters) => ['stat-players', settings, query, filters] as const,
   playerFilters: (settings: ClientSettings, playerId: number | null) => ['player-filters', settings, playerId] as const,
   playerHistory: (settings: ClientSettings, playerId: number | null, filters: PlayerStatsFilters) =>
     ['player-history', settings, playerId, filters] as const,
@@ -126,11 +126,11 @@ export function useSelectionAgencyPrices(settings: ClientSettings, selection: Od
   })
 }
 
-export function useStatPlayers(settings: ClientSettings, query: string) {
+export function useStatPlayers(settings: ClientSettings, query: string, filters: PlayerStatsFilters) {
   return useQuery({
-    queryKey: queryKeys.statPlayers(settings, query),
-    queryFn: () => api.searchStatPlayers(settings, query, 50),
-    staleTime: 60_000,
+    queryKey: queryKeys.statPlayers(settings, query, filters),
+    queryFn: () => api.searchStatPlayers(settings, query, 50, filters),
+    staleTime: 0,
     retry: 1,
   })
 }

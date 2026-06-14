@@ -802,11 +802,18 @@ class Importer:
         if not player_name or start_time_utc is None or not match_name or not season_name:
             return None
 
-        player_team = clean_text(row.get("player_team"))
-        home_team = clean_text(row.get("home_team"))
-        away_team = clean_text(row.get("away_team"))
-        opposition_team = clean_text(row.get("opposition_team"))
-        home_away = "Home" if player_team and home_team and player_team == home_team else "Away"
+        player_team = normalize_team_name(row.get("player_team"))
+        home_team = normalize_team_name(row.get("home_team"))
+        away_team = normalize_team_name(row.get("away_team"))
+        opposition_team = normalize_team_name(row.get("opposition_team"))
+        if player_team and home_team and player_team == home_team:
+            opposition_team = away_team or opposition_team
+            home_away = "Home"
+        elif player_team and away_team and player_team == away_team:
+            opposition_team = home_team or opposition_team
+            home_away = "Away"
+        else:
+            home_away = "Away"
         margin_value = parse_float(row.get("margin"))
         signed_margin = self._signed_margin(
             margin_value=margin_value,
