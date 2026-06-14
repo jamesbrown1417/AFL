@@ -14,20 +14,45 @@ import pandas as pd
 import asyncio
 import os
 from pathlib import Path
-from dotenv import load_dotenv
+from dotenv import dotenv_values
 
 # Get current timestamp=======================================================
 now = datetime.now()
 time_stamp = now.strftime("%Y-%m-%d_%H-%M-%S")
 
-# Load environment variables: try default .env, then fallback to 'env'
-load_dotenv()
-if os.getenv('BET365USER') is None or os.getenv('BET365PW') is None:
-    load_dotenv('/Users/jamesbrown/Projects/AFL/env')
+PROJECT_ROOT = Path(__file__).resolve().parents[1]
+BET365_ENV_KEYS = {"BET365USER", "BET365PW", "BET365_BYPASS_LOGIN"}
 
-# Read credentials after loading
-username = os.getenv('BET365USER')
-password = os.getenv('BET365PW')
+
+def load_bet365_env():
+    """Load Bet365 settings deterministically without leaking stale shell values."""
+    values = {}
+    sources = {}
+
+    # Lowest to highest priority. The project .env intentionally wins over an
+    # inherited shell env so edited credentials are used immediately.
+    for env_path in (PROJECT_ROOT / "env", PROJECT_ROOT / ".env"):
+        if not env_path.exists():
+            continue
+        for key, value in dotenv_values(env_path).items():
+            if key in BET365_ENV_KEYS and value not in (None, ""):
+                values[key] = value
+                sources[key] = str(env_path)
+
+    for key in BET365_ENV_KEYS:
+        if key in values:
+            os.environ[key] = values[key]
+        elif os.getenv(key) not in (None, ""):
+            sources[key] = "process environment"
+
+    return sources
+
+
+BET365_ENV_SOURCES = load_bet365_env()
+
+# Read credentials after loading.
+username = os.getenv("BET365USER")
+password = os.getenv("BET365PW")
 
 # Login bypass switch: when enabled, skip the Bet365 login flow entirely and
 # scrape public (logged-out) markets. The logged-out shell is currently not
@@ -40,7 +65,14 @@ def env_bool(name, default=False):
     return raw.strip().lower() in {"1", "true", "t", "yes", "y", "on"}
 
 
-BYPASS_LOGIN = env_bool("BET365_BYPASS_LOGIN", default=True)
+BYPASS_LOGIN = env_bool("BET365_BYPASS_LOGIN", default=False)
+
+
+def describe_env_source(key):
+    source = BET365_ENV_SOURCES.get(key, "not set")
+    if source not in {"process environment", "not set"}:
+        source = Path(source).name
+    return source
 
 # Validate credentials early with a clear error (only needed when actually logging in)
 if not BYPASS_LOGIN and (not username or not password):
@@ -388,6 +420,13 @@ async def collect_h2h_and_urls(driver):
 
     Uses upcoming fixtures to determine how many matches to click.
     """
+
+    print(
+        "Bet365 config: "
+        f"user_source={describe_env_source('BET365USER')}; "
+        f"password_source={describe_env_source('BET365PW')}; "
+        f"bypass_login={BYPASS_LOGIN}"
+    )
 
     # Read in schedule=======================================================
     schedule_df = pd.read_csv("Data/current_fixture.csv")
