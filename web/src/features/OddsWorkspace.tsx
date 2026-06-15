@@ -1,12 +1,13 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { flexRender, getCoreRowModel, getSortedRowModel, useReactTable, type ColumnDef, type SortingState } from '@tanstack/react-table'
 import { Plus, Search, X } from 'lucide-react'
 import type { BookmakerSummary, EventSummary, OddsScope, OddsSearchResult } from '../api/types'
 import { useOdds } from '../api/queries'
-import { useClientSettings, useAppStore, defaultOddsFilters } from '../store/useAppStore'
+import { useClientSettings, useAppStore, defaultOddsFilters, defaultPlayerFilters } from '../store/useAppStore'
 import { formatDateTime, formatLine, formatPrice, formatSigned, marketLabel, playerPositionTag, selectionTypeLabel, shortMatchLabel } from '../lib/formatters'
-import { combinedBasePrice, toDraftLeg } from '../lib/builder'
+import { combinedBasePrice, toDraftLeg, marketTypeToStatCode } from '../lib/builder'
 import { Button, Chip, EmptyState, ErrorBanner, Field, Panel, Segmented, Select, SortIcon, StatPill, TextInput, Toggle } from '../components/ui'
+import { CandidateContextMenu, AgencyPriceDialog } from './BuilderWorkspace'
 
 const playerMarkets = [
   [null, 'All props'],
@@ -51,6 +52,34 @@ export function OddsWorkspace({
   const clearCgm = useAppStore((state) => state.clearCgm)
   const setActiveView = useAppStore((state) => state.setActiveView)
   const setSelectedPlayer = useAppStore((state) => state.setSelectedPlayer)
+  const setPlayerFilters = useAppStore((state) => state.setPlayerFilters)
+  const [contextMenu, setContextMenu] = useState<{ x: number; y: number; selection: OddsSearchResult } | null>(null)
+  const [priceDialogSelection, setPriceDialogSelection] = useState<OddsSearchResult | null>(null)
+
+  const openContextMenu = (event: React.MouseEvent, selection: OddsSearchResult) => {
+    event.preventDefault()
+    setContextMenu({ x: event.clientX, y: event.clientY, selection })
+  }
+
+  const viewPlayerStat = (selection: OddsSearchResult) => {
+    if (!selection.player) return
+    const stat = marketTypeToStatCode(selection.market_type_code)
+    setPlayerFilters({
+      ...defaultPlayerFilters,
+      stat: stat ?? defaultPlayerFilters.stat,
+      lineMode: 'single',
+      referenceLine: selection.line_value != null ? formatLine(selection.line_value) : defaultPlayerFilters.referenceLine,
+    })
+    setSelectedPlayer(selection.player.id, selection.player.full_name)
+  }
+
+  useEffect(() => {
+    if (!contextMenu) return
+    const close = () => setContextMenu(null)
+    window.addEventListener('click', close)
+    return () => window.removeEventListener('click', close)
+  }, [contextMenu])
+
   const { data = [], isFetching, error } = useOdds(settings, filters, 150)
   const [query, setQuery] = useState('')
   const [sorting, setSorting] = useState<SortingState>([])
@@ -72,15 +101,10 @@ export function OddsWorkspace({
         header: 'Player / match',
         accessorFn: (row) => row.player?.full_name ?? row.match_name,
         cell: ({ row }) => (
-          <button
-            type="button"
-            className="link-cell"
-            disabled={!row.original.player}
-            onClick={() => row.original.player && setSelectedPlayer(row.original.player.id, row.original.player.full_name)}
-          >
+          <div className="table-stack">
             <strong>{row.original.player?.full_name ?? shortMatchLabel(row.original.match_name)}</strong>
             <span>{row.original.player ? shortMatchLabel(row.original.match_name) : formatDateTime(row.original.start_time)}</span>
-          </button>
+          </div>
         ),
       },
       {
@@ -310,7 +334,10 @@ export function OddsWorkspace({
                 </thead>
                 <tbody>
                   {table.getRowModel().rows.map((row) => (
-                    <tr key={`${row.original.selection_id}-${row.original.bookmaker}`}>
+                    <tr
+                      key={`${row.original.selection_id}-${row.original.bookmaker}`}
+                      onContextMenu={(event) => openContextMenu(event, row.original)}
+                    >
                       {row.getVisibleCells().map((cell) => (
                         <td key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</td>
                       ))}
@@ -351,6 +378,30 @@ export function OddsWorkspace({
           Open {builderMode.toUpperCase()} builder
         </Button>
       </aside>
+
+      {contextMenu ? (
+        <CandidateContextMenu
+          x={contextMenu.x}
+          y={contextMenu.y}
+          selection={contextMenu.selection}
+          onViewPlayer={() => {
+            viewPlayerStat(contextMenu.selection)
+            setContextMenu(null)
+          }}
+          onCompareAgencies={() => {
+            setPriceDialogSelection(contextMenu.selection)
+            setContextMenu(null)
+          }}
+        />
+      ) : null}
+
+      {priceDialogSelection ? (
+        <AgencyPriceDialog
+          settings={settings}
+          selection={priceDialogSelection}
+          onClose={() => setPriceDialogSelection(null)}
+        />
+      ) : null}
     </main>
   )
 }

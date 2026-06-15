@@ -470,7 +470,7 @@ function CandidateHeader({
   )
 }
 
-function CandidateContextMenu({
+export function CandidateContextMenu({
   x,
   y,
   selection,
@@ -503,7 +503,7 @@ function MatchupBadge({ value }: { value?: string | null }) {
   return <span className={clsx('tag', 'matchup-tag', `matchup-tag--${normalized.replaceAll(/\s+/g, '-')}`)}>{value}</span>
 }
 
-function AgencyPriceDialog({
+export function AgencyPriceDialog({
   settings,
   selection,
   onClose,
