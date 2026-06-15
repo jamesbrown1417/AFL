@@ -1,3 +1,4 @@
+import { forwardRef } from 'react'
 import type { ButtonHTMLAttributes, InputHTMLAttributes, ReactNode, SelectHTMLAttributes } from 'react'
 import clsx from 'clsx'
 
@@ -30,9 +31,9 @@ export function Field({ label, children }: { label: string; children: ReactNode 
   )
 }
 
-export function TextInput(props: InputHTMLAttributes<HTMLInputElement>) {
-  return <input className="input" {...props} />
-}
+export const TextInput = forwardRef<HTMLInputElement, InputHTMLAttributes<HTMLInputElement>>(function TextInput(props, ref) {
+  return <input ref={ref} className="input" {...props} />
+})
 
 export function Select(props: SelectHTMLAttributes<HTMLSelectElement>) {
   return <select className="input select" {...props} />

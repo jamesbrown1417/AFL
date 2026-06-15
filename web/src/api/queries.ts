@@ -156,7 +156,7 @@ export function usePlayerFilters(settings: ClientSettings, playerId: number | nu
   })
 }
 
-export function usePlayerHistory(settings: ClientSettings, playerId: number | null, filters: PlayerStatsFilters) {
+export function usePlayerHistory(settings: ClientSettings, playerId: number | null, filters: PlayerStatsFilters, enabled = true) {
   return useQuery({
     queryKey: queryKeys.playerHistory(settings, playerId, filters),
     queryFn: async () => {
@@ -166,7 +166,7 @@ export function usePlayerHistory(settings: ClientSettings, playerId: number | nu
       ])
       return { history, summary }
     },
-    enabled: playerId != null,
+    enabled: enabled && playerId != null,
     placeholderData: keepPreviousData,
     retry: 1,
   })
