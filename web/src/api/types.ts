@@ -182,7 +182,7 @@ export interface ArbSearchResult {
   under_agency: string
   margin: number
   implied_probability_sum: number
-  status: 'Arb' | 'Near' | string
+  status: 'Arb' | 'Near'
   source_modified_at: string | null
 }
 

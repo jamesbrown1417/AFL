@@ -32,6 +32,7 @@ export function AppShell({
 
   return (
     <div className={clsx('app-shell', `theme-${themeMode}`)}>
+      <a href="#main-content" className="skip-link">Skip to main content</a>
       <aside className="sidebar">
         <div className="brand">
           <div className="brand-mark">AE</div>
@@ -47,6 +48,8 @@ export function AppShell({
               <button
                 key={item.key}
                 type="button"
+                aria-label={item.label}
+                aria-current={activeView === item.key ? 'page' : undefined}
                 className={clsx(activeView === item.key && 'is-active')}
                 onClick={() => setActiveView(item.key)}
               >
@@ -58,7 +61,7 @@ export function AppShell({
         </nav>
       </aside>
 
-      <div className="app-frame">
+      <div className="app-frame" id="main-content">
         <header className="topbar">
           <div className="status-cluster">
             <div className="status-item">

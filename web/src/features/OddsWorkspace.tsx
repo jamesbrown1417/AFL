@@ -1,12 +1,12 @@
 import { useMemo, useState } from 'react'
 import { flexRender, getCoreRowModel, getSortedRowModel, useReactTable, type ColumnDef, type SortingState } from '@tanstack/react-table'
-import { ArrowDown, ArrowDownUp, ArrowUp, ExternalLink, Plus, Search } from 'lucide-react'
+import { Plus, Search, X } from 'lucide-react'
 import type { BookmakerSummary, EventSummary, OddsScope, OddsSearchResult } from '../api/types'
 import { useOdds } from '../api/queries'
 import { useClientSettings, useAppStore, defaultOddsFilters } from '../store/useAppStore'
 import { formatDateTime, formatLine, formatPrice, formatSigned, marketLabel, playerPositionTag, selectionTypeLabel, shortMatchLabel } from '../lib/formatters'
-import { combinedBasePrice, lineWithSideLabel, toDraftLeg } from '../lib/builder'
-import { Button, Chip, EmptyState, ErrorBanner, Field, Panel, Segmented, Select, StatPill, TextInput, Toggle } from '../components/ui'
+import { combinedBasePrice, toDraftLeg } from '../lib/builder'
+import { Button, Chip, EmptyState, ErrorBanner, Field, Panel, Segmented, Select, SortIcon, StatPill, TextInput, Toggle } from '../components/ui'
 
 const playerMarkets = [
   [null, 'All props'],
@@ -171,7 +171,7 @@ export function OddsWorkspace({
   const sgmReady = data.filter((row) => row.sgm_eligible).length
 
   return (
-    <main className="workspace odds-workspace">
+    <main className="workspace odds-workspace" aria-label="Odds workspace">
       <section className="workspace-main">
         <div className="page-title-row">
           <div>
@@ -289,6 +289,7 @@ export function OddsWorkspace({
           ) : (
             <div className="data-table-wrap">
               <table className="data-table">
+                <caption className="visually-hidden">Odds market board</caption>
                 <thead>
                   {table.getHeaderGroups().map((headerGroup) => (
                     <tr key={headerGroup.id}>
@@ -358,23 +359,6 @@ function Delta({ value }: { value: number | null }) {
   return <span className={value == null ? 'delta' : value >= 0 ? 'delta delta--good' : 'delta delta--bad'}>{formatSigned(value)}</span>
 }
 
-function SortIcon({ state }: { state: false | 'asc' | 'desc' }) {
-  if (state === 'asc') return <ArrowUp size={12} />
-  if (state === 'desc') return <ArrowDown size={12} />
-  return <ArrowDownUp size={12} />
-}
-
-export function SelectionMicroCard({ row, onAdd }: { row: OddsSearchResult; onAdd: () => void }) {
-  return (
-    <button className="selection-card" type="button" onClick={onAdd}>
-      <span>{lineWithSideLabel(row)}</span>
-      <b>{formatPrice(row.decimal_price)}</b>
-      <small>{formatSigned(row.next_best_prob_diff)}</small>
-      <ExternalLink size={14} />
-    </button>
-  )
-}
-
 function DraftRail({
   legs,
   onRemove,
@@ -401,7 +385,7 @@ function DraftRail({
                 <span>{marketLabel(leg.market_type_code)} | {shortMatchLabel(leg.event_label)}</span>
               </div>
               <b>{formatPrice(leg.base_price)}</b>
-              <button type="button" onClick={() => onRemove(leg.selection_id)} aria-label="Remove leg">x</button>
+              <button type="button" onClick={() => onRemove(leg.selection_id)} aria-label="Remove leg"><X size={15} /></button>
             </div>
           ))
         )}

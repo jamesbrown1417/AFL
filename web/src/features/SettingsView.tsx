@@ -20,9 +20,10 @@ export function SettingsView({
   const current = { apiBaseUrl, authToken, defaultBookmaker, themeMode }
   const setSettings = useAppStore((state) => state.setSettings)
   const [draft, setDraft] = useState(current)
+  const [saved, setSaved] = useState(false)
 
   return (
-    <main className="workspace settings-workspace">
+    <main className="workspace settings-workspace" aria-label="Settings">
       <section className="workspace-main">
         <div className="page-title-row">
           <div>
@@ -54,7 +55,9 @@ export function SettingsView({
             <Toggle checked={draft.themeMode === 'dark'} onChange={(checked) => setDraft({ ...draft, themeMode: checked ? 'dark' : 'light' })} label="Dark mode" />
           </div>
           <div className="settings-actions">
-            <Button onClick={() => setSettings(draft)}>Save settings</Button>
+            <Button onClick={() => { setSettings(draft); setSaved(true); setTimeout(() => setSaved(false), 2500) }}>
+              {saved ? 'Saved!' : 'Save settings'}
+            </Button>
             <Button variant="ghost" onClick={() => setDraft({ ...draft, apiBaseUrl: '/api/v1/' })}>Use Vite proxy</Button>
           </div>
         </Panel>
@@ -79,6 +82,7 @@ export function SettingsView({
           </div>
           <div className="data-table-wrap">
             <table className="data-table">
+              <caption className="visually-hidden">Data file sections</caption>
               <thead>
                 <tr>
                   <th>Section</th>

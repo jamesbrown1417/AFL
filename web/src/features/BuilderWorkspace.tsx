@@ -7,7 +7,7 @@ import { useBuilderOdds, useCompareCgm, useCompareSgm, useSelectionAgencyPrices 
 import { defaultMetricFilters, defaultPlayerFilters, useAppStore, useClientSettings } from '../store/useAppStore'
 import { allMarketCode, buildCandidateGroups, combinedBasePrice, defaultDescending, lineWithSideLabel, marketTypeToStatCode, orderedMarketCodes, sortCandidateRows, toDraftLeg } from '../lib/builder'
 import { bookmakerLabel, formatDateTime, formatLine, formatPrice, formatSigned, marketLabel, playerPositionTag, selectionTypeLabel, shortMatchLabel } from '../lib/formatters'
-import { Button, Chip, EmptyState, ErrorBanner, Field, Panel, Segmented, Select, StatPill, TextInput, Toggle } from '../components/ui'
+import { Button, Chip, ConfirmDialog, EmptyState, ErrorBanner, Field, Panel, Segmented, Select, StatPill, TextInput, Toggle } from '../components/ui'
 
 export function BuilderWorkspace({
   mode,
@@ -52,6 +52,7 @@ export function BuilderWorkspace({
   const [notice, setNotice] = useState<string | null>(null)
   const [contextMenu, setContextMenu] = useState<{ x: number; y: number; selection: OddsSearchResult } | null>(null)
   const [priceDialogSelection, setPriceDialogSelection] = useState<OddsSearchResult | null>(null)
+  const [pendingSwitch, setPendingSwitch] = useState<(() => void) | null>(null)
 
   const legs = mode === 'sgm' ? sgmLegs : cgmLegs
   const selectedSelectionIds = useMemo(() => new Set(legs.map((leg) => leg.selection_id)), [legs])
@@ -109,29 +110,32 @@ export function BuilderWorkspace({
     addCgmLeg(draftLeg)
   }
 
-  const confirmDraftSwitch = () => {
-    if (legs.length === 0) return true
-    return window.confirm(`Switching clears your current draft. You currently have ${legs.length} leg${legs.length === 1 ? '' : 's'} selected.`)
+  const requestDraftSwitch = (action: () => void) => {
+    if (legs.length === 0) { action(); return }
+    setPendingSwitch(() => action)
   }
 
   const handleSelectBookmaker = (code: string) => {
     if (code === effectiveBookmaker) return
-    if (!confirmDraftSwitch()) return
-    if (mode === 'sgm') clearSgm()
-    else {
-      clearCgm()
-      setSelectedEventIds(new Set())
-    }
-    setNotice(null)
-    setBookmaker(code)
+    requestDraftSwitch(() => {
+      if (mode === 'sgm') clearSgm()
+      else {
+        clearCgm()
+        setSelectedEventIds(new Set())
+      }
+      setNotice(null)
+      setBookmaker(code)
+    })
   }
 
   const handleSelectSgmEvent = (eventId: number | null) => {
     if (eventId === effectiveSgmEventId) return
-    if (sgmLegs.length > 0 && !confirmDraftSwitch()) return
-    if (sgmLegs.length > 0) clearSgm()
-    setNotice(null)
-    setSgmEventId(eventId)
+    if (sgmLegs.length === 0) { setSgmEventId(eventId); return }
+    requestDraftSwitch(() => {
+      clearSgm()
+      setNotice(null)
+      setSgmEventId(eventId)
+    })
   }
 
   const selectedSgmEvent = mode === 'sgm' ? events.find((event) => event.id === effectiveSgmEventId) ?? null : null
@@ -188,7 +192,7 @@ export function BuilderWorkspace({
   }
 
   return (
-    <main className="workspace builder-workspace">
+    <main className="workspace builder-workspace" aria-label={mode === 'sgm' ? 'SGM builder' : 'CGM builder'}>
       <section className="workspace-main">
         <div className="page-title-row">
           <div>
@@ -406,6 +410,14 @@ export function BuilderWorkspace({
           onClose={() => setPriceDialogSelection(null)}
         />
       ) : null}
+
+      {pendingSwitch ? (
+        <ConfirmDialog
+          message={`Switching clears your current draft. You currently have ${legs.length} leg${legs.length === 1 ? '' : 's'} selected.`}
+          onConfirm={() => { pendingSwitch(); setPendingSwitch(null) }}
+          onCancel={() => setPendingSwitch(null)}
+        />
+      ) : null}
     </main>
   )
 }
@@ -554,23 +566,15 @@ function CandidateRow({
   onContextMenu: (event: React.MouseEvent) => void
 }) {
   return (
-    <div
+    <button
+      type="button"
       className={clsx('candidate-row', selected && 'is-selected', disabled && 'is-disabled')}
-      role="button"
-      tabIndex={disabled ? -1 : 0}
+      tabIndex={disabled ? -1 : undefined}
       aria-pressed={selected}
       aria-disabled={disabled}
       title={disabled ? 'Not available for this builder' : selected ? 'Click to remove from draft' : 'Click to add to draft'}
-      onClick={() => {
-        if (!disabled) onToggle()
-      }}
+      onClick={() => { if (!disabled) onToggle() }}
       onContextMenu={onContextMenu}
-      onKeyDown={(event) => {
-        if (!disabled && (event.key === 'Enter' || event.key === ' ')) {
-          event.preventDefault()
-          onToggle()
-        }
-      }}
     >
       <div className="candidate-primary">
         <strong>
@@ -588,7 +592,7 @@ function CandidateRow({
       <span className={clsx('col-num delta', (selection.diff_last_10 ?? -1) >= 0 ? 'delta--good' : 'delta--bad')}>{formatSigned(selection.diff_last_10)}</span>
       <span className={clsx('col-num delta', (selection.diff_2025 ?? -1) >= 0 ? 'delta--good' : 'delta--bad')}>{formatSigned(selection.diff_2025)}</span>
       <span className={clsx('col-num delta', (selection.next_best_prob_diff ?? -1) >= 0 ? 'delta--good' : 'delta--bad')}>{formatSigned(selection.next_best_prob_diff)}</span>
-    </div>
+    </button>
   )
 }
 

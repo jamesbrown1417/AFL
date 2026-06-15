@@ -1,5 +1,6 @@
 import { forwardRef } from 'react'
 import type { ButtonHTMLAttributes, InputHTMLAttributes, ReactNode, SelectHTMLAttributes } from 'react'
+import { ArrowDown, ArrowDownUp, ArrowUp } from 'lucide-react'
 import clsx from 'clsx'
 
 export function Button({
@@ -88,7 +89,7 @@ export function Chip({
   onClick?: () => void
 }) {
   return (
-    <button type="button" className={clsx('chip', active && 'is-active')} onClick={onClick}>
+    <button type="button" className={clsx('chip', active && 'is-active')} aria-pressed={active} onClick={onClick}>
       {children}
     </button>
   )
@@ -105,7 +106,7 @@ export function EmptyState({ title, body, action }: { title: string; body: strin
 }
 
 export function ErrorBanner({ message }: { message: string }) {
-  return <div className="error-banner">{message}</div>
+  return <div className="error-banner" role="alert">{message}</div>
 }
 
 export function StatPill({ label, value, tone = 'neutral' }: { label: string; value: string; tone?: 'neutral' | 'good' | 'warn' | 'bad' }) {
@@ -113,6 +114,34 @@ export function StatPill({ label, value, tone = 'neutral' }: { label: string; va
     <div className={clsx('stat-pill', `stat-pill--${tone}`)}>
       <span>{label}</span>
       <b>{value}</b>
+    </div>
+  )
+}
+
+export function SortIcon({ state }: { state: false | 'asc' | 'desc' }) {
+  if (state === 'asc') return <ArrowUp size={12} />
+  if (state === 'desc') return <ArrowDown size={12} />
+  return <ArrowDownUp size={12} />
+}
+
+export function ConfirmDialog({
+  message,
+  onConfirm,
+  onCancel,
+}: {
+  message: string
+  onConfirm: () => void
+  onCancel: () => void
+}) {
+  return (
+    <div className="modal-overlay" onClick={onCancel}>
+      <div className="modal confirm-dialog" role="dialog" aria-modal="true" aria-label="Confirm action" onClick={(event) => event.stopPropagation()}>
+        <p className="confirm-dialog-message">{message}</p>
+        <div className="confirm-dialog-actions">
+          <Button variant="ghost" onClick={onCancel}>Cancel</Button>
+          <Button variant="danger" onClick={onConfirm}>Confirm</Button>
+        </div>
+      </div>
     </div>
   )
 }

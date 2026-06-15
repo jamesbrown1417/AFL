@@ -1,6 +1,7 @@
-import { lazy, Suspense, useEffect } from 'react'
+import { lazy, Suspense, useEffect, useMemo } from 'react'
 import { useBookmakers, useDataStatus, useEvents, useHealth } from './api/queries'
 import { AppShell } from './components/AppShell'
+import { ErrorBoundary } from './components/ErrorBoundary'
 import { useAppStore, useClientSettings } from './store/useAppStore'
 import './App.css'
 
@@ -30,10 +31,11 @@ function App() {
     if (!['player', 'odds', 'arbs', 'settings'].includes(activeView)) setActiveView('odds')
   }, [activeView, setActiveView])
 
-  const bookmakerRows = bookmakers.data ?? []
-  const eventRows = events.data ?? []
+  const bookmakerRows = useMemo(() => bookmakers.data ?? [], [bookmakers.data])
+  const eventRows = useMemo(() => events.data ?? [], [events.data])
 
   return (
+    <ErrorBoundary>
     <AppShell health={health.data} dataStatus={dataStatus.data}>
       <Suspense fallback={<div className="screen-loading">Loading workspace</div>}>
         {activeView === 'odds' ? <OddsWorkspace bookmakers={bookmakerRows} events={eventRows} /> : null}
@@ -44,6 +46,7 @@ function App() {
         {activeView === 'settings' ? <SettingsView bookmakers={bookmakerRows} health={health.data} dataStatus={dataStatus.data} /> : null}
       </Suspense>
     </AppShell>
+    </ErrorBoundary>
   )
 }
 

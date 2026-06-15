@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Area, AreaChart, CartesianGrid, Line, LineChart, ReferenceLine, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
 import { ArrowDown, ArrowDownUp, ArrowUp, RefreshCcw, Search, SlidersHorizontal, X } from 'lucide-react'
 import type { PlayerStatFilterOptions, PlayerGameLogEntry, PlayerStatsFilters, PlayerStatSummary } from '../api/types'
@@ -20,14 +20,24 @@ export function PlayerLab() {
   const [playerMode, setPlayerMode] = useState<PlayerMode>('stats')
   const [comparisonFocus, setComparisonFocus] = useState<ScenarioId>('a')
   const [filterTarget, setFilterTarget] = useState<FilterTarget>(null)
+  const [drawerTab, setDrawerTab] = useState<'a' | 'b'>('a')
   const [draftFilters, setDraftFilters] = useState<PlayerStatsFilters>(filters)
   const [scenarioAFilters, setScenarioAFilters] = useState<PlayerStatsFilters>(filters)
   const [scenarioBFilters, setScenarioBFilters] = useState<PlayerStatsFilters>(filters)
+  const [draftScenarioAFilters, setDraftScenarioAFilters] = useState<PlayerStatsFilters>(scenarioAFilters)
+  const [draftScenarioBFilters, setDraftScenarioBFilters] = useState<PlayerStatsFilters>(scenarioBFilters)
   const searchInputRef = useRef<HTMLInputElement | null>(null)
   const [historySort, setHistorySort] = useState<{ key: HistorySortKey; direction: 'asc' | 'desc' }>({
     key: 'date',
     direction: 'desc',
   })
+  const [highlightedEntryKey, setHighlightedEntryKey] = useState<string | null>(null)
+  const highlightTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+
+  const clearHighlightAfterDelay = useCallback(() => {
+    if (highlightTimerRef.current) clearTimeout(highlightTimerRef.current)
+    highlightTimerRef.current = setTimeout(() => setHighlightedEntryKey(null), 1800)
+  }, [])
   const playersQuery = useStatPlayers(settings, query, filters)
   const playerOptions = useMemo(() => {
     const normalizedQuery = query.trim().toLowerCase()
@@ -83,7 +93,8 @@ export function PlayerLab() {
     setScenarioAFilters(filters)
     setScenarioBFilters(filters)
     setComparisonFocus('a')
-  }, [filters, selectedPlayerId])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedPlayerId])
 
   const selectPlayer = (playerId: number, playerName: string) => {
     setSelectedPlayer(playerId, playerName)
@@ -135,31 +146,48 @@ export function PlayerLab() {
     }))
   }
 
-  const openFilters = (target: Exclude<FilterTarget, null> = 'stats') => {
-    if (target === 'scenarioA') setDraftFilters(scenarioAFilters)
-    else if (target === 'scenarioB') setDraftFilters(scenarioBFilters)
-    else setDraftFilters(filters)
+  const openFilters = (target: 'stats' | 'comparison', tab: 'a' | 'b' = 'a') => {
+    setDraftFilters(filters)
+    setDraftScenarioAFilters(scenarioAFilters)
+    setDraftScenarioBFilters(scenarioBFilters)
     setFilterTarget(target)
+    setDrawerTab(tab)
   }
 
   const applyFilters = () => {
-    if (filterTarget === 'scenarioA') setScenarioAFilters(draftFilters)
-    else if (filterTarget === 'scenarioB') setScenarioBFilters(draftFilters)
-    else setFilters(draftFilters)
+    if (filterTarget === 'comparison') {
+      setScenarioAFilters(draftScenarioAFilters)
+      setScenarioBFilters(draftScenarioBFilters)
+    } else {
+      setFilters(draftFilters)
+    }
     setFilterTarget(null)
   }
 
-  const resetFilters = () => {
-    const stat = draftFilters.stat
-    setDraftFilters({ ...defaultPlayerFilters, stat, ...defaultsForStat(stat) })
+  const resetFilters = (tab: 'stats' | 'a' | 'b') => {
+    if (tab === 'stats') {
+      const stat = draftFilters.stat
+      setDraftFilters({ ...defaultPlayerFilters, stat, ...defaultsForStat(stat) })
+    } else if (tab === 'a') {
+      const stat = draftScenarioAFilters.stat
+      setDraftScenarioAFilters({ ...defaultPlayerFilters, stat, ...defaultsForStat(stat) })
+    } else if (tab === 'b') {
+      const stat = draftScenarioBFilters.stat
+      setDraftScenarioBFilters({ ...defaultPlayerFilters, stat, ...defaultsForStat(stat) })
+    }
   }
 
-  const activeFilterCount = useMemo(() => countActiveFilters(filters), [filters])
+  const activeFilterCount = useMemo(() => {
+    if (playerMode === 'comparison') {
+      return countActiveFilters(comparisonFocus === 'a' ? scenarioAFilters : scenarioBFilters)
+    }
+    return countActiveFilters(filters)
+  }, [playerMode, filters, comparisonFocus, scenarioAFilters, scenarioBFilters])
   const comparisonLoading = scenarioAQuery.isFetching || scenarioBQuery.isFetching
   const comparisonStatLabel = filterOptions.data?.stats.find((stat) => stat.code === scenarioAFilters.stat)?.label ?? scenarioAFilters.stat
 
   return (
-    <main className="workspace player-workspace">
+    <main className="workspace player-workspace" aria-label="Player lab">
       <section className="workspace-main">
         <div className="page-title-row">
           <div>
@@ -176,19 +204,18 @@ export function PlayerLab() {
               ]}
               onChange={setPlayerMode}
             />
-            {playerMode === 'stats' ? (
-              <Button variant="secondary" onClick={() => openFilters('stats')}>
-                <SlidersHorizontal size={15} /> Filters
-                {activeFilterCount > 0 ? <span className="filter-count-badge">{activeFilterCount}</span> : null}
-              </Button>
-            ) : (
+            <Button variant="secondary" onClick={() => openFilters(playerMode === 'comparison' ? 'comparison' : 'stats', playerMode === 'comparison' ? comparisonFocus : 'a')}>
+              <SlidersHorizontal size={15} /> Filters
+              {activeFilterCount > 0 ? <span className="filter-count-badge">{activeFilterCount}</span> : null}
+            </Button>
+            {playerMode === 'comparison' ? (
               <Button variant="secondary" onClick={() => {
                 void scenarioAQuery.refetch()
                 void scenarioBQuery.refetch()
               }}>
                 <RefreshCcw size={15} /> Refresh
               </Button>
-            )}
+            ) : null}
           </div>
         </div>
 
@@ -251,13 +278,25 @@ export function PlayerLab() {
                 </div>
               )}
             </div>
-            {playerMode === 'stats' ? <FilterSummary filters={filters} /> : <FilterSummary filters={scenarioAFilters} />}
+            {playerMode === 'stats' ? (
+              <FilterSummary filters={filters} />
+            ) : (
+              <div className="comparison-filter-summaries">
+                <div className="filter-summary-pair">
+                  <span className="summary-label">A:</span>
+                  <FilterSummary filters={scenarioAFilters} />
+                </div>
+                <div className="filter-summary-pair">
+                  <span className="summary-label">B:</span>
+                  <FilterSummary filters={scenarioBFilters} />
+                </div>
+              </div>
+            )}
           </div>
           {playerMode === 'stats' ? (
             <PlayerQuickActions filters={filters} filterOptions={filterOptions.data ?? null} onApply={setFilters} />
           ) : (
             <ComparisonSetup
-              statLabel={comparisonStatLabel}
               filterOptions={filterOptions.data ?? null}
               scenarioAFilters={scenarioAFilters}
               scenarioBFilters={scenarioBFilters}
@@ -334,7 +373,40 @@ export function PlayerLab() {
                           label={{ value: line.label, position: 'insideTopRight', fill: '#2563eb', fontSize: 11 }}
                         />
                       ))}
-                      <Area dataKey="value" stroke="transparent" strokeWidth={0} fill="transparent" dot={<ReferenceResultDot />} activeDot={<ReferenceResultDot isActive />} isAnimationActive={false} />
+                      <Area
+                        dataKey="value"
+                        stroke="transparent"
+                        strokeWidth={0}
+                        fill="transparent"
+                        dot={(props) => (
+                          <ReferenceResultDot
+                            {...props}
+                            onClick={() => {
+                              const point = props.payload as ChartPoint | undefined
+                              if (!point || point.isTransition || point.value == null) return
+                              const entry = history.toReversed()[point.x]
+                              if (!entry) return
+                              setHighlightedEntryKey(`${entry.date}-${entry.game_number}`)
+                              clearHighlightAfterDelay()
+                            }}
+                          />
+                        )}
+                        activeDot={(props) => (
+                          <ReferenceResultDot
+                            {...props}
+                            isActive
+                            onClick={() => {
+                              const point = props.payload as ChartPoint | undefined
+                              if (!point || point.isTransition || point.value == null) return
+                              const entry = history.toReversed()[point.x]
+                              if (!entry) return
+                              setHighlightedEntryKey(`${entry.date}-${entry.game_number}`)
+                              clearHighlightAfterDelay()
+                            }}
+                          />
+                        )}
+                        isAnimationActive={false}
+                      />
                     </AreaChart>
                   </ResponsiveContainer>
                 </div>
@@ -342,7 +414,7 @@ export function PlayerLab() {
             </Panel>
 
             <Panel className="table-panel">
-              <PlayerHistoryTable history={sortedHistory} selectedStatKey={selectedStatKey} sort={historySort} onSort={toggleHistorySort} />
+              <PlayerHistoryTable history={sortedHistory} selectedStatKey={selectedStatKey} sort={historySort} onSort={toggleHistorySort} highlightedEntryKey={highlightedEntryKey} />
             </Panel>
           </>
         ) : (
@@ -357,22 +429,31 @@ export function PlayerLab() {
             historySort={historySort}
             onSort={toggleHistorySort}
             onFocusChange={setComparisonFocus}
-            onEditScenarioA={() => openFilters('scenarioA')}
-            onEditScenarioB={() => openFilters('scenarioB')}
+            onEditScenarioA={() => openFilters('comparison', 'a')}
+            onEditScenarioB={() => openFilters('comparison', 'b')}
+            highlightedEntryKey={highlightedEntryKey}
+            onHighlightEntry={(entryKey) => {
+              setHighlightedEntryKey(entryKey)
+              clearHighlightAfterDelay()
+            }}
           />
         )}
       </section>
 
       {filterTarget ? (
         <PlayerFiltersDrawer
-          title={filterTarget === 'scenarioA' ? 'Scenario A filters' : filterTarget === 'scenarioB' ? 'Scenario B filters' : 'Filters'}
           filterOptions={filterOptions.data ?? null}
-          draft={draftFilters}
-          onChange={setDraftFilters}
+          draftStats={draftFilters}
+          draftA={draftScenarioAFilters}
+          draftB={draftScenarioBFilters}
+          mode={filterTarget}
+          initialTab={drawerTab}
+          onChangeStats={setDraftFilters}
+          onChangeA={setDraftScenarioAFilters}
+          onChangeB={setDraftScenarioBFilters}
           onApply={applyFilters}
           onReset={resetFilters}
           onClose={() => setFilterTarget(null)}
-          showStatControls={filterTarget === 'stats'}
         />
       ) : null}
     </main>
@@ -454,21 +535,19 @@ function PlayerQuickActions({
 }
 
 function ComparisonSetup({
-  statLabel,
   filterOptions,
   scenarioAFilters,
   scenarioBFilters,
   onScenarioAChange,
   onScenarioBChange,
 }: {
-  statLabel: string
   filterOptions: PlayerStatFilterOptions | null
   scenarioAFilters: PlayerStatsFilters
   scenarioBFilters: PlayerStatsFilters
   onScenarioAChange: (filters: PlayerStatsFilters) => void
   onScenarioBChange: (filters: PlayerStatsFilters) => void
 }) {
-  const statOptions = filterOptions?.stats ?? [{ code: scenarioAFilters.stat, label: statLabel }]
+  const statOptions = filterOptions?.stats ?? [{ code: 'disposals', label: 'Disposals' }]
   const homeAwayOptions = filterOptions?.home_away_options.length ? filterOptions.home_away_options : ['Home', 'Away']
   const homeAwaySelected = scenarioAFilters.homeAway.length === 1 && scenarioAFilters.homeAway[0] === 'Home' && scenarioBFilters.homeAway.length === 1 && scenarioBFilters.homeAway[0] === 'Away'
   const winLossSelected = scenarioAFilters.marginMin === '0' && scenarioAFilters.marginMax === '200' && scenarioBFilters.marginMin === '-200' && scenarioBFilters.marginMax === '-1'
@@ -479,7 +558,8 @@ function ComparisonSetup({
   }
 
   const updateStat = (stat: string) => {
-    applyShared({ stat, ...defaultsForStat(stat) })
+    const defaults = defaultsForStat(stat)
+    applyShared({ stat, referenceLine: defaults.referenceLine, lowerBound: defaults.lowerBound, upperBound: defaults.upperBound })
   }
 
   return (
@@ -523,9 +603,10 @@ function ComparisonSetup({
           <Chip
             active={homeAwaySelected}
             onClick={() => {
+              const defaultHomeAway = homeAwayOptions
               if (homeAwaySelected) {
-                onScenarioAChange({ ...scenarioAFilters, homeAway: homeAwayOptions })
-                onScenarioBChange({ ...scenarioBFilters, homeAway: homeAwayOptions })
+                onScenarioAChange({ ...scenarioAFilters, homeAway: defaultHomeAway })
+                onScenarioBChange({ ...scenarioBFilters, homeAway: defaultHomeAway })
               } else {
                 onScenarioAChange({ ...scenarioAFilters, homeAway: ['Home'] })
                 onScenarioBChange({ ...scenarioBFilters, homeAway: ['Away'] })
@@ -567,6 +648,8 @@ function PlayerComparisonMode({
   onFocusChange,
   onEditScenarioA,
   onEditScenarioB,
+  highlightedEntryKey,
+  onHighlightEntry,
 }: {
   statLabel: string
   scenarioAFilters: PlayerStatsFilters
@@ -580,12 +663,21 @@ function PlayerComparisonMode({
   onFocusChange: (scenario: ScenarioId) => void
   onEditScenarioA: () => void
   onEditScenarioB: () => void
+  highlightedEntryKey: string | null
+  onHighlightEntry: (entryKey: string) => void
 }) {
   const historyA = scenarioAData?.history ?? []
   const historyB = scenarioBData?.history ?? []
   const selectedStatKey = normalizeStatKey(scenarioAFilters.stat)
   const focusedHistory = comparisonFocus === 'a' ? historyA : historyB
   const sortedFocusedHistory = useMemo(() => sortHistory(focusedHistory, historySort.key, historySort.direction), [focusedHistory, historySort])
+
+  const handleGraphPointClick = useCallback((entryKey: string, scenario: ScenarioId) => {
+    if (scenario !== comparisonFocus) {
+      onFocusChange(scenario)
+    }
+    onHighlightEntry(entryKey)
+  }, [comparisonFocus, onFocusChange, onHighlightEntry])
 
   return (
     <>
@@ -608,6 +700,7 @@ function PlayerComparisonMode({
         historyA={historyA}
         historyB={historyB}
         isLoading={isLoading}
+        onPointClick={handleGraphPointClick}
       />
       <Panel className="table-panel comparison-log-panel">
         <div className="section-heading">
@@ -625,7 +718,7 @@ function PlayerComparisonMode({
         {sortedFocusedHistory.length === 0 && !isLoading ? (
           <EmptyState title="No game log" body="Adjust the scenario filters to load matching games." />
         ) : (
-          <PlayerHistoryTable history={sortedFocusedHistory} selectedStatKey={selectedStatKey} sort={historySort} onSort={onSort} />
+          <PlayerHistoryTable history={sortedFocusedHistory} selectedStatKey={selectedStatKey} sort={historySort} onSort={onSort} highlightedEntryKey={highlightedEntryKey} />
         )}
       </Panel>
     </>
@@ -736,6 +829,7 @@ function ComparisonGraphPanel({
   historyA,
   historyB,
   isLoading,
+  onPointClick,
 }: {
   statLabel: string
   scenarioAFilters: PlayerStatsFilters
@@ -743,6 +837,7 @@ function ComparisonGraphPanel({
   historyA: PlayerGameLogEntry[]
   historyB: PlayerGameLogEntry[]
   isLoading: boolean
+  onPointClick?: (entryKey: string, scenario: ScenarioId) => void
 }) {
   const data = useMemo(() => buildComparisonChartData(historyA, historyB), [historyA, historyB])
   const guidesA = useMemo(() => referenceLinesFromFilters(scenarioAFilters.lineMode, scenarioAFilters.referenceLine, scenarioAFilters.lowerBound, scenarioAFilters.upperBound), [scenarioAFilters])
@@ -776,8 +871,35 @@ function ComparisonGraphPanel({
               name="Scenario A"
               stroke="#7c3aed"
               strokeWidth={2.2}
-              dot={(props) => <ComparisonResultDot {...props} scenario="a" />}
-              activeDot={(props) => <ComparisonResultDot {...props} scenario="a" isActive />}
+              dot={(props) => (
+                <ComparisonResultDot
+                  {...props}
+                  scenario="a"
+                  onClick={() => {
+                    if (!onPointClick) return
+                    const point = (props as { payload?: ComparisonChartPoint }).payload
+                    if (!point || point.scenarioA == null) return
+                    const entry = historyA[point.gameNumber - 1]
+                    if (!entry) return
+                    onPointClick(`${entry.date}-${entry.game_number}`, 'a')
+                  }}
+                />
+              )}
+              activeDot={(props) => (
+                <ComparisonResultDot
+                  {...props}
+                  scenario="a"
+                  isActive
+                  onClick={() => {
+                    if (!onPointClick) return
+                    const point = (props as { payload?: ComparisonChartPoint }).payload
+                    if (!point || point.scenarioA == null) return
+                    const entry = historyA[point.gameNumber - 1]
+                    if (!entry) return
+                    onPointClick(`${entry.date}-${entry.game_number}`, 'a')
+                  }}
+                />
+              )}
               connectNulls
               isAnimationActive={false}
             />
@@ -787,8 +909,35 @@ function ComparisonGraphPanel({
               name="Scenario B"
               stroke="#0f766e"
               strokeWidth={2.2}
-              dot={(props) => <ComparisonResultDot {...props} scenario="b" />}
-              activeDot={(props) => <ComparisonResultDot {...props} scenario="b" isActive />}
+              dot={(props) => (
+                <ComparisonResultDot
+                  {...props}
+                  scenario="b"
+                  onClick={() => {
+                    if (!onPointClick) return
+                    const point = (props as { payload?: ComparisonChartPoint }).payload
+                    if (!point || point.scenarioB == null) return
+                    const entry = historyB[point.gameNumber - 1]
+                    if (!entry) return
+                    onPointClick(`${entry.date}-${entry.game_number}`, 'b')
+                  }}
+                />
+              )}
+              activeDot={(props) => (
+                <ComparisonResultDot
+                  {...props}
+                  scenario="b"
+                  isActive
+                  onClick={() => {
+                    if (!onPointClick) return
+                    const point = (props as { payload?: ComparisonChartPoint }).payload
+                    if (!point || point.scenarioB == null) return
+                    const entry = historyB[point.gameNumber - 1]
+                    if (!entry) return
+                    onPointClick(`${entry.date}-${entry.game_number}`, 'b')
+                  }}
+                />
+              )}
               connectNulls
               isAnimationActive={false}
             />
@@ -811,47 +960,90 @@ function PlayerHistoryTable({
   selectedStatKey,
   sort,
   onSort,
+  highlightedEntryKey,
 }: {
   history: PlayerGameLogEntry[]
   selectedStatKey: PlayerStatKey | null
   sort: { key: HistorySortKey; direction: 'asc' | 'desc' }
   onSort: (key: HistorySortKey) => void
+  highlightedEntryKey?: string | null
 }) {
+  const tableWrapRef = useRef<HTMLDivElement | null>(null)
+  const rowRefs = useRef<Map<string, HTMLTableRowElement>>(new Map())
+
+  useEffect(() => {
+    if (!highlightedEntryKey) return
+    const row = rowRefs.current.get(highlightedEntryKey)
+    if (!row) return
+    row.scrollIntoView({ behavior: 'smooth', block: 'center' })
+    row.classList.add('row-highlight')
+    const timer = setTimeout(() => row.classList.remove('row-highlight'), 1400)
+    return () => {
+      clearTimeout(timer)
+      row.classList.remove('row-highlight')
+    }
+  }, [highlightedEntryKey])
+
   return (
-    <div className="data-table-wrap">
+    <div className="data-table-wrap" ref={tableWrapRef}>
       <table className="data-table">
+        <caption className="visually-hidden">Player game history</caption>
         <thead>
           <tr>
             <SortableHistoryHeader label="Date" columnKey="date" sort={sort} onSort={onSort} />
             <SortableHistoryHeader label="Round" columnKey="round" sort={sort} onSort={onSort} />
             <SortableHistoryHeader label="Opposition" columnKey="opposition" sort={sort} onSort={onSort} />
             <SortableHistoryHeader label="Venue" columnKey="venue" sort={sort} onSort={onSort} />
+            <SortableHistoryHeader label="Match result" columnKey="match_result" sort={sort} onSort={onSort} />
             {PLAYER_STAT_COLUMNS.map((column) => (
-              <SortableHistoryHeader key={column.key} label={column.label} columnKey={column.key} sort={sort} onSort={onSort} isHighlighted={column.key === selectedStatKey} />
+              <SortableHistoryHeader key={column.key} label={column.label} columnKey={column.key} sort={sort} onSort={onSort} />
             ))}
             <SortableHistoryHeader label="Result" columnKey="hit" sort={sort} onSort={onSort} />
           </tr>
         </thead>
         <tbody>
-          {history.map((entry) => (
-            <tr key={`${entry.date}-${entry.game_number}`}>
-              <td>{formatMatchDateTime(entry.date)}</td>
-              <td>{entry.round_label ?? '-'}</td>
-              <td>{entry.opposition ?? '-'}</td>
-              <td>{entry.venue ?? '-'}</td>
-              {PLAYER_STAT_COLUMNS.map((column) => {
-                const highlighted = column.key === selectedStatKey
-                return (
-                  <td key={column.key} className={highlighted ? `stat-column-highlight${entry.hit === false ? ' stat-column-highlight--miss' : ''}` : undefined}>
-                    <b className="tabular">{formatStatCell(statValue(entry, column.key), column.suffix)}</b>
-                  </td>
-                )
-              })}
-              <td><span className={entry.hit ? 'tag tag--good' : 'tag'}>{entry.hit == null ? 'n/a' : entry.hit ? 'Hit' : 'Miss'}</span></td>
-            </tr>
-          ))}
+          {history.map((entry) => {
+            const entryKey = `${entry.date}-${entry.game_number}`
+            return (
+              <tr
+                key={entryKey}
+                ref={(el) => {
+                  if (el) rowRefs.current.set(entryKey, el)
+                  else rowRefs.current.delete(entryKey)
+                }}
+              >
+                <td>{formatMatchDateTime(entry.date)}</td>
+                <td>{entry.round_label ?? '-'}</td>
+                <td>{entry.opposition ?? '-'}</td>
+                <td>{entry.venue ?? '-'}</td>
+                <td><MatchResultCell entry={entry} /></td>
+                {PLAYER_STAT_COLUMNS.map((column) => {
+                  const highlighted = column.key === selectedStatKey
+                  return (
+                    <td key={column.key} className={highlighted ? `stat-column-highlight${entry.hit === false ? ' stat-column-highlight--miss' : ''}` : undefined}>
+                      <b className="tabular">{formatStatCell(statValue(entry, column.key), column.suffix)}</b>
+                    </td>
+                  )
+                })}
+                <td><span className={entry.hit ? 'tag tag--good' : 'tag'}>{entry.hit == null ? 'n/a' : entry.hit ? 'Hit' : 'Miss'}</span></td>
+              </tr>
+            )
+          })}
         </tbody>
       </table>
+    </div>
+  )
+}
+
+function MatchResultCell({ entry }: { entry: PlayerGameLogEntry }) {
+  const result = matchResult(entry)
+  if (!result) {
+    return <span className="match-result-cell match-result-cell--unknown">--</span>
+  }
+  return (
+    <div className="match-result-cell">
+      <span className={`tag ${result.toneClass}`}>{result.label}</span>
+      <small>{result.context}</small>
     </div>
   )
 }
@@ -862,24 +1054,37 @@ function summarize(values: string[]) {
 }
 
 function PlayerFiltersDrawer({
-  title,
   filterOptions,
-  draft,
-  onChange,
+  draftStats,
+  draftA,
+  draftB,
+  mode,
+  initialTab,
+  onChangeStats,
+  onChangeA,
+  onChangeB,
   onApply,
   onReset,
   onClose,
-  showStatControls = true,
 }: {
-  title: string
   filterOptions: PlayerStatFilterOptions | null
-  draft: PlayerStatsFilters
-  onChange: (filters: PlayerStatsFilters) => void
+  draftStats: PlayerStatsFilters
+  draftA: PlayerStatsFilters
+  draftB: PlayerStatsFilters
+  mode: 'stats' | 'comparison'
+  initialTab: 'a' | 'b'
+  onChangeStats: (filters: PlayerStatsFilters) => void
+  onChangeA: (filters: PlayerStatsFilters) => void
+  onChangeB: (filters: PlayerStatsFilters) => void
   onApply: () => void
-  onReset: () => void
+  onReset: (tab: 'stats' | 'a' | 'b') => void
   onClose: () => void
-  showStatControls?: boolean
 }) {
+  const [activeTab, setActiveTab] = useState<'a' | 'b'>(initialTab)
+
+  const draft = mode === 'stats' ? draftStats : (activeTab === 'a' ? draftA : draftB)
+  const onChange = mode === 'stats' ? onChangeStats : (activeTab === 'a' ? onChangeA : onChangeB)
+
   const statOptions = filterOptions?.stats ?? [{ code: 'disposals', label: 'Disposals' }]
   const updateStat = (stat: string) => {
     const defaults = defaultsForStat(stat)
@@ -889,13 +1094,30 @@ function PlayerFiltersDrawer({
     <div className="drawer-overlay" onClick={onClose}>
       <aside className="drawer" role="dialog" aria-modal="true" aria-label="Player filters" onClick={(event) => event.stopPropagation()}>
         <div className="drawer-head">
-          <h2>{title}</h2>
+          <h2>{mode === 'stats' ? 'Player filters' : 'Comparison filters'}</h2>
           <button type="button" className="modal-close" onClick={onClose} aria-label="Close filters">
             <X size={16} />
           </button>
         </div>
+        {mode === 'comparison' ? (
+          <div className="drawer-tabs">
+            <Segmented<'a' | 'b'>
+              value={activeTab}
+              ariaLabel="Scenario tab"
+              options={[
+                { value: 'a', label: 'Scenario A' },
+                { value: 'b', label: 'Scenario B' },
+              ]}
+              onChange={setActiveTab}
+            />
+          </div>
+        ) : null}
+        <div className="drawer-foot">
+          <Button variant="ghost" onClick={() => onReset(mode === 'stats' ? 'stats' : activeTab)}>Reset</Button>
+          <Button variant="primary" onClick={onApply}>Apply filters</Button>
+        </div>
         <div className="drawer-body">
-          {showStatControls ? (
+          {mode === 'stats' ? (
             <>
               <div className="filter-pair">
                 <Field label="Statistic">
@@ -933,9 +1155,7 @@ function PlayerFiltersDrawer({
                 </div>
               )}
             </>
-          ) : (
-            <p className="drawer-note">Stat and line are controlled from the comparison setup. Edit scenario-specific context here.</p>
-          )}
+          ) : null}
 
           <div className="filter-pair">
             <Field label="Margin min">
@@ -985,10 +1205,6 @@ function PlayerFiltersDrawer({
             selected={draft.weatherCategories}
             onToggle={(value) => onChange({ ...draft, weatherCategories: toggleArrayValue(draft.weatherCategories, value) })}
           />
-        </div>
-        <div className="drawer-foot">
-          <Button variant="ghost" onClick={onReset}>Reset</Button>
-          <Button variant="primary" onClick={onApply}>Apply filters</Button>
         </div>
       </aside>
     </div>
@@ -1048,10 +1264,10 @@ type PlayerStatKey =
   | 'cba'
   | 'tog'
 
-type HistorySortKey = 'date' | 'round' | 'opposition' | 'venue' | 'hit' | PlayerStatKey
+type HistorySortKey = 'date' | 'round' | 'opposition' | 'venue' | 'match_result' | 'hit' | PlayerStatKey
 type PlayerMode = 'stats' | 'comparison'
 type ScenarioId = 'a' | 'b'
-type FilterTarget = 'stats' | 'scenarioA' | 'scenarioB' | null
+type FilterTarget = 'stats' | 'comparison' | null
 type ReferenceResult = 'above' | 'below' | 'inside' | 'outside' | null
 type BaseChartPoint = {
   x: number
@@ -1102,17 +1318,15 @@ function SortableHistoryHeader({
   columnKey,
   sort,
   onSort,
-  isHighlighted = false,
 }: {
   label: string
   columnKey: HistorySortKey
   sort: { key: HistorySortKey; direction: 'asc' | 'desc' }
   onSort: (key: HistorySortKey) => void
-  isHighlighted?: boolean
 }) {
   const active = sort.key === columnKey
   return (
-    <th aria-sort={active ? (sort.direction === 'asc' ? 'ascending' : 'descending') : 'none'} className={isHighlighted ? 'stat-column-highlight' : undefined}>
+    <th aria-sort={active ? (sort.direction === 'asc' ? 'ascending' : 'descending') : 'none'}>
       <button type="button" className="sort-header" onClick={() => onSort(columnKey)}>
         <span>{label}</span>
         {active ? sort.direction === 'asc' ? <ArrowUp size={12} /> : <ArrowDown size={12} /> : <ArrowDownUp size={12} />}
@@ -1136,6 +1350,8 @@ function historyValue(entry: PlayerGameLogEntry, key: HistorySortKey) {
       return entry.opposition ?? ''
     case 'venue':
       return entry.venue ?? ''
+    case 'match_result':
+      return entry.margin ?? -999
     case 'hit':
       return entry.hit == null ? -1 : entry.hit ? 1 : 0
     default:
@@ -1146,6 +1362,30 @@ function historyValue(entry: PlayerGameLogEntry, key: HistorySortKey) {
 function compareHistoryValue(left: string | number, right: string | number) {
   if (typeof left === 'string' || typeof right === 'string') return `${left}`.localeCompare(`${right}`)
   return left - right
+}
+
+function matchResult(entry: PlayerGameLogEntry) {
+  if (entry.margin == null) return null
+  const margin = Math.round(entry.margin)
+  const label = margin > 0 ? `W +${margin}` : margin < 0 ? `L ${margin}` : 'D 0'
+  const toneClass = margin > 0 ? 'tag--good' : margin < 0 ? 'tag--bad' : 'tag--amber'
+  const homeAway = inferHomeAway(entry)
+  const contextParts = [homeAway, entry.team].filter(Boolean)
+  return {
+    label,
+    toneClass,
+    context: contextParts.length > 0 ? contextParts.join(' · ') : 'Team result',
+  }
+}
+
+function inferHomeAway(entry: PlayerGameLogEntry) {
+  if (entry.team && entry.home && namesEqual(entry.team, entry.home)) return 'Home'
+  if (entry.team && entry.away && namesEqual(entry.team, entry.away)) return 'Away'
+  return null
+}
+
+function namesEqual(left: string, right: string) {
+  return left.trim().toLowerCase() === right.trim().toLowerCase()
 }
 
 function statValue(entry: PlayerGameLogEntry, key: PlayerStatKey) {
@@ -1385,9 +1625,11 @@ function ComparisonResultDot({
   payload,
   scenario,
   isActive = false,
+  onClick,
 }: ComparisonDotProps & {
   scenario: ScenarioId
   isActive?: boolean
+  onClick?: () => void
 }) {
   const hit = scenario === 'a' ? payload?.scenarioAHit : payload?.scenarioBHit
   if (cx == null || cy == null || hit == null) return null
@@ -1397,7 +1639,7 @@ function ComparisonResultDot({
   const strokeWidth = isActive ? 2.4 : 2
 
   return (
-    <g>
+    <g style={{ cursor: 'pointer' }} onClick={onClick}>
       <circle cx={cx} cy={cy} r={radius} fill={fill} stroke={stroke} strokeWidth={1.5} />
       {hit ? (
         <path
@@ -1423,11 +1665,13 @@ function ReferenceResultDot({
   cy,
   payload,
   isActive = false,
+  onClick,
 }: {
   cx?: number
   cy?: number
   payload?: ChartPoint
   isActive?: boolean
+  onClick?: () => void
 }) {
   if (cx == null || cy == null || payload?.value == null || payload.referenceResult == null || payload.isTransition) return null
   const success = payload.referenceResult === 'above' || payload.referenceResult === 'inside'
@@ -1437,7 +1681,7 @@ function ReferenceResultDot({
   const strokeWidth = isActive ? 2.4 : 2
 
   return (
-    <g>
+    <g style={{ cursor: 'pointer' }} onClick={onClick}>
       <circle cx={cx} cy={cy} r={radius} fill={fill} stroke={stroke} strokeWidth={1.5} />
       {success ? (
         <path

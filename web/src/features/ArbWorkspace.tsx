@@ -1,10 +1,10 @@
 import { useMemo, useState } from 'react'
 import { flexRender, getCoreRowModel, getSortedRowModel, useReactTable, type ColumnDef, type SortingState } from '@tanstack/react-table'
-import { ArrowDown, ArrowDownUp, ArrowUp, RefreshCcw, Search } from 'lucide-react'
+import { RefreshCcw, Search } from 'lucide-react'
 import clsx from 'clsx'
 import type { ArbSearchResult, BookmakerSummary } from '../api/types'
 import { useArbs } from '../api/queries'
-import { Button, Chip, EmptyState, ErrorBanner, Field, Panel, Select, StatPill, TextInput } from '../components/ui'
+import { Button, Chip, EmptyState, ErrorBanner, Field, Panel, Select, SortIcon, StatPill, TextInput } from '../components/ui'
 import { bookmakerLabel, formatDateTime, formatLine, formatPrice, marketLabel, shortMatchLabel } from '../lib/formatters'
 import { defaultArbFilters, useAppStore, useClientSettings } from '../store/useAppStore'
 
@@ -121,7 +121,7 @@ export function ArbWorkspace({ bookmakers }: { bookmakers: BookmakerSummary[] })
   })
 
   return (
-    <main className="workspace arb-workspace">
+    <main className="workspace arb-workspace" aria-label="Arb finder">
       <section className="workspace-main">
         <div className="page-title-row">
           <div>
@@ -184,6 +184,7 @@ export function ArbWorkspace({ bookmakers }: { bookmakers: BookmakerSummary[] })
           ) : (
             <div className="data-table-wrap">
               <table className="data-table">
+                <caption className="visually-hidden">Arbitrage opportunities</caption>
                 <thead>
                   {table.getHeaderGroups().map((headerGroup) => (
                     <tr key={headerGroup.id}>
@@ -227,12 +228,6 @@ function PriceAgency({ price, agency }: { price: number; agency: string }) {
       <span className="agency">{agency}</span>
     </div>
   )
-}
-
-function SortIcon({ state }: { state: false | 'asc' | 'desc' }) {
-  if (state === 'asc') return <ArrowUp size={12} />
-  if (state === 'desc') return <ArrowDown size={12} />
-  return <ArrowDownUp size={12} />
 }
 
 function formatMargin(value: number) {
