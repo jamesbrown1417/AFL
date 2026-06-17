@@ -2,7 +2,7 @@ export type ThemeMode = 'light' | 'dark'
 export type OddsScope = 'player' | 'match'
 export type BuilderMode = 'sgm' | 'cgm'
 export type DisplayMode = 'row' | 'tile'
-export type SortField = 'player' | 'line' | 'next_best' | 'price' | 'diff_last_10' | 'diff_2025'
+export type SortField = 'player' | 'line' | 'next_best' | 'price' | 'diff_last_10' | 'diff_2025' | 'home_away_diff' | 'win_loss_diff'
 
 export interface HealthResponse {
   status: string
@@ -149,6 +149,8 @@ export interface OddsSearchResult {
   edge_pct: number | null
   diff_2025: number | null
   diff_last_10: number | null
+  home_away_diff: number | null
+  win_loss_diff: number | null
   player_position: string | null
   matchup_difficulty: string | null
   over_matchup_difficulty?: string | null
@@ -215,6 +217,8 @@ export interface DraftLeg {
   base_price: number
   diff_2025: number | null
   diff_last_10: number | null
+  home_away_diff: number | null
+  win_loss_diff: number | null
   next_best_prob_diff: number | null
   player_position?: string | null
   matchup_difficulty?: string | null
@@ -293,6 +297,10 @@ export interface OddsQuery {
   max_diff_2025?: number | null
   min_diff_last_10?: number | null
   max_diff_last_10?: number | null
+  min_home_away_diff?: number | null
+  max_home_away_diff?: number | null
+  min_win_loss_diff?: number | null
+  max_win_loss_diff?: number | null
   min_next_best_prob_diff?: number | null
   max_next_best_prob_diff?: number | null
   sgm_only?: boolean
@@ -323,8 +331,15 @@ export interface MetricFilters {
   minPrice: string
   maxPrice: string
   minDiff2025: number
+  maxDiff2025: number
   minDiffLast10: number
+  maxDiffLast10: number
+  minHomeAwayDiff: number | null
+  maxHomeAwayDiff: number | null
+  minWinLossDiff: number | null
+  maxWinLossDiff: number | null
   minNextBestProbDiff: number
+  maxNextBestProbDiff: number
 }
 
 export interface PlayerStatsFilters {

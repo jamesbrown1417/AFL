@@ -27,6 +27,8 @@ PLAYER_STAT_COLUMN_MAP = {
 ODDS_SORT_COLUMNS = {
     "diff_last_10": "diff_last_10",
     "diff_2025": "diff_2025",
+    "home_away_diff": "home_away_diff",
+    "win_loss_diff": "win_loss_diff",
     "next_best_prob_diff": "next_best_prob_diff",
     "price": "decimal_price",
     "edge": "edge_pct",
@@ -812,6 +814,10 @@ class QueryService:
         max_diff_2025: float | None,
         min_diff_last_10: float | None,
         max_diff_last_10: float | None,
+        min_home_away_diff: float | None,
+        max_home_away_diff: float | None,
+        min_win_loss_diff: float | None,
+        max_win_loss_diff: float | None,
         min_next_best_prob_diff: float | None,
         max_next_best_prob_diff: float | None,
         sgm_only: bool,
@@ -898,6 +904,18 @@ class QueryService:
         if max_diff_last_10 is not None:
             row_conditions.append("diff_last_10 <= ?")
             row_params.append(max_diff_last_10)
+        if min_home_away_diff is not None:
+            row_conditions.append("home_away_diff >= ?")
+            row_params.append(min_home_away_diff)
+        if max_home_away_diff is not None:
+            row_conditions.append("home_away_diff <= ?")
+            row_params.append(max_home_away_diff)
+        if min_win_loss_diff is not None:
+            row_conditions.append("win_loss_diff >= ?")
+            row_params.append(min_win_loss_diff)
+        if max_win_loss_diff is not None:
+            row_conditions.append("win_loss_diff <= ?")
+            row_params.append(max_win_loss_diff)
         if min_next_best_prob_diff is not None:
             row_conditions.append("next_best_prob_diff >= ?")
             row_params.append(min_next_best_prob_diff)
@@ -973,6 +991,8 @@ class QueryService:
                     lm.edge_pct,
                     TRY_CAST(json_extract(lm.metrics_json, '$.diff_2025') AS DOUBLE) AS diff_2025,
                     TRY_CAST(json_extract(lm.metrics_json, '$.diff_last_10') AS DOUBLE) AS diff_last_10,
+                    TRY_CAST(json_extract(lm.metrics_json, '$.home_away_diff') AS DOUBLE) AS home_away_diff,
+                    TRY_CAST(json_extract(lm.metrics_json, '$.win_loss_diff') AS DOUBLE) AS win_loss_diff,
                     json_extract_string(lm.metrics_json, '$.player_position') AS player_position,
                     json_extract_string(lm.metrics_json, '$.matchup_difficulty') AS matchup_difficulty,
                     json_extract_string(lm.metrics_json, '$.over_matchup_difficulty') AS over_matchup_difficulty,
@@ -1048,6 +1068,8 @@ class QueryService:
                     edge_pct,
                     diff_2025,
                     diff_last_10,
+                    home_away_diff,
+                    win_loss_diff,
                     player_position,
                     matchup_difficulty,
                     over_matchup_difficulty,
@@ -1099,6 +1121,8 @@ class QueryService:
                   edge_pct,
                   diff_2025,
                   diff_last_10,
+                  home_away_diff,
+                  win_loss_diff,
                   player_position,
                   matchup_difficulty,
                   over_matchup_difficulty,
@@ -1519,6 +1543,8 @@ class QueryService:
             "edge_pct": row["edge_pct"],
             "diff_2025": row["diff_2025"],
             "diff_last_10": row["diff_last_10"],
+            "home_away_diff": row["home_away_diff"],
+            "win_loss_diff": row["win_loss_diff"],
             "player_position": row["player_position"],
             "matchup_difficulty": row["matchup_difficulty"],
             "over_matchup_difficulty": row["over_matchup_difficulty"],

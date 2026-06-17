@@ -19,7 +19,7 @@ logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(
 
 def is_event_request_response(response):
     return (
-        "/v2/sport/event-request" in response.url
+        "/v2/sport/eventrequest" in response.url.lower()
         and CATEGORY_ID in response.url
         and response.status == 200
     )
@@ -49,6 +49,7 @@ async def main():
                 )
 
             response = await response_info.value
+            logging.info("Captured Neds event list response from %s", response.url)
             payload = await response.json()
             validate_event_response(payload)
 

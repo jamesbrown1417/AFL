@@ -170,6 +170,16 @@ extract_bet365_match_name <- function(bet365) {
     bet365_match_name <- bet365_match_name[!is.na(bet365_match_name)]
 
     if (length(bet365_match_name) == 0) {
+        fixture_subgroup_match <-
+            bet365 |>
+            html_nodes(".src-FixtureSubGroupButton_Text") |>
+            html_text2() |>
+            str_squish()
+
+        if (length(fixture_subgroup_match) > 0) {
+            return(fixture_subgroup_match[1])
+        }
+
         bet365 |>
             html_nodes(".sph-FixturePodHeader_TeamName ") |>
             html_text() |>
@@ -215,6 +225,194 @@ select_bet365_market_node <- function(nodes, include, exclude = character()) {
     }
 
     NULL
+}
+
+read_bet365_disposals_fixture_subgroups <- function(bet365, default_match_name = NULL) {
+    fixture_pods <-
+        bet365 |>
+        html_nodes(".gl-MarketGroupPod.src-HScrollFixtureSubGroupWithShowMore, .src-HScrollFixtureSubGroupWithShowMore")
+
+    if (length(fixture_pods) == 0) {
+        return(NULL)
+    }
+
+    fixture_disposals <-
+        map_dfr(fixture_pods, \(market_pod) {
+            bet365_match_name <-
+                market_pod |>
+                html_node(".src-FixtureSubGroupButton_Text") |>
+                html_text2() |>
+                str_squish()
+
+            if (length(bet365_match_name) == 0 || is.na(bet365_match_name) || bet365_match_name == "") {
+                bet365_match_name <- default_match_name
+            }
+
+            player_names <-
+                market_pod |>
+                html_nodes(".srb-ParticipantLabelWithTeam_Name, .srb-ParticipantLabel_Name") |>
+                html_text2() |>
+                clean_bet365_player_name()
+
+            odds_columns <- market_pod |> html_nodes(".srb-HScrollPlaceColumnMarket")
+
+            headers <-
+                odds_columns |>
+                map_chr(\(column) {
+                    header <- column |> html_node(".srb-HScrollPlaceHeader") |> html_text2()
+                    if (length(header) == 0 || is.na(header)) "" else str_squish(header)
+                })
+
+            keep_columns <- str_detect(headers, "^\\d+\\+$")
+            odds_columns <- odds_columns[keep_columns]
+            headers <- headers[keep_columns]
+
+            if (length(player_names) == 0 && length(headers) == 0) {
+                return(tibble())
+            }
+
+            if (length(player_names) == 0 || length(headers) == 0) {
+                stop(glue("Bet365 fixture subgroup is missing player names or disposal columns for {bet365_match_name}"))
+            }
+
+            map2_dfr(headers, seq_along(headers), \(header, index) {
+                odds <-
+                    odds_columns[[index]] |>
+                    html_nodes(".gl-ParticipantOddsOnly_Odds") |>
+                    html_text2() |>
+                    str_squish()
+
+                if (length(odds) != length(player_names)) {
+                    stop(glue(
+                        "Bet365 fixture subgroup disposal count mismatch for {bet365_match_name} {header}: ",
+                        "{length(odds)} odds for {length(player_names)} players"
+                    ))
+                }
+
+                tibble(
+                    match = bet365_match_name,
+                    player_name = player_names,
+                    number_of_disposals = header,
+                    price = parse_number(na_if(odds, ""))
+                )
+            })
+        })
+
+    if (nrow(fixture_disposals) == 0) {
+        return(NULL)
+    }
+
+    fixture_disposals |>
+        filter(!is.na(price)) |>
+        mutate(implied_probability = 1 / price)
+}
+
+normalise_bet365_goal_header <- function(header, market_code = NULL, index = NULL) {
+    header <- str_squish(header)
+    header_lower <- str_to_lower(header)
+    goal_number <- str_extract(header, "\\d+\\+")
+
+    case_when(
+        !is.na(goal_number) ~ goal_number,
+        str_detect(header_lower, "anytime|to score|goalscorer") ~ "1+",
+        market_code == "goals_anytime" && index == 1 && header == "" ~ "1+",
+        TRUE ~ NA_character_
+    )
+}
+
+read_bet365_goals_fixture_subgroups <- function(bet365, default_match_name = NULL, market_code = NULL) {
+    fixture_pods <-
+        bet365 |>
+        html_nodes(".gl-MarketGroupPod.src-HScrollFixtureSubGroupWithShowMore, .gl-MarketGroupPod.src-FixtureSubGroupWithShowMore")
+
+    if (length(fixture_pods) == 0) {
+        return(NULL)
+    }
+
+    fixture_goals <-
+        map_dfr(fixture_pods, \(market_pod) {
+            bet365_match_name <-
+                market_pod |>
+                html_node(".src-FixtureSubGroupButton_Text") |>
+                html_text2() |>
+                str_squish()
+
+            if (length(bet365_match_name) == 0 || is.na(bet365_match_name) || bet365_match_name == "") {
+                bet365_match_name <- default_match_name
+            }
+
+            player_names <-
+                market_pod |>
+                html_nodes(".srb-ParticipantLabelWithTeam_Name, .srb-ParticipantLabel_Name") |>
+                html_text2() |>
+                clean_bet365_player_name()
+
+            odds_columns <- market_pod |> html_nodes(".srb-HScrollPlaceColumnMarket")
+            if (length(odds_columns) == 0) {
+                odds_columns <- market_pod |> html_nodes(".gl-Market.gl-Market_General-columnheader")
+            }
+
+            headers <-
+                odds_columns |>
+                map_chr(\(column) {
+                    header <- column |> html_node(".srb-HScrollPlaceHeader, .gl-MarketColumnHeader") |> html_text2()
+                    if (length(header) == 0 || is.na(header)) "" else str_squish(header)
+                })
+
+            headers <- map2_chr(headers, seq_along(headers), \(header, index) {
+                normalise_bet365_goal_header(header, market_code = market_code, index = index)
+            })
+
+            # Some layouts (e.g. goals_anytime: Player / First / Last / Anytime)
+            # include a leading player-label column with no odds. Only keep
+            # columns that both map to a goal number and actually contain odds,
+            # so the label column can't be mistaken for an odds column.
+            odds_per_column <- map_int(odds_columns, \(column) {
+                length(html_nodes(column, ".gl-ParticipantOddsOnly_Odds"))
+            })
+            keep_columns <- !is.na(headers) & odds_per_column > 0
+            odds_columns <- odds_columns[keep_columns]
+            headers <- headers[keep_columns]
+
+            if (length(player_names) == 0 && length(headers) == 0) {
+                return(tibble())
+            }
+
+            if (length(player_names) == 0 || length(headers) == 0) {
+                stop(glue("Bet365 fixture subgroup is missing player names or goal columns for {bet365_match_name}"))
+            }
+
+            map2_dfr(headers, seq_along(headers), \(header, index) {
+                odds <-
+                    odds_columns[[index]] |>
+                    html_nodes(".gl-ParticipantOddsOnly_Odds") |>
+                    html_text2() |>
+                    str_squish()
+
+                if (length(odds) != length(player_names)) {
+                    stop(glue(
+                        "Bet365 fixture subgroup goal count mismatch for {bet365_match_name} {header}: ",
+                        "{length(odds)} odds for {length(player_names)} players"
+                    ))
+                }
+
+                tibble(
+                    match = bet365_match_name,
+                    player_name = player_names,
+                    number_of_goals = header,
+                    price = parse_number(na_if(odds, ""))
+                )
+            })
+        })
+
+    if (nrow(fixture_goals) == 0) {
+        return(NULL)
+    }
+
+    fixture_goals |>
+        filter(!is.na(price)) |>
+        distinct(match, player_name, number_of_goals, .keep_all = TRUE) |>
+        mutate(implied_probability = 1 / price)
 }
 
 read_bet365_disposals_modern <- function(bet365, bet365_match_name) {
@@ -278,6 +476,16 @@ read_bet365_disposals_modern <- function(bet365, bet365_match_name) {
         mutate(implied_probability = 1 / price)
 }
 
+empty_bet365_disposal_lines <- function() {
+    tibble(
+        match = character(),
+        player_name = character(),
+        number_of_disposals = character(),
+        over_price = numeric(),
+        under_price = numeric()
+    )
+}
+
 read_bet365_disposal_lines_modern <- function(bet365, bet365_match_name) {
     market_pod <-
         bet365 |>
@@ -285,13 +493,7 @@ read_bet365_disposal_lines_modern <- function(bet365, bet365_match_name) {
         select_bet365_market_node(include = "Total Player Disposals")
 
     if (is.null(market_pod)) {
-        return(tibble(
-            match = character(),
-            player_name = character(),
-            number_of_disposals = character(),
-            over_price = numeric(),
-            under_price = numeric()
-        ))
+        return(empty_bet365_disposal_lines())
     }
 
     player_names <-
@@ -302,6 +504,10 @@ read_bet365_disposal_lines_modern <- function(bet365, bet365_match_name) {
 
     participants <- market_pod |> html_nodes(".gl-ParticipantCenteredStacked")
     n_players <- length(player_names)
+
+    if (n_players == 0 && length(participants) == 0) {
+        return(empty_bet365_disposal_lines())
+    }
 
     if (n_players == 0 || length(participants) < n_players * 2) {
         stop(glue(
@@ -345,6 +551,11 @@ read_bet365_disposals_html <- function(html_path) {
     bet365 <- read_html(html_path)
     
     bet365_match_name <- extract_bet365_match_name(bet365)
+
+    fixture_disposals <- read_bet365_disposals_fixture_subgroups(bet365, bet365_match_name)
+    if (!is.null(fixture_disposals)) {
+        return(fixture_disposals)
+    }
     
     # Extract the disposals data table----------------------------------------------
     # Get the disposals table
@@ -423,10 +634,20 @@ read_bet365_disposals_html <- function(html_path) {
 # Function to read in goals html and output table
 read_bet365_goals_html <- function(html_path) {
     
+    raw_html <- read_file(html_path)
+    market_code <- str_match(raw_html, "market_code:\\s*([^\\s-]+)")[, 2]
+    market_code <- market_code[!is.na(market_code)]
+    market_code <- if (length(market_code) == 0) NULL else market_code[1]
+
     # Read in the txt data as html
-    bet365 <- read_html(html_path)
+    bet365 <- read_html(raw_html)
     
     bet365_match_name <- extract_bet365_match_name(bet365)
+
+    fixture_goals <- read_bet365_goals_fixture_subgroups(bet365, bet365_match_name, market_code)
+    if (!is.null(fixture_goals)) {
+        return(fixture_goals)
+    }
     
     # Extract the goals data table----------------------------------------------
     # Get the goals table
@@ -552,6 +773,20 @@ read_bet365_disposal_lines_html <- function(html_path) {
   bet365 <- read_html(html_path)
   
   bet365_match_name <- extract_bet365_match_name(bet365)
+
+  has_fixture_subgroup <-
+    bet365 |>
+    html_nodes(".src-HScrollFixtureSubGroupWithShowMore") |>
+    length() > 0
+
+  has_line_market <-
+    bet365 |>
+    html_nodes(".gl-ParticipantCenteredStacked, .bbl-BetBuilderMarketGroupContainer") |>
+    length() > 0
+
+  if (has_fixture_subgroup && !has_line_market) {
+    return(empty_bet365_disposal_lines())
+  }
   
   # Extract the disposals data table----------------------------------------------
   # Get the disposals table
@@ -568,13 +803,7 @@ read_bet365_disposal_lines_html <- function(html_path) {
     select_bet365_market_node(include = "Player Disposals|Total Player Disposals|Disposals", exclude = c("Goalscorer", "Goal"))
 
   if (is.null(bet365_disposal_lines)) {
-    return(tibble(
-      match = character(),
-      player_name = character(),
-      number_of_disposals = character(),
-      over_price = numeric(),
-      under_price = numeric()
-    ))
+    return(empty_bet365_disposal_lines())
   }
   
   # Player names
@@ -701,11 +930,30 @@ bind_safe_results <- function(results, label, empty_result) {
   parsed
 }
 
+normalise_bet365_player_aliases <- function(player_name) {
+  case_when(
+    player_name == "Matthew Roberts" ~ "Matt Roberts",
+    player_name == "Jacob Van Rooyen" ~ "Jacob van Rooyen",
+    player_name == "Kamdyn Mcintosh" ~ "Kamdyn McIntosh",
+    player_name == "Malcolm Rosas Jnr" ~ "Malcolm Rosas",
+    player_name == "Ed Allan" ~ "Edward Allan",
+    player_name == "Jordan Sweet" ~ "Jordon Sweet",
+    player_name == "Judd Mcvee" ~ "Judd McVee",
+    player_name == "Lachlan Ash" ~ "Lachie Ash",
+    player_name == "Cameron Mackenzie" ~ "Cam Mackenzie",
+    player_name == "Connor MacDonald" ~ "Connor Macdonald",
+    player_name == "Samuel Banks" ~ "Sam Banks",
+    player_name == "Nicholas Coffield" ~ "Nick Coffield",
+    .default = player_name
+  )
+}
+
 # Get all data
 bet365_goals <-
   map(goals_list, read_bet365_goals_html) |>
   bind_safe_results("goals", empty_bet365_goals_raw) |>
-  mutate(player_name = str_remove(player_name, "\\d+"))
+  mutate(player_name = str_remove(player_name, "\\d+")) |>
+  distinct(match, player_name, number_of_goals, .keep_all = TRUE)
 
 bet365_disposals <-
   map(disposals_list, read_bet365_disposals_html) |>
@@ -734,15 +982,7 @@ bet365_goals |>
     separate(match, c("home_team", "away_team"), sep = " v ", remove = FALSE) |>
     mutate(home_team = fix_team_names(home_team), away_team = fix_team_names(away_team)) |>
     mutate(match = paste(home_team, "v", away_team)) |>
-    mutate(
-        player_name = case_when(
-            player_name == "Matthew Roberts" ~ "Matt Roberts",
-            player_name == "Jacob Van Rooyen" ~ "Jacob van Rooyen",
-            player_name == "Kamdyn Mcintosh" ~ "Kamdyn McIntosh",
-            player_name == "Malcolm Rosas Jnr" ~ "Malcolm Rosas",
-            .default = player_name
-        )
-    ) |>
+    mutate(player_name = normalise_bet365_player_aliases(player_name)) |>
     left_join(player_names, by = c("player_name" = "player_full_name")) |>
     mutate(line = as.numeric(str_extract(number_of_goals, "\\d+"))) |>
     mutate(line = line - 0.5) |> 
@@ -765,15 +1005,7 @@ bet365_disposals |>
     separate(match, c("home_team", "away_team"), sep = " v ", remove = FALSE) |>
     mutate(home_team = fix_team_names(home_team), away_team = fix_team_names(away_team)) |>
     mutate(match = paste(home_team, "v", away_team)) |>
-    mutate(
-        player_name = case_when(
-            player_name == "Matthew Roberts" ~ "Matt Roberts",
-            player_name == "Jacob Van Rooyen" ~ "Jacob van Rooyen",
-            player_name == "Kamdyn Mcintosh" ~ "Kamdyn McIntosh",
-            player_name == "Malcolm Rosas Jnr" ~ "Malcolm Rosas",
-            .default = player_name
-        )
-    ) |>
+    mutate(player_name = normalise_bet365_player_aliases(player_name)) |>
     left_join(player_names, by = c("player_name" = "player_full_name")) |>
     mutate(line = as.numeric(str_extract(number_of_disposals, "\\d+"))) |>
     mutate(line = line - 0.5) |> 
@@ -796,15 +1028,7 @@ bet365_disposals_lines <-
   separate(match, c("home_team", "away_team"), sep = " v ", remove = FALSE) |>
   mutate(home_team = fix_team_names(home_team), away_team = fix_team_names(away_team)) |>
   mutate(match = paste(home_team, "v", away_team)) |>
-  mutate(
-    player_name = case_when(
-    player_name == "Matthew Roberts" ~ "Matt Roberts",
-    player_name == "Jacob Van Rooyen" ~ "Jacob van Rooyen",
-    player_name == "Kamdyn Mcintosh" ~ "Kamdyn McIntosh",
-    player_name == "Malcolm Rosas Jnr" ~ "Malcolm Rosas",
-    .default = player_name
-  )
-  ) |>
+  mutate(player_name = normalise_bet365_player_aliases(player_name)) |>
   left_join(player_names, by = c("player_name" = "player_full_name")) |>
   mutate(line = as.numeric(number_of_disposals)) |> 
   rename(player_team = team_name) |> 

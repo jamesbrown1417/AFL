@@ -1,4 +1,5 @@
 #!/bin/bash
+set -euo pipefail
 
 # Give access to normal path variables
 export PATH="/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
@@ -6,9 +7,10 @@ export PATH="/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
 # Set the current directory to your project folder
 cd /Users/jamesbrown/Projects/AFL || exit
 
-# Remove .json and .txt files in specific directories
-rm OddsScraper/Neds/*.json
-rm Data/BET365_HTML/*.txt
+# Remove cached scraper artifacts that must be regenerated.
+rm -f OddsScraper/Neds/neds_response.json OddsScraper/Neds/neds_afl_match_urls.csv
+find OddsScraper/Neds -maxdepth 1 -name 'data_*.json' -delete
+find Data/BET365_HTML -maxdepth 1 -name '*.txt' -delete
 
 # Execute Python and R scripts
 /Users/jamesbrown/.pyenv/versions/3.12.5/bin/python3 OddsScraper/bet365_afl_single.py

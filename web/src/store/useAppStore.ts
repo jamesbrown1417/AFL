@@ -33,8 +33,15 @@ export const defaultMetricFilters: MetricFilters = {
   minPrice: '',
   maxPrice: '',
   minDiff2025: -1,
+  maxDiff2025: 1,
   minDiffLast10: -1,
+  maxDiffLast10: 1,
+  minHomeAwayDiff: null,
+  maxHomeAwayDiff: null,
+  minWinLossDiff: null,
+  maxWinLossDiff: null,
   minNextBestProbDiff: -1,
+  maxNextBestProbDiff: 1,
 }
 
 export const defaultPlayerFilters: PlayerStatsFilters = {

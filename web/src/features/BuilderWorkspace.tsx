@@ -2,7 +2,7 @@ import { useDeferredValue, useEffect, useMemo, useState } from 'react'
 import clsx from 'clsx'
 import { ArrowDown, ArrowUp, BarChart3, Check, Filter, LineChart, Search, Trash2, X } from 'lucide-react'
 import type { ClientSettings } from '../api/client'
-import type { BookmakerSummary, BuilderMode, CgmAgencyComparison, DraftLeg, EventSummary, OddsSearchResult, SgmAgencyComparison, SortField } from '../api/types'
+import type { BookmakerSummary, BuilderMode, CgmAgencyComparison, DraftLeg, EventSummary, MetricFilters, OddsSearchResult, SgmAgencyComparison, SortField } from '../api/types'
 import { useBuilderOdds, useCompareCgm, useCompareSgm, useSelectionAgencyPrices } from '../api/queries'
 import { defaultMetricFilters, defaultPlayerFilters, useAppStore, useClientSettings } from '../store/useAppStore'
 import { allMarketCode, buildCandidateGroups, combinedBasePrice, defaultDescending, lineWithSideLabel, marketTypeToStatCode, orderedMarketCodes, sortCandidateRows, toDraftLeg } from '../lib/builder'
@@ -53,6 +53,10 @@ export function BuilderWorkspace({
   const [contextMenu, setContextMenu] = useState<{ x: number; y: number; selection: OddsSearchResult } | null>(null)
   const [priceDialogSelection, setPriceDialogSelection] = useState<OddsSearchResult | null>(null)
   const [pendingSwitch, setPendingSwitch] = useState<(() => void) | null>(null)
+  const [showMetricFilters, setShowMetricFilters] = useState(false)
+  const [draftMetricFilters, setDraftMetricFilters] = useState<MetricFilters>(defaultMetricFilters)
+  const normalizedMetricFilters = useMemo(() => normalizeMetricFilters(metricFilters), [metricFilters])
+  const activeMetricFilterCount = useMemo(() => countActiveMetricFilters(normalizedMetricFilters), [normalizedMetricFilters])
 
   const legs = mode === 'sgm' ? sgmLegs : cgmLegs
   const selectedSelectionIds = useMemo(() => new Set(legs.map((leg) => leg.selection_id)), [legs])
@@ -60,7 +64,7 @@ export function BuilderWorkspace({
   const effectiveSgmEventId = sgmEventId ?? events[0]?.id ?? null
   const eventIds = mode === 'sgm' ? (effectiveSgmEventId == null ? [] : [effectiveSgmEventId]) : Array.from(selectedEventIds)
   const effectiveEventIds = mode === 'cgm' && eventIds.length === 0 ? [] : eventIds
-  const candidateQuery = useBuilderOdds(settings, effectiveBookmaker, effectiveEventIds, metricFilters, bestOnly, Boolean(effectiveBookmaker) && (mode === 'cgm' || effectiveSgmEventId != null))
+  const candidateQuery = useBuilderOdds(settings, effectiveBookmaker, effectiveEventIds, normalizedMetricFilters, bestOnly, Boolean(effectiveBookmaker) && (mode === 'cgm' || effectiveSgmEventId != null))
   const candidates = useMemo(() => {
     const rows = candidateQuery.data ?? []
     if (mode === 'cgm') {
@@ -180,6 +184,10 @@ export function BuilderWorkspace({
     }
   }, [contextMenu])
 
+  useEffect(() => {
+    if (showMetricFilters) setDraftMetricFilters(normalizedMetricFilters)
+  }, [normalizedMetricFilters, showMetricFilters])
+
   const compare = () => {
     if (mode === 'sgm') {
       const eventId = legs[0]?.event_id ?? effectiveSgmEventId
@@ -262,28 +270,32 @@ export function BuilderWorkspace({
           </div>
           <div className="quick-filter-grid">
             <Chip
-              active={metricFilters.minDiffLast10 >= 0}
-              onClick={() => setMetricFilters({ ...metricFilters, minDiffLast10: metricFilters.minDiffLast10 >= 0 ? -1 : 0 })}
+              active={normalizedMetricFilters.minDiffLast10 >= 0}
+              onClick={() => setMetricFilters({ ...normalizedMetricFilters, minDiffLast10: normalizedMetricFilters.minDiffLast10 >= 0 ? -1 : 0 })}
             >
               Positive L10
             </Chip>
             <Chip
-              active={metricFilters.minNextBestProbDiff >= 0}
-              onClick={() => setMetricFilters({ ...metricFilters, minNextBestProbDiff: metricFilters.minNextBestProbDiff >= 0 ? -1 : 0 })}
+              active={normalizedMetricFilters.minNextBestProbDiff >= 0}
+              onClick={() => setMetricFilters({ ...normalizedMetricFilters, minNextBestProbDiff: normalizedMetricFilters.minNextBestProbDiff >= 0 ? -1 : 0 })}
             >
               Positive next best
             </Chip>
             <Chip
-              active={metricFilters.matchupDifficulties.length > 0}
+              active={normalizedMetricFilters.matchupDifficulties.length > 0}
               onClick={() =>
                 setMetricFilters({
-                  ...metricFilters,
-                  matchupDifficulties: metricFilters.matchupDifficulties.length > 0 ? [] : ['Neutral', 'Good', 'Excellent'],
+                  ...normalizedMetricFilters,
+                  matchupDifficulties: normalizedMetricFilters.matchupDifficulties.length > 0 ? [] : ['Neutral', 'Good', 'Excellent'],
                 })
               }
             >
               Favorable matchup
             </Chip>
+            <Button variant="secondary" onClick={() => setShowMetricFilters(true)}>
+              <Filter size={15} /> Filters
+              {activeMetricFilterCount > 0 ? <span className="filter-count-badge">{activeMetricFilterCount}</span> : null}
+            </Button>
             <Toggle checked={bestOnly} onChange={setBestOnly} label="Best only" />
             {mode === 'sgm' && <Toggle checked={forceRefresh} onChange={setForceRefresh} label="Force quote refresh" />}
             <Button variant="ghost" onClick={() => setMetricFilters(defaultMetricFilters)}><Filter size={15} /> Reset filters</Button>
@@ -418,8 +430,226 @@ export function BuilderWorkspace({
           onCancel={() => setPendingSwitch(null)}
         />
       ) : null}
+
+      {showMetricFilters ? (
+        <MetricFiltersDrawer
+          filters={draftMetricFilters}
+          onChange={setDraftMetricFilters}
+          onApply={() => {
+            setMetricFilters(normalizeMetricFilters(draftMetricFilters))
+            setShowMetricFilters(false)
+          }}
+          onReset={() => setDraftMetricFilters(defaultMetricFilters)}
+          onClose={() => setShowMetricFilters(false)}
+        />
+      ) : null}
     </main>
   )
+}
+
+const matchupOptions = ['Terrible', 'Bad', 'Neutral', 'Good', 'Excellent']
+
+function MetricFiltersDrawer({
+  filters,
+  onChange,
+  onApply,
+  onReset,
+  onClose,
+}: {
+  filters: MetricFilters
+  onChange: (filters: MetricFilters) => void
+  onApply: () => void
+  onReset: () => void
+  onClose: () => void
+}) {
+  const toggleMatchup = (difficulty: string) => {
+    onChange({
+      ...filters,
+      matchupDifficulties: filters.matchupDifficulties.includes(difficulty)
+        ? filters.matchupDifficulties.filter((item) => item !== difficulty)
+        : [...filters.matchupDifficulties, difficulty],
+    })
+  }
+
+  return (
+    <div className="drawer-overlay" onClick={onClose}>
+      <aside className="drawer" role="dialog" aria-modal="true" aria-label="Selection filters" onClick={(event) => event.stopPropagation()}>
+        <div className="drawer-head">
+          <div>
+            <h2>Selection filters</h2>
+            <p className="muted">Set exact thresholds for SGM and CGM candidate legs.</p>
+          </div>
+          <button type="button" className="modal-close" onClick={onClose} aria-label="Close filters">
+            <X size={18} />
+          </button>
+        </div>
+        <div className="drawer-foot">
+          <Button variant="ghost" onClick={onReset}>Clear</Button>
+          <Button variant="accent" onClick={onApply}>Apply filters</Button>
+        </div>
+        <div className="drawer-body">
+          <section className="metric-filter-section">
+            <h3>Matchup</h3>
+            <div className="filter-chip-row">
+              {matchupOptions.map((difficulty) => (
+                <Chip key={difficulty} active={filters.matchupDifficulties.includes(difficulty)} onClick={() => toggleMatchup(difficulty)}>
+                  {difficulty}
+                </Chip>
+              ))}
+            </div>
+          </section>
+
+          <section className="metric-filter-section">
+            <h3>Price</h3>
+            <div className="filter-pair">
+              <Field label="Min price">
+                <TextInput
+                  inputMode="decimal"
+                  value={filters.minPrice}
+                  placeholder="Any"
+                  onChange={(event) => onChange({ ...filters, minPrice: event.currentTarget.value })}
+                />
+              </Field>
+              <Field label="Max price">
+                <TextInput
+                  inputMode="decimal"
+                  value={filters.maxPrice}
+                  placeholder="Any"
+                  onChange={(event) => onChange({ ...filters, maxPrice: event.currentTarget.value })}
+                />
+              </Field>
+            </div>
+          </section>
+
+          <section className="metric-filter-section">
+            <h3>Model thresholds</h3>
+            <MetricNumberPair
+              title="Last 10 diff"
+              min={filters.minDiffLast10}
+              max={filters.maxDiffLast10}
+              onMinChange={(value) => onChange({ ...filters, minDiffLast10: value ?? defaultMetricFilters.minDiffLast10 })}
+              onMaxChange={(value) => onChange({ ...filters, maxDiffLast10: value ?? defaultMetricFilters.maxDiffLast10 })}
+            />
+            <MetricNumberPair
+              title="Season diff"
+              min={filters.minDiff2025}
+              max={filters.maxDiff2025}
+              onMinChange={(value) => onChange({ ...filters, minDiff2025: value ?? defaultMetricFilters.minDiff2025 })}
+              onMaxChange={(value) => onChange({ ...filters, maxDiff2025: value ?? defaultMetricFilters.maxDiff2025 })}
+            />
+            <MetricNumberPair
+              title="Next best diff"
+              min={filters.minNextBestProbDiff}
+              max={filters.maxNextBestProbDiff}
+              onMinChange={(value) => onChange({ ...filters, minNextBestProbDiff: value ?? defaultMetricFilters.minNextBestProbDiff })}
+              onMaxChange={(value) => onChange({ ...filters, maxNextBestProbDiff: value ?? defaultMetricFilters.maxNextBestProbDiff })}
+            />
+            <MetricNumberPair
+              title="Home / away diff"
+              min={filters.minHomeAwayDiff}
+              max={filters.maxHomeAwayDiff}
+              onMinChange={(value) => onChange({ ...filters, minHomeAwayDiff: value })}
+              onMaxChange={(value) => onChange({ ...filters, maxHomeAwayDiff: value })}
+              optional
+            />
+            <MetricNumberPair
+              title="Win / loss diff"
+              min={filters.minWinLossDiff}
+              max={filters.maxWinLossDiff}
+              onMinChange={(value) => onChange({ ...filters, minWinLossDiff: value })}
+              onMaxChange={(value) => onChange({ ...filters, maxWinLossDiff: value })}
+              optional
+            />
+          </section>
+        </div>
+      </aside>
+    </div>
+  )
+}
+
+function MetricNumberPair({
+  title,
+  min,
+  max,
+  onMinChange,
+  onMaxChange,
+  optional = false,
+}: {
+  title: string
+  min: number | null
+  max: number | null
+  onMinChange: (value: number | null) => void
+  onMaxChange: (value: number | null) => void
+  optional?: boolean
+}) {
+  return (
+    <div className="metric-filter-range">
+      <span>{title}</span>
+      <div className="filter-pair">
+        <Field label="Min">
+          <TextInput
+            type="number"
+            step="0.05"
+            value={formatMetricInputValue(min)}
+            placeholder={optional ? 'Any' : undefined}
+            onChange={(event) => onMinChange(parseMetricInputValue(event.currentTarget.value))}
+          />
+        </Field>
+        <Field label="Max">
+          <TextInput
+            type="number"
+            step="0.05"
+            value={formatMetricInputValue(max)}
+            placeholder={optional ? 'Any' : undefined}
+            onChange={(event) => onMaxChange(parseMetricInputValue(event.currentTarget.value))}
+          />
+        </Field>
+      </div>
+    </div>
+  )
+}
+
+function normalizeMetricFilters(filters: Partial<MetricFilters> | null | undefined): MetricFilters {
+  return {
+    ...defaultMetricFilters,
+    ...filters,
+    matchupDifficulties: filters?.matchupDifficulties ?? defaultMetricFilters.matchupDifficulties,
+    minPrice: filters?.minPrice ?? defaultMetricFilters.minPrice,
+    maxPrice: filters?.maxPrice ?? defaultMetricFilters.maxPrice,
+    minDiff2025: filters?.minDiff2025 ?? defaultMetricFilters.minDiff2025,
+    maxDiff2025: filters?.maxDiff2025 ?? defaultMetricFilters.maxDiff2025,
+    minDiffLast10: filters?.minDiffLast10 ?? defaultMetricFilters.minDiffLast10,
+    maxDiffLast10: filters?.maxDiffLast10 ?? defaultMetricFilters.maxDiffLast10,
+    minHomeAwayDiff: filters?.minHomeAwayDiff ?? defaultMetricFilters.minHomeAwayDiff,
+    maxHomeAwayDiff: filters?.maxHomeAwayDiff ?? defaultMetricFilters.maxHomeAwayDiff,
+    minWinLossDiff: filters?.minWinLossDiff ?? defaultMetricFilters.minWinLossDiff,
+    maxWinLossDiff: filters?.maxWinLossDiff ?? defaultMetricFilters.maxWinLossDiff,
+    minNextBestProbDiff: filters?.minNextBestProbDiff ?? defaultMetricFilters.minNextBestProbDiff,
+    maxNextBestProbDiff: filters?.maxNextBestProbDiff ?? defaultMetricFilters.maxNextBestProbDiff,
+  }
+}
+
+function countActiveMetricFilters(filters: MetricFilters) {
+  let count = 0
+  if (filters.matchupDifficulties.length > 0) count += 1
+  if (filters.minPrice.trim() !== '' || filters.maxPrice.trim() !== '') count += 1
+  if (filters.minDiffLast10 !== defaultMetricFilters.minDiffLast10 || filters.maxDiffLast10 !== defaultMetricFilters.maxDiffLast10) count += 1
+  if (filters.minDiff2025 !== defaultMetricFilters.minDiff2025 || filters.maxDiff2025 !== defaultMetricFilters.maxDiff2025) count += 1
+  if (filters.minNextBestProbDiff !== defaultMetricFilters.minNextBestProbDiff || filters.maxNextBestProbDiff !== defaultMetricFilters.maxNextBestProbDiff) count += 1
+  if (filters.minHomeAwayDiff != null || filters.maxHomeAwayDiff != null) count += 1
+  if (filters.minWinLossDiff != null || filters.maxWinLossDiff != null) count += 1
+  return count
+}
+
+function formatMetricInputValue(value: number | null) {
+  return value == null ? '' : String(value)
+}
+
+function parseMetricInputValue(value: string) {
+  const trimmed = value.trim()
+  if (!trimmed) return null
+  const parsed = Number(trimmed)
+  return Number.isFinite(parsed) ? parsed : null
 }
 
 function CandidateHeader({
@@ -436,6 +666,8 @@ function CandidateHeader({
     { label: 'Price', field: 'price', numeric: true },
     { label: 'L10', field: 'diff_last_10', numeric: true },
     { label: 'Szn', field: 'diff_2025', numeric: true },
+    { label: 'H/A', field: 'home_away_diff', numeric: true },
+    { label: 'W/L', field: 'win_loss_diff', numeric: true },
     { label: 'NB', field: 'next_best', numeric: true },
   ]
   const playerActive = sortField === 'player'
@@ -591,6 +823,8 @@ function CandidateRow({
       <b className="col-num tabular">{formatPrice(selection.decimal_price)}</b>
       <span className={clsx('col-num delta', (selection.diff_last_10 ?? -1) >= 0 ? 'delta--good' : 'delta--bad')}>{formatSigned(selection.diff_last_10)}</span>
       <span className={clsx('col-num delta', (selection.diff_2025 ?? -1) >= 0 ? 'delta--good' : 'delta--bad')}>{formatSigned(selection.diff_2025)}</span>
+      <span className={clsx('col-num delta', (selection.home_away_diff ?? 0) >= 0 ? 'delta--good' : 'delta--bad')}>{formatSigned(selection.home_away_diff)}</span>
+      <span className={clsx('col-num delta', (selection.win_loss_diff ?? 0) >= 0 ? 'delta--good' : 'delta--bad')}>{formatSigned(selection.win_loss_diff)}</span>
       <span className={clsx('col-num delta', (selection.next_best_prob_diff ?? -1) >= 0 ? 'delta--good' : 'delta--bad')}>{formatSigned(selection.next_best_prob_diff)}</span>
     </button>
   )

@@ -60,6 +60,8 @@ class ProcessedSelectionMetric:
     prob_last_10: float | None
     diff_2025: float | None
     diff_last_10: float | None
+    home_away_diff: float | None
+    win_loss_diff: float | None
     variation: float | None
     player_position: str | None
     matchup_difficulty: str | None
@@ -146,6 +148,8 @@ class Importer:
         self.selection_ids: dict[str, int] = {}
         self.player_positions_by_name = self._load_player_positions()
         self.matchup_difficulty_by_key = self._load_matchup_difficulty_map()
+        self.home_away_diff_by_key = self._load_split_diff_map(self.settings.home_away_diff_path)
+        self.win_loss_diff_by_key = self._load_split_diff_map(self.settings.win_loss_diff_path)
 
     def run(self, triggered_by: str = "manual") -> ImportSummary:
         initialize_database(self.settings)
@@ -558,6 +562,11 @@ class Importer:
         market_type_code = market_type_from_name(market_name_raw)
         if not market_type_code.startswith("player_"):
             return []
+        # Performance-split diffs are keyed by player + stat (e.g. "disposals"),
+        # so they attach to every selection of that player's market.
+        stat_key = market_type_code.removeprefix("player_").lower()
+        home_away_diff = self.home_away_diff_by_key.get((player_name, stat_key))
+        win_loss_diff = self.win_loss_diff_by_key.get((player_name, stat_key))
         player_position = self.player_positions_by_name.get(player_name)
         matchup_info = self._resolve_matchup_info(
             opposition_team=row.get("opposition_team"),
@@ -612,6 +621,8 @@ class Importer:
                     prob_last_10=parse_float(row.get(prob_last_10_column)),
                     diff_2025=parse_float(row.get(diff_2025_column)),
                     diff_last_10=parse_float(row.get(diff_last_10_column)),
+                    home_away_diff=home_away_diff,
+                    win_loss_diff=win_loss_diff,
                     variation=variation,
                     player_position=player_position,
                     matchup_difficulty=matchup_difficulty,
@@ -649,6 +660,27 @@ class Importer:
                 if player_name and position:
                     positions[player_name] = position
         return positions
+
+    def _load_split_diff_map(self, path: Path) -> dict[tuple[str, str], float]:
+        """Load a player performance-split file (player_name, stat, median_diff).
+
+        Keyed by (normalized player name, stat) so it can be attached to player
+        prop selections by matching the market's stat. Produced by the R scripts
+        Scripts/all_player_home_vs_away.R and Scripts/all_player_win_vs_loss.R.
+        """
+        if not path.exists():
+            LOGGER.warning("Player split diff file not found: %s", path)
+            return {}
+
+        diffs: dict[tuple[str, str], float] = {}
+        with path.open(newline="", encoding="utf-8") as handle:
+            for row in csv.DictReader(handle):
+                player_name = normalize_player_name(row.get("player_name"))
+                stat = clean_text(row.get("stat"))
+                median_diff = parse_float(row.get("median_diff"))
+                if player_name and stat and median_diff is not None:
+                    diffs[(player_name, stat.lower())] = median_diff
+        return diffs
 
     def _load_matchup_difficulty_map(self) -> dict[tuple[str, str, str], DvpMatchupInfo]:
         path = self.settings.dvp_data_path
@@ -1680,6 +1712,8 @@ class Importer:
                     {
                         "diff_2025": metric.diff_2025,
                         "diff_last_10": metric.diff_last_10,
+                        "home_away_diff": metric.home_away_diff,
+                        "win_loss_diff": metric.win_loss_diff,
                         "prob_2025": metric.prob_2025,
                         "prob_last_10": metric.prob_last_10,
                         "player_position": metric.player_position,

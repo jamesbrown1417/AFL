@@ -7,7 +7,7 @@ export function Button({
   className,
   variant = 'primary',
   ...props
-}: ButtonHTMLAttributes<HTMLButtonElement> & { variant?: 'primary' | 'secondary' | 'ghost' | 'danger' }) {
+}: ButtonHTMLAttributes<HTMLButtonElement> & { variant?: 'primary' | 'secondary' | 'ghost' | 'danger' | 'accent' }) {
   return <button className={clsx('button', `button--${variant}`, className)} {...props} />
 }
 

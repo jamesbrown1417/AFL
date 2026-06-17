@@ -32,6 +32,8 @@ class Settings(BaseSettings):
     arbs_path: Path = Field(default=REPO_ROOT / "Data" / "all_arbs.csv")
     dvp_data_path: Path = Field(default=REPO_ROOT / "DVP" / "dvp_data.csv")
     player_positions_path: Path = Field(default=REPO_ROOT / "DVP" / "AFL-Players-Positions-2026.csv")
+    home_away_diff_path: Path = Field(default=REPO_ROOT / "Data" / "player_home_vs_away_diff.csv")
+    win_loss_diff_path: Path = Field(default=REPO_ROOT / "Data" / "player_win_vs_loss_diff.csv")
     runtime_dir: Path = Field(default=REPO_ROOT / "runtime")
     duckdb_path: Path = Field(default=REPO_ROOT / "runtime" / "duckdb" / "afl.duckdb")
     log_path: Path = Field(default=REPO_ROOT / "runtime" / "logs" / "backend.log")

@@ -99,6 +99,8 @@ export function toDraftLeg(selection: OddsSearchResult): DraftLeg | null {
     base_price: selection.decimal_price,
     diff_2025: selection.diff_2025,
     diff_last_10: selection.diff_last_10,
+    home_away_diff: selection.home_away_diff,
+    win_loss_diff: selection.win_loss_diff,
     next_best_prob_diff: selection.next_best_prob_diff,
     player_position: selection.player_position,
     matchup_difficulty: selection.matchup_difficulty,
@@ -137,6 +139,10 @@ function sortValue(selection: OddsSearchResult, field: SortField) {
       return selection.diff_2025 ?? -999
     case 'diff_last_10':
       return selection.diff_last_10 ?? -999
+    case 'home_away_diff':
+      return selection.home_away_diff ?? -999
+    case 'win_loss_diff':
+      return selection.win_loss_diff ?? -999
     case 'next_best':
       return selection.next_best_prob_diff ?? -999
   }

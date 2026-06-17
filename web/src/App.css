@@ -366,6 +366,15 @@
   color: var(--red);
 }
 
+.button--accent {
+  background: var(--amber);
+  color: #ffffff;
+}
+
+:root[data-theme='dark'] .button--accent {
+  color: var(--bg);
+}
+
 .icon-button {
   width: 36px;
   border-color: var(--border);
@@ -867,7 +876,7 @@
   top: 0;
   z-index: 1;
   display: grid;
-  grid-template-columns: minmax(180px, 1.6fr) 118px 96px 74px 70px 70px 70px;
+  grid-template-columns: minmax(180px, 1.6fr) 118px 96px 74px 70px 70px 70px 70px 70px;
   align-items: center;
   gap: 10px;
   border: 1px solid var(--border);
@@ -902,7 +911,7 @@
 
 .candidate-row {
   display: grid;
-  grid-template-columns: minmax(180px, 1.6fr) 118px 96px 74px 70px 70px 70px;
+  grid-template-columns: minmax(180px, 1.6fr) 118px 96px 74px 70px 70px 70px 70px 70px;
   align-items: center;
   gap: 10px;
   width: 100%;
@@ -1677,6 +1686,35 @@
 }
 
 .filter-group-title {
+  color: var(--text);
+  font-size: 13px;
+  font-weight: 750;
+}
+
+.filter-chip-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.metric-filter-section {
+  display: grid;
+  gap: 12px;
+}
+
+.metric-filter-section h3 {
+  margin: 0;
+  font-size: 14px;
+}
+
+.metric-filter-range {
+  display: grid;
+  gap: 8px;
+  padding: 10px 0;
+  border-top: 1px solid var(--border);
+}
+
+.metric-filter-range > span {
   color: var(--text);
   font-size: 13px;
   font-weight: 750;

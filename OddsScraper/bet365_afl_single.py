@@ -2,26 +2,70 @@
 Single-run Bet365 AFL scraper using one driverless Chrome instance.
 
 Performs both steps in order:
-1) Load main market page and save H2H HTML
-2) Collect player prop URLs and save each match's player HTML (two tabs)
+1) Log in from the Bet365 home shell
+2) Load main market page and save H2H HTML
+3) Load consolidated player goal/disposal screens and save each fixture's expanded HTML
 """
 
 # Import Modules=============================================================
 from selenium_driverless import webdriver
 from selenium_driverless.types.by import By
-from datetime import datetime, timezone
-import pandas as pd
 import asyncio
 import os
+import random
+import socket
+import subprocess
+import sys
 from pathlib import Path
+from urllib.parse import urlsplit
 from dotenv import dotenv_values
 
-# Get current timestamp=======================================================
-now = datetime.now()
-time_stamp = now.strftime("%Y-%m-%d_%H-%M-%S")
-
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
-BET365_ENV_KEYS = {"BET365USER", "BET365PW", "BET365_BYPASS_LOGIN"}
+BET365_ENV_KEYS = {
+    "BET365USER",
+    "BET365PW",
+    "BET365_BYPASS_LOGIN",
+    "BET365_DISPOSALS_URLS",
+    "BET365_GOALS_ANYTIME_URLS",
+    "BET365_GOALS_MULTISCORER_URLS",
+    "BET365_MAX_ATTEMPTS",
+    "BET365_RETRY_BACKOFF_SECONDS",
+    "BET365_PROXY",
+}
+
+# Realistic desktop viewports. We vary the window size per run so consecutive
+# sessions don't share an identical fingerprint. (We deliberately do NOT spoof
+# the user-agent string here: a UA that disagrees with Chrome's client hints is
+# a stronger bot signal than a consistent one. See the note in run_scrape_session.)
+BET365_VIEWPORTS = [
+    (1280, 720),
+    (1366, 768),
+    (1440, 900),
+    (1536, 864),
+    (1600, 900),
+    (1680, 1050),
+    (1920, 1080),
+]
+BET365_HOME_URL = "https://www.bet365.com.au/"
+BET365_H2H_URL = "https://www.bet365.com.au/#/AC/B36/C21101752/D48/E360013/F48/"
+BET365_DISPOSALS_URLS = [
+    "https://www.bet365.com.au/#/AC/B36/C21101752/D48/E360575/F48/N0/",
+]
+BET365_GOALS_ANYTIME_URLS = [
+    "https://www.bet365.com.au/#/AC/B36/C21101752/D48/E360041/F48/N0/",
+]
+BET365_GOALS_MULTISCORER_URLS = [
+    "https://www.bet365.com.au/#/AC/B36/C21101752/D48/E360267/F48/N0/",
+]
+BET365_HTML_DIR = Path("Data/BET365_HTML")
+CLICK_SETTLE_SECONDS = 1.5
+SHOW_MORE_PRECLICK_SECONDS = 1.5
+# After a show-more click we poll for the expansion to render rather than always
+# waiting the worst case: continue the instant the fixture grows, up to the ceiling.
+SHOW_MORE_POSTCLICK_MAX_SECONDS = 4.0
+SHOW_MORE_POLL_INTERVAL_SECONDS = 0.4
+SHOW_MORE_BATCH_COOLDOWN_SECONDS = 6
+SHOW_MORE_BATCH_SIZE = 4
 
 
 def load_bet365_env():
@@ -50,6 +94,27 @@ def load_bet365_env():
 
 BET365_ENV_SOURCES = load_bet365_env()
 
+if os.getenv("BET365_DISPOSALS_URLS"):
+    BET365_DISPOSALS_URLS = [
+        url.strip()
+        for url in os.getenv("BET365_DISPOSALS_URLS", "").split(",")
+        if url.strip()
+    ]
+
+if os.getenv("BET365_GOALS_ANYTIME_URLS"):
+    BET365_GOALS_ANYTIME_URLS = [
+        url.strip()
+        for url in os.getenv("BET365_GOALS_ANYTIME_URLS", "").split(",")
+        if url.strip()
+    ]
+
+if os.getenv("BET365_GOALS_MULTISCORER_URLS"):
+    BET365_GOALS_MULTISCORER_URLS = [
+        url.strip()
+        for url in os.getenv("BET365_GOALS_MULTISCORER_URLS", "").split(",")
+        if url.strip()
+    ]
+
 # Read credentials after loading.
 username = os.getenv("BET365USER")
 password = os.getenv("BET365PW")
@@ -65,6 +130,115 @@ def env_bool(name, default=False):
     return raw.strip().lower() in {"1", "true", "t", "yes", "y", "on"}
 
 
+def env_int(name, default):
+    raw = os.getenv(name)
+    if raw is None or raw.strip() == "":
+        return default
+    try:
+        return int(raw.strip())
+    except ValueError:
+        return default
+
+
+def jittered(base, spread=0.35):
+    """Randomise a sleep duration by +/- `spread` so timing isn't robotically identical.
+
+    Never returns less than half of `base`, so essential settle times are preserved.
+    """
+    delta = base * spread
+    return max(base * 0.5, base + random.uniform(-delta, delta))
+
+
+def redact_proxy(proxy):
+    """Hide any user:pass@ credentials so the proxy can be safely printed in logs."""
+    if "@" in proxy:
+        scheme, _, rest = proxy.partition("://")
+        if rest:
+            return f"{scheme}://***@{rest.split('@', 1)[1]}"
+        return f"***@{proxy.split('@', 1)[1]}"
+    return proxy
+
+
+def find_free_port():
+    """Grab an ephemeral localhost port for the proxy relay to listen on."""
+    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+        s.bind(("127.0.0.1", 0))
+        return s.getsockname()[1]
+
+
+def build_pproxy_remote(proxy_url):
+    """Translate http://user:pass@host:port/ into pproxy's http://host:port#user:pass form."""
+    parts = urlsplit(proxy_url)
+    scheme = parts.scheme or "http"
+    remote = f"{scheme}://{parts.hostname}:{parts.port}"
+    if parts.username:
+        cred = parts.username
+        if parts.password:
+            cred += f":{parts.password}"
+        remote += f"#{cred}"
+    return remote
+
+
+async def start_proxy_relay(proxy_url):
+    """Run a localhost no-auth relay that forwards to the authenticated upstream proxy.
+
+    selenium_driverless's built-in authenticated-proxy support relies on an MV3
+    helper extension that current Chrome refuses to load (its manifest requests
+    permissions removed in MV3), so we can't hand Chrome a user:pass proxy
+    directly. Instead we run a local pproxy relay and point Chrome at it with a
+    credential-free --proxy-server flag, which needs no extension.
+
+    Returns (process, local_proxy_url).
+    """
+    port = find_free_port()
+    remote = build_pproxy_remote(proxy_url)
+    proc = subprocess.Popen(
+        [sys.executable, "-m", "pproxy", "-l", f"http://127.0.0.1:{port}", "-r", remote],
+        stdout=subprocess.DEVNULL,
+        stderr=subprocess.PIPE,
+    )
+
+    loop = asyncio.get_event_loop()
+    deadline = loop.time() + 10
+    while loop.time() < deadline:
+        if proc.poll() is not None:
+            err = proc.stderr.read().decode(errors="replace") if proc.stderr else ""
+            raise RuntimeError(f"Proxy relay exited early: {err.strip()}")
+        try:
+            with socket.create_connection(("127.0.0.1", port), timeout=0.5):
+                return proc, f"http://127.0.0.1:{port}"
+        except OSError:
+            await asyncio.sleep(0.3)
+
+    proc.terminate()
+    raise RuntimeError("Proxy relay did not become ready within 10s")
+
+
+def stop_proxy_relay(proc):
+    """Terminate the local proxy relay subprocess, escalating to kill if needed."""
+    if not proc or proc.poll() is not None:
+        return
+    proc.terminate()
+    try:
+        proc.wait(timeout=5)
+    except subprocess.TimeoutExpired:
+        proc.kill()
+
+
+def kill_stale_chrome():
+    """Kill leftover driverless Chrome processes before launching a fresh session.
+
+    A crash mid-run (we raise RuntimeError fairly often) can leave a 'Chrome for
+    Testing' instance holding the temp profile lock, which makes the next run's
+    SPA shell fail to hydrate in a way that looks identical to bot-blocking.
+    """
+    for pattern in ("Chrome for Testing", "selenium_driverless"):
+        try:
+            subprocess.run(["pkill", "-f", pattern], check=False, capture_output=True)
+        except Exception as exc:
+            print(f"  Could not pkill {pattern!r}: {describe_exception(exc)}")
+
+
 BYPASS_LOGIN = env_bool("BET365_BYPASS_LOGIN", default=False)
 
 
@@ -73,6 +247,14 @@ def describe_env_source(key):
     if source not in {"process environment", "not set"}:
         source = Path(source).name
     return source
+
+
+def clear_bet365_outputs(patterns):
+    """Remove generated Bet365 HTML for markets that are about to be refreshed."""
+    BET365_HTML_DIR.mkdir(parents=True, exist_ok=True)
+    for pattern in patterns:
+        for path in BET365_HTML_DIR.glob(pattern):
+            path.unlink()
 
 # Validate credentials early with a clear error (only needed when actually logging in)
 if not BYPASS_LOGIN and (not username or not password):
@@ -106,279 +288,6 @@ def describe_exception(exc):
     if message:
         return f"{type(exc).__name__}: {message}"
     return f"{type(exc).__name__}: <no message>"
-
-
-async def wait_for_event_url(driver, previous_url, timeout=10):
-    """Wait until a fixture click has completed and the URL points at an event."""
-    loop = asyncio.get_event_loop()
-    deadline = loop.time() + timeout
-    last_url = previous_url
-
-    while loop.time() < deadline:
-        last_url = await driver.current_url
-        if last_url != previous_url and "/D19/E" in last_url:
-            return last_url
-        await driver.sleep(0.25)
-
-    raise RuntimeError(
-        f"Timed out waiting for event URL after click. "
-        f"previous_url={previous_url}; last_url={last_url}"
-    )
-
-
-async def click_fixture_and_get_event_url(driver, fixture_element):
-    previous_url = await driver.current_url
-
-    try:
-        await fixture_element.click()
-        return await wait_for_event_url(driver, previous_url, timeout=8)
-    except Exception as first_error:
-        print(f"  Normal fixture click did not navigate: {describe_exception(first_error)}")
-
-    await driver.execute_script("arguments[0].click();", fixture_element)
-    return await wait_for_event_url(driver, previous_url, timeout=10)
-
-
-async def wait_for_player_container_html(driver, timeout=30):
-    """Return player page container HTML once it contains actual market content."""
-    loop = asyncio.get_event_loop()
-    deadline = loop.time() + timeout
-    last_html = ""
-    last_error = None
-
-    while loop.time() < deadline:
-        try:
-            elem = await driver.find_element(
-                By.XPATH,
-                "//div[contains(@class, 'wcl-PageContainer_Colcontainer')]",
-                timeout=2,
-            )
-            last_html = await elem.get_attribute("outerHTML")
-            has_header = "cm-MatchBettingReactHeader" in last_html
-            has_market = any(
-                token in last_html
-                for token in (
-                    "gl-MarketGroupButton_Text",
-                    "cm-MarketGroupWithIconsButton_Text",
-                    "srb-HScrollPlaceColumnMarket",
-                    "gl-MarketGroupPod",
-                )
-            )
-            has_player_rows = any(
-                token in last_html
-                for token in (
-                    "bbl-BetBuilderParticipantLabel",
-                    "srb-ParticipantLabel",
-                    "srb-ParticipantLabelWithTeam",
-                    "gl-ParticipantCenteredStacked",
-                )
-            )
-            if len(last_html) > 1000 and has_header and (has_market or has_player_rows):
-                return elem, last_html
-        except Exception as exc:
-            last_error = exc
-        await driver.sleep(1)
-
-    current_url = await driver.current_url
-    detail = f"last_html_bytes={len(last_html)}; current_url={current_url}"
-    if last_error:
-        detail = f"{detail}; last_error={describe_exception(last_error)}"
-    raise RuntimeError(f"Player page did not load usable market content ({detail})")
-
-
-async def save_player_container_html(driver, path):
-    elem, html = await wait_for_player_container_html(driver)
-    Path(path).write_text(html)
-    print(f"  Saved: {path} ({len(html)} bytes)")
-    return html
-
-
-async def save_player_disposals_html(driver, path, timeout=20):
-    """Save Player-tab disposals HTML only after line and milestone markets exist."""
-    loop = asyncio.get_event_loop()
-    deadline = loop.time() + timeout
-    last_html = ""
-    last_metrics = {}
-
-    while loop.time() < deadline:
-        elem, last_html = await wait_for_player_container_html(driver, timeout=5)
-        has_total_lines = "Total Player Disposals" in last_html
-        has_milestones = (
-            "Player Disposals Milestones" in last_html
-            or "srb-HScrollPlaceColumnMarket" in last_html
-            or "bbl-FilteredMarketGroupWithHScrollerContainer_Wide" in last_html
-        )
-        last_metrics = await driver.execute_script(
-            """
-            const pods = Array.from(document.querySelectorAll('.gl-MarketGroupPod'));
-            const totalPod = pods.find((pod) => (pod.innerText || '').includes('Total Player Disposals'));
-            if (!totalPod) {
-                return { totalNames: 0, totalPrices: 0, totalHasShowMore: false };
-            }
-            const totalNames = totalPod.querySelectorAll(
-                '.srb-ParticipantLabelWithTeam_Name, .srb-ParticipantLabel_Name'
-            ).length;
-            const totalPrices = totalPod.querySelectorAll('.gl-ParticipantCenteredStacked').length;
-            const totalHasShowMore = Array.from(totalPod.querySelectorAll('.msl-ShowMore_Link, .bbl-ShowMoreForHScroll, .bbl-ShowMore'))
-                .some((node) => ((node.innerText || node.textContent || '').trim().toLowerCase() === 'show more'));
-            return { totalNames, totalPrices, totalHasShowMore };
-            """
-        )
-        total_lines_complete = (
-            last_metrics.get("totalNames", 0) > 0
-            and last_metrics.get("totalPrices", 0) >= last_metrics.get("totalNames", 0) * 2
-            and not last_metrics.get("totalHasShowMore", True)
-        )
-        if has_total_lines and has_milestones and total_lines_complete:
-            Path(path).write_text(last_html)
-            print(f"  Saved: {path} ({len(last_html)} bytes)")
-            return last_html
-        await driver.sleep(1)
-
-    raise RuntimeError(
-        "Player disposals HTML did not contain both milestone and Total Player Disposals markets "
-        f"with complete line rows (last_html_bytes={len(last_html)}; metrics={last_metrics})"
-    )
-
-
-async def click_market_group(driver, label, timeout=10):
-    label_lower = label.lower()
-    has_content_before_click = await driver.execute_script(
-        """
-        const label = arguments[0].toLowerCase();
-        const pods = Array.from(document.querySelectorAll('.gl-MarketGroupPod'));
-        return pods.some((pod) => {
-            const text = (pod.innerText || '').toLowerCase();
-            return text.includes(label) && Boolean(
-                pod.querySelector('.bbl-FilteredMarketGroupWithHScrollerContainer_Wide') ||
-                pod.querySelector('.bbl-BetBuilderMarketGroupContainer') ||
-                pod.querySelector('.srb-HScrollPlaceColumnMarket') ||
-                pod.querySelector('.gl-ParticipantCenteredStacked')
-            );
-        });
-        """,
-        label_lower,
-    )
-    if has_content_before_click:
-        print(f"  '{label}' market content already available")
-        return
-
-    button_xpath = (
-        "//div[contains(@class, 'gl-MarketGroupPod') "
-        "and .//*[("
-        "contains(@class, 'gl-MarketGroupButton_Text') or "
-        "contains(@class, 'cm-MarketGroupWithIconsButton_Text')"
-        f") and contains({XPATH_LOWER_TEXT}, '{label_lower}')]]"
-        "//*[contains(@class, 'gl-MarketGroupButton') or "
-        "contains(@class, 'cm-MarketGroupWithIconsButton')]"
-    )
-
-    try:
-        button = await driver.find_element(By.XPATH, button_xpath, timeout=timeout)
-    except Exception:
-        already_available = await driver.execute_script(
-            """
-            const label = arguments[0].toLowerCase();
-            const pods = Array.from(document.querySelectorAll('.gl-MarketGroupPod'));
-            return pods.some((pod) => {
-                const text = (pod.innerText || '').toLowerCase();
-                return text.includes(label) && Boolean(
-                    pod.querySelector('.bbl-FilteredMarketGroupWithHScrollerContainer_Wide') ||
-                    pod.querySelector('.bbl-BetBuilderMarketGroupContainer') ||
-                    pod.querySelector('.srb-HScrollPlaceColumnMarket') ||
-                    pod.querySelector('.gl-ParticipantCenteredStacked')
-                );
-            });
-            """,
-            label_lower,
-        )
-        if already_available:
-            print(f"  '{label}' market content already available")
-            return
-        raise
-
-    await driver.execute_script("arguments[0].scrollIntoView(true);", button)
-    await driver.execute_script("window.scrollBy(0, -150)")
-    await driver.execute_script("arguments[0].click();", button)
-    print(f"  Clicked '{label}'")
-
-    loop = asyncio.get_event_loop()
-    deadline = loop.time() + timeout
-    while loop.time() < deadline:
-        is_open = await driver.execute_script(
-            """
-            const label = arguments[0].toLowerCase();
-            const pods = Array.from(document.querySelectorAll('.gl-MarketGroupPod'));
-            const pod = pods.find((node) => {
-                const text = (node.innerText || '').toLowerCase();
-                return text.includes(label);
-            });
-            if (!pod) return false;
-            const hasOpenClass = pod.className.includes('gl-MarketGroup_Open') ||
-                Boolean(pod.querySelector('.gl-MarketGroup_Open'));
-            const hasMarketContent = Boolean(
-                pod.querySelector('.bbl-FilteredMarketGroupWithHScrollerContainer_Wide') ||
-                pod.querySelector('.bbl-BetBuilderMarketGroupContainer') ||
-                pod.querySelector('.srb-HScrollPlaceColumnMarket') ||
-                pod.querySelector('.gl-ParticipantCenteredStacked')
-            );
-            return hasMarketContent || hasOpenClass;
-            """,
-            label_lower,
-        )
-        if is_open:
-            return
-        await driver.sleep(0.5)
-
-    raise RuntimeError(f"Timed out waiting for '{label}' market group to open")
-
-
-async def click_market_nav(driver, label, timeout=10):
-    label_lower = label.lower()
-    nav_xpath = (
-        "//div[contains(@class, 'sph-MarketGroupNavBarButton') "
-        f"and .//div[contains(@class, 'sph-MarketGroupNavBarButton_Content') and {XPATH_LOWER_TEXT}='{label_lower}']]"
-    )
-
-    selected = await driver.execute_script(
-        """
-        const label = arguments[0].toLowerCase();
-        const buttons = Array.from(document.querySelectorAll('.sph-MarketGroupNavBarButton'));
-        return buttons.some((button) => {
-            const text = (button.innerText || '').trim().toLowerCase();
-            return text === label && button.className.includes('sph-MarketGroupNavBarButton_Selected');
-        });
-        """,
-        label_lower,
-    )
-    if selected:
-        print(f"  '{label}' tab already selected")
-        return
-
-    nav_button = await driver.find_element(By.XPATH, nav_xpath, timeout=timeout)
-    await driver.execute_script("arguments[0].scrollIntoView({block: 'center', inline: 'center'});", nav_button)
-    await driver.execute_script("arguments[0].click();", nav_button)
-    print(f"  Clicked '{label}' tab")
-
-    loop = asyncio.get_event_loop()
-    deadline = loop.time() + timeout
-    while loop.time() < deadline:
-        selected = await driver.execute_script(
-            """
-            const label = arguments[0].toLowerCase();
-            const buttons = Array.from(document.querySelectorAll('.sph-MarketGroupNavBarButton'));
-            return buttons.some((button) => {
-                const text = (button.innerText || '').trim().toLowerCase();
-                return text === label && button.className.includes('sph-MarketGroupNavBarButton_Selected');
-            });
-            """,
-            label_lower,
-        )
-        if selected:
-            return
-        await driver.sleep(0.5)
-
-    raise RuntimeError(f"Timed out waiting for '{label}' tab to become selected")
 
 
 async def dump_debug_html(driver, path):
@@ -415,12 +324,8 @@ async def wait_for_main_market_container(driver, timeout=30):
     )
 
 
-async def collect_h2h_and_urls(driver):
-    """Navigate to main AFL page, save H2H HTML, and return list of player URLs.
-
-    Uses upcoming fixtures to determine how many matches to click.
-    """
-
+async def login_to_bet365(driver):
+    """Open Bet365 and establish the logged-in shell before AFL deep links."""
     print(
         "Bet365 config: "
         f"user_source={describe_env_source('BET365USER')}; "
@@ -428,298 +333,701 @@ async def collect_h2h_and_urls(driver):
         f"bypass_login={BYPASS_LOGIN}"
     )
 
-    # Read in schedule=======================================================
-    schedule_df = pd.read_csv("Data/current_fixture.csv")
-    schedule_df["start_time"] = pd.to_datetime(schedule_df["start_time"])  # keep timezone
-    schedule_df = schedule_df[schedule_df["start_time"] > datetime.now(timezone.utc)]
-    current_round = schedule_df.iloc[0]["round"]
-    schedule_df_current = schedule_df[schedule_df["round"] == current_round]
+    BET365_HTML_DIR.mkdir(parents=True, exist_ok=True)
 
-    # Warm up the Bet365 shell before loading the AFL deep link. Direct hash
-    # routes intermittently leave the app on the generic sports shell.
-    await driver.get("https://www.bet365.com.au/")
-    await driver.sleep(5)
+    await driver.get(BET365_HOME_URL)
+    await driver.sleep(jittered(5))
 
-    # AFL all matches page
-    await driver.get("https://www.bet365.com.au/#/AC/B36/C21101752/D48/E360013/F48/")
-    await driver.sleep(8)
-
-    # Login each run, unless bypassed (Bet365 odds are public when logged out)
     if BYPASS_LOGIN:
         print("BYPASS_LOGIN enabled - skipping login, scraping logged-out markets")
-    else:
-        print("Attempting login...")
-        login_locator_candidates = [
-            # Most stable header container when logged out.
-            (By.XPATH, "//div[contains(@class, 'hm-MainHeaderRHSLoggedOutWide_Login')]"),
-            # Dynamic hrm-* class token, matched by prefix and label text.
-            (
-                By.XPATH,
-                f"//span[contains(@class, 'hrm-') and (contains({XPATH_LOWER_TEXT}, 'log in') or contains({XPATH_LOWER_TEXT}, 'login'))]",
-            ),
-            # Generic clickable fallback based on visible label.
-            (
-                By.XPATH,
-                f"//*[self::button or self::a][contains({XPATH_LOWER_TEXT}, 'log in') or contains({XPATH_LOWER_TEXT}, 'login')]",
-            ),
-        ]
+        return
+
+    print("Attempting login before loading AFL market pages...")
+    login_locator_candidates = [
+        (By.XPATH, "//div[contains(@class, 'hm-MainHeaderRHSLoggedOutWide_Login')]"),
+        (
+            By.XPATH,
+            f"//span[contains(@class, 'hrm-') and (contains({XPATH_LOWER_TEXT}, 'log in') or contains({XPATH_LOWER_TEXT}, 'login'))]",
+        ),
+        (
+            By.XPATH,
+            f"//*[self::button or self::a][contains({XPATH_LOWER_TEXT}, 'log in') or contains({XPATH_LOWER_TEXT}, 'login')]",
+        ),
+    ]
+
+    try:
         login_element = await find_first_element(
             driver, login_locator_candidates, timeout_per_candidate=4
         )
-        await driver.sleep(2)
-        try:
-            await login_element.click()
-        except Exception:
-            await driver.execute_script("arguments[0].click();", login_element)
-        await driver.sleep(1)
-
-        username_field = await driver.find_element(By.XPATH, "//input[@placeholder='Username or email address']", timeout=10)
-        await username_field.clear()
-        await driver.sleep(0.3)
-        await username_field.send_keys(username)
-        print("Entered username")
-
-        password_field = await driver.find_element(By.XPATH, "//input[@placeholder='Password']", timeout=10)
-        await password_field.clear()
-        await driver.sleep(0.3)
-        await password_field.send_keys(password)
-        print("Entered password")
-
-        login_submit_locator_candidates = [
-            (
-                By.XPATH,
-                f"//input[@placeholder='Password']/ancestor::form//*[self::button or self::span][contains({XPATH_LOWER_TEXT}, 'log in') or contains({XPATH_LOWER_TEXT}, 'login')]",
-            ),
-            (By.XPATH, "//span[starts-with(@class, 'slm')]"),
-        ]
-        login_button = await find_first_element(
-            driver, login_submit_locator_candidates, timeout_per_candidate=3
-        )
-        try:
-            await login_button.click()
-        except Exception:
-            await driver.execute_script("arguments[0].click();", login_button)
-        print("Clicked login button")
-
-        print("Waiting 2 seconds...")
-        await driver.sleep(2)
-
-    # Keep the window active. Bet365 lazy-loads several market panels and can
-    # return empty shells when the page is backgrounded/minimized.
-
-    elem = await wait_for_main_market_container(driver)
-    print("Market container found after login")
-
-    # Capture HTML
-    body_html = await elem.get_attribute("outerHTML")
-
-    # Persist H2H HTML
-    with open("Data/BET365_HTML/h2h_html.txt", "w") as f:
-        f.write(body_html)
-
-    print("Waiting 2 seconds...")
-    await driver.sleep(2)
-
-    # Discover team rows (match links)
-    team_xpath = (
-        "//div[contains(@class, 'src-ParticipantFixtureDetailsHigher') "
-        "and contains(@class, 'src-ParticipantFixtureDetailsHigher-wide') "
-        "and not(contains(@class, 'Hidden'))]"
-    )
-    team_elements = await driver.find_elements(By.XPATH, team_xpath)
-
-    # Log discovered fixtures (best-effort)
-    for team_element in team_elements:
-        try:
-            print(await team_element.get_attribute("innerText"))
-        except Exception:
-            pass
-
-    player_urls = []
-    matches_to_click = len(schedule_df_current)
-
-    for index in range(matches_to_click):
-        print(f"Getting base URL for match {index}")
-        # Re-query elements each loop as DOM may refresh
-        team_elements = await driver.find_elements(By.XPATH, team_xpath)
-
-        # Safety: skip if fewer items than expected
-        if index >= len(team_elements):
-            print(
-                f"Skipping match {index}: Index out of range. (Found {len(team_elements)} matches on site, tried accessing index {index})"
-            )
-            break
-
-        await driver.execute_script("arguments[0].scrollIntoView(true);", team_elements[index])
-        await driver.execute_script("window.scrollBy(0, -150)")
-        await driver.sleep(0.1)
-
-        cur_url = await click_fixture_and_get_event_url(driver, team_elements[index])
-        # AFL player markets suffix
-        modified_player_url = cur_url.split("/I")[0].rstrip("/") + "/I99/"
-        player_urls.append(modified_player_url)
-        print(f"  Player URL: {modified_player_url}")
-
-        await driver.back()
-        await driver.sleep(1.5)
-
-    # Optionally persist URL list for debugging/traceability
-    try:
-        with open("Data/BET365_HTML/urls.csv", "w") as f:
-            f.write("\n".join(player_urls))
     except Exception:
-        pass
+        print("No login control found; assuming an existing Bet365 session is active")
+        return
 
-    return player_urls
+    await driver.sleep(1)
+    try:
+        await login_element.click()
+    except Exception:
+        await driver.execute_script("arguments[0].click();", login_element)
+    await driver.sleep(1)
 
+    username_field = await driver.find_element(
+        By.XPATH,
+        "//input[@placeholder='Username or email address']",
+        timeout=10,
+    )
+    await username_field.clear()
+    await driver.sleep(0.3)
+    await username_field.send_keys(username)
+    print("Entered username")
 
-async def scrape_player_pages(driver, player_urls):
-    """Iterate player URLs, expand sections, and save player HTML per match."""
-    saved_matches = 0
-    failures = []
+    password_field = await driver.find_element(By.XPATH, "//input[@placeholder='Password']", timeout=10)
+    await password_field.clear()
+    await driver.sleep(0.3)
+    await password_field.send_keys(password)
+    print("Entered password")
 
-    async def safe_click_show_more_all():
-        total_clicked = 0
-        idle_passes = 0
+    login_submit_locator_candidates = [
+        (
+            By.XPATH,
+            f"//input[@placeholder='Password']/ancestor::form//*[self::button or self::span][contains({XPATH_LOWER_TEXT}, 'log in') or contains({XPATH_LOWER_TEXT}, 'login')]",
+        ),
+        (By.XPATH, "//span[starts-with(@class, 'slm')]"),
+    ]
+    login_button = await find_first_element(
+        driver, login_submit_locator_candidates, timeout_per_candidate=3
+    )
+    try:
+        await login_button.click()
+    except Exception:
+        await driver.execute_script("arguments[0].click();", login_button)
+    print("Clicked login button")
 
-        for _ in range(50):
-            result = await driver.execute_script(
-                """
-                const candidates = Array.from(document.querySelectorAll(
-                    '.bbl-ShowMoreForHScroll, .bbl-ShowMore, .msl-ShowMore_Link'
-                ));
-                const buttons = candidates.filter((node) => {
-                    const text = (node.innerText || node.textContent || '').trim().toLowerCase();
-                    return text === 'show more';
-                });
-                if (buttons.length === 0) {
-                    return { clicked: false, remaining: 0 };
-                }
-                const button = buttons[0];
-                const clickTarget = button.closest('.msl-ShowMore') || button;
-                button.scrollIntoView({ block: 'center', inline: 'center' });
-                clickTarget.click();
-                return { clicked: true, remaining: buttons.length - 1 };
-                """
-            )
-
-            if result and result.get("clicked"):
-                total_clicked += 1
-                idle_passes = 0
-                await driver.sleep(2)
-                continue
-
-            if idle_passes >= 4:
-                break
-
-            idle_passes += 1
-            await driver.execute_script("window.scrollBy(0, Math.floor(window.innerHeight * 0.85));")
-            await driver.sleep(1.25)
-
-        if total_clicked > 0:
-            print(f"  Clicked {total_clicked} show-more control(s)")
-
-        remaining = await driver.execute_script(
-            """
-            return Array.from(document.querySelectorAll(
-                '.bbl-ShowMoreForHScroll, .bbl-ShowMore, .msl-ShowMore_Link'
-            )).filter((node) => {
-                const text = (node.innerText || node.textContent || '').trim().toLowerCase();
-                return text === 'show more';
-            }).length;
-            """
+    loop = asyncio.get_event_loop()
+    deadline = loop.time() + 20
+    while loop.time() < deadline:
+        form_visible = await driver.execute_script(
+            "return Boolean(document.querySelector(\"input[placeholder='Password']\"));"
         )
-        if remaining:
-            print(f"  {remaining} show-more control(s) still present after expansion pass")
-
-    async def scroll_page_to_load_markets():
-        for _ in range(4):
-            await driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
-            await driver.sleep(0.8)
-        await driver.execute_script("window.scrollTo(0, 0);")
+        if not form_visible:
+            await driver.sleep(2)
+            print("Login form dismissed")
+            return
         await driver.sleep(0.5)
 
-    async def load_usable_player_page(url):
-        last_error = None
-        event_base_url = url.split("/I")[0].rstrip("/") + "/"
-        candidate_urls = [url, event_base_url, url]
+    print("Login form still visible after wait; continuing so downstream checks can surface the failure")
 
-        for attempt, candidate_url in enumerate(candidate_urls, start=1):
-            if attempt == 1 and BYPASS_LOGIN:
-                await driver.get("https://www.bet365.com.au/")
-                await driver.sleep(4)
 
-            await driver.get(candidate_url)
-            await driver.sleep(2 + attempt)
+async def save_h2h_html(driver, required=True):
+    """Save the AFL main market HTML after login."""
+    try:
+        await driver.get(BET365_H2H_URL)
+        # Short initial settle; wait_for_main_market_container polls until ready.
+        await driver.sleep(jittered(4.5))
+        elem = await wait_for_main_market_container(driver)
+        body_html = await elem.get_attribute("outerHTML")
+        (BET365_HTML_DIR / "h2h_html.txt").write_text(body_html)
+        print(f"Saved H2H HTML ({len(body_html)} bytes)")
+    except Exception as exc:
+        existing_h2h = BET365_HTML_DIR / "h2h_html.txt"
+        if required or not existing_h2h.exists():
+            raise
+        print(
+            "Warning: H2H HTML refresh failed after player markets, "
+            f"keeping existing {existing_h2h}: {describe_exception(exc)}"
+        )
+
+
+async def get_disposals_fixture_metrics(driver):
+    return await driver.execute_script(
+        """
+        const fixtureSelector = '.gl-MarketGroupPod.src-HScrollFixtureSubGroupWithShowMore, .gl-MarketGroupPod.src-FixtureSubGroupWithShowMore';
+        const pods = Array.from(document.querySelectorAll(fixtureSelector));
+        return pods.map((pod, index) => {
+            const match = (pod.querySelector('.src-FixtureSubGroupButton_Text')?.innerText || '').trim();
+            const startTime = (pod.querySelector('.src-FixtureSubGroupButton_BookCloses')?.innerText || '').trim();
+            const headers = Array.from(pod.querySelectorAll('.srb-HScrollPlaceHeader, .gl-MarketColumnHeader'))
+                .map((node) => (node.innerText || '').trim())
+                .filter(Boolean);
+            const showMore = Array.from(pod.querySelectorAll('.msl-ShowMore_Link, .bbl-ShowMoreForHScroll, .bbl-ShowMore'))
+                .filter((node) => (node.innerText || node.textContent || '').trim().toLowerCase() === 'show more');
+            return {
+                index,
+                match,
+                startTime,
+                closed: pod.className.includes('FixtureSubGroupWithShowMore_Closed'),
+                playerCount: pod.querySelectorAll('.srb-ParticipantLabelWithTeam_Name, .srb-ParticipantLabel_Name').length,
+                oddsCount: pod.querySelectorAll('.gl-ParticipantOddsOnly_Odds').length,
+                columnCount: headers.length,
+                headers,
+                showMoreCount: showMore.length,
+            };
+        });
+        """
+    )
+
+
+async def wait_for_disposals_market_page(driver, timeout=60):
+    loop = asyncio.get_event_loop()
+    deadline = loop.time() + timeout
+    last_metrics = []
+
+    while loop.time() < deadline:
+        last_metrics = await get_disposals_fixture_metrics(driver)
+        if any(item.get("match") for item in last_metrics):
+            return last_metrics
+        await driver.sleep(1)
+
+    await dump_debug_html(driver, str(BET365_HTML_DIR / "fixture_market_load_error.txt"))
+    last_metrics = await get_disposals_fixture_metrics(driver)
+    if any(item.get("match") for item in last_metrics):
+        return last_metrics
+    raise RuntimeError(f"Could not find disposal fixture groups: {last_metrics}")
+
+
+async def open_collapsed_disposal_fixtures(driver):
+    total_clicked = 0
+
+    for _ in range(30):
+        result = await driver.execute_script(
+            """
+            const fixtureSelector = '.gl-MarketGroupPod.src-HScrollFixtureSubGroupWithShowMore, .gl-MarketGroupPod.src-FixtureSubGroupWithShowMore';
+            const pods = Array.from(document.querySelectorAll(fixtureSelector));
+            const pod = pods.find((node) => node.className.includes('FixtureSubGroupWithShowMore_Closed'));
+            if (!pod) return { clicked: false };
+
+            const button = pod.querySelector('.src-FixtureSubGroupButton');
+            const match = (pod.querySelector('.src-FixtureSubGroupButton_Text')?.innerText || '').trim();
+            if (!button) return { clicked: false, match };
+
+            button.scrollIntoView({ block: 'center', inline: 'center' });
+            button.click();
+            return { clicked: true, match };
+            """
+        )
+
+        if not result or not result.get("clicked"):
+            break
+
+        total_clicked += 1
+        print(f"  Opened fixture group: {result.get('match')}")
+        await driver.sleep(jittered(CLICK_SETTLE_SECONDS))
+
+    metrics = await get_disposals_fixture_metrics(driver)
+    closed = [item.get("match") or f"fixture {item.get('index')}" for item in metrics if item.get("closed")]
+    if closed:
+        raise RuntimeError(f"Could not open collapsed disposal fixture group(s): {closed}")
+
+    if total_clicked:
+        print(f"  Opened {total_clicked} collapsed fixture group(s)")
+
+
+async def click_all_disposal_show_mores(driver):
+    total_clicked = 0
+    stalled = []
+
+    async def fixture_show_more_status():
+        return await driver.execute_script(
+            """
+            const fixtureSelector = '.gl-MarketGroupPod.src-HScrollFixtureSubGroupWithShowMore, .gl-MarketGroupPod.src-FixtureSubGroupWithShowMore';
+            const pods = Array.from(document.querySelectorAll(fixtureSelector));
+            return pods.map((pod, index) => {
+                const match = (pod.querySelector('.src-FixtureSubGroupButton_Text')?.innerText || '').trim();
+                const buttons = Array.from(pod.querySelectorAll('.msl-ShowMore_Link, .bbl-ShowMoreForHScroll, .bbl-ShowMore'))
+                    .filter((node) => {
+                        const text = (node.innerText || node.textContent || '').trim().toLowerCase();
+                        const rect = node.getBoundingClientRect();
+                        return text === 'show more' && rect.width > 0 && rect.height > 0;
+                    });
+                return {
+                    index,
+                    match,
+                    playerCount: pod.querySelectorAll('.srb-ParticipantLabelWithTeam_Name, .srb-ParticipantLabel_Name').length,
+                    oddsCount: pod.querySelectorAll('.gl-ParticipantOddsOnly_Odds').length,
+                    htmlBytes: pod.outerHTML.length,
+                    showMoreCount: buttons.length,
+                };
+            });
+            """
+        )
+
+    async def click_fixture_show_more(fixture_index):
+        target = await driver.execute_script(
+            """
+            const fixtureIndex = arguments[0];
+            const fixtureSelector = '.gl-MarketGroupPod.src-HScrollFixtureSubGroupWithShowMore, .gl-MarketGroupPod.src-FixtureSubGroupWithShowMore';
+            const pod = Array.from(document.querySelectorAll(fixtureSelector))[fixtureIndex];
+            if (!pod) return { clicked: false, reason: 'missing fixture' };
+
+            const buttons = Array.from(pod.querySelectorAll('.msl-ShowMore_Link, .bbl-ShowMoreForHScroll, .bbl-ShowMore'))
+                .filter((node) => {
+                    const text = (node.innerText || node.textContent || '').trim().toLowerCase();
+                    const rect = node.getBoundingClientRect();
+                    return text === 'show more' && rect.width > 0 && rect.height > 0;
+                });
+            if (buttons.length === 0) {
+                return { clicked: false, reason: 'no show more' };
+            }
+
+            const button = buttons[0];
+            const match = (pod.querySelector('.src-FixtureSubGroupButton_Text')?.innerText || '').trim();
+            pod.scrollIntoView({ block: 'center', inline: 'nearest' });
+            button.scrollIntoView({ block: 'center', inline: 'center' });
+            window.scrollBy(0, -80);
+
+            const rect = button.getBoundingClientRect();
+            const x = Math.floor(rect.left + rect.width / 2);
+            const y = Math.floor(rect.top + rect.height / 2);
+            return {
+                clicked: false,
+                ready: true,
+                match,
+                x,
+                y,
+                remainingInFixture: buttons.length - 1,
+            };
+            """,
+            fixture_index,
+        )
+
+        if not target or not target.get("ready"):
+            return target
+
+        await driver.sleep(jittered(SHOW_MORE_PRECLICK_SECONDS, spread=0.55))
+        x = target.get("x")
+        y = target.get("y")
+
+        if x is not None and y is not None:
             try:
-                return await wait_for_player_container_html(driver, timeout=25)
-            except Exception as exc:
-                last_error = exc
-                print(
-                    f"  Player page load attempt {attempt} failed: "
-                    f"{describe_exception(exc)}; url={candidate_url}"
+                await driver.execute_cdp_cmd(
+                    "Input.dispatchMouseEvent",
+                    {"type": "mouseMoved", "x": x, "y": y},
                 )
-                try:
-                    await driver.refresh()
-                except Exception:
-                    pass
-                await driver.sleep(3)
-        raise last_error
+                await driver.sleep(jittered(0.3, spread=0.6))
+                await driver.execute_cdp_cmd(
+                    "Input.dispatchMouseEvent",
+                    {
+                        "type": "mousePressed",
+                        "x": x,
+                        "y": y,
+                        "button": "left",
+                        "clickCount": 1,
+                    },
+                )
+                await driver.sleep(jittered(0.2, spread=0.6))
+                await driver.execute_cdp_cmd(
+                    "Input.dispatchMouseEvent",
+                    {
+                        "type": "mouseReleased",
+                        "x": x,
+                        "y": y,
+                        "button": "left",
+                        "clickCount": 1,
+                    },
+                )
+                return {**target, "clicked": True, "strategy": "cdp_mouse"}
+            except Exception as exc:
+                print(f"  CDP show-more click failed: {describe_exception(exc)}")
 
-    for index, url in enumerate(player_urls, start=1):
-        try:
-            print(f"\n{'='*60}")
-            print(f"Processing match {index}")
-            print(f"{'='*60}")
-            print(f"URL: {url}")
+        fallback = await driver.execute_script(
+            """
+            const fixtureIndex = arguments[0];
+            const fixtureSelector = '.gl-MarketGroupPod.src-HScrollFixtureSubGroupWithShowMore, .gl-MarketGroupPod.src-FixtureSubGroupWithShowMore';
+            const pod = Array.from(document.querySelectorAll(fixtureSelector))[fixtureIndex];
+            if (!pod) return { clicked: false, reason: 'missing fixture' };
 
-            await load_usable_player_page(url)
+            const button = Array.from(pod.querySelectorAll('.msl-ShowMore_Link, .bbl-ShowMoreForHScroll, .bbl-ShowMore'))
+                .find((node) => {
+                    const text = (node.innerText || node.textContent || '').trim().toLowerCase();
+                    const rect = node.getBoundingClientRect();
+                    return text === 'show more' && rect.width > 0 && rect.height > 0;
+                });
+            if (!button) return { clicked: false, reason: 'no show more' };
 
-            # The default SGM page opens Goalscorer. Save it first, then open
-            # the Player tab so player milestone and line markets are saved.
-            await safe_click_show_more_all()
-            await save_player_container_html(
-                driver,
-                f"Data/BET365_HTML/body_html_players_a_match_{index}.txt",
-            )
+            const parent = button.closest('.msl-ShowMore') || button.parentElement;
+            const events = ['mouseover', 'mousemove', 'mousedown', 'mouseup', 'click'];
+            for (const type of events) {
+                button.dispatchEvent(new MouseEvent(type, {
+                    bubbles: true,
+                    cancelable: true,
+                    view: window,
+                }));
+            }
+            if (parent && parent !== button) {
+                parent.click();
+            } else {
+                button.click();
+            }
+            return { clicked: true, strategy: 'js_fallback' };
+            """,
+            fixture_index,
+        )
+        return {**target, **(fallback or {})}
 
-            await click_market_nav(driver, "Player")
-            await driver.sleep(2)
-            await scroll_page_to_load_markets()
-            await click_market_group(driver, "Total Player Disposals")
-            await driver.sleep(2)
-            await safe_click_show_more_all()
-            await scroll_page_to_load_markets()
-            await safe_click_show_more_all()
-            await save_player_disposals_html(
-                driver,
-                f"Data/BET365_HTML/body_html_players_b_match_{index}.txt",
-            )
-            saved_matches += 1
+    for _ in range(10):
+        statuses = await fixture_show_more_status()
+        expandable = [item for item in statuses if item.get("showMoreCount", 0) > 0]
+        if not expandable:
+            break
+        random.shuffle(expandable)
 
-        except Exception as e:
-            reason = describe_exception(e)
-            failures.append((index, url, reason))
-            print(f"  Error with match {index}: {reason}. Continuing...")
+        progress_this_pass = False
+        for item in expandable:
+            fixture_index = item.get("index")
+            match = item.get("match") or f"fixture {fixture_index}"
+            before = item
+
+            made_progress = False
+            for attempt in range(1, 3):
+                result = await click_fixture_show_more(fixture_index)
+                if not result or not result.get("clicked"):
+                    break
+
+                total_clicked += 1
+                strategy = result.get("strategy", "unknown")
+                print(f"  Clicked show more: {match} (attempt {attempt}, {strategy})")
+
+                # Poll for the expansion to render instead of always paying the
+                # worst-case settle time: break as soon as the fixture grows or
+                # the control disappears, up to SHOW_MORE_POSTCLICK_MAX_SECONDS.
+                after = None
+                progressed = False
+                deadline = asyncio.get_event_loop().time() + SHOW_MORE_POSTCLICK_MAX_SECONDS
+                while True:
+                    await driver.sleep(SHOW_MORE_POLL_INTERVAL_SECONDS)
+                    after_statuses = await fixture_show_more_status()
+                    after = next(
+                        (status for status in after_statuses if status.get("match") == item.get("match")),
+                        None,
+                    )
+                    if after is None:
+                        break
+
+                    grew = (
+                        after.get("playerCount", 0) > before.get("playerCount", 0)
+                        or after.get("oddsCount", 0) > before.get("oddsCount", 0)
+                        or after.get("htmlBytes", 0) > before.get("htmlBytes", 0) + 500
+                    )
+                    disappeared = after.get("showMoreCount", 0) < before.get("showMoreCount", 0)
+
+                    if grew or disappeared:
+                        progressed = True
+                        break
+
+                    if asyncio.get_event_loop().time() >= deadline:
+                        break
+
+                if after is None:
+                    break
+
+                if progressed:
+                    made_progress = True
+                    progress_this_pass = True
+                    break
+
+                before = after
+                await driver.execute_script("window.scrollBy(0, Math.floor(window.innerHeight * 0.25));")
+                await driver.sleep(jittered(2.5, spread=0.5))
+
+            if not made_progress:
+                stalled.append(match)
+            elif total_clicked % SHOW_MORE_BATCH_SIZE == 0:
+                cooldown = jittered(SHOW_MORE_BATCH_COOLDOWN_SECONDS, spread=0.5)
+                print(f"  Cooling down {cooldown:.1f}s after {total_clicked} show-more click(s)")
+                await driver.sleep(cooldown)
+
+        if not progress_this_pass:
+            break
+
+    if total_clicked:
+        print(f"  Clicked {total_clicked} show-more control(s)")
+
+    await driver.execute_script("window.scrollTo(0, 0);")
+    await driver.sleep(1)
+
+    remaining = sum(item.get("showMoreCount", 0) for item in await get_disposals_fixture_metrics(driver))
+    if remaining:
+        # The expander already retried each control across multiple passes; if a
+        # few won't hydrate we move forward and save whatever did expand rather
+        # than failing the whole run for one stubborn fixture.
+        stalled_detail = f"; stalled={sorted(set(stalled))}" if stalled else ""
+        print(
+            f"  WARNING: {remaining} show-more control(s) still present after expansion"
+            f"{stalled_detail}; continuing with partially expanded fixture(s)"
+        )
+
+
+async def hydrate_disposals_screen(driver):
+    for _ in range(3):
+        await driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+        await driver.sleep(1)
+    await driver.execute_script("window.scrollTo(0, 0);")
+    await driver.sleep(1)
+
+    await open_collapsed_disposal_fixtures(driver)
+    await hydrate_disposals_screen_scroll_only(driver)
+    await click_all_disposal_show_mores(driver)
+    await hydrate_disposals_screen_scroll_only(driver)
+
+    metrics = await get_disposals_fixture_metrics(driver)
+    incomplete = [
+        item
+        for item in metrics
+        if item.get("match")
+        and (
+            item.get("closed")
+            or item.get("playerCount", 0) == 0
+            or item.get("columnCount", 0) == 0
+        )
+    ]
+    if incomplete:
+        raise RuntimeError(f"Disposal fixture group(s) did not hydrate: {incomplete}")
+
+    return metrics
+
+
+async def hydrate_disposals_screen_scroll_only(driver):
+    for _ in range(4):
+        await driver.execute_script("window.scrollBy(0, Math.floor(window.innerHeight * 0.9));")
+        await driver.sleep(0.8)
+    await driver.execute_script("window.scrollTo(0, 0);")
+    await driver.sleep(0.8)
+
+
+async def save_fixture_group_html(
+    driver,
+    screen_index,
+    next_match_index,
+    seen_matches,
+    market_code,
+    all_screen_prefix,
+    match_file_prefix,
+):
+    all_html = await driver.execute_script(
+        """
+        const grid = document.querySelector('.cm-CouponMarketGrid') ||
+            document.querySelector('.wcl-PageContainer_Colcontainer') ||
+            document.body;
+        return grid.outerHTML;
+        """
+    )
+    all_path = BET365_HTML_DIR / f"{all_screen_prefix}_all_screen_{screen_index}.txt"
+    all_path.write_text(all_html)
+    print(f"Saved expanded {market_code} screen: {all_path} ({len(all_html)} bytes)")
+
+    fixtures = await driver.execute_script(
+        """
+        const fixtureSelector = '.gl-MarketGroupPod.src-HScrollFixtureSubGroupWithShowMore, .gl-MarketGroupPod.src-FixtureSubGroupWithShowMore';
+        return Array.from(document.querySelectorAll(fixtureSelector))
+            .map((pod) => ({
+                match: (pod.querySelector('.src-FixtureSubGroupButton_Text')?.innerText || '').trim(),
+                startTime: (pod.querySelector('.src-FixtureSubGroupButton_BookCloses')?.innerText || '').trim(),
+                playerCount: pod.querySelectorAll('.srb-ParticipantLabelWithTeam_Name, .srb-ParticipantLabel_Name').length,
+                columnCount: pod.querySelectorAll('.srb-HScrollPlaceHeader, .gl-MarketColumnHeader').length,
+                html: pod.outerHTML,
+            }))
+            .filter((item) => item.match && item.playerCount > 0 && item.columnCount > 0);
+        """
+    )
+
+    saved = 0
+    for fixture in fixtures:
+        match = fixture.get("match", "")
+        if match in seen_matches:
+            print(f"  Skipping duplicate {market_code} fixture from screen {screen_index}: {match}")
             continue
 
-    print(f"Saved usable Bet365 player HTML for {saved_matches}/{len(player_urls)} matches")
-    if failures:
-        print("Bet365 player-page failures:")
-        for index, url, reason in failures:
-            print(f"  match {index}: {reason}; url={url}")
+        seen_matches.add(match)
+        path = BET365_HTML_DIR / f"{match_file_prefix}_match_{next_match_index}.txt"
+        payload = (
+            f"<!-- source: consolidated Bet365 {market_code} market screen {screen_index} -->\n"
+            f"<!-- market_code: {market_code} -->\n"
+            f"<!-- match: {match} -->\n"
+            f"<!-- start_time: {fixture.get('startTime', '')} -->\n"
+            f"{fixture.get('html', '')}"
+        )
+        path.write_text(payload)
+        print(
+            f"  Saved fixture {next_match_index}: {match} "
+            f"({fixture.get('playerCount')} players, {fixture.get('columnCount')} columns)"
+        )
+        next_match_index += 1
+        saved += 1
 
-    if player_urls and saved_matches == 0:
-        raise RuntimeError("No usable Bet365 player HTML files were saved")
+    if saved == 0:
+        raise RuntimeError(f"No hydrated fixture HTML was saved from {market_code} screen {screen_index}")
+
+    return next_match_index, saved
 
 
-async def main():
+async def scrape_consolidated_fixture_screens(
+    driver,
+    urls,
+    market_code,
+    all_screen_prefix,
+    match_file_prefix,
+    clear_patterns,
+):
+    """Use consolidated fixture screens rather than opening each match URL."""
+    seen_matches = set()
+    next_match_index = 1
+    total_saved = 0
+    cleared_previous = False
+
+    for screen_index, url in enumerate(urls, start=1):
+        print(f"\n{'='*60}")
+        print(f"Processing consolidated {market_code} screen {screen_index}")
+        print(f"{'='*60}")
+        print(f"URL: {url}")
+
+        await driver.get(url)
+        # Short initial settle; wait_for_disposals_market_page polls until ready.
+        await driver.sleep(jittered(4.5))
+        await wait_for_disposals_market_page(driver)
+        if not cleared_previous:
+            clear_bet365_outputs(clear_patterns)
+            cleared_previous = True
+        metrics = await hydrate_disposals_screen(driver)
+        for item in metrics:
+            if item.get("match"):
+                print(
+                    "  Fixture: "
+                    f"{item.get('match')} | players={item.get('playerCount')} "
+                    f"columns={item.get('columnCount')} show_more={item.get('showMoreCount')}"
+                )
+
+        next_match_index, saved = await save_fixture_group_html(
+            driver,
+            screen_index,
+            next_match_index,
+            seen_matches,
+            market_code,
+            all_screen_prefix,
+            match_file_prefix,
+        )
+        total_saved += saved
+
+    print(f"Saved Bet365 {market_code} HTML for {total_saved} fixture(s)")
+
+
+async def scrape_disposal_market_screens(driver):
+    await scrape_consolidated_fixture_screens(
+        driver,
+        BET365_DISPOSALS_URLS,
+        market_code="disposals",
+        all_screen_prefix="disposals",
+        match_file_prefix="body_html_players_b",
+        clear_patterns=[
+            "body_html_players_b_match_*.txt",
+            "disposals_all_screen_*.txt",
+        ],
+    )
+
+
+async def scrape_goal_market_screens(driver):
+    await scrape_consolidated_fixture_screens(
+        driver,
+        BET365_GOALS_ANYTIME_URLS,
+        market_code="goals_anytime",
+        all_screen_prefix="goals_anytime",
+        match_file_prefix="body_html_players_a",
+        clear_patterns=[
+            "body_html_players_a_match_*.txt",
+            "body_html_players_a_multiscorer_match_*.txt",
+            "goals_anytime_all_screen_*.txt",
+            "goals_multiscorer_all_screen_*.txt",
+        ],
+    )
+    await scrape_consolidated_fixture_screens(
+        driver,
+        BET365_GOALS_MULTISCORER_URLS,
+        market_code="goals_multiscorer",
+        all_screen_prefix="goals_multiscorer",
+        match_file_prefix="body_html_players_a_multiscorer",
+        clear_patterns=[],
+    )
+
+
+def save_market_url_trace():
+    urls = [
+        "# goals_anytime",
+        *BET365_GOALS_ANYTIME_URLS,
+        "# goals_multiscorer",
+        *BET365_GOALS_MULTISCORER_URLS,
+        "# disposals",
+        *BET365_DISPOSALS_URLS,
+    ]
+    (BET365_HTML_DIR / "urls.csv").write_text("\n".join(urls))
+
+
+async def run_scrape_session():
+    """Open one fresh browser, log in, and scrape every market. Raises on failure."""
     options = webdriver.ChromeOptions()
     # options.add_argument("--headless=True")
 
-    async with webdriver.Chrome(options=options) as driver:
-        player_urls = await collect_h2h_and_urls(driver)
-        await scrape_player_pages(driver, player_urls)
+    # Vary the window size per run so consecutive sessions don't present an
+    # identical fingerprint. We do NOT spoof the user-agent: setting --user-agent
+    # only changes the UA string, not Chrome's client hints (sec-ch-ua), and a
+    # mismatch between the two is a stronger bot signal than leaving it alone.
+    width, height = random.choice(BET365_VIEWPORTS)
+    options.add_argument(f"--window-size={width},{height}")
+    print(f"Browser viewport for this run: {width}x{height}")
+
+    # The hydration failures are an IP-based rate block: a real browser on the
+    # same IP is blocked at the same time, but the same page works from a
+    # different IP (phone hotspot). Routing through a (residential) proxy resets
+    # the rate counter. Set BET365_PROXY to e.g. http://user:pass@host:port/
+    # to enable; leave it unset to run direct.
+    #
+    # We can't hand Chrome the authenticated proxy directly (driverless's auth
+    # mechanism needs an MV3 extension that current Chrome won't load), so we run
+    # a local relay and give Chrome a credential-free --proxy-server flag.
+    #
+    # Only proxy when scraping logged-out (BYPASS_LOGIN). When we actually log in,
+    # we go direct on the real IP: logging into the account through a rotating
+    # residential proxy in a different location is a strong account-security flag.
+    proxy = os.getenv("BET365_PROXY", "").strip()
+    relay_proc = None
+    if proxy and not BYPASS_LOGIN:
+        print("Login enabled - scraping direct (not via proxy) to avoid flagging the account login")
+        proxy = ""
+    if proxy:
+        relay_proc, local_proxy = await start_proxy_relay(proxy)
+        options.add_argument(f"--proxy-server={local_proxy}")
+        print(f"Routing through proxy: {redact_proxy(proxy)} (via local relay {local_proxy})")
+
+    try:
+        async with webdriver.Chrome(options=options) as driver:
+            await login_to_bet365(driver)
+            save_market_url_trace()
+            await scrape_goal_market_screens(driver)
+            await scrape_disposal_market_screens(driver)
+            await save_h2h_html(driver, required=False)
+    finally:
+        stop_proxy_relay(relay_proc)
+
+
+async def main():
+    # A hydration failure (RuntimeError) usually means Bet365 has soft-throttled
+    # us and is serving a shell that never populates the markets. Rather than
+    # saving junk, back off and retry once on a brand-new browser session.
+    max_attempts = max(1, env_int("BET365_MAX_ATTEMPTS", 2))
+    backoff_seconds = env_int("BET365_RETRY_BACKOFF_SECONDS", 300)
+
+    for attempt in range(1, max_attempts + 1):
+        kill_stale_chrome()
+        try:
+            await run_scrape_session()
+            return
+        except RuntimeError as exc:
+            print(f"Scrape attempt {attempt}/{max_attempts} failed: {describe_exception(exc)}")
+            if attempt >= max_attempts:
+                raise
+            print(
+                "Likely throttled / degraded shell; backing off "
+                f"{backoff_seconds}s before a fresh browser session "
+                "(override with BET365_RETRY_BACKOFF_SECONDS)..."
+            )
+            await asyncio.sleep(backoff_seconds)
 
 
 if __name__ == "__main__":

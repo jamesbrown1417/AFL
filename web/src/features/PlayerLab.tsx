@@ -1114,7 +1114,7 @@ function PlayerFiltersDrawer({
         ) : null}
         <div className="drawer-foot">
           <Button variant="ghost" onClick={() => onReset(mode === 'stats' ? 'stats' : activeTab)}>Reset</Button>
-          <Button variant="primary" onClick={onApply}>Apply filters</Button>
+          <Button variant="accent" onClick={onApply}>Apply filters</Button>
         </div>
         <div className="drawer-body">
           {mode === 'stats' ? (

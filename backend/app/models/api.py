@@ -188,6 +188,8 @@ class OddsSearchResult(BaseModel):
     edge_pct: float | None
     diff_2025: float | None = None
     diff_last_10: float | None = None
+    home_away_diff: float | None = None
+    win_loss_diff: float | None = None
     player_position: str | None = None
     matchup_difficulty: str | None = None
     over_matchup_difficulty: str | None = None

@@ -64,10 +64,11 @@ class WorkspaceTests(unittest.TestCase):
                 {
                     "OddsScraper/Neds/data_1.json",
                     "OddsScraper/Neds/neds_response.json",
+                    "OddsScraper/Neds/neds_afl_match_urls.csv",
                     "Data/BET365_HTML/h2h_html.txt",
                 },
             )
-            self.assertTrue((neds / "neds_afl_match_urls.csv").exists())
+            self.assertFalse((neds / "neds_afl_match_urls.csv").exists())
             self.assertTrue((bet365 / "urls.csv").exists())
 
     def test_source_artifact_mutation_detection_flags_production_writes(self) -> None:

@@ -19,6 +19,7 @@ COPY_IGNORE = shutil.ignore_patterns(
 
 PRODUCTION_CACHE_CLEANUP_GLOBS = (
     "OddsScraper/Neds/*.json",
+    "OddsScraper/Neds/neds_afl_match_urls.csv",
     "Data/BET365_HTML/*.txt",
 )
 
