@@ -6,7 +6,7 @@ import type { BookmakerSummary, BuilderMode, CgmAgencyComparison, DraftLeg, Even
 import { useBuilderOdds, useCompareCgm, useCompareSgm, useSelectionAgencyPrices } from '../api/queries'
 import { defaultMetricFilters, defaultPlayerFilters, useAppStore, useClientSettings } from '../store/useAppStore'
 import { allMarketCode, buildCandidateGroups, combinedBasePrice, defaultDescending, lineWithSideLabel, marketTypeToStatCode, orderedMarketCodes, sortCandidateRows, toDraftLeg } from '../lib/builder'
-import { bookmakerLabel, formatDateTime, formatLine, formatPrice, formatSigned, marketLabel, playerPositionTag, selectionTypeLabel, shortMatchLabel } from '../lib/formatters'
+import { aflTeamCode, bookmakerLabel, formatDateTime, formatLine, formatPrice, formatShortDate, formatSigned, marketLabel, playerPositionTag, selectionTypeLabel, shortMatchLabel } from '../lib/formatters'
 import { Button, Chip, ConfirmDialog, EmptyState, ErrorBanner, Field, Panel, Segmented, Select, StatPill, TextInput, Toggle } from '../components/ui'
 
 export function BuilderWorkspace({
@@ -339,12 +339,13 @@ export function BuilderWorkspace({
             <EmptyState title="No eligible legs" body="Change agency, match, market, player search, or metric filters." />
           ) : displayMode === 'row' ? (
             <div className="candidate-table">
-              <CandidateHeader sortField={sortField} descending={descending} onSort={handleSort} />
-              <div className="candidate-list">
-                {rowCandidates.map((selection) => (
-                  <CandidateRow
-                    key={`${selection.selection_id}-${selection.bookmaker}`}
-                    selection={selection}
+                  <CandidateHeader sortField={sortField} descending={descending} onSort={handleSort} />
+                  <div className="candidate-list">
+                    {rowCandidates.map((selection) => (
+                      <CandidateRow
+                        key={`${selection.selection_id}-${selection.bookmaker}`}
+                        mode={mode}
+                        selection={selection}
                     selected={selectedSelectionIds.has(selection.selection_id)}
                     onToggle={() => toggleLeg(selection)}
                     onContextMenu={(event) => openContextMenu(event, selection)}
@@ -363,6 +364,7 @@ export function BuilderWorkspace({
                     <div className="tag-row">
                       {playerPositionTag(group.playerPosition) ? <span className="tag">{playerPositionTag(group.playerPosition)}</span> : null}
                       <MatchupBadge value={group.matchupDifficulty} />
+                      <TeamContextTags selection={group.selections[0]} />
                     </div>
                   </div>
                   <div className="tile-lines">
@@ -661,7 +663,9 @@ function CandidateHeader({
   descending: boolean
   onSort: (field: SortField) => void
 }) {
-  const columns: { label: string; field: SortField; numeric: boolean }[] = [
+  const columns: { label: string; field?: SortField; numeric: boolean }[] = [
+    { label: 'Loc', numeric: false },
+    { label: 'Team line', field: 'player_team_line', numeric: true },
     { label: 'Line', field: 'line', numeric: true },
     { label: 'Price', field: 'price', numeric: true },
     { label: 'L10', field: 'diff_last_10', numeric: true },
@@ -684,13 +688,17 @@ function CandidateHeader({
       </button>
       <div className="candidate-head-cell">Matchup</div>
       {columns.map((column) => {
-        const active = sortField === column.field
+        const field = column.field
+        const active = field != null && sortField === field
+        if (field == null) {
+          return <div key={column.label} className={clsx('candidate-head-cell', column.numeric && 'col-num')}>{column.label}</div>
+        }
         return (
           <button
             key={column.field}
             type="button"
             className={clsx('candidate-head-cell', column.numeric && 'col-num', active && 'is-active')}
-            onClick={() => onSort(column.field)}
+            onClick={() => onSort(field)}
             aria-sort={active ? (descending ? 'descending' : 'ascending') : 'none'}
           >
             {column.label}
@@ -733,6 +741,41 @@ function MatchupBadge({ value }: { value?: string | null }) {
   if (!value) return null
   const normalized = value.trim().toLowerCase()
   return <span className={clsx('tag', 'matchup-tag', `matchup-tag--${normalized.replaceAll(/\s+/g, '-')}`)}>{value}</span>
+}
+
+function TeamContextTags({ selection }: { selection: Pick<OddsSearchResult, 'player_team' | 'player_home_away' | 'player_team_line'> }) {
+  const teamCode = selection.player_team ? aflTeamCode(selection.player_team) : null
+  return (
+    <>
+      {selection.player_home_away ? <span className="tag">{selection.player_home_away}</span> : null}
+      {teamCode ? <span className="tag">{teamCode}</span> : null}
+      <TeamLineBadge value={selection.player_team_line} />
+    </>
+  )
+}
+
+function TeamLineBadge({ value }: { value?: number | null }) {
+  if (value == null) return null
+  return <span className={clsx('team-line-badge', value >= 0 ? 'team-line-badge--win' : 'team-line-badge--loss')}>{formatSigned(value)}</span>
+}
+
+function TeamLineCell({ value }: { value?: number | null }) {
+  return (
+    <span className={clsx('col-num', 'team-line-cell', value == null ? 'team-line-cell--empty' : value >= 0 ? 'team-line-cell--win' : 'team-line-cell--loss')}>
+      {formatSigned(value)}
+    </span>
+  )
+}
+
+function matchDetailLine(startTime?: string | null, venue?: string | null) {
+  const parts = [formatShortDate(startTime), venue].filter((part) => part && part !== 'TBA')
+  return parts.length ? parts.join(' | ') : 'TBA'
+}
+
+const emptyTeamContext = {
+  player_team: null,
+  player_home_away: null,
+  player_team_line: null,
 }
 
 export function AgencyPriceDialog({
@@ -785,12 +828,14 @@ export function AgencyPriceDialog({
 }
 
 function CandidateRow({
+  mode,
   selection,
   selected,
   disabled,
   onToggle,
   onContextMenu,
 }: {
+  mode: BuilderMode
   selection: OddsSearchResult
   selected: boolean
   disabled: boolean
@@ -813,12 +858,17 @@ function CandidateRow({
           {selected ? <Check size={13} className="candidate-check" /> : null}
           {selection.player?.full_name ?? selection.label}
         </strong>
-        <span>{marketLabel(selection.market_type_code)} | {shortMatchLabel(selection.match_name)}</span>
+        <span>
+          {marketLabel(selection.market_type_code)} | {shortMatchLabel(selection.match_name)}
+          {mode === 'cgm' ? ` | ${matchDetailLine(selection.start_time, selection.venue)}` : ''}
+        </span>
       </div>
       <div className="candidate-context">
         {playerPositionTag(selection.player_position) ? <span className="tag">{playerPositionTag(selection.player_position)}</span> : null}
         <MatchupBadge value={selection.matchup_difficulty} />
       </div>
+      <span className="candidate-home-away">{selection.player_home_away ?? '-'}</span>
+      <TeamLineCell value={selection.player_team_line} />
       <span className="col-num">{lineWithSideLabel(selection)}</span>
       <b className="col-num tabular">{formatPrice(selection.decimal_price)}</b>
       <span className={clsx('col-num delta', (selection.diff_last_10 ?? -1) >= 0 ? 'delta--good' : 'delta--bad')}>{formatSigned(selection.diff_last_10)}</span>
@@ -877,6 +927,7 @@ function BuilderPanel({
                 <div className="tag-row">
                   {playerPositionTag(leg.player_position) ? <span className="tag">{playerPositionTag(leg.player_position)}</span> : null}
                   <MatchupBadge value={leg.matchup_difficulty} />
+                  <TeamContextTags selection={leg} />
                 </div>
               </div>
               <b>{formatPrice(leg.base_price)}</b>
@@ -924,6 +975,7 @@ function SgmComparisonCard({ result, rank, legBySelectionId }: { result: SgmAgen
           <div className="comparison-leg" key={leg.selection_id}>
             <span>{leg.label}</span>
             <MatchupBadge value={legBySelectionId.get(leg.selection_id)?.matchup_difficulty} />
+            <TeamContextTags selection={legBySelectionId.get(leg.selection_id) ?? emptyTeamContext} />
             <b className="tabular">{formatPrice(leg.base_price)}</b>
           </div>
         ))}
@@ -948,8 +1000,9 @@ function CgmComparisonCard({ result, rank, legBySelectionId }: { result: CgmAgen
           <div className="comparison-leg comparison-leg--stacked" key={leg.selection_id}>
             <div>
               <span>{leg.label}</span>
-              <small>{shortMatchLabel(leg.match_name)}</small>
+              <small>{shortMatchLabel(leg.match_name)} | {matchDetailLine(legBySelectionId.get(leg.selection_id)?.start_time, legBySelectionId.get(leg.selection_id)?.venue)}</small>
               <MatchupBadge value={legBySelectionId.get(leg.selection_id)?.matchup_difficulty} />
+              <TeamContextTags selection={legBySelectionId.get(leg.selection_id) ?? emptyTeamContext} />
             </div>
             <b className="tabular">{formatPrice(leg.base_price)}</b>
           </div>

@@ -2,7 +2,7 @@ export type ThemeMode = 'light' | 'dark'
 export type OddsScope = 'player' | 'match'
 export type BuilderMode = 'sgm' | 'cgm'
 export type DisplayMode = 'row' | 'tile'
-export type SortField = 'player' | 'line' | 'next_best' | 'price' | 'diff_last_10' | 'diff_2025' | 'home_away_diff' | 'win_loss_diff'
+export type SortField = 'player' | 'player_team_line' | 'line' | 'next_best' | 'price' | 'diff_last_10' | 'diff_2025' | 'home_away_diff' | 'win_loss_diff'
 
 export interface HealthResponse {
   status: string
@@ -137,10 +137,14 @@ export interface OddsSearchResult {
   event_id: number
   match_name: string
   start_time: string | null
+  venue: string | null
   bookmaker: string
   market_type_code: string
   market_display_name: string
   player: PlayerSummary | null
+  player_team: string | null
+  player_home_away: string | null
+  player_team_line: number | null
   selection_type: string
   label: string
   line_value: number | null
@@ -215,6 +219,11 @@ export interface DraftLeg {
   market_type_code: string
   selection_type: string
   base_price: number
+  start_time: string | null
+  venue: string | null
+  player_team: string | null
+  player_home_away: string | null
+  player_team_line: number | null
   diff_2025: number | null
   diff_last_10: number | null
   home_away_diff: number | null

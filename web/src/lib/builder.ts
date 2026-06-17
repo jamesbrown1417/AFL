@@ -97,6 +97,11 @@ export function toDraftLeg(selection: OddsSearchResult): DraftLeg | null {
     market_type_code: selection.market_type_code,
     selection_type: selection.selection_type,
     base_price: selection.decimal_price,
+    start_time: selection.start_time,
+    venue: selection.venue,
+    player_team: selection.player_team,
+    player_home_away: selection.player_home_away,
+    player_team_line: selection.player_team_line,
     diff_2025: selection.diff_2025,
     diff_last_10: selection.diff_last_10,
     home_away_diff: selection.home_away_diff,
@@ -134,6 +139,8 @@ function sortValue(selection: OddsSearchResult, field: SortField) {
       return selection.player?.full_name ?? selection.label
     case 'line':
       return selection.line_value ?? 999
+    case 'player_team_line':
+      return selection.player_team_line ?? -999
     case 'price':
       return selection.decimal_price ?? -999
     case 'diff_2025':

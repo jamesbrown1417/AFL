@@ -176,10 +176,14 @@ class OddsSearchResult(BaseModel):
     event_id: int
     match_name: str
     start_time: datetime | None
+    venue: str | None = None
     bookmaker: str
     market_type_code: str
     market_display_name: str
     player: PlayerSummary | None
+    player_team: str | None = None
+    player_home_away: str | None = None
+    player_team_line: float | None = None
     selection_type: str
     label: str
     line_value: float | None

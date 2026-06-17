@@ -971,6 +971,58 @@ class QueryService:
                   ) nearest
                   WHERE row_num = 1
                 ),
+                player_team_context AS (
+                  SELECT
+                    e.event_id,
+                    latest_player_team.player_id,
+                    latest_player_team.player_team,
+                    CASE
+                      WHEN LOWER(TRIM(latest_player_team.player_team)) = LOWER(TRIM(home_t.name)) THEN 'Home'
+                      WHEN LOWER(TRIM(latest_player_team.player_team)) = LOWER(TRIM(away_t.name)) THEN 'Away'
+                      ELSE NULL
+                    END AS player_home_away
+                  FROM (
+                    SELECT
+                      pgl.player_id,
+                      pgl.player_team,
+                      ROW_NUMBER() OVER (
+                        PARTITION BY pgl.player_id
+                        ORDER BY pgl.start_time_utc DESC
+                      ) AS row_num
+                    FROM player_game_logs pgl
+                    WHERE pgl.player_team IS NOT NULL
+                  ) latest_player_team
+                  JOIN events e ON TRUE
+                  JOIN teams home_t ON home_t.team_id = e.home_team_id
+                  JOIN teams away_t ON away_t.team_id = e.away_team_id
+                  WHERE latest_player_team.row_num = 1
+                    AND (
+                      LOWER(TRIM(latest_player_team.player_team)) = LOWER(TRIM(home_t.name))
+                      OR LOWER(TRIM(latest_player_team.player_team)) = LOWER(TRIM(away_t.name))
+                    )
+                ),
+                sportsbet_line_context AS (
+                  SELECT
+                    event_id,
+                    home_line
+                  FROM (
+                    SELECT
+                      line_market.event_id,
+                      line_market.line_value AS home_line,
+                      ROW_NUMBER() OVER (
+                        PARTITION BY line_market.event_id
+                        ORDER BY line_market.market_id DESC
+                      ) AS row_num
+                    FROM markets line_market
+                    JOIN selections line_selection ON line_selection.market_id = line_market.market_id
+                    JOIN selection_bookmaker_meta line_meta ON line_meta.selection_id = line_selection.selection_id
+                    JOIN bookmakers b ON b.bookmaker_id = line_meta.bookmaker_id
+                    WHERE line_market.market_type_code = 'line'
+                      AND line_selection.selection_type = 'home'
+                      AND b.code = 'sportsbet'
+                  ) ranked_lines
+                  WHERE row_num = 1
+                ),
                 base_odds AS (
                   SELECT
                     s.selection_id,
@@ -978,11 +1030,19 @@ class QueryService:
                     e.event_id,
                     e.match_name,
                     e.start_time_utc AS start_time,
+                    e.venue,
                     b.code AS bookmaker,
                     m.market_type_code,
                     m.market_name_raw AS market_display_name,
                     p.player_id,
                     p.full_name AS player_name,
+                    ptc.player_team,
+                    ptc.player_home_away,
+                    CASE
+                      WHEN ptc.player_home_away = 'Home' AND lc.home_line IS NOT NULL THEN lc.home_line * -1
+                      WHEN ptc.player_home_away = 'Away' AND lc.home_line IS NOT NULL THEN lc.home_line
+                      ELSE NULL
+                    END AS player_team_line,
                     s.selection_type,
                     s.label,
                     m.line_value,
@@ -1019,8 +1079,12 @@ class QueryService:
                   JOIN events e ON e.event_id = m.event_id
                   LEFT JOIN event_weather ew ON ew.event_id = e.event_id
                   LEFT JOIN players p ON p.player_id = m.player_id
+                  LEFT JOIN player_team_context ptc
+                    ON ptc.event_id = e.event_id AND ptc.player_id = p.player_id
                   JOIN selection_bookmaker_meta sbm ON sbm.selection_id = s.selection_id
                   JOIN bookmakers b ON b.bookmaker_id = sbm.bookmaker_id
+                  LEFT JOIN sportsbet_line_context lc
+                    ON lc.event_id = e.event_id
                   LEFT JOIN current_outcome_prices_v cop
                     ON cop.selection_id = s.selection_id AND cop.bookmaker_id = sbm.bookmaker_id
                   LEFT JOIN latest_selection_metrics_v lm
@@ -1055,11 +1119,15 @@ class QueryService:
                     event_id,
                     match_name,
                     start_time,
+                    venue,
                     bookmaker,
                     market_type_code,
                     market_display_name,
                     player_id,
                     player_name,
+                    player_team,
+                    player_home_away,
+                    player_team_line,
                     selection_type,
                     label,
                     line_value,
@@ -1108,11 +1176,15 @@ class QueryService:
                   event_id,
                   match_name,
                   start_time,
+                  venue,
                   bookmaker,
                   market_type_code,
                   market_display_name,
                   player_id,
                   player_name,
+                  player_team,
+                  player_home_away,
+                  player_team_line,
                   selection_type,
                   label,
                   line_value,
@@ -1531,10 +1603,14 @@ class QueryService:
             "event_id": row["event_id"],
             "match_name": row["match_name"],
             "start_time": row["start_time"],
+            "venue": row["venue"],
             "bookmaker": row["bookmaker"],
             "market_type_code": row["market_type_code"],
             "market_display_name": row["market_display_name"],
             "player": player,
+            "player_team": row["player_team"],
+            "player_home_away": row["player_home_away"],
+            "player_team_line": row["player_team_line"],
             "selection_type": row["selection_type"],
             "label": row["label"],
             "line_value": row["line_value"],

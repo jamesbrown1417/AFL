@@ -121,7 +121,7 @@ export function titleize(value: string) {
   return value.replace(/\w\S*/g, (word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
 }
 
-function aflTeamCode(teamName: string) {
+export function aflTeamCode(teamName: string) {
   const normalized = teamName.trim().toLowerCase().replaceAll('.', '')
   if (normalized.includes('port adelaide') || normalized.startsWith('port ') || normalized.includes(' power')) return 'PTA'
   if (normalized.includes('north melbourne') || normalized.includes('kangaroos')) return 'NTH'
