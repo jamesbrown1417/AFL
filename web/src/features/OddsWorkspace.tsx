@@ -138,6 +138,16 @@ export function OddsWorkspace({
         cell: ({ row }) => <Delta value={row.original.diff_2025} />,
       },
       {
+        header: 'H/A',
+        accessorKey: 'home_away_diff',
+        cell: ({ row }) => <Delta value={row.original.home_away_diff} />,
+      },
+      {
+        header: 'W/L',
+        accessorKey: 'win_loss_diff',
+        cell: ({ row }) => <Delta value={row.original.win_loss_diff} />,
+      },
+      {
         header: 'Next best',
         accessorKey: 'next_best_prob_diff',
         cell: ({ row }) => <Delta value={row.original.next_best_prob_diff} />,

@@ -121,6 +121,7 @@ const marketStatCodes: Record<string, string> = {
   player_kicks: 'kicks',
   player_handballs: 'handballs',
   player_hitouts: 'hitouts',
+  player_clearances: 'clearances',
 }
 
 export function marketTypeToStatCode(marketTypeCode: string): string | null {

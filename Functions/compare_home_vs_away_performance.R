@@ -39,10 +39,22 @@ compare_home_vs_away_performance <- function(player, stat) {
                          games = tidytable::n())
 
   # Get difference between home and away median and mean
+  home_away_wide <-
     home_away_summary |>
       tidytable::pivot_wider(names_from = home_away,
-                             values_from = c(median_stat, mean_stat, games)) |>
-      tidytable::mutate(median_diff = median_stat_home - median_stat_away,
-                        mean_diff = mean_stat_home - mean_stat_away) |>
-      tidytable::mutate(stat = stat)
+                             values_from = c(median_stat, mean_stat, games))
+
+  # A player may have only home or only away games in the window; keep the row
+  # importable with NA diffs and explicit zero counts for the missing side.
+  for (col in c("median_stat_home", "median_stat_away", "mean_stat_home", "mean_stat_away")) {
+    if (col %notin% names(home_away_wide)) home_away_wide[[col]] <- NA_real_
+  }
+  for (col in c("games_home", "games_away")) {
+    if (col %notin% names(home_away_wide)) home_away_wide[[col]] <- 0L
+  }
+
+  home_away_wide |>
+    tidytable::mutate(median_diff = median_stat_home - median_stat_away,
+                      mean_diff = mean_stat_home - mean_stat_away) |>
+    tidytable::mutate(stat = stat)
 }
