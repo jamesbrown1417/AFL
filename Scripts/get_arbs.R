@@ -1,6 +1,15 @@
 # library(shiny)
 library(tidyverse)
 
+# Ensure expected columns exist in a dataframe, adding them as NA if missing.
+# Early in the week, lines/prices may not yet be released for some agencies,
+# so columns like `under_price` can be absent from scraped files entirely.
+ensure_columns <- function(df, cols) {
+  missing <- setdiff(cols, names(df))
+  if (length(missing)) df[missing] <- NA
+  df
+}
+
 #===============================================================================
 # Read in Data
 #===============================================================================
@@ -65,6 +74,7 @@ all_player_disposals <-
   keep( ~ nrow(.x) > 0) |>
   map(~select(.x, -matches("id"))) |>
   reduce(bind_rows) |>
+  ensure_columns(c("under_price", "over_price", "line")) |>
   arrange(player_name, line, desc(over_price))
 
 ##%######################################################%##
@@ -79,6 +89,9 @@ all_player_fantasy_points <-
              full.names = TRUE,
              pattern = "player_fantasy_points") |>
   map(read_csv, num_threads = 12 ) |>
+  # Guarantee line/over_price/under_price exist per file before coercion
+  # (under_price may be absent early in the week before lines are released)
+  map(~ensure_columns(.x, c("line", "over_price", "under_price"))) |>
   # Make line and over_price numeric
   map(~mutate(.x, line = as.numeric(line),
               over_price = as.numeric(over_price))) |>
@@ -103,6 +116,7 @@ all_player_goals <-
   keep( ~ nrow(.x) > 0) |>
   map(~select(.x, -matches("id"))) |>
   reduce(bind_rows) |>
+  ensure_columns(c("under_price", "over_price", "line")) |>
   arrange(player_name, line, desc(over_price))
 
 ##%######################################################%##
@@ -124,6 +138,7 @@ all_player_marks <-
   # keep( ~ nrow(.x) > 0) |>
   map(~select(.x, -matches("id"))) |>
   reduce(bind_rows) |>
+  ensure_columns(c("under_price", "over_price", "line")) |>
   arrange(player_name, line, desc(over_price))
 
 ##%######################################################%##
@@ -144,6 +159,7 @@ all_player_tackles <-
   # keep( ~ nrow(.x) > 0) |>
   map(~select(.x, -matches("id"))) |>
   reduce(bind_rows) |>
+  ensure_columns(c("under_price", "over_price", "line")) |>
   arrange(player_name, line, desc(over_price))
 
 

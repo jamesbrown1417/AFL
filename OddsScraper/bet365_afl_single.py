@@ -31,7 +31,13 @@ BET365_ENV_KEYS = {
     "BET365_MAX_ATTEMPTS",
     "BET365_RETRY_BACKOFF_SECONDS",
     "BET365_PROXY",
+    "BET365_USER_DATA_DIR",
 }
+
+# When logging in, we reuse a persistent Chrome profile across runs so the session
+# cookie survives and we skip credential entry. Override the location with the
+# BET365_USER_DATA_DIR env var; otherwise this default is used.
+DEFAULT_BET365_PROFILE_DIR = PROJECT_ROOT / "OddsScraper" / ".bet365_profile"
 
 # Realistic desktop viewports. We vary the window size per run so consecutive
 # sessions don't share an identical fingerprint. (We deliberately do NOT spoof
@@ -58,6 +64,12 @@ BET365_GOALS_MULTISCORER_URLS = [
     "https://www.bet365.com.au/#/AC/B36/C21101752/D48/E360267/F48/N0/",
 ]
 BET365_HTML_DIR = Path("Data/BET365_HTML")
+BET365_PLAYER_FIXTURE_PATTERNS = [
+    "body_html_players_a_match_*.txt",
+    "body_html_players_a_multiscorer_match_*.txt",
+    "body_html_players_b_match_*.txt",
+]
+CURRENT_RUN_PLAYER_ARTIFACTS = 0
 CLICK_SETTLE_SECONDS = 1.5
 SHOW_MORE_PRECLICK_SECONDS = 1.5
 # After a show-more click we poll for the expansion to render rather than always
@@ -66,6 +78,8 @@ SHOW_MORE_POSTCLICK_MAX_SECONDS = 4.0
 SHOW_MORE_POLL_INTERVAL_SECONDS = 0.4
 SHOW_MORE_BATCH_COOLDOWN_SECONDS = 6
 SHOW_MORE_BATCH_SIZE = 4
+WHEEL_SCROLL_MIN_CHUNK = 90
+WHEEL_SCROLL_MAX_CHUNK = 280
 
 
 def load_bet365_env():
@@ -256,6 +270,15 @@ def clear_bet365_outputs(patterns):
         for path in BET365_HTML_DIR.glob(pattern):
             path.unlink()
 
+
+def count_bet365_artifacts(patterns):
+    BET365_HTML_DIR.mkdir(parents=True, exist_ok=True)
+    return sum(1 for pattern in patterns for path in BET365_HTML_DIR.glob(pattern) if path.is_file())
+
+
+def has_partial_player_artifacts():
+    return CURRENT_RUN_PLAYER_ARTIFACTS > 0
+
 # Validate credentials early with a clear error (only needed when actually logging in)
 if not BYPASS_LOGIN and (not username or not password):
     raise RuntimeError(
@@ -288,6 +311,180 @@ def describe_exception(exc):
     if message:
         return f"{type(exc).__name__}: {message}"
     return f"{type(exc).__name__}: <no message>"
+
+
+def clamp(value, low, high):
+    return max(low, min(high, value))
+
+
+async def viewport_size(driver):
+    return await driver.execute_script(
+        """
+        return {
+            width: window.innerWidth || document.documentElement.clientWidth || 1280,
+            height: window.innerHeight || document.documentElement.clientHeight || 720,
+        };
+        """
+    )
+
+
+async def human_wheel_scroll(driver, delta_y, *, x=None, y=None):
+    """Scroll using CDP mouse-wheel events in uneven bursts."""
+    viewport = await viewport_size(driver)
+    x = int(x if x is not None else random.uniform(viewport["width"] * 0.35, viewport["width"] * 0.75))
+    y = int(y if y is not None else random.uniform(viewport["height"] * 0.38, viewport["height"] * 0.78))
+
+    await driver.execute_cdp_cmd(
+        "Input.dispatchMouseEvent",
+        {"type": "mouseMoved", "x": x + random.randint(-18, 18), "y": y + random.randint(-12, 12)},
+    )
+
+    remaining = float(delta_y)
+    while abs(remaining) > 8:
+        chunk_abs = min(abs(remaining), random.uniform(WHEEL_SCROLL_MIN_CHUNK, WHEEL_SCROLL_MAX_CHUNK))
+        chunk = chunk_abs if remaining > 0 else -chunk_abs
+        remaining -= chunk
+        await driver.execute_cdp_cmd(
+            "Input.dispatchMouseEvent",
+            {
+                "type": "mouseWheel",
+                "x": x + random.randint(-6, 6),
+                "y": y + random.randint(-6, 6),
+                "deltaX": random.uniform(-4, 4),
+                "deltaY": chunk,
+            },
+        )
+        await driver.sleep(random.uniform(0.05, 0.22))
+
+    await driver.sleep(random.uniform(0.15, 0.55))
+
+
+async def human_scroll_to_bottom(driver, max_passes=30):
+    for _ in range(max_passes):
+        position = await driver.execute_script(
+            """
+            return {
+                scrollY: window.scrollY || document.documentElement.scrollTop || 0,
+                viewportHeight: window.innerHeight || document.documentElement.clientHeight || 720,
+                scrollHeight: Math.max(
+                    document.body?.scrollHeight || 0,
+                    document.documentElement?.scrollHeight || 0
+                ),
+            };
+            """
+        )
+        if position["scrollY"] + position["viewportHeight"] >= position["scrollHeight"] - 25:
+            break
+        await human_wheel_scroll(driver, random.uniform(420, 900))
+        await driver.sleep(random.uniform(0.25, 0.85))
+
+
+async def human_scroll_to_top(driver, max_passes=30):
+    for _ in range(max_passes):
+        scroll_y = await driver.execute_script("return window.scrollY || document.documentElement.scrollTop || 0;")
+        if scroll_y <= 20:
+            break
+        await human_wheel_scroll(driver, -random.uniform(420, 900))
+        await driver.sleep(random.uniform(0.25, 0.8))
+
+
+async def get_element_rect(driver, element_script, *script_args):
+    script = f"""
+        const element = (() => {{
+            {element_script}
+        }})();
+        if (!element) return {{ found: false }};
+        const rect = element.getBoundingClientRect();
+        return {{
+            found: true,
+            top: rect.top,
+            bottom: rect.bottom,
+            left: rect.left,
+            right: rect.right,
+            width: rect.width,
+            height: rect.height,
+            centerX: rect.left + rect.width / 2,
+            centerY: rect.top + rect.height / 2,
+            viewportWidth: window.innerWidth || document.documentElement.clientWidth || 1280,
+            viewportHeight: window.innerHeight || document.documentElement.clientHeight || 720,
+        }};
+    """
+    return await driver.execute_script(script, *script_args)
+
+
+async def human_scroll_to_element(driver, element_script, *script_args, label="target", max_steps=20):
+    """Bring an element near the middle of the viewport with wheel scrolling."""
+    info = None
+    for _ in range(max_steps):
+        info = await get_element_rect(driver, element_script, *script_args)
+        if not info or not info.get("found"):
+            return info
+
+        viewport_height = info.get("viewportHeight", 720)
+        target_y = viewport_height * random.uniform(0.40, 0.55)
+        center_y = info.get("centerY", target_y)
+        top = info.get("top", 0)
+        bottom = info.get("bottom", 0)
+        comfortably_visible = (
+            top >= random.uniform(45, 85)
+            and bottom <= viewport_height - random.uniform(45, 90)
+            and abs(center_y - target_y) <= random.uniform(55, 95)
+        )
+        if comfortably_visible:
+            break
+
+        delta_y = clamp((center_y - target_y) * random.uniform(0.70, 1.08), -760, 760)
+        if abs(delta_y) < 90:
+            delta_y = 90 if delta_y >= 0 else -90
+
+        await human_wheel_scroll(driver, delta_y)
+
+    info = await get_element_rect(driver, element_script, *script_args)
+    if not info or not info.get("found"):
+        return info
+
+    print(
+        f"  Wheel-scrolled to {label}: "
+        f"y={info.get('centerY', 0):.0f}/{info.get('viewportHeight', 0):.0f}"
+    )
+    return info
+
+
+async def human_cdp_click(driver, rect_info, *, label="target"):
+    """Click inside an element using mouse movement and press/release events."""
+    if not rect_info or not rect_info.get("found"):
+        return False
+
+    width = max(1, rect_info.get("width", 1))
+    height = max(1, rect_info.get("height", 1))
+    x = int(rect_info.get("left", 0) + width * random.uniform(0.38, 0.62))
+    y = int(rect_info.get("top", 0) + height * random.uniform(0.35, 0.65))
+
+    try:
+        await driver.execute_cdp_cmd(
+            "Input.dispatchMouseEvent",
+            {"type": "mouseMoved", "x": x + random.randint(-10, 10), "y": y + random.randint(-8, 8)},
+        )
+        await driver.sleep(random.uniform(0.18, 0.55))
+        await driver.execute_cdp_cmd(
+            "Input.dispatchMouseEvent",
+            {"type": "mouseMoved", "x": x, "y": y},
+        )
+        await driver.sleep(random.uniform(0.08, 0.22))
+        await driver.execute_cdp_cmd(
+            "Input.dispatchMouseEvent",
+            {"type": "mousePressed", "x": x, "y": y, "button": "left", "clickCount": 1},
+        )
+        await driver.sleep(random.uniform(0.08, 0.24))
+        await driver.execute_cdp_cmd(
+            "Input.dispatchMouseEvent",
+            {"type": "mouseReleased", "x": x, "y": y, "button": "left", "clickCount": 1},
+        )
+        print(f"  Mouse-clicked {label}")
+        return True
+    except Exception as exc:
+        print(f"  CDP click failed for {label}: {describe_exception(exc)}")
+        return False
 
 
 async def dump_debug_html(driver, path):
@@ -341,6 +538,21 @@ async def login_to_bet365(driver):
     if BYPASS_LOGIN:
         print("BYPASS_LOGIN enabled - skipping login, scraping logged-out markets")
         return
+
+    # If the persistent profile already holds a valid session, skip the credential
+    # flow entirely. This is the fast path on every run after the first login; we
+    # only fall through to entering credentials when the session has lapsed.
+    logged_in_locator_candidates = [
+        (By.XPATH, "//div[contains(@class, 'hm-MainHeaderRHSLoggedInWide')]"),
+        (By.XPATH, "//div[contains(@class, 'hm-MainHeaderMembersWide')]"),
+        (By.XPATH, "//*[contains(@class, 'hm-Balance')]"),
+    ]
+    try:
+        await find_first_element(driver, logged_in_locator_candidates, timeout_per_candidate=3)
+        print("Existing Bet365 session detected - skipping login")
+        return
+    except Exception:
+        pass
 
     print("Attempting login before loading AFL market pages...")
     login_locator_candidates = [
@@ -429,11 +641,26 @@ async def save_h2h_html(driver, required=True):
         print(f"Saved H2H HTML ({len(body_html)} bytes)")
     except Exception as exc:
         existing_h2h = BET365_HTML_DIR / "h2h_html.txt"
-        if required or not existing_h2h.exists():
+        if required or (not existing_h2h.exists() and not has_partial_player_artifacts()):
             raise
-        print(
-            "Warning: H2H HTML refresh failed after player markets, "
-            f"keeping existing {existing_h2h}: {describe_exception(exc)}"
+        if existing_h2h.exists():
+            print(
+                "Warning: H2H HTML refresh failed after player markets, "
+                f"keeping existing {existing_h2h}: {describe_exception(exc)}"
+            )
+        else:
+            print(
+                "Warning: H2H HTML refresh failed after player markets and no H2H HTML exists; "
+                "continuing with saved player-market artifacts only: "
+                f"{describe_exception(exc)}"
+            )
+        await write_partial_scrape_summary(
+            status="partial",
+            failed_step="h2h market",
+            error=describe_exception(exc),
+            current_run_player_artifacts=CURRENT_RUN_PLAYER_ARTIFACTS,
+            disk_player_artifacts=count_bet365_artifacts(BET365_PLAYER_FIXTURE_PATTERNS),
+            h2h_exists=existing_h2h.exists(),
         )
 
 
@@ -486,30 +713,57 @@ async def wait_for_disposals_market_page(driver, timeout=60):
 
 async def open_collapsed_disposal_fixtures(driver):
     total_clicked = 0
+    collapsed_button_script = """
+        const fixtureSelector = '.gl-MarketGroupPod.src-HScrollFixtureSubGroupWithShowMore, .gl-MarketGroupPod.src-FixtureSubGroupWithShowMore';
+        const pods = Array.from(document.querySelectorAll(fixtureSelector));
+        const pod = pods.find((node) => node.className.includes('FixtureSubGroupWithShowMore_Closed'));
+        if (!pod) return null;
+        return pod.querySelector('.src-FixtureSubGroupButton');
+    """
 
     for _ in range(30):
-        result = await driver.execute_script(
+        target = await driver.execute_script(
             """
             const fixtureSelector = '.gl-MarketGroupPod.src-HScrollFixtureSubGroupWithShowMore, .gl-MarketGroupPod.src-FixtureSubGroupWithShowMore';
             const pods = Array.from(document.querySelectorAll(fixtureSelector));
             const pod = pods.find((node) => node.className.includes('FixtureSubGroupWithShowMore_Closed'));
-            if (!pod) return { clicked: false };
-
-            const button = pod.querySelector('.src-FixtureSubGroupButton');
+            if (!pod) return { found: false };
             const match = (pod.querySelector('.src-FixtureSubGroupButton_Text')?.innerText || '').trim();
-            if (!button) return { clicked: false, match };
-
-            button.scrollIntoView({ block: 'center', inline: 'center' });
-            button.click();
-            return { clicked: true, match };
+            const button = pod.querySelector('.src-FixtureSubGroupButton');
+            return { found: Boolean(button), match };
             """
         )
 
-        if not result or not result.get("clicked"):
+        if not target or not target.get("found"):
+            break
+
+        match = target.get("match") or "collapsed fixture group"
+        rect = await human_scroll_to_element(
+            driver,
+            collapsed_button_script,
+            label=f"collapsed fixture {match}",
+            max_steps=18,
+        )
+        clicked = await human_cdp_click(driver, rect, label=f"collapsed fixture {match}")
+        if not clicked:
+            fallback = await driver.execute_script(
+                """
+                const fixtureSelector = '.gl-MarketGroupPod.src-HScrollFixtureSubGroupWithShowMore, .gl-MarketGroupPod.src-FixtureSubGroupWithShowMore';
+                const pods = Array.from(document.querySelectorAll(fixtureSelector));
+                const pod = pods.find((node) => node.className.includes('FixtureSubGroupWithShowMore_Closed'));
+                const button = pod?.querySelector('.src-FixtureSubGroupButton');
+                if (!button) return false;
+                button.click();
+                return true;
+                """
+            )
+            clicked = bool(fallback)
+
+        if not clicked:
             break
 
         total_clicked += 1
-        print(f"  Opened fixture group: {result.get('match')}")
+        print(f"  Opened fixture group: {match}")
         await driver.sleep(jittered(CLICK_SETTLE_SECONDS))
 
     metrics = await get_disposals_fixture_metrics(driver)
@@ -551,6 +805,18 @@ async def click_all_disposal_show_mores(driver):
         )
 
     async def click_fixture_show_more(fixture_index):
+        show_more_button_script = """
+            const fixtureIndex = arguments[0];
+            const fixtureSelector = '.gl-MarketGroupPod.src-HScrollFixtureSubGroupWithShowMore, .gl-MarketGroupPod.src-FixtureSubGroupWithShowMore';
+            const pod = Array.from(document.querySelectorAll(fixtureSelector))[fixtureIndex];
+            if (!pod) return null;
+            return Array.from(pod.querySelectorAll('.msl-ShowMore_Link, .bbl-ShowMoreForHScroll, .bbl-ShowMore'))
+                .find((node) => {
+                    const text = (node.innerText || node.textContent || '').trim().toLowerCase();
+                    const rect = node.getBoundingClientRect();
+                    return text === 'show more' && rect.width > 0 && rect.height > 0;
+                }) || null;
+        """
         target = await driver.execute_script(
             """
             const fixtureIndex = arguments[0];
@@ -568,21 +834,11 @@ async def click_all_disposal_show_mores(driver):
                 return { clicked: false, reason: 'no show more' };
             }
 
-            const button = buttons[0];
             const match = (pod.querySelector('.src-FixtureSubGroupButton_Text')?.innerText || '').trim();
-            pod.scrollIntoView({ block: 'center', inline: 'nearest' });
-            button.scrollIntoView({ block: 'center', inline: 'center' });
-            window.scrollBy(0, -80);
-
-            const rect = button.getBoundingClientRect();
-            const x = Math.floor(rect.left + rect.width / 2);
-            const y = Math.floor(rect.top + rect.height / 2);
             return {
                 clicked: false,
                 ready: true,
                 match,
-                x,
-                y,
                 remainingInFixture: buttons.length - 1,
             };
             """,
@@ -592,41 +848,19 @@ async def click_all_disposal_show_mores(driver):
         if not target or not target.get("ready"):
             return target
 
-        await driver.sleep(jittered(SHOW_MORE_PRECLICK_SECONDS, spread=0.55))
-        x = target.get("x")
-        y = target.get("y")
+        rect = await human_scroll_to_element(
+            driver,
+            show_more_button_script,
+            fixture_index,
+            label=f"show more {target.get('match') or fixture_index}",
+            max_steps=20,
+        )
+        if not rect or not rect.get("found"):
+            return {**target, "clicked": False, "reason": "show more disappeared before click"}
 
-        if x is not None and y is not None:
-            try:
-                await driver.execute_cdp_cmd(
-                    "Input.dispatchMouseEvent",
-                    {"type": "mouseMoved", "x": x, "y": y},
-                )
-                await driver.sleep(jittered(0.3, spread=0.6))
-                await driver.execute_cdp_cmd(
-                    "Input.dispatchMouseEvent",
-                    {
-                        "type": "mousePressed",
-                        "x": x,
-                        "y": y,
-                        "button": "left",
-                        "clickCount": 1,
-                    },
-                )
-                await driver.sleep(jittered(0.2, spread=0.6))
-                await driver.execute_cdp_cmd(
-                    "Input.dispatchMouseEvent",
-                    {
-                        "type": "mouseReleased",
-                        "x": x,
-                        "y": y,
-                        "button": "left",
-                        "clickCount": 1,
-                    },
-                )
-                return {**target, "clicked": True, "strategy": "cdp_mouse"}
-            except Exception as exc:
-                print(f"  CDP show-more click failed: {describe_exception(exc)}")
+        await driver.sleep(jittered(SHOW_MORE_PRECLICK_SECONDS, spread=0.55))
+        if await human_cdp_click(driver, rect, label=f"show more {target.get('match') or fixture_index}"):
+            return {**target, "clicked": True, "strategy": "cdp_mouse"}
 
         fallback = await driver.execute_script(
             """
@@ -725,7 +959,7 @@ async def click_all_disposal_show_mores(driver):
                     break
 
                 before = after
-                await driver.execute_script("window.scrollBy(0, Math.floor(window.innerHeight * 0.25));")
+                await human_wheel_scroll(driver, random.uniform(180, 380))
                 await driver.sleep(jittered(2.5, spread=0.5))
 
             if not made_progress:
@@ -741,8 +975,8 @@ async def click_all_disposal_show_mores(driver):
     if total_clicked:
         print(f"  Clicked {total_clicked} show-more control(s)")
 
-    await driver.execute_script("window.scrollTo(0, 0);")
-    await driver.sleep(1)
+    await human_scroll_to_top(driver)
+    await driver.sleep(random.uniform(0.6, 1.3))
 
     remaining = sum(item.get("showMoreCount", 0) for item in await get_disposals_fixture_metrics(driver))
     if remaining:
@@ -757,11 +991,9 @@ async def click_all_disposal_show_mores(driver):
 
 
 async def hydrate_disposals_screen(driver):
-    for _ in range(3):
-        await driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
-        await driver.sleep(1)
-    await driver.execute_script("window.scrollTo(0, 0);")
-    await driver.sleep(1)
+    await human_scroll_to_bottom(driver)
+    await human_scroll_to_top(driver)
+    await driver.sleep(random.uniform(0.7, 1.4))
 
     await open_collapsed_disposal_fixtures(driver)
     await hydrate_disposals_screen_scroll_only(driver)
@@ -786,11 +1018,9 @@ async def hydrate_disposals_screen(driver):
 
 
 async def hydrate_disposals_screen_scroll_only(driver):
-    for _ in range(4):
-        await driver.execute_script("window.scrollBy(0, Math.floor(window.innerHeight * 0.9));")
-        await driver.sleep(0.8)
-    await driver.execute_script("window.scrollTo(0, 0);")
-    await driver.sleep(0.8)
+    await human_scroll_to_bottom(driver)
+    await human_scroll_to_top(driver)
+    await driver.sleep(random.uniform(0.6, 1.2))
 
 
 async def save_fixture_group_html(
@@ -802,6 +1032,8 @@ async def save_fixture_group_html(
     all_screen_prefix,
     match_file_prefix,
 ):
+    global CURRENT_RUN_PLAYER_ARTIFACTS
+
     all_html = await driver.execute_script(
         """
         const grid = document.querySelector('.cm-CouponMarketGrid') ||
@@ -846,6 +1078,7 @@ async def save_fixture_group_html(
             f"{fixture.get('html', '')}"
         )
         path.write_text(payload)
+        CURRENT_RUN_PLAYER_ARTIFACTS += 1
         print(
             f"  Saved fixture {next_match_index}: {match} "
             f"({fixture.get('playerCount')} players, {fixture.get('columnCount')} columns)"
@@ -948,6 +1181,9 @@ async def scrape_goal_market_screens(driver):
 
 
 def save_market_url_trace():
+    partial_status = BET365_HTML_DIR / "partial_scrape_status.txt"
+    if partial_status.exists():
+        partial_status.unlink()
     urls = [
         "# goals_anytime",
         *BET365_GOALS_ANYTIME_URLS,
@@ -959,10 +1195,66 @@ def save_market_url_trace():
     (BET365_HTML_DIR / "urls.csv").write_text("\n".join(urls))
 
 
+async def run_market_step_or_finish_partial(step_name, step_coro):
+    """Run one scrape step, treating post-artifact throttling as a clean partial run.
+
+    Bet365 often stops hydrating later screens once the IP is soft-throttled. If
+    we already have fixture-level player HTML on disk, that is useful input for
+    the downstream R parser, so do not fail the whole update just because a later
+    page shell degraded.
+    """
+    before_count = CURRENT_RUN_PLAYER_ARTIFACTS
+    try:
+        await step_coro()
+        return False
+    except Exception as exc:
+        after_count = CURRENT_RUN_PLAYER_ARTIFACTS
+        if after_count > 0:
+            print(
+                f"WARNING: Bet365 {step_name} stopped before completion after "
+                f"{after_count} player fixture artifact(s) were saved in this run. "
+                "Assuming throttled/degraded hydration and exiting cleanly with partial data: "
+                f"{describe_exception(exc)}"
+            )
+            await write_partial_scrape_summary(
+                status="partial",
+                failed_step=step_name,
+                error=describe_exception(exc),
+                current_run_player_artifacts=after_count,
+                current_run_player_artifacts_before_step=before_count,
+                disk_player_artifacts=count_bet365_artifacts(BET365_PLAYER_FIXTURE_PATTERNS),
+            )
+            return True
+        raise
+
+
+async def write_partial_scrape_summary(**fields):
+    lines = [f"{key}: {value}" for key, value in fields.items()]
+    (BET365_HTML_DIR / "partial_scrape_status.txt").write_text("\n".join(lines) + "\n")
+
+
 async def run_scrape_session():
     """Open one fresh browser, log in, and scrape every market. Raises on failure."""
+    global CURRENT_RUN_PLAYER_ARTIFACTS
+    CURRENT_RUN_PLAYER_ARTIFACTS = 0
+
     options = webdriver.ChromeOptions()
     # options.add_argument("--headless=True")
+
+    # Kill Chrome's background services (Optimization Guide ML-model downloads,
+    # component updater, Safe Browsing pings, sync, telemetry). They are useless for
+    # scraping and, under --proxy-server, would otherwise burn residential proxy GB
+    # (~86 MB/run was going to optimizationguide-pa.googleapis.com). We deliberately
+    # avoid --disable-features here: Chrome honors only the last --disable-features
+    # switch, so adding our own could clobber selenium_driverless's stealth flags.
+    for flag in (
+        "--disable-background-networking",
+        "--disable-component-update",
+        "--disable-sync",
+        "--disable-domain-reliability",
+        "--no-pings",
+    ):
+        options.add_argument(flag)
 
     # Vary the window size per run so consecutive sessions don't present an
     # identical fingerprint. We do NOT spoof the user-agent: setting --user-agent
@@ -971,6 +1263,23 @@ async def run_scrape_session():
     width, height = random.choice(BET365_VIEWPORTS)
     options.add_argument(f"--window-size={width},{height}")
     print(f"Browser viewport for this run: {width}x{height}")
+
+    # Profile strategy keyed on login mode:
+    #   - Logging in (not BYPASS_LOGIN): reuse one persistent Chrome profile so the
+    #     session cookie survives between runs and we skip credential entry. Only one
+    #     Chrome can open the profile at a time; kill_stale_chrome() clears a stale
+    #     lock left by a crashed run.
+    #   - Logged-out (BYPASS_LOGIN): leave the default throwaway temp profile, which
+    #     driverless auto-cleans, so every run looks like a fresh visitor (paired
+    #     with the proxy below).
+    if not BYPASS_LOGIN:
+        profile_dir = os.getenv("BET365_USER_DATA_DIR", "").strip() or str(DEFAULT_BET365_PROFILE_DIR)
+        Path(profile_dir).mkdir(parents=True, exist_ok=True)
+        options.user_data_dir = profile_dir
+        options.auto_clean_dirs = False  # critical: keep the profile across runs
+        print(f"Logged-in mode - persistent Chrome profile: {profile_dir}")
+    else:
+        print("Logged-out mode - fresh throwaway Chrome profile this run")
 
     # The hydration failures are an IP-based rate block: a real browser on the
     # same IP is blocked at the same time, but the same page works from a
@@ -993,14 +1302,23 @@ async def run_scrape_session():
     if proxy:
         relay_proc, local_proxy = await start_proxy_relay(proxy)
         options.add_argument(f"--proxy-server={local_proxy}")
+        # Force any remaining Google/Chrome background traffic direct (real IP) so it
+        # never costs proxy GB, even if a request slips past the disable flags above.
+        options.add_argument(
+            "--proxy-bypass-list=*.googleapis.com;*.google.com;*.gstatic.com;*.gvt1.com;*.gvt2.com"
+        )
         print(f"Routing through proxy: {redact_proxy(proxy)} (via local relay {local_proxy})")
 
     try:
         async with webdriver.Chrome(options=options) as driver:
             await login_to_bet365(driver)
             save_market_url_trace()
-            await scrape_goal_market_screens(driver)
-            await scrape_disposal_market_screens(driver)
+            partial = await run_market_step_or_finish_partial("goal markets", lambda: scrape_goal_market_screens(driver))
+            if partial:
+                return
+            partial = await run_market_step_or_finish_partial("disposal markets", lambda: scrape_disposal_market_screens(driver))
+            if partial:
+                return
             await save_h2h_html(driver, required=False)
     finally:
         stop_proxy_relay(relay_proc)

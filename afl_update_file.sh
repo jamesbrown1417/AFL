@@ -39,10 +39,8 @@ if ! (
     exit 1
 fi
 
-# Publish reports using Quarto
-echo "1" | quarto publish quarto-pub Reports/afl-odds.qmd
-
 # Automatically stage all changes
+cd /Users/jamesbrown/Projects/AFL/
 git add .
 
 # Commit changes with a message including "automated commit" and the current timestamp
