@@ -27,13 +27,17 @@ def event_id_from_url(url):
 
 def load_matches():
     if not CSV_FILE.exists():
-        raise FileNotFoundError(f"Input CSV file not found: {CSV_FILE}")
+        logging.error(
+            "Input CSV file not found (upstream step likely failed): %s", CSV_FILE
+        )
+        sys.exit(0)
 
     with CSV_FILE.open(newline="", encoding="utf-8") as file:
         rows = list(csv.DictReader(file))
 
     if not rows:
-        raise ValueError(f"Input CSV has no rows: {CSV_FILE}")
+        logging.error("Input CSV has no rows (upstream step likely failed): %s", CSV_FILE)
+        sys.exit(0)
 
     matches = []
     for row in rows:
@@ -41,7 +45,8 @@ def load_matches():
         event_id = (row.get("event_id") or event_id_from_url(url)).strip()
         event_name = (row.get("event_name") or event_id).strip()
         if not url or not event_id:
-            raise ValueError(f"Input CSV row is missing url or event_id: {row}")
+            logging.error("Input CSV row is missing url or event_id: %s", row)
+            sys.exit(0)
         matches.append({"event_name": event_name, "event_id": event_id, "url": url})
 
     return matches

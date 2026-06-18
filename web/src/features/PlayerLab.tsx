@@ -1,10 +1,10 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Area, AreaChart, CartesianGrid, Line, LineChart, ReferenceLine, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
-import { ArrowDown, ArrowDownUp, ArrowUp, RefreshCcw, Search, SlidersHorizontal, X } from 'lucide-react'
+import { ArrowDown, ArrowDownUp, ArrowUp, Minus, Plus, RefreshCcw, Search, SlidersHorizontal, X } from 'lucide-react'
 import type { PlayerStatFilterOptions, PlayerGameLogEntry, PlayerStatsFilters, PlayerStatSummary } from '../api/types'
 import { usePlayerFilters, usePlayerHistory, useStatPlayers } from '../api/queries'
 import { defaultPlayerFilters, useAppStore, useClientSettings } from '../store/useAppStore'
-import { formatMatchDateTime, formatPercent, formatPrice, formatShortDate } from '../lib/formatters'
+import { aflTeamCode, formatLine, formatMatchDateTime, formatPercent, formatPrice, formatShortDate } from '../lib/formatters'
 import { Button, Chip, EmptyState, ErrorBanner, Field, Panel, Segmented, Select, StatPill, TextInput } from '../components/ui'
 
 export function PlayerLab() {
@@ -68,11 +68,12 @@ export function PlayerLab() {
   const scenarioBQuery = usePlayerHistory(settings, selectedPlayerId, scenarioBFilters, playerMode === 'comparison')
   const history = useMemo(() => historyQuery.data?.history ?? [], [historyQuery.data?.history])
   const summary = historyQuery.data?.summary ?? null
+  const chronologicalHistory = useMemo(() => history.toReversed(), [history])
   const selectedStatKey = normalizeStatKey(filters.stat)
   const referenceLines = useMemo(() => referenceLinesFromFilters(filters.lineMode, filters.referenceLine, filters.lowerBound, filters.upperBound), [filters.lineMode, filters.referenceLine, filters.lowerBound, filters.upperBound])
   const chartData = useMemo(
     () => {
-      const points = history.toReversed().map((entry, index) => ({
+      const points = chronologicalHistory.map((entry, index) => ({
         x: index,
         date: formatShortDate(entry.date),
         value: entry.selected_value,
@@ -81,7 +82,7 @@ export function PlayerLab() {
       }))
       return buildSegmentedChartData(points)
     },
-    [history, filters.lineMode, filters.referenceLine, filters.lowerBound, filters.upperBound],
+    [chronologicalHistory, filters.lineMode, filters.referenceLine, filters.lowerBound, filters.upperBound],
   )
   const chartDomain = useMemo(() => computeChartDomain(chartData.map((entry) => entry.value), referenceLines.map((line) => line.value)), [chartData, referenceLines])
   const chartXAxisTicks = useMemo(() => chartData.filter((entry) => !entry.isTransition).map((entry) => entry.x), [chartData])
@@ -184,15 +185,39 @@ export function PlayerLab() {
     return countActiveFilters(filters)
   }, [playerMode, filters, comparisonFocus, scenarioAFilters, scenarioBFilters])
   const comparisonLoading = scenarioAQuery.isFetching || scenarioBQuery.isFetching
+  const statOptions = filterOptions.data?.stats ?? [{ code: filters.stat, label: filters.stat }]
+  const selectedStatLabel = statOptions.find((stat) => stat.code === filters.stat)?.label ?? filters.stat
   const comparisonStatLabel = filterOptions.data?.stats.find((stat) => stat.code === scenarioAFilters.stat)?.label ?? scenarioAFilters.stat
+  const updateStatsStat = (stat: string) => {
+    setFilters({ ...filters, stat, ...defaultsForStat(stat) })
+  }
+  const updateStatsReferenceLine = (value: string) => {
+    setFilters({ ...filters, referenceLine: value })
+  }
+  const adjustStatsReferenceLine = (delta: number) => {
+    const current = Number.parseFloat(filters.referenceLine)
+    const next = Number.isFinite(current) ? Math.max(0, current + delta) : Number.parseFloat(defaultsForStat(filters.stat).referenceLine)
+    setFilters({ ...filters, referenceLine: formatLine(Math.round(next * 2) / 2) })
+  }
+  const highlightStatsChartPoint = (point: ChartPoint | null) => {
+    if (!point || point.isTransition || point.value == null) return
+    const entry = chronologicalHistory[point.x]
+    if (!entry) return
+    setHighlightedEntryKey(`${entry.date}-${entry.game_number}`)
+    clearHighlightAfterDelay()
+  }
 
   return (
     <main className="workspace player-workspace" aria-label="Player lab">
       <section className="workspace-main">
-        <div className="page-title-row">
+        <div className="page-title-row player-title-row">
           <div>
-            <h1>Player</h1>
-            <p>{selectedPlayerName || 'Search player history and implied prices'}</p>
+            <h1>Player Lab</h1>
+            <div className="player-title-meta">
+              <span>{selectedPlayerName || 'Search player history and implied prices'}</span>
+              {selectedPlayerName ? <span className="player-title-chip">{selectedStatLabel}</span> : null}
+              {selectedPlayerId ? <span className="player-title-chip player-title-chip--muted">ID {selectedPlayerId}</span> : null}
+            </div>
           </div>
           <div className="page-actions">
             <Segmented<PlayerMode>
@@ -219,9 +244,10 @@ export function PlayerLab() {
           </div>
         </div>
 
-        <Panel className="filters-panel">
+        <Panel className="filters-panel player-lab-controls">
           <div className="player-controls-bar">
             <div className="autocomplete">
+              <span className="player-control-label">Player</span>
               <div className="input-with-icon">
                 <Search size={16} />
                 <TextInput
@@ -279,7 +305,23 @@ export function PlayerLab() {
               )}
             </div>
             {playerMode === 'stats' ? (
-              <FilterSummary filters={filters} />
+              <>
+                <Field label="Statistic">
+                  <Select value={filters.stat} onChange={(event) => updateStatsStat(event.currentTarget.value)}>
+                    {statOptions.map((stat) => (
+                      <option key={stat.code} value={stat.code}>{stat.label}</option>
+                    ))}
+                  </Select>
+                </Field>
+                <ReferenceLineControl
+                  value={filters.referenceLine}
+                  label={filters.lineMode === 'interval' ? 'Reference line' : 'Reference line'}
+                  disabled={filters.lineMode === 'interval'}
+                  onChange={updateStatsReferenceLine}
+                  onStep={adjustStatsReferenceLine}
+                />
+                <FilterSummary filters={filters} />
+              </>
             ) : (
               <div className="comparison-filter-summaries">
                 <div className="filter-summary-pair">
@@ -319,17 +361,19 @@ export function PlayerLab() {
 
         {playerMode === 'stats' ? (
           <>
-            <div className="summary-strip">
-              <StatPill label="Sample" value={summary?.sample_size?.toString() ?? String(history.length)} />
-              <StatPill label="Over" value={formatPercent(summary?.proportion_over)} tone="good" />
-              <StatPill label="Under" value={formatPercent(summary?.proportion_under)} tone="warn" />
-              <StatPill label="Implied over" value={formatPrice(summary?.implied_odds_over)} />
-              <StatPill label="Implied under" value={formatPrice(summary?.implied_odds_under)} />
-            </div>
+            <PlayerPricingHero
+              filters={filters}
+              history={history}
+              summary={summary}
+              statLabel={selectedStatLabel}
+            />
 
             <Panel className="chart-panel">
               <div className="section-heading">
-                <h2>{filterOptions.data?.stats.find((stat) => stat.code === filters.stat)?.label ?? filters.stat} history</h2>
+                <div className="section-title-with-legend">
+                  <h2>{selectedStatLabel} history</h2>
+                  <ChartLegend mode="stats" />
+                </div>
                 <span>{historyQuery.isFetching ? 'Refreshing' : `${history.length} games`}</span>
               </div>
               {history.length === 0 && !historyQuery.isFetching ? (
@@ -337,7 +381,7 @@ export function PlayerLab() {
               ) : (
                 <div className="chart-frame">
                   <ResponsiveContainer width="100%" height={280}>
-                    <AreaChart data={chartData}>
+                    <AreaChart data={chartData} onClick={(state) => highlightStatsChartPoint(activeChartPointFromState(state))}>
                       <defs>
                         <linearGradient id="historyFill" x1="0" x2="0" y1="0" y2="1">
                           <stop offset="0%" stopColor="#0f766e" stopOpacity={0.36} />
@@ -381,28 +425,14 @@ export function PlayerLab() {
                         dot={(props) => (
                           <ReferenceResultDot
                             {...props}
-                            onClick={() => {
-                              const point = props.payload as ChartPoint | undefined
-                              if (!point || point.isTransition || point.value == null) return
-                              const entry = history.toReversed()[point.x]
-                              if (!entry) return
-                              setHighlightedEntryKey(`${entry.date}-${entry.game_number}`)
-                              clearHighlightAfterDelay()
-                            }}
+                            onClick={() => highlightStatsChartPoint((props.payload as ChartPoint | undefined) ?? null)}
                           />
                         )}
                         activeDot={(props) => (
                           <ReferenceResultDot
                             {...props}
                             isActive
-                            onClick={() => {
-                              const point = props.payload as ChartPoint | undefined
-                              if (!point || point.isTransition || point.value == null) return
-                              const entry = history.toReversed()[point.x]
-                              if (!entry) return
-                              setHighlightedEntryKey(`${entry.date}-${entry.game_number}`)
-                              clearHighlightAfterDelay()
-                            }}
+                            onClick={() => highlightStatsChartPoint((props.payload as ChartPoint | undefined) ?? null)}
                           />
                         )}
                         isAnimationActive={false}
@@ -413,7 +443,13 @@ export function PlayerLab() {
               )}
             </Panel>
 
-            <Panel className="table-panel">
+            <Panel className="table-panel player-log-panel">
+              <div className="section-heading log-heading">
+                <div>
+                  <h2>Game log</h2>
+                  <span>{sortedHistory.length} rows</span>
+                </div>
+              </div>
               <PlayerHistoryTable history={sortedHistory} selectedStatKey={selectedStatKey} sort={historySort} onSort={toggleHistorySort} highlightedEntryKey={highlightedEntryKey} />
             </Panel>
           </>
@@ -478,6 +514,151 @@ function countActiveFilters(filters: PlayerStatsFilters) {
   return count
 }
 
+function ReferenceLineControl({
+  value,
+  label,
+  disabled,
+  onChange,
+  onStep,
+}: {
+  value: string
+  label: string
+  disabled?: boolean
+  onChange: (value: string) => void
+  onStep: (delta: number) => void
+}) {
+  return (
+    <label className="field reference-line-control">
+      <span>{label}</span>
+      <div className="line-stepper" aria-disabled={disabled}>
+        <button type="button" aria-label="Decrease reference line" disabled={disabled} onClick={() => onStep(-0.5)}>
+          <Minus size={14} />
+        </button>
+        <input
+          inputMode="decimal"
+          value={value}
+          disabled={disabled}
+          onChange={(event) => onChange(event.currentTarget.value)}
+        />
+        <button type="button" aria-label="Increase reference line" disabled={disabled} onClick={() => onStep(0.5)}>
+          <Plus size={14} />
+        </button>
+      </div>
+    </label>
+  )
+}
+
+function PlayerPricingHero({
+  filters,
+  history,
+  summary,
+  statLabel,
+}: {
+  filters: PlayerStatsFilters
+  history: PlayerGameLogEntry[]
+  summary: PlayerStatSummary | null
+  statLabel: string
+}) {
+  const isInterval = filters.lineMode === 'interval'
+  const primaryLabel = isInterval ? 'Within' : 'Over'
+  const secondaryLabel = isInterval ? 'Outside' : 'Under'
+  const primaryPct = isInterval ? summary?.proportion_within_interval : summary?.proportion_over
+  const secondaryPct = isInterval ? summary?.proportion_outside_interval : summary?.proportion_under
+  const primaryPrice = isInterval ? summary?.implied_odds_within_interval : summary?.implied_odds_over
+  const secondaryPrice = isInterval ? summary?.implied_odds_outside_interval : summary?.implied_odds_under
+  const average = averageSelectedValue(history)
+  const recentSample = history.slice(0, 10)
+  const recentHits = recentSample.filter((entry) => entry.hit === true).length
+  const recentLabel = `L${recentSample.length || 10} hit`
+  const recentValue = recentSample.length > 0 ? `${recentHits}/${recentSample.length}` : '--'
+  const edgeLabel = primaryPct == null || secondaryPct == null ? '--' : primaryPct >= secondaryPct ? primaryLabel.toUpperCase() : secondaryLabel.toUpperCase()
+  const edgeDelta = primaryPct == null || secondaryPct == null ? null : Math.abs(primaryPct - secondaryPct) * 100
+  const edgeLean = edgeDelta == null ? 'No lean' : edgeDelta < 0.05 ? 'Even' : `${edgeDelta.toFixed(0)}% lean`
+  const lineText = isInterval ? `${filters.lowerBound || '-'} to ${filters.upperBound || '-'}` : filters.referenceLine
+  const primaryWidth = primaryPct == null ? 50 : Math.max(0, Math.min(100, primaryPct * 100))
+
+  return (
+    <section className="player-pricing-grid" aria-label="Player line summary">
+      <Panel className="player-pricing-card">
+        <div className="pricing-card-head">
+          <div>
+            <strong>{statLabel}</strong>
+            <span>{primaryLabel.toLowerCase()} / {secondaryLabel.toLowerCase()}</span>
+          </div>
+          <span className="line-badge">{lineText}</span>
+          <span className="pricing-sample">{summary?.sample_size ?? history.length} games</span>
+        </div>
+        <div className="pricing-prob-grid">
+          <div className="pricing-prob pricing-prob--primary">
+            <span><i />{primaryLabel}</span>
+            <div>
+              <b>{formatPercent(primaryPct)}</b>
+              <small><span>Implied</span>{formatPrice(primaryPrice)}</small>
+            </div>
+          </div>
+          <div className="pricing-prob">
+            <span><i />{secondaryLabel}</span>
+            <div>
+              <b>{formatPercent(secondaryPct)}</b>
+              <small><span>Implied</span>{formatPrice(secondaryPrice)}</small>
+            </div>
+          </div>
+        </div>
+        <div className="pricing-bar" aria-hidden="true">
+          <span style={{ width: `${primaryWidth}%` }} />
+        </div>
+      </Panel>
+      <Panel className="player-mini-grid">
+        <MiniMetric label="Sample" value={String(summary?.sample_size ?? history.length)} sub="games" />
+        <MiniMetric label="Average" value={average} sub={statLabel} />
+        <MiniMetric label={recentLabel} value={recentValue} sub="recent" tone="good" />
+        <MiniMetric label="Edge" value={edgeLabel} sub={edgeLean} tone={edgeLabel === secondaryLabel.toUpperCase() ? 'bad' : 'good'} />
+      </Panel>
+    </section>
+  )
+}
+
+function MiniMetric({ label, value, sub, tone = 'neutral' }: { label: string; value: string; sub: string; tone?: 'neutral' | 'good' | 'bad' }) {
+  return (
+    <div className={`mini-metric mini-metric--${tone}`}>
+      <span>{label}</span>
+      <b>{value}</b>
+      <small>{sub}</small>
+    </div>
+  )
+}
+
+function ChartLegend({ mode }: { mode: 'stats' | 'comparison' }) {
+  if (mode === 'comparison') {
+    return (
+      <div className="chart-legend">
+        <span><i className="legend-line legend-line--a" />Scenario A</span>
+        <span><i className="legend-line legend-line--b" />Scenario B</span>
+      </div>
+    )
+  }
+
+  return (
+    <div className="chart-legend">
+      <span><i className="legend-ring legend-ring--over" />Over</span>
+      <span><i className="legend-ring legend-ring--under" />Under</span>
+      <span><i className="legend-line legend-line--ref" />Line</span>
+    </div>
+  )
+}
+
+function averageSelectedValue(history: PlayerGameLogEntry[]) {
+  const values = history.map((entry) => entry.selected_value).filter((value): value is number => value != null && Number.isFinite(value))
+  if (values.length === 0) return '--'
+  return (values.reduce((sum, value) => sum + value, 0) / values.length).toFixed(1)
+}
+
+function activeChartPointFromState(state: unknown): ChartPoint | null {
+  if (!state || typeof state !== 'object') return null
+  const payload = (state as { activePayload?: { payload?: ChartPoint }[] }).activePayload
+  return payload?.find((item) => item.payload?.value != null)?.payload ?? null
+}
+
 function FilterSummary({ filters }: { filters: PlayerStatsFilters }) {
   const parts: string[] = []
   if (filters.seasons.length > 0) parts.push(`Seasons: ${summarize(filters.seasons)}`)
@@ -509,8 +690,11 @@ function PlayerQuickActions({
   const latestSeason = filterOptions?.seasons[0] ?? '2026'
   const homeAwayOptions = filterOptions?.home_away_options.length ? filterOptions.home_away_options : ['Home', 'Away']
   const defaultHomeAway = homeAwayOptions.length ? homeAwayOptions : defaultPlayerFilters.homeAway
+  const allGamesActive = countActiveFilters(filters) === 0
   return (
     <div className="quick-filter-grid player-quick-actions" aria-label="Player quick filters">
+      <span className="quick-label">Quick</span>
+      <Chip active={allGamesActive} onClick={() => onApply(defaultPlayerFilters)}>All games</Chip>
       <Chip active={filters.lastGames === '5'} onClick={() => onApply({ ...filters, lastGames: filters.lastGames === '5' ? '' : '5' })}>Last 5</Chip>
       <Chip active={filters.lastGames === '10'} onClick={() => onApply({ ...filters, lastGames: filters.lastGames === '10' ? '' : '10' })}>Last 10</Chip>
       <Chip
@@ -529,7 +713,7 @@ function PlayerQuickActions({
           Away
         </Chip>
       ) : null}
-      {countActiveFilters(filters) > 0 ? <Button variant="ghost" onClick={() => onApply(defaultPlayerFilters)}>Reset</Button> : null}
+      {!allGamesActive ? <Button variant="ghost" onClick={() => onApply(defaultPlayerFilters)}>Reset all</Button> : null}
     </div>
   )
 }
@@ -685,14 +869,6 @@ function PlayerComparisonMode({
         <ScenarioCard label="Scenario A" filters={scenarioAFilters} history={historyA} summary={scenarioAData?.summary ?? null} onEdit={onEditScenarioA} />
         <ScenarioCard label="Scenario B" filters={scenarioBFilters} history={historyB} summary={scenarioBData?.summary ?? null} onEdit={onEditScenarioB} />
       </div>
-      <ComparisonSummaryPanel
-        statLabel={statLabel}
-        scenarioAFilters={scenarioAFilters}
-        scenarioBFilters={scenarioBFilters}
-        scenarioAData={scenarioAData}
-        scenarioBData={scenarioBData}
-        isLoading={isLoading}
-      />
       <ComparisonGraphPanel
         statLabel={statLabel}
         scenarioAFilters={scenarioAFilters}
@@ -702,9 +878,12 @@ function PlayerComparisonMode({
         isLoading={isLoading}
         onPointClick={handleGraphPointClick}
       />
-      <Panel className="table-panel comparison-log-panel">
-        <div className="section-heading">
-          <h2>{comparisonFocus === 'a' ? 'Scenario A' : 'Scenario B'} game log</h2>
+      <Panel className="table-panel comparison-log-panel player-log-panel">
+        <div className="section-heading log-heading">
+          <div>
+            <h2>{comparisonFocus === 'a' ? 'Scenario A' : 'Scenario B'} game log</h2>
+            <span>{sortedFocusedHistory.length} rows</span>
+          </div>
           <Segmented<ScenarioId>
             value={comparisonFocus}
             ariaLabel="Game log scenario"
@@ -772,56 +951,6 @@ function ScenarioFilterChips({ filters }: { filters: PlayerStatsFilters }) {
   )
 }
 
-function ComparisonSummaryPanel({
-  statLabel,
-  scenarioAFilters,
-  scenarioBFilters,
-  scenarioAData,
-  scenarioBData,
-  isLoading,
-}: {
-  statLabel: string
-  scenarioAFilters: PlayerStatsFilters
-  scenarioBFilters: PlayerStatsFilters
-  scenarioAData: { history: PlayerGameLogEntry[]; summary: PlayerStatSummary | null } | null
-  scenarioBData: { history: PlayerGameLogEntry[]; summary: PlayerStatSummary | null } | null
-  isLoading: boolean
-}) {
-  const historyA = scenarioAData?.history ?? []
-  const historyB = scenarioBData?.history ?? []
-  const summaryA = scenarioAData?.summary ?? null
-  const summaryB = scenarioBData?.summary ?? null
-  const labels = comparisonOutcomeLabels(scenarioAFilters, scenarioBFilters)
-  const rows = [
-    ['Games', String(summaryA?.sample_size ?? historyA.length), String(summaryB?.sample_size ?? historyB.length)],
-    ['Average', comparisonAverage(historyA), comparisonAverage(historyB)],
-    [labels[0], comparisonOutcomeValue(summaryA, true), comparisonOutcomeValue(summaryB, true)],
-    [labels[1], comparisonOutcomeValue(summaryA, false), comparisonOutcomeValue(summaryB, false)],
-  ]
-  return (
-    <Panel className="comparison-summary-panel">
-      <div className="section-heading">
-        <h2>{statLabel} scenario comparison</h2>
-        <span>{isLoading ? 'Refreshing' : 'Updated'}</span>
-      </div>
-      <div className="comparison-table">
-        <div className="comparison-table-row comparison-table-head">
-          <span>Metric</span>
-          <span>A · {playerLineLabel(scenarioAFilters)}</span>
-          <span>B · {playerLineLabel(scenarioBFilters)}</span>
-        </div>
-        {rows.map(([label, a, b]) => (
-          <div className="comparison-table-row" key={label}>
-            <b>{label}</b>
-            <span>{a}</span>
-            <span>{b}</span>
-          </div>
-        ))}
-      </div>
-    </Panel>
-  )
-}
-
 function ComparisonGraphPanel({
   statLabel,
   scenarioAFilters,
@@ -853,7 +982,10 @@ function ComparisonGraphPanel({
   return (
     <Panel className="chart-panel comparison-chart-panel">
       <div className="section-heading">
-        <h2>{statLabel} comparison graph</h2>
+        <div className="section-title-with-legend">
+          <h2>{statLabel} comparison</h2>
+          <ChartLegend mode="comparison" />
+        </div>
         <span>{isLoading ? 'Refreshing' : `${data.length} recency slots`}</span>
       </div>
       <div className="chart-frame">
@@ -975,7 +1107,12 @@ function PlayerHistoryTable({
     if (!highlightedEntryKey) return
     const row = rowRefs.current.get(highlightedEntryKey)
     if (!row) return
-    row.scrollIntoView({ behavior: 'smooth', block: 'center' })
+    const tableWrap = tableWrapRef.current
+    if (tableWrap) {
+      const targetTop = row.offsetTop - (tableWrap.clientHeight / 2) + (row.clientHeight / 2)
+      tableWrap.scrollTo({ top: Math.max(0, targetTop), behavior: 'smooth' })
+    }
+    row.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'nearest' })
     row.classList.add('row-highlight')
     const timer = setTimeout(() => row.classList.remove('row-highlight'), 1400)
     return () => {
@@ -1004,6 +1141,10 @@ function PlayerHistoryTable({
         <tbody>
           {history.map((entry) => {
             const entryKey = `${entry.date}-${entry.game_number}`
+            const date = new Date(entry.date)
+            const yearLabel = Number.isNaN(date.getTime()) ? '' : String(date.getFullYear())
+            const oppositionCode = entry.opposition ? aflTeamCode(entry.opposition) ?? entry.opposition.slice(0, 3).toUpperCase() : '-'
+            const homeAway = inferHomeAway(entry)
             return (
               <tr
                 key={entryKey}
@@ -1012,10 +1153,20 @@ function PlayerHistoryTable({
                   else rowRefs.current.delete(entryKey)
                 }}
               >
-                <td>{formatMatchDateTime(entry.date)}</td>
-                <td>{entry.round_label ?? '-'}</td>
-                <td>{entry.opposition ?? '-'}</td>
-                <td>{entry.venue ?? '-'}</td>
+                <td>
+                  <div className="game-date-cell">
+                    <b>{formatShortDate(entry.date)}</b>
+                    <span>{yearLabel || '-'}</span>
+                  </div>
+                </td>
+                <td><span className="tabular muted-cell">{entry.round_label ?? '-'}</span></td>
+                <td>
+                  <span className="opposition-cell">
+                    <b>{oppositionCode}</b>
+                    <small>{homeAway}</small>
+                  </span>
+                </td>
+                <td><span className="muted-cell">{entry.venue ?? '-'}</span></td>
                 <td><MatchResultCell entry={entry} /></td>
                 {PLAYER_STAT_COLUMNS.map((column) => {
                   const highlighted = column.key === selectedStatKey
@@ -1114,7 +1265,7 @@ function PlayerFiltersDrawer({
         ) : null}
         <div className="drawer-foot">
           <Button variant="ghost" onClick={() => onReset(mode === 'stats' ? 'stats' : activeTab)}>Reset</Button>
-          <Button variant="accent" onClick={onApply}>Apply filters</Button>
+          <Button onClick={onApply}>Apply filters</Button>
         </div>
         <div className="drawer-body">
           {mode === 'stats' ? (
@@ -1258,6 +1409,7 @@ type PlayerStatKey =
   | 'behinds'
   | 'tackles'
   | 'hitouts'
+  | 'clearances'
   | 'frees_for'
   | 'frees_against'
   | 'fantasy'
@@ -1306,6 +1458,7 @@ const PLAYER_STAT_COLUMNS: { key: PlayerStatKey; label: string; suffix?: string 
   { key: 'behinds', label: 'Behinds' },
   { key: 'tackles', label: 'Tackles' },
   { key: 'hitouts', label: 'Hitouts' },
+  { key: 'clearances', label: 'Clearances' },
   { key: 'frees_for', label: 'Frees for' },
   { key: 'frees_against', label: 'Frees agst' },
   { key: 'fantasy', label: 'Fantasy' },
@@ -1400,7 +1553,15 @@ function formatStatCell(value: number | null, suffix?: string) {
 
 function normalizeStatKey(stat: string): PlayerStatKey | null {
   const normalized = stat.replace(/^player_/, '')
-  if (normalized === 'fantasy_points') return 'fantasy'
+  const aliases: Partial<Record<string, PlayerStatKey>> = {
+    fantasy_points: 'fantasy',
+    total_clearances: 'clearances',
+    clearances: 'clearances',
+    cba_percentage: 'cba',
+    tog_percentage: 'tog',
+  }
+  const aliased = aliases[normalized]
+  if (aliased) return aliased
   if (isPlayerStatKey(normalized)) return normalized
   return null
 }
@@ -1431,6 +1592,7 @@ const STAT_REFERENCE_DEFAULTS: Record<PlayerStatKey, string> = {
   behinds: '0.5',
   tackles: '3.5',
   hitouts: '15.5',
+  clearances: '4.5',
   frees_for: '0.5',
   frees_against: '0.5',
   fantasy: '80.5',
@@ -1470,11 +1632,6 @@ function comparisonAverage(history: PlayerGameLogEntry[]) {
   const values = history.map((entry) => entry.selected_value).filter((value): value is number => value != null && Number.isFinite(value))
   if (values.length === 0) return '--'
   return (values.reduce((total, value) => total + value, 0) / values.length).toFixed(1)
-}
-
-function comparisonOutcomeLabels(filtersA: PlayerStatsFilters, filtersB: PlayerStatsFilters): [string, string] {
-  if (filtersA.lineMode !== filtersB.lineMode) return ['Outcome 1', 'Outcome 2']
-  return filtersA.lineMode === 'interval' ? ['Within', 'Outside'] : ['Over', 'Under']
 }
 
 function comparisonOutcomeValue(summary: PlayerStatSummary | null, primary: boolean) {
@@ -1639,7 +1796,16 @@ function ComparisonResultDot({
   const strokeWidth = isActive ? 2.4 : 2
 
   return (
-    <g style={{ cursor: 'pointer' }} onClick={onClick}>
+    <g
+      role="button"
+      tabIndex={0}
+      style={{ cursor: 'pointer', pointerEvents: 'all' }}
+      onClick={onClick}
+      onMouseDown={onClick}
+      onKeyDown={(event) => {
+        if (event.key === 'Enter' || event.key === ' ') onClick?.()
+      }}
+    >
       <circle cx={cx} cy={cy} r={radius} fill={fill} stroke={stroke} strokeWidth={1.5} />
       {hit ? (
         <path
@@ -1681,7 +1847,16 @@ function ReferenceResultDot({
   const strokeWidth = isActive ? 2.4 : 2
 
   return (
-    <g style={{ cursor: 'pointer' }} onClick={onClick}>
+    <g
+      role="button"
+      tabIndex={0}
+      style={{ cursor: 'pointer', pointerEvents: 'all' }}
+      onClick={onClick}
+      onMouseDown={onClick}
+      onKeyDown={(event) => {
+        if (event.key === 'Enter' || event.key === ' ') onClick?.()
+      }}
+    >
       <circle cx={cx} cy={cy} r={radius} fill={fill} stroke={stroke} strokeWidth={1.5} />
       {success ? (
         <path

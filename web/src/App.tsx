@@ -1,4 +1,4 @@
-import { lazy, Suspense, useEffect, useMemo } from 'react'
+import { lazy, Suspense, useEffect, useMemo, useState } from 'react'
 import { useBookmakers, useDataStatus, useEvents, useHealth } from './api/queries'
 import { AppShell } from './components/AppShell'
 import { ErrorBoundary } from './components/ErrorBoundary'
@@ -21,6 +21,10 @@ function App() {
   const bookmakers = useBookmakers(settings)
   const defaultBookmaker = useAppStore((state) => state.defaultBookmaker)
   const events = useEvents(settings, defaultBookmaker)
+  const [mountedBuilderViews, setMountedBuilderViews] = useState({
+    sgm: activeView === 'sgm',
+    cgm: activeView === 'cgm',
+  })
 
   useEffect(() => {
     document.documentElement.dataset.theme = themeMode
@@ -30,6 +34,13 @@ function App() {
     if (activeView === 'sgm' || activeView === 'cgm') return
     if (!['player', 'odds', 'arbs', 'settings'].includes(activeView)) setActiveView('odds')
   }, [activeView, setActiveView])
+
+  useEffect(() => {
+    if (activeView !== 'sgm' && activeView !== 'cgm') return
+    setMountedBuilderViews((current) => (
+      current[activeView] ? current : { ...current, [activeView]: true }
+    ))
+  }, [activeView])
 
   const bookmakerRows = useMemo(() => bookmakers.data ?? [], [bookmakers.data])
   const eventRows = useMemo(() => events.data ?? [], [events.data])
@@ -41,8 +52,16 @@ function App() {
         {activeView === 'odds' ? <OddsWorkspace bookmakers={bookmakerRows} events={eventRows} /> : null}
         {activeView === 'arbs' ? <ArbWorkspace bookmakers={bookmakerRows} /> : null}
         {activeView === 'player' ? <PlayerLab /> : null}
-        {activeView === 'sgm' ? <BuilderWorkspace mode="sgm" bookmakers={bookmakerRows} events={eventRows} /> : null}
-        {activeView === 'cgm' ? <BuilderWorkspace mode="cgm" bookmakers={bookmakerRows} events={eventRows} /> : null}
+        {mountedBuilderViews.sgm ? (
+          <div hidden={activeView !== 'sgm'}>
+            <BuilderWorkspace mode="sgm" bookmakers={bookmakerRows} events={eventRows} />
+          </div>
+        ) : null}
+        {mountedBuilderViews.cgm ? (
+          <div hidden={activeView !== 'cgm'}>
+            <BuilderWorkspace mode="cgm" bookmakers={bookmakerRows} events={eventRows} />
+          </div>
+        ) : null}
         {activeView === 'settings' ? <SettingsView bookmakers={bookmakerRows} health={health.data} dataStatus={dataStatus.data} /> : null}
       </Suspense>
     </AppShell>

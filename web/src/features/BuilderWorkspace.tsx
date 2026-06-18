@@ -772,12 +772,6 @@ function matchDetailLine(startTime?: string | null, venue?: string | null) {
   return parts.length ? parts.join(' | ') : 'TBA'
 }
 
-const emptyTeamContext = {
-  player_team: null,
-  player_home_away: null,
-  player_team_line: null,
-}
-
 export function AgencyPriceDialog({
   settings,
   selection,
@@ -955,7 +949,7 @@ function BuilderPanel({
   )
 }
 
-function SgmComparisonCard({ result, rank, legBySelectionId }: { result: SgmAgencyComparison; rank: number; legBySelectionId: Map<number, DraftLeg> }) {
+function SgmComparisonCard({ result, rank }: { result: SgmAgencyComparison; rank: number; legBySelectionId: Map<number, DraftLeg> }) {
   return (
     <div className={clsx('comparison-card', rank === 1 && 'comparison-card--best')}>
       <div className="comparison-head">
@@ -974,8 +968,6 @@ function SgmComparisonCard({ result, rank, legBySelectionId }: { result: SgmAgen
         {result.legs.map((leg) => (
           <div className="comparison-leg" key={leg.selection_id}>
             <span>{leg.label}</span>
-            <MatchupBadge value={legBySelectionId.get(leg.selection_id)?.matchup_difficulty} />
-            <TeamContextTags selection={legBySelectionId.get(leg.selection_id) ?? emptyTeamContext} />
             <b className="tabular">{formatPrice(leg.base_price)}</b>
           </div>
         ))}
@@ -985,7 +977,7 @@ function SgmComparisonCard({ result, rank, legBySelectionId }: { result: SgmAgen
   )
 }
 
-function CgmComparisonCard({ result, rank, legBySelectionId }: { result: CgmAgencyComparison; rank: number; legBySelectionId: Map<number, DraftLeg> }) {
+function CgmComparisonCard({ result, rank }: { result: CgmAgencyComparison; rank: number; legBySelectionId: Map<number, DraftLeg> }) {
   return (
     <div className={clsx('comparison-card', rank === 1 && 'comparison-card--best')}>
       <div className="comparison-head">
@@ -997,13 +989,8 @@ function CgmComparisonCard({ result, rank, legBySelectionId }: { result: CgmAgen
       </div>
       <div className="comparison-legs">
         {result.legs.map((leg) => (
-          <div className="comparison-leg comparison-leg--stacked" key={leg.selection_id}>
-            <div>
-              <span>{leg.label}</span>
-              <small>{shortMatchLabel(leg.match_name)} | {matchDetailLine(legBySelectionId.get(leg.selection_id)?.start_time, legBySelectionId.get(leg.selection_id)?.venue)}</small>
-              <MatchupBadge value={legBySelectionId.get(leg.selection_id)?.matchup_difficulty} />
-              <TeamContextTags selection={legBySelectionId.get(leg.selection_id) ?? emptyTeamContext} />
-            </div>
+          <div className="comparison-leg" key={leg.selection_id}>
+            <span>{leg.label}</span>
             <b className="tabular">{formatPrice(leg.base_price)}</b>
           </div>
         ))}

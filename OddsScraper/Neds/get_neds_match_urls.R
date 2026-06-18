@@ -6,14 +6,24 @@ library(jsonlite)
 input_file <- "OddsScraper/Neds/neds_response.json"
 output_file <- "OddsScraper/Neds/neds_afl_match_urls.csv"
 
-if (!file.exists(input_file)) {
-  stop("Neds response JSON is missing: ", input_file)
+exit_gracefully <- function(message) {
+  message(message)
+  quit(status = 0)
 }
 
-neds_response <- jsonlite::fromJSON(input_file, simplifyVector = FALSE)
+if (!file.exists(input_file)) {
+  exit_gracefully("Neds response JSON is missing (upstream step likely failed): ", input_file)
+}
+
+neds_response <- tryCatch(
+  jsonlite::fromJSON(input_file, simplifyVector = FALSE),
+  error = function(error) {
+    exit_gracefully(paste0("Could not parse Neds response JSON: ", conditionMessage(error)))
+  }
+)
 
 if (is.null(neds_response$events) || length(neds_response$events) == 0) {
-  stop("Neds response JSON did not contain any events.")
+  exit_gracefully("Neds response JSON did not contain any events. Exiting gracefully.")
 }
 
 value_or_na <- function(value) {
@@ -55,7 +65,7 @@ df <-
   )
 
 if (nrow(df) == 0) {
-  stop("No AFL match URLs were found in the Neds response JSON.")
+  exit_gracefully("No AFL match URLs were found in the Neds response JSON. Exiting gracefully.")
 }
 
 write_csv(df, output_file)

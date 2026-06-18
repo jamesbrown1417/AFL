@@ -73,6 +73,7 @@ export interface PlayerGameLogEntry {
   behinds: number | null
   tackles: number | null
   hitouts: number | null
+  clearances: number | null
   frees_for: number | null
   frees_against: number | null
   fantasy: number | null

@@ -85,6 +85,7 @@ class PlayerGameLogEntry(BaseModel):
     behinds: float | None
     tackles: float | None
     hitouts: float | None
+    clearances: float | None
     frees_for: float | None
     frees_against: float | None
     fantasy: float | None
