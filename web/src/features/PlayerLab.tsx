@@ -1170,8 +1170,17 @@ function PlayerHistoryTable({
                 <td><MatchResultCell entry={entry} /></td>
                 {PLAYER_STAT_COLUMNS.map((column) => {
                   const highlighted = column.key === selectedStatKey
+                  const highlightClass = highlighted
+                    ? `stat-column-highlight ${
+                      entry.hit === true
+                        ? 'stat-column-highlight--hit'
+                        : entry.hit === false
+                          ? 'stat-column-highlight--miss'
+                          : 'stat-column-highlight--neutral'
+                    }`
+                    : undefined
                   return (
-                    <td key={column.key} className={highlighted ? `stat-column-highlight${entry.hit === false ? ' stat-column-highlight--miss' : ''}` : undefined}>
+                    <td key={column.key} className={highlightClass}>
                       <b className="tabular">{formatStatCell(statValue(entry, column.key), column.suffix)}</b>
                     </td>
                   )
