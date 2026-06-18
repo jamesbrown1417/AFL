@@ -1,12 +1,12 @@
 import { useEffect, useMemo, useState } from 'react'
 import { flexRender, getCoreRowModel, getSortedRowModel, useReactTable, type ColumnDef, type SortingState } from '@tanstack/react-table'
-import { Plus, Search, X } from 'lucide-react'
+import { Plus, ReceiptText, Search, X } from 'lucide-react'
 import type { BookmakerSummary, EventSummary, OddsScope, OddsSearchResult } from '../api/types'
 import { useOdds } from '../api/queries'
 import { useClientSettings, useAppStore, defaultOddsFilters, defaultPlayerFilters } from '../store/useAppStore'
 import { formatDateTime, formatLine, formatPrice, formatSigned, marketLabel, playerPositionTag, selectionTypeLabel, shortMatchLabel } from '../lib/formatters'
 import { combinedBasePrice, toDraftLeg, marketTypeToStatCode } from '../lib/builder'
-import { Button, Chip, EmptyState, ErrorBanner, Field, Panel, Segmented, Select, SortIcon, StatPill, TextInput, Toggle } from '../components/ui'
+import { Button, Chip, EmptyState, ErrorBanner, Field, Panel, Segmented, Select, SortIcon, TextInput, Toggle } from '../components/ui'
 import { CandidateContextMenu, AgencyPriceDialog } from './BuilderWorkspace'
 
 const playerMarkets = [
@@ -98,6 +98,7 @@ export function OddsWorkspace({
   const columns = useMemo<ColumnDef<OddsSearchResult>[]>(
     () => [
       {
+        id: 'name',
         header: 'Player / match',
         accessorFn: (row) => row.player?.full_name ?? row.match_name,
         cell: ({ row }) => (
@@ -108,6 +109,7 @@ export function OddsWorkspace({
         ),
       },
       {
+        id: 'market',
         header: 'Market',
         accessorFn: (row) => `${marketLabel(row.market_type_code)} ${row.selection_type} ${row.line_value ?? ''}`,
         cell: ({ row }) => (
@@ -118,41 +120,54 @@ export function OddsWorkspace({
         ),
       },
       {
+        id: 'agency',
         header: 'Agency',
         accessorKey: 'bookmaker',
         cell: ({ row }) => <span className="agency">{row.original.bookmaker}</span>,
       },
       {
+        id: 'price',
         header: 'Price',
         accessorKey: 'decimal_price',
-        cell: ({ row }) => <b className="tabular">{formatPrice(row.original.decimal_price)}</b>,
+        cell: ({ row }) => (
+          <span className="price-cell">
+            <b className="tabular">{formatPrice(row.original.decimal_price)}</b>
+            {row.original.is_best_price ? <span className="best-price-badge">Best</span> : null}
+          </span>
+        ),
       },
       {
-        header: 'L10',
-        accessorKey: 'diff_last_10',
-        cell: ({ row }) => <Delta value={row.original.diff_last_10} />,
-      },
-      {
-        header: 'Season',
-        accessorKey: 'diff_2025',
-        cell: ({ row }) => <Delta value={row.original.diff_2025} />,
-      },
-      {
-        header: 'H/A',
-        accessorKey: 'home_away_diff',
-        cell: ({ row }) => <Delta value={row.original.home_away_diff} />,
-      },
-      {
-        header: 'W/L',
-        accessorKey: 'win_loss_diff',
-        cell: ({ row }) => <Delta value={row.original.win_loss_diff} />,
-      },
-      {
+        id: 'next-best',
         header: 'Next best',
         accessorKey: 'next_best_prob_diff',
         cell: ({ row }) => <Delta value={row.original.next_best_prob_diff} />,
       },
       {
+        id: 'l10',
+        header: 'L10',
+        accessorKey: 'diff_last_10',
+        cell: ({ row }) => <Delta value={row.original.diff_last_10} />,
+      },
+      {
+        id: 'season',
+        header: 'Season',
+        accessorKey: 'diff_2025',
+        cell: ({ row }) => <Delta value={row.original.diff_2025} />,
+      },
+      {
+        id: 'home-away',
+        header: 'H/A',
+        accessorKey: 'home_away_diff',
+        cell: ({ row }) => <Delta value={row.original.home_away_diff} />,
+      },
+      {
+        id: 'win-loss',
+        header: 'W/L',
+        accessorKey: 'win_loss_diff',
+        cell: ({ row }) => <Delta value={row.original.win_loss_diff} />,
+      },
+      {
+        id: 'context',
         header: 'Context',
         accessorFn: (row) => `${row.matchup_difficulty ?? ''} ${row.player_position ?? ''} ${row.weather?.temperature_c ?? ''} ${row.is_best_price ? 'Best' : ''}`,
         cell: ({ row }) => (
@@ -174,12 +189,13 @@ export function OddsWorkspace({
             <div className="row-actions">
               <Button
                 variant="secondary"
+                className="odds-action-button odds-action-button--sgm"
                 disabled={!draftLeg || !row.original.sgm_eligible}
                 onClick={() => draftLeg && addSgmLeg(draftLeg)}
               >
                 <Plus size={14} /> SGM
               </Button>
-              <Button variant="ghost" disabled={!draftLeg} onClick={() => draftLeg && addCgmLeg(draftLeg)}>
+              <Button className="odds-action-button" variant="ghost" disabled={!draftLeg} onClick={() => draftLeg && addCgmLeg(draftLeg)}>
                 CGM
               </Button>
             </div>
@@ -203,6 +219,23 @@ export function OddsWorkspace({
   const positiveL10 = data.filter((row) => (row.diff_last_10 ?? -1) >= 0).length
   const bestPrices = data.filter((row) => row.is_best_price).length
   const sgmReady = data.filter((row) => row.sgm_eligible).length
+  const activeFilterCount =
+    (query.trim() ? 1 : 0) +
+    (filters.marketTypeCode ? 1 : 0) +
+    (filters.eventId ? 1 : 0) +
+    (filters.bookmakerCodes.length > 0 ? 1 : 0) +
+    (filters.minDiffLast10 >= 0 ? 1 : 0) +
+    (filters.minNextBestProbDiff >= 0 ? 1 : 0) +
+    (filters.matchupDifficulties.length > 0 ? 1 : 0) +
+    (filters.bestOnly ? 1 : 0) +
+    (filters.sgmOnly ? 1 : 0)
+  const subtitle = `${visibleRows.length} of ${data.length} ${filters.scope === 'player' ? 'player prop' : 'match'} selections`
+  const summaryStats = [
+    { label: 'Positive L10 edge', value: String(positiveL10), tone: 'good' },
+    { label: 'Best prices', value: String(bestPrices), tone: 'primary' },
+    { label: filters.scope === 'player' ? 'SGM eligible' : 'Match selections', value: String(filters.scope === 'player' ? sgmReady : data.length), tone: 'indigo' },
+    { label: 'In view', value: String(visibleRows.length), tone: 'neutral' },
+  ]
 
   return (
     <main className="workspace odds-workspace" aria-label="Odds workspace">
@@ -210,14 +243,15 @@ export function OddsWorkspace({
         <div className="page-title-row">
           <div>
             <h1>Odds</h1>
-            <p>{isFetching ? 'Refreshing market board' : `${visibleRows.length} rows in view`}</p>
+            <p>{isFetching ? 'Refreshing market board' : subtitle}</p>
           </div>
           <Segmented<OddsScope>
+            className="odds-scope-tabs"
             value={filters.scope}
             ariaLabel="Odds scope"
             options={[
-              { value: 'player', label: 'Player' },
-              { value: 'match', label: 'Match' },
+              { value: 'player', label: 'Player props' },
+              { value: 'match', label: 'Match markets' },
             ]}
             onChange={(scope) =>
               patchFilters({
@@ -231,11 +265,16 @@ export function OddsWorkspace({
           />
         </div>
 
-        <div className="summary-strip">
-          <StatPill label="Positive L10" value={String(positiveL10)} tone="good" />
-          <StatPill label="Best prices" value={String(bestPrices)} tone="warn" />
-          <StatPill label="SGM ready" value={String(sgmReady)} tone="neutral" />
-          <StatPill label="Loaded" value={String(data.length)} />
+        <div className="odds-summary-grid">
+          {summaryStats.map((stat) => (
+            <div className={`odds-summary-card odds-summary-card--${stat.tone}`} key={stat.label}>
+              <span aria-hidden="true" />
+              <div>
+                <strong>{stat.value}</strong>
+                <small>{stat.label}</small>
+              </div>
+            </div>
+          ))}
         </div>
 
         <Panel className="filters-panel">
@@ -243,7 +282,7 @@ export function OddsWorkspace({
             <Field label="Search board">
               <div className="input-with-icon">
                 <Search size={16} />
-                <TextInput value={query} onChange={(event) => setQuery(event.currentTarget.value)} placeholder="Player, market, match" />
+                <TextInput value={query} onChange={(event) => setQuery(event.currentTarget.value)} placeholder="Player, market, agency, match" />
               </div>
             </Field>
             <Field label="Market">
@@ -277,6 +316,7 @@ export function OddsWorkspace({
             </Field>
           </div>
           <div className="chip-row">
+            <span className="odds-chip-label">Agency</span>
             {enabledBookmakers.map((bookmaker) => (
               <Chip
                 key={bookmaker.code}
@@ -293,6 +333,7 @@ export function OddsWorkspace({
             ))}
           </div>
           <div className="quick-filter-grid">
+            <span className="odds-chip-label">Signal</span>
             <Chip active={filters.minDiffLast10 >= 0} onClick={() => patchFilters({ minDiffLast10: filters.minDiffLast10 >= 0 ? -1 : 0 })}>
               Positive L10
             </Chip>
@@ -311,7 +352,12 @@ export function OddsWorkspace({
             </Chip>
             <Toggle checked={filters.bestOnly} onChange={(bestOnly) => patchFilters({ bestOnly })} label="Best only" />
             <Toggle checked={filters.sgmOnly} onChange={(sgmOnly) => patchFilters({ sgmOnly })} label="SGM only" />
-            <Button variant="ghost" onClick={() => setFilters({ ...defaultOddsFilters, bookmakerCodes: enabledBookmakers.map((item) => item.code) })}>Reset</Button>
+            {activeFilterCount > 0 ? (
+              <Button variant="ghost" onClick={() => {
+                setQuery('')
+                setFilters({ ...defaultOddsFilters, bookmakerCodes: enabledBookmakers.map((item) => item.code) })
+              }}>Reset</Button>
+            ) : null}
           </div>
         </Panel>
 
@@ -321,14 +367,18 @@ export function OddsWorkspace({
           {visibleRows.length === 0 && !isFetching ? (
             <EmptyState title="No odds" body="Adjust market, agency, match, or quick filters." />
           ) : (
-            <div className="data-table-wrap">
-              <table className="data-table">
+            <div className="data-table-wrap odds-table-wrap">
+              <table className="data-table odds-board-table">
                 <caption className="visually-hidden">Odds market board</caption>
                 <thead>
                   {table.getHeaderGroups().map((headerGroup) => (
                     <tr key={headerGroup.id}>
                       {headerGroup.headers.map((header) => (
-                        <th key={header.id} aria-sort={header.column.getIsSorted() === 'asc' ? 'ascending' : header.column.getIsSorted() === 'desc' ? 'descending' : 'none'}>
+                        <th
+                          key={header.id}
+                          className={columnClassName(header.column.id)}
+                          aria-sort={header.column.getIsSorted() === 'asc' ? 'ascending' : header.column.getIsSorted() === 'desc' ? 'descending' : 'none'}
+                        >
                           {header.column.getCanSort() ? (
                             <button type="button" className="sort-header" onClick={header.column.getToggleSortingHandler()}>
                               <span>{flexRender(header.column.columnDef.header, header.getContext())}</span>
@@ -349,7 +399,15 @@ export function OddsWorkspace({
                       onContextMenu={(event) => openContextMenu(event, row.original)}
                     >
                       {row.getVisibleCells().map((cell) => (
-                        <td key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</td>
+                        <td
+                          key={cell.id}
+                          className={[
+                            columnClassName(cell.column.id),
+                            cell.column.id === 'price' && row.original.is_best_price ? 'is-best-price-cell' : '',
+                          ].filter(Boolean).join(' ') || undefined}
+                        >
+                          {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                        </td>
                       ))}
                     </tr>
                   ))}
@@ -420,6 +478,13 @@ function Delta({ value }: { value: number | null }) {
   return <span className={value == null ? 'delta' : value >= 0 ? 'delta delta--good' : 'delta delta--bad'}>{formatSigned(value)}</span>
 }
 
+function columnClassName(columnId: string) {
+  if (columnId === 'name') return 'is-sticky-column'
+  if (columnId === 'context') return 'is-context-column'
+  if (['price', 'next-best', 'l10', 'season', 'home-away', 'win-loss', 'actions'].includes(columnId)) return 'is-numeric-column'
+  return undefined
+}
+
 function DraftRail({
   legs,
   onRemove,
@@ -429,15 +494,28 @@ function DraftRail({
   onRemove: (selectionId: number) => void
   onClear: () => void
 }) {
+  const combinedPrice = combinedBasePrice(legs)
+  const ready = legs.length >= 2
+
   return (
     <>
-      <div className="builder-stats">
-        <StatPill label="Base price" value={formatPrice(combinedBasePrice(legs))} tone="warn" />
-        <StatPill label="Status" value={legs.length >= 2 ? 'Ready' : '2+ legs'} tone={legs.length >= 2 ? 'good' : 'neutral'} />
+      <div className="odds-builder-stats">
+        <div>
+          <span>Combined</span>
+          <strong>{formatPrice(combinedPrice)}</strong>
+        </div>
+        <div>
+          <span>Status</span>
+          <strong className={ready ? 'is-ready' : undefined}>{ready ? 'Ready to price' : legs.length === 0 ? 'Empty' : `Add ${2 - legs.length} more`}</strong>
+        </div>
       </div>
       <div className="draft-list">
         {legs.length === 0 ? (
-          <EmptyState title="No draft legs" body="Use SGM or CGM actions in the odds table." />
+          <div className="odds-empty-draft">
+            <div aria-hidden="true"><ReceiptText size={20} /></div>
+            <strong>No legs yet</strong>
+            <span>Use the <b>SGM</b> or <b>CGM</b> action on any market to start a draft.</span>
+          </div>
         ) : (
           legs.map((leg) => (
             <div className="draft-leg" key={leg.selection_id}>

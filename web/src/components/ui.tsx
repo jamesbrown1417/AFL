@@ -55,14 +55,16 @@ export function Segmented<T extends string>({
   options,
   onChange,
   ariaLabel,
+  className,
 }: {
   value: T
   options: { value: T; label: string }[]
   onChange: (value: T) => void
   ariaLabel: string
+  className?: string
 }) {
   return (
-    <div className="segmented" role="tablist" aria-label={ariaLabel}>
+    <div className={clsx('segmented', className)} role="tablist" aria-label={ariaLabel}>
       {options.map((option) => (
         <button
           key={option.value}
