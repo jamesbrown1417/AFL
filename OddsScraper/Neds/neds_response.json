@@ -1,164 +1,5 @@
 {
   "events": {
-    "4b52df81-26f5-479e-8bc8-e22805a9e62a": {
-      "id": "4b52df81-26f5-479e-8bc8-e22805a9e62a",
-      "name": "AFL Round 15 Specials",
-      "url": "/sports/australian-rules/afl/afl-round-15-specials/4b52df81-26f5-479e-8bc8-e22805a9e62a",
-      "advertisedStart": "2026-06-18T10:09:00.000Z",
-      "eventType": "MATCH",
-      "eventTypeId": "6bfa0efc-05df-4ae1-9b1e-152365290cfd",
-      "bettingStatus": "OPEN",
-      "status": "OPEN",
-      "phase": null,
-      "hasLiveVision": false,
-      "inPlay": false,
-      "sportCategory": {
-        "id": "23d497e6-8aab-4309-905b-9421f42c9bc5",
-        "name": "Australian Rules",
-        "category": "AUSTRALIAN_RULES",
-        "icon": "sports/australian-rules",
-        "slug": "australian-rules",
-        "url": "/sports/australian-rules",
-        "hasRegions": false,
-        "eventCount": 0
-      },
-      "competition": {
-        "id": "ccff2e9a-5347-41aa-902a-bb6b1886d817",
-        "name": "AFL",
-        "url": "/sports/australian-rules/afl",
-        "hasInPlayEvents": false,
-        "region": null
-      },
-      "teams": null,
-      "matchClock": {
-        "countDown": false,
-        "maxPeriodSeconds": 1200,
-        "paused": false,
-        "periodSeconds": 0
-      },
-      "marketCount": 12,
-      "markets": {
-        "nodes": []
-      }
-    },
-    "192b9fc0-8105-4828-8c00-d6eaeb562221": {
-      "id": "192b9fc0-8105-4828-8c00-d6eaeb562221",
-      "name": "Fremantle vs Geelong Cats",
-      "url": "/sports/australian-rules/afl/fremantle-vs-geelong-cats/192b9fc0-8105-4828-8c00-d6eaeb562221",
-      "advertisedStart": "2026-06-18T10:10:00.000Z",
-      "eventType": "MATCH",
-      "eventTypeId": "6bfa0efc-05df-4ae1-9b1e-152365290cfd",
-      "bettingStatus": "OPEN",
-      "status": "OPEN",
-      "phase": null,
-      "hasLiveVision": false,
-      "inPlay": false,
-      "sportCategory": {
-        "id": "23d497e6-8aab-4309-905b-9421f42c9bc5",
-        "name": "Australian Rules",
-        "category": "AUSTRALIAN_RULES",
-        "icon": "sports/australian-rules",
-        "slug": "australian-rules",
-        "url": "/sports/australian-rules",
-        "hasRegions": false,
-        "eventCount": 0
-      },
-      "competition": {
-        "id": "ccff2e9a-5347-41aa-902a-bb6b1886d817",
-        "name": "AFL",
-        "url": "/sports/australian-rules/afl",
-        "hasInPlayEvents": false,
-        "region": null
-      },
-      "teams": [
-        {
-          "id": "SportingTeam:bb07f99f-e19c-478e-8245-07826b04620d",
-          "name": "Fremantle",
-          "colour": "#2E0F4F",
-          "locale": "HOME",
-          "scores": [],
-          "scoresV2": null,
-          "icon": {
-            "web": "/images/neds/sprites/svg-sports-afl-icon.svg#fremantle-dockers"
-          }
-        },
-        {
-          "id": "SportingTeam:6ff9c263-04f1-4122-9107-e1ecc0fe7c43",
-          "name": "Geelong Cats",
-          "colour": "#0B2A5B",
-          "locale": "AWAY",
-          "scores": [],
-          "scoresV2": null,
-          "icon": {
-            "web": "/images/neds/sprites/svg-sports-afl-icon.svg#geelong-cats"
-          }
-        }
-      ],
-      "matchClock": {
-        "countDown": false,
-        "maxPeriodSeconds": 1200,
-        "paused": false,
-        "periodSeconds": 0
-      },
-      "marketCount": 282,
-      "markets": {
-        "nodes": [
-          {
-            "id": "SportingMarket:4de5a5ce-5951-4ab8-ac1f-99cf4186a4e9",
-            "name": "Match Betting",
-            "marketTypeId": "be25c37a-71ff-47f6-a1e2-02a494eb5a4d",
-            "handicap": null,
-            "isPrimary": true,
-            "isSuspended": false,
-            "status": "OPEN",
-            "liveBettingAvailable": true,
-            "allowsCashOut": false,
-            "sameGameMultiAvailable": true,
-            "allowOddsBoostExtra": false,
-            "additionalProductTypeIds": null,
-            "entrantCount": 2,
-            "entrants": {
-              "nodes": [
-                {
-                  "id": "SportingEntrant:209c5f64-4779-4151-b019-818e77482fd3",
-                  "name": "Fremantle",
-                  "handicap": null,
-                  "isSuspended": false,
-                  "role": "HOME",
-                  "icon": {
-                    "web": "/images/neds/sprites/svg-sports-afl-icon.svg#fremantle-dockers"
-                  },
-                  "price": {
-                    "id": "209c5f64-4779-4151-b019-818e77482fd3:940b8704-e497-4a76-b390-00918ff7d282:",
-                    "odds": {
-                      "numerator": 3,
-                      "denominator": 10
-                    }
-                  }
-                },
-                {
-                  "id": "SportingEntrant:053816fa-425d-4f77-96a1-be9092a2cb77",
-                  "name": "Geelong Cats",
-                  "handicap": null,
-                  "isSuspended": false,
-                  "role": "AWAY",
-                  "icon": {
-                    "web": "/images/neds/sprites/svg-sports-afl-icon.svg#geelong-cats"
-                  },
-                  "price": {
-                    "id": "053816fa-425d-4f77-96a1-be9092a2cb77:940b8704-e497-4a76-b390-00918ff7d282:",
-                    "odds": {
-                      "numerator": 5,
-                      "denominator": 2
-                    }
-                  }
-                }
-              ]
-            }
-          }
-        ]
-      }
-    },
     "176a2187-e299-409a-9ab3-928e0ec5d70c": {
       "id": "176a2187-e299-409a-9ab3-928e0ec5d70c",
       "name": "Gold Coast Suns vs Hawthorn",
@@ -218,7 +59,7 @@
         "paused": false,
         "periodSeconds": 0
       },
-      "marketCount": 202,
+      "marketCount": 265,
       "markets": {
         "nodes": [
           {
@@ -249,7 +90,7 @@
                   "price": {
                     "id": "fbac8c06-d3d3-4a03-a84a-9286cf03c466:940b8704-e497-4a76-b390-00918ff7d282:",
                     "odds": {
-                      "numerator": 21,
+                      "numerator": 23,
                       "denominator": 20
                     }
                   }
@@ -266,8 +107,8 @@
                   "price": {
                     "id": "66912e2d-649a-4e13-8467-d30099e96680:940b8704-e497-4a76-b390-00918ff7d282:",
                     "odds": {
-                      "numerator": 39,
-                      "denominator": 50
+                      "numerator": 18,
+                      "denominator": 25
                     }
                   }
                 }
@@ -336,7 +177,7 @@
         "paused": false,
         "periodSeconds": 0
       },
-      "marketCount": 199,
+      "marketCount": 257,
       "markets": {
         "nodes": [
           {
@@ -454,7 +295,7 @@
         "paused": false,
         "periodSeconds": 0
       },
-      "marketCount": 202,
+      "marketCount": 258,
       "markets": {
         "nodes": [
           {
@@ -485,8 +326,8 @@
                   "price": {
                     "id": "df7f89ec-a3c9-4c72-8eeb-0df7383e6b60:940b8704-e497-4a76-b390-00918ff7d282:",
                     "odds": {
-                      "numerator": 2,
-                      "denominator": 5
+                      "numerator": 7,
+                      "denominator": 20
                     }
                   }
                 },
@@ -502,8 +343,8 @@
                   "price": {
                     "id": "b66e6e3a-2379-4861-9831-204209a98171:940b8704-e497-4a76-b390-00918ff7d282:",
                     "odds": {
-                      "numerator": 39,
-                      "denominator": 20
+                      "numerator": 11,
+                      "denominator": 5
                     }
                   }
                 }
@@ -572,7 +413,7 @@
         "paused": false,
         "periodSeconds": 0
       },
-      "marketCount": 200,
+      "marketCount": 254,
       "markets": {
         "nodes": [
           {
@@ -690,7 +531,7 @@
         "paused": false,
         "periodSeconds": 0
       },
-      "marketCount": 138,
+      "marketCount": 202,
       "markets": {
         "nodes": [
           {
@@ -808,7 +649,7 @@
         "paused": false,
         "periodSeconds": 0
       },
-      "marketCount": 138,
+      "marketCount": 202,
       "markets": {
         "nodes": [
           {
@@ -839,8 +680,8 @@
                   "price": {
                     "id": "9a0d34a5-9459-4a83-a924-28d7b03666f1:940b8704-e497-4a76-b390-00918ff7d282:",
                     "odds": {
-                      "numerator": 4,
-                      "denominator": 5
+                      "numerator": 77,
+                      "denominator": 100
                     }
                   }
                 },
@@ -856,8 +697,8 @@
                   "price": {
                     "id": "2f83d9ef-c79a-4aca-8cef-348c3e004010:940b8704-e497-4a76-b390-00918ff7d282:",
                     "odds": {
-                      "numerator": 1,
-                      "denominator": 1
+                      "numerator": 21,
+                      "denominator": 20
                     }
                   }
                 }
