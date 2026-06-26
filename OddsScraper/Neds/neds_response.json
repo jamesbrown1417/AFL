@@ -1,164 +1,5 @@
 {
   "events": {
-    "d10b9b22-006c-4677-bc6d-5aea31f5462a": {
-      "id": "d10b9b22-006c-4677-bc6d-5aea31f5462a",
-      "name": "AFL Round 16 Specials",
-      "url": "/sports/australian-rules/afl/afl-round-16-specials/d10b9b22-006c-4677-bc6d-5aea31f5462a",
-      "advertisedStart": "2026-06-25T09:29:00.000Z",
-      "eventType": "MATCH",
-      "eventTypeId": "6bfa0efc-05df-4ae1-9b1e-152365290cfd",
-      "bettingStatus": "OPEN",
-      "status": "OPEN",
-      "phase": null,
-      "hasLiveVision": false,
-      "inPlay": false,
-      "sportCategory": {
-        "id": "23d497e6-8aab-4309-905b-9421f42c9bc5",
-        "name": "Australian Rules",
-        "category": "AUSTRALIAN_RULES",
-        "icon": "sports/australian-rules",
-        "slug": "australian-rules",
-        "url": "/sports/australian-rules",
-        "hasRegions": false,
-        "eventCount": 0
-      },
-      "competition": {
-        "id": "ccff2e9a-5347-41aa-902a-bb6b1886d817",
-        "name": "AFL",
-        "url": "/sports/australian-rules/afl",
-        "hasInPlayEvents": false,
-        "region": null
-      },
-      "teams": null,
-      "matchClock": {
-        "countDown": false,
-        "maxPeriodSeconds": 1200,
-        "paused": false,
-        "periodSeconds": 0
-      },
-      "marketCount": 12,
-      "markets": {
-        "nodes": []
-      }
-    },
-    "1b75f18c-ec27-46e4-8c6a-fa4b84e75433": {
-      "id": "1b75f18c-ec27-46e4-8c6a-fa4b84e75433",
-      "name": "Brisbane Lions vs Sydney Swans",
-      "url": "/sports/australian-rules/afl/brisbane-lions-vs-sydney-swans/1b75f18c-ec27-46e4-8c6a-fa4b84e75433",
-      "advertisedStart": "2026-06-25T09:30:00.000Z",
-      "eventType": "MATCH",
-      "eventTypeId": "6bfa0efc-05df-4ae1-9b1e-152365290cfd",
-      "bettingStatus": "OPEN",
-      "status": "OPEN",
-      "phase": null,
-      "hasLiveVision": false,
-      "inPlay": false,
-      "sportCategory": {
-        "id": "23d497e6-8aab-4309-905b-9421f42c9bc5",
-        "name": "Australian Rules",
-        "category": "AUSTRALIAN_RULES",
-        "icon": "sports/australian-rules",
-        "slug": "australian-rules",
-        "url": "/sports/australian-rules",
-        "hasRegions": false,
-        "eventCount": 0
-      },
-      "competition": {
-        "id": "ccff2e9a-5347-41aa-902a-bb6b1886d817",
-        "name": "AFL",
-        "url": "/sports/australian-rules/afl",
-        "hasInPlayEvents": false,
-        "region": null
-      },
-      "teams": [
-        {
-          "id": "SportingTeam:3d937e08-308a-443d-9dd2-6e5d1f47e826",
-          "name": "Brisbane Lions",
-          "colour": "#7A0C2E",
-          "locale": "HOME",
-          "scores": [],
-          "scoresV2": null,
-          "icon": {
-            "web": "/images/neds/sprites/svg-sports-afl-icon.svg#brisbane-lions"
-          }
-        },
-        {
-          "id": "SportingTeam:bf14b440-3244-4d04-b0af-0f5fa187b0fb",
-          "name": "Sydney Swans",
-          "colour": "#C8102E",
-          "locale": "AWAY",
-          "scores": [],
-          "scoresV2": null,
-          "icon": {
-            "web": "/images/neds/sprites/svg-sports-afl-icon.svg#sydney-swans"
-          }
-        }
-      ],
-      "matchClock": {
-        "countDown": false,
-        "maxPeriodSeconds": 1200,
-        "paused": false,
-        "periodSeconds": 0
-      },
-      "marketCount": 278,
-      "markets": {
-        "nodes": [
-          {
-            "id": "SportingMarket:3e75bf6a-9d13-4bdc-878b-52d52c882e82",
-            "name": "Match Betting",
-            "marketTypeId": "be25c37a-71ff-47f6-a1e2-02a494eb5a4d",
-            "handicap": null,
-            "isPrimary": true,
-            "isSuspended": false,
-            "status": "OPEN",
-            "liveBettingAvailable": true,
-            "allowsCashOut": false,
-            "sameGameMultiAvailable": true,
-            "allowOddsBoostExtra": false,
-            "additionalProductTypeIds": null,
-            "entrantCount": 2,
-            "entrants": {
-              "nodes": [
-                {
-                  "id": "SportingEntrant:71fe8c3e-29e6-4a4b-9668-155472417516",
-                  "name": "Brisbane Lions",
-                  "handicap": null,
-                  "isSuspended": false,
-                  "role": "HOME",
-                  "icon": {
-                    "web": "/images/neds/sprites/svg-sports-afl-icon.svg#brisbane-lions"
-                  },
-                  "price": {
-                    "id": "71fe8c3e-29e6-4a4b-9668-155472417516:940b8704-e497-4a76-b390-00918ff7d282:",
-                    "odds": {
-                      "numerator": 83,
-                      "denominator": 100
-                    }
-                  }
-                },
-                {
-                  "id": "SportingEntrant:25915695-23bf-436e-9e3b-2453f593720f",
-                  "name": "Sydney Swans",
-                  "handicap": null,
-                  "isSuspended": false,
-                  "role": "AWAY",
-                  "icon": {
-                    "web": "/images/neds/sprites/svg-sports-afl-icon.svg#sydney-swans"
-                  },
-                  "price": {
-                    "id": "25915695-23bf-436e-9e3b-2453f593720f:940b8704-e497-4a76-b390-00918ff7d282:",
-                    "odds": {
-                      "numerator": 49,
-                      "denominator": 50
-                    }
-                  }
-                }
-              ]
-            }
-          }
-        ]
-      }
-    },
     "af50fae0-1d9b-43fc-a002-ef93bb9ee408": {
       "id": "af50fae0-1d9b-43fc-a002-ef93bb9ee408",
       "name": "Hawthorn vs GWS Giants",
@@ -218,7 +59,7 @@
         "paused": false,
         "periodSeconds": 0
       },
-      "marketCount": 176,
+      "marketCount": 257,
       "markets": {
         "nodes": [
           {
@@ -336,7 +177,7 @@
         "paused": false,
         "periodSeconds": 0
       },
-      "marketCount": 174,
+      "marketCount": 225,
       "markets": {
         "nodes": [
           {
@@ -367,8 +208,8 @@
                   "price": {
                     "id": "6282338a-a54f-4eb6-bee8-41d4488cdf2b:940b8704-e497-4a76-b390-00918ff7d282:",
                     "odds": {
-                      "numerator": 7,
-                      "denominator": 50
+                      "numerator": 3,
+                      "denominator": 20
                     }
                   }
                 },
@@ -384,8 +225,8 @@
                   "price": {
                     "id": "c41ca806-502c-417c-928a-c9659c039587:940b8704-e497-4a76-b390-00918ff7d282:",
                     "odds": {
-                      "numerator": 22,
-                      "denominator": 5
+                      "numerator": 9,
+                      "denominator": 2
                     }
                   }
                 }
@@ -454,7 +295,7 @@
         "paused": false,
         "periodSeconds": 0
       },
-      "marketCount": 174,
+      "marketCount": 226,
       "markets": {
         "nodes": [
           {
@@ -572,7 +413,7 @@
         "paused": false,
         "periodSeconds": 0
       },
-      "marketCount": 175,
+      "marketCount": 225,
       "markets": {
         "nodes": [
           {
@@ -690,7 +531,7 @@
         "paused": false,
         "periodSeconds": 0
       },
-      "marketCount": 155,
+      "marketCount": 202,
       "markets": {
         "nodes": [
           {
@@ -808,7 +649,7 @@
         "paused": false,
         "periodSeconds": 0
       },
-      "marketCount": 138,
+      "marketCount": 201,
       "markets": {
         "nodes": [
           {
