@@ -1,10 +1,10 @@
 {
   "events": {
-    "af50fae0-1d9b-43fc-a002-ef93bb9ee408": {
-      "id": "af50fae0-1d9b-43fc-a002-ef93bb9ee408",
-      "name": "Hawthorn vs GWS Giants",
-      "url": "/sports/australian-rules/afl/hawthorn-vs-gws-giants/af50fae0-1d9b-43fc-a002-ef93bb9ee408",
-      "advertisedStart": "2026-06-26T09:40:00.000Z",
+    "79cd1f06-13fb-457f-9588-3756a53c1dbf": {
+      "id": "79cd1f06-13fb-457f-9588-3756a53c1dbf",
+      "name": "Saturday AFL Specials - 27/06",
+      "url": "/sports/australian-rules/afl/saturday-afl-specials-27-06/79cd1f06-13fb-457f-9588-3756a53c1dbf",
+      "advertisedStart": "2026-06-27T03:14:00.000Z",
       "eventType": "MATCH",
       "eventTypeId": "6bfa0efc-05df-4ae1-9b1e-152365290cfd",
       "bettingStatus": "OPEN",
@@ -29,93 +29,16 @@
         "hasInPlayEvents": false,
         "region": null
       },
-      "teams": [
-        {
-          "id": "SportingTeam:29a6ad17-c347-49bf-9cbf-a27ea69b9136",
-          "name": "Hawthorn",
-          "colour": "#4A2E0B",
-          "locale": "HOME",
-          "scores": [],
-          "scoresV2": null,
-          "icon": {
-            "web": "/images/neds/sprites/svg-sports-afl-icon.svg#hawthorn-hawks"
-          }
-        },
-        {
-          "id": "SportingTeam:d4e1e92c-12d9-4a6c-98fc-bfc004a72043",
-          "name": "GWS Giants",
-          "colour": "#C1440E",
-          "locale": "AWAY",
-          "scores": [],
-          "scoresV2": null,
-          "icon": {
-            "web": "/images/neds/sprites/svg-sports-afl-icon.svg#gws-giants"
-          }
-        }
-      ],
+      "teams": null,
       "matchClock": {
         "countDown": false,
         "maxPeriodSeconds": 1200,
         "paused": false,
         "periodSeconds": 0
       },
-      "marketCount": 270,
+      "marketCount": 13,
       "markets": {
-        "nodes": [
-          {
-            "id": "SportingMarket:2ddf3692-dc3a-4f1e-a2c2-c1bffcf82246",
-            "name": "Match Betting",
-            "marketTypeId": "be25c37a-71ff-47f6-a1e2-02a494eb5a4d",
-            "handicap": null,
-            "isPrimary": true,
-            "isSuspended": false,
-            "status": "OPEN",
-            "liveBettingAvailable": true,
-            "allowsCashOut": false,
-            "sameGameMultiAvailable": true,
-            "allowOddsBoostExtra": false,
-            "additionalProductTypeIds": null,
-            "entrantCount": 2,
-            "entrants": {
-              "nodes": [
-                {
-                  "id": "SportingEntrant:981c87d7-e132-4d3e-a102-957def632f6b",
-                  "name": "Hawthorn",
-                  "handicap": null,
-                  "isSuspended": false,
-                  "role": "HOME",
-                  "icon": {
-                    "web": "/images/neds/sprites/svg-sports-afl-icon.svg#hawthorn-hawks"
-                  },
-                  "price": {
-                    "id": "981c87d7-e132-4d3e-a102-957def632f6b:940b8704-e497-4a76-b390-00918ff7d282:",
-                    "odds": {
-                      "numerator": 13,
-                      "denominator": 50
-                    }
-                  }
-                },
-                {
-                  "id": "SportingEntrant:b76f6112-a8fa-428d-b6e6-7afc3b0964f9",
-                  "name": "GWS Giants",
-                  "handicap": null,
-                  "isSuspended": false,
-                  "role": "AWAY",
-                  "icon": {
-                    "web": "/images/neds/sprites/svg-sports-afl-icon.svg#gws-giants"
-                  },
-                  "price": {
-                    "id": "b76f6112-a8fa-428d-b6e6-7afc3b0964f9:940b8704-e497-4a76-b390-00918ff7d282:",
-                    "odds": {
-                      "numerator": 29,
-                      "denominator": 10
-                    }
-                  }
-                }
-              ]
-            }
-          }
-        ]
+        "nodes": []
       }
     },
     "2b6cc93f-5fc8-4ea1-b920-b9f67048ce67": {
@@ -177,7 +100,7 @@
         "paused": false,
         "periodSeconds": 0
       },
-      "marketCount": 254,
+      "marketCount": 280,
       "markets": {
         "nodes": [
           {
@@ -208,8 +131,8 @@
                   "price": {
                     "id": "6282338a-a54f-4eb6-bee8-41d4488cdf2b:940b8704-e497-4a76-b390-00918ff7d282:",
                     "odds": {
-                      "numerator": 3,
-                      "denominator": 20
+                      "numerator": 13,
+                      "denominator": 100
                     }
                   }
                 },
@@ -225,8 +148,8 @@
                   "price": {
                     "id": "c41ca806-502c-417c-928a-c9659c039587:940b8704-e497-4a76-b390-00918ff7d282:",
                     "odds": {
-                      "numerator": 9,
-                      "denominator": 2
+                      "numerator": 5,
+                      "denominator": 1
                     }
                   }
                 }
@@ -295,7 +218,7 @@
         "paused": false,
         "periodSeconds": 0
       },
-      "marketCount": 226,
+      "marketCount": 283,
       "markets": {
         "nodes": [
           {
@@ -326,8 +249,8 @@
                   "price": {
                     "id": "126ce2c9-e1a6-4755-b370-a4a8b142cea1:940b8704-e497-4a76-b390-00918ff7d282:",
                     "odds": {
-                      "numerator": 3,
-                      "denominator": 25
+                      "numerator": 1,
+                      "denominator": 10
                     }
                   }
                 },
@@ -343,8 +266,8 @@
                   "price": {
                     "id": "34b8fa6e-0862-4c25-9a87-127155b39ece:940b8704-e497-4a76-b390-00918ff7d282:",
                     "odds": {
-                      "numerator": 5,
-                      "denominator": 1
+                      "numerator": 23,
+                      "denominator": 4
                     }
                   }
                 }
@@ -413,7 +336,7 @@
         "paused": false,
         "periodSeconds": 0
       },
-      "marketCount": 254,
+      "marketCount": 280,
       "markets": {
         "nodes": [
           {
@@ -444,8 +367,8 @@
                   "price": {
                     "id": "dd62d00d-9e35-448f-b2c7-01c0405d1016:940b8704-e497-4a76-b390-00918ff7d282:",
                     "odds": {
-                      "numerator": 27,
-                      "denominator": 10
+                      "numerator": 3,
+                      "denominator": 1
                     }
                   }
                 },
@@ -461,8 +384,8 @@
                   "price": {
                     "id": "fa2bbacf-825b-4755-a4f3-4a24adf2955b:940b8704-e497-4a76-b390-00918ff7d282:",
                     "odds": {
-                      "numerator": 7,
-                      "denominator": 25
+                      "numerator": 1,
+                      "denominator": 4
                     }
                   }
                 }
@@ -1152,8 +1075,8 @@
                   "price": {
                     "id": "25f342aa-ce87-4f50-9f27-870b7aca3760:940b8704-e497-4a76-b390-00918ff7d282:",
                     "odds": {
-                      "numerator": 13,
-                      "denominator": 50
+                      "numerator": 3,
+                      "denominator": 10
                     }
                   }
                 },
@@ -1169,7 +1092,7 @@
                   "price": {
                     "id": "bea5aec1-e5d7-483f-a7ab-02240fc4cd47:940b8704-e497-4a76-b390-00918ff7d282:",
                     "odds": {
-                      "numerator": 57,
+                      "numerator": 51,
                       "denominator": 20
                     }
                   }
@@ -1270,8 +1193,8 @@
                   "price": {
                     "id": "f3807936-d1e2-4017-a52b-bcce20b647a9:940b8704-e497-4a76-b390-00918ff7d282:",
                     "odds": {
-                      "numerator": 39,
-                      "denominator": 20
+                      "numerator": 21,
+                      "denominator": 10
                     }
                   }
                 },
@@ -1287,8 +1210,8 @@
                   "price": {
                     "id": "e803ae13-243b-4882-afdc-9636a007a6fe:940b8704-e497-4a76-b390-00918ff7d282:",
                     "odds": {
-                      "numerator": 2,
-                      "denominator": 5
+                      "numerator": 9,
+                      "denominator": 25
                     }
                   }
                 }
