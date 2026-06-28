@@ -1,10 +1,10 @@
 {
   "events": {
-    "ab69c952-93d4-40b8-b637-d375d795521f": {
-      "id": "ab69c952-93d4-40b8-b637-d375d795521f",
-      "name": "Port Adelaide vs Adelaide Crows",
-      "url": "/sports/australian-rules/afl/port-adelaide-vs-adelaide-crows/ab69c952-93d4-40b8-b637-d375d795521f",
-      "advertisedStart": "2026-06-27T09:35:00.000Z",
+    "d70533f8-9246-4324-9bd8-35bb909f2fdb": {
+      "id": "d70533f8-9246-4324-9bd8-35bb909f2fdb",
+      "name": "Sunday AFL Specials - 28/06",
+      "url": "/sports/australian-rules/afl/sunday-afl-specials-28-06/d70533f8-9246-4324-9bd8-35bb909f2fdb",
+      "advertisedStart": "2026-06-28T05:14:00.000Z",
       "eventType": "MATCH",
       "eventTypeId": "6bfa0efc-05df-4ae1-9b1e-152365290cfd",
       "bettingStatus": "OPEN",
@@ -29,93 +29,16 @@
         "hasInPlayEvents": false,
         "region": null
       },
-      "teams": [
-        {
-          "id": "SportingTeam:3bf66d09-e70c-4667-8b75-d985f28d4e24",
-          "name": "Port Adelaide",
-          "colour": "#008A8F",
-          "locale": "HOME",
-          "scores": [],
-          "scoresV2": null,
-          "icon": {
-            "web": "/images/neds/sprites/svg-sports-afl-icon.svg#port-adelaide-power"
-          }
-        },
-        {
-          "id": "SportingTeam:ff87e608-1307-403d-a7e0-8c7dfa5e4a44",
-          "name": "Adelaide Crows",
-          "colour": "#002F6C",
-          "locale": "AWAY",
-          "scores": [],
-          "scoresV2": null,
-          "icon": {
-            "web": "/images/neds/sprites/svg-sports-afl-icon.svg#adelaide-crows"
-          }
-        }
-      ],
+      "teams": null,
       "matchClock": {
         "countDown": false,
         "maxPeriodSeconds": 1200,
         "paused": false,
         "periodSeconds": 0
       },
-      "marketCount": 280,
+      "marketCount": 13,
       "markets": {
-        "nodes": [
-          {
-            "id": "SportingMarket:bff641ef-838a-4b19-85e3-eea418840792",
-            "name": "Match Betting",
-            "marketTypeId": "be25c37a-71ff-47f6-a1e2-02a494eb5a4d",
-            "handicap": null,
-            "isPrimary": true,
-            "isSuspended": false,
-            "status": "OPEN",
-            "liveBettingAvailable": true,
-            "allowsCashOut": false,
-            "sameGameMultiAvailable": true,
-            "allowOddsBoostExtra": false,
-            "additionalProductTypeIds": null,
-            "entrantCount": 2,
-            "entrants": {
-              "nodes": [
-                {
-                  "id": "SportingEntrant:dd62d00d-9e35-448f-b2c7-01c0405d1016",
-                  "name": "Port Adelaide",
-                  "handicap": null,
-                  "isSuspended": false,
-                  "role": "HOME",
-                  "icon": {
-                    "web": "/images/neds/sprites/svg-sports-afl-icon.svg#port-adelaide-power"
-                  },
-                  "price": {
-                    "id": "dd62d00d-9e35-448f-b2c7-01c0405d1016:940b8704-e497-4a76-b390-00918ff7d282:",
-                    "odds": {
-                      "numerator": 3,
-                      "denominator": 1
-                    }
-                  }
-                },
-                {
-                  "id": "SportingEntrant:fa2bbacf-825b-4755-a4f3-4a24adf2955b",
-                  "name": "Adelaide Crows",
-                  "handicap": null,
-                  "isSuspended": false,
-                  "role": "AWAY",
-                  "icon": {
-                    "web": "/images/neds/sprites/svg-sports-afl-icon.svg#adelaide-crows"
-                  },
-                  "price": {
-                    "id": "fa2bbacf-825b-4755-a4f3-4a24adf2955b:940b8704-e497-4a76-b390-00918ff7d282:",
-                    "odds": {
-                      "numerator": 1,
-                      "denominator": 4
-                    }
-                  }
-                }
-              ]
-            }
-          }
-        ]
+        "nodes": []
       }
     },
     "e45ab005-3c08-4bd5-a8da-6bca89e08220": {
@@ -177,7 +100,7 @@
         "paused": false,
         "periodSeconds": 0
       },
-      "marketCount": 226,
+      "marketCount": 265,
       "markets": {
         "nodes": [
           {
@@ -295,7 +218,7 @@
         "paused": false,
         "periodSeconds": 0
       },
-      "marketCount": 226,
+      "marketCount": 265,
       "markets": {
         "nodes": [
           {
@@ -935,124 +858,6 @@
                     "odds": {
                       "numerator": 1,
                       "denominator": 4
-                    }
-                  }
-                }
-              ]
-            }
-          }
-        ]
-      }
-    },
-    "56518c86-2bc7-42b2-b90f-2b3046e87661": {
-      "id": "56518c86-2bc7-42b2-b90f-2b3046e87661",
-      "name": "Port Adelaide vs North Melbourne",
-      "url": "/sports/australian-rules/afl/port-adelaide-vs-north-melbourne/56518c86-2bc7-42b2-b90f-2b3046e87661",
-      "advertisedStart": "2026-07-05T06:40:00.000Z",
-      "eventType": "MATCH",
-      "eventTypeId": "6bfa0efc-05df-4ae1-9b1e-152365290cfd",
-      "bettingStatus": "OPEN",
-      "status": "OPEN",
-      "phase": null,
-      "hasLiveVision": false,
-      "inPlay": false,
-      "sportCategory": {
-        "id": "23d497e6-8aab-4309-905b-9421f42c9bc5",
-        "name": "Australian Rules",
-        "category": "AUSTRALIAN_RULES",
-        "icon": "sports/australian-rules",
-        "slug": "australian-rules",
-        "url": "/sports/australian-rules",
-        "hasRegions": false,
-        "eventCount": 0
-      },
-      "competition": {
-        "id": "ccff2e9a-5347-41aa-902a-bb6b1886d817",
-        "name": "AFL",
-        "url": "/sports/australian-rules/afl",
-        "hasInPlayEvents": false,
-        "region": null
-      },
-      "teams": [
-        {
-          "id": "SportingTeam:bf5d115d-bff2-4139-802c-97ecd6cca816",
-          "name": "Port Adelaide",
-          "colour": "#008A8F",
-          "locale": "HOME",
-          "scores": [],
-          "scoresV2": null,
-          "icon": {
-            "web": "/images/neds/sprites/svg-sports-afl-icon.svg#port-adelaide-power"
-          }
-        },
-        {
-          "id": "SportingTeam:7706527b-5c87-4810-b23f-f2f75f2a520b",
-          "name": "North Melbourne",
-          "colour": "#0D2F6F",
-          "locale": "AWAY",
-          "scores": [],
-          "scoresV2": null,
-          "icon": {
-            "web": "/images/neds/sprites/svg-sports-afl-icon.svg#north-melbourne-fc"
-          }
-        }
-      ],
-      "matchClock": {
-        "countDown": false,
-        "maxPeriodSeconds": 1200,
-        "paused": false,
-        "periodSeconds": 0
-      },
-      "marketCount": 1,
-      "markets": {
-        "nodes": [
-          {
-            "id": "SportingMarket:97968baa-9857-4514-a94e-f21c65392e60",
-            "name": "Match Betting",
-            "marketTypeId": "be25c37a-71ff-47f6-a1e2-02a494eb5a4d",
-            "handicap": null,
-            "isPrimary": true,
-            "isSuspended": false,
-            "status": "OPEN",
-            "liveBettingAvailable": false,
-            "allowsCashOut": false,
-            "sameGameMultiAvailable": false,
-            "allowOddsBoostExtra": false,
-            "additionalProductTypeIds": null,
-            "entrantCount": 2,
-            "entrants": {
-              "nodes": [
-                {
-                  "id": "SportingEntrant:15c3e8fb-f24b-4e2c-bd32-bfe457656569",
-                  "name": "Port Adelaide",
-                  "handicap": null,
-                  "isSuspended": false,
-                  "role": "HOME",
-                  "icon": {
-                    "web": "/images/neds/sprites/svg-sports-afl-icon.svg#port-adelaide-power"
-                  },
-                  "price": {
-                    "id": "15c3e8fb-f24b-4e2c-bd32-bfe457656569:940b8704-e497-4a76-b390-00918ff7d282:",
-                    "odds": {
-                      "numerator": 1,
-                      "denominator": 2
-                    }
-                  }
-                },
-                {
-                  "id": "SportingEntrant:3eeb5890-a355-486c-ac82-2932f7f3e7b7",
-                  "name": "North Melbourne",
-                  "handicap": null,
-                  "isSuspended": false,
-                  "role": "AWAY",
-                  "icon": {
-                    "web": "/images/neds/sprites/svg-sports-afl-icon.svg#north-melbourne-fc"
-                  },
-                  "price": {
-                    "id": "3eeb5890-a355-486c-ac82-2932f7f3e7b7:940b8704-e497-4a76-b390-00918ff7d282:",
-                    "odds": {
-                      "numerator": 8,
-                      "denominator": 5
                     }
                   }
                 }
