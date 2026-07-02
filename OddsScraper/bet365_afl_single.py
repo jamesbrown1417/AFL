@@ -778,6 +778,7 @@ async def open_collapsed_disposal_fixtures(driver):
 async def click_all_disposal_show_mores(driver):
     total_clicked = 0
     stalled = []
+    skipped_target_keys = set()
 
     async def fixture_show_more_status():
         return await driver.execute_script(
@@ -804,54 +805,88 @@ async def click_all_disposal_show_mores(driver):
             """
         )
 
-    async def click_fixture_show_more(fixture_index):
+    async def next_show_more_target():
+        return await driver.execute_script(
+            """
+            const skippedTargetKeys = new Set(arguments[0] || []);
+            const fixtureSelector = '.gl-MarketGroupPod.src-HScrollFixtureSubGroupWithShowMore, .gl-MarketGroupPod.src-FixtureSubGroupWithShowMore';
+            const pods = Array.from(document.querySelectorAll(fixtureSelector));
+            const targets = [];
+
+            pods.forEach((pod, fixtureIndex) => {
+                const match = (pod.querySelector('.src-FixtureSubGroupButton_Text')?.innerText || '').trim();
+                const buttons = Array.from(pod.querySelectorAll('.msl-ShowMore_Link, .bbl-ShowMoreForHScroll, .bbl-ShowMore'))
+                    .filter((node) => {
+                        const text = (node.innerText || node.textContent || '').trim().toLowerCase();
+                        const rect = node.getBoundingClientRect();
+                        return text === 'show more' && rect.width > 0 && rect.height > 0;
+                    });
+
+                buttons.forEach((button, buttonIndex) => {
+                    const rect = button.getBoundingClientRect();
+                    const documentTop = rect.top + (window.scrollY || document.documentElement.scrollTop || 0);
+                    const documentLeft = rect.left + (window.scrollX || document.documentElement.scrollLeft || 0);
+                    const targetKey = `${fixtureIndex}:${buttonIndex}:${Math.round(documentTop)}:${Math.round(documentLeft)}`;
+                    if (skippedTargetKeys.has(targetKey)) {
+                        return;
+                    }
+                    targets.push({
+                        fixtureIndex,
+                        buttonIndex,
+                        targetKey,
+                        match,
+                        playerCount: pod.querySelectorAll('.srb-ParticipantLabelWithTeam_Name, .srb-ParticipantLabel_Name').length,
+                        oddsCount: pod.querySelectorAll('.gl-ParticipantOddsOnly_Odds').length,
+                        htmlBytes: pod.outerHTML.length,
+                        showMoreCount: buttons.length,
+                        documentTop,
+                        documentLeft,
+                        screenTop: rect.top,
+                        screenLeft: rect.left,
+                    });
+                });
+            });
+
+            targets.sort((left, right) => {
+                if (left.documentTop !== right.documentTop) {
+                    return left.documentTop - right.documentTop;
+                }
+                if (left.documentLeft !== right.documentLeft) {
+                    return left.documentLeft - right.documentLeft;
+                }
+                if (left.fixtureIndex !== right.fixtureIndex) {
+                    return left.fixtureIndex - right.fixtureIndex;
+                }
+                return left.buttonIndex - right.buttonIndex;
+            });
+
+            return targets[0] || null;
+            """,
+            list(skipped_target_keys),
+        )
+
+    async def click_show_more_target(target):
+        fixture_index = target.get("fixtureIndex")
+        button_index = target.get("buttonIndex")
         show_more_button_script = """
             const fixtureIndex = arguments[0];
+            const buttonIndex = arguments[1];
             const fixtureSelector = '.gl-MarketGroupPod.src-HScrollFixtureSubGroupWithShowMore, .gl-MarketGroupPod.src-FixtureSubGroupWithShowMore';
             const pod = Array.from(document.querySelectorAll(fixtureSelector))[fixtureIndex];
             if (!pod) return null;
             return Array.from(pod.querySelectorAll('.msl-ShowMore_Link, .bbl-ShowMoreForHScroll, .bbl-ShowMore'))
-                .find((node) => {
-                    const text = (node.innerText || node.textContent || '').trim().toLowerCase();
-                    const rect = node.getBoundingClientRect();
-                    return text === 'show more' && rect.width > 0 && rect.height > 0;
-                }) || null;
-        """
-        target = await driver.execute_script(
-            """
-            const fixtureIndex = arguments[0];
-            const fixtureSelector = '.gl-MarketGroupPod.src-HScrollFixtureSubGroupWithShowMore, .gl-MarketGroupPod.src-FixtureSubGroupWithShowMore';
-            const pod = Array.from(document.querySelectorAll(fixtureSelector))[fixtureIndex];
-            if (!pod) return { clicked: false, reason: 'missing fixture' };
-
-            const buttons = Array.from(pod.querySelectorAll('.msl-ShowMore_Link, .bbl-ShowMoreForHScroll, .bbl-ShowMore'))
                 .filter((node) => {
                     const text = (node.innerText || node.textContent || '').trim().toLowerCase();
                     const rect = node.getBoundingClientRect();
                     return text === 'show more' && rect.width > 0 && rect.height > 0;
-                });
-            if (buttons.length === 0) {
-                return { clicked: false, reason: 'no show more' };
-            }
-
-            const match = (pod.querySelector('.src-FixtureSubGroupButton_Text')?.innerText || '').trim();
-            return {
-                clicked: false,
-                ready: true,
-                match,
-                remainingInFixture: buttons.length - 1,
-            };
-            """,
-            fixture_index,
-        )
-
-        if not target or not target.get("ready"):
-            return target
+                })[buttonIndex] || null;
+        """
 
         rect = await human_scroll_to_element(
             driver,
             show_more_button_script,
             fixture_index,
+            button_index,
             label=f"show more {target.get('match') or fixture_index}",
             max_steps=20,
         )
@@ -865,16 +900,17 @@ async def click_all_disposal_show_mores(driver):
         fallback = await driver.execute_script(
             """
             const fixtureIndex = arguments[0];
+            const buttonIndex = arguments[1];
             const fixtureSelector = '.gl-MarketGroupPod.src-HScrollFixtureSubGroupWithShowMore, .gl-MarketGroupPod.src-FixtureSubGroupWithShowMore';
             const pod = Array.from(document.querySelectorAll(fixtureSelector))[fixtureIndex];
             if (!pod) return { clicked: false, reason: 'missing fixture' };
 
             const button = Array.from(pod.querySelectorAll('.msl-ShowMore_Link, .bbl-ShowMoreForHScroll, .bbl-ShowMore'))
-                .find((node) => {
+                .filter((node) => {
                     const text = (node.innerText || node.textContent || '').trim().toLowerCase();
                     const rect = node.getBoundingClientRect();
                     return text === 'show more' && rect.width > 0 && rect.height > 0;
-                });
+                })[buttonIndex];
             if (!button) return { clicked: false, reason: 'no show more' };
 
             const parent = button.closest('.msl-ShowMore') || button.parentElement;
@@ -894,83 +930,78 @@ async def click_all_disposal_show_mores(driver):
             return { clicked: true, strategy: 'js_fallback' };
             """,
             fixture_index,
+            button_index,
         )
         return {**target, **(fallback or {})}
 
-    for _ in range(10):
-        statuses = await fixture_show_more_status()
-        expandable = [item for item in statuses if item.get("showMoreCount", 0) > 0]
-        if not expandable:
+    for _ in range(60):
+        target = await next_show_more_target()
+        if not target:
             break
-        random.shuffle(expandable)
 
-        progress_this_pass = False
-        for item in expandable:
-            fixture_index = item.get("index")
-            match = item.get("match") or f"fixture {fixture_index}"
-            before = item
+        match = target.get("match") or f"fixture {target.get('fixtureIndex')}"
+        target_key = target.get("targetKey")
+        before = target
 
-            made_progress = False
-            for attempt in range(1, 3):
-                result = await click_fixture_show_more(fixture_index)
-                if not result or not result.get("clicked"):
-                    break
+        result = await click_show_more_target(target)
+        if not result or not result.get("clicked"):
+            stalled.append(match)
+            if target_key:
+                skipped_target_keys.add(target_key)
+            await human_wheel_scroll(driver, random.uniform(180, 380))
+            await driver.sleep(jittered(2.5, spread=0.5))
+            continue
 
-                total_clicked += 1
-                strategy = result.get("strategy", "unknown")
-                print(f"  Clicked show more: {match} (attempt {attempt}, {strategy})")
+        total_clicked += 1
+        strategy = result.get("strategy", "unknown")
+        print(
+            f"  Clicked show more: {match} "
+            f"(screen y={before.get('screenTop', 0):.0f}, x={before.get('screenLeft', 0):.0f}, {strategy})"
+        )
 
-                # Poll for the expansion to render instead of always paying the
-                # worst-case settle time: break as soon as the fixture grows or
-                # the control disappears, up to SHOW_MORE_POSTCLICK_MAX_SECONDS.
-                after = None
-                progressed = False
-                deadline = asyncio.get_event_loop().time() + SHOW_MORE_POSTCLICK_MAX_SECONDS
-                while True:
-                    await driver.sleep(SHOW_MORE_POLL_INTERVAL_SECONDS)
-                    after_statuses = await fixture_show_more_status()
-                    after = next(
-                        (status for status in after_statuses if status.get("match") == item.get("match")),
-                        None,
-                    )
-                    if after is None:
-                        break
+        # Poll for the expansion to render instead of always paying the
+        # worst-case settle time: continue as soon as the fixture grows or
+        # the control disappears, up to SHOW_MORE_POSTCLICK_MAX_SECONDS.
+        progressed = False
+        deadline = asyncio.get_event_loop().time() + SHOW_MORE_POSTCLICK_MAX_SECONDS
+        while True:
+            await driver.sleep(SHOW_MORE_POLL_INTERVAL_SECONDS)
+            after_statuses = await fixture_show_more_status()
+            after = next(
+                (
+                    status
+                    for status in after_statuses
+                    if status.get("index") == before.get("fixtureIndex")
+                ),
+                None,
+            )
+            if after is None:
+                break
 
-                    grew = (
-                        after.get("playerCount", 0) > before.get("playerCount", 0)
-                        or after.get("oddsCount", 0) > before.get("oddsCount", 0)
-                        or after.get("htmlBytes", 0) > before.get("htmlBytes", 0) + 500
-                    )
-                    disappeared = after.get("showMoreCount", 0) < before.get("showMoreCount", 0)
+            grew = (
+                after.get("playerCount", 0) > before.get("playerCount", 0)
+                or after.get("oddsCount", 0) > before.get("oddsCount", 0)
+                or after.get("htmlBytes", 0) > before.get("htmlBytes", 0) + 500
+            )
+            disappeared = after.get("showMoreCount", 0) < before.get("showMoreCount", 0)
 
-                    if grew or disappeared:
-                        progressed = True
-                        break
+            if grew or disappeared:
+                progressed = True
+                break
 
-                    if asyncio.get_event_loop().time() >= deadline:
-                        break
+            if asyncio.get_event_loop().time() >= deadline:
+                break
 
-                if after is None:
-                    break
-
-                if progressed:
-                    made_progress = True
-                    progress_this_pass = True
-                    break
-
-                before = after
-                await human_wheel_scroll(driver, random.uniform(180, 380))
-                await driver.sleep(jittered(2.5, spread=0.5))
-
-            if not made_progress:
-                stalled.append(match)
-            elif total_clicked % SHOW_MORE_BATCH_SIZE == 0:
-                cooldown = jittered(SHOW_MORE_BATCH_COOLDOWN_SECONDS, spread=0.5)
-                print(f"  Cooling down {cooldown:.1f}s after {total_clicked} show-more click(s)")
-                await driver.sleep(cooldown)
-
-        if not progress_this_pass:
-            break
+        if not progressed:
+            stalled.append(match)
+            if target_key:
+                skipped_target_keys.add(target_key)
+            await human_wheel_scroll(driver, random.uniform(180, 380))
+            await driver.sleep(jittered(2.5, spread=0.5))
+        elif total_clicked % SHOW_MORE_BATCH_SIZE == 0:
+            cooldown = jittered(SHOW_MORE_BATCH_COOLDOWN_SECONDS, spread=0.5)
+            print(f"  Cooling down {cooldown:.1f}s after {total_clicked} show-more click(s)")
+            await driver.sleep(cooldown)
 
     if total_clicked:
         print(f"  Clicked {total_clicked} show-more control(s)")

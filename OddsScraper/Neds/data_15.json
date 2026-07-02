@@ -1,0 +1,130 @@
+{
+  "entrants": {
+    "4c476e24-1739-4800-aad0-74b5495bedfe": {
+      "id": "4c476e24-1739-4800-aad0-74b5495bedfe",
+      "name": "Adelaide Crows",
+      "home_away": "HOME",
+      "visible": true,
+      "sort_order": 10,
+      "market_id": "4a1950a0-ee90-4fea-ab2c-3218490297c5"
+    },
+    "60ac2be7-8ce0-400e-adf6-25812bfab9d1": {
+      "id": "60ac2be7-8ce0-400e-adf6-25812bfab9d1",
+      "name": "Gold Coast Suns",
+      "home_away": "AWAY",
+      "visible": true,
+      "sort_order": 20,
+      "market_id": "4a1950a0-ee90-4fea-ab2c-3218490297c5"
+    }
+  },
+  "event_participants": {
+    "7d23b9a6-72b6-459c-a60c-40f1b106135b": {
+      "id": "7d23b9a6-72b6-459c-a60c-40f1b106135b",
+      "event_id": "f7aa3cff-5dc2-45cf-ac96-eb5d1ba538f8",
+      "name": "Adelaide Crows",
+      "home_away": "HOME",
+      "colour": "#002F6C"
+    },
+    "c9bb3c5a-d6c7-4be9-a994-8d72e114fcde": {
+      "id": "c9bb3c5a-d6c7-4be9-a994-8d72e114fcde",
+      "event_id": "f7aa3cff-5dc2-45cf-ac96-eb5d1ba538f8",
+      "name": "Gold Coast Suns",
+      "home_away": "AWAY",
+      "colour": "#A3122F"
+    }
+  },
+  "events": {
+    "f7aa3cff-5dc2-45cf-ac96-eb5d1ba538f8": {
+      "id": "f7aa3cff-5dc2-45cf-ac96-eb5d1ba538f8",
+      "name": "Adelaide Crows vs Gold Coast Suns",
+      "event_type": {
+        "id": "6bfa0efc-05df-4ae1-9b1e-152365290cfd",
+        "name": "Match"
+      },
+      "match_status": "BettingOpen",
+      "advertised_start": "2026-07-11T10:10:00Z",
+      "actual_start": "2026-07-11T10:10:00Z",
+      "visible": true,
+      "slug": "adelaide-crows-vs-gold-coast-suns",
+      "competition": {
+        "id": "ccff2e9a-5347-41aa-902a-bb6b1886d817",
+        "name": "AFL",
+        "sort_order": 1,
+        "region": "Australia"
+      },
+      "competition_id": "ccff2e9a-5347-41aa-902a-bb6b1886d817",
+      "market_type_group_ids": [
+        "29edb5e1-a717-4769-8bcd-2d43ec38d828"
+      ],
+      "market_type_group_markets": [
+        {
+          "market_type_group_id": "29edb5e1-a717-4769-8bcd-2d43ec38d828",
+          "market_ids": [
+            "4a1950a0-ee90-4fea-ab2c-3218490297c5"
+          ]
+        }
+      ],
+      "market_count": 1,
+      "main_markets": [
+        "4a1950a0-ee90-4fea-ab2c-3218490297c5"
+      ],
+      "market_ids": [
+        "4a1950a0-ee90-4fea-ab2c-3218490297c5"
+      ],
+      "category_id": "23d497e6-8aab-4309-905b-9421f42c9bc5",
+      "round_id": "7a5b30f0-1789-4b27-b17f-b3e8b96fa4bf",
+      "participant_ids": [
+        "7d23b9a6-72b6-459c-a60c-40f1b106135b",
+        "c9bb3c5a-d6c7-4be9-a994-8d72e114fcde"
+      ]
+    }
+  },
+  "market_type_groups": {
+    "29edb5e1-a717-4769-8bcd-2d43ec38d828": {
+      "id": "29edb5e1-a717-4769-8bcd-2d43ec38d828",
+      "category_id": "23d497e6-8aab-4309-905b-9421f42c9bc5",
+      "name": "Top Markets",
+      "priority": 352,
+      "type": "MARKET_TYPE_GROUP_TYPE_EVENT"
+    }
+  },
+  "markets": {
+    "4a1950a0-ee90-4fea-ab2c-3218490297c5": {
+      "id": "4a1950a0-ee90-4fea-ab2c-3218490297c5",
+      "event_id": "f7aa3cff-5dc2-45cf-ac96-eb5d1ba538f8",
+      "market_type_id": "be25c37a-71ff-47f6-a1e2-02a494eb5a4d",
+      "market_status_id": "4bc8fe96-296b-4b4c-aea4-85c94f63b9c6",
+      "name": "Match Betting",
+      "advertised_start": {
+        "seconds": 1783764600
+      },
+      "actual_start": {
+        "seconds": 1783764600
+      },
+      "is_primary": true,
+      "visible": true,
+      "entrant_ids": [
+        "4c476e24-1739-4800-aad0-74b5495bedfe",
+        "60ac2be7-8ce0-400e-adf6-25812bfab9d1"
+      ],
+      "num_winners": 1
+    }
+  },
+  "markets_allow_cashout": {
+    "4a1950a0-ee90-4fea-ab2c-3218490297c5": true
+  },
+  "prices": {
+    "4c476e24-1739-4800-aad0-74b5495bedfe:940b8704-e497-4a76-b390-00918ff7d282:": {
+      "odds": {
+        "numerator": 11,
+        "denominator": 25
+      }
+    },
+    "60ac2be7-8ce0-400e-adf6-25812bfab9d1:940b8704-e497-4a76-b390-00918ff7d282:": {
+      "odds": {
+        "numerator": 9,
+        "denominator": 5
+      }
+    }
+  }
+}
