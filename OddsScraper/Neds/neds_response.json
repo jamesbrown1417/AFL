@@ -1,10 +1,10 @@
 {
   "events": {
-    "6372037e-4f96-43f9-8d09-1cc9f950b29b": {
-      "id": "6372037e-4f96-43f9-8d09-1cc9f950b29b",
-      "name": "AFL Round 17 Specials",
-      "url": "/sports/australian-rules/afl/afl-round-17-specials/6372037e-4f96-43f9-8d09-1cc9f950b29b",
-      "advertisedStart": "2026-07-02T09:29:00.000Z",
+    "93c027fd-cc88-4bdd-b7d3-351406e16562": {
+      "id": "93c027fd-cc88-4bdd-b7d3-351406e16562",
+      "name": "Friday AFL Specials - 03/07",
+      "url": "/sports/australian-rules/afl/friday-afl-specials-03-07/93c027fd-cc88-4bdd-b7d3-351406e16562",
+      "advertisedStart": "2026-07-03T09:39:00.000Z",
       "eventType": "MATCH",
       "eventTypeId": "6bfa0efc-05df-4ae1-9b1e-152365290cfd",
       "bettingStatus": "OPEN",
@@ -36,127 +36,9 @@
         "paused": false,
         "periodSeconds": 0
       },
-      "marketCount": 12,
+      "marketCount": 13,
       "markets": {
         "nodes": []
-      }
-    },
-    "da6cb903-abb6-4aa2-a98c-f9751b1d07a0": {
-      "id": "da6cb903-abb6-4aa2-a98c-f9751b1d07a0",
-      "name": "Geelong Cats vs Brisbane Lions",
-      "url": "/sports/australian-rules/afl/geelong-cats-vs-brisbane-lions/da6cb903-abb6-4aa2-a98c-f9751b1d07a0",
-      "advertisedStart": "2026-07-02T09:30:00.000Z",
-      "eventType": "MATCH",
-      "eventTypeId": "6bfa0efc-05df-4ae1-9b1e-152365290cfd",
-      "bettingStatus": "OPEN",
-      "status": "OPEN",
-      "phase": null,
-      "hasLiveVision": false,
-      "inPlay": false,
-      "sportCategory": {
-        "id": "23d497e6-8aab-4309-905b-9421f42c9bc5",
-        "name": "Australian Rules",
-        "category": "AUSTRALIAN_RULES",
-        "icon": "sports/australian-rules",
-        "slug": "australian-rules",
-        "url": "/sports/australian-rules",
-        "hasRegions": false,
-        "eventCount": 0
-      },
-      "competition": {
-        "id": "ccff2e9a-5347-41aa-902a-bb6b1886d817",
-        "name": "AFL",
-        "url": "/sports/australian-rules/afl",
-        "hasInPlayEvents": false,
-        "region": null
-      },
-      "teams": [
-        {
-          "id": "SportingTeam:049166c2-8f34-425e-b640-2386f6b496c4",
-          "name": "Geelong Cats",
-          "colour": "#0B2A5B",
-          "locale": "HOME",
-          "scores": [],
-          "scoresV2": null,
-          "icon": {
-            "web": "/images/neds/sprites/svg-sports-afl-icon.svg#geelong-cats"
-          }
-        },
-        {
-          "id": "SportingTeam:45d6c66a-66fa-4173-86ac-a78ee9dbc904",
-          "name": "Brisbane Lions",
-          "colour": "#7A0C2E",
-          "locale": "AWAY",
-          "scores": [],
-          "scoresV2": null,
-          "icon": {
-            "web": "/images/neds/sprites/svg-sports-afl-icon.svg#brisbane-lions"
-          }
-        }
-      ],
-      "matchClock": {
-        "countDown": false,
-        "maxPeriodSeconds": 1200,
-        "paused": false,
-        "periodSeconds": 0
-      },
-      "marketCount": 283,
-      "markets": {
-        "nodes": [
-          {
-            "id": "SportingMarket:47e61031-3b1e-4e7a-801e-1af451dccd14",
-            "name": "Match Betting",
-            "marketTypeId": "be25c37a-71ff-47f6-a1e2-02a494eb5a4d",
-            "handicap": null,
-            "isPrimary": true,
-            "isSuspended": false,
-            "status": "OPEN",
-            "liveBettingAvailable": true,
-            "allowsCashOut": false,
-            "sameGameMultiAvailable": true,
-            "allowOddsBoostExtra": false,
-            "additionalProductTypeIds": null,
-            "entrantCount": 2,
-            "entrants": {
-              "nodes": [
-                {
-                  "id": "SportingEntrant:0ac654bb-b4fb-41dc-9374-d753a2cf3ca3",
-                  "name": "Geelong Cats",
-                  "handicap": null,
-                  "isSuspended": false,
-                  "role": "HOME",
-                  "icon": {
-                    "web": "/images/neds/sprites/svg-sports-afl-icon.svg#geelong-cats"
-                  },
-                  "price": {
-                    "id": "0ac654bb-b4fb-41dc-9374-d753a2cf3ca3:940b8704-e497-4a76-b390-00918ff7d282:",
-                    "odds": {
-                      "numerator": 23,
-                      "denominator": 50
-                    }
-                  }
-                },
-                {
-                  "id": "SportingEntrant:717d3837-ff84-403b-88b6-520c9ad55f6c",
-                  "name": "Brisbane Lions",
-                  "handicap": null,
-                  "isSuspended": false,
-                  "role": "AWAY",
-                  "icon": {
-                    "web": "/images/neds/sprites/svg-sports-afl-icon.svg#brisbane-lions"
-                  },
-                  "price": {
-                    "id": "717d3837-ff84-403b-88b6-520c9ad55f6c:940b8704-e497-4a76-b390-00918ff7d282:",
-                    "odds": {
-                      "numerator": 17,
-                      "denominator": 10
-                    }
-                  }
-                }
-              ]
-            }
-          }
-        ]
       }
     },
     "2f4b2009-5ed2-468f-8413-a47f17a1fa10": {
@@ -218,7 +100,7 @@
         "paused": false,
         "periodSeconds": 0
       },
-      "marketCount": 203,
+      "marketCount": 264,
       "markets": {
         "nodes": [
           {
@@ -336,7 +218,7 @@
         "paused": false,
         "periodSeconds": 0
       },
-      "marketCount": 201,
+      "marketCount": 261,
       "markets": {
         "nodes": [
           {
@@ -454,7 +336,7 @@
         "paused": false,
         "periodSeconds": 0
       },
-      "marketCount": 137,
+      "marketCount": 254,
       "markets": {
         "nodes": [
           {
@@ -485,8 +367,8 @@
                   "price": {
                     "id": "25f342aa-ce87-4f50-9f27-870b7aca3760:940b8704-e497-4a76-b390-00918ff7d282:",
                     "odds": {
-                      "numerator": 11,
-                      "denominator": 25
+                      "numerator": 21,
+                      "denominator": 50
                     }
                   }
                 },
@@ -502,8 +384,8 @@
                   "price": {
                     "id": "bea5aec1-e5d7-483f-a7ab-02240fc4cd47:940b8704-e497-4a76-b390-00918ff7d282:",
                     "odds": {
-                      "numerator": 9,
-                      "denominator": 5
+                      "numerator": 37,
+                      "denominator": 20
                     }
                   }
                 }
@@ -572,7 +454,7 @@
         "paused": false,
         "periodSeconds": 0
       },
-      "marketCount": 138,
+      "marketCount": 264,
       "markets": {
         "nodes": [
           {
@@ -603,8 +485,8 @@
                   "price": {
                     "id": "f3807936-d1e2-4017-a52b-bcce20b647a9:940b8704-e497-4a76-b390-00918ff7d282:",
                     "odds": {
-                      "numerator": 9,
-                      "denominator": 4
+                      "numerator": 23,
+                      "denominator": 10
                     }
                   }
                 },
@@ -690,7 +572,7 @@
         "paused": false,
         "periodSeconds": 0
       },
-      "marketCount": 138,
+      "marketCount": 255,
       "markets": {
         "nodes": [
           {
@@ -808,7 +690,7 @@
         "paused": false,
         "periodSeconds": 0
       },
-      "marketCount": 200,
+      "marketCount": 255,
       "markets": {
         "nodes": [
           {
@@ -926,7 +808,7 @@
         "paused": false,
         "periodSeconds": 0
       },
-      "marketCount": 144,
+      "marketCount": 201,
       "markets": {
         "nodes": [
           {
@@ -1547,8 +1429,8 @@
                   "price": {
                     "id": "0a68e075-b56c-4ca2-9fe4-e578699b03d5:940b8704-e497-4a76-b390-00918ff7d282:",
                     "odds": {
-                      "numerator": 37,
-                      "denominator": 20
+                      "numerator": 8,
+                      "denominator": 5
                     }
                   }
                 },
@@ -1564,8 +1446,8 @@
                   "price": {
                     "id": "d9628072-f366-489d-b6cf-23b38ffb7b5e:940b8704-e497-4a76-b390-00918ff7d282:",
                     "odds": {
-                      "numerator": 21,
-                      "denominator": 50
+                      "numerator": 1,
+                      "denominator": 2
                     }
                   }
                 }
@@ -2137,8 +2019,8 @@
                   "price": {
                     "id": "381df9de-e0f1-4a52-aec8-1fd9a4499d08:940b8704-e497-4a76-b390-00918ff7d282:",
                     "odds": {
-                      "numerator": 1,
-                      "denominator": 25
+                      "numerator": 3,
+                      "denominator": 100
                     }
                   }
                 },
@@ -2154,7 +2036,7 @@
                   "price": {
                     "id": "38705eb6-9cb8-4c44-b057-4eb1e4610407:940b8704-e497-4a76-b390-00918ff7d282:",
                     "odds": {
-                      "numerator": 10,
+                      "numerator": 11,
                       "denominator": 1
                     }
                   }
