@@ -13,9 +13,10 @@ find OddsScraper/Neds -maxdepth 1 -name 'data_*.json' -delete
 find Data/BET365_HTML -maxdepth 1 -name '*.txt' -delete
 
 # Execute Python and R scripts
-if ! /Users/jamesbrown/.pyenv/versions/3.12.5/bin/python3 OddsScraper/bet365_afl_single.py; then
-    echo "Bet365 scrape failed. Continuing with the remaining update steps."
-fi
+#if ! /Users/jamesbrown/.pyenv/versions/3.12.5/bin/python3 OddsScraper/bet365_afl_single.py; then
+#    echo "Bet365 scrape failed. Continuing with the remaining update steps."
+#fi
+
 /Users/jamesbrown/.pyenv/versions/3.12.5/bin/python3 OddsScraper/TAB/get-TAB-response.py
 
 /Users/jamesbrown/.pyenv/versions/3.12.5/bin/python3 OddsScraper/Neds/get_neds_urls.py
