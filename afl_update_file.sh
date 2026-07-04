@@ -10,7 +10,7 @@ cd /Users/jamesbrown/Projects/AFL || exit
 # Remove cached scraper artifacts that must be regenerated.
 rm -f OddsScraper/Neds/neds_response.json OddsScraper/Neds/neds_afl_match_urls.csv
 find OddsScraper/Neds -maxdepth 1 -name 'data_*.json' -delete
-find Data/BET365_HTML -maxdepth 1 -name '*.txt' -delete
+# find Data/BET365_HTML -maxdepth 1 -name '*.txt' -delete
 
 # Execute Python and R scripts
 #if ! /Users/jamesbrown/.pyenv/versions/3.12.5/bin/python3 OddsScraper/bet365_afl_single.py; then
