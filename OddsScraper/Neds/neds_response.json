@@ -1,123 +1,5 @@
 {
   "events": {
-    "ed81c213-9f5a-4da4-8777-3e71746b7dea": {
-      "id": "ed81c213-9f5a-4da4-8777-3e71746b7dea",
-      "name": "GWS Giants vs Fremantle",
-      "url": "/sports/australian-rules/afl/gws-giants-vs-fremantle/ed81c213-9f5a-4da4-8777-3e71746b7dea",
-      "advertisedStart": "2026-07-04T03:35:00.000Z",
-      "eventType": "MATCH",
-      "eventTypeId": "6bfa0efc-05df-4ae1-9b1e-152365290cfd",
-      "bettingStatus": "OPEN",
-      "status": "OPEN",
-      "phase": null,
-      "hasLiveVision": false,
-      "inPlay": false,
-      "sportCategory": {
-        "id": "23d497e6-8aab-4309-905b-9421f42c9bc5",
-        "name": "Australian Rules",
-        "category": "AUSTRALIAN_RULES",
-        "icon": "sports/australian-rules",
-        "slug": "australian-rules",
-        "url": "/sports/australian-rules",
-        "hasRegions": false,
-        "eventCount": 0
-      },
-      "competition": {
-        "id": "ccff2e9a-5347-41aa-902a-bb6b1886d817",
-        "name": "AFL",
-        "url": "/sports/australian-rules/afl",
-        "hasInPlayEvents": false,
-        "region": null
-      },
-      "teams": [
-        {
-          "id": "SportingTeam:d6834485-65bf-43e6-bd4e-73a3cac7417e",
-          "name": "GWS Giants",
-          "colour": "#C1440E",
-          "locale": "HOME",
-          "scores": [],
-          "scoresV2": null,
-          "icon": {
-            "web": "/images/neds/sprites/svg-sports-afl-icon.svg#gws-giants"
-          }
-        },
-        {
-          "id": "SportingTeam:04921894-a9e6-433d-86f7-13658c7c3f5b",
-          "name": "Fremantle",
-          "colour": "#2E0F4F",
-          "locale": "AWAY",
-          "scores": [],
-          "scoresV2": null,
-          "icon": {
-            "web": "/images/neds/sprites/svg-sports-afl-icon.svg#fremantle-dockers"
-          }
-        }
-      ],
-      "matchClock": {
-        "countDown": false,
-        "maxPeriodSeconds": 1200,
-        "paused": false,
-        "periodSeconds": 0
-      },
-      "marketCount": 274,
-      "markets": {
-        "nodes": [
-          {
-            "id": "SportingMarket:f0a51f81-3d59-465a-9496-0f789fdbadce",
-            "name": "Match Betting",
-            "marketTypeId": "be25c37a-71ff-47f6-a1e2-02a494eb5a4d",
-            "handicap": null,
-            "isPrimary": true,
-            "isSuspended": false,
-            "status": "OPEN",
-            "liveBettingAvailable": true,
-            "allowsCashOut": false,
-            "sameGameMultiAvailable": true,
-            "allowOddsBoostExtra": false,
-            "additionalProductTypeIds": null,
-            "entrantCount": 2,
-            "entrants": {
-              "nodes": [
-                {
-                  "id": "SportingEntrant:f3807936-d1e2-4017-a52b-bcce20b647a9",
-                  "name": "GWS Giants",
-                  "handicap": null,
-                  "isSuspended": false,
-                  "role": "HOME",
-                  "icon": {
-                    "web": "/images/neds/sprites/svg-sports-afl-icon.svg#gws-giants"
-                  },
-                  "price": {
-                    "id": "f3807936-d1e2-4017-a52b-bcce20b647a9:940b8704-e497-4a76-b390-00918ff7d282:",
-                    "odds": {
-                      "numerator": 29,
-                      "denominator": 10
-                    }
-                  }
-                },
-                {
-                  "id": "SportingEntrant:e803ae13-243b-4882-afdc-9636a007a6fe",
-                  "name": "Fremantle",
-                  "handicap": null,
-                  "isSuspended": false,
-                  "role": "AWAY",
-                  "icon": {
-                    "web": "/images/neds/sprites/svg-sports-afl-icon.svg#fremantle-dockers"
-                  },
-                  "price": {
-                    "id": "e803ae13-243b-4882-afdc-9636a007a6fe:940b8704-e497-4a76-b390-00918ff7d282:",
-                    "odds": {
-                      "numerator": 1,
-                      "denominator": 4
-                    }
-                  }
-                }
-              ]
-            }
-          }
-        ]
-      }
-    },
     "8b430120-f378-4f71-b11a-3c08d042e2a8": {
       "id": "8b430120-f378-4f71-b11a-3c08d042e2a8",
       "name": "Gold Coast Suns vs Collingwood",
@@ -144,7 +26,7 @@
         "id": "ccff2e9a-5347-41aa-902a-bb6b1886d817",
         "name": "AFL",
         "url": "/sports/australian-rules/afl",
-        "hasInPlayEvents": false,
+        "hasInPlayEvents": true,
         "region": null
       },
       "teams": [
@@ -262,7 +144,7 @@
         "id": "ccff2e9a-5347-41aa-902a-bb6b1886d817",
         "name": "AFL",
         "url": "/sports/australian-rules/afl",
-        "hasInPlayEvents": false,
+        "hasInPlayEvents": true,
         "region": null
       },
       "teams": [
@@ -380,7 +262,7 @@
         "id": "ccff2e9a-5347-41aa-902a-bb6b1886d817",
         "name": "AFL",
         "url": "/sports/australian-rules/afl",
-        "hasInPlayEvents": false,
+        "hasInPlayEvents": true,
         "region": null
       },
       "teams": [
@@ -498,7 +380,7 @@
         "id": "ccff2e9a-5347-41aa-902a-bb6b1886d817",
         "name": "AFL",
         "url": "/sports/australian-rules/afl",
-        "hasInPlayEvents": false,
+        "hasInPlayEvents": true,
         "region": null
       },
       "teams": [
@@ -616,7 +498,7 @@
         "id": "ccff2e9a-5347-41aa-902a-bb6b1886d817",
         "name": "AFL",
         "url": "/sports/australian-rules/afl",
-        "hasInPlayEvents": false,
+        "hasInPlayEvents": true,
         "region": null
       },
       "teams": [
@@ -734,7 +616,7 @@
         "id": "ccff2e9a-5347-41aa-902a-bb6b1886d817",
         "name": "AFL",
         "url": "/sports/australian-rules/afl",
-        "hasInPlayEvents": false,
+        "hasInPlayEvents": true,
         "region": null
       },
       "teams": [
@@ -852,7 +734,7 @@
         "id": "ccff2e9a-5347-41aa-902a-bb6b1886d817",
         "name": "AFL",
         "url": "/sports/australian-rules/afl",
-        "hasInPlayEvents": false,
+        "hasInPlayEvents": true,
         "region": null
       },
       "teams": [
@@ -970,7 +852,7 @@
         "id": "ccff2e9a-5347-41aa-902a-bb6b1886d817",
         "name": "AFL",
         "url": "/sports/australian-rules/afl",
-        "hasInPlayEvents": false,
+        "hasInPlayEvents": true,
         "region": null
       },
       "teams": [
@@ -1088,7 +970,7 @@
         "id": "ccff2e9a-5347-41aa-902a-bb6b1886d817",
         "name": "AFL",
         "url": "/sports/australian-rules/afl",
-        "hasInPlayEvents": false,
+        "hasInPlayEvents": true,
         "region": null
       },
       "teams": [
@@ -1206,7 +1088,7 @@
         "id": "ccff2e9a-5347-41aa-902a-bb6b1886d817",
         "name": "AFL",
         "url": "/sports/australian-rules/afl",
-        "hasInPlayEvents": false,
+        "hasInPlayEvents": true,
         "region": null
       },
       "teams": [
