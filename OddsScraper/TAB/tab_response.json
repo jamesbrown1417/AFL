@@ -72,9 +72,9 @@
         "Essendon",
         "St Kilda"
       ],
-      "openMarketCount": 43,
+      "openMarketCount": 38,
       "futureMarketCount": 0,
-      "nonFutureMarketCount": 43,
+      "nonFutureMarketCount": 38,
       "markets": [
         {
           "id": "135579067",
@@ -107,7 +107,7 @@
             {
               "id": "1005",
               "name": "Essendon",
-              "returnWin": 6.5,
+              "returnWin": 101,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -120,27 +120,27 @@
             {
               "id": "1013",
               "name": "St Kilda",
-              "returnWin": 1.09,
+              "returnWin": 1.01,
               "returnPlace": 0,
               "differential": null,
-              "bettingStatus": "Open",
+              "bettingStatus": "Suspended",
               "allowPlace": false,
               "number": 1013,
-              "isOpen": true,
+              "isOpen": false,
               "sortOrder": 2,
               "position": "AWAY"
             }
           ]
         },
         {
-          "id": "135846271",
-          "name": "AFL Ess-St Kilda LiveLine +22.5",
-          "shortName": "AFL Ess-StK LveLne +22.5",
-          "betOption": "Live Lines",
-          "betOptionSpectrumId": "235",
-          "betOptionPriority": 2590,
-          "marketUniqueId": 135846271,
-          "closeTime": "2026-07-05T05:16:00.000Z",
+          "id": "135581606",
+          "name": "AFL R17 Essendon-St Kilda 05/07",
+          "shortName": "AFL R17 Ess-StK ExLine",
+          "betOption": "Line",
+          "betOptionSpectrumId": "43",
+          "betOptionPriority": 1470,
+          "marketUniqueId": 135581606,
+          "closeTime": "2026-07-05T09:15:00.000Z",
           "bettingStatus": "Open",
           "message": null,
           "informationMessage": null,
@@ -161,198 +161,30 @@
           "allowBundle": false,
           "propositions": [
             {
-              "id": "5526",
-              "name": "Essendon +22.5",
-              "returnWin": 2.9,
+              "id": "11598",
+              "name": "Essendon +82.5",
+              "returnWin": 1.9,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
               "allowPlace": false,
-              "number": 5526,
+              "number": 11598,
               "isOpen": true,
               "sortOrder": 1,
-              "line": "+22.5"
+              "line": "+82.5"
             },
             {
-              "id": "5527",
-              "name": "St Kilda -22.5",
-              "returnWin": 1.38,
+              "id": "11599",
+              "name": "St Kilda -82.5",
+              "returnWin": 1.9,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
               "allowPlace": false,
-              "number": 5527,
+              "number": 11599,
               "isOpen": true,
               "sortOrder": 2,
-              "line": "-22.5"
-            }
-          ]
-        },
-        {
-          "id": "135846345",
-          "name": "AFL Ess-St Kilda LiveLine +31.5",
-          "shortName": "AFL Ess-StK LveLne +31.5",
-          "betOption": "Live Lines",
-          "betOptionSpectrumId": "235",
-          "betOptionPriority": 2590,
-          "marketUniqueId": 135846345,
-          "closeTime": "2026-07-05T05:16:00.000Z",
-          "bettingStatus": "Open",
-          "message": null,
-          "informationMessage": null,
-          "isFuture": false,
-          "onlineBetting": false,
-          "phoneBettingOnly": true,
-          "inPlay": true,
-          "goingInPlay": false,
-          "allowWin": true,
-          "allowPlace": false,
-          "allowEachWay": false,
-          "allowMulti": true,
-          "allowMultiWin": true,
-          "allowMultiPlace": false,
-          "allowMultiEachWay": false,
-          "numberOfPlaces": 0,
-          "cashOutEligibility": "Disabled",
-          "allowBundle": false,
-          "propositions": [
-            {
-              "id": "5810",
-              "name": "Essendon +31.5",
-              "returnWin": 2.2,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 5810,
-              "isOpen": true,
-              "sortOrder": 1,
-              "line": "+31.5"
-            },
-            {
-              "id": "5811",
-              "name": "St Kilda -31.5",
-              "returnWin": 1.62,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 5811,
-              "isOpen": true,
-              "sortOrder": 2,
-              "line": "-31.5"
-            }
-          ]
-        },
-        {
-          "id": "135846232",
-          "name": "AFL Ess-St Kilda LiveLine +40.5",
-          "shortName": "AFL Ess-StK LveLne +40.5",
-          "betOption": "Live Lines",
-          "betOptionSpectrumId": "235",
-          "betOptionPriority": 2590,
-          "marketUniqueId": 135846232,
-          "closeTime": "2026-07-05T05:16:00.000Z",
-          "bettingStatus": "Open",
-          "message": null,
-          "informationMessage": null,
-          "isFuture": false,
-          "onlineBetting": false,
-          "phoneBettingOnly": true,
-          "inPlay": true,
-          "goingInPlay": false,
-          "allowWin": true,
-          "allowPlace": false,
-          "allowEachWay": false,
-          "allowMulti": true,
-          "allowMultiWin": true,
-          "allowMultiPlace": false,
-          "allowMultiEachWay": false,
-          "numberOfPlaces": 0,
-          "cashOutEligibility": "Disabled",
-          "allowBundle": false,
-          "propositions": [
-            {
-              "id": "5318",
-              "name": "Essendon +40.5",
-              "returnWin": 1.75,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 5318,
-              "isOpen": true,
-              "sortOrder": 1,
-              "line": "+40.5"
-            },
-            {
-              "id": "5319",
-              "name": "St Kilda -40.5",
-              "returnWin": 2,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 5319,
-              "isOpen": true,
-              "sortOrder": 2,
-              "line": "-40.5"
-            }
-          ]
-        },
-        {
-          "id": "135846236",
-          "name": "AFL Ess-St Kilda LiveLine +49.5",
-          "shortName": "AFL Ess-StK LveLne +49.5",
-          "betOption": "Live Lines",
-          "betOptionSpectrumId": "235",
-          "betOptionPriority": 2590,
-          "marketUniqueId": 135846236,
-          "closeTime": "2026-07-05T05:16:00.000Z",
-          "bettingStatus": "Open",
-          "message": null,
-          "informationMessage": null,
-          "isFuture": false,
-          "onlineBetting": false,
-          "phoneBettingOnly": true,
-          "inPlay": true,
-          "goingInPlay": false,
-          "allowWin": true,
-          "allowPlace": false,
-          "allowEachWay": false,
-          "allowMulti": true,
-          "allowMultiWin": true,
-          "allowMultiPlace": false,
-          "allowMultiEachWay": false,
-          "numberOfPlaces": 0,
-          "cashOutEligibility": "Disabled",
-          "allowBundle": false,
-          "propositions": [
-            {
-              "id": "5326",
-              "name": "Essendon +49.5",
-              "returnWin": 1.5,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 5326,
-              "isOpen": true,
-              "sortOrder": 1,
-              "line": "+49.5"
-            },
-            {
-              "id": "5448",
-              "name": "St Kilda -49.5",
-              "returnWin": 2.5,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 5448,
-              "isOpen": true,
-              "sortOrder": 2,
-              "line": "-49.5"
+              "line": "-82.5"
             }
           ]
         },
@@ -387,7 +219,7 @@
             {
               "id": "5673",
               "name": "Essendon +58.5",
-              "returnWin": 1.3,
+              "returnWin": 5,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -400,7 +232,7 @@
             {
               "id": "5674",
               "name": "St Kilda -58.5",
-              "returnWin": 3.3,
+              "returnWin": 1.15,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -409,6 +241,284 @@
               "isOpen": true,
               "sortOrder": 2,
               "line": "-58.5"
+            }
+          ]
+        },
+        {
+          "id": "135846292",
+          "name": "AFL Ess-St Kilda LiveLine +67.5",
+          "shortName": "AFL Ess-StK LveLne +67.5",
+          "betOption": "Live Lines",
+          "betOptionSpectrumId": "235",
+          "betOptionPriority": 2590,
+          "marketUniqueId": 135846292,
+          "closeTime": "2026-07-05T05:16:00.000Z",
+          "bettingStatus": "Open",
+          "message": null,
+          "informationMessage": null,
+          "isFuture": false,
+          "onlineBetting": false,
+          "phoneBettingOnly": true,
+          "inPlay": true,
+          "goingInPlay": false,
+          "allowWin": true,
+          "allowPlace": false,
+          "allowEachWay": false,
+          "allowMulti": true,
+          "allowMultiWin": true,
+          "allowMultiPlace": false,
+          "allowMultiEachWay": false,
+          "numberOfPlaces": 0,
+          "cashOutEligibility": "Disabled",
+          "allowBundle": false,
+          "propositions": [
+            {
+              "id": "5571",
+              "name": "Essendon +67.5",
+              "returnWin": 3.1,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 5571,
+              "isOpen": true,
+              "sortOrder": 1,
+              "line": "+67.5"
+            },
+            {
+              "id": "5572",
+              "name": "St Kilda -67.5",
+              "returnWin": 1.34,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 5572,
+              "isOpen": true,
+              "sortOrder": 2,
+              "line": "-67.5"
+            }
+          ]
+        },
+        {
+          "id": "135846234",
+          "name": "AFL Ess-St Kilda LiveLine +76.5",
+          "shortName": "AFL Ess-StK LveLne +76.5",
+          "betOption": "Live Lines",
+          "betOptionSpectrumId": "235",
+          "betOptionPriority": 2590,
+          "marketUniqueId": 135846234,
+          "closeTime": "2026-07-05T05:16:00.000Z",
+          "bettingStatus": "Open",
+          "message": null,
+          "informationMessage": null,
+          "isFuture": false,
+          "onlineBetting": false,
+          "phoneBettingOnly": true,
+          "inPlay": true,
+          "goingInPlay": false,
+          "allowWin": true,
+          "allowPlace": false,
+          "allowEachWay": false,
+          "allowMulti": true,
+          "allowMultiWin": true,
+          "allowMultiPlace": false,
+          "allowMultiEachWay": false,
+          "numberOfPlaces": 0,
+          "cashOutEligibility": "Disabled",
+          "allowBundle": false,
+          "propositions": [
+            {
+              "id": "5322",
+              "name": "Essendon +76.5",
+              "returnWin": 2.1,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 5322,
+              "isOpen": true,
+              "sortOrder": 1,
+              "line": "+76.5"
+            },
+            {
+              "id": "5323",
+              "name": "St Kilda -76.5",
+              "returnWin": 1.68,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 5323,
+              "isOpen": true,
+              "sortOrder": 2,
+              "line": "-76.5"
+            }
+          ]
+        },
+        {
+          "id": "135846283",
+          "name": "AFL Ess-St Kilda LiveLine +85.5",
+          "shortName": "AFL Ess-StK LveLne +85.5",
+          "betOption": "Live Lines",
+          "betOptionSpectrumId": "235",
+          "betOptionPriority": 2590,
+          "marketUniqueId": 135846283,
+          "closeTime": "2026-07-05T05:16:00.000Z",
+          "bettingStatus": "Open",
+          "message": null,
+          "informationMessage": null,
+          "isFuture": false,
+          "onlineBetting": false,
+          "phoneBettingOnly": true,
+          "inPlay": true,
+          "goingInPlay": false,
+          "allowWin": true,
+          "allowPlace": false,
+          "allowEachWay": false,
+          "allowMulti": true,
+          "allowMultiWin": true,
+          "allowMultiPlace": false,
+          "allowMultiEachWay": false,
+          "numberOfPlaces": 0,
+          "cashOutEligibility": "Disabled",
+          "allowBundle": false,
+          "propositions": [
+            {
+              "id": "5551",
+              "name": "Essendon +85.5",
+              "returnWin": 1.58,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 5551,
+              "isOpen": true,
+              "sortOrder": 1,
+              "line": "+85.5"
+            },
+            {
+              "id": "5552",
+              "name": "St Kilda -85.5",
+              "returnWin": 2.3,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 5552,
+              "isOpen": true,
+              "sortOrder": 2,
+              "line": "-85.5"
+            }
+          ]
+        },
+        {
+          "id": "135846250",
+          "name": "AFL Ess-St Kilda LiveLine +94.5",
+          "shortName": "AFL Ess-StK LveLne +94.5",
+          "betOption": "Live Lines",
+          "betOptionSpectrumId": "235",
+          "betOptionPriority": 2590,
+          "marketUniqueId": 135846250,
+          "closeTime": "2026-07-05T05:16:00.000Z",
+          "bettingStatus": "Open",
+          "message": null,
+          "informationMessage": null,
+          "isFuture": false,
+          "onlineBetting": false,
+          "phoneBettingOnly": true,
+          "inPlay": true,
+          "goingInPlay": false,
+          "allowWin": true,
+          "allowPlace": false,
+          "allowEachWay": false,
+          "allowMulti": true,
+          "allowMultiWin": true,
+          "allowMultiPlace": false,
+          "allowMultiEachWay": false,
+          "numberOfPlaces": 0,
+          "cashOutEligibility": "Disabled",
+          "allowBundle": false,
+          "propositions": [
+            {
+              "id": "5479",
+              "name": "Essendon +94.5",
+              "returnWin": 1.28,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 5479,
+              "isOpen": true,
+              "sortOrder": 1,
+              "line": "+94.5"
+            },
+            {
+              "id": "5480",
+              "name": "St Kilda -94.5",
+              "returnWin": 3.5,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 5480,
+              "isOpen": true,
+              "sortOrder": 2,
+              "line": "-94.5"
+            }
+          ]
+        },
+        {
+          "id": "135581612",
+          "name": "AFL R17 Essendon-St Kilda 05/07",
+          "shortName": "AFL R17 Ess-StK TSOvUn",
+          "betOption": "Total Score Over/Under",
+          "betOptionSpectrumId": "157",
+          "betOptionPriority": 2780,
+          "marketUniqueId": 135581612,
+          "closeTime": "2026-07-05T09:15:00.000Z",
+          "bettingStatus": "Open",
+          "message": null,
+          "informationMessage": null,
+          "isFuture": false,
+          "onlineBetting": false,
+          "phoneBettingOnly": true,
+          "inPlay": true,
+          "goingInPlay": false,
+          "allowWin": true,
+          "allowPlace": false,
+          "allowEachWay": false,
+          "allowMulti": true,
+          "allowMultiWin": true,
+          "allowMultiPlace": false,
+          "allowMultiEachWay": false,
+          "numberOfPlaces": 0,
+          "cashOutEligibility": "AvailableSoon",
+          "allowBundle": false,
+          "propositions": [
+            {
+              "id": "11608",
+              "name": "Over 195.5 Pts",
+              "returnWin": 1.9,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 11608,
+              "isOpen": true,
+              "sortOrder": 1
+            },
+            {
+              "id": "11609",
+              "name": "Under 195.5 Pts",
+              "returnWin": 1.9,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 11609,
+              "isOpen": true,
+              "sortOrder": 2
             }
           ]
         },
@@ -443,7 +553,7 @@
             {
               "id": "9701",
               "name": "Essendon by 40+",
-              "returnWin": 41,
+              "returnWin": 101,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -455,7 +565,7 @@
             {
               "id": "9702",
               "name": "Essendon by 1-39",
-              "returnWin": 7,
+              "returnWin": 101,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -467,7 +577,7 @@
             {
               "id": "9703",
               "name": "Draw",
-              "returnWin": 51,
+              "returnWin": 101,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -479,7 +589,7 @@
             {
               "id": "9704",
               "name": "St Kilda by 1-39",
-              "returnWin": 2.3,
+              "returnWin": 17,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -491,7 +601,7 @@
             {
               "id": "9705",
               "name": "St Kilda by 40+",
-              "returnWin": 1.92,
+              "returnWin": 1.02,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -533,7 +643,7 @@
             {
               "id": "9972",
               "name": "Essendon by 25+",
-              "returnWin": 21,
+              "returnWin": 101,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -545,7 +655,7 @@
             {
               "id": "9973",
               "name": "Essendon by 1-24",
-              "returnWin": 8,
+              "returnWin": 81,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -557,7 +667,7 @@
             {
               "id": "9974",
               "name": "Draw",
-              "returnWin": 51,
+              "returnWin": 81,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -569,7 +679,7 @@
             {
               "id": "9975",
               "name": "St Kilda by 1-24",
-              "returnWin": 4,
+              "returnWin": 51,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -581,14 +691,92 @@
             {
               "id": "9976",
               "name": "St Kilda by 25+",
-              "returnWin": 1.42,
+              "returnWin": 1.02,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Suspended",
+              "allowPlace": false,
+              "number": 9976,
+              "isOpen": false,
+              "sortOrder": 5
+            }
+          ]
+        },
+        {
+          "id": "135581582",
+          "name": "AFL R17 Essendon-St Kilda 05/07",
+          "shortName": "AFL R17 Ess-StK LnOUD",
+          "betOption": "Live Line Over/Under Double",
+          "betOptionSpectrumId": "2609",
+          "betOptionPriority": 2850,
+          "marketUniqueId": 135581582,
+          "closeTime": "2026-07-05T09:15:00.000Z",
+          "bettingStatus": "Open",
+          "message": null,
+          "informationMessage": null,
+          "isFuture": false,
+          "onlineBetting": false,
+          "phoneBettingOnly": true,
+          "inPlay": true,
+          "goingInPlay": false,
+          "allowWin": true,
+          "allowPlace": false,
+          "allowEachWay": false,
+          "allowMulti": true,
+          "allowMultiWin": true,
+          "allowMultiPlace": false,
+          "allowMultiEachWay": false,
+          "numberOfPlaces": 0,
+          "cashOutEligibility": "AvailableSoon",
+          "allowBundle": false,
+          "propositions": [
+            {
+              "id": "11527",
+              "name": "Essendon +82.5/Over 195.5",
+              "returnWin": 3.7,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
               "allowPlace": false,
-              "number": 9976,
+              "number": 11527,
               "isOpen": true,
-              "sortOrder": 5
+              "sortOrder": 1
+            },
+            {
+              "id": "11528",
+              "name": "Essendon +82.5/Under 195.5",
+              "returnWin": 3.3,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 11528,
+              "isOpen": true,
+              "sortOrder": 2
+            },
+            {
+              "id": "11529",
+              "name": "St Kilda -82.5/Over 195.5",
+              "returnWin": 3,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 11529,
+              "isOpen": true,
+              "sortOrder": 3
+            },
+            {
+              "id": "11530",
+              "name": "St Kilda -82.5/Under 195.5",
+              "returnWin": 4.2,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 11530,
+              "isOpen": true,
+              "sortOrder": 4
             }
           ]
         },
@@ -623,7 +811,7 @@
             {
               "id": "9554",
               "name": "Essendon by 73+",
-              "returnWin": 101,
+              "returnWin": 151,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -647,7 +835,7 @@
             {
               "id": "9556",
               "name": "Essendon by 49-60",
-              "returnWin": 81,
+              "returnWin": 101,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -659,7 +847,7 @@
             {
               "id": "9557",
               "name": "Essendon by 37-48",
-              "returnWin": 51,
+              "returnWin": 101,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -671,7 +859,7 @@
             {
               "id": "9558",
               "name": "Essendon by 25-36",
-              "returnWin": 34,
+              "returnWin": 101,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -683,7 +871,7 @@
             {
               "id": "9559",
               "name": "Essendon by 13-24",
-              "returnWin": 21,
+              "returnWin": 101,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -695,7 +883,7 @@
             {
               "id": "9560",
               "name": "Essendon by 1-12",
-              "returnWin": 12,
+              "returnWin": 101,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -707,7 +895,7 @@
             {
               "id": "9561",
               "name": "Draw",
-              "returnWin": 67,
+              "returnWin": 101,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -719,7 +907,7 @@
             {
               "id": "9562",
               "name": "St Kilda by 1-12",
-              "returnWin": 8,
+              "returnWin": 101,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -731,7 +919,7 @@
             {
               "id": "9563",
               "name": "St Kilda by 13-24",
-              "returnWin": 6.5,
+              "returnWin": 67,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -743,7 +931,7 @@
             {
               "id": "9564",
               "name": "St Kilda by 25-36",
-              "returnWin": 5.5,
+              "returnWin": 34,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -755,7 +943,7 @@
             {
               "id": "9565",
               "name": "St Kilda by 37-48",
-              "returnWin": 5.5,
+              "returnWin": 13,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -767,7 +955,7 @@
             {
               "id": "9566",
               "name": "St Kilda by 49-60",
-              "returnWin": 6,
+              "returnWin": 7,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -779,7 +967,7 @@
             {
               "id": "9567",
               "name": "St Kilda by 61-72",
-              "returnWin": 7.5,
+              "returnWin": 4.5,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -791,7 +979,7 @@
             {
               "id": "9568",
               "name": "St Kilda by 73+",
-              "returnWin": 5.5,
+              "returnWin": 1.52,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -803,13 +991,13 @@
           ]
         },
         {
-          "id": "135846354",
+          "id": "135846343",
           "name": "AFL Ess-StK TS3Way",
           "shortName": "AFL Ess-StK TS3Way",
           "betOption": "Total Score 3-Way",
           "betOptionSpectrumId": "806",
           "betOptionPriority": 6970,
-          "marketUniqueId": 135846354,
+          "marketUniqueId": 135846343,
           "closeTime": "2026-07-05T05:16:00.000Z",
           "bettingStatus": "Open",
           "message": null,
@@ -831,38 +1019,38 @@
           "allowBundle": false,
           "propositions": [
             {
-              "id": "5467",
-              "name": "Over 190",
+              "id": "5696",
+              "name": "Over 200",
               "returnWin": 2.3,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
               "allowPlace": false,
-              "number": 5467,
+              "number": 5696,
               "isOpen": true,
               "sortOrder": 1
             },
             {
-              "id": "5468",
-              "name": "Between 180-190",
-              "returnWin": 6,
+              "id": "5805",
+              "name": "Between 190-200",
+              "returnWin": 4.2,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
               "allowPlace": false,
-              "number": 5468,
+              "number": 5805,
               "isOpen": true,
               "sortOrder": 2
             },
             {
-              "id": "5469",
-              "name": "Under 180",
-              "returnWin": 1.92,
+              "id": "5806",
+              "name": "Under 190",
+              "returnWin": 2.2,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
               "allowPlace": false,
-              "number": 5469,
+              "number": 5806,
               "isOpen": true,
               "sortOrder": 3
             }
@@ -1295,258 +1483,6 @@
           ]
         },
         {
-          "id": "135846218",
-          "name": "AFL Ess-StK L1HH2H",
-          "shortName": "AFL Ess-StK L1HH2H",
-          "betOption": "Live 1st Half Head to Head",
-          "betOptionSpectrumId": "2823",
-          "betOptionPriority": 11450,
-          "marketUniqueId": 135846218,
-          "closeTime": "2026-07-05T05:16:00.000Z",
-          "bettingStatus": "Open",
-          "message": null,
-          "informationMessage": null,
-          "isFuture": false,
-          "onlineBetting": false,
-          "phoneBettingOnly": true,
-          "inPlay": true,
-          "goingInPlay": false,
-          "allowWin": true,
-          "allowPlace": false,
-          "allowEachWay": false,
-          "allowMulti": true,
-          "allowMultiWin": true,
-          "allowMultiPlace": false,
-          "allowMultiEachWay": false,
-          "numberOfPlaces": 0,
-          "cashOutEligibility": "Disabled",
-          "allowBundle": false,
-          "propositions": [
-            {
-              "id": "5250",
-              "name": "Essendon",
-              "returnWin": 8,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 5250,
-              "isOpen": true,
-              "sortOrder": 1
-            },
-            {
-              "id": "5251",
-              "name": "Tie",
-              "returnWin": 51,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 5251,
-              "isOpen": true,
-              "sortOrder": 2
-            },
-            {
-              "id": "5252",
-              "name": "St Kilda",
-              "returnWin": 1.06,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 5252,
-              "isOpen": true,
-              "sortOrder": 3
-            }
-          ]
-        },
-        {
-          "id": "135846219",
-          "name": "AFL Ess-StK L1HMgn",
-          "shortName": "AFL Ess-StK L1HMgn",
-          "betOption": "Live 1st Half Margin",
-          "betOptionSpectrumId": "2825",
-          "betOptionPriority": 11610,
-          "marketUniqueId": 135846219,
-          "closeTime": "2026-07-05T05:16:00.000Z",
-          "bettingStatus": "Open",
-          "message": null,
-          "informationMessage": null,
-          "isFuture": false,
-          "onlineBetting": false,
-          "phoneBettingOnly": true,
-          "inPlay": true,
-          "goingInPlay": false,
-          "allowWin": true,
-          "allowPlace": false,
-          "allowEachWay": false,
-          "allowMulti": true,
-          "allowMultiWin": true,
-          "allowMultiPlace": false,
-          "allowMultiEachWay": false,
-          "numberOfPlaces": 0,
-          "cashOutEligibility": "Disabled",
-          "allowBundle": false,
-          "propositions": [
-            {
-              "id": "5253",
-              "name": "Essendon Between 1-6",
-              "returnWin": 17,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 5253,
-              "isOpen": true,
-              "sortOrder": 1
-            },
-            {
-              "id": "5254",
-              "name": "Essendon Between 7-12",
-              "returnWin": 26,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 5254,
-              "isOpen": true,
-              "sortOrder": 2
-            },
-            {
-              "id": "5255",
-              "name": "Essendon Between 13-18",
-              "returnWin": 41,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 5255,
-              "isOpen": true,
-              "sortOrder": 3
-            },
-            {
-              "id": "5256",
-              "name": "Essendon Between 19-24",
-              "returnWin": 51,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 5256,
-              "isOpen": true,
-              "sortOrder": 4
-            },
-            {
-              "id": "5257",
-              "name": "Essendon Between 25-30",
-              "returnWin": 81,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 5257,
-              "isOpen": true,
-              "sortOrder": 5
-            },
-            {
-              "id": "5258",
-              "name": "Essendon 31+",
-              "returnWin": 81,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 5258,
-              "isOpen": true,
-              "sortOrder": 6
-            },
-            {
-              "id": "5259",
-              "name": "St Kilda Between 1-6",
-              "returnWin": 11,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 5259,
-              "isOpen": true,
-              "sortOrder": 7
-            },
-            {
-              "id": "5260",
-              "name": "St Kilda Between 7-12",
-              "returnWin": 8.5,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 5260,
-              "isOpen": true,
-              "sortOrder": 8
-            },
-            {
-              "id": "5261",
-              "name": "St Kilda Between 13-18",
-              "returnWin": 7,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 5261,
-              "isOpen": true,
-              "sortOrder": 9
-            },
-            {
-              "id": "5262",
-              "name": "St Kilda Between 19-24",
-              "returnWin": 6.5,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 5262,
-              "isOpen": true,
-              "sortOrder": 10
-            },
-            {
-              "id": "5263",
-              "name": "St Kilda Between 25-30",
-              "returnWin": 6.5,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 5263,
-              "isOpen": true,
-              "sortOrder": 11
-            },
-            {
-              "id": "5264",
-              "name": "St Kilda 31+",
-              "returnWin": 2.3,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 5264,
-              "isOpen": true,
-              "sortOrder": 12
-            },
-            {
-              "id": "5265",
-              "name": "Tie",
-              "returnWin": 51,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 5265,
-              "isOpen": true,
-              "sortOrder": 13
-            }
-          ]
-        },
-        {
           "id": "135579033",
           "name": "AFL Ess-StK 2HfRsl",
           "shortName": "AFL Ess-StK 2HfRsl",
@@ -1577,7 +1513,7 @@
             {
               "id": "10079",
               "name": "Essendon",
-              "returnWin": 3.1,
+              "returnWin": 3.5,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -1601,7 +1537,7 @@
             {
               "id": "10081",
               "name": "St Kilda",
-              "returnWin": 1.35,
+              "returnWin": 1.28,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -1655,7 +1591,7 @@
             {
               "id": "5222",
               "name": "Essendon Between 7-12",
-              "returnWin": 11,
+              "returnWin": 12,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -1667,7 +1603,7 @@
             {
               "id": "5223",
               "name": "Essendon Between 13-18",
-              "returnWin": 15,
+              "returnWin": 17,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -1679,7 +1615,7 @@
             {
               "id": "5224",
               "name": "Essendon Between 19-24",
-              "returnWin": 17,
+              "returnWin": 21,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -1691,7 +1627,7 @@
             {
               "id": "5225",
               "name": "Essendon Between 25-30",
-              "returnWin": 26,
+              "returnWin": 34,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -1703,7 +1639,7 @@
             {
               "id": "5226",
               "name": "Essendon 31+",
-              "returnWin": 21,
+              "returnWin": 26,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -1715,7 +1651,7 @@
             {
               "id": "5227",
               "name": "St Kilda Between 1-6",
-              "returnWin": 7.5,
+              "returnWin": 8,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -1763,7 +1699,7 @@
             {
               "id": "5231",
               "name": "St Kilda Between 25-30",
-              "returnWin": 9,
+              "returnWin": 8.5,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -1775,7 +1711,7 @@
             {
               "id": "5232",
               "name": "St Kilda 31+",
-              "returnWin": 4.2,
+              "returnWin": 3.6,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -1799,13 +1735,13 @@
           ]
         },
         {
-          "id": "135846217",
-          "name": "AFL Ess-StK Lv2QHH",
-          "shortName": "AFL Ess-StK Lv2QHH",
-          "betOption": "Live 2nd Quarter Head to Head",
-          "betOptionSpectrumId": "1635",
-          "betOptionPriority": 16355,
-          "marketUniqueId": 135846217,
+          "id": "135846301",
+          "name": "AFL Ess-StK Lv3QHH",
+          "shortName": "AFL Ess-StK Lv3QHH",
+          "betOption": "Live 3rd Quarter Head to Head",
+          "betOptionSpectrumId": "1636",
+          "betOptionPriority": 16625,
+          "marketUniqueId": 135846301,
           "closeTime": "2026-07-05T05:16:00.000Z",
           "bettingStatus": "Open",
           "message": null,
@@ -1827,1693 +1763,55 @@
           "allowBundle": false,
           "propositions": [
             {
-              "id": "5234",
+              "id": "5591",
               "name": "Essendon",
-              "returnWin": 2.8,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 5234,
-              "isOpen": true,
-              "sortOrder": 1
-            },
-            {
-              "id": "5235",
-              "name": "Tie",
-              "returnWin": 21,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 5235,
-              "isOpen": true,
-              "sortOrder": 2
-            },
-            {
-              "id": "5236",
-              "name": "St Kilda",
-              "returnWin": 1.45,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 5236,
-              "isOpen": true,
-              "sortOrder": 3
-            }
-          ]
-        },
-        {
-          "id": "135846338",
-          "name": "AFL Ess-St Kilda Lv2QLine 7.5",
-          "shortName": "AFL Ess-StK Lv2QLn 7.5",
-          "betOption": "Live 2nd Quarter Line",
-          "betOptionSpectrumId": "1638",
-          "betOptionPriority": 16380,
-          "marketUniqueId": 135846338,
-          "closeTime": "2026-07-05T05:16:00.000Z",
-          "bettingStatus": "Open",
-          "message": null,
-          "informationMessage": null,
-          "isFuture": false,
-          "onlineBetting": false,
-          "phoneBettingOnly": true,
-          "inPlay": true,
-          "goingInPlay": false,
-          "allowWin": true,
-          "allowPlace": false,
-          "allowEachWay": false,
-          "allowMulti": true,
-          "allowMultiWin": true,
-          "allowMultiPlace": false,
-          "allowMultiEachWay": false,
-          "numberOfPlaces": 0,
-          "cashOutEligibility": "Disabled",
-          "allowBundle": false,
-          "propositions": [
-            {
-              "id": "5684",
-              "name": "Essendon +7.5",
-              "returnWin": 1.72,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 5684,
-              "isOpen": true,
-              "sortOrder": 1
-            },
-            {
-              "id": "5685",
-              "name": "St Kilda -7.5",
-              "returnWin": 2,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 5685,
-              "isOpen": true,
-              "sortOrder": 2
-            }
-          ]
-        },
-        {
-          "id": "135776832",
-          "name": "AFL Ess-St Kilda 1stGol2Q",
-          "shortName": "AFL Ess-StK 1stGol2Q",
-          "betOption": "2nd Quarter 1st Goal Scorer",
-          "betOptionSpectrumId": "141",
-          "betOptionPriority": 16400,
-          "marketUniqueId": 135776832,
-          "closeTime": "2026-07-05T05:16:00.000Z",
-          "bettingStatus": "Open",
-          "message": null,
-          "informationMessage": "Quote Others.",
-          "isFuture": false,
-          "onlineBetting": false,
-          "phoneBettingOnly": true,
-          "inPlay": true,
-          "goingInPlay": false,
-          "allowWin": true,
-          "allowPlace": false,
-          "allowEachWay": false,
-          "allowMulti": true,
-          "allowMultiWin": true,
-          "allowMultiPlace": false,
-          "allowMultiEachWay": false,
-          "numberOfPlaces": 0,
-          "cashOutEligibility": "Enabled",
-          "allowBundle": false,
-          "propositions": [
-            {
-              "id": "24926",
-              "name": "Nate Caddy (ESS)",
-              "returnWin": 10,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 24926,
-              "isOpen": true,
-              "sortOrder": 21
-            },
-            {
-              "id": "24940",
-              "name": "Cooper Sharman (STK)",
-              "returnWin": 11,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 24940,
-              "isOpen": true,
-              "sortOrder": 35
-            },
-            {
-              "id": "24944",
-              "name": "Jack Higgins (STK)",
-              "returnWin": 11,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 24944,
-              "isOpen": true,
-              "sortOrder": 39
-            },
-            {
-              "id": "24907",
-              "name": "Liam Ryan (STK)",
-              "returnWin": 11,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 24907,
-              "isOpen": true,
-              "sortOrder": 2
-            },
-            {
-              "id": "24957",
-              "name": "Peter Wright (ESS)",
-              "returnWin": 13,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 24957,
-              "isOpen": true,
-              "sortOrder": 52
-            },
-            {
-              "id": "24952",
-              "name": "Mitch Owens (STK)",
-              "returnWin": 14,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 24952,
-              "isOpen": true,
-              "sortOrder": 47
-            },
-            {
-              "id": "24936",
-              "name": "Ben McKay (ESS)",
-              "returnWin": 15,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 24936,
-              "isOpen": true,
-              "sortOrder": 31
-            },
-            {
-              "id": "24951",
-              "name": "Max Hall (STK)",
-              "returnWin": 19,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 24951,
-              "isOpen": true,
-              "sortOrder": 46
-            },
-            {
-              "id": "24942",
-              "name": "Darcy Wilson (STK)",
-              "returnWin": 21,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 24942,
-              "isOpen": true,
-              "sortOrder": 37
-            },
-            {
-              "id": "24961",
-              "name": "Liam Henry (STK)",
-              "returnWin": 21,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 24961,
-              "isOpen": true,
-              "sortOrder": 56
-            },
-            {
-              "id": "24953",
-              "name": "Nasiah W-Milera (STK)",
-              "returnWin": 23,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 24953,
-              "isOpen": true,
-              "sortOrder": 48
-            },
-            {
-              "id": "24960",
-              "name": "Mattaes Phillipou (STK)",
-              "returnWin": 23,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 24960,
-              "isOpen": true,
-              "sortOrder": 55
-            },
-            {
-              "id": "24950",
-              "name": "Mason Wood (STK)",
-              "returnWin": 23,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 24950,
-              "isOpen": true,
-              "sortOrder": 45
-            },
-            {
-              "id": "24919",
-              "name": "Isaac Kako (ESS)",
-              "returnWin": 23,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 24919,
-              "isOpen": true,
-              "sortOrder": 14
-            },
-            {
-              "id": "24929",
-              "name": "Sam Durham (ESS)",
-              "returnWin": 26,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 24929,
-              "isOpen": true,
-              "sortOrder": 24
-            },
-            {
-              "id": "24930",
-              "name": "Sullivan Robey (ESS)",
-              "returnWin": 31,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 24930,
-              "isOpen": true,
-              "sortOrder": 25
-            },
-            {
-              "id": "24912",
-              "name": "Archie Perkins (ESS)",
-              "returnWin": 31,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 24912,
-              "isOpen": true,
-              "sortOrder": 7
-            },
-            {
-              "id": "24956",
-              "name": "Campbell Lake (STK)",
-              "returnWin": 31,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 24956,
-              "isOpen": true,
-              "sortOrder": 51
-            },
-            {
-              "id": "24911",
-              "name": "Archer Day-Wicks (ESS)",
-              "returnWin": 34,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 24911,
-              "isOpen": true,
-              "sortOrder": 6
-            },
-            {
-              "id": "24954",
-              "name": "Rowan Marshall (STK)",
-              "returnWin": 34,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 24954,
-              "isOpen": true,
-              "sortOrder": 49
-            },
-            {
-              "id": "24931",
-              "name": "Will Setterfield (ESS)",
-              "returnWin": 41,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 24931,
-              "isOpen": true,
-              "sortOrder": 26
-            },
-            {
-              "id": "24932",
-              "name": "Xavier Duursma (ESS)",
-              "returnWin": 41,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 24932,
-              "isOpen": true,
-              "sortOrder": 27
-            },
-            {
-              "id": "24934",
-              "name": "Zach Reid (ESS)",
-              "returnWin": 41,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 24934,
-              "isOpen": true,
-              "sortOrder": 29
-            },
-            {
-              "id": "24962",
-              "name": "Liam OConnell (STK)",
-              "returnWin": 41,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 24962,
-              "isOpen": true,
-              "sortOrder": 57
-            },
-            {
-              "id": "24906",
-              "name": "Bradley Hill (STK)",
-              "returnWin": 41,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 24906,
-              "isOpen": true,
-              "sortOrder": 1
-            },
-            {
-              "id": "24937",
-              "name": "Angus Hastie (STK)",
-              "returnWin": 41,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 24937,
-              "isOpen": true,
-              "sortOrder": 32
-            },
-            {
-              "id": "24915",
-              "name": "Dyson Sharp (ESS)",
-              "returnWin": 41,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 24915,
-              "isOpen": true,
-              "sortOrder": 10
-            },
-            {
-              "id": "24910",
-              "name": "Andrew McGrath (ESS)",
-              "returnWin": 41,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 24910,
-              "isOpen": true,
-              "sortOrder": 5
-            },
-            {
-              "id": "24943",
-              "name": "Hugo Garcia (STK)",
-              "returnWin": 41,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 24943,
-              "isOpen": true,
-              "sortOrder": 38
-            },
-            {
-              "id": "24928",
-              "name": "Nik Cox (ESS)",
-              "returnWin": 41,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 24928,
-              "isOpen": true,
-              "sortOrder": 23
-            },
-            {
-              "id": "24920",
-              "name": "Jacob Farrow (ESS)",
-              "returnWin": 41,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 24920,
-              "isOpen": true,
-              "sortOrder": 15
-            },
-            {
-              "id": "24922",
-              "name": "Jordan Ridley (ESS)",
-              "returnWin": 41,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 24922,
-              "isOpen": true,
-              "sortOrder": 17
-            },
-            {
-              "id": "24938",
-              "name": "Anthony Caminiti (STK)",
-              "returnWin": 41,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 24938,
-              "isOpen": true,
-              "sortOrder": 33
-            },
-            {
-              "id": "24927",
-              "name": "Nick Bryan (ESS)",
-              "returnWin": 41,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 24927,
-              "isOpen": true,
-              "sortOrder": 22
-            },
-            {
-              "id": "24946",
-              "name": "Jack Silvagni (STK)",
-              "returnWin": 41,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 24946,
-              "isOpen": true,
-              "sortOrder": 41
-            },
-            {
-              "id": "24914",
-              "name": "Darcy Parish (ESS)",
-              "returnWin": 41,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 24914,
-              "isOpen": true,
-              "sortOrder": 9
-            },
-            {
-              "id": "24925",
-              "name": "Mason Redman (ESS)",
-              "returnWin": 41,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 24925,
-              "isOpen": true,
-              "sortOrder": 20
-            },
-            {
-              "id": "24923",
-              "name": "Jye Caldwell (ESS)",
-              "returnWin": 41,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 24923,
-              "isOpen": true,
-              "sortOrder": 18
-            },
-            {
-              "id": "24958",
-              "name": "Saad El-Hawli (ESS)",
-              "returnWin": 41,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 24958,
-              "isOpen": true,
-              "sortOrder": 53
-            },
-            {
-              "id": "24959",
-              "name": "Tobie Travaglia (STK)",
-              "returnWin": 41,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 24959,
-              "isOpen": true,
-              "sortOrder": 54
-            },
-            {
-              "id": "24933",
-              "name": "Zach Merrett (ESS)",
-              "returnWin": 41,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 24933,
-              "isOpen": true,
-              "sortOrder": 28
-            },
-            {
-              "id": "24955",
-              "name": "Ryan Byrnes (STK)",
-              "returnWin": 41,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 24955,
-              "isOpen": true,
-              "sortOrder": 50
-            },
-            {
-              "id": "24949",
-              "name": "Marcus Windhager (STK)",
-              "returnWin": 41,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 24949,
-              "isOpen": true,
-              "sortOrder": 44
-            },
-            {
-              "id": "24939",
-              "name": "Callum Wilkie (STK)",
-              "returnWin": 41,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 24939,
-              "isOpen": true,
-              "sortOrder": 34
-            }
-          ]
-        },
-        {
-          "id": "135776839",
-          "name": "AFL Ess-St Kilda 2QAnyGS",
-          "shortName": "AFL Ess-StK 2QAnyGS",
-          "betOption": "To Kick a Goal (2nd Quarter)",
-          "betOptionSpectrumId": "985",
-          "betOptionPriority": 16405,
-          "marketUniqueId": 135776839,
-          "closeTime": "2026-07-05T05:16:00.000Z",
-          "bettingStatus": "Open",
-          "message": null,
-          "informationMessage": "Quote Others.",
-          "isFuture": false,
-          "onlineBetting": false,
-          "phoneBettingOnly": true,
-          "inPlay": true,
-          "goingInPlay": false,
-          "allowWin": true,
-          "allowPlace": false,
-          "allowEachWay": false,
-          "allowMulti": true,
-          "allowMultiWin": true,
-          "allowMultiPlace": false,
-          "allowMultiEachWay": false,
-          "numberOfPlaces": 0,
-          "cashOutEligibility": "Enabled",
-          "allowBundle": false,
-          "propositions": [
-            {
-              "id": "29032",
-              "name": "Nate Caddy (ESS)",
-              "returnWin": 2.3,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 29032,
-              "isOpen": true,
-              "sortOrder": 21
-            },
-            {
-              "id": "29054",
-              "name": "Jack Higgins (STK)",
-              "returnWin": 2.4,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 29054,
-              "isOpen": true,
-              "sortOrder": 39
-            },
-            {
-              "id": "29003",
-              "name": "Liam Ryan (STK)",
-              "returnWin": 2.4,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 29003,
-              "isOpen": true,
-              "sortOrder": 2
-            },
-            {
-              "id": "29046",
-              "name": "Cooper Sharman (STK)",
-              "returnWin": 2.5,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 29046,
-              "isOpen": true,
-              "sortOrder": 35
-            },
-            {
-              "id": "29067",
-              "name": "Peter Wright (ESS)",
-              "returnWin": 2.8,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 29067,
-              "isOpen": true,
-              "sortOrder": 52
-            },
-            {
-              "id": "29062",
-              "name": "Mitch Owens (STK)",
-              "returnWin": 2.9,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 29062,
-              "isOpen": true,
-              "sortOrder": 47
-            },
-            {
-              "id": "29042",
-              "name": "Ben McKay (ESS)",
-              "returnWin": 3.1,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 29042,
-              "isOpen": true,
-              "sortOrder": 31
-            },
-            {
-              "id": "29061",
-              "name": "Max Hall (STK)",
-              "returnWin": 4,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 29061,
-              "isOpen": true,
-              "sortOrder": 46
-            },
-            {
-              "id": "29071",
-              "name": "Liam Henry (STK)",
-              "returnWin": 4.2,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 29071,
-              "isOpen": true,
-              "sortOrder": 56
-            },
-            {
-              "id": "29048",
-              "name": "Darcy Wilson (STK)",
-              "returnWin": 4.25,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 29048,
-              "isOpen": true,
-              "sortOrder": 37
-            },
-            {
-              "id": "29060",
-              "name": "Mason Wood (STK)",
-              "returnWin": 4.5,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 29060,
-              "isOpen": true,
-              "sortOrder": 45
-            },
-            {
-              "id": "29063",
-              "name": "Nasiah W-Milera (STK)",
-              "returnWin": 4.5,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 29063,
-              "isOpen": true,
-              "sortOrder": 48
-            },
-            {
-              "id": "29025",
-              "name": "Isaac Kako (ESS)",
-              "returnWin": 4.5,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 29025,
-              "isOpen": true,
-              "sortOrder": 14
-            },
-            {
-              "id": "29070",
-              "name": "Mattaes Phillipou (STK)",
-              "returnWin": 4.5,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 29070,
-              "isOpen": true,
-              "sortOrder": 55
-            },
-            {
-              "id": "29035",
-              "name": "Sam Durham (ESS)",
-              "returnWin": 5.5,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 29035,
-              "isOpen": true,
-              "sortOrder": 24
-            },
-            {
-              "id": "29018",
-              "name": "Archie Perkins (ESS)",
-              "returnWin": 6,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 29018,
-              "isOpen": true,
-              "sortOrder": 7
-            },
-            {
-              "id": "29036",
-              "name": "Sullivan Robey (ESS)",
-              "returnWin": 6,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 29036,
-              "isOpen": true,
-              "sortOrder": 25
-            },
-            {
-              "id": "29066",
-              "name": "Campbell Lake (STK)",
-              "returnWin": 6,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 29066,
-              "isOpen": true,
-              "sortOrder": 51
-            },
-            {
-              "id": "29017",
-              "name": "Archer Day-Wicks (ESS)",
-              "returnWin": 6.5,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 29017,
-              "isOpen": true,
-              "sortOrder": 6
-            },
-            {
-              "id": "29021",
-              "name": "Dyson Sharp (ESS)",
-              "returnWin": 7,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 29021,
-              "isOpen": true,
-              "sortOrder": 10
-            },
-            {
-              "id": "29064",
-              "name": "Rowan Marshall (STK)",
-              "returnWin": 7,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 29064,
-              "isOpen": true,
-              "sortOrder": 49
-            },
-            {
-              "id": "29002",
-              "name": "Bradley Hill (STK)",
-              "returnWin": 8,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 29002,
-              "isOpen": true,
-              "sortOrder": 1
-            },
-            {
-              "id": "29038",
-              "name": "Xavier Duursma (ESS)",
-              "returnWin": 8,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 29038,
-              "isOpen": true,
-              "sortOrder": 27
-            },
-            {
-              "id": "29049",
-              "name": "Hugo Garcia (STK)",
-              "returnWin": 8,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 29049,
-              "isOpen": true,
-              "sortOrder": 38
-            },
-            {
-              "id": "29034",
-              "name": "Nik Cox (ESS)",
-              "returnWin": 8.5,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 29034,
-              "isOpen": true,
-              "sortOrder": 23
-            },
-            {
-              "id": "29039",
-              "name": "Zach Merrett (ESS)",
-              "returnWin": 9,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 29039,
-              "isOpen": true,
-              "sortOrder": 28
-            },
-            {
-              "id": "29029",
-              "name": "Jye Caldwell (ESS)",
-              "returnWin": 9,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 29029,
-              "isOpen": true,
-              "sortOrder": 18
-            },
-            {
-              "id": "29056",
-              "name": "Jack Silvagni (STK)",
-              "returnWin": 9.5,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 29056,
-              "isOpen": true,
-              "sortOrder": 41
-            },
-            {
-              "id": "29020",
-              "name": "Darcy Parish (ESS)",
-              "returnWin": 10,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 29020,
-              "isOpen": true,
-              "sortOrder": 9
-            },
-            {
-              "id": "29072",
-              "name": "Liam OConnell (STK)",
-              "returnWin": 11,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 29072,
-              "isOpen": true,
-              "sortOrder": 57
-            },
-            {
-              "id": "29037",
-              "name": "Will Setterfield (ESS)",
-              "returnWin": 11,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 29037,
-              "isOpen": true,
-              "sortOrder": 26
-            },
-            {
-              "id": "29059",
-              "name": "Marcus Windhager (STK)",
-              "returnWin": 11,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 29059,
-              "isOpen": true,
-              "sortOrder": 44
-            },
-            {
-              "id": "29065",
-              "name": "Ryan Byrnes (STK)",
-              "returnWin": 11,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 29065,
-              "isOpen": true,
-              "sortOrder": 50
-            },
-            {
-              "id": "29044",
-              "name": "Anthony Caminiti (STK)",
-              "returnWin": 12,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 29044,
-              "isOpen": true,
-              "sortOrder": 33
-            }
-          ]
-        },
-        {
-          "id": "135581600",
-          "name": "AFL R17 Essendon-St Kilda 05/07",
-          "shortName": "AFL R17 Ess-StK 2QLOU",
-          "betOption": "2nd Quarter Line/OverUnder Double",
-          "betOptionSpectrumId": "344",
-          "betOptionPriority": 16410,
-          "marketUniqueId": 135581600,
-          "closeTime": "2026-07-05T09:15:00.000Z",
-          "bettingStatus": "Open",
-          "message": null,
-          "informationMessage": null,
-          "isFuture": false,
-          "onlineBetting": false,
-          "phoneBettingOnly": true,
-          "inPlay": true,
-          "goingInPlay": false,
-          "allowWin": true,
-          "allowPlace": false,
-          "allowEachWay": false,
-          "allowMulti": true,
-          "allowMultiWin": true,
-          "allowMultiPlace": false,
-          "allowMultiEachWay": false,
-          "numberOfPlaces": 0,
-          "cashOutEligibility": "Disabled",
-          "allowBundle": false,
-          "propositions": [
-            {
-              "id": "11543",
-              "name": "Essendon +6.5 / Over 43.5",
-              "returnWin": 3.6,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 11543,
-              "isOpen": true,
-              "sortOrder": 1
-            },
-            {
-              "id": "11544",
-              "name": "Essendon +6.5 / Under 43.5",
-              "returnWin": 3.4,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 11544,
-              "isOpen": true,
-              "sortOrder": 2
-            },
-            {
-              "id": "11545",
-              "name": "St Kilda -6.5 / Over 43.5",
-              "returnWin": 3.2,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 11545,
-              "isOpen": true,
-              "sortOrder": 3
-            },
-            {
-              "id": "11546",
-              "name": "St Kilda -6.5 / Under 43.5",
-              "returnWin": 4,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 11546,
-              "isOpen": true,
-              "sortOrder": 4
-            }
-          ]
-        },
-        {
-          "id": "135581590",
-          "name": "AFL R17 Essendon-St Kilda 05/07",
-          "shortName": "AFL R17 Ess-StK 2QHHOU",
-          "betOption": "2nd Quarter H2H/OverUnder Double",
-          "betOptionSpectrumId": "1445",
-          "betOptionPriority": 16415,
-          "marketUniqueId": 135581590,
-          "closeTime": "2026-07-05T09:15:00.000Z",
-          "bettingStatus": "Open",
-          "message": null,
-          "informationMessage": null,
-          "isFuture": false,
-          "onlineBetting": false,
-          "phoneBettingOnly": true,
-          "inPlay": true,
-          "goingInPlay": false,
-          "allowWin": true,
-          "allowPlace": false,
-          "allowEachWay": false,
-          "allowMulti": true,
-          "allowMultiWin": true,
-          "allowMultiPlace": false,
-          "allowMultiEachWay": false,
-          "numberOfPlaces": 0,
-          "cashOutEligibility": "Enabled",
-          "allowBundle": false,
-          "propositions": [
-            {
-              "id": "11612",
-              "name": "Essendon / Over 43.5",
-              "returnWin": 5.25,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 11612,
-              "isOpen": true,
-              "sortOrder": 1
-            },
-            {
-              "id": "11613",
-              "name": "Essendon / Under 43.5",
-              "returnWin": 5.25,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 11613,
-              "isOpen": true,
-              "sortOrder": 2
-            },
-            {
-              "id": "11614",
-              "name": "St Kilda / Over 43.5",
-              "returnWin": 2.6,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 11614,
-              "isOpen": true,
-              "sortOrder": 3
-            },
-            {
-              "id": "11615",
-              "name": "St Kilda / Under 43.5",
-              "returnWin": 2.6,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 11615,
-              "isOpen": true,
-              "sortOrder": 4
-            }
-          ]
-        },
-        {
-          "id": "135581587",
-          "name": "AFL R17 Essendon-St Kilda 05/07",
-          "shortName": "AFL R17 Ess-StK 2QGls",
-          "betOption": "2nd Quarter Goals",
-          "betOptionSpectrumId": "1963",
-          "betOptionPriority": 16420,
-          "marketUniqueId": 135581587,
-          "closeTime": "2026-07-05T09:15:00.000Z",
-          "bettingStatus": "Open",
-          "message": null,
-          "informationMessage": null,
-          "isFuture": false,
-          "onlineBetting": false,
-          "phoneBettingOnly": true,
-          "inPlay": true,
-          "goingInPlay": false,
-          "allowWin": true,
-          "allowPlace": false,
-          "allowEachWay": false,
-          "allowMulti": true,
-          "allowMultiWin": true,
-          "allowMultiPlace": false,
-          "allowMultiEachWay": false,
-          "numberOfPlaces": 0,
-          "cashOutEligibility": "Enabled",
-          "allowBundle": false,
-          "propositions": [
-            {
-              "id": "11587",
-              "name": "0-5 Goals",
-              "returnWin": 2.4,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 11587,
-              "isOpen": true,
-              "sortOrder": 1
-            },
-            {
-              "id": "11588",
-              "name": "6-7 Goals",
               "returnWin": 3,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
               "allowPlace": false,
-              "number": 11588,
-              "isOpen": true,
-              "sortOrder": 2
-            },
-            {
-              "id": "11589",
-              "name": "8+ Goals",
-              "returnWin": 2.8,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 11589,
-              "isOpen": true,
-              "sortOrder": 3
-            }
-          ]
-        },
-        {
-          "id": "135726390",
-          "name": "AFL Ess-StK 2QMgn6",
-          "shortName": "AFL Ess-StK 2QMgn6",
-          "betOption": "2nd Quarter Margin (1-6)",
-          "betOptionSpectrumId": "1765",
-          "betOptionPriority": 16425,
-          "marketUniqueId": 135726390,
-          "closeTime": "2026-07-05T05:16:00.000Z",
-          "bettingStatus": "Open",
-          "message": null,
-          "informationMessage": null,
-          "isFuture": false,
-          "onlineBetting": false,
-          "phoneBettingOnly": true,
-          "inPlay": true,
-          "goingInPlay": false,
-          "allowWin": true,
-          "allowPlace": false,
-          "allowEachWay": false,
-          "allowMulti": true,
-          "allowMultiWin": true,
-          "allowMultiPlace": false,
-          "allowMultiEachWay": false,
-          "numberOfPlaces": 0,
-          "cashOutEligibility": "Disabled",
-          "allowBundle": false,
-          "propositions": [
-            {
-              "id": "27478",
-              "name": "Essendon by 7+",
-              "returnWin": 4.2,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 27478,
+              "number": 5591,
               "isOpen": true,
               "sortOrder": 1
             },
             {
-              "id": "27479",
-              "name": "Essendon by 1-6",
-              "returnWin": 5.5,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 27479,
-              "isOpen": true,
-              "sortOrder": 2
-            },
-            {
-              "id": "27480",
-              "name": "Draw",
-              "returnWin": 23,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 27480,
-              "isOpen": true,
-              "sortOrder": 3
-            },
-            {
-              "id": "27482",
-              "name": "St Kilda by 1-6",
-              "returnWin": 4.8,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 27482,
-              "isOpen": true,
-              "sortOrder": 4
-            },
-            {
-              "id": "27483",
-              "name": "St Kilda by 7+",
-              "returnWin": 1.9,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 27483,
-              "isOpen": true,
-              "sortOrder": 5
-            }
-          ]
-        },
-        {
-          "id": "135579028",
-          "name": "AFL Ess-St Kilda 2QtrMgn1-12",
-          "shortName": "AFL Ess-StK 2QMgn1-12",
-          "betOption": "2nd Quarter Margin (1-12)",
-          "betOptionSpectrumId": "2848",
-          "betOptionPriority": 16430,
-          "marketUniqueId": 135579028,
-          "closeTime": "2026-07-05T05:16:00.000Z",
-          "bettingStatus": "Open",
-          "message": null,
-          "informationMessage": null,
-          "isFuture": false,
-          "onlineBetting": false,
-          "phoneBettingOnly": true,
-          "inPlay": true,
-          "goingInPlay": false,
-          "allowWin": true,
-          "allowPlace": false,
-          "allowEachWay": false,
-          "allowMulti": true,
-          "allowMultiWin": true,
-          "allowMultiPlace": false,
-          "allowMultiEachWay": false,
-          "numberOfPlaces": 0,
-          "cashOutEligibility": "Disabled",
-          "allowBundle": false,
-          "propositions": [
-            {
-              "id": "10054",
-              "name": "Essendon by 13+",
-              "returnWin": 7,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 10054,
-              "isOpen": true,
-              "sortOrder": 1
-            },
-            {
-              "id": "10055",
-              "name": "Essendon by 1-12",
-              "returnWin": 3.8,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 10055,
-              "isOpen": true,
-              "sortOrder": 2
-            },
-            {
-              "id": "10056",
-              "name": "Draw",
-              "returnWin": 23,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 10056,
-              "isOpen": true,
-              "sortOrder": 3
-            },
-            {
-              "id": "10057",
-              "name": "St Kilda by 1-12",
-              "returnWin": 2.8,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 10057,
-              "isOpen": true,
-              "sortOrder": 4
-            },
-            {
-              "id": "10058",
-              "name": "St Kilda by 13+",
-              "returnWin": 2.6,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 10058,
-              "isOpen": true,
-              "sortOrder": 5
-            }
-          ]
-        },
-        {
-          "id": "135846221",
-          "name": "AFL Ess-StK Qtr2Mg",
-          "shortName": "AFL Ess-StK Qtr2Mg",
-          "betOption": "2nd Quarter Winning Margin",
-          "betOptionSpectrumId": "458",
-          "betOptionPriority": 16435,
-          "marketUniqueId": 135846221,
-          "closeTime": "2026-07-05T05:16:00.000Z",
-          "bettingStatus": "Open",
-          "message": null,
-          "informationMessage": null,
-          "isFuture": false,
-          "onlineBetting": false,
-          "phoneBettingOnly": true,
-          "inPlay": true,
-          "goingInPlay": false,
-          "allowWin": true,
-          "allowPlace": false,
-          "allowEachWay": false,
-          "allowMulti": true,
-          "allowMultiWin": true,
-          "allowMultiPlace": false,
-          "allowMultiEachWay": false,
-          "numberOfPlaces": 0,
-          "cashOutEligibility": "Disabled",
-          "allowBundle": false,
-          "propositions": [
-            {
-              "id": "5237",
-              "name": "Essendon Between 1-6",
-              "returnWin": 6,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 5237,
-              "isOpen": true,
-              "sortOrder": 1
-            },
-            {
-              "id": "5238",
-              "name": "Essendon Between 7-12",
-              "returnWin": 8.5,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 5238,
-              "isOpen": true,
-              "sortOrder": 2
-            },
-            {
-              "id": "5239",
-              "name": "Essendon Between 13-18",
-              "returnWin": 13,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 5239,
-              "isOpen": true,
-              "sortOrder": 3
-            },
-            {
-              "id": "5240",
-              "name": "Essendon Between 19-24",
-              "returnWin": 21,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 5240,
-              "isOpen": true,
-              "sortOrder": 4
-            },
-            {
-              "id": "5241",
-              "name": "Essendon Between 25-30",
-              "returnWin": 41,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 5241,
-              "isOpen": true,
-              "sortOrder": 5
-            },
-            {
-              "id": "5242",
-              "name": "Essendon 31+",
-              "returnWin": 51,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 5242,
-              "isOpen": true,
-              "sortOrder": 6
-            },
-            {
-              "id": "5243",
-              "name": "St Kilda Between 1-6",
-              "returnWin": 5,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 5243,
-              "isOpen": true,
-              "sortOrder": 7
-            },
-            {
-              "id": "5244",
-              "name": "St Kilda Between 7-12",
-              "returnWin": 5.5,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 5244,
-              "isOpen": true,
-              "sortOrder": 8
-            },
-            {
-              "id": "5245",
-              "name": "St Kilda Between 13-18",
-              "returnWin": 6,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 5245,
-              "isOpen": true,
-              "sortOrder": 9
-            },
-            {
-              "id": "5246",
-              "name": "St Kilda Between 19-24",
-              "returnWin": 8,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 5246,
-              "isOpen": true,
-              "sortOrder": 10
-            },
-            {
-              "id": "5247",
-              "name": "St Kilda Between 25-30",
-              "returnWin": 13,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 5247,
-              "isOpen": true,
-              "sortOrder": 11
-            },
-            {
-              "id": "5248",
-              "name": "St Kilda 31+",
-              "returnWin": 12,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 5248,
-              "isOpen": true,
-              "sortOrder": 12
-            },
-            {
-              "id": "5249",
+              "id": "5592",
               "name": "Tie",
               "returnWin": 21,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
               "allowPlace": false,
-              "number": 5249,
+              "number": 5592,
               "isOpen": true,
-              "sortOrder": 13
+              "sortOrder": 2
+            },
+            {
+              "id": "5593",
+              "name": "St Kilda",
+              "returnWin": 1.4,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 5593,
+              "isOpen": true,
+              "sortOrder": 3
             }
           ]
         },
         {
-          "id": "135776818",
-          "name": "AFL Ess-StK 2QTGOU",
-          "shortName": "AFL Ess-StK 2QTGOU",
-          "betOption": "2nd Quarter Time of 1st Goal O/U",
-          "betOptionSpectrumId": "2879",
-          "betOptionPriority": 16490,
-          "marketUniqueId": 135776818,
+          "id": "135846323",
+          "name": "AFL Ess-St Kilda Lv3QLine 7.5",
+          "shortName": "AFL Ess-StK Lv3QLn 7.5",
+          "betOption": "Live 3rd Quarter Line",
+          "betOptionSpectrumId": "1639",
+          "betOptionPriority": 16650,
+          "marketUniqueId": 135846323,
           "closeTime": "2026-07-05T05:16:00.000Z",
           "bettingStatus": "Open",
-          "message": "Pays on elapsed time as per afl.com.au",
-          "informationMessage": "Settled on the official AFL count-up clock published on afl.com.au. This clock runs continuously from the start of each quarter",
+          "message": null,
+          "informationMessage": null,
           "isFuture": false,
           "onlineBetting": false,
           "phoneBettingOnly": true,
@@ -3527,290 +1825,32 @@
           "allowMultiPlace": false,
           "allowMultiEachWay": false,
           "numberOfPlaces": 0,
-          "cashOutEligibility": "Enabled",
+          "cashOutEligibility": "Disabled",
           "allowBundle": false,
           "propositions": [
             {
-              "id": "24212",
-              "name": "0:00-3:00 min",
+              "id": "5638",
+              "name": "Essendon +7.5",
               "returnWin": 1.8,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
               "allowPlace": false,
-              "number": 24212,
+              "number": 5638,
               "isOpen": true,
               "sortOrder": 1
             },
             {
-              "id": "24213",
-              "name": "3:01 or Later",
-              "returnWin": 2,
+              "id": "5639",
+              "name": "St Kilda -7.5",
+              "returnWin": 1.9,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
               "allowPlace": false,
-              "number": 24213,
+              "number": 5639,
               "isOpen": true,
               "sortOrder": 2
-            }
-          ]
-        },
-        {
-          "id": "135579024",
-          "name": "AFL Ess-St Kilda 2Q 1stScoPly",
-          "shortName": "AFL Ess-StK 2Q 1stScoPly",
-          "betOption": "2nd Quarter 1st Scoring Play",
-          "betOptionSpectrumId": "2846",
-          "betOptionPriority": 16535,
-          "marketUniqueId": 135579024,
-          "closeTime": "2026-07-05T05:16:00.000Z",
-          "bettingStatus": "Open",
-          "message": null,
-          "informationMessage": null,
-          "isFuture": false,
-          "onlineBetting": false,
-          "phoneBettingOnly": true,
-          "inPlay": true,
-          "goingInPlay": false,
-          "allowWin": true,
-          "allowPlace": false,
-          "allowEachWay": false,
-          "allowMulti": true,
-          "allowMultiWin": true,
-          "allowMultiPlace": false,
-          "allowMultiEachWay": false,
-          "numberOfPlaces": 0,
-          "cashOutEligibility": "Disabled",
-          "allowBundle": false,
-          "propositions": [
-            {
-              "id": "9727",
-              "name": "Essendon Goal",
-              "returnWin": 3.6,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 9727,
-              "isOpen": true,
-              "sortOrder": 1
-            },
-            {
-              "id": "9728",
-              "name": "St Kilda Goal",
-              "returnWin": 2.8,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 9728,
-              "isOpen": true,
-              "sortOrder": 2
-            },
-            {
-              "id": "9729",
-              "name": "Essendon Behind",
-              "returnWin": 4,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 9729,
-              "isOpen": true,
-              "sortOrder": 3
-            },
-            {
-              "id": "9730",
-              "name": "St Kilda Behind",
-              "returnWin": 3.6,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 9730,
-              "isOpen": true,
-              "sortOrder": 4
-            }
-          ]
-        },
-        {
-          "id": "135637850",
-          "name": "AFL Ess-StK 2QTm1G",
-          "shortName": "AFL Ess-StK 2QTm1G",
-          "betOption": "2nd Quarter Time of 1st Goal",
-          "betOptionSpectrumId": "2850",
-          "betOptionPriority": 16550,
-          "marketUniqueId": 135637850,
-          "closeTime": "2026-07-05T05:16:00.000Z",
-          "bettingStatus": "Open",
-          "message": "Pays on elapsed time as per afl.com.au",
-          "informationMessage": "Settled on the official AFL count-up clock published on afl.com.au. This clock runs continuously from the start of each quarter",
-          "isFuture": false,
-          "onlineBetting": false,
-          "phoneBettingOnly": true,
-          "inPlay": true,
-          "goingInPlay": false,
-          "allowWin": true,
-          "allowPlace": false,
-          "allowEachWay": false,
-          "allowMulti": true,
-          "allowMultiWin": true,
-          "allowMultiPlace": false,
-          "allowMultiEachWay": false,
-          "numberOfPlaces": 0,
-          "cashOutEligibility": "Enabled",
-          "allowBundle": false,
-          "propositions": [
-            {
-              "id": "19731",
-              "name": "0:00-1:00",
-              "returnWin": 5.5,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 19731,
-              "isOpen": true,
-              "sortOrder": 1
-            },
-            {
-              "id": "19732",
-              "name": "1:01-2:00",
-              "returnWin": 4.5,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 19732,
-              "isOpen": true,
-              "sortOrder": 2
-            },
-            {
-              "id": "19733",
-              "name": "2:01-3:00",
-              "returnWin": 4.8,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 19733,
-              "isOpen": true,
-              "sortOrder": 3
-            },
-            {
-              "id": "19734",
-              "name": "3:01-4:00",
-              "returnWin": 6,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 19734,
-              "isOpen": true,
-              "sortOrder": 4
-            },
-            {
-              "id": "19735",
-              "name": "4:01-5:00",
-              "returnWin": 9,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 19735,
-              "isOpen": true,
-              "sortOrder": 5
-            },
-            {
-              "id": "19736",
-              "name": "5:01 or Later",
-              "returnWin": 3.8,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 19736,
-              "isOpen": true,
-              "sortOrder": 6
-            }
-          ]
-        },
-        {
-          "id": "135776826",
-          "name": "AFL Ess-St Kilda 2QLdyScr",
-          "shortName": "AFL Ess-StK 2QLScr",
-          "betOption": "2nd Quarter Last Scoring Play",
-          "betOptionSpectrumId": "2847",
-          "betOptionPriority": 16555,
-          "marketUniqueId": 135776826,
-          "closeTime": "2026-07-05T05:16:00.000Z",
-          "bettingStatus": "Open",
-          "message": null,
-          "informationMessage": null,
-          "isFuture": false,
-          "onlineBetting": false,
-          "phoneBettingOnly": true,
-          "inPlay": true,
-          "goingInPlay": false,
-          "allowWin": true,
-          "allowPlace": false,
-          "allowEachWay": false,
-          "allowMulti": true,
-          "allowMultiWin": true,
-          "allowMultiPlace": false,
-          "allowMultiEachWay": false,
-          "numberOfPlaces": 0,
-          "cashOutEligibility": "Disabled",
-          "allowBundle": false,
-          "propositions": [
-            {
-              "id": "24486",
-              "name": "Essendon Goal",
-              "returnWin": 3.6,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 24486,
-              "isOpen": true,
-              "sortOrder": 1
-            },
-            {
-              "id": "24487",
-              "name": "St Kilda Goal",
-              "returnWin": 2.8,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 24487,
-              "isOpen": true,
-              "sortOrder": 2
-            },
-            {
-              "id": "24488",
-              "name": "Essendon Behind",
-              "returnWin": 4,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 24488,
-              "isOpen": true,
-              "sortOrder": 3
-            },
-            {
-              "id": "24489",
-              "name": "St Kilda Behind",
-              "returnWin": 3.6,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 24489,
-              "isOpen": true,
-              "sortOrder": 4
             }
           ]
         },
@@ -4593,6 +2633,18 @@
               "sortOrder": 25
             },
             {
+              "id": "24579",
+              "name": "Anthony Caminiti (STK)",
+              "returnWin": 5.5,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 24579,
+              "isOpen": true,
+              "sortOrder": 33
+            },
+            {
               "id": "24553",
               "name": "Archie Perkins (ESS)",
               "returnWin": 5.5,
@@ -4795,18 +2847,228 @@
               "number": 24603,
               "isOpen": true,
               "sortOrder": 57
-            },
+            }
+          ]
+        },
+        {
+          "id": "135581602",
+          "name": "AFL R17 Essendon-St Kilda 05/07",
+          "shortName": "AFL R17 Ess-StK 3QLOU",
+          "betOption": "3rd Quarter Line/OverUnder Double",
+          "betOptionSpectrumId": "345",
+          "betOptionPriority": 16665,
+          "marketUniqueId": 135581602,
+          "closeTime": "2026-07-05T09:15:00.000Z",
+          "bettingStatus": "Open",
+          "message": null,
+          "informationMessage": null,
+          "isFuture": false,
+          "onlineBetting": false,
+          "phoneBettingOnly": true,
+          "inPlay": true,
+          "goingInPlay": false,
+          "allowWin": true,
+          "allowPlace": false,
+          "allowEachWay": false,
+          "allowMulti": true,
+          "allowMultiWin": true,
+          "allowMultiPlace": false,
+          "allowMultiEachWay": false,
+          "numberOfPlaces": 0,
+          "cashOutEligibility": "Disabled",
+          "allowBundle": false,
+          "propositions": [
             {
-              "id": "24579",
-              "name": "Anthony Caminiti (STK)",
-              "returnWin": 11,
+              "id": "11547",
+              "name": "Essendon +6.5 / Over 45.5",
+              "returnWin": 3.6,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
               "allowPlace": false,
-              "number": 24579,
+              "number": 11547,
               "isOpen": true,
-              "sortOrder": 33
+              "sortOrder": 1
+            },
+            {
+              "id": "11548",
+              "name": "Essendon +6.5 / Under 45.5",
+              "returnWin": 3.4,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 11548,
+              "isOpen": true,
+              "sortOrder": 2
+            },
+            {
+              "id": "11549",
+              "name": "St Kilda -6.5 / Over 45.5",
+              "returnWin": 3.2,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 11549,
+              "isOpen": true,
+              "sortOrder": 3
+            },
+            {
+              "id": "11550",
+              "name": "St Kilda -6.5 / Under 45.5",
+              "returnWin": 4,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 11550,
+              "isOpen": true,
+              "sortOrder": 4
+            }
+          ]
+        },
+        {
+          "id": "135581592",
+          "name": "AFL R17 Essendon-St Kilda 05/07",
+          "shortName": "AFL R17 Ess-StK 3QHHOU",
+          "betOption": "3rd Quarter H2H/OverUnder Double",
+          "betOptionSpectrumId": "1446",
+          "betOptionPriority": 16670,
+          "marketUniqueId": 135581592,
+          "closeTime": "2026-07-05T09:15:00.000Z",
+          "bettingStatus": "Open",
+          "message": null,
+          "informationMessage": null,
+          "isFuture": false,
+          "onlineBetting": false,
+          "phoneBettingOnly": true,
+          "inPlay": true,
+          "goingInPlay": false,
+          "allowWin": true,
+          "allowPlace": false,
+          "allowEachWay": false,
+          "allowMulti": true,
+          "allowMultiWin": true,
+          "allowMultiPlace": false,
+          "allowMultiEachWay": false,
+          "numberOfPlaces": 0,
+          "cashOutEligibility": "Enabled",
+          "allowBundle": false,
+          "propositions": [
+            {
+              "id": "11620",
+              "name": "Essendon / Over 43.5",
+              "returnWin": 5.25,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 11620,
+              "isOpen": true,
+              "sortOrder": 1
+            },
+            {
+              "id": "11621",
+              "name": "Essendon / Under 43.5",
+              "returnWin": 5.25,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 11621,
+              "isOpen": true,
+              "sortOrder": 2
+            },
+            {
+              "id": "11622",
+              "name": "St Kilda / Over 43.5",
+              "returnWin": 2.6,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 11622,
+              "isOpen": true,
+              "sortOrder": 3
+            },
+            {
+              "id": "11623",
+              "name": "St Kilda / Under 43.5",
+              "returnWin": 2.6,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 11623,
+              "isOpen": true,
+              "sortOrder": 4
+            }
+          ]
+        },
+        {
+          "id": "135581594",
+          "name": "AFL R17 Essendon-St Kilda 05/07",
+          "shortName": "AFL R17 Ess-StK 3QGls",
+          "betOption": "3rd Quarter Goals",
+          "betOptionSpectrumId": "1964",
+          "betOptionPriority": 16675,
+          "marketUniqueId": 135581594,
+          "closeTime": "2026-07-05T09:15:00.000Z",
+          "bettingStatus": "Open",
+          "message": null,
+          "informationMessage": null,
+          "isFuture": false,
+          "onlineBetting": false,
+          "phoneBettingOnly": true,
+          "inPlay": true,
+          "goingInPlay": false,
+          "allowWin": true,
+          "allowPlace": false,
+          "allowEachWay": false,
+          "allowMulti": true,
+          "allowMultiWin": true,
+          "allowMultiPlace": false,
+          "allowMultiEachWay": false,
+          "numberOfPlaces": 0,
+          "cashOutEligibility": "Enabled",
+          "allowBundle": false,
+          "propositions": [
+            {
+              "id": "11590",
+              "name": "0-5 Goals",
+              "returnWin": 2.75,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 11590,
+              "isOpen": true,
+              "sortOrder": 1
+            },
+            {
+              "id": "11591",
+              "name": "6-7 Goals",
+              "returnWin": 3,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 11591,
+              "isOpen": true,
+              "sortOrder": 2
+            },
+            {
+              "id": "11592",
+              "name": "8+ Goals",
+              "returnWin": 2.5,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 11592,
+              "isOpen": true,
+              "sortOrder": 3
             }
           ]
         },
@@ -4987,6 +3249,192 @@
               "number": 10067,
               "isOpen": true,
               "sortOrder": 5
+            }
+          ]
+        },
+        {
+          "id": "135846225",
+          "name": "AFL Ess-StK Qtr3Mg",
+          "shortName": "AFL Ess-StK Qtr3Mg",
+          "betOption": "3rd Quarter Winning Margin",
+          "betOptionSpectrumId": "459",
+          "betOptionPriority": 16700,
+          "marketUniqueId": 135846225,
+          "closeTime": "2026-07-05T05:16:00.000Z",
+          "bettingStatus": "Open",
+          "message": null,
+          "informationMessage": null,
+          "isFuture": false,
+          "onlineBetting": false,
+          "phoneBettingOnly": true,
+          "inPlay": true,
+          "goingInPlay": false,
+          "allowWin": true,
+          "allowPlace": false,
+          "allowEachWay": false,
+          "allowMulti": true,
+          "allowMultiWin": true,
+          "allowMultiPlace": false,
+          "allowMultiEachWay": false,
+          "numberOfPlaces": 0,
+          "cashOutEligibility": "Disabled",
+          "allowBundle": false,
+          "propositions": [
+            {
+              "id": "5285",
+              "name": "Essendon Between 1-6",
+              "returnWin": 6.5,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 5285,
+              "isOpen": true,
+              "sortOrder": 1
+            },
+            {
+              "id": "5286",
+              "name": "Essendon Between 7-12",
+              "returnWin": 9,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 5286,
+              "isOpen": true,
+              "sortOrder": 2
+            },
+            {
+              "id": "5287",
+              "name": "Essendon Between 13-18",
+              "returnWin": 13,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 5287,
+              "isOpen": true,
+              "sortOrder": 3
+            },
+            {
+              "id": "5288",
+              "name": "Essendon Between 19-24",
+              "returnWin": 26,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 5288,
+              "isOpen": true,
+              "sortOrder": 4
+            },
+            {
+              "id": "5289",
+              "name": "Essendon Between 25-30",
+              "returnWin": 41,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 5289,
+              "isOpen": true,
+              "sortOrder": 5
+            },
+            {
+              "id": "5290",
+              "name": "Essendon 31+",
+              "returnWin": 67,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 5290,
+              "isOpen": true,
+              "sortOrder": 6
+            },
+            {
+              "id": "5291",
+              "name": "St Kilda Between 1-6",
+              "returnWin": 5.5,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 5291,
+              "isOpen": true,
+              "sortOrder": 7
+            },
+            {
+              "id": "5292",
+              "name": "St Kilda Between 7-12",
+              "returnWin": 5,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 5292,
+              "isOpen": true,
+              "sortOrder": 8
+            },
+            {
+              "id": "5293",
+              "name": "St Kilda Between 13-18",
+              "returnWin": 6,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 5293,
+              "isOpen": true,
+              "sortOrder": 9
+            },
+            {
+              "id": "5294",
+              "name": "St Kilda Between 19-24",
+              "returnWin": 7.5,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 5294,
+              "isOpen": true,
+              "sortOrder": 10
+            },
+            {
+              "id": "5295",
+              "name": "St Kilda Between 25-30",
+              "returnWin": 11,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 5295,
+              "isOpen": true,
+              "sortOrder": 11
+            },
+            {
+              "id": "5296",
+              "name": "St Kilda 31+",
+              "returnWin": 11,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 5296,
+              "isOpen": true,
+              "sortOrder": 12
+            },
+            {
+              "id": "5297",
+              "name": "Tie",
+              "returnWin": 21,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 5297,
+              "isOpen": true,
+              "sortOrder": 13
             }
           ]
         },
@@ -5299,6 +3747,72 @@
               "number": 25031,
               "isOpen": true,
               "sortOrder": 4
+            }
+          ]
+        },
+        {
+          "id": "135846247",
+          "name": "AFL Ess-StK Lv4QHH",
+          "shortName": "AFL Ess-StK Lv4QHH",
+          "betOption": "Live 4th Quarter Head to Head",
+          "betOptionSpectrumId": "1637",
+          "betOptionPriority": 16870,
+          "marketUniqueId": 135846247,
+          "closeTime": "2026-07-05T05:16:00.000Z",
+          "bettingStatus": "Open",
+          "message": null,
+          "informationMessage": null,
+          "isFuture": false,
+          "onlineBetting": false,
+          "phoneBettingOnly": true,
+          "inPlay": true,
+          "goingInPlay": false,
+          "allowWin": true,
+          "allowPlace": false,
+          "allowEachWay": false,
+          "allowMulti": true,
+          "allowMultiWin": true,
+          "allowMultiPlace": false,
+          "allowMultiEachWay": false,
+          "numberOfPlaces": 0,
+          "cashOutEligibility": "Disabled",
+          "allowBundle": false,
+          "propositions": [
+            {
+              "id": "5472",
+              "name": "Essendon",
+              "returnWin": 3,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 5472,
+              "isOpen": true,
+              "sortOrder": 1
+            },
+            {
+              "id": "5473",
+              "name": "Tie",
+              "returnWin": 21,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 5473,
+              "isOpen": true,
+              "sortOrder": 2
+            },
+            {
+              "id": "5474",
+              "name": "St Kilda",
+              "returnWin": 1.4,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 5474,
+              "isOpen": true,
+              "sortOrder": 3
             }
           ]
         },
@@ -6069,6 +4583,18 @@
               "sortOrder": 24
             },
             {
+              "id": "28506",
+              "name": "Anthony Caminiti (STK)",
+              "returnWin": 5.5,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 28506,
+              "isOpen": true,
+              "sortOrder": 33
+            },
+            {
               "id": "28543",
               "name": "Campbell Lake (STK)",
               "returnWin": 6,
@@ -6283,18 +4809,6 @@
               "number": 28549,
               "isOpen": true,
               "sortOrder": 57
-            },
-            {
-              "id": "28506",
-              "name": "Anthony Caminiti (STK)",
-              "returnWin": 11,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 28506,
-              "isOpen": true,
-              "sortOrder": 33
             }
           ]
         },
@@ -6475,6 +4989,192 @@
               "number": 10078,
               "isOpen": true,
               "sortOrder": 5
+            }
+          ]
+        },
+        {
+          "id": "135846350",
+          "name": "AFL Ess-StK Qtr4Mg",
+          "shortName": "AFL Ess-StK Qtr4Mg",
+          "betOption": "4th Quarter Winning Margin",
+          "betOptionSpectrumId": "460",
+          "betOptionPriority": 16935,
+          "marketUniqueId": 135846350,
+          "closeTime": "2026-07-05T05:16:00.000Z",
+          "bettingStatus": "Open",
+          "message": null,
+          "informationMessage": null,
+          "isFuture": false,
+          "onlineBetting": false,
+          "phoneBettingOnly": true,
+          "inPlay": true,
+          "goingInPlay": false,
+          "allowWin": true,
+          "allowPlace": false,
+          "allowEachWay": false,
+          "allowMulti": true,
+          "allowMultiWin": true,
+          "allowMultiPlace": false,
+          "allowMultiEachWay": false,
+          "numberOfPlaces": 0,
+          "cashOutEligibility": "Disabled",
+          "allowBundle": false,
+          "propositions": [
+            {
+              "id": "5658",
+              "name": "Essendon Between 1-6",
+              "returnWin": 6.5,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 5658,
+              "isOpen": true,
+              "sortOrder": 1
+            },
+            {
+              "id": "5659",
+              "name": "Essendon Between 7-12",
+              "returnWin": 9,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 5659,
+              "isOpen": true,
+              "sortOrder": 2
+            },
+            {
+              "id": "5660",
+              "name": "Essendon Between 13-18",
+              "returnWin": 13,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 5660,
+              "isOpen": true,
+              "sortOrder": 3
+            },
+            {
+              "id": "5661",
+              "name": "Essendon Between 19-24",
+              "returnWin": 26,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 5661,
+              "isOpen": true,
+              "sortOrder": 4
+            },
+            {
+              "id": "5662",
+              "name": "Essendon Between 25-30",
+              "returnWin": 41,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 5662,
+              "isOpen": true,
+              "sortOrder": 5
+            },
+            {
+              "id": "5663",
+              "name": "Essendon 31+",
+              "returnWin": 67,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 5663,
+              "isOpen": true,
+              "sortOrder": 6
+            },
+            {
+              "id": "5664",
+              "name": "St Kilda Between 1-6",
+              "returnWin": 5.5,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 5664,
+              "isOpen": true,
+              "sortOrder": 7
+            },
+            {
+              "id": "5665",
+              "name": "St Kilda Between 7-12",
+              "returnWin": 5,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 5665,
+              "isOpen": true,
+              "sortOrder": 8
+            },
+            {
+              "id": "5666",
+              "name": "St Kilda Between 13-18",
+              "returnWin": 6,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 5666,
+              "isOpen": true,
+              "sortOrder": 9
+            },
+            {
+              "id": "5667",
+              "name": "St Kilda Between 19-24",
+              "returnWin": 7.5,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 5667,
+              "isOpen": true,
+              "sortOrder": 10
+            },
+            {
+              "id": "5668",
+              "name": "St Kilda Between 25-30",
+              "returnWin": 11,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 5668,
+              "isOpen": true,
+              "sortOrder": 11
+            },
+            {
+              "id": "5669",
+              "name": "St Kilda 31+",
+              "returnWin": 11,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 5669,
+              "isOpen": true,
+              "sortOrder": 12
+            },
+            {
+              "id": "5670",
+              "name": "Tie",
+              "returnWin": 21,
+              "returnPlace": 0,
+              "differential": null,
+              "bettingStatus": "Open",
+              "allowPlace": false,
+              "number": 5670,
+              "isOpen": true,
+              "sortOrder": 13
             }
           ]
         },
@@ -8048,7 +6748,7 @@
             {
               "id": "10493",
               "name": "Nth Melb by 16+",
-              "returnWin": 4.8,
+              "returnWin": 5,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -8190,7 +6890,7 @@
             {
               "id": "19890",
               "name": "PtAd -16.5 /Over 171.5",
-              "returnWin": 3.3,
+              "returnWin": 3.4,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -8203,7 +6903,7 @@
             {
               "id": "19891",
               "name": "PtAd -16.5 /Under 171.5",
-              "returnWin": 4,
+              "returnWin": 3.8,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -8229,7 +6929,7 @@
             {
               "id": "19893",
               "name": "NMlb +16.5 /Under 171.5",
-              "returnWin": 3.5,
+              "returnWin": 3.4,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -8274,7 +6974,7 @@
             {
               "id": "19748",
               "name": "Port Adel /Over 173.5",
-              "returnWin": 2.6,
+              "returnWin": 2.7,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -8676,7 +7376,7 @@
             {
               "id": "10397",
               "name": "Port Adel -36.5",
-              "returnWin": 3.4,
+              "returnWin": 3.3,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -8689,7 +7389,7 @@
             {
               "id": "10398",
               "name": "Nth Melb +36.5",
-              "returnWin": 1.28,
+              "returnWin": 1.3,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -8702,7 +7402,7 @@
             {
               "id": "10399",
               "name": "Port Adel -32.5",
-              "returnWin": 3,
+              "returnWin": 2.9,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -8715,7 +7415,7 @@
             {
               "id": "10400",
               "name": "Nth Melb +32.5",
-              "returnWin": 1.36,
+              "returnWin": 1.38,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -8910,7 +7610,7 @@
             {
               "id": "10415",
               "name": "Port Adel +4.5",
-              "returnWin": 1.32,
+              "returnWin": 1.3,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -8923,7 +7623,7 @@
             {
               "id": "10416",
               "name": "Nth Melb -4.5",
-              "returnWin": 3.2,
+              "returnWin": 3.3,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -8936,7 +7636,7 @@
             {
               "id": "10417",
               "name": "Port Adel +8.5",
-              "returnWin": 1.25,
+              "returnWin": 1.24,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -8949,7 +7649,7 @@
             {
               "id": "10418",
               "name": "Nth Melb -8.5",
-              "returnWin": 3.7,
+              "returnWin": 3.8,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -8962,7 +7662,7 @@
             {
               "id": "10419",
               "name": "Port Adel +12.5",
-              "returnWin": 1.2,
+              "returnWin": 1.18,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -8975,7 +7675,7 @@
             {
               "id": "10420",
               "name": "Nth Melb -12.5",
-              "returnWin": 4.2,
+              "returnWin": 4.5,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -8988,7 +7688,7 @@
             {
               "id": "10421",
               "name": "Port Adel +16.5",
-              "returnWin": 1.15,
+              "returnWin": 1.14,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -9001,7 +7701,7 @@
             {
               "id": "10422",
               "name": "Nth Melb -16.5",
-              "returnWin": 5,
+              "returnWin": 5.2,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -9072,7 +7772,7 @@
             {
               "id": "19904",
               "name": "Over 203.5",
-              "returnWin": 6,
+              "returnWin": 6.2,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -9085,7 +7785,7 @@
             {
               "id": "19905",
               "name": "Under 203.5",
-              "returnWin": 1.11,
+              "returnWin": 1.1,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -9150,7 +7850,7 @@
             {
               "id": "19910",
               "name": "Over 185.5",
-              "returnWin": 2.75,
+              "returnWin": 2.8,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -9163,7 +7863,7 @@
             {
               "id": "19911",
               "name": "Under 185.5",
-              "returnWin": 1.42,
+              "returnWin": 1.4,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -9176,7 +7876,7 @@
             {
               "id": "19912",
               "name": "Over 179.5",
-              "returnWin": 2.25,
+              "returnWin": 2.3,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -9189,7 +7889,7 @@
             {
               "id": "19913",
               "name": "Under 179.5",
-              "returnWin": 1.6,
+              "returnWin": 1.58,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -9202,7 +7902,7 @@
             {
               "id": "19914",
               "name": "Over 173.5",
-              "returnWin": 1.9,
+              "returnWin": 1.95,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -9215,7 +7915,7 @@
             {
               "id": "19915",
               "name": "Under 173.5",
-              "returnWin": 1.85,
+              "returnWin": 1.8,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -9280,7 +7980,7 @@
             {
               "id": "19920",
               "name": "Over 155.5",
-              "returnWin": 1.3,
+              "returnWin": 1.32,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -9293,7 +7993,7 @@
             {
               "id": "19921",
               "name": "Under 155.5",
-              "returnWin": 3.3,
+              "returnWin": 3.2,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -27082,7 +25782,7 @@
             {
               "id": "10273",
               "name": "Port Adelaide by 43-44",
-              "returnWin": 34,
+              "returnWin": 31,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -27900,7 +26600,7 @@
             {
               "id": "10198",
               "name": "Either Team By 19 or Less",
-              "returnWin": 2.2,
+              "returnWin": 2.25,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -27984,7 +26684,7 @@
             {
               "id": "10529",
               "name": "North Melbourne by 30+",
-              "returnWin": 8.5,
+              "returnWin": 9,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -28370,7 +27070,7 @@
             {
               "id": "19943",
               "name": "Pt Adel 40+ /160 or less",
-              "returnWin": 12,
+              "returnWin": 11,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -28418,7 +27118,7 @@
             {
               "id": "19947",
               "name": "Pt Adel 1-39 /160 or less",
-              "returnWin": 4.5,
+              "returnWin": 4.2,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -28786,7 +27486,7 @@
             {
               "id": "20003",
               "name": "PtA 80-99 / NMl 120+",
-              "returnWin": 41,
+              "returnWin": 51,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -29435,7 +28135,7 @@
             {
               "id": "20037",
               "name": "183 to 185",
-              "returnWin": 13,
+              "returnWin": 14,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -29717,7 +28417,7 @@
             {
               "id": "27801",
               "name": "Pt Adel Over 94.5",
-              "returnWin": 1.9,
+              "returnWin": 1.95,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -29729,7 +28429,7 @@
             {
               "id": "27802",
               "name": "Pt Adel Under 94.5",
-              "returnWin": 1.9,
+              "returnWin": 1.85,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -30089,7 +28789,7 @@
             {
               "id": "28051",
               "name": "Nth Melb 61 to 70",
-              "returnWin": 6,
+              "returnWin": 5.5,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -33626,7 +32326,7 @@
             {
               "id": "10518",
               "name": "Port Adelaide",
-              "returnWin": 1.53,
+              "returnWin": 1.52,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -33638,7 +32338,7 @@
             {
               "id": "10519",
               "name": "North Melbourne",
-              "returnWin": 2.5,
+              "returnWin": 2.55,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -33680,7 +32380,7 @@
             {
               "id": "10187",
               "name": "Port Adelaide",
-              "returnWin": 1.53,
+              "returnWin": 1.52,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -33809,7 +32509,7 @@
             {
               "id": "19836",
               "name": "Pt Adel -8.5 /Over 86.5",
-              "returnWin": 3.5,
+              "returnWin": 3.4,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -33833,7 +32533,7 @@
             {
               "id": "19838",
               "name": "Nth Melb +8.5 /Over 86.5",
-              "returnWin": 3.6,
+              "returnWin": 3.8,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -33845,7 +32545,7 @@
             {
               "id": "19839",
               "name": "Nth Melb +8.5 /Under 86.5",
-              "returnWin": 3.1,
+              "returnWin": 3.2,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -34225,7 +32925,7 @@
             {
               "id": "10589",
               "name": "Port Adel -8.5",
-              "returnWin": 1.95,
+              "returnWin": 1.9,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -34238,7 +32938,7 @@
             {
               "id": "10590",
               "name": "Nth Melb +8.5",
-              "returnWin": 1.8,
+              "returnWin": 1.85,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -35231,7 +33931,7 @@
             {
               "id": "20053",
               "name": "91 to 100",
-              "returnWin": 5,
+              "returnWin": 4.8,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -35255,7 +33955,7 @@
             {
               "id": "20055",
               "name": "111 Points or More",
-              "returnWin": 7,
+              "returnWin": 7.5,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -35375,7 +34075,7 @@
             {
               "id": "27756",
               "name": "Under 85 Pts",
-              "returnWin": 2,
+              "returnWin": 1.95,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -35507,7 +34207,7 @@
             {
               "id": "27920",
               "name": "Port Adelaide 31 to 40",
-              "returnWin": 5,
+              "returnWin": 4.8,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -36545,7 +35245,7 @@
             {
               "id": "10179",
               "name": "North Melbourne by 19-24",
-              "returnWin": 15,
+              "returnWin": 16,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -36791,7 +35491,7 @@
             {
               "id": "28011",
               "name": "Port Adel 31 to 40",
-              "returnWin": 4.8,
+              "returnWin": 4.5,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -37252,7 +35952,7 @@
             {
               "id": "10222",
               "name": "Port Adelaide -3.5",
-              "returnWin": 1.9,
+              "returnWin": 1.85,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -37265,7 +35965,7 @@
             {
               "id": "10223",
               "name": "North Melbourne +3.5",
-              "returnWin": 1.9,
+              "returnWin": 1.95,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -37933,7 +36633,7 @@
             {
               "id": "10454",
               "name": "North Melbourne by 1-6",
-              "returnWin": 5.5,
+              "returnWin": 5,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -37946,7 +36646,7 @@
             {
               "id": "10455",
               "name": "North Melbourne by 7+",
-              "returnWin": 3.4,
+              "returnWin": 3.5,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -38232,7 +36932,7 @@
             {
               "id": "18703",
               "name": "North Melbourne",
-              "returnWin": 2.7,
+              "returnWin": 2.8,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -38934,7 +37634,7 @@
             {
               "id": "27799",
               "name": "North Melbourne 26 to 30",
-              "returnWin": 6.5,
+              "returnWin": 6,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -38946,7 +37646,7 @@
             {
               "id": "27800",
               "name": "North Melbourne 31+",
-              "returnWin": 5.8,
+              "returnWin": 6,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -39442,7 +38142,7 @@
             {
               "id": "10667",
               "name": "Nth Melb Goal",
-              "returnWin": 3.5,
+              "returnWin": 3.6,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -39634,7 +38334,7 @@
             {
               "id": "28066",
               "name": "North Melbourne Goal",
-              "returnWin": 3.5,
+              "returnWin": 3.6,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -41511,7 +40211,7 @@
             {
               "id": "19757",
               "name": "61 Points or More",
-              "returnWin": 7.5,
+              "returnWin": 8,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -44001,7 +42701,7 @@
             {
               "id": "19889",
               "name": "61 Points or More",
-              "returnWin": 7.5,
+              "returnWin": 8,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -44847,7 +43547,7 @@
             {
               "id": "40757",
               "name": "Port Adelaide",
-              "returnWin": 1.62,
+              "returnWin": 1.6,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -46509,7 +45209,7 @@
             {
               "id": "20058",
               "name": "31 to 40",
-              "returnWin": 3.5,
+              "returnWin": 3.4,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -46863,7 +45563,7 @@
             {
               "id": "27829",
               "name": "Nth Melb 0 to 10",
-              "returnWin": 4.8,
+              "returnWin": 4.6,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -46923,7 +45623,7 @@
             {
               "id": "27834",
               "name": "Nth Melb 31+",
-              "returnWin": 4.8,
+              "returnWin": 5,
               "returnPlace": 0,
               "differential": null,
               "bettingStatus": "Open",
@@ -50216,189 +48916,6 @@
       "stats": true
     },
     {
-      "id": "StKvPtA",
-      "name": "St Kilda v Port Adelaide",
-      "spectrumId": "StKvPtA",
-      "spectrumUniqueId": 3339980,
-      "competitionSpectrumId": "102",
-      "round": "18",
-      "broadcastChannel": "Fox Footy",
-      "broadcastChannels": [
-        "Fox Footy"
-      ],
-      "startTime": "2026-07-11T03:15:00.000Z",
-      "_links": {
-        "self": "https://api.beta.tab.com.au/v1/tab-info-service/sports/AFL%20Football/competitions/AFL/matches/St%20Kilda%20v%20Port%20Adelaide?jurisdiction=SA&amp;homeState=SA&amp;includeH2hMulti=false",
-        "selfTemplate": "https://api.beta.tab.com.au/v1/tab-info-service/sports/AFL%20Football/competitions/AFL/matches/St%20Kilda%20v%20Port%20Adelaide?jurisdiction={jurisdiction}{&amp;returnPromo,returnOffers,returnMultiOnly,channelType,cashSales,homeState,includeH2hMulti}",
-        "markets": "https://api.beta.tab.com.au/v1/tab-info-service/sports/AFL%20Football/competitions/AFL/matches/St%20Kilda%20v%20Port%20Adelaide/markets?jurisdiction=SA&amp;homeState=SA",
-        "stats": "https://api.beta.tab.com.au/v1/stats-service/sports/AFL%20Football/competitions/AFL/matches/3339980/h2h/stats"
-      },
-      "contestants": [
-        {
-          "name": "St Kilda",
-          "position": "HOME",
-          "isHome": true,
-          "image": [
-            {
-              "size": "svg",
-              "url": "https://metadata.beta.tab.com.au/icons/AFL/St%20Kilda.svg"
-            },
-            {
-              "size": "xxhdpi",
-              "url": "https://metadata.beta.tab.com.au/icons/AFL/St%20Kilda_xxhdpi.png"
-            },
-            {
-              "size": "2x",
-              "url": "https://metadata.beta.tab.com.au/icons/AFL/St%20Kilda%402x.png"
-            }
-          ]
-        },
-        {
-          "name": "Port Adelaide",
-          "position": "AWAY",
-          "isHome": false,
-          "image": [
-            {
-              "size": "svg",
-              "url": "https://metadata.beta.tab.com.au/icons/AFL/Port%20Adelaide.svg"
-            },
-            {
-              "size": "xxhdpi",
-              "url": "https://metadata.beta.tab.com.au/icons/AFL/Port%20Adelaide_xxhdpi.png"
-            },
-            {
-              "size": "2x",
-              "url": "https://metadata.beta.tab.com.au/icons/AFL/Port%20Adelaide%402x.png"
-            }
-          ]
-        }
-      ],
-      "competitors": [
-        "St Kilda",
-        "Port Adelaide"
-      ],
-      "openMarketCount": 2,
-      "futureMarketCount": 0,
-      "nonFutureMarketCount": 2,
-      "markets": [
-        {
-          "id": "135529416",
-          "name": "AFL R18 St Kilda-Port Adel 11/07",
-          "shortName": "AFL R18 StK-PtAdel NxRdHH",
-          "betOption": "Head To Head",
-          "betOptionSpectrumId": "72",
-          "betOptionPriority": 475,
-          "marketUniqueId": 135529416,
-          "closeTime": "2026-07-11T03:15:00.000Z",
-          "bettingStatus": "Open",
-          "message": null,
-          "informationMessage": null,
-          "isFuture": false,
-          "onlineBetting": true,
-          "phoneBettingOnly": false,
-          "inPlay": false,
-          "goingInPlay": false,
-          "allowWin": true,
-          "allowPlace": false,
-          "allowEachWay": false,
-          "allowMulti": true,
-          "allowMultiWin": true,
-          "allowMultiPlace": false,
-          "allowMultiEachWay": false,
-          "numberOfPlaces": 0,
-          "cashOutEligibility": "PreMatch",
-          "allowBundle": false,
-          "propositions": [
-            {
-              "id": "5721",
-              "name": "St Kilda",
-              "returnWin": 1.65,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 5721,
-              "isOpen": true,
-              "sortOrder": 1,
-              "position": "HOME"
-            },
-            {
-              "id": "5722",
-              "name": "Port Adelaide",
-              "returnWin": 2.25,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 5722,
-              "isOpen": true,
-              "sortOrder": 2,
-              "position": "AWAY"
-            }
-          ]
-        },
-        {
-          "id": "135529417",
-          "name": "AFL R18 St Kilda-Port Adel 11/07",
-          "shortName": "AFL R18 StK-PtAdel NxRdLn",
-          "betOption": "Line",
-          "betOptionSpectrumId": "43",
-          "betOptionPriority": 1470,
-          "marketUniqueId": 135529417,
-          "closeTime": "2026-07-11T03:15:00.000Z",
-          "bettingStatus": "Open",
-          "message": null,
-          "informationMessage": null,
-          "isFuture": false,
-          "onlineBetting": true,
-          "phoneBettingOnly": false,
-          "inPlay": false,
-          "goingInPlay": false,
-          "allowWin": true,
-          "allowPlace": false,
-          "allowEachWay": false,
-          "allowMulti": true,
-          "allowMultiWin": true,
-          "allowMultiPlace": false,
-          "allowMultiEachWay": false,
-          "numberOfPlaces": 0,
-          "cashOutEligibility": "Enabled",
-          "allowBundle": false,
-          "propositions": [
-            {
-              "id": "5723",
-              "name": "St Kilda -7.5",
-              "returnWin": 1.9,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 5723,
-              "isOpen": true,
-              "sortOrder": 1,
-              "line": "-7.5"
-            },
-            {
-              "id": "5724",
-              "name": "Port Adelaide +7.5",
-              "returnWin": 1.9,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 5724,
-              "isOpen": true,
-              "sortOrder": 2,
-              "line": "+7.5"
-            }
-          ]
-        }
-      ],
-      "inPlay": false,
-      "goingInPlay": false,
-      "stats": true
-    },
-    {
       "id": "GWSvGee",
       "name": "GWS v Geelong",
       "spectrumId": "GWSvGee",
@@ -51312,189 +49829,6 @@
       "inPlay": false,
       "goingInPlay": false,
       "stats": true
-    },
-    {
-      "id": "BrsvEss",
-      "name": "Brisbane v Essendon",
-      "spectrumId": "BrsvEss",
-      "spectrumUniqueId": 3339986,
-      "competitionSpectrumId": "102",
-      "round": "18",
-      "broadcastChannel": "Fox Footy",
-      "broadcastChannels": [
-        "Fox Footy"
-      ],
-      "startTime": "2026-07-12T06:40:00.000Z",
-      "_links": {
-        "self": "https://api.beta.tab.com.au/v1/tab-info-service/sports/AFL%20Football/competitions/AFL/matches/Brisbane%20v%20Essendon?jurisdiction=SA&amp;homeState=SA&amp;includeH2hMulti=false",
-        "selfTemplate": "https://api.beta.tab.com.au/v1/tab-info-service/sports/AFL%20Football/competitions/AFL/matches/Brisbane%20v%20Essendon?jurisdiction={jurisdiction}{&amp;returnPromo,returnOffers,returnMultiOnly,channelType,cashSales,homeState,includeH2hMulti}",
-        "markets": "https://api.beta.tab.com.au/v1/tab-info-service/sports/AFL%20Football/competitions/AFL/matches/Brisbane%20v%20Essendon/markets?jurisdiction=SA&amp;homeState=SA",
-        "stats": "https://api.beta.tab.com.au/v1/stats-service/sports/AFL%20Football/competitions/AFL/matches/3339986/h2h/stats"
-      },
-      "contestants": [
-        {
-          "name": "Brisbane",
-          "position": "HOME",
-          "isHome": true,
-          "image": [
-            {
-              "size": "svg",
-              "url": "https://metadata.beta.tab.com.au/icons/AFL/Brisbane%20Lions.svg"
-            },
-            {
-              "size": "xxhdpi",
-              "url": "https://metadata.beta.tab.com.au/icons/AFL/Brisbane%20Lions_xxhdpi.png"
-            },
-            {
-              "size": "2x",
-              "url": "https://metadata.beta.tab.com.au/icons/AFL/Brisbane%20Lions%402x.png"
-            }
-          ]
-        },
-        {
-          "name": "Essendon",
-          "position": "AWAY",
-          "isHome": false,
-          "image": [
-            {
-              "size": "svg",
-              "url": "https://metadata.beta.tab.com.au/icons/AFL/Essendon.svg"
-            },
-            {
-              "size": "xxhdpi",
-              "url": "https://metadata.beta.tab.com.au/icons/AFL/Essendon_xxhdpi.png"
-            },
-            {
-              "size": "2x",
-              "url": "https://metadata.beta.tab.com.au/icons/AFL/Essendon%402x.png"
-            }
-          ]
-        }
-      ],
-      "competitors": [
-        "Brisbane",
-        "Essendon"
-      ],
-      "openMarketCount": 2,
-      "futureMarketCount": 0,
-      "nonFutureMarketCount": 2,
-      "markets": [
-        {
-          "id": "135529380",
-          "name": "AFL R18 Brisbane-Essendon 12/07",
-          "shortName": "AFL R18 Bris-Ess NxRdHH",
-          "betOption": "Head To Head",
-          "betOptionSpectrumId": "72",
-          "betOptionPriority": 475,
-          "marketUniqueId": 135529380,
-          "closeTime": "2026-07-12T06:40:00.000Z",
-          "bettingStatus": "Open",
-          "message": null,
-          "informationMessage": null,
-          "isFuture": false,
-          "onlineBetting": true,
-          "phoneBettingOnly": false,
-          "inPlay": false,
-          "goingInPlay": false,
-          "allowWin": true,
-          "allowPlace": false,
-          "allowEachWay": false,
-          "allowMulti": true,
-          "allowMultiWin": true,
-          "allowMultiPlace": false,
-          "allowMultiEachWay": false,
-          "numberOfPlaces": 0,
-          "cashOutEligibility": "PreMatch",
-          "allowBundle": false,
-          "propositions": [
-            {
-              "id": "5793",
-              "name": "Brisbane",
-              "returnWin": 1.03,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 5793,
-              "isOpen": true,
-              "sortOrder": 1,
-              "position": "HOME"
-            },
-            {
-              "id": "5794",
-              "name": "Essendon",
-              "returnWin": 11,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 5794,
-              "isOpen": true,
-              "sortOrder": 2,
-              "position": "AWAY"
-            }
-          ]
-        },
-        {
-          "id": "135529382",
-          "name": "AFL R18 Brisbane-Essendon 12/07",
-          "shortName": "AFL R18 Bris-Ess NxRdLn",
-          "betOption": "Line",
-          "betOptionSpectrumId": "43",
-          "betOptionPriority": 1470,
-          "marketUniqueId": 135529382,
-          "closeTime": "2026-07-12T06:40:00.000Z",
-          "bettingStatus": "Open",
-          "message": null,
-          "informationMessage": null,
-          "isFuture": false,
-          "onlineBetting": true,
-          "phoneBettingOnly": false,
-          "inPlay": false,
-          "goingInPlay": false,
-          "allowWin": true,
-          "allowPlace": false,
-          "allowEachWay": false,
-          "allowMulti": true,
-          "allowMultiWin": true,
-          "allowMultiPlace": false,
-          "allowMultiEachWay": false,
-          "numberOfPlaces": 0,
-          "cashOutEligibility": "Enabled",
-          "allowBundle": false,
-          "propositions": [
-            {
-              "id": "5797",
-              "name": "Brisbane -54.5",
-              "returnWin": 1.9,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 5797,
-              "isOpen": true,
-              "sortOrder": 3,
-              "line": "-54.5"
-            },
-            {
-              "id": "5798",
-              "name": "Essendon +54.5",
-              "returnWin": 1.9,
-              "returnPlace": 0,
-              "differential": null,
-              "bettingStatus": "Open",
-              "allowPlace": false,
-              "number": 5798,
-              "isOpen": true,
-              "sortOrder": 4,
-              "line": "+54.5"
-            }
-          ]
-        }
-      ],
-      "inPlay": false,
-      "goingInPlay": false,
-      "stats": true
     }
   ],
   "tournaments": [],
@@ -51506,10 +49840,12 @@
     "What Are The Odds?",
     "Line",
     "Live Lines",
+    "Total Score Over/Under",
     "Margin",
     "Tri Bet",
     "Margin (1-24)",
     "Line/Over Under Double",
+    "Live Line Over/Under Double",
     "HDtoHD/OverUnder Double",
     "Line/Total Double $2",
     "Line/Total Double $7",
@@ -51602,7 +49938,6 @@
     "To Kick A Goal (1st Half)",
     "To Kick A Goal (2nd Half)",
     "1st Half Head to Head",
-    "Live 1st Half Head to Head",
     "1st Half Result",
     "1st Half Line",
     "1st Half Line/OverUnder Double",
@@ -51615,7 +49950,6 @@
     "1st Half Margin (1-19)",
     "1st Half Winning Margin",
     "1st Half Super Margin",
-    "Live 1st Half Margin",
     "1st Half Total Points",
     "1st Half Total Points O/U",
     "1st Half Total 3-Way",
@@ -51669,17 +50003,11 @@
     "1st Quarter Total Points Odd/Even",
     "2nd Quarter Result",
     "2nd Quarter Head to Head",
-    "Live 2nd Quarter Head to Head",
     "2nd Quarter Line",
-    "Live 2nd Quarter Line",
     "2nd Quarter 1st Goal Scorer",
     "To Kick a Goal (2nd Quarter)",
-    "2nd Quarter Line/OverUnder Double",
-    "2nd Quarter H2H/OverUnder Double",
-    "2nd Quarter Goals",
     "2nd Quarter Margin (1-6)",
     "2nd Quarter Margin (1-12)",
-    "2nd Quarter Winning Margin",
     "2nd Quarter Super Margin",
     "2nd Quarter Time of 1st Goal O/U",
     "2nd Quarter Total Points O/U",
@@ -51696,11 +50024,17 @@
     "2nd Quarter Last Scoring Play",
     "3rd Quarter Result",
     "3rd Quarter Head to Head",
+    "Live 3rd Quarter Head to Head",
     "3rd Quarter Line",
+    "Live 3rd Quarter Line",
     "3rd Quarter 1st Goal Scorer",
     "To Kick a Goal (3rd Quarter)",
+    "3rd Quarter Line/OverUnder Double",
+    "3rd Quarter H2H/OverUnder Double",
+    "3rd Quarter Goals",
     "3rd Quarter Margin (1-6)",
     "3rd Quarter Margin (1-12)",
+    "3rd Quarter Winning Margin",
     "3rd Quarter Super Margin",
     "3rd Quarter Time of 1st Goal O/U",
     "3rd Quarter Total Points",
@@ -51717,11 +50051,13 @@
     "3rd Quarter Last Scoring Play",
     "4th Quarter Result",
     "4th Quarter Head to Head",
+    "Live 4th Quarter Head to Head",
     "4th Quarter Line",
     "4th Quarter 1st Goal Scorer",
     "To Kick a Goal (4th Quarter)",
     "4th Quarter Margin (1-6)",
     "4th Quarter Margin (1-12)",
+    "4th Quarter Winning Margin",
     "4th Quarter Super Margin",
     "4th Quarter Time of 1st Goal O/U",
     "4th Quarter Total Points",
@@ -51757,7 +50093,7 @@
     {
       "name": "Head To Head",
       "hasFutureMarket": false,
-      "openMarketCount": 11,
+      "openMarketCount": 9,
       "_links": {
         "markets": "https://api.beta.tab.com.au/v1/tab-info-service/sports/AFL%20Football/competitions/AFL/markets?jurisdiction=SA&amp;betOptionName=Head%20To%20Head&amp;homeState=SA"
       }
@@ -51789,7 +50125,7 @@
     {
       "name": "Line",
       "hasFutureMarket": false,
-      "openMarketCount": 10,
+      "openMarketCount": 9,
       "_links": {
         "markets": "https://api.beta.tab.com.au/v1/tab-info-service/sports/AFL%20Football/competitions/AFL/markets?jurisdiction=SA&amp;betOptionName=Line&amp;homeState=SA"
       }
@@ -51800,6 +50136,14 @@
       "openMarketCount": 5,
       "_links": {
         "markets": "https://api.beta.tab.com.au/v1/tab-info-service/sports/AFL%20Football/competitions/AFL/markets?jurisdiction=SA&amp;betOptionName=Live%20Lines&amp;homeState=SA"
+      }
+    },
+    {
+      "name": "Total Score Over/Under",
+      "hasFutureMarket": false,
+      "openMarketCount": 1,
+      "_links": {
+        "markets": "https://api.beta.tab.com.au/v1/tab-info-service/sports/AFL%20Football/competitions/AFL/markets?jurisdiction=SA&amp;betOptionName=Total%20Score%20Over%2FUnder&amp;homeState=SA"
       }
     },
     {
@@ -51832,6 +50176,14 @@
       "openMarketCount": 1,
       "_links": {
         "markets": "https://api.beta.tab.com.au/v1/tab-info-service/sports/AFL%20Football/competitions/AFL/markets?jurisdiction=SA&amp;betOptionName=Line%2FOver%20Under%20Double&amp;homeState=SA"
+      }
+    },
+    {
+      "name": "Live Line Over/Under Double",
+      "hasFutureMarket": false,
+      "openMarketCount": 1,
+      "_links": {
+        "markets": "https://api.beta.tab.com.au/v1/tab-info-service/sports/AFL%20Football/competitions/AFL/markets?jurisdiction=SA&amp;betOptionName=Live%20Line%20Over%2FUnder%20Double&amp;homeState=SA"
       }
     },
     {
@@ -52571,14 +50923,6 @@
       }
     },
     {
-      "name": "Live 1st Half Head to Head",
-      "hasFutureMarket": false,
-      "openMarketCount": 1,
-      "_links": {
-        "markets": "https://api.beta.tab.com.au/v1/tab-info-service/sports/AFL%20Football/competitions/AFL/markets?jurisdiction=SA&amp;betOptionName=Live%201st%20Half%20Head%20to%20Head&amp;homeState=SA"
-      }
-    },
-    {
       "name": "1st Half Result",
       "hasFutureMarket": false,
       "openMarketCount": 1,
@@ -52672,14 +51016,6 @@
       "openMarketCount": 1,
       "_links": {
         "markets": "https://api.beta.tab.com.au/v1/tab-info-service/sports/AFL%20Football/competitions/AFL/markets?jurisdiction=SA&amp;betOptionName=1st%20Half%20Super%20Margin&amp;homeState=SA"
-      }
-    },
-    {
-      "name": "Live 1st Half Margin",
-      "hasFutureMarket": false,
-      "openMarketCount": 1,
-      "_links": {
-        "markets": "https://api.beta.tab.com.au/v1/tab-info-service/sports/AFL%20Football/competitions/AFL/markets?jurisdiction=SA&amp;betOptionName=Live%201st%20Half%20Margin&amp;homeState=SA"
       }
     },
     {
@@ -53107,14 +51443,6 @@
       }
     },
     {
-      "name": "Live 2nd Quarter Head to Head",
-      "hasFutureMarket": false,
-      "openMarketCount": 1,
-      "_links": {
-        "markets": "https://api.beta.tab.com.au/v1/tab-info-service/sports/AFL%20Football/competitions/AFL/markets?jurisdiction=SA&amp;betOptionName=Live%202nd%20Quarter%20Head%20to%20Head&amp;homeState=SA"
-      }
-    },
-    {
       "name": "2nd Quarter Line",
       "hasFutureMarket": false,
       "openMarketCount": 1,
@@ -53123,17 +51451,9 @@
       }
     },
     {
-      "name": "Live 2nd Quarter Line",
-      "hasFutureMarket": false,
-      "openMarketCount": 1,
-      "_links": {
-        "markets": "https://api.beta.tab.com.au/v1/tab-info-service/sports/AFL%20Football/competitions/AFL/markets?jurisdiction=SA&amp;betOptionName=Live%202nd%20Quarter%20Line&amp;homeState=SA"
-      }
-    },
-    {
       "name": "2nd Quarter 1st Goal Scorer",
       "hasFutureMarket": false,
-      "openMarketCount": 2,
+      "openMarketCount": 1,
       "_links": {
         "markets": "https://api.beta.tab.com.au/v1/tab-info-service/sports/AFL%20Football/competitions/AFL/markets?jurisdiction=SA&amp;betOptionName=2nd%20Quarter%201st%20Goal%20Scorer&amp;homeState=SA"
       }
@@ -53141,39 +51461,15 @@
     {
       "name": "To Kick a Goal (2nd Quarter)",
       "hasFutureMarket": false,
-      "openMarketCount": 2,
+      "openMarketCount": 1,
       "_links": {
         "markets": "https://api.beta.tab.com.au/v1/tab-info-service/sports/AFL%20Football/competitions/AFL/markets?jurisdiction=SA&amp;betOptionName=To%20Kick%20a%20Goal%20(2nd%20Quarter)&amp;homeState=SA"
       }
     },
     {
-      "name": "2nd Quarter Line/OverUnder Double",
-      "hasFutureMarket": false,
-      "openMarketCount": 1,
-      "_links": {
-        "markets": "https://api.beta.tab.com.au/v1/tab-info-service/sports/AFL%20Football/competitions/AFL/markets?jurisdiction=SA&amp;betOptionName=2nd%20Quarter%20Line%2FOverUnder%20Double&amp;homeState=SA"
-      }
-    },
-    {
-      "name": "2nd Quarter H2H/OverUnder Double",
-      "hasFutureMarket": false,
-      "openMarketCount": 1,
-      "_links": {
-        "markets": "https://api.beta.tab.com.au/v1/tab-info-service/sports/AFL%20Football/competitions/AFL/markets?jurisdiction=SA&amp;betOptionName=2nd%20Quarter%20H2H%2FOverUnder%20Double&amp;homeState=SA"
-      }
-    },
-    {
-      "name": "2nd Quarter Goals",
-      "hasFutureMarket": false,
-      "openMarketCount": 1,
-      "_links": {
-        "markets": "https://api.beta.tab.com.au/v1/tab-info-service/sports/AFL%20Football/competitions/AFL/markets?jurisdiction=SA&amp;betOptionName=2nd%20Quarter%20Goals&amp;homeState=SA"
-      }
-    },
-    {
       "name": "2nd Quarter Margin (1-6)",
       "hasFutureMarket": false,
-      "openMarketCount": 2,
+      "openMarketCount": 1,
       "_links": {
         "markets": "https://api.beta.tab.com.au/v1/tab-info-service/sports/AFL%20Football/competitions/AFL/markets?jurisdiction=SA&amp;betOptionName=2nd%20Quarter%20Margin%20(1-6)&amp;homeState=SA"
       }
@@ -53181,17 +51477,9 @@
     {
       "name": "2nd Quarter Margin (1-12)",
       "hasFutureMarket": false,
-      "openMarketCount": 2,
-      "_links": {
-        "markets": "https://api.beta.tab.com.au/v1/tab-info-service/sports/AFL%20Football/competitions/AFL/markets?jurisdiction=SA&amp;betOptionName=2nd%20Quarter%20Margin%20(1-12)&amp;homeState=SA"
-      }
-    },
-    {
-      "name": "2nd Quarter Winning Margin",
-      "hasFutureMarket": false,
       "openMarketCount": 1,
       "_links": {
-        "markets": "https://api.beta.tab.com.au/v1/tab-info-service/sports/AFL%20Football/competitions/AFL/markets?jurisdiction=SA&amp;betOptionName=2nd%20Quarter%20Winning%20Margin&amp;homeState=SA"
+        "markets": "https://api.beta.tab.com.au/v1/tab-info-service/sports/AFL%20Football/competitions/AFL/markets?jurisdiction=SA&amp;betOptionName=2nd%20Quarter%20Margin%20(1-12)&amp;homeState=SA"
       }
     },
     {
@@ -53205,7 +51493,7 @@
     {
       "name": "2nd Quarter Time of 1st Goal O/U",
       "hasFutureMarket": false,
-      "openMarketCount": 2,
+      "openMarketCount": 1,
       "_links": {
         "markets": "https://api.beta.tab.com.au/v1/tab-info-service/sports/AFL%20Football/competitions/AFL/markets?jurisdiction=SA&amp;betOptionName=2nd%20Quarter%20Time%20of%201st%20Goal%20O%2FU&amp;homeState=SA"
       }
@@ -53269,7 +51557,7 @@
     {
       "name": "2nd Quarter 1st Scoring Play",
       "hasFutureMarket": false,
-      "openMarketCount": 2,
+      "openMarketCount": 1,
       "_links": {
         "markets": "https://api.beta.tab.com.au/v1/tab-info-service/sports/AFL%20Football/competitions/AFL/markets?jurisdiction=SA&amp;betOptionName=2nd%20Quarter%201st%20Scoring%20Play&amp;homeState=SA"
       }
@@ -53293,7 +51581,7 @@
     {
       "name": "2nd Quarter Time of 1st Goal",
       "hasFutureMarket": false,
-      "openMarketCount": 2,
+      "openMarketCount": 1,
       "_links": {
         "markets": "https://api.beta.tab.com.au/v1/tab-info-service/sports/AFL%20Football/competitions/AFL/markets?jurisdiction=SA&amp;betOptionName=2nd%20Quarter%20Time%20of%201st%20Goal&amp;homeState=SA"
       }
@@ -53301,7 +51589,7 @@
     {
       "name": "2nd Quarter Last Scoring Play",
       "hasFutureMarket": false,
-      "openMarketCount": 2,
+      "openMarketCount": 1,
       "_links": {
         "markets": "https://api.beta.tab.com.au/v1/tab-info-service/sports/AFL%20Football/competitions/AFL/markets?jurisdiction=SA&amp;betOptionName=2nd%20Quarter%20Last%20Scoring%20Play&amp;homeState=SA"
       }
@@ -53323,11 +51611,27 @@
       }
     },
     {
+      "name": "Live 3rd Quarter Head to Head",
+      "hasFutureMarket": false,
+      "openMarketCount": 1,
+      "_links": {
+        "markets": "https://api.beta.tab.com.au/v1/tab-info-service/sports/AFL%20Football/competitions/AFL/markets?jurisdiction=SA&amp;betOptionName=Live%203rd%20Quarter%20Head%20to%20Head&amp;homeState=SA"
+      }
+    },
+    {
       "name": "3rd Quarter Line",
       "hasFutureMarket": false,
       "openMarketCount": 1,
       "_links": {
         "markets": "https://api.beta.tab.com.au/v1/tab-info-service/sports/AFL%20Football/competitions/AFL/markets?jurisdiction=SA&amp;betOptionName=3rd%20Quarter%20Line&amp;homeState=SA"
+      }
+    },
+    {
+      "name": "Live 3rd Quarter Line",
+      "hasFutureMarket": false,
+      "openMarketCount": 1,
+      "_links": {
+        "markets": "https://api.beta.tab.com.au/v1/tab-info-service/sports/AFL%20Football/competitions/AFL/markets?jurisdiction=SA&amp;betOptionName=Live%203rd%20Quarter%20Line&amp;homeState=SA"
       }
     },
     {
@@ -53347,6 +51651,30 @@
       }
     },
     {
+      "name": "3rd Quarter Line/OverUnder Double",
+      "hasFutureMarket": false,
+      "openMarketCount": 1,
+      "_links": {
+        "markets": "https://api.beta.tab.com.au/v1/tab-info-service/sports/AFL%20Football/competitions/AFL/markets?jurisdiction=SA&amp;betOptionName=3rd%20Quarter%20Line%2FOverUnder%20Double&amp;homeState=SA"
+      }
+    },
+    {
+      "name": "3rd Quarter H2H/OverUnder Double",
+      "hasFutureMarket": false,
+      "openMarketCount": 1,
+      "_links": {
+        "markets": "https://api.beta.tab.com.au/v1/tab-info-service/sports/AFL%20Football/competitions/AFL/markets?jurisdiction=SA&amp;betOptionName=3rd%20Quarter%20H2H%2FOverUnder%20Double&amp;homeState=SA"
+      }
+    },
+    {
+      "name": "3rd Quarter Goals",
+      "hasFutureMarket": false,
+      "openMarketCount": 1,
+      "_links": {
+        "markets": "https://api.beta.tab.com.au/v1/tab-info-service/sports/AFL%20Football/competitions/AFL/markets?jurisdiction=SA&amp;betOptionName=3rd%20Quarter%20Goals&amp;homeState=SA"
+      }
+    },
+    {
       "name": "3rd Quarter Margin (1-6)",
       "hasFutureMarket": false,
       "openMarketCount": 2,
@@ -53360,6 +51688,14 @@
       "openMarketCount": 2,
       "_links": {
         "markets": "https://api.beta.tab.com.au/v1/tab-info-service/sports/AFL%20Football/competitions/AFL/markets?jurisdiction=SA&amp;betOptionName=3rd%20Quarter%20Margin%20(1-12)&amp;homeState=SA"
+      }
+    },
+    {
+      "name": "3rd Quarter Winning Margin",
+      "hasFutureMarket": false,
+      "openMarketCount": 1,
+      "_links": {
+        "markets": "https://api.beta.tab.com.au/v1/tab-info-service/sports/AFL%20Football/competitions/AFL/markets?jurisdiction=SA&amp;betOptionName=3rd%20Quarter%20Winning%20Margin&amp;homeState=SA"
       }
     },
     {
@@ -53491,6 +51827,14 @@
       }
     },
     {
+      "name": "Live 4th Quarter Head to Head",
+      "hasFutureMarket": false,
+      "openMarketCount": 1,
+      "_links": {
+        "markets": "https://api.beta.tab.com.au/v1/tab-info-service/sports/AFL%20Football/competitions/AFL/markets?jurisdiction=SA&amp;betOptionName=Live%204th%20Quarter%20Head%20to%20Head&amp;homeState=SA"
+      }
+    },
+    {
       "name": "4th Quarter Line",
       "hasFutureMarket": false,
       "openMarketCount": 1,
@@ -53528,6 +51872,14 @@
       "openMarketCount": 2,
       "_links": {
         "markets": "https://api.beta.tab.com.au/v1/tab-info-service/sports/AFL%20Football/competitions/AFL/markets?jurisdiction=SA&amp;betOptionName=4th%20Quarter%20Margin%20(1-12)&amp;homeState=SA"
+      }
+    },
+    {
+      "name": "4th Quarter Winning Margin",
+      "hasFutureMarket": false,
+      "openMarketCount": 1,
+      "_links": {
+        "markets": "https://api.beta.tab.com.au/v1/tab-info-service/sports/AFL%20Football/competitions/AFL/markets?jurisdiction=SA&amp;betOptionName=4th%20Quarter%20Winning%20Margin&amp;homeState=SA"
       }
     },
     {
