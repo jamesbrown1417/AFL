@@ -1,12 +1,13 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { flexRender, getCoreRowModel, getSortedRowModel, useReactTable, type ColumnDef, type SortingState } from '@tanstack/react-table'
-import { Plus, ReceiptText, Search, X } from 'lucide-react'
-import type { BookmakerSummary, EventSummary, OddsScope, OddsSearchResult } from '../api/types'
+import { Filter, Plus, ReceiptText, Search, X } from 'lucide-react'
+import clsx from 'clsx'
+import type { BookmakerSummary, EventSummary, OddsFilters, OddsScope, OddsSearchResult } from '../api/types'
 import { useOdds } from '../api/queries'
 import { useClientSettings, useAppStore, defaultOddsFilters, defaultPlayerFilters } from '../store/useAppStore'
-import { formatDateTime, formatLine, formatPrice, formatSigned, marketLabel, playerPositionTag, selectionTypeLabel, shortMatchLabel } from '../lib/formatters'
-import { combinedBasePrice, toDraftLeg, marketTypeToStatCode } from '../lib/builder'
-import { Button, Chip, EmptyState, ErrorBanner, Field, Panel, Segmented, Select, SortIcon, TextInput, Toggle } from '../components/ui'
+import { bookmakerLabel, formatDateTime, formatLine, formatPrice, formatSigned, marketLabel, playerPositionTag, selectionTypeLabel, shortMatchLabel } from '../lib/formatters'
+import { combinedBasePrice, favorableMatchupDifficulties, isFavorableMatchupSet, marketTypeToStatCode, rawMatchupDifficulty, toDraftLeg } from '../lib/builder'
+import { AdaptiveRail, Button, Chip, EmptyState, ErrorBanner, Field, Panel, Segmented, Select, SortIcon, TextInput, Toggle } from '../components/ui'
 import { CandidateContextMenu, AgencyPriceDialog } from './BuilderWorkspace'
 
 const playerMarkets = [
@@ -43,6 +44,7 @@ export function OddsWorkspace({
   const addSgmLeg = useAppStore((state) => state.addSgmLeg)
   const addCgmLeg = useAppStore((state) => state.addCgmLeg)
   const sgmLegs = useAppStore((state) => state.sgmLegs)
+  const sgmContext = useAppStore((state) => state.sgmContext)
   const cgmLegs = useAppStore((state) => state.cgmLegs)
   const builderMode = useAppStore((state) => state.builderMode)
   const setBuilderMode = useAppStore((state) => state.setBuilderMode)
@@ -55,6 +57,11 @@ export function OddsWorkspace({
   const setPlayerFilters = useAppStore((state) => state.setPlayerFilters)
   const [contextMenu, setContextMenu] = useState<{ x: number; y: number; selection: OddsSearchResult } | null>(null)
   const [priceDialogSelection, setPriceDialogSelection] = useState<OddsSearchResult | null>(null)
+  const [railOpen, setRailOpen] = useState(false)
+  const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false)
+  const [advancedFiltersOpen, setAdvancedFiltersOpen] = useState(false)
+  const [draftFilters, setDraftFilters] = useState<OddsFilters>(filters)
+  const railTriggerRef = useRef<HTMLButtonElement>(null)
 
   const openContextMenu = (event: React.MouseEvent, selection: OddsSearchResult) => {
     event.preventDefault()
@@ -169,11 +176,11 @@ export function OddsWorkspace({
       {
         id: 'context',
         header: 'Context',
-        accessorFn: (row) => `${row.matchup_difficulty ?? ''} ${row.player_position ?? ''} ${row.weather?.temperature_c ?? ''} ${row.is_best_price ? 'Best' : ''}`,
+        accessorFn: (row) => `${rawMatchupDifficulty(row) ?? ''} ${row.player_position ?? ''} ${row.weather?.temperature_c ?? ''} ${row.is_best_price ? 'Best' : ''}`,
         cell: ({ row }) => (
           <div className="tag-row">
             {playerPositionTag(row.original.player_position) && <span className="tag">{playerPositionTag(row.original.player_position)}</span>}
-            {row.original.matchup_difficulty && <span className="tag tag--amber">{row.original.matchup_difficulty}</span>}
+            {rawMatchupDifficulty(row.original) && <span className="tag tag--amber">{rawMatchupDifficulty(row.original)}</span>}
             {row.original.weather?.temperature_c != null && <span className="tag">{Math.round(row.original.weather.temperature_c)} deg</span>}
             {row.original.is_best_price && <span className="tag tag--good">Best</span>}
           </div>
@@ -203,7 +210,7 @@ export function OddsWorkspace({
         },
       },
     ],
-    [addCgmLeg, addSgmLeg, setSelectedPlayer],
+    [addCgmLeg, addSgmLeg],
   )
 
   // TanStack Table intentionally returns function-bearing instances; this component does not pass it across memoized boundaries.
@@ -223,12 +230,25 @@ export function OddsWorkspace({
     (query.trim() ? 1 : 0) +
     (filters.marketTypeCode ? 1 : 0) +
     (filters.eventId ? 1 : 0) +
-    (filters.bookmakerCodes.length > 0 ? 1 : 0) +
+    (filters.bookmakerCodes.length > 0 && filters.bookmakerCodes.length < enabledBookmakers.length ? 1 : 0) +
     (filters.minDiffLast10 >= 0 ? 1 : 0) +
     (filters.minNextBestProbDiff >= 0 ? 1 : 0) +
+    (filters.minHomeAwayDiff != null || filters.maxHomeAwayDiff != null ? 1 : 0) +
+    (filters.minWinLossDiff != null || filters.maxWinLossDiff != null ? 1 : 0) +
+    (filters.favorableHomeAway ? 1 : 0) +
+    (filters.favorableWinLoss ? 1 : 0) +
     (filters.matchupDifficulties.length > 0 ? 1 : 0) +
     (filters.bestOnly ? 1 : 0) +
     (filters.sgmOnly ? 1 : 0)
+  const favorableMatchups = favorableMatchupDifficulties(filters.selectionType)
+  const updateSelectionType = (selectionType: string | null) => {
+    patchFilters({
+      selectionType,
+      matchupDifficulties: isFavorableMatchupSet(filters.matchupDifficulties)
+        ? [...favorableMatchupDifficulties(selectionType)]
+        : filters.matchupDifficulties,
+    })
+  }
   const subtitle = `${visibleRows.length} of ${data.length} ${filters.scope === 'player' ? 'player prop' : 'match'} selections`
   const summaryStats = [
     { label: 'Positive L10 edge', value: String(positiveL10), tone: 'good' },
@@ -245,24 +265,29 @@ export function OddsWorkspace({
             <h1>Odds</h1>
             <p>{isFetching ? 'Refreshing market board' : subtitle}</p>
           </div>
-          <Segmented<OddsScope>
-            className="odds-scope-tabs"
-            value={filters.scope}
-            ariaLabel="Odds scope"
-            options={[
-              { value: 'player', label: 'Player props' },
-              { value: 'match', label: 'Match markets' },
-            ]}
-            onChange={(scope) =>
-              patchFilters({
-                scope,
-                marketTypeCode: null,
-                selectionType: scope === 'player' ? filters.selectionType : null,
-                sortBy: scope === 'player' ? 'diff_last_10' : 'start_time',
-                sortDirection: scope === 'player' ? 'desc' : 'asc',
-              })
-            }
-          />
+          <div className="page-actions odds-page-actions">
+            <Segmented<OddsScope>
+              className="odds-scope-tabs"
+              value={filters.scope}
+              ariaLabel="Odds scope"
+              options={[
+                { value: 'player', label: 'Player props' },
+                { value: 'match', label: 'Match markets' },
+              ]}
+              onChange={(scope) =>
+                patchFilters({
+                  scope,
+                  marketTypeCode: null,
+                  selectionType: scope === 'player' ? filters.selectionType : null,
+                  sortBy: scope === 'player' ? 'diff_last_10' : 'start_time',
+                  sortDirection: scope === 'player' ? 'desc' : 'asc',
+                })
+              }
+            />
+            <button ref={railTriggerRef} type="button" className="button button--secondary adaptive-rail-trigger" onClick={() => setRailOpen(true)}>
+              <ReceiptText size={15} /> Draft ({builderMode === 'sgm' ? sgmLegs.length : cgmLegs.length})
+            </button>
+          </div>
         </div>
 
         <div className="odds-summary-grid">
@@ -277,22 +302,25 @@ export function OddsWorkspace({
           ))}
         </div>
 
-        <Panel className="filters-panel">
+        <Panel className={clsx('filters-panel responsive-filters', mobileFiltersOpen && 'mobile-filters-open')}>
+          <button type="button" className="button button--secondary mobile-filter-toggle" aria-expanded={mobileFiltersOpen} onClick={() => setMobileFiltersOpen((open) => !open)}>
+            Filters ({activeFilterCount})
+          </button>
           <div className="filter-grid">
-            <Field label="Search board">
+            <Field label="Search board" className="mobile-filter-primary">
               <div className="input-with-icon">
                 <Search size={16} />
                 <TextInput value={query} onChange={(event) => setQuery(event.currentTarget.value)} placeholder="Player, market, agency, match" />
               </div>
             </Field>
-            <Field label="Market">
+            <Field label="Market" className="mobile-filter-secondary">
               <Select value={filters.marketTypeCode ?? ''} onChange={(event) => patchFilters({ marketTypeCode: event.currentTarget.value || null })}>
                 {(filters.scope === 'player' ? playerMarkets : matchMarkets).map(([value, label]) => (
                   <option key={value ?? 'all'} value={value ?? ''}>{label}</option>
                 ))}
               </Select>
             </Field>
-            <Field label="Match">
+            <Field label="Match" className="mobile-filter-secondary">
               <Select value={filters.eventId ?? ''} onChange={(event) => patchFilters({ eventId: event.currentTarget.value ? Number(event.currentTarget.value) : null })}>
                 <option value="">All matches</option>
                 {events.map((event) => (
@@ -300,7 +328,14 @@ export function OddsWorkspace({
                 ))}
               </Select>
             </Field>
-            <Field label="Sort">
+            <Field label="Side" className="mobile-filter-secondary">
+              <Select value={filters.selectionType ?? ''} disabled={filters.scope !== 'player'} onChange={(event) => updateSelectionType(event.currentTarget.value || null)}>
+                <option value="">Overs & unders</option>
+                <option value="over">Overs only</option>
+                <option value="under">Unders only</option>
+              </Select>
+            </Field>
+            <Field label="Sort" className="mobile-filter-primary">
               <Select value={`${filters.sortBy}:${filters.sortDirection}`} onChange={(event) => {
                 const [sortBy, sortDirection] = event.currentTarget.value.split(':') as [string, 'asc' | 'desc']
                 patchFilters({ sortBy, sortDirection })
@@ -308,6 +343,8 @@ export function OddsWorkspace({
                 <option value="diff_last_10:desc">Last-10 diff</option>
                 <option value="next_best_prob_diff:desc">Next best diff</option>
                 <option value="diff_2025:desc">Season diff</option>
+                <option value="home_away_diff:desc">Home/away diff</option>
+                <option value="win_loss_diff:desc">Win/loss diff</option>
                 <option value="price:desc">Price high-low</option>
                 <option value="price:asc">Price low-high</option>
                 <option value="player:asc">Player A-Z</option>
@@ -315,7 +352,7 @@ export function OddsWorkspace({
               </Select>
             </Field>
           </div>
-          <div className="chip-row">
+          <div className="chip-row mobile-filter-secondary">
             <span className="odds-chip-label">Agency</span>
             {enabledBookmakers.map((bookmaker) => (
               <Chip
@@ -332,8 +369,11 @@ export function OddsWorkspace({
               </Chip>
             ))}
           </div>
-          <div className="quick-filter-grid">
+          <div className="quick-filter-grid mobile-filter-secondary">
             <span className="odds-chip-label">Signal</span>
+            <Chip active={filters.selectionType === 'under'} onClick={() => updateSelectionType(filters.selectionType === 'under' ? null : 'under')}>
+              Unders only
+            </Chip>
             <Chip active={filters.minDiffLast10 >= 0} onClick={() => patchFilters({ minDiffLast10: filters.minDiffLast10 >= 0 ? -1 : 0 })}>
               Positive L10
             </Chip>
@@ -344,18 +384,30 @@ export function OddsWorkspace({
               active={filters.matchupDifficulties.length > 0}
               onClick={() =>
                 patchFilters({
-                  matchupDifficulties: filters.matchupDifficulties.length > 0 ? [] : ['Neutral', 'Good', 'Excellent'],
+                  matchupDifficulties: filters.matchupDifficulties.length > 0 ? [] : [...favorableMatchups],
                 })
               }
             >
               Favorable matchup
             </Chip>
+            <Chip active={filters.favorableHomeAway} onClick={() => patchFilters({ favorableHomeAway: !filters.favorableHomeAway })}>
+              H/A edge
+            </Chip>
+            <Chip active={filters.favorableWinLoss} onClick={() => patchFilters({ favorableWinLoss: !filters.favorableWinLoss })}>
+              W/L edge
+            </Chip>
+            <Button variant="secondary" onClick={() => {
+              setDraftFilters(filters)
+              setAdvancedFiltersOpen(true)
+            }}>
+              <Filter size={14} /> Filters
+            </Button>
             <Toggle checked={filters.bestOnly} onChange={(bestOnly) => patchFilters({ bestOnly })} label="Best only" />
             <Toggle checked={filters.sgmOnly} onChange={(sgmOnly) => patchFilters({ sgmOnly })} label="SGM only" />
             {activeFilterCount > 0 ? (
               <Button variant="ghost" onClick={() => {
                 setQuery('')
-                setFilters({ ...defaultOddsFilters, bookmakerCodes: enabledBookmakers.map((item) => item.code) })
+                setFilters(defaultOddsFilters)
               }}>Reset</Button>
             ) : null}
           </div>
@@ -417,11 +469,12 @@ export function OddsWorkspace({
           )}
         </Panel>
       </section>
-      <aside className="odds-builder-rail">
+      <AdaptiveRail open={railOpen} onClose={() => setRailOpen(false)} label={`${builderMode.toUpperCase()} draft`} className="odds-builder-rail" triggerRef={railTriggerRef}>
         <div className="builder-panel-head">
           <div>
             <h2>{builderMode.toUpperCase()} draft</h2>
             <span>{(builderMode === 'sgm' ? sgmLegs : cgmLegs).length} legs selected</span>
+            {builderMode === 'sgm' && sgmContext ? <small className="draft-context">{bookmakerLabel(sgmContext.bookmaker)} · {shortMatchLabel(sgmContext.eventLabel)}</small> : null}
           </div>
           <Segmented
             value={builderMode}
@@ -445,7 +498,7 @@ export function OddsWorkspace({
         >
           Open {builderMode.toUpperCase()} builder
         </Button>
-      </aside>
+      </AdaptiveRail>
 
       {contextMenu ? (
         <CandidateContextMenu
@@ -470,7 +523,87 @@ export function OddsWorkspace({
           onClose={() => setPriceDialogSelection(null)}
         />
       ) : null}
+
+      {advancedFiltersOpen ? (
+        <OddsEdgeFiltersDrawer
+          filters={draftFilters}
+          onChange={setDraftFilters}
+          onApply={() => {
+            setFilters(draftFilters)
+            setAdvancedFiltersOpen(false)
+          }}
+          onReset={() => setDraftFilters({
+            ...draftFilters,
+            minHomeAwayDiff: null,
+            maxHomeAwayDiff: null,
+            minWinLossDiff: null,
+            maxWinLossDiff: null,
+            favorableHomeAway: false,
+            favorableWinLoss: false,
+          })}
+          onClose={() => setAdvancedFiltersOpen(false)}
+        />
+      ) : null}
     </main>
+  )
+}
+
+function OddsEdgeFiltersDrawer({
+  filters,
+  onChange,
+  onApply,
+  onReset,
+  onClose,
+}: {
+  filters: OddsFilters
+  onChange: (filters: OddsFilters) => void
+  onApply: () => void
+  onReset: () => void
+  onClose: () => void
+}) {
+  return (
+    <div className="drawer-overlay" onClick={onClose}>
+      <aside className="drawer" role="dialog" aria-modal="true" aria-label="Odds edge filters" onClick={(event) => event.stopPropagation()}>
+        <div className="drawer-head">
+          <div>
+            <h2>H/A and W/L filters</h2>
+            <p className="muted">Set raw split thresholds. Quick filters account for venue, projected result and side.</p>
+          </div>
+          <button type="button" className="modal-close" onClick={onClose} aria-label="Close filters"><X size={18} /></button>
+        </div>
+        <div className="drawer-foot">
+          <Button variant="ghost" onClick={onReset}>Clear</Button>
+          <Button variant="accent" onClick={onApply}>Apply filters</Button>
+        </div>
+        <div className="drawer-body">
+          <OddsMetricPair
+            title="Home / away diff"
+            min={filters.minHomeAwayDiff}
+            max={filters.maxHomeAwayDiff}
+            onChange={(min, max) => onChange({ ...filters, minHomeAwayDiff: min, maxHomeAwayDiff: max })}
+          />
+          <OddsMetricPair
+            title="Win / loss diff"
+            min={filters.minWinLossDiff}
+            max={filters.maxWinLossDiff}
+            onChange={(min, max) => onChange({ ...filters, minWinLossDiff: min, maxWinLossDiff: max })}
+          />
+        </div>
+      </aside>
+    </div>
+  )
+}
+
+function OddsMetricPair({ title, min, max, onChange }: { title: string; min: number | null; max: number | null; onChange: (min: number | null, max: number | null) => void }) {
+  const parse = (value: string) => value.trim() === '' ? null : Number(value)
+  return (
+    <section className="metric-filter-section">
+      <h3>{title}</h3>
+      <div className="filter-pair">
+        <Field label="Min"><TextInput type="number" step="0.5" placeholder="Any" value={min ?? ''} onChange={(event) => onChange(parse(event.currentTarget.value), max)} /></Field>
+        <Field label="Max"><TextInput type="number" step="0.5" placeholder="Any" value={max ?? ''} onChange={(event) => onChange(min, parse(event.currentTarget.value))} /></Field>
+      </div>
+    </section>
   )
 }
 

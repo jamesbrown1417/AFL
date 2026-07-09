@@ -2,6 +2,21 @@ import type { DraftLeg, OddsSearchResult, SortField } from '../api/types'
 import { formatLine, marketLabel, selectionTypeLabel, shortMatchLabel } from './formatters'
 
 export const allMarketCode = '__all__'
+export const OVER_FAVORABLE_MATCHUPS = ['Neutral', 'Good', 'Excellent']
+export const UNDER_FAVORABLE_MATCHUPS = ['Neutral', 'Bad', 'Terrible']
+
+export function favorableMatchupDifficulties(selectionType: string | null) {
+  return selectionType === 'under' ? UNDER_FAVORABLE_MATCHUPS : OVER_FAVORABLE_MATCHUPS
+}
+
+export function isFavorableMatchupSet(values: string[]) {
+  const normalized = values.toSorted().join('|')
+  return normalized === OVER_FAVORABLE_MATCHUPS.toSorted().join('|') || normalized === UNDER_FAVORABLE_MATCHUPS.toSorted().join('|')
+}
+
+export function rawMatchupDifficulty(selection: Pick<OddsSearchResult, 'over_matchup_difficulty' | 'matchup_difficulty'>) {
+  return selection.over_matchup_difficulty ?? selection.matchup_difficulty
+}
 
 const preferredMarketOrder = [
   'player_disposals',
@@ -51,7 +66,7 @@ export function buildCandidateGroups(legs: OddsSearchResult[]) {
           ? `${marketLabel(first.market_type_code)} | ${shortMatchLabel(first.match_name)}`
           : shortMatchLabel(first.match_name),
         playerPosition: first.player_position,
-        matchupDifficulty: first.matchup_difficulty,
+        matchupDifficulty: rawMatchupDifficulty(first),
         selections: selections.toSorted((a, b) => (a.line_value ?? 999) - (b.line_value ?? 999)),
       } satisfies CandidateGroup
     })
@@ -108,7 +123,7 @@ export function toDraftLeg(selection: OddsSearchResult): DraftLeg | null {
     win_loss_diff: selection.win_loss_diff,
     next_best_prob_diff: selection.next_best_prob_diff,
     player_position: selection.player_position,
-    matchup_difficulty: selection.matchup_difficulty,
+    matchup_difficulty: rawMatchupDifficulty(selection),
     is_best_price: selection.is_best_price,
   }
 }

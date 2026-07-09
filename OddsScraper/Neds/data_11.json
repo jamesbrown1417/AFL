@@ -1,0 +1,130 @@
+{
+  "entrants": {
+    "5a1d231c-736f-4b4d-8d71-1abab80b2a20": {
+      "id": "5a1d231c-736f-4b4d-8d71-1abab80b2a20",
+      "name": "Port Adelaide",
+      "home_away": "HOME",
+      "visible": true,
+      "sort_order": 10,
+      "market_id": "117abc5d-be29-449d-84de-fbd7e2a5af57"
+    },
+    "b01e2e13-4969-4b60-b0f5-f75fdd382fdb": {
+      "id": "b01e2e13-4969-4b60-b0f5-f75fdd382fdb",
+      "name": "Fremantle",
+      "home_away": "AWAY",
+      "visible": true,
+      "sort_order": 20,
+      "market_id": "117abc5d-be29-449d-84de-fbd7e2a5af57"
+    }
+  },
+  "event_participants": {
+    "49330747-8371-47bb-8ede-a1dbdcffdd34": {
+      "id": "49330747-8371-47bb-8ede-a1dbdcffdd34",
+      "event_id": "7fdc3d1a-b949-4594-b86d-759b4b165762",
+      "name": "Port Adelaide",
+      "home_away": "HOME",
+      "colour": "#008A8F"
+    },
+    "e488acf0-59d0-49b8-8685-41e555e2f8e5": {
+      "id": "e488acf0-59d0-49b8-8685-41e555e2f8e5",
+      "event_id": "7fdc3d1a-b949-4594-b86d-759b4b165762",
+      "name": "Fremantle",
+      "home_away": "AWAY",
+      "colour": "#2E0F4F"
+    }
+  },
+  "events": {
+    "7fdc3d1a-b949-4594-b86d-759b4b165762": {
+      "id": "7fdc3d1a-b949-4594-b86d-759b4b165762",
+      "name": "Port Adelaide vs Fremantle",
+      "event_type": {
+        "id": "6bfa0efc-05df-4ae1-9b1e-152365290cfd",
+        "name": "Match"
+      },
+      "match_status": "BettingOpen",
+      "advertised_start": "2026-07-18T03:15:00Z",
+      "actual_start": "2026-07-18T03:15:00Z",
+      "visible": true,
+      "slug": "port-adelaide-vs-fremantle",
+      "competition": {
+        "id": "ccff2e9a-5347-41aa-902a-bb6b1886d817",
+        "name": "AFL",
+        "sort_order": 1,
+        "region": "Australia"
+      },
+      "competition_id": "ccff2e9a-5347-41aa-902a-bb6b1886d817",
+      "market_type_group_ids": [
+        "29edb5e1-a717-4769-8bcd-2d43ec38d828"
+      ],
+      "market_type_group_markets": [
+        {
+          "market_type_group_id": "29edb5e1-a717-4769-8bcd-2d43ec38d828",
+          "market_ids": [
+            "117abc5d-be29-449d-84de-fbd7e2a5af57"
+          ]
+        }
+      ],
+      "market_count": 1,
+      "main_markets": [
+        "117abc5d-be29-449d-84de-fbd7e2a5af57"
+      ],
+      "market_ids": [
+        "117abc5d-be29-449d-84de-fbd7e2a5af57"
+      ],
+      "category_id": "23d497e6-8aab-4309-905b-9421f42c9bc5",
+      "round_id": "13403bae-bb76-4ac5-8e2f-6344c148b003",
+      "participant_ids": [
+        "49330747-8371-47bb-8ede-a1dbdcffdd34",
+        "e488acf0-59d0-49b8-8685-41e555e2f8e5"
+      ]
+    }
+  },
+  "market_type_groups": {
+    "29edb5e1-a717-4769-8bcd-2d43ec38d828": {
+      "id": "29edb5e1-a717-4769-8bcd-2d43ec38d828",
+      "category_id": "23d497e6-8aab-4309-905b-9421f42c9bc5",
+      "name": "Top Markets",
+      "priority": 352,
+      "type": "MARKET_TYPE_GROUP_TYPE_EVENT"
+    }
+  },
+  "markets": {
+    "117abc5d-be29-449d-84de-fbd7e2a5af57": {
+      "id": "117abc5d-be29-449d-84de-fbd7e2a5af57",
+      "event_id": "7fdc3d1a-b949-4594-b86d-759b4b165762",
+      "market_type_id": "be25c37a-71ff-47f6-a1e2-02a494eb5a4d",
+      "market_status_id": "4bc8fe96-296b-4b4c-aea4-85c94f63b9c6",
+      "name": "Match Betting",
+      "advertised_start": {
+        "seconds": 1784344500
+      },
+      "actual_start": {
+        "seconds": 1784344500
+      },
+      "is_primary": true,
+      "visible": true,
+      "entrant_ids": [
+        "5a1d231c-736f-4b4d-8d71-1abab80b2a20",
+        "b01e2e13-4969-4b60-b0f5-f75fdd382fdb"
+      ],
+      "num_winners": 1
+    }
+  },
+  "markets_allow_cashout": {
+    "117abc5d-be29-449d-84de-fbd7e2a5af57": true
+  },
+  "prices": {
+    "5a1d231c-736f-4b4d-8d71-1abab80b2a20:940b8704-e497-4a76-b390-00918ff7d282:": {
+      "odds": {
+        "numerator": 5,
+        "denominator": 2
+      }
+    },
+    "b01e2e13-4969-4b60-b0f5-f75fdd382fdb:940b8704-e497-4a76-b390-00918ff7d282:": {
+      "odds": {
+        "numerator": 3,
+        "denominator": 10
+      }
+    }
+  }
+}

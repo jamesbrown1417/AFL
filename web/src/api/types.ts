@@ -313,6 +313,8 @@ export interface OddsQuery {
   max_win_loss_diff?: number | null
   min_next_best_prob_diff?: number | null
   max_next_best_prob_diff?: number | null
+  favorable_home_away?: boolean
+  favorable_win_loss?: boolean
   sgm_only?: boolean
   best_only?: boolean
   limit?: number
@@ -332,11 +334,18 @@ export interface OddsFilters {
   maxPrice: string
   minDiffLast10: number
   minNextBestProbDiff: number
+  minHomeAwayDiff: number | null
+  maxHomeAwayDiff: number | null
+  minWinLossDiff: number | null
+  maxWinLossDiff: number | null
+  favorableHomeAway: boolean
+  favorableWinLoss: boolean
   bestOnly: boolean
   sgmOnly: boolean
 }
 
 export interface MetricFilters {
+  selectionType: string | null
   matchupDifficulties: string[]
   minPrice: string
   maxPrice: string
@@ -350,6 +359,8 @@ export interface MetricFilters {
   maxWinLossDiff: number | null
   minNextBestProbDiff: number
   maxNextBestProbDiff: number
+  favorableHomeAway: boolean
+  favorableWinLoss: boolean
 }
 
 export interface PlayerStatsFilters {

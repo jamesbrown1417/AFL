@@ -818,6 +818,8 @@ class QueryService:
         max_home_away_diff: float | None,
         min_win_loss_diff: float | None,
         max_win_loss_diff: float | None,
+        favorable_home_away: bool,
+        favorable_win_loss: bool,
         min_next_best_prob_diff: float | None,
         max_next_best_prob_diff: float | None,
         sgm_only: bool,
@@ -870,7 +872,7 @@ class QueryService:
         if normalized_matchup_difficulties:
             placeholders = ", ".join("?" for _ in normalized_matchup_difficulties)
             row_conditions.append(
-                f"LOWER(COALESCE(matchup_difficulty, '')) IN ({placeholders})"
+                f"LOWER(COALESCE(over_matchup_difficulty, matchup_difficulty, '')) IN ({placeholders})"
             )
             row_params.extend(normalized_matchup_difficulties)
         if date_from:
@@ -916,6 +918,22 @@ class QueryService:
         if max_win_loss_diff is not None:
             row_conditions.append("win_loss_diff <= ?")
             row_params.append(max_win_loss_diff)
+        if favorable_home_away:
+            row_conditions.append(
+                """
+                home_away_diff
+                * CASE player_home_away WHEN 'Home' THEN 1 WHEN 'Away' THEN -1 ELSE 0 END
+                * CASE WHEN selection_type = 'under' THEN -1 ELSE 1 END > 0
+                """
+            )
+        if favorable_win_loss:
+            row_conditions.append(
+                """
+                win_loss_diff
+                * CASE WHEN player_team_line < 0 THEN 1 WHEN player_team_line > 0 THEN -1 ELSE 0 END
+                * CASE WHEN selection_type = 'under' THEN -1 ELSE 1 END > 0
+                """
+            )
         if min_next_best_prob_diff is not None:
             row_conditions.append("next_best_prob_diff >= ?")
             row_params.append(min_next_best_prob_diff)

@@ -190,7 +190,42 @@ def test_event_market_selection_flow(client) -> None:
     assert matchup_filtered_response.status_code == 200
     matchup_filtered_payload = matchup_filtered_response.json()
     if matchup_filtered_payload:
-        assert all(row["matchup_difficulty"] == "Bad" for row in matchup_filtered_payload)
+        assert all(row["over_matchup_difficulty"] == "Bad" for row in matchup_filtered_payload)
+
+    under_matchup_response = client.get(
+        "/api/v1/odds/search",
+        params={
+            "scope": "player",
+            "selection_type": "under",
+            "matchup_difficulty": "Terrible",
+            "limit": 50,
+        },
+    )
+    assert under_matchup_response.status_code == 200
+    under_matchup_payload = under_matchup_response.json()
+    if under_matchup_payload:
+        assert all(row["selection_type"] == "under" for row in under_matchup_payload)
+        assert all(row["over_matchup_difficulty"] == "Terrible" for row in under_matchup_payload)
+
+    home_away_edge_response = client.get(
+        "/api/v1/odds/search",
+        params={"scope": "player", "favorable_home_away": True, "limit": 200},
+    )
+    assert home_away_edge_response.status_code == 200
+    for row in home_away_edge_response.json():
+        side_factor = -1 if row["selection_type"] == "under" else 1
+        context_factor = 1 if row["player_home_away"] == "Home" else -1
+        assert row["home_away_diff"] * side_factor * context_factor > 0
+
+    win_loss_edge_response = client.get(
+        "/api/v1/odds/search",
+        params={"scope": "player", "favorable_win_loss": True, "limit": 200},
+    )
+    assert win_loss_edge_response.status_code == 200
+    for row in win_loss_edge_response.json():
+        side_factor = -1 if row["selection_type"] == "under" else 1
+        result_factor = 1 if row["player_team_line"] < 0 else -1
+        assert row["win_loss_diff"] * side_factor * result_factor > 0
 
     best_only_response = client.get(
         "/api/v1/odds/search",

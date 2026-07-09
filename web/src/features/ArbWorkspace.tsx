@@ -1,10 +1,10 @@
-import { useMemo, useState } from 'react'
+import { useMemo, useRef, useState } from 'react'
 import { flexRender, getCoreRowModel, getSortedRowModel, useReactTable, type ColumnDef, type SortingState } from '@tanstack/react-table'
 import { Calculator, Search } from 'lucide-react'
 import clsx from 'clsx'
 import type { ArbFilters, ArbSearchResult, BookmakerSummary } from '../api/types'
 import { useArbs } from '../api/queries'
-import { Button, Chip, EmptyState, ErrorBanner, Field, Panel, Segmented, Select, SortIcon, TextInput } from '../components/ui'
+import { AdaptiveRail, Button, Chip, EmptyState, ErrorBanner, Field, Panel, Segmented, Select, SortIcon, TextInput } from '../components/ui'
 import { bookmakerLabel, formatLine, formatPrice, marketLabel, shortMatchLabel } from '../lib/formatters'
 import { defaultArbFilters, useAppStore, useClientSettings } from '../store/useAppStore'
 
@@ -35,6 +35,9 @@ export function ArbWorkspace({ bookmakers }: { bookmakers: BookmakerSummary[] })
   const [selectedArbId, setSelectedArbId] = useState<string | null>(null)
   const [stake, setStake] = useState('100')
   const [sorting, setSorting] = useState<SortingState>([{ id: 'margin', desc: true }])
+  const [railOpen, setRailOpen] = useState(false)
+  const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false)
+  const railTriggerRef = useRef<HTMLButtonElement>(null)
 
   const scopedRows = useMemo(() => {
     if (scope === 'all') return data
@@ -142,6 +145,7 @@ export function ArbWorkspace({ bookmakers }: { bookmakers: BookmakerSummary[] })
             onClick={(event) => {
               event.stopPropagation()
               setSelectedArbId(row.original.id)
+              setRailOpen(true)
             }}
           >
             <Calculator size={13} /> Stake
@@ -174,16 +178,22 @@ export function ArbWorkspace({ bookmakers }: { bookmakers: BookmakerSummary[] })
             <h1>Arbs</h1>
             <p>{isFetching ? 'Refreshing arb board' : `${table.getRowModel().rows.length} of ${scopedRows.length} opportunities in view`}</p>
           </div>
-          <Segmented
-            value={scope}
-            options={scopeOptions}
-            onChange={(nextScope) => {
-              setScope(nextScope)
-              setSelectedArbId(null)
-            }}
-            ariaLabel="Arb scope"
-            className="arb-scope-tabs"
-          />
+          <div className="page-actions arb-page-actions">
+            <Segmented
+              value={scope}
+              options={scopeOptions}
+              onChange={(nextScope) => {
+                setScope(nextScope)
+                setSelectedArbId(null)
+                setRailOpen(false)
+              }}
+              ariaLabel="Arb scope"
+              className="arb-scope-tabs"
+            />
+            <button ref={railTriggerRef} type="button" className="button button--secondary adaptive-rail-trigger" onClick={() => setRailOpen(true)}>
+              <Calculator size={15} /> Calculator
+            </button>
+          </div>
         </div>
 
         <div className="arb-summary-grid">
@@ -193,15 +203,18 @@ export function ArbWorkspace({ bookmakers }: { bookmakers: BookmakerSummary[] })
           <SummaryCard label="Avg arb margin" value={avgArbMargin == null ? '--' : formatMargin(avgArbMargin)} tone="indigo" />
         </div>
 
-        <Panel className="filters-panel">
+        <Panel className={clsx('filters-panel responsive-filters', mobileFiltersOpen && 'mobile-filters-open')}>
+          <button type="button" className="button button--secondary mobile-filter-toggle" aria-expanded={mobileFiltersOpen} onClick={() => setMobileFiltersOpen((open) => !open)}>
+            Filters ({activeFilters})
+          </button>
           <div className="filter-grid arb-filter-grid">
-            <Field label="Search">
+            <Field label="Search" className="mobile-filter-primary">
               <div className="input-with-icon">
                 <Search size={16} />
                 <TextInput value={filters.query} onChange={(event) => patchFilters({ query: event.currentTarget.value })} placeholder="Player, match, market, agency" />
               </div>
             </Field>
-            <Field label="Market">
+            <Field label="Market" className="mobile-filter-secondary">
               <Select value={filters.markets[0] ?? ''} onChange={(event) => patchFilters({ markets: event.currentTarget.value ? [event.currentTarget.value] : [] })}>
                 <option value="">All markets</option>
                 {marketOptions.map((market) => (
@@ -209,19 +222,19 @@ export function ArbWorkspace({ bookmakers }: { bookmakers: BookmakerSummary[] })
                 ))}
               </Select>
             </Field>
-            <Field label="Min margin">
+            <Field label="Min margin" className="mobile-filter-secondary">
               <div className="arb-percent-input">
                 <TextInput inputMode="decimal" value={filters.minMargin} onChange={(event) => patchFilters({ minMargin: event.currentTarget.value })} />
                 <span>%</span>
               </div>
             </Field>
-            <Field label="Max margin">
+            <Field label="Max margin" className="mobile-filter-secondary">
               <div className="arb-percent-input">
                 <TextInput inputMode="decimal" value={filters.maxMargin} onChange={(event) => patchFilters({ maxMargin: event.currentTarget.value })} placeholder="No cap" />
                 <span>%</span>
               </div>
             </Field>
-            <Field label="Sort">
+            <Field label="Sort" className="mobile-filter-primary">
               <Select value={sortValue} onChange={(event) => setSorting(selectValueToSorting(event.currentTarget.value as ArbSortValue))}>
                 {sortOptions.map((option) => (
                   <option key={option.value} value={option.value}>{option.label}</option>
@@ -229,7 +242,7 @@ export function ArbWorkspace({ bookmakers }: { bookmakers: BookmakerSummary[] })
               </Select>
             </Field>
           </div>
-          <div className="chip-row">
+          <div className="chip-row mobile-filter-secondary">
             <span className="odds-chip-label">Agency</span>
             {agencies.map((agency) => (
               <Chip
@@ -241,7 +254,7 @@ export function ArbWorkspace({ bookmakers }: { bookmakers: BookmakerSummary[] })
               </Chip>
             ))}
           </div>
-          <div className="quick-filter-grid arb-signal-row">
+          <div className="quick-filter-grid arb-signal-row mobile-filter-secondary">
             <span className="odds-chip-label">Signal</span>
             <Chip
               active={trueArbsOnly}
@@ -297,7 +310,10 @@ export function ArbWorkspace({ bookmakers }: { bookmakers: BookmakerSummary[] })
                     <tr
                       key={row.original.id}
                       className={clsx(row.original.margin >= 0 && 'arb-row--positive', row.original.id === selectedArbId && 'is-selected')}
-                      onClick={() => setSelectedArbId(row.original.id)}
+                      onClick={() => {
+                        setSelectedArbId(row.original.id)
+                        setRailOpen(true)
+                      }}
                     >
                       {row.getVisibleCells().map((cell) => (
                         <td key={cell.id} className={arbColumnClassName(cell.column.id)}>
@@ -313,7 +329,15 @@ export function ArbWorkspace({ bookmakers }: { bookmakers: BookmakerSummary[] })
         </Panel>
       </section>
 
-      <StakeCalculatorRail selected={selectedArb} stake={stake} setStake={setStake} clearSelection={() => setSelectedArbId(null)} />
+      <StakeCalculatorRail
+        selected={selectedArb}
+        stake={stake}
+        setStake={setStake}
+        clearSelection={() => setSelectedArbId(null)}
+        open={railOpen}
+        onClose={() => setRailOpen(false)}
+        triggerRef={railTriggerRef}
+      />
     </main>
   )
 }
@@ -335,18 +359,24 @@ function StakeCalculatorRail({
   stake,
   setStake,
   clearSelection,
+  open,
+  onClose,
+  triggerRef,
 }: {
   selected: ArbSearchResult | null
   stake: string
   setStake: (value: string) => void
   clearSelection: () => void
+  open: boolean
+  onClose: () => void
+  triggerRef: React.RefObject<HTMLButtonElement | null>
 }) {
   const stakeValue = Number.parseFloat(stake)
   const stakeNumber = Number.isFinite(stakeValue) ? stakeValue : 0
   const calc = selected ? calculateStakeSplit(selected, stakeNumber) : null
 
   return (
-    <aside className="arb-calculator-rail" aria-label="Stake calculator">
+    <AdaptiveRail open={open} onClose={onClose} label="Stake calculator" className="arb-calculator-rail" triggerRef={triggerRef}>
       <div className="builder-panel-head">
         <div>
           <h2>Stake calculator</h2>
@@ -405,7 +435,7 @@ function StakeCalculatorRail({
           </div>
         </div>
       )}
-    </aside>
+    </AdaptiveRail>
   )
 }
 

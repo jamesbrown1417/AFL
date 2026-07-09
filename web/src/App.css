@@ -654,9 +654,13 @@
 }
 
 .odds-workspace .filter-grid {
-  grid-template-columns: minmax(220px, 1fr) minmax(150px, 0.65fr) minmax(178px, 0.75fr) minmax(168px, 0.72fr);
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
   align-items: end;
   gap: 12px;
+}
+
+.builder-controls .filter-grid {
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
 }
 
 .odds-workspace .field {
@@ -3546,6 +3550,236 @@
   .candidate-head-cell:nth-child(5),
   .candidate-head-cell:nth-child(n + 7) {
     display: none;
+  }
+}
+
+/* Complete candidate boards render through a bounded virtual viewport. */
+.candidate-virtual-scroll {
+  position: relative;
+  min-height: 280px;
+  max-height: min(620px, calc(100vh - 318px));
+  overflow: auto;
+  overscroll-behavior: contain;
+}
+
+.candidate-virtual-spacer {
+  position: relative;
+  width: 100%;
+}
+
+.candidate-virtual-item {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  padding-bottom: 7px;
+}
+
+.candidate-grid-row {
+  display: grid;
+  gap: 10px;
+  padding-bottom: 10px;
+}
+
+.candidate-virtual-scroll.is-refreshing {
+  pointer-events: none;
+  opacity: 0.62;
+}
+
+.builder-context-pill,
+.draft-context {
+  display: inline-flex;
+  width: fit-content;
+  margin-top: 5px;
+  border-radius: 5px;
+  background: var(--teal-soft);
+  color: var(--teal-strong);
+  padding: 3px 7px;
+  font-size: 10px;
+  font-weight: 800;
+}
+
+.draft-context {
+  max-width: 230px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.adaptive-rail-trigger,
+.adaptive-rail-close,
+.adaptive-rail-backdrop,
+.mobile-filter-toggle {
+  display: none;
+}
+
+.undo-toast {
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  z-index: 80;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  max-width: min(440px, calc(100vw - 32px));
+  border: 1px solid var(--border-strong);
+  border-radius: 8px;
+  background: var(--text);
+  color: var(--surface);
+  box-shadow: 0 16px 38px rgba(15, 23, 42, 0.24);
+  padding: 11px 12px 11px 14px;
+  font-size: 13px;
+}
+
+.undo-toast span {
+  flex: 1;
+}
+
+.undo-toast button {
+  border: 0;
+  background: transparent;
+  color: var(--teal-soft);
+  font: inherit;
+  font-weight: 850;
+  cursor: pointer;
+}
+
+.undo-toast .undo-toast-close {
+  color: var(--surface);
+  font-size: 18px;
+  line-height: 1;
+}
+
+@media (max-width: 1400px) {
+  .builder-workspace,
+  .odds-workspace,
+  .arb-workspace {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .odds-workspace .filter-grid,
+  .arb-workspace .filter-grid {
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  }
+
+  .adaptive-rail-trigger {
+    display: inline-flex;
+  }
+
+  .adaptive-rail-backdrop {
+    position: fixed;
+    inset: 58px 0 0;
+    z-index: 54;
+    display: block;
+    background: rgba(15, 23, 42, 0.32);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 160ms ease;
+  }
+
+  .adaptive-rail-backdrop.is-open {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .adaptive-rail.builder-panel,
+  .adaptive-rail.odds-builder-rail,
+  .adaptive-rail.arb-calculator-rail {
+    position: fixed;
+    top: 58px;
+    right: 0;
+    bottom: 0;
+    z-index: 55;
+    width: min(390px, calc(100vw - 24px));
+    max-height: none;
+    overflow: auto;
+    border-radius: 8px 0 0 8px;
+    transform: translateX(105%);
+    transition: transform 180ms ease;
+  }
+
+  .adaptive-rail.builder-panel.is-open,
+  .adaptive-rail.odds-builder-rail.is-open,
+  .adaptive-rail.arb-calculator-rail.is-open {
+    transform: translateX(0);
+  }
+
+  .adaptive-rail-close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 2;
+    display: grid;
+  }
+
+  .adaptive-rail .builder-panel-head {
+    padding-right: 54px;
+  }
+}
+
+@media (max-width: 820px) {
+  .odds-summary-grid,
+  .arb-summary-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .responsive-filters .mobile-filter-toggle {
+    display: inline-flex;
+    width: 100%;
+    justify-content: center;
+    margin-bottom: 10px;
+  }
+
+  .responsive-filters:not(.mobile-filters-open) .mobile-filter-secondary {
+    display: none;
+  }
+
+  .adaptive-rail-backdrop {
+    inset: 0 0 62px;
+  }
+
+  .adaptive-rail.builder-panel,
+  .adaptive-rail.odds-builder-rail,
+  .adaptive-rail.arb-calculator-rail {
+    top: auto;
+    right: 0;
+    bottom: 62px;
+    left: 0;
+    width: 100%;
+    max-height: min(78dvh, 680px);
+    border-radius: 10px 10px 0 0;
+    transform: translateY(calc(105% + 62px));
+  }
+
+  .adaptive-rail.builder-panel.is-open,
+  .adaptive-rail.odds-builder-rail.is-open,
+  .adaptive-rail.arb-calculator-rail.is-open {
+    transform: translateY(0);
+  }
+
+  .side-nav button {
+    flex-direction: column;
+    gap: 2px;
+    padding: 3px 2px;
+  }
+
+  .side-nav span {
+    display: block;
+    max-width: 100%;
+    overflow: hidden;
+    font-size: 9px;
+    line-height: 1;
+    text-overflow: ellipsis;
+  }
+
+  .undo-toast {
+    right: 12px;
+    bottom: 74px;
+    left: 12px;
+  }
+
+  .candidate-virtual-scroll {
+    max-height: min(560px, calc(100dvh - 220px));
   }
 }
 

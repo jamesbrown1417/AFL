@@ -70,6 +70,27 @@ export function useOdds(settings: ClientSettings, filters: OddsFilters, limit = 
   })
 }
 
+export const BUILDER_ODDS_PAGE_SIZE = 5_000
+
+export async function fetchAllBuilderOdds(
+  fetchPage: (query: OddsQuery) => Promise<OddsSearchResult[]>,
+  query: OddsQuery,
+) {
+  const allRows: OddsSearchResult[] = []
+  let offset = 0
+
+  while (true) {
+    const page = await fetchPage({ ...query, limit: BUILDER_ODDS_PAGE_SIZE, offset })
+    allRows.push(...page)
+    if (page.length < BUILDER_ODDS_PAGE_SIZE) break
+    offset += page.length
+  }
+
+  const uniqueRows = new Map<string, OddsSearchResult>()
+  allRows.forEach((row) => uniqueRows.set(`${row.selection_id}-${row.bookmaker}`, row))
+  return Array.from(uniqueRows.values())
+}
+
 export function useBuilderOdds(
   settings: ClientSettings,
   bookmaker: string | null | undefined,
@@ -82,6 +103,7 @@ export function useBuilderOdds(
     bookmaker: bookmaker ? [bookmaker] : [],
     scope: 'player',
     event_id: eventIds,
+    selection_type: metricFilters.selectionType,
     sort_by: eventIds.length <= 1 ? 'market' : 'next_best_prob_diff',
     sort_dir: eventIds.length <= 1 ? 'asc' : 'desc',
     matchup_difficulty: metricFilters.matchupDifficulties,
@@ -97,12 +119,15 @@ export function useBuilderOdds(
     max_win_loss_diff: metricFilters.maxWinLossDiff,
     min_next_best_prob_diff: metricFilters.minNextBestProbDiff,
     max_next_best_prob_diff: metricFilters.maxNextBestProbDiff,
+    favorable_home_away: metricFilters.favorableHomeAway,
+    favorable_win_loss: metricFilters.favorableWinLoss,
     best_only: bestOnly,
-    limit: 5000,
+    limit: BUILDER_ODDS_PAGE_SIZE,
   }
   return useQuery({
     queryKey: queryKeys.odds(settings, query),
-    queryFn: () => api.odds(settings, query).then((rows) => rows.filter((row) => row.market_type_code.startsWith('player_'))),
+    queryFn: () => fetchAllBuilderOdds((pageQuery) => api.odds(settings, pageQuery), query)
+      .then((rows) => rows.filter((row) => row.market_type_code.startsWith('player_'))),
     enabled: enabled && Boolean(bookmaker),
     placeholderData: keepPreviousData,
     retry: 1,
@@ -224,6 +249,12 @@ export function oddsFiltersToQuery(filters: OddsFilters, limit = 100): OddsQuery
     max_diff_last_10: playerScoped ? 1 : null,
     min_next_best_prob_diff: playerScoped ? filters.minNextBestProbDiff : null,
     max_next_best_prob_diff: playerScoped ? 1 : null,
+    min_home_away_diff: playerScoped ? filters.minHomeAwayDiff : null,
+    max_home_away_diff: playerScoped ? filters.maxHomeAwayDiff : null,
+    min_win_loss_diff: playerScoped ? filters.minWinLossDiff : null,
+    max_win_loss_diff: playerScoped ? filters.maxWinLossDiff : null,
+    favorable_home_away: playerScoped ? filters.favorableHomeAway : false,
+    favorable_win_loss: playerScoped ? filters.favorableWinLoss : false,
     best_only: playerScoped ? filters.bestOnly : false,
     sgm_only: playerScoped ? filters.sgmOnly : false,
     limit,

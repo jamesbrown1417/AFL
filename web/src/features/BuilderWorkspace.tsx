@@ -1,13 +1,14 @@
-import { useDeferredValue, useEffect, useMemo, useState } from 'react'
+import { useDeferredValue, useEffect, useMemo, useRef, useState } from 'react'
 import clsx from 'clsx'
+import { useVirtualizer } from '@tanstack/react-virtual'
 import { ArrowDown, ArrowUp, BarChart3, Check, Filter, LineChart, Search, Trash2, X } from 'lucide-react'
 import type { ClientSettings } from '../api/client'
 import type { BookmakerSummary, BuilderMode, CgmAgencyComparison, DraftLeg, EventSummary, MetricFilters, OddsSearchResult, SgmAgencyComparison, SortField } from '../api/types'
 import { useBuilderOdds, useCompareCgm, useCompareSgm, useSelectionAgencyPrices } from '../api/queries'
 import { defaultMetricFilters, defaultPlayerFilters, useAppStore, useClientSettings } from '../store/useAppStore'
-import { allMarketCode, buildCandidateGroups, combinedBasePrice, defaultDescending, lineWithSideLabel, marketTypeToStatCode, orderedMarketCodes, sortCandidateRows, toDraftLeg } from '../lib/builder'
+import { allMarketCode, buildCandidateGroups, combinedBasePrice, defaultDescending, favorableMatchupDifficulties, isFavorableMatchupSet, lineWithSideLabel, marketTypeToStatCode, orderedMarketCodes, rawMatchupDifficulty, sortCandidateRows, toDraftLeg } from '../lib/builder'
 import { aflTeamCode, bookmakerLabel, formatDateTime, formatLine, formatPrice, formatShortDate, formatSigned, marketLabel, playerPositionTag, selectionTypeLabel, shortMatchLabel } from '../lib/formatters'
-import { Button, Chip, ConfirmDialog, EmptyState, ErrorBanner, Field, Panel, Segmented, Select, StatPill, TextInput, Toggle } from '../components/ui'
+import { AdaptiveRail, Button, Chip, ConfirmDialog, EmptyState, ErrorBanner, Field, Panel, Segmented, Select, StatPill, TextInput, Toggle } from '../components/ui'
 
 export function BuilderWorkspace({
   mode,
@@ -25,6 +26,7 @@ export function BuilderWorkspace({
   const displayMode = useAppStore((state) => state.displayMode)
   const setDisplayMode = useAppStore((state) => state.setDisplayMode)
   const sgmLegs = useAppStore((state) => state.sgmLegs)
+  const sgmContext = useAppStore((state) => state.sgmContext)
   const cgmLegs = useAppStore((state) => state.cgmLegs)
   const addSgmLeg = useAppStore((state) => state.addSgmLeg)
   const addCgmLeg = useAppStore((state) => state.addCgmLeg)
@@ -41,7 +43,7 @@ export function BuilderWorkspace({
   const firstBookmaker = enabledBookmakers.find((bookmaker) => bookmaker.code === selectedDefault)?.code ?? enabledBookmakers[0]?.code ?? ''
   const [bookmaker, setBookmaker] = useState('')
   // Fall back to the preferred/first agency until the user explicitly picks one (agencies load async).
-  const effectiveBookmaker = bookmaker || firstBookmaker
+  const effectiveBookmaker = mode === 'sgm' && sgmContext ? sgmContext.bookmaker : bookmaker || firstBookmaker
   const [sgmEventId, setSgmEventId] = useState<number | null>(null)
   const [selectedEventIds, setSelectedEventIds] = useState<Set<number>>(new Set())
   const [bestOnly, setBestOnly] = useState(false)
@@ -54,6 +56,8 @@ export function BuilderWorkspace({
   const [priceDialogSelection, setPriceDialogSelection] = useState<OddsSearchResult | null>(null)
   const [pendingSwitch, setPendingSwitch] = useState<(() => void) | null>(null)
   const [showMetricFilters, setShowMetricFilters] = useState(false)
+  const [builderRailOpen, setBuilderRailOpen] = useState(false)
+  const builderRailTriggerRef = useRef<HTMLButtonElement>(null)
   const [draftMetricFilters, setDraftMetricFilters] = useState<MetricFilters>(defaultMetricFilters)
   const normalizedMetricFilters = useMemo(() => normalizeMetricFilters(metricFilters), [metricFilters])
   const activeMetricFilterCount = useMemo(() => countActiveMetricFilters(normalizedMetricFilters), [normalizedMetricFilters])
@@ -61,9 +65,12 @@ export function BuilderWorkspace({
   const legs = mode === 'sgm' ? sgmLegs : cgmLegs
   const selectedSelectionIds = useMemo(() => new Set(legs.map((leg) => leg.selection_id)), [legs])
   // SGM always has one match in focus: the user's explicit pick, otherwise the first fixture.
-  const effectiveSgmEventId = sgmEventId ?? events[0]?.id ?? null
-  const eventIds = mode === 'sgm' ? (effectiveSgmEventId == null ? [] : [effectiveSgmEventId]) : Array.from(selectedEventIds)
-  const effectiveEventIds = mode === 'cgm' && eventIds.length === 0 ? [] : eventIds
+  const effectiveSgmEventId = sgmContext?.eventId ?? sgmEventId ?? events[0]?.id ?? null
+  const eventIds = useMemo(
+    () => mode === 'sgm' ? (effectiveSgmEventId == null ? [] : [effectiveSgmEventId]) : Array.from(selectedEventIds),
+    [effectiveSgmEventId, mode, selectedEventIds],
+  )
+  const effectiveEventIds = useMemo(() => mode === 'cgm' && eventIds.length === 0 ? [] : eventIds, [eventIds, mode])
   const candidateQuery = useBuilderOdds(settings, effectiveBookmaker, effectiveEventIds, normalizedMetricFilters, bestOnly, Boolean(effectiveBookmaker) && (mode === 'cgm' || effectiveSgmEventId != null))
   const candidates = useMemo(() => {
     const rows = candidateQuery.data ?? []
@@ -88,8 +95,32 @@ export function BuilderWorkspace({
   }, [candidates, deferredPlayerQuery, selectedMarket])
   const rowCandidates = useMemo(() => sortCandidateRows(visibleCandidates, sortField, descending), [visibleCandidates, sortField, descending])
   const groups = useMemo(() => buildCandidateGroups(visibleCandidates), [visibleCandidates])
+  const candidateScrollRef = useRef<HTMLDivElement>(null)
+  // TanStack Virtual intentionally returns function-bearing instances local to this component.
+  // eslint-disable-next-line react-hooks/incompatible-library
+  const rowVirtualizer = useVirtualizer({
+    count: displayMode === 'row' ? rowCandidates.length : 0,
+    getScrollElement: () => candidateScrollRef.current,
+    estimateSize: () => 61,
+    overscan: 10,
+  })
+  const virtualRows = rowVirtualizer.getVirtualItems()
+  const visibleRange = virtualRows.length > 0
+    ? `${virtualRows[0].index + 1}–${virtualRows[virtualRows.length - 1].index + 1}`
+    : rowCandidates.length > 0 ? '1–1' : '0–0'
   const compareSgm = useCompareSgm(settings)
   const compareCgm = useCompareCgm(settings)
+  const favorableMatchups = favorableMatchupDifficulties(normalizedMetricFilters.selectionType)
+
+  const updateSelectionType = (selectionType: string | null) => {
+    setMetricFilters({
+      ...normalizedMetricFilters,
+      selectionType,
+      matchupDifficulties: isFavorableMatchupSet(normalizedMetricFilters.matchupDifficulties)
+        ? [...favorableMatchupDifficulties(selectionType)]
+        : normalizedMetricFilters.matchupDifficulties,
+    })
+  }
 
   const toggleLeg = (selection: OddsSearchResult) => {
     setNotice(null)
@@ -188,6 +219,10 @@ export function BuilderWorkspace({
     if (showMetricFilters) setDraftMetricFilters(normalizedMetricFilters)
   }, [normalizedMetricFilters, showMetricFilters])
 
+  useEffect(() => {
+    rowVirtualizer.scrollToOffset(0)
+  }, [deferredPlayerQuery, descending, effectiveBookmaker, effectiveEventIds, normalizedMetricFilters, rowVirtualizer, selectedMarket, sortField])
+
   const compare = () => {
     if (mode === 'sgm') {
       const eventId = legs[0]?.event_id ?? effectiveSgmEventId
@@ -206,16 +241,24 @@ export function BuilderWorkspace({
           <div>
             <h1>{mode === 'sgm' ? 'SGM builder' : 'CGM builder'}</h1>
             <p>{mode === 'sgm' ? 'One match, multiple legs' : 'One leg per match across games'}</p>
+            {mode === 'sgm' && sgmContext ? (
+              <span className="builder-context-pill">{bookmakerLabel(sgmContext.bookmaker)} · {shortMatchLabel(sgmContext.eventLabel)}</span>
+            ) : null}
           </div>
-          <Segmented
-            value={displayMode}
-            ariaLabel="Candidate display"
-            options={[
-              { value: 'row', label: 'Rows' },
-              { value: 'tile', label: 'Tiles' },
-            ]}
-            onChange={setDisplayMode}
-          />
+          <div className="page-actions">
+            <Segmented
+              value={displayMode}
+              ariaLabel="Candidate display"
+              options={[
+                { value: 'row', label: 'Rows' },
+                { value: 'tile', label: 'Tiles' },
+              ]}
+              onChange={setDisplayMode}
+            />
+            <button ref={builderRailTriggerRef} type="button" className="button button--secondary adaptive-rail-trigger" onClick={() => setBuilderRailOpen(true)}>
+              Draft ({legs.length})
+            </button>
+          </div>
         </div>
 
         <Panel className="builder-controls">
@@ -230,6 +273,9 @@ export function BuilderWorkspace({
             {mode === 'sgm' ? (
               <Field label="Match">
                 <Select value={effectiveSgmEventId ?? ''} onChange={(event) => handleSelectSgmEvent(event.currentTarget.value ? Number(event.currentTarget.value) : null)}>
+                  {sgmContext && !events.some((event) => event.id === sgmContext.eventId) ? (
+                    <option value={sgmContext.eventId}>{shortMatchLabel(sgmContext.eventLabel)} | saved draft</option>
+                  ) : null}
                   {events.map((event) => (
                     <option key={event.id} value={event.id}>{shortMatchLabel(event.match_name)} | {formatDateTime(event.start_time)}</option>
                   ))}
@@ -261,6 +307,13 @@ export function BuilderWorkspace({
                 ))}
               </Select>
             </Field>
+            <Field label="Side">
+              <Select value={normalizedMetricFilters.selectionType ?? ''} onChange={(event) => updateSelectionType(event.currentTarget.value || null)}>
+                <option value="">Overs & unders</option>
+                <option value="over">Overs only</option>
+                <option value="under">Unders only</option>
+              </Select>
+            </Field>
             <Field label="Player search">
               <div className="input-with-icon">
                 <Search size={16} />
@@ -269,6 +322,9 @@ export function BuilderWorkspace({
             </Field>
           </div>
           <div className="quick-filter-grid">
+            <Chip active={normalizedMetricFilters.selectionType === 'under'} onClick={() => updateSelectionType(normalizedMetricFilters.selectionType === 'under' ? null : 'under')}>
+              Unders only
+            </Chip>
             <Chip
               active={normalizedMetricFilters.minDiffLast10 >= 0}
               onClick={() => setMetricFilters({ ...normalizedMetricFilters, minDiffLast10: normalizedMetricFilters.minDiffLast10 >= 0 ? -1 : 0 })}
@@ -286,11 +342,23 @@ export function BuilderWorkspace({
               onClick={() =>
                 setMetricFilters({
                   ...normalizedMetricFilters,
-                  matchupDifficulties: normalizedMetricFilters.matchupDifficulties.length > 0 ? [] : ['Neutral', 'Good', 'Excellent'],
+                  matchupDifficulties: normalizedMetricFilters.matchupDifficulties.length > 0 ? [] : [...favorableMatchups],
                 })
               }
             >
               Favorable matchup
+            </Chip>
+            <Chip
+              active={normalizedMetricFilters.favorableHomeAway}
+              onClick={() => setMetricFilters({ ...normalizedMetricFilters, favorableHomeAway: !normalizedMetricFilters.favorableHomeAway })}
+            >
+              H/A edge
+            </Chip>
+            <Chip
+              active={normalizedMetricFilters.favorableWinLoss}
+              onClick={() => setMetricFilters({ ...normalizedMetricFilters, favorableWinLoss: !normalizedMetricFilters.favorableWinLoss })}
+            >
+              W/L edge
             </Chip>
             <Button variant="secondary" onClick={() => setShowMetricFilters(true)}>
               <Filter size={15} /> Filters
@@ -332,59 +400,49 @@ export function BuilderWorkspace({
         <Panel className="candidate-panel">
           <div className="section-heading">
             <h2>{marketLabel(selectedMarket)} options</h2>
-            <span>{candidateQuery.isFetching ? 'Loading' : `${visibleCandidates.length} selections`}</span>
+            <span>{candidateQuery.isFetching ? 'Loading complete board' : displayMode === 'row' ? `Showing ${visibleRange} of ${visibleCandidates.length}` : `${visibleCandidates.length} selections`}</span>
           </div>
           {notice ? <p className="builder-notice" role="status">{notice}</p> : null}
           {visibleCandidates.length === 0 && !candidateQuery.isFetching ? (
             <EmptyState title="No eligible legs" body="Change agency, match, market, player search, or metric filters." />
           ) : displayMode === 'row' ? (
             <div className="candidate-table">
-                  <CandidateHeader sortField={sortField} descending={descending} onSort={handleSort} />
-                  <div className="candidate-list">
-                    {rowCandidates.map((selection) => (
-                      <CandidateRow
+              <CandidateHeader sortField={sortField} descending={descending} onSort={handleSort} />
+              <div ref={candidateScrollRef} className={clsx('candidate-virtual-scroll', candidateQuery.isFetching && 'is-refreshing')} aria-busy={candidateQuery.isFetching}>
+                <div className="candidate-virtual-spacer" style={{ height: rowVirtualizer.getTotalSize() }}>
+                  {virtualRows.map((virtualRow) => {
+                    const selection = rowCandidates[virtualRow.index]
+                    return (
+                      <div
                         key={`${selection.selection_id}-${selection.bookmaker}`}
-                        mode={mode}
-                        selection={selection}
-                    selected={selectedSelectionIds.has(selection.selection_id)}
-                    onToggle={() => toggleLeg(selection)}
-                    onContextMenu={(event) => openContextMenu(event, selection)}
-                    disabled={selection.decimal_price == null || (mode === 'sgm' && !selection.sgm_eligible)}
-                  />
-                ))}
+                        ref={rowVirtualizer.measureElement}
+                        data-index={virtualRow.index}
+                        className="candidate-virtual-item"
+                        style={{ transform: `translateY(${virtualRow.start}px)` }}
+                      >
+                        <CandidateRow
+                          mode={mode}
+                          selection={selection}
+                          selected={selectedSelectionIds.has(selection.selection_id)}
+                          onToggle={() => toggleLeg(selection)}
+                          onContextMenu={(event) => openContextMenu(event, selection)}
+                          disabled={candidateQuery.isFetching || selection.decimal_price == null || (mode === 'sgm' && !selection.sgm_eligible)}
+                        />
+                      </div>
+                    )
+                  })}
+                </div>
               </div>
             </div>
           ) : (
-            <div className="candidate-grid">
-              {groups.map((group) => (
-                <div className="candidate-tile" key={group.key}>
-                  <div className="tile-head">
-                    <strong>{group.title}</strong>
-                    <span>{group.subtitle}</span>
-                    <div className="tag-row">
-                      {playerPositionTag(group.playerPosition) ? <span className="tag">{playerPositionTag(group.playerPosition)}</span> : null}
-                      <MatchupBadge value={group.matchupDifficulty} />
-                      <TeamContextTags selection={group.selections[0]} />
-                    </div>
-                  </div>
-                  <div className="tile-lines">
-                    {group.selections.map((selection) => (
-                      <button
-                        type="button"
-                        key={selection.selection_id}
-                        className={selectedSelectionIds.has(selection.selection_id) ? 'is-selected' : ''}
-                        disabled={selection.decimal_price == null || (mode === 'sgm' && !selection.sgm_eligible)}
-                        onClick={() => toggleLeg(selection)}
-                        onContextMenu={(event) => openContextMenu(event, selection)}
-                      >
-                        <span>{selectionTypeLabel(selection.selection_type)} {formatPrice(selection.decimal_price)}</span>
-                        <b>{selection.line_value ?? '-'}</b>
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              ))}
-            </div>
+            <VirtualCandidateGrid
+              groups={groups}
+              mode={mode}
+              selectedSelectionIds={selectedSelectionIds}
+              isRefreshing={candidateQuery.isFetching}
+              onToggle={toggleLeg}
+              onContextMenu={openContextMenu}
+            />
           )}
         </Panel>
       </section>
@@ -396,6 +454,10 @@ export function BuilderWorkspace({
         sgmResults={compareSgm.data?.results ?? []}
         cgmResults={compareCgm.data?.results ?? []}
         error={compareSgm.error instanceof Error ? compareSgm.error.message : compareCgm.error instanceof Error ? compareCgm.error.message : null}
+        context={mode === 'sgm' ? sgmContext : null}
+        open={builderRailOpen}
+        onClose={() => setBuilderRailOpen(false)}
+        triggerRef={builderRailTriggerRef}
         onCompare={compare}
         onClear={mode === 'sgm' ? clearSgm : clearCgm}
         onRemove={mode === 'sgm' ? removeSgmLeg : removeCgmLeg}
@@ -472,6 +534,15 @@ function MetricFiltersDrawer({
         : [...filters.matchupDifficulties, difficulty],
     })
   }
+  const updateSelectionType = (selectionType: string | null) => {
+    onChange({
+      ...filters,
+      selectionType,
+      matchupDifficulties: isFavorableMatchupSet(filters.matchupDifficulties)
+        ? [...favorableMatchupDifficulties(selectionType)]
+        : filters.matchupDifficulties,
+    })
+  }
 
   return (
     <div className="drawer-overlay" onClick={onClose}>
@@ -490,6 +561,14 @@ function MetricFiltersDrawer({
           <Button variant="accent" onClick={onApply}>Apply filters</Button>
         </div>
         <div className="drawer-body">
+          <section className="metric-filter-section">
+            <h3>Side</h3>
+            <div className="filter-chip-row">
+              <Chip active={filters.selectionType == null} onClick={() => updateSelectionType(null)}>All</Chip>
+              <Chip active={filters.selectionType === 'over'} onClick={() => updateSelectionType('over')}>Overs</Chip>
+              <Chip active={filters.selectionType === 'under'} onClick={() => updateSelectionType('under')}>Unders</Chip>
+            </div>
+          </section>
           <section className="metric-filter-section">
             <h3>Matchup</h3>
             <div className="filter-chip-row">
@@ -633,6 +712,7 @@ function normalizeMetricFilters(filters: Partial<MetricFilters> | null | undefin
 
 function countActiveMetricFilters(filters: MetricFilters) {
   let count = 0
+  if (filters.selectionType != null) count += 1
   if (filters.matchupDifficulties.length > 0) count += 1
   if (filters.minPrice.trim() !== '' || filters.maxPrice.trim() !== '') count += 1
   if (filters.minDiffLast10 !== defaultMetricFilters.minDiffLast10 || filters.maxDiffLast10 !== defaultMetricFilters.maxDiffLast10) count += 1
@@ -640,6 +720,8 @@ function countActiveMetricFilters(filters: MetricFilters) {
   if (filters.minNextBestProbDiff !== defaultMetricFilters.minNextBestProbDiff || filters.maxNextBestProbDiff !== defaultMetricFilters.maxNextBestProbDiff) count += 1
   if (filters.minHomeAwayDiff != null || filters.maxHomeAwayDiff != null) count += 1
   if (filters.minWinLossDiff != null || filters.maxWinLossDiff != null) count += 1
+  if (filters.favorableHomeAway) count += 1
+  if (filters.favorableWinLoss) count += 1
   return count
 }
 
@@ -859,7 +941,7 @@ function CandidateRow({
       </div>
       <div className="candidate-context">
         {playerPositionTag(selection.player_position) ? <span className="tag">{playerPositionTag(selection.player_position)}</span> : null}
-        <MatchupBadge value={selection.matchup_difficulty} />
+        <MatchupBadge value={rawMatchupDifficulty(selection)} />
       </div>
       <span className="candidate-home-away">{selection.player_home_away ?? '-'}</span>
       <TeamLineCell value={selection.player_team_line} />
@@ -874,6 +956,132 @@ function CandidateRow({
   )
 }
 
+type CandidateGroup = ReturnType<typeof buildCandidateGroups>[number]
+
+function VirtualCandidateGrid({
+  groups,
+  mode,
+  selectedSelectionIds,
+  isRefreshing,
+  onToggle,
+  onContextMenu,
+}: {
+  groups: CandidateGroup[]
+  mode: BuilderMode
+  selectedSelectionIds: Set<number>
+  isRefreshing: boolean
+  onToggle: (selection: OddsSearchResult) => void
+  onContextMenu: (event: React.MouseEvent, selection: OddsSearchResult) => void
+}) {
+  const scrollRef = useRef<HTMLDivElement>(null)
+  const [containerWidth, setContainerWidth] = useState(0)
+
+  useEffect(() => {
+    const element = scrollRef.current
+    if (!element) return
+    const updateWidth = () => setContainerWidth(element.clientWidth)
+    updateWidth()
+    const observer = new ResizeObserver(updateWidth)
+    observer.observe(element)
+    return () => observer.disconnect()
+  }, [])
+
+  const columnCount = Math.max(1, Math.floor((containerWidth + 10) / 260))
+  const groupRows = useMemo(() => {
+    const rows: CandidateGroup[][] = []
+    for (let index = 0; index < groups.length; index += columnCount) rows.push(groups.slice(index, index + columnCount))
+    return rows
+  }, [columnCount, groups])
+  // TanStack Virtual intentionally returns function-bearing instances local to this component.
+  // eslint-disable-next-line react-hooks/incompatible-library
+  const virtualizer = useVirtualizer({
+    count: groupRows.length,
+    getScrollElement: () => scrollRef.current,
+    estimateSize: () => 250,
+    overscan: 4,
+  })
+
+  useEffect(() => {
+    virtualizer.scrollToOffset(0)
+  }, [columnCount, groups, virtualizer])
+
+  return (
+    <div ref={scrollRef} className={clsx('candidate-virtual-scroll candidate-grid-scroll', isRefreshing && 'is-refreshing')} aria-busy={isRefreshing}>
+      <div className="candidate-virtual-spacer" style={{ height: virtualizer.getTotalSize() }}>
+        {virtualizer.getVirtualItems().map((virtualRow) => (
+          <div
+            key={virtualRow.key}
+            ref={virtualizer.measureElement}
+            data-index={virtualRow.index}
+            className="candidate-virtual-item candidate-grid-row"
+            style={{
+              gridTemplateColumns: `repeat(${columnCount}, minmax(250px, 1fr))`,
+              transform: `translateY(${virtualRow.start}px)`,
+            }}
+          >
+            {groupRows[virtualRow.index].map((group) => (
+              <CandidateTile
+                key={group.key}
+                group={group}
+                mode={mode}
+                selectedSelectionIds={selectedSelectionIds}
+                disabled={isRefreshing}
+                onToggle={onToggle}
+                onContextMenu={onContextMenu}
+              />
+            ))}
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+function CandidateTile({
+  group,
+  mode,
+  selectedSelectionIds,
+  disabled,
+  onToggle,
+  onContextMenu,
+}: {
+  group: CandidateGroup
+  mode: BuilderMode
+  selectedSelectionIds: Set<number>
+  disabled: boolean
+  onToggle: (selection: OddsSearchResult) => void
+  onContextMenu: (event: React.MouseEvent, selection: OddsSearchResult) => void
+}) {
+  return (
+    <div className="candidate-tile">
+      <div className="tile-head">
+        <strong>{group.title}</strong>
+        <span>{group.subtitle}</span>
+        <div className="tag-row">
+          {playerPositionTag(group.playerPosition) ? <span className="tag">{playerPositionTag(group.playerPosition)}</span> : null}
+          <MatchupBadge value={group.matchupDifficulty} />
+          <TeamContextTags selection={group.selections[0]} />
+        </div>
+      </div>
+      <div className="tile-lines">
+        {group.selections.map((selection) => (
+          <button
+            type="button"
+            key={selection.selection_id}
+            className={selectedSelectionIds.has(selection.selection_id) ? 'is-selected' : ''}
+            disabled={disabled || selection.decimal_price == null || (mode === 'sgm' && !selection.sgm_eligible)}
+            onClick={() => onToggle(selection)}
+            onContextMenu={(event) => onContextMenu(event, selection)}
+          >
+            <span>{selectionTypeLabel(selection.selection_type)} {formatPrice(selection.decimal_price)}</span>
+            <b>{selection.line_value ?? '-'}</b>
+          </button>
+        ))}
+      </div>
+    </div>
+  )
+}
+
 function BuilderPanel({
   mode,
   legs,
@@ -881,6 +1089,10 @@ function BuilderPanel({
   sgmResults,
   cgmResults,
   error,
+  context,
+  open,
+  onClose,
+  triggerRef,
   onCompare,
   onClear,
   onRemove,
@@ -891,17 +1103,22 @@ function BuilderPanel({
   sgmResults: SgmAgencyComparison[]
   cgmResults: CgmAgencyComparison[]
   error: string | null
+  context: ReturnType<typeof useAppStore.getState>['sgmContext']
+  open: boolean
+  onClose: () => void
+  triggerRef: React.RefObject<HTMLButtonElement | null>
   onCompare: () => void
   onClear: () => void
   onRemove: (selectionId: number) => void
 }) {
   const legBySelectionId = useMemo(() => new Map(legs.map((leg) => [leg.selection_id, leg])), [legs])
   return (
-    <aside className="builder-panel">
+    <AdaptiveRail open={open} onClose={onClose} label={`${mode.toUpperCase()} draft`} className="builder-panel" triggerRef={triggerRef}>
       <div className="builder-panel-head">
         <div>
           <h2>{mode.toUpperCase()} draft</h2>
           <span>{legs.length} legs</span>
+          {mode === 'sgm' && context ? <small className="draft-context">{bookmakerLabel(context.bookmaker)} · {shortMatchLabel(context.eventLabel)}</small> : null}
         </div>
         <Button variant="ghost" onClick={onClear} disabled={legs.length === 0}><Trash2 size={15} /> Clear</Button>
       </div>
@@ -945,7 +1162,7 @@ function BuilderPanel({
               <CgmComparisonCard key={result.bookmaker} result={result} rank={index + 1} legBySelectionId={legBySelectionId} />
             ))}
       </div>
-    </aside>
+    </AdaptiveRail>
   )
 }
 

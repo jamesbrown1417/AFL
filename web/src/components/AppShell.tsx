@@ -1,9 +1,10 @@
 import { Activity, BarChart3, Database, GitCompareArrows, Percent, RefreshCw, Settings, SlidersHorizontal, Trophy, UserRound } from 'lucide-react'
 import clsx from 'clsx'
 import { useQueryClient } from '@tanstack/react-query'
+import { useEffect } from 'react'
 import type { ReactNode } from 'react'
 import type { DataStatusResponse, HealthResponse } from '../api/types'
-import { formatDateTime } from '../lib/formatters'
+import { bookmakerLabel, formatDateTime } from '../lib/formatters'
 import { useAppStore } from '../store/useAppStore'
 import { IconButton } from './ui'
 
@@ -28,7 +29,18 @@ export function AppShell({
   const activeView = useAppStore((state) => state.activeView)
   const setActiveView = useAppStore((state) => state.setActiveView)
   const themeMode = useAppStore((state) => state.themeMode)
+  const sgmContext = useAppStore((state) => state.sgmContext)
+  const sgmUndo = useAppStore((state) => state.sgmUndo)
+  const undoSgmReplacement = useAppStore((state) => state.undoSgmReplacement)
+  const dismissSgmUndo = useAppStore((state) => state.dismissSgmUndo)
   const queryClient = useQueryClient()
+
+  useEffect(() => {
+    if (!sgmUndo) return
+    const remaining = Math.max(0, sgmUndo.expiresAt - Date.now())
+    const timeout = window.setTimeout(dismissSgmUndo, remaining)
+    return () => window.clearTimeout(timeout)
+  }, [dismissSgmUndo, sgmUndo])
 
   return (
     <div className={clsx('app-shell', `theme-${themeMode}`)}>
@@ -86,6 +98,13 @@ export function AppShell({
         </header>
         {children}
       </div>
+      {sgmUndo ? (
+        <div className="undo-toast" role="status" aria-live="polite">
+          <span>Draft switched to <b>{bookmakerLabel(sgmContext?.bookmaker ?? '')}</b> · {sgmContext?.eventLabel}</span>
+          <button type="button" onClick={undoSgmReplacement}>Undo</button>
+          <button type="button" className="undo-toast-close" aria-label="Dismiss" onClick={dismissSgmUndo}>×</button>
+        </div>
+      ) : null}
     </div>
   )
 }

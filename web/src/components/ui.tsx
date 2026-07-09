@@ -1,6 +1,6 @@
-import { forwardRef } from 'react'
-import type { ButtonHTMLAttributes, InputHTMLAttributes, ReactNode, SelectHTMLAttributes } from 'react'
-import { ArrowDown, ArrowDownUp, ArrowUp } from 'lucide-react'
+import { forwardRef, useEffect, useRef, useSyncExternalStore } from 'react'
+import type { ButtonHTMLAttributes, InputHTMLAttributes, ReactNode, RefObject, SelectHTMLAttributes } from 'react'
+import { ArrowDown, ArrowDownUp, ArrowUp, X } from 'lucide-react'
 import clsx from 'clsx'
 
 export function Button({
@@ -23,9 +23,9 @@ export function Panel({ className, children }: { className?: string; children: R
   return <section className={clsx('panel', className)}>{children}</section>
 }
 
-export function Field({ label, children }: { label: string; children: ReactNode }) {
+export function Field({ label, children, className }: { label: string; children: ReactNode; className?: string }) {
   return (
-    <label className="field">
+    <label className={clsx('field', className)}>
       <span>{label}</span>
       {children}
     </label>
@@ -109,6 +109,85 @@ export function EmptyState({ title, body, action }: { title: string; body: strin
 
 export function ErrorBanner({ message }: { message: string }) {
   return <div className="error-banner" role="alert">{message}</div>
+}
+
+export function AdaptiveRail({
+  open,
+  onClose,
+  label,
+  className,
+  triggerRef,
+  children,
+}: {
+  open: boolean
+  onClose: () => void
+  label: string
+  className?: string
+  triggerRef?: RefObject<HTMLElement | null>
+  children: ReactNode
+}) {
+  const railRef = useRef<HTMLElement>(null)
+  const overlayMode = useSyncExternalStore(
+    (onStoreChange) => {
+      const media = window.matchMedia('(max-width: 1400px)')
+      media.addEventListener('change', onStoreChange)
+      return () => media.removeEventListener('change', onStoreChange)
+    },
+    () => window.matchMedia('(max-width: 1400px)').matches,
+    () => false,
+  )
+
+  useEffect(() => {
+    if (!open || !overlayMode) return
+    const previousFocus = document.activeElement instanceof HTMLElement ? document.activeElement : null
+    const restoreTarget = triggerRef?.current ?? previousFocus
+    const rail = railRef.current
+    window.requestAnimationFrame(() => rail?.focus())
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        event.preventDefault()
+        onClose()
+        return
+      }
+      if (event.key !== 'Tab' || !rail) return
+      const focusable = Array.from(rail.querySelectorAll<HTMLElement>('button:not([disabled]), input:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])'))
+      if (focusable.length === 0) return
+      const first = focusable[0]
+      const last = focusable[focusable.length - 1]
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault()
+        last.focus()
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault()
+        first.focus()
+      }
+    }
+    document.addEventListener('keydown', handleKeyDown)
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown)
+      window.requestAnimationFrame(() => restoreTarget?.focus())
+    }
+  }, [onClose, open, overlayMode, triggerRef])
+
+  return (
+    <>
+      <div className={clsx('adaptive-rail-backdrop', open && 'is-open')} aria-hidden="true" onClick={onClose} />
+      <aside
+        ref={railRef}
+        className={clsx('adaptive-rail', className, open && 'is-open')}
+        aria-label={label}
+        aria-hidden={overlayMode && !open ? true : undefined}
+        inert={overlayMode && !open ? true : undefined}
+        tabIndex={-1}
+      >
+        <IconButton className="adaptive-rail-close" label={`Close ${label}`} onClick={onClose}>
+          <X size={18} />
+        </IconButton>
+        {children}
+      </aside>
+    </>
+  )
 }
 
 export function StatPill({ label, value, tone = 'neutral' }: { label: string; value: string; tone?: 'neutral' | 'good' | 'warn' | 'bad' }) {

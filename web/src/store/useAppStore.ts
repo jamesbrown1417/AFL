@@ -3,6 +3,28 @@ import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 import type { ArbFilters, BuilderMode, DisplayMode, DraftLeg, MetricFilters, OddsFilters, PlayerStatsFilters, ThemeMode } from '../api/types'
 
+export interface SgmDraftContext {
+  eventId: number
+  eventLabel: string
+  bookmaker: string
+}
+
+export interface SgmUndoSnapshot {
+  legs: DraftLeg[]
+  context: SgmDraftContext
+  expiresAt: number
+}
+
+export const SGM_UNDO_DURATION_MS = 8_000
+
+export function sgmContextFromLeg(leg: DraftLeg): SgmDraftContext {
+  return {
+    eventId: leg.event_id,
+    eventLabel: leg.event_label,
+    bookmaker: leg.bookmaker,
+  }
+}
+
 export const defaultOddsFilters: OddsFilters = {
   scope: 'player',
   bookmakerCodes: [],
@@ -16,6 +38,12 @@ export const defaultOddsFilters: OddsFilters = {
   maxPrice: '',
   minDiffLast10: -1,
   minNextBestProbDiff: -1,
+  minHomeAwayDiff: null,
+  maxHomeAwayDiff: null,
+  minWinLossDiff: null,
+  maxWinLossDiff: null,
+  favorableHomeAway: false,
+  favorableWinLoss: false,
   bestOnly: false,
   sgmOnly: false,
 }
@@ -29,6 +57,7 @@ export const defaultArbFilters: ArbFilters = {
 }
 
 export const defaultMetricFilters: MetricFilters = {
+  selectionType: null,
   matchupDifficulties: [],
   minPrice: '',
   maxPrice: '',
@@ -42,6 +71,8 @@ export const defaultMetricFilters: MetricFilters = {
   maxWinLossDiff: null,
   minNextBestProbDiff: -1,
   maxNextBestProbDiff: 1,
+  favorableHomeAway: false,
+  favorableWinLoss: false,
 }
 
 export const defaultPlayerFilters: PlayerStatsFilters = {
@@ -61,7 +92,7 @@ export const defaultPlayerFilters: PlayerStatsFilters = {
   upperBound: '25.5',
 }
 
-interface AppStore {
+export interface AppStore {
   apiBaseUrl: string
   authToken: string
   defaultBookmaker: string
@@ -76,6 +107,8 @@ interface AppStore {
   selectedPlayerId: number | null
   selectedPlayerName: string
   sgmLegs: DraftLeg[]
+  sgmContext: SgmDraftContext | null
+  sgmUndo: SgmUndoSnapshot | null
   cgmLegs: DraftLeg[]
   sgmForceRefresh: boolean
   setSettings: (settings: Partial<Pick<AppStore, 'apiBaseUrl' | 'authToken' | 'defaultBookmaker' | 'themeMode'>>) => void
@@ -92,10 +125,43 @@ interface AppStore {
   addSgmLeg: (leg: DraftLeg) => void
   removeSgmLeg: (selectionId: number) => void
   clearSgm: () => void
+  undoSgmReplacement: () => void
+  dismissSgmUndo: () => void
   addCgmLeg: (leg: DraftLeg) => void
   removeCgmLeg: (selectionId: number) => void
   clearCgm: () => void
   setSgmForceRefresh: (forceRefresh: boolean) => void
+}
+
+export function migratePersistedAppState(persistedState: unknown) {
+  if (!persistedState || typeof persistedState !== 'object') return persistedState
+  const state = persistedState as Partial<AppStore>
+  const playerFilters = state.playerFilters
+  const nextState = {
+    ...state,
+    sgmContext: state.sgmContext ?? (state.sgmLegs?.[0] ? sgmContextFromLeg(state.sgmLegs[0]) : null),
+    oddsFilters: {
+      ...defaultOddsFilters,
+      ...state.oddsFilters,
+    },
+    metricFilters: {
+      ...defaultMetricFilters,
+      ...state.metricFilters,
+    },
+    arbFilters: {
+      ...defaultArbFilters,
+      ...state.arbFilters,
+    },
+  }
+  if (!playerFilters || playerFilters.seasons.length > 0) return nextState
+  return {
+    ...nextState,
+    playerFilters: {
+      ...defaultPlayerFilters,
+      ...playerFilters,
+      seasons: defaultPlayerFilters.seasons,
+    },
+  }
 }
 
 export const useAppStore = create<AppStore>()(
@@ -115,6 +181,8 @@ export const useAppStore = create<AppStore>()(
       selectedPlayerId: null,
       selectedPlayerName: '',
       sgmLegs: [],
+      sgmContext: null,
+      sgmUndo: null,
       cgmLegs: [],
       sgmForceRefresh: false,
       setSettings: (settings) => set(settings),
@@ -131,14 +199,50 @@ export const useAppStore = create<AppStore>()(
       addSgmLeg: (leg) =>
         set((state) => {
           const existing = state.sgmLegs.some((item) => item.selection_id === leg.selection_id)
-          if (existing) return { sgmLegs: state.sgmLegs.filter((item) => item.selection_id !== leg.selection_id) }
-          const resetForNewContext =
-            state.sgmLegs.length > 0 &&
-            (state.sgmLegs[0].event_id !== leg.event_id || state.sgmLegs[0].bookmaker !== leg.bookmaker)
-          return { sgmLegs: [...(resetForNewContext ? [] : state.sgmLegs), leg], builderMode: 'sgm' }
+          if (existing) {
+            const nextLegs = state.sgmLegs.filter((item) => item.selection_id !== leg.selection_id)
+            return { sgmLegs: nextLegs, sgmContext: nextLegs.length ? state.sgmContext : null, sgmUndo: null }
+          }
+
+          const currentContext = state.sgmContext ?? (state.sgmLegs[0] ? sgmContextFromLeg(state.sgmLegs[0]) : null)
+          const incomingContext = sgmContextFromLeg(leg)
+          const contextChanged = currentContext != null && (
+            currentContext.eventId !== incomingContext.eventId || currentContext.bookmaker !== incomingContext.bookmaker
+          )
+          if (state.sgmLegs.length > 0 && currentContext && contextChanged) {
+            return {
+              sgmLegs: [leg],
+              sgmContext: incomingContext,
+              sgmUndo: {
+                legs: state.sgmLegs,
+                context: currentContext,
+                expiresAt: Date.now() + SGM_UNDO_DURATION_MS,
+              },
+              builderMode: 'sgm' as const,
+            }
+          }
+          return {
+            sgmLegs: [...state.sgmLegs, leg],
+            sgmContext: currentContext ?? incomingContext,
+            sgmUndo: null,
+            builderMode: 'sgm' as const,
+          }
         }),
-      removeSgmLeg: (selectionId) => set((state) => ({ sgmLegs: state.sgmLegs.filter((leg) => leg.selection_id !== selectionId) })),
-      clearSgm: () => set({ sgmLegs: [] }),
+      removeSgmLeg: (selectionId) => set((state) => {
+        const nextLegs = state.sgmLegs.filter((leg) => leg.selection_id !== selectionId)
+        return { sgmLegs: nextLegs, sgmContext: nextLegs.length ? state.sgmContext : null, sgmUndo: null }
+      }),
+      clearSgm: () => set({ sgmLegs: [], sgmContext: null, sgmUndo: null }),
+      undoSgmReplacement: () => set((state) => {
+        if (!state.sgmUndo || state.sgmUndo.expiresAt <= Date.now()) return { sgmUndo: null }
+        return {
+          sgmLegs: state.sgmUndo.legs,
+          sgmContext: state.sgmUndo.context,
+          sgmUndo: null,
+          builderMode: 'sgm' as const,
+        }
+      }),
+      dismissSgmUndo: () => set({ sgmUndo: null }),
       addCgmLeg: (leg) =>
         set((state) => {
           const existing = state.cgmLegs.some((item) => item.selection_id === leg.selection_id)
@@ -153,28 +257,8 @@ export const useAppStore = create<AppStore>()(
     }),
     {
       name: 'afl-edge-web-v1',
-      version: 1,
-      migrate: (persistedState) => {
-        if (!persistedState || typeof persistedState !== 'object') return persistedState
-        const state = persistedState as Partial<AppStore>
-        const playerFilters = state.playerFilters
-        const nextState = {
-          ...state,
-          arbFilters: {
-            ...defaultArbFilters,
-            ...state.arbFilters,
-          },
-        }
-        if (!playerFilters || playerFilters.seasons.length > 0) return nextState
-        return {
-          ...nextState,
-          playerFilters: {
-            ...defaultPlayerFilters,
-            ...playerFilters,
-            seasons: defaultPlayerFilters.seasons,
-          },
-        }
-      },
+      version: 3,
+      migrate: migratePersistedAppState,
       partialize: (state) => ({
         apiBaseUrl: state.apiBaseUrl,
         authToken: state.authToken,
@@ -190,6 +274,7 @@ export const useAppStore = create<AppStore>()(
         selectedPlayerId: state.selectedPlayerId,
         selectedPlayerName: state.selectedPlayerName,
         sgmLegs: state.sgmLegs,
+        sgmContext: state.sgmContext,
         cgmLegs: state.cgmLegs,
         sgmForceRefresh: state.sgmForceRefresh,
       }),
