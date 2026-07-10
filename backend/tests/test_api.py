@@ -213,9 +213,8 @@ def test_event_market_selection_flow(client) -> None:
     )
     assert home_away_edge_response.status_code == 200
     for row in home_away_edge_response.json():
-        side_factor = -1 if row["selection_type"] == "under" else 1
         context_factor = 1 if row["player_home_away"] == "Home" else -1
-        assert row["home_away_diff"] * side_factor * context_factor > 0
+        assert row["home_away_diff"] * context_factor > 0
 
     win_loss_edge_response = client.get(
         "/api/v1/odds/search",
@@ -223,9 +222,8 @@ def test_event_market_selection_flow(client) -> None:
     )
     assert win_loss_edge_response.status_code == 200
     for row in win_loss_edge_response.json():
-        side_factor = -1 if row["selection_type"] == "under" else 1
-        result_factor = 1 if row["player_team_line"] < 0 else -1
-        assert row["win_loss_diff"] * side_factor * result_factor > 0
+        result_factor = 1 if row["player_team_line"] > 0 else -1
+        assert row["win_loss_diff"] * result_factor > 0
 
     best_only_response = client.get(
         "/api/v1/odds/search",

@@ -922,16 +922,14 @@ class QueryService:
             row_conditions.append(
                 """
                 home_away_diff
-                * CASE player_home_away WHEN 'Home' THEN 1 WHEN 'Away' THEN -1 ELSE 0 END
-                * CASE WHEN selection_type = 'under' THEN -1 ELSE 1 END > 0
+                * CASE player_home_away WHEN 'Home' THEN 1 WHEN 'Away' THEN -1 ELSE 0 END > 0
                 """
             )
         if favorable_win_loss:
             row_conditions.append(
                 """
                 win_loss_diff
-                * CASE WHEN player_team_line < 0 THEN 1 WHEN player_team_line > 0 THEN -1 ELSE 0 END
-                * CASE WHEN selection_type = 'under' THEN -1 ELSE 1 END > 0
+                * CASE WHEN player_team_line > 0 THEN 1 WHEN player_team_line < 0 THEN -1 ELSE 0 END > 0
                 """
             )
         if min_next_best_prob_diff is not None:
