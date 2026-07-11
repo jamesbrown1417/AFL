@@ -1,164 +1,5 @@
 {
   "events": {
-    "6b880d4c-5fd0-4753-aef1-9b9e2fd0f4e8": {
-      "id": "6b880d4c-5fd0-4753-aef1-9b9e2fd0f4e8",
-      "name": "Saturday AFL Specials - 11/07",
-      "url": "/sports/australian-rules/afl/saturday-afl-specials-11-07/6b880d4c-5fd0-4753-aef1-9b9e2fd0f4e8",
-      "advertisedStart": "2026-07-11T03:14:00.000Z",
-      "eventType": "MATCH",
-      "eventTypeId": "6bfa0efc-05df-4ae1-9b1e-152365290cfd",
-      "bettingStatus": "OPEN",
-      "status": "OPEN",
-      "phase": null,
-      "hasLiveVision": false,
-      "inPlay": false,
-      "sportCategory": {
-        "id": "23d497e6-8aab-4309-905b-9421f42c9bc5",
-        "name": "Australian Rules",
-        "category": "AUSTRALIAN_RULES",
-        "icon": "sports/australian-rules",
-        "slug": "australian-rules",
-        "url": "/sports/australian-rules",
-        "hasRegions": false,
-        "eventCount": 0
-      },
-      "competition": {
-        "id": "ccff2e9a-5347-41aa-902a-bb6b1886d817",
-        "name": "AFL",
-        "url": "/sports/australian-rules/afl",
-        "hasInPlayEvents": false,
-        "region": null
-      },
-      "teams": null,
-      "matchClock": {
-        "countDown": false,
-        "maxPeriodSeconds": 1200,
-        "paused": false,
-        "periodSeconds": 0
-      },
-      "marketCount": 13,
-      "markets": {
-        "nodes": []
-      }
-    },
-    "98a15c30-01c2-4f77-a5a8-9af788173bfb": {
-      "id": "98a15c30-01c2-4f77-a5a8-9af788173bfb",
-      "name": "St Kilda vs Port Adelaide",
-      "url": "/sports/australian-rules/afl/st-kilda-vs-port-adelaide/98a15c30-01c2-4f77-a5a8-9af788173bfb",
-      "advertisedStart": "2026-07-11T03:15:00.000Z",
-      "eventType": "MATCH",
-      "eventTypeId": "6bfa0efc-05df-4ae1-9b1e-152365290cfd",
-      "bettingStatus": "OPEN",
-      "status": "OPEN",
-      "phase": null,
-      "hasLiveVision": false,
-      "inPlay": false,
-      "sportCategory": {
-        "id": "23d497e6-8aab-4309-905b-9421f42c9bc5",
-        "name": "Australian Rules",
-        "category": "AUSTRALIAN_RULES",
-        "icon": "sports/australian-rules",
-        "slug": "australian-rules",
-        "url": "/sports/australian-rules",
-        "hasRegions": false,
-        "eventCount": 0
-      },
-      "competition": {
-        "id": "ccff2e9a-5347-41aa-902a-bb6b1886d817",
-        "name": "AFL",
-        "url": "/sports/australian-rules/afl",
-        "hasInPlayEvents": false,
-        "region": null
-      },
-      "teams": [
-        {
-          "id": "SportingTeam:99241145-a8cc-4344-be29-3ee0f9efdf36",
-          "name": "St Kilda",
-          "colour": "#C8102E",
-          "locale": "HOME",
-          "scores": [],
-          "scoresV2": null,
-          "icon": {
-            "web": "/images/neds/sprites/svg-sports-afl-icon.svg#st-kilda-fc"
-          }
-        },
-        {
-          "id": "SportingTeam:2450214f-3e88-433a-bcf9-ca2e3b359a03",
-          "name": "Port Adelaide",
-          "colour": "#008A8F",
-          "locale": "AWAY",
-          "scores": [],
-          "scoresV2": null,
-          "icon": {
-            "web": "/images/neds/sprites/svg-sports-afl-icon.svg#port-adelaide-power"
-          }
-        }
-      ],
-      "matchClock": {
-        "countDown": false,
-        "maxPeriodSeconds": 1200,
-        "paused": false,
-        "periodSeconds": 0
-      },
-      "marketCount": 275,
-      "markets": {
-        "nodes": [
-          {
-            "id": "SportingMarket:dbd11326-a907-4152-8417-c6377a36ff0f",
-            "name": "Match Betting",
-            "marketTypeId": "be25c37a-71ff-47f6-a1e2-02a494eb5a4d",
-            "handicap": null,
-            "isPrimary": true,
-            "isSuspended": false,
-            "status": "OPEN",
-            "liveBettingAvailable": true,
-            "allowsCashOut": false,
-            "sameGameMultiAvailable": true,
-            "allowOddsBoostExtra": false,
-            "additionalProductTypeIds": null,
-            "entrantCount": 2,
-            "entrants": {
-              "nodes": [
-                {
-                  "id": "SportingEntrant:1623b9a3-df8b-4db6-a455-3d23521777f6",
-                  "name": "St Kilda",
-                  "handicap": null,
-                  "isSuspended": false,
-                  "role": "HOME",
-                  "icon": {
-                    "web": "/images/neds/sprites/svg-sports-afl-icon.svg#st-kilda-fc"
-                  },
-                  "price": {
-                    "id": "1623b9a3-df8b-4db6-a455-3d23521777f6:940b8704-e497-4a76-b390-00918ff7d282:",
-                    "odds": {
-                      "numerator": 11,
-                      "denominator": 20
-                    }
-                  }
-                },
-                {
-                  "id": "SportingEntrant:63e00510-a743-4393-8495-f7f5475150d0",
-                  "name": "Port Adelaide",
-                  "handicap": null,
-                  "isSuspended": false,
-                  "role": "AWAY",
-                  "icon": {
-                    "web": "/images/neds/sprites/svg-sports-afl-icon.svg#port-adelaide-power"
-                  },
-                  "price": {
-                    "id": "63e00510-a743-4393-8495-f7f5475150d0:940b8704-e497-4a76-b390-00918ff7d282:",
-                    "odds": {
-                      "numerator": 29,
-                      "denominator": 20
-                    }
-                  }
-                }
-              ]
-            }
-          }
-        ]
-      }
-    },
     "e20ec459-fa15-41a4-a43b-ced73150245a": {
       "id": "e20ec459-fa15-41a4-a43b-ced73150245a",
       "name": "GWS Giants vs Geelong Cats",
@@ -185,7 +26,7 @@
         "id": "ccff2e9a-5347-41aa-902a-bb6b1886d817",
         "name": "AFL",
         "url": "/sports/australian-rules/afl",
-        "hasInPlayEvents": false,
+        "hasInPlayEvents": true,
         "region": null
       },
       "teams": [
@@ -303,7 +144,7 @@
         "id": "ccff2e9a-5347-41aa-902a-bb6b1886d817",
         "name": "AFL",
         "url": "/sports/australian-rules/afl",
-        "hasInPlayEvents": false,
+        "hasInPlayEvents": true,
         "region": null
       },
       "teams": [
@@ -421,7 +262,7 @@
         "id": "ccff2e9a-5347-41aa-902a-bb6b1886d817",
         "name": "AFL",
         "url": "/sports/australian-rules/afl",
-        "hasInPlayEvents": false,
+        "hasInPlayEvents": true,
         "region": null
       },
       "teams": [
@@ -539,7 +380,7 @@
         "id": "ccff2e9a-5347-41aa-902a-bb6b1886d817",
         "name": "AFL",
         "url": "/sports/australian-rules/afl",
-        "hasInPlayEvents": false,
+        "hasInPlayEvents": true,
         "region": null
       },
       "teams": [
@@ -657,7 +498,7 @@
         "id": "ccff2e9a-5347-41aa-902a-bb6b1886d817",
         "name": "AFL",
         "url": "/sports/australian-rules/afl",
-        "hasInPlayEvents": false,
+        "hasInPlayEvents": true,
         "region": null
       },
       "teams": [
@@ -775,7 +616,7 @@
         "id": "ccff2e9a-5347-41aa-902a-bb6b1886d817",
         "name": "AFL",
         "url": "/sports/australian-rules/afl",
-        "hasInPlayEvents": false,
+        "hasInPlayEvents": true,
         "region": null
       },
       "teams": [
@@ -893,7 +734,7 @@
         "id": "ccff2e9a-5347-41aa-902a-bb6b1886d817",
         "name": "AFL",
         "url": "/sports/australian-rules/afl",
-        "hasInPlayEvents": false,
+        "hasInPlayEvents": true,
         "region": null
       },
       "teams": [
@@ -1011,7 +852,7 @@
         "id": "ccff2e9a-5347-41aa-902a-bb6b1886d817",
         "name": "AFL",
         "url": "/sports/australian-rules/afl",
-        "hasInPlayEvents": false,
+        "hasInPlayEvents": true,
         "region": null
       },
       "teams": [
@@ -1129,7 +970,7 @@
         "id": "ccff2e9a-5347-41aa-902a-bb6b1886d817",
         "name": "AFL",
         "url": "/sports/australian-rules/afl",
-        "hasInPlayEvents": false,
+        "hasInPlayEvents": true,
         "region": null
       },
       "teams": [
@@ -1247,7 +1088,7 @@
         "id": "ccff2e9a-5347-41aa-902a-bb6b1886d817",
         "name": "AFL",
         "url": "/sports/australian-rules/afl",
-        "hasInPlayEvents": false,
+        "hasInPlayEvents": true,
         "region": null
       },
       "teams": [
@@ -1365,7 +1206,7 @@
         "id": "ccff2e9a-5347-41aa-902a-bb6b1886d817",
         "name": "AFL",
         "url": "/sports/australian-rules/afl",
-        "hasInPlayEvents": false,
+        "hasInPlayEvents": true,
         "region": null
       },
       "teams": [
@@ -1483,7 +1324,7 @@
         "id": "ccff2e9a-5347-41aa-902a-bb6b1886d817",
         "name": "AFL",
         "url": "/sports/australian-rules/afl",
-        "hasInPlayEvents": false,
+        "hasInPlayEvents": true,
         "region": null
       },
       "teams": [
@@ -1601,7 +1442,7 @@
         "id": "ccff2e9a-5347-41aa-902a-bb6b1886d817",
         "name": "AFL",
         "url": "/sports/australian-rules/afl",
-        "hasInPlayEvents": false,
+        "hasInPlayEvents": true,
         "region": null
       },
       "teams": [
