@@ -1,51 +1,51 @@
 {
   "entrants": {
-    "4d1770c1-f3be-4877-93ea-f7d644599087": {
-      "id": "4d1770c1-f3be-4877-93ea-f7d644599087",
-      "name": "Western Bulldogs",
+    "0f2a4677-2552-48f9-a659-0692b6327225": {
+      "id": "0f2a4677-2552-48f9-a659-0692b6327225",
+      "name": "GWS Giants",
       "home_away": "AWAY",
       "visible": true,
       "sort_order": 20,
-      "market_id": "dbb1e11c-78a0-4bca-9e39-ebf0b525ccf9"
+      "market_id": "bd258bf1-7c22-435a-b555-fb5dd8d843d1"
     },
-    "d6f19805-e1ee-412c-aeec-05300a0b4c3e": {
-      "id": "d6f19805-e1ee-412c-aeec-05300a0b4c3e",
-      "name": "Gold Coast Suns",
+    "b72dac6c-8acb-40f2-86e8-95f6f39e9401": {
+      "id": "b72dac6c-8acb-40f2-86e8-95f6f39e9401",
+      "name": "Essendon",
       "home_away": "HOME",
       "visible": true,
       "sort_order": 10,
-      "market_id": "dbb1e11c-78a0-4bca-9e39-ebf0b525ccf9"
+      "market_id": "bd258bf1-7c22-435a-b555-fb5dd8d843d1"
     }
   },
   "event_participants": {
-    "b4a52a9d-f344-4d29-b9d7-a6a15d1fed26": {
-      "id": "b4a52a9d-f344-4d29-b9d7-a6a15d1fed26",
-      "event_id": "7ea34315-546d-4945-87c4-119fb2990124",
-      "name": "Western Bulldogs",
-      "home_away": "AWAY",
-      "colour": "#003A8F"
-    },
-    "ebaa09b8-8edd-435c-af0b-20222d8b09af": {
-      "id": "ebaa09b8-8edd-435c-af0b-20222d8b09af",
-      "event_id": "7ea34315-546d-4945-87c4-119fb2990124",
-      "name": "Gold Coast Suns",
+    "b0d35c1a-3c80-4846-a6c6-452d6ea179b7": {
+      "id": "b0d35c1a-3c80-4846-a6c6-452d6ea179b7",
+      "event_id": "37bdb449-73e2-408d-9512-dfee45518c1f",
+      "name": "Essendon",
       "home_away": "HOME",
-      "colour": "#A3122F"
+      "colour": "#C8102E"
+    },
+    "cdd639ca-3a27-483d-b876-d98ed89ce042": {
+      "id": "cdd639ca-3a27-483d-b876-d98ed89ce042",
+      "event_id": "37bdb449-73e2-408d-9512-dfee45518c1f",
+      "name": "GWS Giants",
+      "home_away": "AWAY",
+      "colour": "#C1440E"
     }
   },
   "events": {
-    "7ea34315-546d-4945-87c4-119fb2990124": {
-      "id": "7ea34315-546d-4945-87c4-119fb2990124",
-      "name": "Gold Coast Suns vs Western Bulldogs",
+    "37bdb449-73e2-408d-9512-dfee45518c1f": {
+      "id": "37bdb449-73e2-408d-9512-dfee45518c1f",
+      "name": "Essendon vs GWS Giants",
       "event_type": {
         "id": "6bfa0efc-05df-4ae1-9b1e-152365290cfd",
         "name": "Match"
       },
       "match_status": "BettingOpen",
-      "advertised_start": "2026-07-19T05:15:00Z",
-      "actual_start": "2026-07-19T05:15:00Z",
+      "advertised_start": "2026-07-19T06:40:00Z",
+      "actual_start": "2026-07-19T06:40:00Z",
       "visible": true,
-      "slug": "gold-coast-suns-vs-western-bulldogs",
+      "slug": "essendon-vs-gws-giants",
       "competition": {
         "id": "ccff2e9a-5347-41aa-902a-bb6b1886d817",
         "name": "AFL",
@@ -60,22 +60,22 @@
         {
           "market_type_group_id": "29edb5e1-a717-4769-8bcd-2d43ec38d828",
           "market_ids": [
-            "dbb1e11c-78a0-4bca-9e39-ebf0b525ccf9"
+            "bd258bf1-7c22-435a-b555-fb5dd8d843d1"
           ]
         }
       ],
       "market_count": 1,
       "main_markets": [
-        "dbb1e11c-78a0-4bca-9e39-ebf0b525ccf9"
+        "bd258bf1-7c22-435a-b555-fb5dd8d843d1"
       ],
       "market_ids": [
-        "dbb1e11c-78a0-4bca-9e39-ebf0b525ccf9"
+        "bd258bf1-7c22-435a-b555-fb5dd8d843d1"
       ],
       "category_id": "23d497e6-8aab-4309-905b-9421f42c9bc5",
       "round_id": "13403bae-bb76-4ac5-8e2f-6344c148b003",
       "participant_ids": [
-        "b4a52a9d-f344-4d29-b9d7-a6a15d1fed26",
-        "ebaa09b8-8edd-435c-af0b-20222d8b09af"
+        "b0d35c1a-3c80-4846-a6c6-452d6ea179b7",
+        "cdd639ca-3a27-483d-b876-d98ed89ce042"
       ]
     }
   },
@@ -89,41 +89,41 @@
     }
   },
   "markets": {
-    "dbb1e11c-78a0-4bca-9e39-ebf0b525ccf9": {
-      "id": "dbb1e11c-78a0-4bca-9e39-ebf0b525ccf9",
-      "event_id": "7ea34315-546d-4945-87c4-119fb2990124",
+    "bd258bf1-7c22-435a-b555-fb5dd8d843d1": {
+      "id": "bd258bf1-7c22-435a-b555-fb5dd8d843d1",
+      "event_id": "37bdb449-73e2-408d-9512-dfee45518c1f",
       "market_type_id": "be25c37a-71ff-47f6-a1e2-02a494eb5a4d",
       "market_status_id": "4bc8fe96-296b-4b4c-aea4-85c94f63b9c6",
       "name": "Match Betting",
       "advertised_start": {
-        "seconds": 1784438100
+        "seconds": 1784443200
       },
       "actual_start": {
-        "seconds": 1784438100
+        "seconds": 1784443200
       },
       "is_primary": true,
       "visible": true,
       "entrant_ids": [
-        "d6f19805-e1ee-412c-aeec-05300a0b4c3e",
-        "4d1770c1-f3be-4877-93ea-f7d644599087"
+        "b72dac6c-8acb-40f2-86e8-95f6f39e9401",
+        "0f2a4677-2552-48f9-a659-0692b6327225"
       ],
       "num_winners": 1
     }
   },
   "markets_allow_cashout": {
-    "dbb1e11c-78a0-4bca-9e39-ebf0b525ccf9": true
+    "bd258bf1-7c22-435a-b555-fb5dd8d843d1": true
   },
   "prices": {
-    "4d1770c1-f3be-4877-93ea-f7d644599087:940b8704-e497-4a76-b390-00918ff7d282:": {
+    "0f2a4677-2552-48f9-a659-0692b6327225:940b8704-e497-4a76-b390-00918ff7d282:": {
       "odds": {
-        "numerator": 6,
-        "denominator": 5
+        "numerator": 3,
+        "denominator": 20
       }
     },
-    "d6f19805-e1ee-412c-aeec-05300a0b4c3e:940b8704-e497-4a76-b390-00918ff7d282:": {
+    "b72dac6c-8acb-40f2-86e8-95f6f39e9401:940b8704-e497-4a76-b390-00918ff7d282:": {
       "odds": {
-        "numerator": 67,
-        "denominator": 100
+        "numerator": 22,
+        "denominator": 5
       }
     }
   }

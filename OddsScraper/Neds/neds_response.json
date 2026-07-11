@@ -1,10 +1,10 @@
 {
   "events": {
-    "04ddadc8-eb76-49a1-92f8-633e23da8d4b": {
-      "id": "04ddadc8-eb76-49a1-92f8-633e23da8d4b",
-      "name": "Collingwood vs North Melbourne",
-      "url": "/sports/australian-rules/afl/collingwood-vs-north-melbourne/04ddadc8-eb76-49a1-92f8-633e23da8d4b",
-      "advertisedStart": "2026-07-10T09:40:00.000Z",
+    "6b880d4c-5fd0-4753-aef1-9b9e2fd0f4e8": {
+      "id": "6b880d4c-5fd0-4753-aef1-9b9e2fd0f4e8",
+      "name": "Saturday AFL Specials - 11/07",
+      "url": "/sports/australian-rules/afl/saturday-afl-specials-11-07/6b880d4c-5fd0-4753-aef1-9b9e2fd0f4e8",
+      "advertisedStart": "2026-07-11T03:14:00.000Z",
       "eventType": "MATCH",
       "eventTypeId": "6bfa0efc-05df-4ae1-9b1e-152365290cfd",
       "bettingStatus": "OPEN",
@@ -29,93 +29,16 @@
         "hasInPlayEvents": false,
         "region": null
       },
-      "teams": [
-        {
-          "id": "SportingTeam:bdb39e7e-fa47-44a7-8f5c-53d272c4a074",
-          "name": "Collingwood",
-          "colour": "#111111",
-          "locale": "HOME",
-          "scores": [],
-          "scoresV2": null,
-          "icon": {
-            "web": "/images/neds/sprites/svg-sports-afl-icon.svg#collingwood-magpies"
-          }
-        },
-        {
-          "id": "SportingTeam:251a0e9e-1425-4e95-868b-9a37dce39b2f",
-          "name": "North Melbourne",
-          "colour": "#0D2F6F",
-          "locale": "AWAY",
-          "scores": [],
-          "scoresV2": null,
-          "icon": {
-            "web": "/images/neds/sprites/svg-sports-afl-icon.svg#north-melbourne-fc"
-          }
-        }
-      ],
+      "teams": null,
       "matchClock": {
         "countDown": false,
         "maxPeriodSeconds": 1200,
         "paused": false,
         "periodSeconds": 0
       },
-      "marketCount": 273,
+      "marketCount": 13,
       "markets": {
-        "nodes": [
-          {
-            "id": "SportingMarket:a367d1f4-d126-4979-bdaa-56ae21a39f12",
-            "name": "Match Betting",
-            "marketTypeId": "be25c37a-71ff-47f6-a1e2-02a494eb5a4d",
-            "handicap": null,
-            "isPrimary": true,
-            "isSuspended": false,
-            "status": "OPEN",
-            "liveBettingAvailable": true,
-            "allowsCashOut": false,
-            "sameGameMultiAvailable": true,
-            "allowOddsBoostExtra": false,
-            "additionalProductTypeIds": null,
-            "entrantCount": 2,
-            "entrants": {
-              "nodes": [
-                {
-                  "id": "SportingEntrant:f2f28863-7f93-4edd-b1fc-62817660e3a7",
-                  "name": "Collingwood",
-                  "handicap": null,
-                  "isSuspended": false,
-                  "role": "HOME",
-                  "icon": {
-                    "web": "/images/neds/sprites/svg-sports-afl-icon.svg#collingwood-magpies"
-                  },
-                  "price": {
-                    "id": "f2f28863-7f93-4edd-b1fc-62817660e3a7:940b8704-e497-4a76-b390-00918ff7d282:",
-                    "odds": {
-                      "numerator": 19,
-                      "denominator": 50
-                    }
-                  }
-                },
-                {
-                  "id": "SportingEntrant:149e30f5-a2f6-4713-9b8a-9829acdbee64",
-                  "name": "North Melbourne",
-                  "handicap": null,
-                  "isSuspended": false,
-                  "role": "AWAY",
-                  "icon": {
-                    "web": "/images/neds/sprites/svg-sports-afl-icon.svg#north-melbourne-fc"
-                  },
-                  "price": {
-                    "id": "149e30f5-a2f6-4713-9b8a-9829acdbee64:940b8704-e497-4a76-b390-00918ff7d282:",
-                    "odds": {
-                      "numerator": 2,
-                      "denominator": 1
-                    }
-                  }
-                }
-              ]
-            }
-          }
-        ]
+        "nodes": []
       }
     },
     "98a15c30-01c2-4f77-a5a8-9af788173bfb": {
@@ -177,7 +100,7 @@
         "paused": false,
         "periodSeconds": 0
       },
-      "marketCount": 256,
+      "marketCount": 275,
       "markets": {
         "nodes": [
           {
@@ -295,7 +218,7 @@
         "paused": false,
         "periodSeconds": 0
       },
-      "marketCount": 256,
+      "marketCount": 276,
       "markets": {
         "nodes": [
           {
@@ -326,8 +249,8 @@
                   "price": {
                     "id": "0a68e075-b56c-4ca2-9fe4-e578699b03d5:940b8704-e497-4a76-b390-00918ff7d282:",
                     "odds": {
-                      "numerator": 27,
-                      "denominator": 20
+                      "numerator": 5,
+                      "denominator": 4
                     }
                   }
                 },
@@ -343,8 +266,8 @@
                   "price": {
                     "id": "d9628072-f366-489d-b6cf-23b38ffb7b5e:940b8704-e497-4a76-b390-00918ff7d282:",
                     "odds": {
-                      "numerator": 3,
-                      "denominator": 5
+                      "numerator": 16,
+                      "denominator": 25
                     }
                   }
                 }
@@ -413,7 +336,7 @@
         "paused": false,
         "periodSeconds": 0
       },
-      "marketCount": 256,
+      "marketCount": 271,
       "markets": {
         "nodes": [
           {
@@ -444,8 +367,8 @@
                   "price": {
                     "id": "59e554d4-b32b-4f6f-bafe-4e40a6951207:940b8704-e497-4a76-b390-00918ff7d282:",
                     "odds": {
-                      "numerator": 31,
-                      "denominator": 20
+                      "numerator": 5,
+                      "denominator": 4
                     }
                   }
                 },
@@ -461,7 +384,7 @@
                   "price": {
                     "id": "1914c044-2421-4d95-8b36-e914053004f1:940b8704-e497-4a76-b390-00918ff7d282:",
                     "odds": {
-                      "numerator": 13,
+                      "numerator": 16,
                       "denominator": 25
                     }
                   }
@@ -531,7 +454,7 @@
         "paused": false,
         "periodSeconds": 0
       },
-      "marketCount": 254,
+      "marketCount": 270,
       "markets": {
         "nodes": [
           {
@@ -562,7 +485,7 @@
                   "price": {
                     "id": "4c476e24-1739-4800-aad0-74b5495bedfe:940b8704-e497-4a76-b390-00918ff7d282:",
                     "odds": {
-                      "numerator": 9,
+                      "numerator": 8,
                       "denominator": 25
                     }
                   }
@@ -579,8 +502,8 @@
                   "price": {
                     "id": "60ac2be7-8ce0-400e-adf6-25812bfab9d1:940b8704-e497-4a76-b390-00918ff7d282:",
                     "odds": {
-                      "numerator": 21,
-                      "denominator": 10
+                      "numerator": 47,
+                      "denominator": 20
                     }
                   }
                 }
@@ -649,7 +572,7 @@
         "paused": false,
         "periodSeconds": 0
       },
-      "marketCount": 224,
+      "marketCount": 232,
       "markets": {
         "nodes": [
           {
@@ -680,8 +603,8 @@
                   "price": {
                     "id": "a617a10e-2fe7-4259-ade7-508588120a98:940b8704-e497-4a76-b390-00918ff7d282:",
                     "odds": {
-                      "numerator": 3,
-                      "denominator": 25
+                      "numerator": 11,
+                      "denominator": 100
                     }
                   }
                 },
@@ -697,8 +620,8 @@
                   "price": {
                     "id": "f1dca2c1-40b9-42e0-b11b-0eaf718ab2d3:940b8704-e497-4a76-b390-00918ff7d282:",
                     "odds": {
-                      "numerator": 5,
-                      "denominator": 1
+                      "numerator": 27,
+                      "denominator": 5
                     }
                   }
                 }
@@ -767,7 +690,7 @@
         "paused": false,
         "periodSeconds": 0
       },
-      "marketCount": 223,
+      "marketCount": 231,
       "markets": {
         "nodes": [
           {
