@@ -1,123 +1,5 @@
 {
   "events": {
-    "e20ec459-fa15-41a4-a43b-ced73150245a": {
-      "id": "e20ec459-fa15-41a4-a43b-ced73150245a",
-      "name": "GWS Giants vs Geelong Cats",
-      "url": "/sports/australian-rules/afl/gws-giants-vs-geelong-cats/e20ec459-fa15-41a4-a43b-ced73150245a",
-      "advertisedStart": "2026-07-11T06:15:00.000Z",
-      "eventType": "MATCH",
-      "eventTypeId": "6bfa0efc-05df-4ae1-9b1e-152365290cfd",
-      "bettingStatus": "OPEN",
-      "status": "OPEN",
-      "phase": null,
-      "hasLiveVision": false,
-      "inPlay": false,
-      "sportCategory": {
-        "id": "23d497e6-8aab-4309-905b-9421f42c9bc5",
-        "name": "Australian Rules",
-        "category": "AUSTRALIAN_RULES",
-        "icon": "sports/australian-rules",
-        "slug": "australian-rules",
-        "url": "/sports/australian-rules",
-        "hasRegions": false,
-        "eventCount": 0
-      },
-      "competition": {
-        "id": "ccff2e9a-5347-41aa-902a-bb6b1886d817",
-        "name": "AFL",
-        "url": "/sports/australian-rules/afl",
-        "hasInPlayEvents": true,
-        "region": null
-      },
-      "teams": [
-        {
-          "id": "SportingTeam:3f3ccc4e-9c28-431e-a9ae-2e563bba7e2e",
-          "name": "GWS Giants",
-          "colour": "#C1440E",
-          "locale": "HOME",
-          "scores": [],
-          "scoresV2": null,
-          "icon": {
-            "web": "/images/neds/sprites/svg-sports-afl-icon.svg#gws-giants"
-          }
-        },
-        {
-          "id": "SportingTeam:88d9fd37-5343-4de4-b8db-c227915fa914",
-          "name": "Geelong Cats",
-          "colour": "#0B2A5B",
-          "locale": "AWAY",
-          "scores": [],
-          "scoresV2": null,
-          "icon": {
-            "web": "/images/neds/sprites/svg-sports-afl-icon.svg#geelong-cats"
-          }
-        }
-      ],
-      "matchClock": {
-        "countDown": false,
-        "maxPeriodSeconds": 1200,
-        "paused": false,
-        "periodSeconds": 0
-      },
-      "marketCount": 276,
-      "markets": {
-        "nodes": [
-          {
-            "id": "SportingMarket:d1ab7a23-6943-46d9-a9ad-14a03fe4ca4a",
-            "name": "Match Betting",
-            "marketTypeId": "be25c37a-71ff-47f6-a1e2-02a494eb5a4d",
-            "handicap": null,
-            "isPrimary": true,
-            "isSuspended": false,
-            "status": "OPEN",
-            "liveBettingAvailable": true,
-            "allowsCashOut": false,
-            "sameGameMultiAvailable": true,
-            "allowOddsBoostExtra": false,
-            "additionalProductTypeIds": null,
-            "entrantCount": 2,
-            "entrants": {
-              "nodes": [
-                {
-                  "id": "SportingEntrant:0a68e075-b56c-4ca2-9fe4-e578699b03d5",
-                  "name": "GWS Giants",
-                  "handicap": null,
-                  "isSuspended": false,
-                  "role": "HOME",
-                  "icon": {
-                    "web": "/images/neds/sprites/svg-sports-afl-icon.svg#gws-giants"
-                  },
-                  "price": {
-                    "id": "0a68e075-b56c-4ca2-9fe4-e578699b03d5:940b8704-e497-4a76-b390-00918ff7d282:",
-                    "odds": {
-                      "numerator": 23,
-                      "denominator": 20
-                    }
-                  }
-                },
-                {
-                  "id": "SportingEntrant:d9628072-f366-489d-b6cf-23b38ffb7b5e",
-                  "name": "Geelong Cats",
-                  "handicap": null,
-                  "isSuspended": false,
-                  "role": "AWAY",
-                  "icon": {
-                    "web": "/images/neds/sprites/svg-sports-afl-icon.svg#geelong-cats"
-                  },
-                  "price": {
-                    "id": "d9628072-f366-489d-b6cf-23b38ffb7b5e:940b8704-e497-4a76-b390-00918ff7d282:",
-                    "odds": {
-                      "numerator": 7,
-                      "denominator": 10
-                    }
-                  }
-                }
-              ]
-            }
-          }
-        ]
-      }
-    },
     "405bf264-7bc1-4669-9737-8866328d741f": {
       "id": "405bf264-7bc1-4669-9737-8866328d741f",
       "name": "Carlton vs Hawthorn",
@@ -208,8 +90,8 @@
                   "price": {
                     "id": "59e554d4-b32b-4f6f-bafe-4e40a6951207:940b8704-e497-4a76-b390-00918ff7d282:",
                     "odds": {
-                      "numerator": 23,
-                      "denominator": 20
+                      "numerator": 5,
+                      "denominator": 4
                     }
                   }
                 },
@@ -225,8 +107,8 @@
                   "price": {
                     "id": "1914c044-2421-4d95-8b36-e914053004f1:940b8704-e497-4a76-b390-00918ff7d282:",
                     "odds": {
-                      "numerator": 7,
-                      "denominator": 10
+                      "numerator": 67,
+                      "denominator": 100
                     }
                   }
                 }
@@ -1407,124 +1289,6 @@
                     "odds": {
                       "numerator": 6,
                       "denominator": 5
-                    }
-                  }
-                }
-              ]
-            }
-          }
-        ]
-      }
-    },
-    "37bdb449-73e2-408d-9512-dfee45518c1f": {
-      "id": "37bdb449-73e2-408d-9512-dfee45518c1f",
-      "name": "Essendon vs GWS Giants",
-      "url": "/sports/australian-rules/afl/essendon-vs-gws-giants/37bdb449-73e2-408d-9512-dfee45518c1f",
-      "advertisedStart": "2026-07-19T06:40:00.000Z",
-      "eventType": "MATCH",
-      "eventTypeId": "6bfa0efc-05df-4ae1-9b1e-152365290cfd",
-      "bettingStatus": "OPEN",
-      "status": "OPEN",
-      "phase": null,
-      "hasLiveVision": false,
-      "inPlay": false,
-      "sportCategory": {
-        "id": "23d497e6-8aab-4309-905b-9421f42c9bc5",
-        "name": "Australian Rules",
-        "category": "AUSTRALIAN_RULES",
-        "icon": "sports/australian-rules",
-        "slug": "australian-rules",
-        "url": "/sports/australian-rules",
-        "hasRegions": false,
-        "eventCount": 0
-      },
-      "competition": {
-        "id": "ccff2e9a-5347-41aa-902a-bb6b1886d817",
-        "name": "AFL",
-        "url": "/sports/australian-rules/afl",
-        "hasInPlayEvents": true,
-        "region": null
-      },
-      "teams": [
-        {
-          "id": "SportingTeam:b0d35c1a-3c80-4846-a6c6-452d6ea179b7",
-          "name": "Essendon",
-          "colour": "#C8102E",
-          "locale": "HOME",
-          "scores": [],
-          "scoresV2": null,
-          "icon": {
-            "web": "/images/neds/sprites/svg-sports-afl-icon.svg#essendon-bombers"
-          }
-        },
-        {
-          "id": "SportingTeam:cdd639ca-3a27-483d-b876-d98ed89ce042",
-          "name": "GWS Giants",
-          "colour": "#C1440E",
-          "locale": "AWAY",
-          "scores": [],
-          "scoresV2": null,
-          "icon": {
-            "web": "/images/neds/sprites/svg-sports-afl-icon.svg#gws-giants"
-          }
-        }
-      ],
-      "matchClock": {
-        "countDown": false,
-        "maxPeriodSeconds": 1200,
-        "paused": false,
-        "periodSeconds": 0
-      },
-      "marketCount": 1,
-      "markets": {
-        "nodes": [
-          {
-            "id": "SportingMarket:bd258bf1-7c22-435a-b555-fb5dd8d843d1",
-            "name": "Match Betting",
-            "marketTypeId": "be25c37a-71ff-47f6-a1e2-02a494eb5a4d",
-            "handicap": null,
-            "isPrimary": true,
-            "isSuspended": false,
-            "status": "OPEN",
-            "liveBettingAvailable": false,
-            "allowsCashOut": false,
-            "sameGameMultiAvailable": false,
-            "allowOddsBoostExtra": false,
-            "additionalProductTypeIds": null,
-            "entrantCount": 2,
-            "entrants": {
-              "nodes": [
-                {
-                  "id": "SportingEntrant:b72dac6c-8acb-40f2-86e8-95f6f39e9401",
-                  "name": "Essendon",
-                  "handicap": null,
-                  "isSuspended": false,
-                  "role": "HOME",
-                  "icon": {
-                    "web": "/images/neds/sprites/svg-sports-afl-icon.svg#essendon-bombers"
-                  },
-                  "price": {
-                    "id": "b72dac6c-8acb-40f2-86e8-95f6f39e9401:940b8704-e497-4a76-b390-00918ff7d282:",
-                    "odds": {
-                      "numerator": 22,
-                      "denominator": 5
-                    }
-                  }
-                },
-                {
-                  "id": "SportingEntrant:0f2a4677-2552-48f9-a659-0692b6327225",
-                  "name": "GWS Giants",
-                  "handicap": null,
-                  "isSuspended": false,
-                  "role": "AWAY",
-                  "icon": {
-                    "web": "/images/neds/sprites/svg-sports-afl-icon.svg#gws-giants"
-                  },
-                  "price": {
-                    "id": "0f2a4677-2552-48f9-a659-0692b6327225:940b8704-e497-4a76-b390-00918ff7d282:",
-                    "odds": {
-                      "numerator": 3,
-                      "denominator": 20
                     }
                   }
                 }
