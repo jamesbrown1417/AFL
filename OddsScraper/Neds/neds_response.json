@@ -131,8 +131,8 @@
                   "price": {
                     "id": "1623b9a3-df8b-4db6-a455-3d23521777f6:940b8704-e497-4a76-b390-00918ff7d282:",
                     "odds": {
-                      "numerator": 57,
-                      "denominator": 100
+                      "numerator": 11,
+                      "denominator": 20
                     }
                   }
                 },
@@ -148,8 +148,8 @@
                   "price": {
                     "id": "63e00510-a743-4393-8495-f7f5475150d0:940b8704-e497-4a76-b390-00918ff7d282:",
                     "odds": {
-                      "numerator": 7,
-                      "denominator": 5
+                      "numerator": 29,
+                      "denominator": 20
                     }
                   }
                 }
@@ -367,8 +367,8 @@
                   "price": {
                     "id": "59e554d4-b32b-4f6f-bafe-4e40a6951207:940b8704-e497-4a76-b390-00918ff7d282:",
                     "odds": {
-                      "numerator": 6,
-                      "denominator": 5
+                      "numerator": 23,
+                      "denominator": 20
                     }
                   }
                 },
@@ -384,8 +384,8 @@
                   "price": {
                     "id": "1914c044-2421-4d95-8b36-e914053004f1:940b8704-e497-4a76-b390-00918ff7d282:",
                     "odds": {
-                      "numerator": 67,
-                      "denominator": 100
+                      "numerator": 7,
+                      "denominator": 10
                     }
                   }
                 }
@@ -867,124 +867,6 @@
         ]
       }
     },
-    "b4cd1b89-62b9-442e-8d89-412772da1405": {
-      "id": "b4cd1b89-62b9-442e-8d89-412772da1405",
-      "name": "Geelong Cats vs St Kilda",
-      "url": "/sports/australian-rules/afl/geelong-cats-vs-st-kilda/b4cd1b89-62b9-442e-8d89-412772da1405",
-      "advertisedStart": "2026-07-16T09:30:00.000Z",
-      "eventType": "MATCH",
-      "eventTypeId": "6bfa0efc-05df-4ae1-9b1e-152365290cfd",
-      "bettingStatus": "OPEN",
-      "status": "OPEN",
-      "phase": null,
-      "hasLiveVision": false,
-      "inPlay": false,
-      "sportCategory": {
-        "id": "23d497e6-8aab-4309-905b-9421f42c9bc5",
-        "name": "Australian Rules",
-        "category": "AUSTRALIAN_RULES",
-        "icon": "sports/australian-rules",
-        "slug": "australian-rules",
-        "url": "/sports/australian-rules",
-        "hasRegions": false,
-        "eventCount": 0
-      },
-      "competition": {
-        "id": "ccff2e9a-5347-41aa-902a-bb6b1886d817",
-        "name": "AFL",
-        "url": "/sports/australian-rules/afl",
-        "hasInPlayEvents": false,
-        "region": null
-      },
-      "teams": [
-        {
-          "id": "SportingTeam:c0f3eb81-cc86-44d8-9aba-e46449c0d9d6",
-          "name": "Geelong Cats",
-          "colour": "#0B2A5B",
-          "locale": "HOME",
-          "scores": [],
-          "scoresV2": null,
-          "icon": {
-            "web": "/images/neds/sprites/svg-sports-afl-icon.svg#geelong-cats"
-          }
-        },
-        {
-          "id": "SportingTeam:0f58722b-f5d2-462a-8999-7cc9ccce5958",
-          "name": "St Kilda",
-          "colour": "#C8102E",
-          "locale": "AWAY",
-          "scores": [],
-          "scoresV2": null,
-          "icon": {
-            "web": "/images/neds/sprites/svg-sports-afl-icon.svg#st-kilda-fc"
-          }
-        }
-      ],
-      "matchClock": {
-        "countDown": false,
-        "maxPeriodSeconds": 1200,
-        "paused": false,
-        "periodSeconds": 0
-      },
-      "marketCount": 1,
-      "markets": {
-        "nodes": [
-          {
-            "id": "SportingMarket:b7a2c05e-3f09-4311-b2b9-1ff18e02126d",
-            "name": "Match Betting",
-            "marketTypeId": "be25c37a-71ff-47f6-a1e2-02a494eb5a4d",
-            "handicap": null,
-            "isPrimary": true,
-            "isSuspended": false,
-            "status": "OPEN",
-            "liveBettingAvailable": false,
-            "allowsCashOut": false,
-            "sameGameMultiAvailable": false,
-            "allowOddsBoostExtra": false,
-            "additionalProductTypeIds": null,
-            "entrantCount": 2,
-            "entrants": {
-              "nodes": [
-                {
-                  "id": "SportingEntrant:c2017f0b-24a2-404e-9fdc-c3fa505b7543",
-                  "name": "Geelong Cats",
-                  "handicap": null,
-                  "isSuspended": false,
-                  "role": "HOME",
-                  "icon": {
-                    "web": "/images/neds/sprites/svg-sports-afl-icon.svg#geelong-cats"
-                  },
-                  "price": {
-                    "id": "c2017f0b-24a2-404e-9fdc-c3fa505b7543:940b8704-e497-4a76-b390-00918ff7d282:",
-                    "odds": {
-                      "numerator": 3,
-                      "denominator": 10
-                    }
-                  }
-                },
-                {
-                  "id": "SportingEntrant:38102333-6ce6-4a42-a745-51c8def068ec",
-                  "name": "St Kilda",
-                  "handicap": null,
-                  "isSuspended": false,
-                  "role": "AWAY",
-                  "icon": {
-                    "web": "/images/neds/sprites/svg-sports-afl-icon.svg#st-kilda-fc"
-                  },
-                  "price": {
-                    "id": "38102333-6ce6-4a42-a745-51c8def068ec:940b8704-e497-4a76-b390-00918ff7d282:",
-                    "odds": {
-                      "numerator": 5,
-                      "denominator": 2
-                    }
-                  }
-                }
-              ]
-            }
-          }
-        ]
-      }
-    },
     "33381548-a4a6-4acc-89a0-e55b4a8636db": {
       "id": "33381548-a4a6-4acc-89a0-e55b4a8636db",
       "name": "Sydney Swans vs Adelaide Crows",
@@ -1093,124 +975,6 @@
                     "id": "5fc5b6f4-c5bc-4859-8522-9a88f8097519:940b8704-e497-4a76-b390-00918ff7d282:",
                     "odds": {
                       "numerator": 19,
-                      "denominator": 10
-                    }
-                  }
-                }
-              ]
-            }
-          }
-        ]
-      }
-    },
-    "7fdc3d1a-b949-4594-b86d-759b4b165762": {
-      "id": "7fdc3d1a-b949-4594-b86d-759b4b165762",
-      "name": "Port Adelaide vs Fremantle",
-      "url": "/sports/australian-rules/afl/port-adelaide-vs-fremantle/7fdc3d1a-b949-4594-b86d-759b4b165762",
-      "advertisedStart": "2026-07-18T03:15:00.000Z",
-      "eventType": "MATCH",
-      "eventTypeId": "6bfa0efc-05df-4ae1-9b1e-152365290cfd",
-      "bettingStatus": "OPEN",
-      "status": "OPEN",
-      "phase": null,
-      "hasLiveVision": false,
-      "inPlay": false,
-      "sportCategory": {
-        "id": "23d497e6-8aab-4309-905b-9421f42c9bc5",
-        "name": "Australian Rules",
-        "category": "AUSTRALIAN_RULES",
-        "icon": "sports/australian-rules",
-        "slug": "australian-rules",
-        "url": "/sports/australian-rules",
-        "hasRegions": false,
-        "eventCount": 0
-      },
-      "competition": {
-        "id": "ccff2e9a-5347-41aa-902a-bb6b1886d817",
-        "name": "AFL",
-        "url": "/sports/australian-rules/afl",
-        "hasInPlayEvents": false,
-        "region": null
-      },
-      "teams": [
-        {
-          "id": "SportingTeam:49330747-8371-47bb-8ede-a1dbdcffdd34",
-          "name": "Port Adelaide",
-          "colour": "#008A8F",
-          "locale": "HOME",
-          "scores": [],
-          "scoresV2": null,
-          "icon": {
-            "web": "/images/neds/sprites/svg-sports-afl-icon.svg#port-adelaide-power"
-          }
-        },
-        {
-          "id": "SportingTeam:e488acf0-59d0-49b8-8685-41e555e2f8e5",
-          "name": "Fremantle",
-          "colour": "#2E0F4F",
-          "locale": "AWAY",
-          "scores": [],
-          "scoresV2": null,
-          "icon": {
-            "web": "/images/neds/sprites/svg-sports-afl-icon.svg#fremantle-dockers"
-          }
-        }
-      ],
-      "matchClock": {
-        "countDown": false,
-        "maxPeriodSeconds": 1200,
-        "paused": false,
-        "periodSeconds": 0
-      },
-      "marketCount": 1,
-      "markets": {
-        "nodes": [
-          {
-            "id": "SportingMarket:117abc5d-be29-449d-84de-fbd7e2a5af57",
-            "name": "Match Betting",
-            "marketTypeId": "be25c37a-71ff-47f6-a1e2-02a494eb5a4d",
-            "handicap": null,
-            "isPrimary": true,
-            "isSuspended": false,
-            "status": "OPEN",
-            "liveBettingAvailable": false,
-            "allowsCashOut": false,
-            "sameGameMultiAvailable": false,
-            "allowOddsBoostExtra": false,
-            "additionalProductTypeIds": null,
-            "entrantCount": 2,
-            "entrants": {
-              "nodes": [
-                {
-                  "id": "SportingEntrant:5a1d231c-736f-4b4d-8d71-1abab80b2a20",
-                  "name": "Port Adelaide",
-                  "handicap": null,
-                  "isSuspended": false,
-                  "role": "HOME",
-                  "icon": {
-                    "web": "/images/neds/sprites/svg-sports-afl-icon.svg#port-adelaide-power"
-                  },
-                  "price": {
-                    "id": "5a1d231c-736f-4b4d-8d71-1abab80b2a20:940b8704-e497-4a76-b390-00918ff7d282:",
-                    "odds": {
-                      "numerator": 5,
-                      "denominator": 2
-                    }
-                  }
-                },
-                {
-                  "id": "SportingEntrant:b01e2e13-4969-4b60-b0f5-f75fdd382fdb",
-                  "name": "Fremantle",
-                  "handicap": null,
-                  "isSuspended": false,
-                  "role": "AWAY",
-                  "icon": {
-                    "web": "/images/neds/sprites/svg-sports-afl-icon.svg#fremantle-dockers"
-                  },
-                  "price": {
-                    "id": "b01e2e13-4969-4b60-b0f5-f75fdd382fdb:940b8704-e497-4a76-b390-00918ff7d282:",
-                    "odds": {
-                      "numerator": 3,
                       "denominator": 10
                     }
                   }

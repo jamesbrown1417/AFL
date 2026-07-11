@@ -1,51 +1,51 @@
 {
   "entrants": {
-    "3d625b4c-29ab-4da7-b407-a4db1b7ebd5f": {
-      "id": "3d625b4c-29ab-4da7-b407-a4db1b7ebd5f",
-      "name": "Richmond",
-      "home_away": "HOME",
-      "visible": true,
-      "sort_order": 10,
-      "market_id": "7bb5b07f-820e-4c40-8cc0-e815f9c731dc"
-    },
-    "d2bf12ba-8359-48ad-9299-786b9fae2388": {
-      "id": "d2bf12ba-8359-48ad-9299-786b9fae2388",
-      "name": "Hawthorn",
+    "0f2a4677-2552-48f9-a659-0692b6327225": {
+      "id": "0f2a4677-2552-48f9-a659-0692b6327225",
+      "name": "GWS Giants",
       "home_away": "AWAY",
       "visible": true,
       "sort_order": 20,
-      "market_id": "7bb5b07f-820e-4c40-8cc0-e815f9c731dc"
+      "market_id": "bd258bf1-7c22-435a-b555-fb5dd8d843d1"
+    },
+    "b72dac6c-8acb-40f2-86e8-95f6f39e9401": {
+      "id": "b72dac6c-8acb-40f2-86e8-95f6f39e9401",
+      "name": "Essendon",
+      "home_away": "HOME",
+      "visible": true,
+      "sort_order": 10,
+      "market_id": "bd258bf1-7c22-435a-b555-fb5dd8d843d1"
     }
   },
   "event_participants": {
-    "99e5a6c0-c217-4ca5-9358-483b75eec7d8": {
-      "id": "99e5a6c0-c217-4ca5-9358-483b75eec7d8",
-      "event_id": "59ec89e7-bbfc-4205-8d3a-ffe8aab51f39",
-      "name": "Richmond",
+    "b0d35c1a-3c80-4846-a6c6-452d6ea179b7": {
+      "id": "b0d35c1a-3c80-4846-a6c6-452d6ea179b7",
+      "event_id": "37bdb449-73e2-408d-9512-dfee45518c1f",
+      "name": "Essendon",
       "home_away": "HOME",
-      "colour": "#B38F00"
+      "colour": "#C8102E"
     },
-    "e1e56166-d24f-4781-8db8-ab781629d91b": {
-      "id": "e1e56166-d24f-4781-8db8-ab781629d91b",
-      "event_id": "59ec89e7-bbfc-4205-8d3a-ffe8aab51f39",
-      "name": "Hawthorn",
+    "cdd639ca-3a27-483d-b876-d98ed89ce042": {
+      "id": "cdd639ca-3a27-483d-b876-d98ed89ce042",
+      "event_id": "37bdb449-73e2-408d-9512-dfee45518c1f",
+      "name": "GWS Giants",
       "home_away": "AWAY",
-      "colour": "#4A2E0B"
+      "colour": "#C1440E"
     }
   },
   "events": {
-    "59ec89e7-bbfc-4205-8d3a-ffe8aab51f39": {
-      "id": "59ec89e7-bbfc-4205-8d3a-ffe8aab51f39",
-      "name": "Richmond vs Hawthorn",
+    "37bdb449-73e2-408d-9512-dfee45518c1f": {
+      "id": "37bdb449-73e2-408d-9512-dfee45518c1f",
+      "name": "Essendon vs GWS Giants",
       "event_type": {
         "id": "6bfa0efc-05df-4ae1-9b1e-152365290cfd",
         "name": "Match"
       },
       "match_status": "BettingOpen",
-      "advertised_start": "2026-07-19T03:10:00Z",
-      "actual_start": "2026-07-19T03:10:00Z",
+      "advertised_start": "2026-07-19T06:40:00Z",
+      "actual_start": "2026-07-19T06:40:00Z",
       "visible": true,
-      "slug": "richmond-vs-hawthorn",
+      "slug": "essendon-vs-gws-giants",
       "competition": {
         "id": "ccff2e9a-5347-41aa-902a-bb6b1886d817",
         "name": "AFL",
@@ -60,22 +60,22 @@
         {
           "market_type_group_id": "29edb5e1-a717-4769-8bcd-2d43ec38d828",
           "market_ids": [
-            "7bb5b07f-820e-4c40-8cc0-e815f9c731dc"
+            "bd258bf1-7c22-435a-b555-fb5dd8d843d1"
           ]
         }
       ],
       "market_count": 1,
       "main_markets": [
-        "7bb5b07f-820e-4c40-8cc0-e815f9c731dc"
+        "bd258bf1-7c22-435a-b555-fb5dd8d843d1"
       ],
       "market_ids": [
-        "7bb5b07f-820e-4c40-8cc0-e815f9c731dc"
+        "bd258bf1-7c22-435a-b555-fb5dd8d843d1"
       ],
       "category_id": "23d497e6-8aab-4309-905b-9421f42c9bc5",
       "round_id": "13403bae-bb76-4ac5-8e2f-6344c148b003",
       "participant_ids": [
-        "99e5a6c0-c217-4ca5-9358-483b75eec7d8",
-        "e1e56166-d24f-4781-8db8-ab781629d91b"
+        "b0d35c1a-3c80-4846-a6c6-452d6ea179b7",
+        "cdd639ca-3a27-483d-b876-d98ed89ce042"
       ]
     }
   },
@@ -89,41 +89,41 @@
     }
   },
   "markets": {
-    "7bb5b07f-820e-4c40-8cc0-e815f9c731dc": {
-      "id": "7bb5b07f-820e-4c40-8cc0-e815f9c731dc",
-      "event_id": "59ec89e7-bbfc-4205-8d3a-ffe8aab51f39",
+    "bd258bf1-7c22-435a-b555-fb5dd8d843d1": {
+      "id": "bd258bf1-7c22-435a-b555-fb5dd8d843d1",
+      "event_id": "37bdb449-73e2-408d-9512-dfee45518c1f",
       "market_type_id": "be25c37a-71ff-47f6-a1e2-02a494eb5a4d",
       "market_status_id": "4bc8fe96-296b-4b4c-aea4-85c94f63b9c6",
       "name": "Match Betting",
       "advertised_start": {
-        "seconds": 1784430600
+        "seconds": 1784443200
       },
       "actual_start": {
-        "seconds": 1784430600
+        "seconds": 1784443200
       },
       "is_primary": true,
       "visible": true,
       "entrant_ids": [
-        "3d625b4c-29ab-4da7-b407-a4db1b7ebd5f",
-        "d2bf12ba-8359-48ad-9299-786b9fae2388"
+        "b72dac6c-8acb-40f2-86e8-95f6f39e9401",
+        "0f2a4677-2552-48f9-a659-0692b6327225"
       ],
       "num_winners": 1
     }
   },
   "markets_allow_cashout": {
-    "7bb5b07f-820e-4c40-8cc0-e815f9c731dc": true
+    "bd258bf1-7c22-435a-b555-fb5dd8d843d1": true
   },
   "prices": {
-    "3d625b4c-29ab-4da7-b407-a4db1b7ebd5f:940b8704-e497-4a76-b390-00918ff7d282:": {
+    "0f2a4677-2552-48f9-a659-0692b6327225:940b8704-e497-4a76-b390-00918ff7d282:": {
       "odds": {
-        "numerator": 9,
-        "denominator": 1
+        "numerator": 3,
+        "denominator": 20
       }
     },
-    "d2bf12ba-8359-48ad-9299-786b9fae2388:940b8704-e497-4a76-b390-00918ff7d282:": {
+    "b72dac6c-8acb-40f2-86e8-95f6f39e9401:940b8704-e497-4a76-b390-00918ff7d282:": {
       "odds": {
-        "numerator": 1,
-        "denominator": 20
+        "numerator": 22,
+        "denominator": 5
       }
     }
   }
