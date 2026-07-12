@@ -1,164 +1,5 @@
 {
   "events": {
-    "3fddf66e-73aa-450f-a270-d4951c54240c": {
-      "id": "3fddf66e-73aa-450f-a270-d4951c54240c",
-      "name": "Sunday AFL Specials - 12/07",
-      "url": "/sports/australian-rules/afl/sunday-afl-specials-12-07/3fddf66e-73aa-450f-a270-d4951c54240c",
-      "advertisedStart": "2026-07-12T03:09:00.000Z",
-      "eventType": "MATCH",
-      "eventTypeId": "6bfa0efc-05df-4ae1-9b1e-152365290cfd",
-      "bettingStatus": "OPEN",
-      "status": "OPEN",
-      "phase": null,
-      "hasLiveVision": false,
-      "inPlay": false,
-      "sportCategory": {
-        "id": "23d497e6-8aab-4309-905b-9421f42c9bc5",
-        "name": "Australian Rules",
-        "category": "AUSTRALIAN_RULES",
-        "icon": "sports/australian-rules",
-        "slug": "australian-rules",
-        "url": "/sports/australian-rules",
-        "hasRegions": false,
-        "eventCount": 0
-      },
-      "competition": {
-        "id": "ccff2e9a-5347-41aa-902a-bb6b1886d817",
-        "name": "AFL",
-        "url": "/sports/australian-rules/afl",
-        "hasInPlayEvents": false,
-        "region": null
-      },
-      "teams": null,
-      "matchClock": {
-        "countDown": false,
-        "maxPeriodSeconds": 1200,
-        "paused": false,
-        "periodSeconds": 0
-      },
-      "marketCount": 13,
-      "markets": {
-        "nodes": []
-      }
-    },
-    "14f602e2-32fd-4148-ab07-3ec9a5371b2c": {
-      "id": "14f602e2-32fd-4148-ab07-3ec9a5371b2c",
-      "name": "Western Bulldogs vs West Coast Eagles",
-      "url": "/sports/australian-rules/afl/western-bulldogs-vs-west-coast-eagles/14f602e2-32fd-4148-ab07-3ec9a5371b2c",
-      "advertisedStart": "2026-07-12T03:10:00.000Z",
-      "eventType": "MATCH",
-      "eventTypeId": "6bfa0efc-05df-4ae1-9b1e-152365290cfd",
-      "bettingStatus": "OPEN",
-      "status": "OPEN",
-      "phase": null,
-      "hasLiveVision": false,
-      "inPlay": false,
-      "sportCategory": {
-        "id": "23d497e6-8aab-4309-905b-9421f42c9bc5",
-        "name": "Australian Rules",
-        "category": "AUSTRALIAN_RULES",
-        "icon": "sports/australian-rules",
-        "slug": "australian-rules",
-        "url": "/sports/australian-rules",
-        "hasRegions": false,
-        "eventCount": 0
-      },
-      "competition": {
-        "id": "ccff2e9a-5347-41aa-902a-bb6b1886d817",
-        "name": "AFL",
-        "url": "/sports/australian-rules/afl",
-        "hasInPlayEvents": false,
-        "region": null
-      },
-      "teams": [
-        {
-          "id": "SportingTeam:975a5ef4-b53b-4314-ae41-9bde5b8bcf2e",
-          "name": "Western Bulldogs",
-          "colour": "#003A8F",
-          "locale": "HOME",
-          "scores": [],
-          "scoresV2": null,
-          "icon": {
-            "web": "/images/neds/sprites/svg-sports-afl-icon.svg#western-bulldogs"
-          }
-        },
-        {
-          "id": "SportingTeam:6ffca832-7f8f-4e6e-aa50-eb5b6550c701",
-          "name": "West Coast Eagles",
-          "colour": "#0A2A66",
-          "locale": "AWAY",
-          "scores": [],
-          "scoresV2": null,
-          "icon": {
-            "web": "/images/neds/sprites/svg-sports-afl-icon.svg#west-coast-eagles"
-          }
-        }
-      ],
-      "matchClock": {
-        "countDown": false,
-        "maxPeriodSeconds": 1200,
-        "paused": false,
-        "periodSeconds": 0
-      },
-      "marketCount": 272,
-      "markets": {
-        "nodes": [
-          {
-            "id": "SportingMarket:ab50f4cf-55ae-4526-a794-f89c72df38ec",
-            "name": "Match Betting",
-            "marketTypeId": "be25c37a-71ff-47f6-a1e2-02a494eb5a4d",
-            "handicap": null,
-            "isPrimary": true,
-            "isSuspended": false,
-            "status": "OPEN",
-            "liveBettingAvailable": true,
-            "allowsCashOut": false,
-            "sameGameMultiAvailable": true,
-            "allowOddsBoostExtra": false,
-            "additionalProductTypeIds": null,
-            "entrantCount": 2,
-            "entrants": {
-              "nodes": [
-                {
-                  "id": "SportingEntrant:a617a10e-2fe7-4259-ade7-508588120a98",
-                  "name": "Western Bulldogs",
-                  "handicap": null,
-                  "isSuspended": false,
-                  "role": "HOME",
-                  "icon": {
-                    "web": "/images/neds/sprites/svg-sports-afl-icon.svg#western-bulldogs"
-                  },
-                  "price": {
-                    "id": "a617a10e-2fe7-4259-ade7-508588120a98:940b8704-e497-4a76-b390-00918ff7d282:",
-                    "odds": {
-                      "numerator": 13,
-                      "denominator": 100
-                    }
-                  }
-                },
-                {
-                  "id": "SportingEntrant:f1dca2c1-40b9-42e0-b11b-0eaf718ab2d3",
-                  "name": "West Coast Eagles",
-                  "handicap": null,
-                  "isSuspended": false,
-                  "role": "AWAY",
-                  "icon": {
-                    "web": "/images/neds/sprites/svg-sports-afl-icon.svg#west-coast-eagles"
-                  },
-                  "price": {
-                    "id": "f1dca2c1-40b9-42e0-b11b-0eaf718ab2d3:940b8704-e497-4a76-b390-00918ff7d282:",
-                    "odds": {
-                      "numerator": 5,
-                      "denominator": 1
-                    }
-                  }
-                }
-              ]
-            }
-          }
-        ]
-      }
-    },
     "f4a36b8f-61b7-458a-8efc-fa71638cc7d4": {
       "id": "f4a36b8f-61b7-458a-8efc-fa71638cc7d4",
       "name": "Melbourne vs Richmond",
@@ -185,7 +26,7 @@
         "id": "ccff2e9a-5347-41aa-902a-bb6b1886d817",
         "name": "AFL",
         "url": "/sports/australian-rules/afl",
-        "hasInPlayEvents": false,
+        "hasInPlayEvents": true,
         "region": null
       },
       "teams": [
@@ -303,7 +144,7 @@
         "id": "ccff2e9a-5347-41aa-902a-bb6b1886d817",
         "name": "AFL",
         "url": "/sports/australian-rules/afl",
-        "hasInPlayEvents": false,
+        "hasInPlayEvents": true,
         "region": null
       },
       "teams": [
@@ -421,7 +262,7 @@
         "id": "ccff2e9a-5347-41aa-902a-bb6b1886d817",
         "name": "AFL",
         "url": "/sports/australian-rules/afl",
-        "hasInPlayEvents": false,
+        "hasInPlayEvents": true,
         "region": null
       },
       "teams": [
@@ -539,7 +380,7 @@
         "id": "ccff2e9a-5347-41aa-902a-bb6b1886d817",
         "name": "AFL",
         "url": "/sports/australian-rules/afl",
-        "hasInPlayEvents": false,
+        "hasInPlayEvents": true,
         "region": null
       },
       "teams": [
@@ -657,7 +498,7 @@
         "id": "ccff2e9a-5347-41aa-902a-bb6b1886d817",
         "name": "AFL",
         "url": "/sports/australian-rules/afl",
-        "hasInPlayEvents": false,
+        "hasInPlayEvents": true,
         "region": null
       },
       "teams": [
@@ -775,7 +616,7 @@
         "id": "ccff2e9a-5347-41aa-902a-bb6b1886d817",
         "name": "AFL",
         "url": "/sports/australian-rules/afl",
-        "hasInPlayEvents": false,
+        "hasInPlayEvents": true,
         "region": null
       },
       "teams": [
@@ -867,124 +708,6 @@
         ]
       }
     },
-    "e21d2621-880c-414e-8233-199183a827ad": {
-      "id": "e21d2621-880c-414e-8233-199183a827ad",
-      "name": "West Coast Eagles vs Brisbane Lions",
-      "url": "/sports/australian-rules/afl/west-coast-eagles-vs-brisbane-lions/e21d2621-880c-414e-8233-199183a827ad",
-      "advertisedStart": "2026-07-18T10:10:00.000Z",
-      "eventType": "MATCH",
-      "eventTypeId": "6bfa0efc-05df-4ae1-9b1e-152365290cfd",
-      "bettingStatus": "OPEN",
-      "status": "OPEN",
-      "phase": null,
-      "hasLiveVision": false,
-      "inPlay": false,
-      "sportCategory": {
-        "id": "23d497e6-8aab-4309-905b-9421f42c9bc5",
-        "name": "Australian Rules",
-        "category": "AUSTRALIAN_RULES",
-        "icon": "sports/australian-rules",
-        "slug": "australian-rules",
-        "url": "/sports/australian-rules",
-        "hasRegions": false,
-        "eventCount": 0
-      },
-      "competition": {
-        "id": "ccff2e9a-5347-41aa-902a-bb6b1886d817",
-        "name": "AFL",
-        "url": "/sports/australian-rules/afl",
-        "hasInPlayEvents": false,
-        "region": null
-      },
-      "teams": [
-        {
-          "id": "SportingTeam:2c9aa979-3ef6-4a38-99a0-865e2131a212",
-          "name": "West Coast Eagles",
-          "colour": "#0A2A66",
-          "locale": "HOME",
-          "scores": [],
-          "scoresV2": null,
-          "icon": {
-            "web": "/images/neds/sprites/svg-sports-afl-icon.svg#west-coast-eagles"
-          }
-        },
-        {
-          "id": "SportingTeam:73cc2ab6-32a9-4b1a-b77f-3b8888a90c52",
-          "name": "Brisbane Lions",
-          "colour": "#7A0C2E",
-          "locale": "AWAY",
-          "scores": [],
-          "scoresV2": null,
-          "icon": {
-            "web": "/images/neds/sprites/svg-sports-afl-icon.svg#brisbane-lions"
-          }
-        }
-      ],
-      "matchClock": {
-        "countDown": false,
-        "maxPeriodSeconds": 1200,
-        "paused": false,
-        "periodSeconds": 0
-      },
-      "marketCount": 1,
-      "markets": {
-        "nodes": [
-          {
-            "id": "SportingMarket:59221c94-b46a-401d-a2d9-e2c659052510",
-            "name": "Match Betting",
-            "marketTypeId": "be25c37a-71ff-47f6-a1e2-02a494eb5a4d",
-            "handicap": null,
-            "isPrimary": true,
-            "isSuspended": false,
-            "status": "OPEN",
-            "liveBettingAvailable": false,
-            "allowsCashOut": false,
-            "sameGameMultiAvailable": false,
-            "allowOddsBoostExtra": false,
-            "additionalProductTypeIds": null,
-            "entrantCount": 2,
-            "entrants": {
-              "nodes": [
-                {
-                  "id": "SportingEntrant:bd4b98fd-9db3-42ec-b136-37227d56bb38",
-                  "name": "West Coast Eagles",
-                  "handicap": null,
-                  "isSuspended": false,
-                  "role": "HOME",
-                  "icon": {
-                    "web": "/images/neds/sprites/svg-sports-afl-icon.svg#west-coast-eagles"
-                  },
-                  "price": {
-                    "id": "bd4b98fd-9db3-42ec-b136-37227d56bb38:940b8704-e497-4a76-b390-00918ff7d282:",
-                    "odds": {
-                      "numerator": 6,
-                      "denominator": 1
-                    }
-                  }
-                },
-                {
-                  "id": "SportingEntrant:166c9439-4d02-44b6-b828-19f0c70542db",
-                  "name": "Brisbane Lions",
-                  "handicap": null,
-                  "isSuspended": false,
-                  "role": "AWAY",
-                  "icon": {
-                    "web": "/images/neds/sprites/svg-sports-afl-icon.svg#brisbane-lions"
-                  },
-                  "price": {
-                    "id": "166c9439-4d02-44b6-b828-19f0c70542db:940b8704-e497-4a76-b390-00918ff7d282:",
-                    "odds": {
-                      "numerator": 1,
-                      "denominator": 10
-                    }
-                  }
-                }
-              ]
-            }
-          }
-        ]
-      }
-    },
     "59ec89e7-bbfc-4205-8d3a-ffe8aab51f39": {
       "id": "59ec89e7-bbfc-4205-8d3a-ffe8aab51f39",
       "name": "Richmond vs Hawthorn",
@@ -1011,7 +734,7 @@
         "id": "ccff2e9a-5347-41aa-902a-bb6b1886d817",
         "name": "AFL",
         "url": "/sports/australian-rules/afl",
-        "hasInPlayEvents": false,
+        "hasInPlayEvents": true,
         "region": null
       },
       "teams": [
@@ -1094,124 +817,6 @@
                     "odds": {
                       "numerator": 1,
                       "denominator": 20
-                    }
-                  }
-                }
-              ]
-            }
-          }
-        ]
-      }
-    },
-    "7ea34315-546d-4945-87c4-119fb2990124": {
-      "id": "7ea34315-546d-4945-87c4-119fb2990124",
-      "name": "Gold Coast Suns vs Western Bulldogs",
-      "url": "/sports/australian-rules/afl/gold-coast-suns-vs-western-bulldogs/7ea34315-546d-4945-87c4-119fb2990124",
-      "advertisedStart": "2026-07-19T05:15:00.000Z",
-      "eventType": "MATCH",
-      "eventTypeId": "6bfa0efc-05df-4ae1-9b1e-152365290cfd",
-      "bettingStatus": "OPEN",
-      "status": "OPEN",
-      "phase": null,
-      "hasLiveVision": false,
-      "inPlay": false,
-      "sportCategory": {
-        "id": "23d497e6-8aab-4309-905b-9421f42c9bc5",
-        "name": "Australian Rules",
-        "category": "AUSTRALIAN_RULES",
-        "icon": "sports/australian-rules",
-        "slug": "australian-rules",
-        "url": "/sports/australian-rules",
-        "hasRegions": false,
-        "eventCount": 0
-      },
-      "competition": {
-        "id": "ccff2e9a-5347-41aa-902a-bb6b1886d817",
-        "name": "AFL",
-        "url": "/sports/australian-rules/afl",
-        "hasInPlayEvents": false,
-        "region": null
-      },
-      "teams": [
-        {
-          "id": "SportingTeam:ebaa09b8-8edd-435c-af0b-20222d8b09af",
-          "name": "Gold Coast Suns",
-          "colour": "#A3122F",
-          "locale": "HOME",
-          "scores": [],
-          "scoresV2": null,
-          "icon": {
-            "web": "/images/neds/sprites/svg-sports-afl-icon.svg#gold-coast-suns"
-          }
-        },
-        {
-          "id": "SportingTeam:b4a52a9d-f344-4d29-b9d7-a6a15d1fed26",
-          "name": "Western Bulldogs",
-          "colour": "#003A8F",
-          "locale": "AWAY",
-          "scores": [],
-          "scoresV2": null,
-          "icon": {
-            "web": "/images/neds/sprites/svg-sports-afl-icon.svg#western-bulldogs"
-          }
-        }
-      ],
-      "matchClock": {
-        "countDown": false,
-        "maxPeriodSeconds": 1200,
-        "paused": false,
-        "periodSeconds": 0
-      },
-      "marketCount": 1,
-      "markets": {
-        "nodes": [
-          {
-            "id": "SportingMarket:dbb1e11c-78a0-4bca-9e39-ebf0b525ccf9",
-            "name": "Match Betting",
-            "marketTypeId": "be25c37a-71ff-47f6-a1e2-02a494eb5a4d",
-            "handicap": null,
-            "isPrimary": true,
-            "isSuspended": false,
-            "status": "OPEN",
-            "liveBettingAvailable": false,
-            "allowsCashOut": false,
-            "sameGameMultiAvailable": false,
-            "allowOddsBoostExtra": false,
-            "additionalProductTypeIds": null,
-            "entrantCount": 2,
-            "entrants": {
-              "nodes": [
-                {
-                  "id": "SportingEntrant:d6f19805-e1ee-412c-aeec-05300a0b4c3e",
-                  "name": "Gold Coast Suns",
-                  "handicap": null,
-                  "isSuspended": false,
-                  "role": "HOME",
-                  "icon": {
-                    "web": "/images/neds/sprites/svg-sports-afl-icon.svg#gold-coast-suns"
-                  },
-                  "price": {
-                    "id": "d6f19805-e1ee-412c-aeec-05300a0b4c3e:940b8704-e497-4a76-b390-00918ff7d282:",
-                    "odds": {
-                      "numerator": 39,
-                      "denominator": 50
-                    }
-                  }
-                },
-                {
-                  "id": "SportingEntrant:4d1770c1-f3be-4877-93ea-f7d644599087",
-                  "name": "Western Bulldogs",
-                  "handicap": null,
-                  "isSuspended": false,
-                  "role": "AWAY",
-                  "icon": {
-                    "web": "/images/neds/sprites/svg-sports-afl-icon.svg#western-bulldogs"
-                  },
-                  "price": {
-                    "id": "4d1770c1-f3be-4877-93ea-f7d644599087:940b8704-e497-4a76-b390-00918ff7d282:",
-                    "odds": {
-                      "numerator": 1,
-                      "denominator": 1
                     }
                   }
                 }
