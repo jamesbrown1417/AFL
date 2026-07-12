@@ -218,7 +218,7 @@
         "paused": false,
         "periodSeconds": 0
       },
-      "marketCount": 260,
+      "marketCount": 270,
       "markets": {
         "nodes": [
           {
@@ -336,7 +336,7 @@
         "paused": false,
         "periodSeconds": 0
       },
-      "marketCount": 264,
+      "marketCount": 275,
       "markets": {
         "nodes": [
           {
@@ -386,6 +386,124 @@
                     "odds": {
                       "numerator": 15,
                       "denominator": 1
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "b4cd1b89-62b9-442e-8d89-412772da1405": {
+      "id": "b4cd1b89-62b9-442e-8d89-412772da1405",
+      "name": "Geelong Cats vs St Kilda",
+      "url": "/sports/australian-rules/afl/geelong-cats-vs-st-kilda/b4cd1b89-62b9-442e-8d89-412772da1405",
+      "advertisedStart": "2026-07-16T09:30:00.000Z",
+      "eventType": "MATCH",
+      "eventTypeId": "6bfa0efc-05df-4ae1-9b1e-152365290cfd",
+      "bettingStatus": "OPEN",
+      "status": "OPEN",
+      "phase": null,
+      "hasLiveVision": false,
+      "inPlay": false,
+      "sportCategory": {
+        "id": "23d497e6-8aab-4309-905b-9421f42c9bc5",
+        "name": "Australian Rules",
+        "category": "AUSTRALIAN_RULES",
+        "icon": "sports/australian-rules",
+        "slug": "australian-rules",
+        "url": "/sports/australian-rules",
+        "hasRegions": false,
+        "eventCount": 0
+      },
+      "competition": {
+        "id": "ccff2e9a-5347-41aa-902a-bb6b1886d817",
+        "name": "AFL",
+        "url": "/sports/australian-rules/afl",
+        "hasInPlayEvents": false,
+        "region": null
+      },
+      "teams": [
+        {
+          "id": "SportingTeam:c0f3eb81-cc86-44d8-9aba-e46449c0d9d6",
+          "name": "Geelong Cats",
+          "colour": "#0B2A5B",
+          "locale": "HOME",
+          "scores": [],
+          "scoresV2": null,
+          "icon": {
+            "web": "/images/neds/sprites/svg-sports-afl-icon.svg#geelong-cats"
+          }
+        },
+        {
+          "id": "SportingTeam:0f58722b-f5d2-462a-8999-7cc9ccce5958",
+          "name": "St Kilda",
+          "colour": "#C8102E",
+          "locale": "AWAY",
+          "scores": [],
+          "scoresV2": null,
+          "icon": {
+            "web": "/images/neds/sprites/svg-sports-afl-icon.svg#st-kilda-fc"
+          }
+        }
+      ],
+      "matchClock": {
+        "countDown": false,
+        "maxPeriodSeconds": 1200,
+        "paused": false,
+        "periodSeconds": 0
+      },
+      "marketCount": 1,
+      "markets": {
+        "nodes": [
+          {
+            "id": "SportingMarket:b7a2c05e-3f09-4311-b2b9-1ff18e02126d",
+            "name": "Match Betting",
+            "marketTypeId": "be25c37a-71ff-47f6-a1e2-02a494eb5a4d",
+            "handicap": null,
+            "isPrimary": true,
+            "isSuspended": false,
+            "status": "OPEN",
+            "liveBettingAvailable": false,
+            "allowsCashOut": false,
+            "sameGameMultiAvailable": false,
+            "allowOddsBoostExtra": false,
+            "additionalProductTypeIds": null,
+            "entrantCount": 2,
+            "entrants": {
+              "nodes": [
+                {
+                  "id": "SportingEntrant:c2017f0b-24a2-404e-9fdc-c3fa505b7543",
+                  "name": "Geelong Cats",
+                  "handicap": null,
+                  "isSuspended": false,
+                  "role": "HOME",
+                  "icon": {
+                    "web": "/images/neds/sprites/svg-sports-afl-icon.svg#geelong-cats"
+                  },
+                  "price": {
+                    "id": "c2017f0b-24a2-404e-9fdc-c3fa505b7543:940b8704-e497-4a76-b390-00918ff7d282:",
+                    "odds": {
+                      "numerator": 21,
+                      "denominator": 50
+                    }
+                  }
+                },
+                {
+                  "id": "SportingEntrant:38102333-6ce6-4a42-a745-51c8def068ec",
+                  "name": "St Kilda",
+                  "handicap": null,
+                  "isSuspended": false,
+                  "role": "AWAY",
+                  "icon": {
+                    "web": "/images/neds/sprites/svg-sports-afl-icon.svg#st-kilda-fc"
+                  },
+                  "price": {
+                    "id": "38102333-6ce6-4a42-a745-51c8def068ec:940b8704-e497-4a76-b390-00918ff7d282:",
+                    "odds": {
+                      "numerator": 9,
+                      "denominator": 5
                     }
                   }
                 }
@@ -485,8 +603,8 @@
                   "price": {
                     "id": "d5832ea7-9566-497b-b28c-320375d64746:940b8704-e497-4a76-b390-00918ff7d282:",
                     "odds": {
-                      "numerator": 21,
-                      "denominator": 50
+                      "numerator": 13,
+                      "denominator": 25
                     }
                   }
                 },
@@ -502,8 +620,8 @@
                   "price": {
                     "id": "5fc5b6f4-c5bc-4859-8522-9a88f8097519:940b8704-e497-4a76-b390-00918ff7d282:",
                     "odds": {
-                      "numerator": 19,
-                      "denominator": 10
+                      "numerator": 3,
+                      "denominator": 2
                     }
                   }
                 }
@@ -721,8 +839,8 @@
                   "price": {
                     "id": "b7fa0f18-576b-40e7-ac0d-a8fdb72090ff:940b8704-e497-4a76-b390-00918ff7d282:",
                     "odds": {
-                      "numerator": 7,
-                      "denominator": 10
+                      "numerator": 16,
+                      "denominator": 25
                     }
                   }
                 },
@@ -738,8 +856,8 @@
                   "price": {
                     "id": "517bff56-e043-4ebf-ae53-c31ffbe398a3:940b8704-e497-4a76-b390-00918ff7d282:",
                     "odds": {
-                      "numerator": 23,
-                      "denominator": 20
+                      "numerator": 6,
+                      "denominator": 5
                     }
                   }
                 }
@@ -1075,8 +1193,8 @@
                   "price": {
                     "id": "d6f19805-e1ee-412c-aeec-05300a0b4c3e:940b8704-e497-4a76-b390-00918ff7d282:",
                     "odds": {
-                      "numerator": 67,
-                      "denominator": 100
+                      "numerator": 39,
+                      "denominator": 50
                     }
                   }
                 },
@@ -1092,8 +1210,8 @@
                   "price": {
                     "id": "4d1770c1-f3be-4877-93ea-f7d644599087:940b8704-e497-4a76-b390-00918ff7d282:",
                     "odds": {
-                      "numerator": 6,
-                      "denominator": 5
+                      "numerator": 1,
+                      "denominator": 1
                     }
                   }
                 }
