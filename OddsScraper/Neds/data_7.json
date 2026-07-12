@@ -1,51 +1,51 @@
 {
   "entrants": {
-    "a04a7fe7-3163-4546-bff1-cd8deb7a723f": {
-      "id": "a04a7fe7-3163-4546-bff1-cd8deb7a723f",
-      "name": "North Melbourne",
-      "home_away": "HOME",
-      "visible": true,
-      "sort_order": 10,
-      "market_id": "8557d5e5-f6a0-4d44-afcd-8f70d183ed54"
-    },
-    "b5cea2b3-1c71-43d3-83d4-9e276ab25a35": {
-      "id": "b5cea2b3-1c71-43d3-83d4-9e276ab25a35",
-      "name": "Melbourne",
+    "166c9439-4d02-44b6-b828-19f0c70542db": {
+      "id": "166c9439-4d02-44b6-b828-19f0c70542db",
+      "name": "Brisbane Lions",
       "home_away": "AWAY",
       "visible": true,
       "sort_order": 20,
-      "market_id": "8557d5e5-f6a0-4d44-afcd-8f70d183ed54"
+      "market_id": "59221c94-b46a-401d-a2d9-e2c659052510"
+    },
+    "bd4b98fd-9db3-42ec-b136-37227d56bb38": {
+      "id": "bd4b98fd-9db3-42ec-b136-37227d56bb38",
+      "name": "West Coast Eagles",
+      "home_away": "HOME",
+      "visible": true,
+      "sort_order": 10,
+      "market_id": "59221c94-b46a-401d-a2d9-e2c659052510"
     }
   },
   "event_participants": {
-    "45127bc6-e684-48dc-8e92-ec9c7a444fea": {
-      "id": "45127bc6-e684-48dc-8e92-ec9c7a444fea",
-      "event_id": "505d44ff-4cdd-48fa-b0a5-d8aeb17ad995",
-      "name": "Melbourne",
-      "home_away": "AWAY",
-      "colour": "#0A1F44"
-    },
-    "ccce8e12-b9c2-49b6-a0df-672e91b62dbe": {
-      "id": "ccce8e12-b9c2-49b6-a0df-672e91b62dbe",
-      "event_id": "505d44ff-4cdd-48fa-b0a5-d8aeb17ad995",
-      "name": "North Melbourne",
+    "2c9aa979-3ef6-4a38-99a0-865e2131a212": {
+      "id": "2c9aa979-3ef6-4a38-99a0-865e2131a212",
+      "event_id": "e21d2621-880c-414e-8233-199183a827ad",
+      "name": "West Coast Eagles",
       "home_away": "HOME",
-      "colour": "#0D2F6F"
+      "colour": "#0A2A66"
+    },
+    "73cc2ab6-32a9-4b1a-b77f-3b8888a90c52": {
+      "id": "73cc2ab6-32a9-4b1a-b77f-3b8888a90c52",
+      "event_id": "e21d2621-880c-414e-8233-199183a827ad",
+      "name": "Brisbane Lions",
+      "home_away": "AWAY",
+      "colour": "#7A0C2E"
     }
   },
   "events": {
-    "505d44ff-4cdd-48fa-b0a5-d8aeb17ad995": {
-      "id": "505d44ff-4cdd-48fa-b0a5-d8aeb17ad995",
-      "name": "North Melbourne vs Melbourne",
+    "e21d2621-880c-414e-8233-199183a827ad": {
+      "id": "e21d2621-880c-414e-8233-199183a827ad",
+      "name": "West Coast Eagles vs Brisbane Lions",
       "event_type": {
         "id": "6bfa0efc-05df-4ae1-9b1e-152365290cfd",
         "name": "Match"
       },
       "match_status": "BettingOpen",
-      "advertised_start": "2026-07-18T06:15:00Z",
-      "actual_start": "2026-07-18T06:15:00Z",
+      "advertised_start": "2026-07-18T10:10:00Z",
+      "actual_start": "2026-07-18T10:10:00Z",
       "visible": true,
-      "slug": "north-melbourne-vs-melbourne",
+      "slug": "west-coast-eagles-vs-brisbane-lions",
       "competition": {
         "id": "ccff2e9a-5347-41aa-902a-bb6b1886d817",
         "name": "AFL",
@@ -60,22 +60,22 @@
         {
           "market_type_group_id": "29edb5e1-a717-4769-8bcd-2d43ec38d828",
           "market_ids": [
-            "8557d5e5-f6a0-4d44-afcd-8f70d183ed54"
+            "59221c94-b46a-401d-a2d9-e2c659052510"
           ]
         }
       ],
       "market_count": 1,
       "main_markets": [
-        "8557d5e5-f6a0-4d44-afcd-8f70d183ed54"
+        "59221c94-b46a-401d-a2d9-e2c659052510"
       ],
       "market_ids": [
-        "8557d5e5-f6a0-4d44-afcd-8f70d183ed54"
+        "59221c94-b46a-401d-a2d9-e2c659052510"
       ],
       "category_id": "23d497e6-8aab-4309-905b-9421f42c9bc5",
       "round_id": "13403bae-bb76-4ac5-8e2f-6344c148b003",
       "participant_ids": [
-        "45127bc6-e684-48dc-8e92-ec9c7a444fea",
-        "ccce8e12-b9c2-49b6-a0df-672e91b62dbe"
+        "2c9aa979-3ef6-4a38-99a0-865e2131a212",
+        "73cc2ab6-32a9-4b1a-b77f-3b8888a90c52"
       ]
     }
   },
@@ -89,41 +89,41 @@
     }
   },
   "markets": {
-    "8557d5e5-f6a0-4d44-afcd-8f70d183ed54": {
-      "id": "8557d5e5-f6a0-4d44-afcd-8f70d183ed54",
-      "event_id": "505d44ff-4cdd-48fa-b0a5-d8aeb17ad995",
+    "59221c94-b46a-401d-a2d9-e2c659052510": {
+      "id": "59221c94-b46a-401d-a2d9-e2c659052510",
+      "event_id": "e21d2621-880c-414e-8233-199183a827ad",
       "market_type_id": "be25c37a-71ff-47f6-a1e2-02a494eb5a4d",
       "market_status_id": "4bc8fe96-296b-4b4c-aea4-85c94f63b9c6",
       "name": "Match Betting",
       "advertised_start": {
-        "seconds": 1784355300
+        "seconds": 1784369400
       },
       "actual_start": {
-        "seconds": 1784355300
+        "seconds": 1784369400
       },
       "is_primary": true,
       "visible": true,
       "entrant_ids": [
-        "a04a7fe7-3163-4546-bff1-cd8deb7a723f",
-        "b5cea2b3-1c71-43d3-83d4-9e276ab25a35"
+        "bd4b98fd-9db3-42ec-b136-37227d56bb38",
+        "166c9439-4d02-44b6-b828-19f0c70542db"
       ],
       "num_winners": 1
     }
   },
   "markets_allow_cashout": {
-    "8557d5e5-f6a0-4d44-afcd-8f70d183ed54": true
+    "59221c94-b46a-401d-a2d9-e2c659052510": true
   },
   "prices": {
-    "a04a7fe7-3163-4546-bff1-cd8deb7a723f:940b8704-e497-4a76-b390-00918ff7d282:": {
+    "166c9439-4d02-44b6-b828-19f0c70542db:940b8704-e497-4a76-b390-00918ff7d282:": {
       "odds": {
-        "numerator": 39,
-        "denominator": 20
+        "numerator": 1,
+        "denominator": 10
       }
     },
-    "b5cea2b3-1c71-43d3-83d4-9e276ab25a35:940b8704-e497-4a76-b390-00918ff7d282:": {
+    "bd4b98fd-9db3-42ec-b136-37227d56bb38:940b8704-e497-4a76-b390-00918ff7d282:": {
       "odds": {
-        "numerator": 2,
-        "denominator": 5
+        "numerator": 6,
+        "denominator": 1
       }
     }
   }
