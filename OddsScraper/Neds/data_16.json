@@ -1,0 +1,130 @@
+{
+  "entrants": {
+    "2e54c634-6232-4d1f-852c-a5e6ad845405": {
+      "id": "2e54c634-6232-4d1f-852c-a5e6ad845405",
+      "name": "Western Bulldogs",
+      "home_away": "HOME",
+      "visible": true,
+      "sort_order": 10,
+      "market_id": "3dd3260d-7ee2-4a93-a020-51ae6ddf2906"
+    },
+    "8c468a68-0e12-4416-bd21-789eed64465e": {
+      "id": "8c468a68-0e12-4416-bd21-789eed64465e",
+      "name": "Richmond",
+      "home_away": "AWAY",
+      "visible": true,
+      "sort_order": 20,
+      "market_id": "3dd3260d-7ee2-4a93-a020-51ae6ddf2906"
+    }
+  },
+  "event_participants": {
+    "13266d7f-5eb2-4e4a-a743-694dc18062dc": {
+      "id": "13266d7f-5eb2-4e4a-a743-694dc18062dc",
+      "event_id": "39c08530-0bf2-4649-9e3c-d17664965206",
+      "name": "Richmond",
+      "home_away": "AWAY",
+      "colour": "#B38F00"
+    },
+    "54d66545-d36d-4413-92ad-fb7f570bc087": {
+      "id": "54d66545-d36d-4413-92ad-fb7f570bc087",
+      "event_id": "39c08530-0bf2-4649-9e3c-d17664965206",
+      "name": "Western Bulldogs",
+      "home_away": "HOME",
+      "colour": "#003A8F"
+    }
+  },
+  "events": {
+    "39c08530-0bf2-4649-9e3c-d17664965206": {
+      "id": "39c08530-0bf2-4649-9e3c-d17664965206",
+      "name": "Western Bulldogs vs Richmond",
+      "event_type": {
+        "id": "6bfa0efc-05df-4ae1-9b1e-152365290cfd",
+        "name": "Match"
+      },
+      "match_status": "BettingOpen",
+      "advertised_start": "2026-07-25T09:40:00Z",
+      "actual_start": "2026-07-25T09:40:00Z",
+      "visible": true,
+      "slug": "western-bulldogs-vs-richmond",
+      "competition": {
+        "id": "ccff2e9a-5347-41aa-902a-bb6b1886d817",
+        "name": "AFL",
+        "sort_order": 1,
+        "region": "Australia"
+      },
+      "competition_id": "ccff2e9a-5347-41aa-902a-bb6b1886d817",
+      "market_type_group_ids": [
+        "29edb5e1-a717-4769-8bcd-2d43ec38d828"
+      ],
+      "market_type_group_markets": [
+        {
+          "market_type_group_id": "29edb5e1-a717-4769-8bcd-2d43ec38d828",
+          "market_ids": [
+            "3dd3260d-7ee2-4a93-a020-51ae6ddf2906"
+          ]
+        }
+      ],
+      "market_count": 1,
+      "main_markets": [
+        "3dd3260d-7ee2-4a93-a020-51ae6ddf2906"
+      ],
+      "market_ids": [
+        "3dd3260d-7ee2-4a93-a020-51ae6ddf2906"
+      ],
+      "category_id": "23d497e6-8aab-4309-905b-9421f42c9bc5",
+      "round_id": "51109c55-d27e-46d9-b14e-c84029aa7704",
+      "participant_ids": [
+        "13266d7f-5eb2-4e4a-a743-694dc18062dc",
+        "54d66545-d36d-4413-92ad-fb7f570bc087"
+      ]
+    }
+  },
+  "market_type_groups": {
+    "29edb5e1-a717-4769-8bcd-2d43ec38d828": {
+      "id": "29edb5e1-a717-4769-8bcd-2d43ec38d828",
+      "category_id": "23d497e6-8aab-4309-905b-9421f42c9bc5",
+      "name": "Top Markets",
+      "priority": 352,
+      "type": "MARKET_TYPE_GROUP_TYPE_EVENT"
+    }
+  },
+  "markets": {
+    "3dd3260d-7ee2-4a93-a020-51ae6ddf2906": {
+      "id": "3dd3260d-7ee2-4a93-a020-51ae6ddf2906",
+      "event_id": "39c08530-0bf2-4649-9e3c-d17664965206",
+      "market_type_id": "be25c37a-71ff-47f6-a1e2-02a494eb5a4d",
+      "market_status_id": "4bc8fe96-296b-4b4c-aea4-85c94f63b9c6",
+      "name": "Match Betting",
+      "advertised_start": {
+        "seconds": 1784972400
+      },
+      "actual_start": {
+        "seconds": 1784972400
+      },
+      "is_primary": true,
+      "visible": true,
+      "entrant_ids": [
+        "2e54c634-6232-4d1f-852c-a5e6ad845405",
+        "8c468a68-0e12-4416-bd21-789eed64465e"
+      ],
+      "num_winners": 1
+    }
+  },
+  "markets_allow_cashout": {
+    "3dd3260d-7ee2-4a93-a020-51ae6ddf2906": true
+  },
+  "prices": {
+    "2e54c634-6232-4d1f-852c-a5e6ad845405:940b8704-e497-4a76-b390-00918ff7d282:": {
+      "odds": {
+        "numerator": 3,
+        "denominator": 25
+      }
+    },
+    "8c468a68-0e12-4416-bd21-789eed64465e:940b8704-e497-4a76-b390-00918ff7d282:": {
+      "odds": {
+        "numerator": 51,
+        "denominator": 10
+      }
+    }
+  }
+}

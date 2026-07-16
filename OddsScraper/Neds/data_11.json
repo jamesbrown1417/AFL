@@ -1,0 +1,130 @@
+{
+  "entrants": {
+    "63d9fdef-a4ae-4513-8462-b0ec620ccab3": {
+      "id": "63d9fdef-a4ae-4513-8462-b0ec620ccab3",
+      "name": "Melbourne",
+      "home_away": "HOME",
+      "visible": true,
+      "sort_order": 10,
+      "market_id": "9d8b7f0e-ab96-452d-92f8-2145477716b5"
+    },
+    "fa699ac5-d188-450d-9878-441a7c97842c": {
+      "id": "fa699ac5-d188-450d-9878-441a7c97842c",
+      "name": "Geelong Cats",
+      "home_away": "AWAY",
+      "visible": true,
+      "sort_order": 20,
+      "market_id": "9d8b7f0e-ab96-452d-92f8-2145477716b5"
+    }
+  },
+  "event_participants": {
+    "bd3e0ddf-a102-4c10-a7ff-f48a7177fff6": {
+      "id": "bd3e0ddf-a102-4c10-a7ff-f48a7177fff6",
+      "event_id": "8c8a7ef9-451c-4157-b950-a5bbc0b30ac7",
+      "name": "Melbourne",
+      "home_away": "HOME",
+      "colour": "#0A1F44"
+    },
+    "d51f9cce-56a2-44ea-a934-60d5c7f8ad84": {
+      "id": "d51f9cce-56a2-44ea-a934-60d5c7f8ad84",
+      "event_id": "8c8a7ef9-451c-4157-b950-a5bbc0b30ac7",
+      "name": "Geelong Cats",
+      "home_away": "AWAY",
+      "colour": "#0B2A5B"
+    }
+  },
+  "events": {
+    "8c8a7ef9-451c-4157-b950-a5bbc0b30ac7": {
+      "id": "8c8a7ef9-451c-4157-b950-a5bbc0b30ac7",
+      "name": "Melbourne vs Geelong Cats",
+      "event_type": {
+        "id": "6bfa0efc-05df-4ae1-9b1e-152365290cfd",
+        "name": "Match"
+      },
+      "match_status": "BettingOpen",
+      "advertised_start": "2026-07-24T09:40:00Z",
+      "actual_start": "2026-07-24T09:40:00Z",
+      "visible": true,
+      "slug": "melbourne-vs-geelong-cats",
+      "competition": {
+        "id": "ccff2e9a-5347-41aa-902a-bb6b1886d817",
+        "name": "AFL",
+        "sort_order": 1,
+        "region": "Australia"
+      },
+      "competition_id": "ccff2e9a-5347-41aa-902a-bb6b1886d817",
+      "market_type_group_ids": [
+        "29edb5e1-a717-4769-8bcd-2d43ec38d828"
+      ],
+      "market_type_group_markets": [
+        {
+          "market_type_group_id": "29edb5e1-a717-4769-8bcd-2d43ec38d828",
+          "market_ids": [
+            "9d8b7f0e-ab96-452d-92f8-2145477716b5"
+          ]
+        }
+      ],
+      "market_count": 1,
+      "main_markets": [
+        "9d8b7f0e-ab96-452d-92f8-2145477716b5"
+      ],
+      "market_ids": [
+        "9d8b7f0e-ab96-452d-92f8-2145477716b5"
+      ],
+      "category_id": "23d497e6-8aab-4309-905b-9421f42c9bc5",
+      "round_id": "51109c55-d27e-46d9-b14e-c84029aa7704",
+      "participant_ids": [
+        "bd3e0ddf-a102-4c10-a7ff-f48a7177fff6",
+        "d51f9cce-56a2-44ea-a934-60d5c7f8ad84"
+      ]
+    }
+  },
+  "market_type_groups": {
+    "29edb5e1-a717-4769-8bcd-2d43ec38d828": {
+      "id": "29edb5e1-a717-4769-8bcd-2d43ec38d828",
+      "category_id": "23d497e6-8aab-4309-905b-9421f42c9bc5",
+      "name": "Top Markets",
+      "priority": 352,
+      "type": "MARKET_TYPE_GROUP_TYPE_EVENT"
+    }
+  },
+  "markets": {
+    "9d8b7f0e-ab96-452d-92f8-2145477716b5": {
+      "id": "9d8b7f0e-ab96-452d-92f8-2145477716b5",
+      "event_id": "8c8a7ef9-451c-4157-b950-a5bbc0b30ac7",
+      "market_type_id": "be25c37a-71ff-47f6-a1e2-02a494eb5a4d",
+      "market_status_id": "4bc8fe96-296b-4b4c-aea4-85c94f63b9c6",
+      "name": "Match Betting",
+      "advertised_start": {
+        "seconds": 1784886000
+      },
+      "actual_start": {
+        "seconds": 1784886000
+      },
+      "is_primary": true,
+      "visible": true,
+      "entrant_ids": [
+        "63d9fdef-a4ae-4513-8462-b0ec620ccab3",
+        "fa699ac5-d188-450d-9878-441a7c97842c"
+      ],
+      "num_winners": 1
+    }
+  },
+  "markets_allow_cashout": {
+    "9d8b7f0e-ab96-452d-92f8-2145477716b5": true
+  },
+  "prices": {
+    "63d9fdef-a4ae-4513-8462-b0ec620ccab3:940b8704-e497-4a76-b390-00918ff7d282:": {
+      "odds": {
+        "numerator": 21,
+        "denominator": 20
+      }
+    },
+    "fa699ac5-d188-450d-9878-441a7c97842c:940b8704-e497-4a76-b390-00918ff7d282:": {
+      "odds": {
+        "numerator": 77,
+        "denominator": 100
+      }
+    }
+  }
+}
