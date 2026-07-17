@@ -530,6 +530,7 @@ function countActiveFilters(filters: ArbFilters, scope: ArbScope) {
 function arbColumnClassName(columnId: string) {
   return clsx(
     columnId === 'selection' && 'is-sticky-column',
+    columnId === 'actions' && 'is-sticky-actions',
     ['over_price', 'under_price', 'implied_probability_sum', 'margin', 'actions'].includes(columnId) && 'is-numeric-column',
     columnId === 'player_team_opposition_team' && 'is-context-column',
   )

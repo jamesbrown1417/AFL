@@ -53,6 +53,8 @@
 .sidebar {
   position: sticky;
   top: 0;
+  display: flex;
+  flex-direction: column;
   height: 100vh;
   padding: 18px 14px;
   border-right: 1px solid var(--border);
@@ -95,6 +97,8 @@
 .side-nav {
   display: grid;
   gap: 4px;
+  flex: 1;
+  align-content: start;
 }
 
 .side-nav button {
@@ -116,6 +120,35 @@
 .side-nav button.is-active {
   background: var(--teal-soft);
   color: var(--teal-strong);
+}
+
+.side-nav button .nav-badge {
+  margin-left: auto;
+  display: inline-grid;
+  place-items: center;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 6px;
+  border-radius: 999px;
+  background: var(--teal);
+  color: #ffffff;
+  font-size: 11px;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.sidebar-footer {
+  display: flex;
+  align-items: center;
+  margin-top: auto;
+  padding-top: 14px;
+  border-top: 1px solid var(--border);
+}
+
+.sidebar-footer .toggle {
+  min-height: 32px;
+  font-size: 12px;
+  font-weight: 750;
 }
 
 .app-frame {
@@ -344,6 +377,7 @@
   cursor: pointer;
   font-size: 13px;
   font-weight: 750;
+  transition: background 140ms ease, border-color 140ms ease, color 140ms ease, box-shadow 140ms ease;
 }
 
 .button {
@@ -355,10 +389,19 @@
   color: #ffffff;
 }
 
+.button--primary:hover:not(:disabled) {
+  background: var(--teal-strong);
+}
+
 .button--secondary {
   border-color: var(--border);
   background: var(--surface-low);
   color: var(--text);
+}
+
+.button--secondary:hover:not(:disabled) {
+  border-color: var(--border-strong);
+  background: var(--surface-high);
 }
 
 .button--ghost {
@@ -366,9 +409,18 @@
   color: var(--muted);
 }
 
+.button--ghost:hover:not(:disabled) {
+  background: var(--surface-high);
+  color: var(--text);
+}
+
 .button--danger {
   background: var(--red-soft);
   color: var(--red);
+}
+
+.button--danger:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--red-soft) 70%, var(--red));
 }
 
 .button--accent {
@@ -376,14 +428,36 @@
   color: #ffffff;
 }
 
+.button--accent:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--amber) 86%, black);
+}
+
 :root[data-theme='dark'] .button--accent {
   color: var(--bg);
+}
+
+:root[data-theme='dark'] .button--accent:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--amber) 88%, white);
 }
 
 .icon-button {
   width: 36px;
   border-color: var(--border);
   background: var(--surface-low);
+}
+
+.icon-button:hover:not(:disabled) {
+  border-color: var(--border-strong);
+  background: var(--surface-high);
+  color: var(--teal-strong);
+}
+
+.icon-button .is-spinning {
+  animation: spin 700ms linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
 }
 
 .segmented {
@@ -439,12 +513,24 @@
   padding: 0 9px;
   font-size: 12px;
   font-weight: 750;
+  transition: background 140ms ease, border-color 140ms ease, color 140ms ease;
+}
+
+.chip:hover:not(:disabled) {
+  border-color: var(--border-strong);
+  background: var(--surface-high);
+  color: var(--text);
 }
 
 .chip.is-active {
   border-color: var(--teal);
   background: var(--teal-soft);
   color: var(--teal-strong);
+}
+
+.chip.is-active:hover:not(:disabled) {
+  border-color: var(--teal-strong);
+  background: color-mix(in srgb, var(--teal-soft) 78%, var(--teal));
 }
 
 .toggle {
@@ -557,7 +643,7 @@
 }
 
 .player-workspace .data-table {
-  min-width: 1580px;
+  min-width: 1520px;
 }
 
 .odds-workspace .data-table th,
@@ -716,7 +802,7 @@
 }
 
 .odds-table-wrap {
-  max-height: min(620px, calc(100vh - 318px));
+  max-height: calc(100vh - 318px);
 }
 
 .odds-workspace .odds-board-table {
@@ -759,6 +845,26 @@
 
 .odds-workspace .odds-board-table th.is-sticky-column {
   z-index: 4;
+}
+
+.odds-workspace .odds-board-table .is-sticky-actions {
+  position: sticky;
+  right: 0;
+  z-index: 3;
+  background: var(--surface);
+  box-shadow: -1px 0 0 var(--border);
+}
+
+.odds-workspace .odds-board-table th.is-sticky-actions {
+  z-index: 4;
+}
+
+.odds-workspace .odds-board-table tbody tr:nth-child(even) td.is-sticky-actions {
+  background: color-mix(in srgb, var(--surface-low) 58%, var(--surface));
+}
+
+.odds-workspace .odds-board-table tbody tr:hover td.is-sticky-actions {
+  background: color-mix(in srgb, var(--teal-soft) 20%, var(--surface));
 }
 
 .odds-workspace .odds-board-table .is-numeric-column {
@@ -1289,7 +1395,7 @@
 }
 
 .arb-table-wrap {
-  max-height: min(620px, calc(100vh - 318px));
+  max-height: calc(100vh - 318px);
 }
 
 .arb-workspace .arb-board-table {
@@ -1332,6 +1438,30 @@
 
 .arb-workspace .arb-board-table th.is-sticky-column {
   z-index: 4;
+}
+
+.arb-workspace .arb-board-table .is-sticky-actions {
+  position: sticky;
+  right: 0;
+  z-index: 3;
+  background: var(--surface);
+  box-shadow: -1px 0 0 var(--border);
+}
+
+.arb-workspace .arb-board-table th.is-sticky-actions {
+  z-index: 4;
+}
+
+.arb-workspace .arb-board-table tbody tr:nth-child(even) td.is-sticky-actions {
+  background: color-mix(in srgb, var(--surface-low) 58%, var(--surface));
+}
+
+.arb-workspace .arb-board-table tbody tr:hover td.is-sticky-actions {
+  background: color-mix(in srgb, var(--teal-soft) 20%, var(--surface));
+}
+
+.arb-workspace .arb-board-table tbody tr.is-selected td.is-sticky-actions {
+  background: color-mix(in srgb, var(--teal-soft) 54%, var(--surface));
 }
 
 .arb-workspace .arb-board-table .is-numeric-column {
@@ -3167,13 +3297,13 @@
 
 .player-workspace .data-table {
   width: 100%;
-  min-width: 1580px;
+  min-width: 1520px;
   border-collapse: separate;
   border-spacing: 0;
 }
 
 .player-workspace .data-table th {
-  padding: 10px 8px;
+  padding: 10px 6px;
   background: var(--surface);
   color: var(--muted);
   font-size: 10.5px;
@@ -3183,7 +3313,7 @@
 
 .player-workspace .data-table td {
   height: 44px;
-  padding: 0 8px;
+  padding: 0 6px;
   border-bottom-color: color-mix(in srgb, var(--border) 62%, transparent);
   white-space: nowrap;
 }
@@ -3331,6 +3461,7 @@
 
   .brand div:not(.brand-mark),
   .side-nav span,
+  .sidebar-footer .toggle b,
   .hide-small {
     display: none;
   }
@@ -3340,6 +3471,21 @@
   }
 
   .side-nav button {
+    position: relative;
+    justify-content: center;
+  }
+
+  .side-nav button .nav-badge {
+    position: absolute;
+    top: 4px;
+    right: 6px;
+    min-width: 16px;
+    height: 16px;
+    padding: 0 4px;
+    font-size: 10px;
+  }
+
+  .sidebar-footer {
     justify-content: center;
   }
 
@@ -3557,7 +3703,7 @@
 .candidate-virtual-scroll {
   position: relative;
   min-height: 280px;
-  max-height: min(620px, calc(100vh - 318px));
+  max-height: calc(100vh - 318px);
   overflow: auto;
   overscroll-behavior: contain;
 }
@@ -3650,7 +3796,7 @@
   line-height: 1;
 }
 
-@media (max-width: 1400px) {
+@media (max-width: 1700px) {
   .builder-workspace,
   .odds-workspace,
   .arb-workspace {
@@ -3826,5 +3972,29 @@
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+  }
+
+  .icon-button .is-spinning {
+    animation: none;
+  }
+}
+
+@media (max-width: 820px) {
+  .sidebar-footer {
+    display: none;
+  }
+
+  .side-nav button .nav-badge {
+    position: absolute;
+    top: 2px;
+    right: 8px;
+    min-width: 14px;
+    height: 14px;
+    padding: 0 3px;
+    font-size: 9px;
+  }
+
+  .side-nav button {
+    position: relative;
   }
 }

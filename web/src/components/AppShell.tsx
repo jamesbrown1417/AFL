@@ -1,12 +1,12 @@
 import { Activity, BarChart3, Database, GitCompareArrows, Percent, RefreshCw, Settings, SlidersHorizontal, Trophy, UserRound } from 'lucide-react'
 import clsx from 'clsx'
-import { useQueryClient } from '@tanstack/react-query'
+import { useIsFetching, useQueryClient } from '@tanstack/react-query'
 import { useEffect } from 'react'
 import type { ReactNode } from 'react'
 import type { DataStatusResponse, HealthResponse } from '../api/types'
 import { bookmakerLabel, formatDateTime } from '../lib/formatters'
 import { useAppStore } from '../store/useAppStore'
-import { IconButton } from './ui'
+import { IconButton, Toggle } from './ui'
 
 const nav = [
   { key: 'player', label: 'Player', icon: UserRound },
@@ -29,11 +29,15 @@ export function AppShell({
   const activeView = useAppStore((state) => state.activeView)
   const setActiveView = useAppStore((state) => state.setActiveView)
   const themeMode = useAppStore((state) => state.themeMode)
+  const setSettings = useAppStore((state) => state.setSettings)
+  const sgmLegs = useAppStore((state) => state.sgmLegs)
+  const cgmLegs = useAppStore((state) => state.cgmLegs)
   const sgmContext = useAppStore((state) => state.sgmContext)
   const sgmUndo = useAppStore((state) => state.sgmUndo)
   const undoSgmReplacement = useAppStore((state) => state.undoSgmReplacement)
   const dismissSgmUndo = useAppStore((state) => state.dismissSgmUndo)
   const queryClient = useQueryClient()
+  const fetchingCount = useIsFetching()
 
   useEffect(() => {
     if (!sgmUndo) return
@@ -41,6 +45,11 @@ export function AppShell({
     const timeout = window.setTimeout(dismissSgmUndo, remaining)
     return () => window.clearTimeout(timeout)
   }, [dismissSgmUndo, sgmUndo])
+
+  const draftCounts = {
+    sgm: sgmLegs.length,
+    cgm: cgmLegs.length,
+  } as const
 
   return (
     <div className={clsx('app-shell', `theme-${themeMode}`)}>
@@ -56,21 +65,30 @@ export function AppShell({
         <nav className="side-nav" aria-label="Main navigation">
           {nav.map((item) => {
             const Icon = item.icon
+            const badge = item.key === 'sgm' || item.key === 'cgm' ? draftCounts[item.key] : 0
             return (
               <button
                 key={item.key}
                 type="button"
-                aria-label={item.label}
+                aria-label={badge > 0 ? `${item.label}, ${badge} legs` : item.label}
                 aria-current={activeView === item.key ? 'page' : undefined}
                 className={clsx(activeView === item.key && 'is-active')}
                 onClick={() => setActiveView(item.key)}
               >
                 <Icon size={18} />
                 <span>{item.label}</span>
+                {badge > 0 ? <b className="nav-badge">{badge}</b> : null}
               </button>
             )
           })}
         </nav>
+        <div className="sidebar-footer">
+          <Toggle
+            checked={themeMode === 'dark'}
+            onChange={(checked) => setSettings({ themeMode: checked ? 'dark' : 'light' })}
+            label="Dark mode"
+          />
+        </div>
       </aside>
 
       <div className="app-frame" id="main-content">
@@ -92,8 +110,12 @@ export function AppShell({
               <b>{formatDateTime(dataStatus?.generated_at)}</b>
             </div>
           </div>
-          <IconButton label="Refresh data" onClick={() => void queryClient.invalidateQueries()}>
-            <RefreshCw size={18} />
+          <IconButton
+            label="Refresh data"
+            className={clsx(fetchingCount > 0 && 'is-refreshing')}
+            onClick={() => void queryClient.invalidateQueries()}
+          >
+            <RefreshCw size={18} className={clsx(fetchingCount > 0 && 'is-spinning')} />
           </IconButton>
         </header>
         {children}

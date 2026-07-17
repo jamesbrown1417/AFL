@@ -614,7 +614,8 @@ function Delta({ value }: { value: number | null }) {
 function columnClassName(columnId: string) {
   if (columnId === 'name') return 'is-sticky-column'
   if (columnId === 'context') return 'is-context-column'
-  if (['price', 'next-best', 'l10', 'season', 'home-away', 'win-loss', 'actions'].includes(columnId)) return 'is-numeric-column'
+  if (columnId === 'actions') return 'is-numeric-column is-sticky-actions'
+  if (['price', 'next-best', 'l10', 'season', 'home-away', 'win-loss'].includes(columnId)) return 'is-numeric-column'
   return undefined
 }
 

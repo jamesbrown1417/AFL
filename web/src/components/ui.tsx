@@ -129,11 +129,11 @@ export function AdaptiveRail({
   const railRef = useRef<HTMLElement>(null)
   const overlayMode = useSyncExternalStore(
     (onStoreChange) => {
-      const media = window.matchMedia('(max-width: 1400px)')
+      const media = window.matchMedia('(max-width: 1700px)')
       media.addEventListener('change', onStoreChange)
       return () => media.removeEventListener('change', onStoreChange)
     },
-    () => window.matchMedia('(max-width: 1400px)').matches,
+    () => window.matchMedia('(max-width: 1700px)').matches,
     () => false,
   )
 
