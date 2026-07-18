@@ -131,8 +131,8 @@
                   "price": {
                     "id": "5a1d231c-736f-4b4d-8d71-1abab80b2a20:940b8704-e497-4a76-b390-00918ff7d282:",
                     "odds": {
-                      "numerator": 9,
-                      "denominator": 1
+                      "numerator": 33,
+                      "denominator": 4
                     }
                   }
                 },
@@ -148,8 +148,8 @@
                   "price": {
                     "id": "b01e2e13-4969-4b60-b0f5-f75fdd382fdb:940b8704-e497-4a76-b390-00918ff7d282:",
                     "odds": {
-                      "numerator": 1,
-                      "denominator": 20
+                      "numerator": 3,
+                      "denominator": 50
                     }
                   }
                 }
@@ -1093,119 +1093,6 @@
         ]
       }
     },
-    "a738f3ae-8f52-4b61-a7d0-e395b8fc8744": {
-      "id": "a738f3ae-8f52-4b61-a7d0-e395b8fc8744",
-      "name": "Fremantle vs West Coast Eagles",
-      "url": "/sports/australian-rules/afl/fremantle-vs-west-coast-eagles/a738f3ae-8f52-4b61-a7d0-e395b8fc8744",
-      "advertisedStart": "2026-07-24T10:10:00.000Z",
-      "eventType": "MATCH",
-      "eventTypeId": "6bfa0efc-05df-4ae1-9b1e-152365290cfd",
-      "bettingStatus": "OPEN",
-      "status": "OPEN",
-      "phase": null,
-      "hasLiveVision": false,
-      "inPlay": false,
-      "sportCategory": {
-        "id": "23d497e6-8aab-4309-905b-9421f42c9bc5",
-        "name": "Australian Rules",
-        "category": "AUSTRALIAN_RULES",
-        "icon": "sports/australian-rules",
-        "slug": "australian-rules",
-        "url": "/sports/australian-rules",
-        "hasRegions": false,
-        "eventCount": 0
-      },
-      "competition": {
-        "id": "ccff2e9a-5347-41aa-902a-bb6b1886d817",
-        "name": "AFL",
-        "url": "/sports/australian-rules/afl",
-        "hasInPlayEvents": false,
-        "region": null
-      },
-      "teams": [
-        {
-          "id": "SportingTeam:07253b37-3449-4d73-a758-c4098e392a82",
-          "name": "Fremantle",
-          "colour": "#2E0F4F",
-          "locale": "HOME",
-          "scores": [],
-          "scoresV2": null,
-          "icon": {
-            "web": "/images/neds/sprites/svg-sports-afl-icon.svg#fremantle-dockers"
-          }
-        },
-        {
-          "id": "SportingTeam:691b24bc-73b4-4d94-a5c5-9e40ab853240",
-          "name": "West Coast Eagles",
-          "colour": "#0A2A66",
-          "locale": "AWAY",
-          "scores": [],
-          "scoresV2": null,
-          "icon": {
-            "web": "/images/neds/sprites/svg-sports-afl-icon.svg#west-coast-eagles"
-          }
-        }
-      ],
-      "matchClock": null,
-      "marketCount": 1,
-      "markets": {
-        "nodes": [
-          {
-            "id": "SportingMarket:7e163a66-5a4a-45c5-98fe-ef3319a4d51a",
-            "name": "Match Betting",
-            "marketTypeId": "be25c37a-71ff-47f6-a1e2-02a494eb5a4d",
-            "handicap": null,
-            "isPrimary": true,
-            "isSuspended": false,
-            "status": "OPEN",
-            "liveBettingAvailable": false,
-            "allowsCashOut": false,
-            "sameGameMultiAvailable": false,
-            "allowOddsBoostExtra": false,
-            "additionalProductTypeIds": null,
-            "entrantCount": 2,
-            "entrants": {
-              "nodes": [
-                {
-                  "id": "SportingEntrant:74acd271-7b35-4bac-89f4-4e2bc557812b",
-                  "name": "Fremantle",
-                  "handicap": null,
-                  "isSuspended": false,
-                  "role": "HOME",
-                  "icon": {
-                    "web": "/images/neds/sprites/svg-sports-afl-icon.svg#fremantle-dockers"
-                  },
-                  "price": {
-                    "id": "74acd271-7b35-4bac-89f4-4e2bc557812b:940b8704-e497-4a76-b390-00918ff7d282:",
-                    "odds": {
-                      "numerator": 1,
-                      "denominator": 25
-                    }
-                  }
-                },
-                {
-                  "id": "SportingEntrant:5750d02c-b07f-4250-abdc-437e22816733",
-                  "name": "West Coast Eagles",
-                  "handicap": null,
-                  "isSuspended": false,
-                  "role": "AWAY",
-                  "icon": {
-                    "web": "/images/neds/sprites/svg-sports-afl-icon.svg#west-coast-eagles"
-                  },
-                  "price": {
-                    "id": "5750d02c-b07f-4250-abdc-437e22816733:940b8704-e497-4a76-b390-00918ff7d282:",
-                    "odds": {
-                      "numerator": 10,
-                      "denominator": 1
-                    }
-                  }
-                }
-              ]
-            }
-          }
-        ]
-      }
-    },
     "6f927c6c-066e-40d6-9a84-9e59e5015c47": {
       "id": "6f927c6c-066e-40d6-9a84-9e59e5015c47",
       "name": "Carlton vs Gold Coast Suns",
@@ -1649,119 +1536,6 @@
                     "odds": {
                       "numerator": 51,
                       "denominator": 10
-                    }
-                  }
-                }
-              ]
-            }
-          }
-        ]
-      }
-    },
-    "dda1a516-e679-4500-9249-849f6f5b7423": {
-      "id": "dda1a516-e679-4500-9249-849f6f5b7423",
-      "name": "Brisbane Lions vs Port Adelaide",
-      "url": "/sports/australian-rules/afl/brisbane-lions-vs-port-adelaide/dda1a516-e679-4500-9249-849f6f5b7423",
-      "advertisedStart": "2026-07-26T03:10:00.000Z",
-      "eventType": "MATCH",
-      "eventTypeId": "6bfa0efc-05df-4ae1-9b1e-152365290cfd",
-      "bettingStatus": "OPEN",
-      "status": "OPEN",
-      "phase": null,
-      "hasLiveVision": false,
-      "inPlay": false,
-      "sportCategory": {
-        "id": "23d497e6-8aab-4309-905b-9421f42c9bc5",
-        "name": "Australian Rules",
-        "category": "AUSTRALIAN_RULES",
-        "icon": "sports/australian-rules",
-        "slug": "australian-rules",
-        "url": "/sports/australian-rules",
-        "hasRegions": false,
-        "eventCount": 0
-      },
-      "competition": {
-        "id": "ccff2e9a-5347-41aa-902a-bb6b1886d817",
-        "name": "AFL",
-        "url": "/sports/australian-rules/afl",
-        "hasInPlayEvents": false,
-        "region": null
-      },
-      "teams": [
-        {
-          "id": "SportingTeam:27d6d12b-9589-4ba4-8cda-81b000097c6f",
-          "name": "Brisbane Lions",
-          "colour": "#7A0C2E",
-          "locale": "HOME",
-          "scores": [],
-          "scoresV2": null,
-          "icon": {
-            "web": "/images/neds/sprites/svg-sports-afl-icon.svg#brisbane-lions"
-          }
-        },
-        {
-          "id": "SportingTeam:49fe691d-34f3-418f-bec7-f9f9252cb199",
-          "name": "Port Adelaide",
-          "colour": "#008A8F",
-          "locale": "AWAY",
-          "scores": [],
-          "scoresV2": null,
-          "icon": {
-            "web": "/images/neds/sprites/svg-sports-afl-icon.svg#port-adelaide-power"
-          }
-        }
-      ],
-      "matchClock": null,
-      "marketCount": 1,
-      "markets": {
-        "nodes": [
-          {
-            "id": "SportingMarket:620af2a9-fd98-4e7d-90b8-633fcc7817bf",
-            "name": "Match Betting",
-            "marketTypeId": "be25c37a-71ff-47f6-a1e2-02a494eb5a4d",
-            "handicap": null,
-            "isPrimary": true,
-            "isSuspended": false,
-            "status": "OPEN",
-            "liveBettingAvailable": false,
-            "allowsCashOut": false,
-            "sameGameMultiAvailable": false,
-            "allowOddsBoostExtra": false,
-            "additionalProductTypeIds": null,
-            "entrantCount": 2,
-            "entrants": {
-              "nodes": [
-                {
-                  "id": "SportingEntrant:d2d576fb-0ce0-4cfc-ab8c-43beea4be5ca",
-                  "name": "Brisbane Lions",
-                  "handicap": null,
-                  "isSuspended": false,
-                  "role": "HOME",
-                  "icon": {
-                    "web": "/images/neds/sprites/svg-sports-afl-icon.svg#brisbane-lions"
-                  },
-                  "price": {
-                    "id": "d2d576fb-0ce0-4cfc-ab8c-43beea4be5ca:940b8704-e497-4a76-b390-00918ff7d282:",
-                    "odds": {
-                      "numerator": 1,
-                      "denominator": 20
-                    }
-                  }
-                },
-                {
-                  "id": "SportingEntrant:748cb835-ac70-478c-93b5-b15eb7e71661",
-                  "name": "Port Adelaide",
-                  "handicap": null,
-                  "isSuspended": false,
-                  "role": "AWAY",
-                  "icon": {
-                    "web": "/images/neds/sprites/svg-sports-afl-icon.svg#port-adelaide-power"
-                  },
-                  "price": {
-                    "id": "748cb835-ac70-478c-93b5-b15eb7e71661:940b8704-e497-4a76-b390-00918ff7d282:",
-                    "odds": {
-                      "numerator": 9,
-                      "denominator": 1
                     }
                   }
                 }
