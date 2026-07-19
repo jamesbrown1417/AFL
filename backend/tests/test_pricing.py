@@ -1,9 +1,10 @@
 from __future__ import annotations
 
-import json
 import asyncio
+import json
 from collections import defaultdict
 
+import httpx
 import pytest
 
 from app.bookmakers.base import ResolvedLeg
@@ -82,6 +83,10 @@ def test_tab_adapter_builds_expected_request() -> None:
     # The v2 adapter sends a pre-serialised body with browser-like headers.
     assert request_spec["headers"]["content-type"] == "application/json;charset=UTF-8"
     assert request_spec["headers"]["origin"] == settings.tab_origin
+    assert 'Google Chrome";v="150"' in request_spec["headers"]["sec-ch-ua"]
+    assert request_spec["headers"]["sec-fetch-dest"] == "empty"
+    assert request_spec["headers"]["sec-fetch-mode"] == "cors"
+    assert request_spec["headers"]["sec-fetch-site"] == "same-site"
     payload = json.loads(request_spec["body"])
     assert payload["clientDetails"] == {
         "jurisdiction": settings.tab_jurisdiction,
@@ -93,6 +98,29 @@ def test_tab_adapter_builds_expected_request() -> None:
         {"type": "WIN", "propositionId": 12345},
         {"type": "WIN", "propositionId": 67890},
     ]
+
+
+@pytest.mark.asyncio
+async def test_tab_adapter_bootstrap_uses_navigation_headers() -> None:
+    settings = get_settings()
+    adapter = TabAdapter(settings)
+    requests: list[httpx.Request] = []
+
+    async def handler(request: httpx.Request) -> httpx.Response:
+        requests.append(request)
+        return httpx.Response(200, request=request)
+
+    async with httpx.AsyncClient(transport=httpx.MockTransport(handler)) as client:
+        await adapter.ensure_session(client)
+
+    assert len(requests) == 1
+    headers = requests[0].headers
+    assert headers["user-agent"] == settings.tab_user_agent
+    assert 'Google Chrome";v="150"' in headers["sec-ch-ua"]
+    assert headers["sec-fetch-dest"] == "document"
+    assert headers["sec-fetch-mode"] == "navigate"
+    assert headers["sec-fetch-site"] == "none"
+    assert headers["upgrade-insecure-requests"] == "1"
 
 
 def test_pointsbet_adapter_builds_expected_request() -> None:

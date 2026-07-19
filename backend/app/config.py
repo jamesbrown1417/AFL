@@ -64,7 +64,7 @@ class Settings(BaseSettings):
     tab_user_agent: str = (
         "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
         "AppleWebKit/537.36 (KHTML, like Gecko) "
-        "Chrome/136.0.0.0 Safari/537.36"
+        "Chrome/150.0.0.0 Safari/537.36"
     )
     pointsbet_quote_url: str = "https://api.au.pointsbet.com/api/v2/sgm/price"
     pointsbet_user_agent: str = sportsbet_user_agent

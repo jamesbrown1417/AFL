@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import re
 from typing import Any
 
 import httpx
@@ -12,7 +13,7 @@ from app.utils.errors import AppError
 
 class TabAdapter(BookmakerAdapter):
     code = "tab"
-    adapter_version = "v2"
+    adapter_version = "v3"
 
     def __init__(self, settings: Settings):
         self.settings = settings
@@ -42,11 +43,12 @@ class TabAdapter(BookmakerAdapter):
             "url": self.settings.tab_quote_url,
             "headers": {
                 "accept": "application/json, text/plain, */*",
-                "accept-language": "en-US,en;q=0.9",
+                "accept-language": "en-AU,en;q=0.9",
                 "content-type": "application/json;charset=UTF-8",
                 "origin": self.settings.tab_origin,
                 "referer": self.settings.tab_referer,
                 "user-agent": self.settings.tab_user_agent,
+                **self._browser_client_hints(pricing_request=True),
             },
             "body": json.dumps(
                 {
@@ -78,8 +80,13 @@ class TabAdapter(BookmakerAdapter):
             self.settings.tab_bootstrap_url,
             headers={
                 "user-agent": self.settings.tab_user_agent,
-                "accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
-                "accept-language": "en-US,en;q=0.9",
+                "accept": (
+                    "text/html,application/xhtml+xml,application/xml;q=0.9,"
+                    "image/avif,image/webp,image/apng,*/*;q=0.8"
+                ),
+                "accept-language": "en-AU,en;q=0.9",
+                "upgrade-insecure-requests": "1",
+                **self._browser_client_hints(pricing_request=False),
             },
             follow_redirects=True,
             timeout=self.settings.tab_request_timeout_seconds,
@@ -137,3 +144,21 @@ class TabAdapter(BookmakerAdapter):
 
     def _coerce_numeric(self, value: str) -> int | str:
         return int(value) if value.isdigit() else value
+
+    def _browser_client_hints(self, *, pricing_request: bool) -> dict[str, str]:
+        version_match = re.search(r"\bChrome/(\d+)", self.settings.tab_user_agent)
+        if version_match is None:
+            return {}
+        browser_major_version = version_match.group(1)
+        return {
+            "sec-ch-ua": (
+                f'"Chromium";v="{browser_major_version}", '
+                f'"Google Chrome";v="{browser_major_version}", '
+                '"Not_A Brand";v="99"'
+            ),
+            "sec-ch-ua-mobile": "?0",
+            "sec-ch-ua-platform": '"macOS"',
+            "sec-fetch-dest": "empty" if pricing_request else "document",
+            "sec-fetch-mode": "cors" if pricing_request else "navigate",
+            "sec-fetch-site": "same-site" if pricing_request else "none",
+        }
