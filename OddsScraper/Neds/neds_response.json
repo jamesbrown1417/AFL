@@ -1,10 +1,10 @@
 {
   "events": {
-    "8e19860f-da2e-4b86-93a9-404d01a8ac10": {
-      "id": "8e19860f-da2e-4b86-93a9-404d01a8ac10",
-      "name": "Collingwood vs Carlton",
-      "url": "/sports/australian-rules/afl/collingwood-vs-carlton/8e19860f-da2e-4b86-93a9-404d01a8ac10",
-      "advertisedStart": "2026-07-18T09:35:00.000Z",
+    "bb9a33d1-e201-4aaf-8ffe-94a0c418fb97": {
+      "id": "bb9a33d1-e201-4aaf-8ffe-94a0c418fb97",
+      "name": "Sunday AFL Specials - 19/07",
+      "url": "/sports/australian-rules/afl/sunday-afl-specials-19-07/bb9a33d1-e201-4aaf-8ffe-94a0c418fb97",
+      "advertisedStart": "2026-07-19T03:09:00.000Z",
       "eventType": "MATCH",
       "eventTypeId": "6bfa0efc-05df-4ae1-9b1e-152365290cfd",
       "bettingStatus": "OPEN",
@@ -29,211 +29,16 @@
         "hasInPlayEvents": false,
         "region": null
       },
-      "teams": [
-        {
-          "id": "SportingTeam:69372fff-eb17-431d-bb55-80d0f32fc8c4",
-          "name": "Collingwood",
-          "colour": "#111111",
-          "locale": "HOME",
-          "scores": [],
-          "scoresV2": null,
-          "icon": {
-            "web": "/images/neds/sprites/svg-sports-afl-icon.svg#collingwood-magpies"
-          }
-        },
-        {
-          "id": "SportingTeam:6f73643e-3174-41af-9105-4de326d5af42",
-          "name": "Carlton",
-          "colour": "#0A1F44",
-          "locale": "AWAY",
-          "scores": [],
-          "scoresV2": null,
-          "icon": {
-            "web": "/images/neds/sprites/svg-sports-afl-icon.svg#carlton-fc"
-          }
-        }
-      ],
+      "teams": null,
       "matchClock": {
         "countDown": false,
         "maxPeriodSeconds": 1200,
         "paused": false,
         "periodSeconds": 0
       },
-      "marketCount": 275,
+      "marketCount": 13,
       "markets": {
-        "nodes": [
-          {
-            "id": "SportingMarket:eb23e444-5cc2-451d-a03c-9a5112ad4b70",
-            "name": "Match Betting",
-            "marketTypeId": "be25c37a-71ff-47f6-a1e2-02a494eb5a4d",
-            "handicap": null,
-            "isPrimary": true,
-            "isSuspended": false,
-            "status": "OPEN",
-            "liveBettingAvailable": true,
-            "allowsCashOut": false,
-            "sameGameMultiAvailable": true,
-            "allowOddsBoostExtra": false,
-            "additionalProductTypeIds": null,
-            "entrantCount": 2,
-            "entrants": {
-              "nodes": [
-                {
-                  "id": "SportingEntrant:b7fa0f18-576b-40e7-ac0d-a8fdb72090ff",
-                  "name": "Collingwood",
-                  "handicap": null,
-                  "isSuspended": false,
-                  "role": "HOME",
-                  "icon": {
-                    "web": "/images/neds/sprites/svg-sports-afl-icon.svg#collingwood-magpies"
-                  },
-                  "price": {
-                    "id": "b7fa0f18-576b-40e7-ac0d-a8fdb72090ff:940b8704-e497-4a76-b390-00918ff7d282:",
-                    "odds": {
-                      "numerator": 7,
-                      "denominator": 10
-                    }
-                  }
-                },
-                {
-                  "id": "SportingEntrant:517bff56-e043-4ebf-ae53-c31ffbe398a3",
-                  "name": "Carlton",
-                  "handicap": null,
-                  "isSuspended": false,
-                  "role": "AWAY",
-                  "icon": {
-                    "web": "/images/neds/sprites/svg-sports-afl-icon.svg#carlton-fc"
-                  },
-                  "price": {
-                    "id": "517bff56-e043-4ebf-ae53-c31ffbe398a3:940b8704-e497-4a76-b390-00918ff7d282:",
-                    "odds": {
-                      "numerator": 23,
-                      "denominator": 20
-                    }
-                  }
-                }
-              ]
-            }
-          }
-        ]
-      }
-    },
-    "e21d2621-880c-414e-8233-199183a827ad": {
-      "id": "e21d2621-880c-414e-8233-199183a827ad",
-      "name": "West Coast Eagles vs Brisbane Lions",
-      "url": "/sports/australian-rules/afl/west-coast-eagles-vs-brisbane-lions/e21d2621-880c-414e-8233-199183a827ad",
-      "advertisedStart": "2026-07-18T10:10:00.000Z",
-      "eventType": "MATCH",
-      "eventTypeId": "6bfa0efc-05df-4ae1-9b1e-152365290cfd",
-      "bettingStatus": "OPEN",
-      "status": "OPEN",
-      "phase": null,
-      "hasLiveVision": false,
-      "inPlay": false,
-      "sportCategory": {
-        "id": "23d497e6-8aab-4309-905b-9421f42c9bc5",
-        "name": "Australian Rules",
-        "category": "AUSTRALIAN_RULES",
-        "icon": "sports/australian-rules",
-        "slug": "australian-rules",
-        "url": "/sports/australian-rules",
-        "hasRegions": false,
-        "eventCount": 0
-      },
-      "competition": {
-        "id": "ccff2e9a-5347-41aa-902a-bb6b1886d817",
-        "name": "AFL",
-        "url": "/sports/australian-rules/afl",
-        "hasInPlayEvents": false,
-        "region": null
-      },
-      "teams": [
-        {
-          "id": "SportingTeam:2c9aa979-3ef6-4a38-99a0-865e2131a212",
-          "name": "West Coast Eagles",
-          "colour": "#0A2A66",
-          "locale": "HOME",
-          "scores": [],
-          "scoresV2": null,
-          "icon": {
-            "web": "/images/neds/sprites/svg-sports-afl-icon.svg#west-coast-eagles"
-          }
-        },
-        {
-          "id": "SportingTeam:73cc2ab6-32a9-4b1a-b77f-3b8888a90c52",
-          "name": "Brisbane Lions",
-          "colour": "#7A0C2E",
-          "locale": "AWAY",
-          "scores": [],
-          "scoresV2": null,
-          "icon": {
-            "web": "/images/neds/sprites/svg-sports-afl-icon.svg#brisbane-lions"
-          }
-        }
-      ],
-      "matchClock": {
-        "countDown": false,
-        "maxPeriodSeconds": 1200,
-        "paused": false,
-        "periodSeconds": 0
-      },
-      "marketCount": 276,
-      "markets": {
-        "nodes": [
-          {
-            "id": "SportingMarket:59221c94-b46a-401d-a2d9-e2c659052510",
-            "name": "Match Betting",
-            "marketTypeId": "be25c37a-71ff-47f6-a1e2-02a494eb5a4d",
-            "handicap": null,
-            "isPrimary": true,
-            "isSuspended": false,
-            "status": "OPEN",
-            "liveBettingAvailable": true,
-            "allowsCashOut": false,
-            "sameGameMultiAvailable": true,
-            "allowOddsBoostExtra": false,
-            "additionalProductTypeIds": null,
-            "entrantCount": 2,
-            "entrants": {
-              "nodes": [
-                {
-                  "id": "SportingEntrant:bd4b98fd-9db3-42ec-b136-37227d56bb38",
-                  "name": "West Coast Eagles",
-                  "handicap": null,
-                  "isSuspended": false,
-                  "role": "HOME",
-                  "icon": {
-                    "web": "/images/neds/sprites/svg-sports-afl-icon.svg#west-coast-eagles"
-                  },
-                  "price": {
-                    "id": "bd4b98fd-9db3-42ec-b136-37227d56bb38:940b8704-e497-4a76-b390-00918ff7d282:",
-                    "odds": {
-                      "numerator": 7,
-                      "denominator": 1
-                    }
-                  }
-                },
-                {
-                  "id": "SportingEntrant:166c9439-4d02-44b6-b828-19f0c70542db",
-                  "name": "Brisbane Lions",
-                  "handicap": null,
-                  "isSuspended": false,
-                  "role": "AWAY",
-                  "icon": {
-                    "web": "/images/neds/sprites/svg-sports-afl-icon.svg#brisbane-lions"
-                  },
-                  "price": {
-                    "id": "166c9439-4d02-44b6-b828-19f0c70542db:940b8704-e497-4a76-b390-00918ff7d282:",
-                    "odds": {
-                      "numerator": 2,
-                      "denominator": 25
-                    }
-                  }
-                }
-              ]
-            }
-          }
-        ]
+        "nodes": []
       }
     },
     "59ec89e7-bbfc-4205-8d3a-ffe8aab51f39": {
@@ -413,7 +218,7 @@
         "paused": false,
         "periodSeconds": 0
       },
-      "marketCount": 255,
+      "marketCount": 254,
       "markets": {
         "nodes": [
           {
@@ -444,8 +249,8 @@
                   "price": {
                     "id": "d6f19805-e1ee-412c-aeec-05300a0b4c3e:940b8704-e497-4a76-b390-00918ff7d282:",
                     "odds": {
-                      "numerator": 41,
-                      "denominator": 50
+                      "numerator": 77,
+                      "denominator": 100
                     }
                   }
                 },
@@ -461,8 +266,8 @@
                   "price": {
                     "id": "4d1770c1-f3be-4877-93ea-f7d644599087:940b8704-e497-4a76-b390-00918ff7d282:",
                     "odds": {
-                      "numerator": 1,
-                      "denominator": 1
+                      "numerator": 21,
+                      "denominator": 20
                     }
                   }
                 }
