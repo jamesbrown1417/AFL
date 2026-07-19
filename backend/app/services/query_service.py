@@ -319,8 +319,10 @@ class QueryService:
                 JOIN selections s ON s.market_id = m.market_id
                 JOIN selection_bookmaker_meta sbm ON sbm.selection_id = s.selection_id
                 JOIN bookmakers b ON b.bookmaker_id = sbm.bookmaker_id
-                JOIN current_outcome_prices_v cop
-                  ON cop.selection_id = s.selection_id AND cop.bookmaker_id = sbm.bookmaker_id
+                JOIN serving_selection_data cop
+                  ON cop.selection_id = s.selection_id
+                 AND cop.bookmaker_id = sbm.bookmaker_id
+                 AND cop.decimal_price IS NOT NULL
                 WHERE {' AND '.join(conditions)}
                 GROUP BY m.market_id, m.event_id, m.market_type_code, m.market_name_raw,
                          p.player_id, p.full_name, m.line_value, b.code
@@ -345,14 +347,12 @@ class QueryService:
                   cop.implied_prob,
                   b.code AS bookmaker,
                   sbm.sgm_eligible,
-                  lm.edge_pct
+                  cop.edge_pct
                 FROM selections s
                 JOIN selection_bookmaker_meta sbm ON sbm.selection_id = s.selection_id
                 JOIN bookmakers b ON b.bookmaker_id = sbm.bookmaker_id
-                LEFT JOIN current_outcome_prices_v cop
+                LEFT JOIN serving_selection_data cop
                   ON cop.selection_id = s.selection_id AND cop.bookmaker_id = sbm.bookmaker_id
-                LEFT JOIN latest_selection_metrics_v lm
-                  ON lm.selection_id = s.selection_id AND lm.bookmaker_id = sbm.bookmaker_id
                 WHERE s.market_id = ? AND b.code = ?
                 ORDER BY s.sort_order, s.selection_id
                 """,
@@ -623,28 +623,31 @@ class QueryService:
         reference_line: float | None,
         lower_bound: float | None,
         upper_bound: float | None,
+        _rows: list[dict[str, Any]] | None = None,
     ) -> dict[str, Any] | None:
         resolved = self._resolve_player_stat(stat)
         if resolved is None:
             return None
-        rows = self._load_filtered_player_stats(
-            player_id=player_id,
-            seasons=seasons,
-            oppositions=oppositions,
-            venues=venues,
-            weather_categories=weather_categories,
-            home_away=home_away,
-            margin_min=margin_min,
-            margin_max=margin_max,
-            last_games=last_games,
-            minutes_minimum=minutes_minimum,
-            stat_column=resolved["column"],
-            stat_label=resolved["label"],
-            line_mode=None,
-            reference_line=None,
-            lower_bound=None,
-            upper_bound=None,
-        )
+        rows = _rows
+        if rows is None:
+            rows = self._load_filtered_player_stats(
+                player_id=player_id,
+                seasons=seasons,
+                oppositions=oppositions,
+                venues=venues,
+                weather_categories=weather_categories,
+                home_away=home_away,
+                margin_min=margin_min,
+                margin_max=margin_max,
+                last_games=last_games,
+                minutes_minimum=minutes_minimum,
+                stat_column=resolved["column"],
+                stat_label=resolved["label"],
+                line_mode=None,
+                reference_line=None,
+                lower_bound=None,
+                upper_bound=None,
+            )
         if rows is None:
             return None
         sample_size = len(rows)
@@ -713,6 +716,66 @@ class QueryService:
             "implied_odds_outside_interval": None,
         }
 
+    def get_player_stat_bundle(
+        self,
+        *,
+        player_id: int,
+        stat: str,
+        seasons: list[str] | None,
+        oppositions: list[str] | None,
+        venues: list[str] | None,
+        weather_categories: list[str] | None,
+        home_away: list[str] | None,
+        margin_min: int,
+        margin_max: int,
+        last_games: int | None,
+        minutes_minimum: float,
+        line_mode: str | None,
+        reference_line: float | None,
+        lower_bound: float | None,
+        upper_bound: float | None,
+    ) -> dict[str, Any] | None:
+        history = self.get_player_stat_history(
+            player_id=player_id,
+            stat=stat,
+            seasons=seasons,
+            oppositions=oppositions,
+            venues=venues,
+            weather_categories=weather_categories,
+            home_away=home_away,
+            margin_min=margin_min,
+            margin_max=margin_max,
+            last_games=last_games,
+            minutes_minimum=minutes_minimum,
+            line_mode=line_mode,
+            reference_line=reference_line,
+            lower_bound=lower_bound,
+            upper_bound=upper_bound,
+        )
+        if history is None:
+            return None
+        summary = None
+        if line_mode is not None:
+            summary = self.get_player_stat_summary(
+                player_id=player_id,
+                stat=stat,
+                seasons=seasons,
+                oppositions=oppositions,
+                venues=venues,
+                weather_categories=weather_categories,
+                home_away=home_away,
+                margin_min=margin_min,
+                margin_max=margin_max,
+                last_games=last_games,
+                minutes_minimum=minutes_minimum,
+                line_mode=line_mode,
+                reference_line=reference_line,
+                lower_bound=lower_bound,
+                upper_bound=upper_bound,
+                _rows=history,
+            )
+        return {"history": history, "summary": summary}
+
     def search_props(
         self,
         *,
@@ -751,7 +814,7 @@ class QueryService:
             conditions.append("e.start_time_utc <= ?")
             params.append(date_to)
         if min_edge is not None:
-            conditions.append("COALESCE(lm.edge_pct, -1000000) >= ?")
+            conditions.append("COALESCE(cop.edge_pct, -1000000) >= ?")
             params.append(min_edge)
         params.extend([limit, offset])
 
@@ -773,7 +836,7 @@ class QueryService:
                   m.line_value,
                   cop.decimal_price,
                   cop.implied_prob,
-                  lm.edge_pct,
+                  cop.edge_pct,
                   sbm.sgm_eligible
                 FROM selections s
                 JOIN markets m ON m.market_id = s.market_id
@@ -781,10 +844,8 @@ class QueryService:
                 LEFT JOIN players p ON p.player_id = m.player_id
                 JOIN selection_bookmaker_meta sbm ON sbm.selection_id = s.selection_id
                 JOIN bookmakers b ON b.bookmaker_id = sbm.bookmaker_id
-                LEFT JOIN current_outcome_prices_v cop
+                LEFT JOIN serving_selection_data cop
                   ON cop.selection_id = s.selection_id AND cop.bookmaker_id = sbm.bookmaker_id
-                LEFT JOIN latest_selection_metrics_v lm
-                  ON lm.selection_id = s.selection_id AND lm.bookmaker_id = sbm.bookmaker_id
                 WHERE {' AND '.join(conditions)}
                 ORDER BY e.start_time_utc NULLS LAST, e.event_id, p.full_name, m.market_type_code, s.sort_order
                 LIMIT ? OFFSET ?
@@ -997,22 +1058,11 @@ class QueryService:
                       WHEN LOWER(TRIM(latest_player_team.player_team)) = LOWER(TRIM(away_t.name)) THEN 'Away'
                       ELSE NULL
                     END AS player_home_away
-                  FROM (
-                    SELECT
-                      pgl.player_id,
-                      pgl.player_team,
-                      ROW_NUMBER() OVER (
-                        PARTITION BY pgl.player_id
-                        ORDER BY pgl.start_time_utc DESC
-                      ) AS row_num
-                    FROM player_game_logs pgl
-                    WHERE pgl.player_team IS NOT NULL
-                  ) latest_player_team
+                  FROM serving_latest_player_team latest_player_team
                   JOIN events e ON TRUE
                   JOIN teams home_t ON home_t.team_id = e.home_team_id
                   JOIN teams away_t ON away_t.team_id = e.away_team_id
-                  WHERE latest_player_team.row_num = 1
-                    AND (
+                  WHERE (
                       LOWER(TRIM(latest_player_team.player_team)) = LOWER(TRIM(home_t.name))
                       OR LOWER(TRIM(latest_player_team.player_team)) = LOWER(TRIM(away_t.name))
                     )
@@ -1064,25 +1114,25 @@ class QueryService:
                     m.line_value,
                     cop.decimal_price,
                     cop.implied_prob,
-                    lm.edge_pct,
-                    TRY_CAST(json_extract(lm.metrics_json, '$.diff_2025') AS DOUBLE) AS diff_2025,
-                    TRY_CAST(json_extract(lm.metrics_json, '$.diff_last_10') AS DOUBLE) AS diff_last_10,
-                    TRY_CAST(json_extract(lm.metrics_json, '$.home_away_diff') AS DOUBLE) AS home_away_diff,
-                    TRY_CAST(json_extract(lm.metrics_json, '$.win_loss_diff') AS DOUBLE) AS win_loss_diff,
-                    json_extract_string(lm.metrics_json, '$.player_position') AS player_position,
-                    json_extract_string(lm.metrics_json, '$.matchup_difficulty') AS matchup_difficulty,
-                    json_extract_string(lm.metrics_json, '$.over_matchup_difficulty') AS over_matchup_difficulty,
-                    json_extract_string(lm.metrics_json, '$.under_matchup_difficulty') AS under_matchup_difficulty,
-                    TRY_CAST(json_extract(lm.metrics_json, '$.dvp') AS DOUBLE) AS dvp,
-                    TRY_CAST(json_extract(lm.metrics_json, '$.raw_dvp') AS DOUBLE) AS raw_dvp,
-                    TRY_CAST(json_extract(lm.metrics_json, '$.dvp_standard_error') AS DOUBLE) AS dvp_standard_error,
-                    TRY_CAST(json_extract(lm.metrics_json, '$.dvp_bootstrap_ci_low') AS DOUBLE) AS dvp_bootstrap_ci_low,
-                    TRY_CAST(json_extract(lm.metrics_json, '$.dvp_bootstrap_ci_high') AS DOUBLE) AS dvp_bootstrap_ci_high,
-                    TRY_CAST(json_extract(lm.metrics_json, '$.dvp_sample_count') AS BIGINT) AS dvp_sample_count,
-                    TRY_CAST(json_extract(lm.metrics_json, '$.dvp_match_count') AS BIGINT) AS dvp_match_count,
-                    TRY_CAST(json_extract(lm.metrics_json, '$.dvp_observation_count') AS BIGINT) AS dvp_observation_count,
-                    json_extract_string(lm.metrics_json, '$.dvp_model_version') AS dvp_model_version,
-                    json_extract_string(lm.metrics_json, '$.dvp_generated_at') AS dvp_generated_at,
+                    cop.edge_pct,
+                    cop.diff_2025,
+                    cop.diff_last_10,
+                    cop.home_away_diff,
+                    cop.win_loss_diff,
+                    cop.player_position,
+                    cop.matchup_difficulty,
+                    cop.over_matchup_difficulty,
+                    cop.under_matchup_difficulty,
+                    cop.dvp,
+                    cop.raw_dvp,
+                    cop.dvp_standard_error,
+                    cop.dvp_bootstrap_ci_low,
+                    cop.dvp_bootstrap_ci_high,
+                    cop.dvp_sample_count,
+                    cop.dvp_match_count,
+                    cop.dvp_observation_count,
+                    cop.dvp_model_version,
+                    cop.dvp_generated_at,
                     ew.temperature_c AS weather_temperature_c,
                     ew.wind_kph AS weather_wind_kph,
                     ew.precipitation_probability AS weather_precip_probability,
@@ -1101,10 +1151,8 @@ class QueryService:
                   JOIN bookmakers b ON b.bookmaker_id = sbm.bookmaker_id
                   LEFT JOIN sportsbet_line_context lc
                     ON lc.event_id = e.event_id
-                  LEFT JOIN current_outcome_prices_v cop
+                  LEFT JOIN serving_selection_data cop
                     ON cop.selection_id = s.selection_id AND cop.bookmaker_id = sbm.bookmaker_id
-                  LEFT JOIN latest_selection_metrics_v lm
-                    ON lm.selection_id = s.selection_id AND lm.bookmaker_id = sbm.bookmaker_id
                   {universe_where_clause}
                 ),
                 ranked_odds AS (

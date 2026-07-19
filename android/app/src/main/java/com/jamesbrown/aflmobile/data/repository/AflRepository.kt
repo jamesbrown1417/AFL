@@ -15,6 +15,7 @@ import com.jamesbrown.aflmobile.model.OddsQuery
 import com.jamesbrown.aflmobile.model.OddsSearchResult
 import com.jamesbrown.aflmobile.model.PlayerGameLogEntry
 import com.jamesbrown.aflmobile.model.PlayerStatFilterOptions
+import com.jamesbrown.aflmobile.model.PlayerStatBundle
 import com.jamesbrown.aflmobile.model.PlayerStatSummary
 import com.jamesbrown.aflmobile.model.PlayerSummary
 import com.jamesbrown.aflmobile.model.PlayerStatsFilters
@@ -147,6 +148,27 @@ class AflRepository(
         marginMax = filters.marginMaxText.toIntOrNull() ?: 200,
         lastGames = filters.lastGamesText.toIntOrNull(),
         minutesMinimum = filters.minutesMinimumText.toDoubleOrNull() ?: 0.0,
+    )
+
+    suspend fun playerStatBundle(
+        playerId: Int,
+        filters: PlayerStatsFilters,
+    ): PlayerStatBundle = apiClient.getPlayerStatBundle(
+        playerId = playerId,
+        stat = filters.statCode,
+        seasons = filters.seasons,
+        oppositions = filters.oppositions,
+        venues = filters.venues,
+        weatherCategories = filters.weatherCategories,
+        homeAway = filters.homeAway,
+        marginMin = filters.marginMinText.toIntOrNull() ?: -200,
+        marginMax = filters.marginMaxText.toIntOrNull() ?: 200,
+        lastGames = filters.lastGamesText.toIntOrNull(),
+        minutesMinimum = filters.minutesMinimumText.toDoubleOrNull() ?: 0.0,
+        lineMode = filters.resolvedLineModeOrNull(),
+        referenceLine = filters.referenceLineText.toDoubleOrNull(),
+        lowerBound = filters.lowerBoundText.toDoubleOrNull(),
+        upperBound = filters.upperBoundText.toDoubleOrNull(),
     )
 
     suspend fun odds(query: OddsQuery): List<OddsSearchResult> = apiClient.searchOdds(query)

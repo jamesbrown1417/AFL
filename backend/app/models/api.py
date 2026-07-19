@@ -115,6 +115,11 @@ class PlayerStatSummary(BaseModel):
     implied_odds_outside_interval: float | None
 
 
+class PlayerStatBundle(BaseModel):
+    history: list[PlayerGameLogEntry]
+    summary: PlayerStatSummary | None
+
+
 class BookmakerSummary(BaseModel):
     id: int
     code: str

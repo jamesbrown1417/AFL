@@ -318,19 +318,14 @@ class PlayerStatsViewModel(
     }
 
     private suspend fun loadHistoryAndSummary(playerId: Int, filters: PlayerStatsFilters) {
-        val historyResult = runCatchingCancellable { repository.playerStatHistory(playerId, filters) }
-        val summaryResult = if (filters.canRequestSummary()) {
-            runCatchingCancellable { repository.playerStatSummary(playerId, filters) }
-        } else {
-            Result.success(null)
-        }
+        val bundleResult = runCatchingCancellable { repository.playerStatBundle(playerId, filters) }
 
-        historyResult
-            .onSuccess { history ->
+        bundleResult
+            .onSuccess { bundle ->
                 _uiState.update {
                     it.copy(
-                        history = history,
-                        summary = summaryResult.getOrNull(),
+                        history = bundle.history,
+                        summary = bundle.summary,
                         isLoading = false,
                         infoMessage = playerSummaryInfoMessage(filters),
                     )
@@ -435,18 +430,13 @@ class PlayerStatsViewModel(
         playerId: Int,
         filters: PlayerStatsFilters,
     ): ComparisonScenarioState {
-        val historyResult = runCatchingCancellable { repository.playerStatHistory(playerId, filters) }
-        val summaryResult = if (filters.canRequestSummary()) {
-            runCatchingCancellable { repository.playerStatSummary(playerId, filters) }
-        } else {
-            Result.success(null)
-        }
-        return historyResult.fold(
-            onSuccess = { history ->
+        val bundleResult = runCatchingCancellable { repository.playerStatBundle(playerId, filters) }
+        return bundleResult.fold(
+            onSuccess = { bundle ->
                 ComparisonScenarioState(
                     filters = filters,
-                    history = history,
-                    summary = summaryResult.getOrNull(),
+                    history = bundle.history,
+                    summary = bundle.summary,
                     infoMessage = playerSummaryInfoMessage(filters),
                     loadedFilters = filters,
                 )

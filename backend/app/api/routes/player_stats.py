@@ -5,7 +5,7 @@ from typing import Annotated, Literal
 from fastapi import APIRouter, Depends, Query
 
 from app.dependencies import get_query_service, require_auth
-from app.models.api import PlayerGameLogEntry, PlayerStatFilterOptions, PlayerStatSummary
+from app.models.api import PlayerGameLogEntry, PlayerStatBundle, PlayerStatFilterOptions, PlayerStatSummary
 from app.services.query_service import QueryService
 from app.utils.errors import AppError
 
@@ -130,6 +130,54 @@ def get_player_stat_history(
     if rows is None:
         raise AppError(422, "invalid_stat", f"Unsupported stat '{stat}'.")
     return [PlayerGameLogEntry.model_validate(row) for row in rows]
+
+
+@router.get("/players/{player_id}/stats/bundle", response_model=PlayerStatBundle)
+def get_player_stat_bundle(
+    player_id: int,
+    query_service: Annotated[QueryService, Depends(get_query_service)],
+    stat: str = Query(default="disposals"),
+    seasons: Annotated[list[str] | None, Query()] = None,
+    oppositions: Annotated[list[str] | None, Query()] = None,
+    venues: Annotated[list[str] | None, Query()] = None,
+    weather_categories: Annotated[list[str] | None, Query()] = None,
+    home_away: Annotated[list[str] | None, Query()] = None,
+    margin_min: int = Query(default=-200),
+    margin_max: int = Query(default=200),
+    last_games: int | None = Query(default=None, ge=1, le=100),
+    minutes_minimum: float = Query(default=0, ge=0),
+    line_mode: Literal["single", "interval"] | None = Query(default=None),
+    reference_line: float | None = Query(default=None),
+    lower_bound: float | None = Query(default=None),
+    upper_bound: float | None = Query(default=None),
+) -> PlayerStatBundle:
+    if line_mode is not None:
+        _validate_line_inputs(
+            line_mode=line_mode,
+            reference_line=reference_line,
+            lower_bound=lower_bound,
+            upper_bound=upper_bound,
+        )
+    response = query_service.get_player_stat_bundle(
+        player_id=player_id,
+        stat=stat,
+        seasons=seasons,
+        oppositions=oppositions,
+        venues=venues,
+        weather_categories=weather_categories,
+        home_away=home_away,
+        margin_min=margin_min,
+        margin_max=margin_max,
+        last_games=last_games,
+        minutes_minimum=minutes_minimum,
+        line_mode=line_mode,
+        reference_line=reference_line,
+        lower_bound=lower_bound,
+        upper_bound=upper_bound,
+    )
+    if response is None:
+        raise AppError(422, "invalid_stat", f"Unsupported stat '{stat}'.")
+    return PlayerStatBundle.model_validate(response)
 
 
 @router.get("/players/{player_id}/stats/summary", response_model=PlayerStatSummary)

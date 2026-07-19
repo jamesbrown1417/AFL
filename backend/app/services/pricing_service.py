@@ -37,6 +37,14 @@ class PricingService:
         return set(self.adapters)
 
     async def quote_sgm(self, request: SgmQuoteRequest) -> dict[str, Any]:
+        async with httpx.AsyncClient(timeout=self.settings.request_timeout_seconds) as client:
+            return await self._quote_sgm_with_client(request, client)
+
+    async def _quote_sgm_with_client(
+        self,
+        request: SgmQuoteRequest,
+        client: httpx.AsyncClient,
+    ) -> dict[str, Any]:
         adapter = self.adapters.get(request.bookmaker)
         if adapter is None:
             raise AppError(422, "bookmaker_not_supported", f"{request.bookmaker} is not enabled for live pricing.")
@@ -57,6 +65,7 @@ class PricingService:
             adapter=adapter,
             request_spec=request_spec,
             resolved_legs=resolved_legs,
+            client=client,
         )
         response = self._store_quote(
             adapter=adapter,
@@ -79,13 +88,15 @@ class PricingService:
             for bookmaker_code in sorted(self.live_pricing_codes)
         ]
 
-        results: list[dict[str, Any]] = []
-        for comparison_request in comparison_requests:
-            try:
-                quote = await self.quote_sgm(comparison_request)
-            except Exception:
-                continue
-            results.append(quote)
+        async with httpx.AsyncClient(timeout=self.settings.request_timeout_seconds) as client:
+            outcomes = await asyncio.gather(
+                *(
+                    self._quote_sgm_with_client(comparison_request, client)
+                    for comparison_request in comparison_requests
+                ),
+                return_exceptions=True,
+            )
+        results = [outcome for outcome in outcomes if isinstance(outcome, dict)]
 
         results.sort(key=lambda result: float(result["quoted_price"]), reverse=True)
         return {
@@ -100,14 +111,14 @@ class PricingService:
         adapter: BookmakerAdapter,
         request_spec: dict[str, Any],
         resolved_legs: list[ResolvedLeg],
+        client: httpx.AsyncClient,
     ) -> QuoteResult:
         attempts = max(1, self.settings.sgm_retry_attempts)
         last_error: AppError | None = None
         for attempt in range(1, attempts + 1):
             try:
-                async with httpx.AsyncClient(timeout=self.settings.request_timeout_seconds) as client:
-                    await adapter.ensure_session(client)
-                    payload = await adapter.send(client, request_spec)
+                await adapter.ensure_session(client)
+                payload = await adapter.send(client, request_spec)
                 return adapter.parse_response(payload, resolved_legs)
             except httpx.TimeoutException as exc:
                 last_error = AppError(
@@ -224,7 +235,7 @@ class PricingService:
                 JOIN events e ON e.event_id = m.event_id
                 JOIN selection_bookmaker_meta sbm ON sbm.selection_id = s.selection_id
                 JOIN bookmakers b ON b.bookmaker_id = sbm.bookmaker_id
-                JOIN current_outcome_prices_v cop
+                JOIN serving_selection_data cop
                   ON cop.selection_id = s.selection_id AND cop.bookmaker_id = sbm.bookmaker_id
                 WHERE s.selection_id IN ({placeholders})
                   AND b.enabled = TRUE
@@ -347,7 +358,7 @@ class PricingService:
                 JOIN bookmakers b ON b.bookmaker_id = sbm.bookmaker_id
                 LEFT JOIN event_bookmaker_map ebm
                   ON ebm.event_id = m.event_id AND ebm.bookmaker_id = sbm.bookmaker_id
-                LEFT JOIN current_outcome_prices_v cop
+                LEFT JOIN serving_selection_data cop
                   ON cop.selection_id = s.selection_id AND cop.bookmaker_id = sbm.bookmaker_id
                 WHERE s.selection_id IN ({placeholders}) AND b.code = ?
                 """,

@@ -14,6 +14,7 @@ import com.jamesbrown.aflmobile.model.OddsQuery
 import com.jamesbrown.aflmobile.model.OddsSearchResult
 import com.jamesbrown.aflmobile.model.PlayerGameLogEntry
 import com.jamesbrown.aflmobile.model.PlayerStatFilterOptions
+import com.jamesbrown.aflmobile.model.PlayerStatBundle
 import com.jamesbrown.aflmobile.model.PlayerStatSummary
 import com.jamesbrown.aflmobile.model.PlayerSummary
 import com.jamesbrown.aflmobile.model.PropSearchResult
@@ -216,6 +217,42 @@ class BackendApiClient(
             add("margin_max" to marginMax.toString())
             add("minutes_minimum" to minutesMinimum.toString())
             lastGames?.let { add("last_games" to it.toString()) }
+            referenceLine?.let { add("reference_line" to it.toString()) }
+            lowerBound?.let { add("lower_bound" to it.toString()) }
+            upperBound?.let { add("upper_bound" to it.toString()) }
+        },
+    )
+
+    suspend fun getPlayerStatBundle(
+        playerId: Int,
+        stat: String,
+        seasons: List<String>,
+        oppositions: List<String>,
+        venues: List<String>,
+        weatherCategories: List<String>,
+        homeAway: List<String>,
+        marginMin: Int,
+        marginMax: Int,
+        lastGames: Int? = null,
+        minutesMinimum: Double = 0.0,
+        lineMode: String? = null,
+        referenceLine: Double? = null,
+        lowerBound: Double? = null,
+        upperBound: Double? = null,
+    ): PlayerStatBundle = get(
+        path = "players/$playerId/stats/bundle",
+        query = buildList {
+            add("stat" to stat)
+            seasons.forEach { add("seasons" to it) }
+            oppositions.forEach { add("oppositions" to it) }
+            venues.forEach { add("venues" to it) }
+            weatherCategories.forEach { add("weather_categories" to it) }
+            homeAway.forEach { add("home_away" to it) }
+            add("margin_min" to marginMin.toString())
+            add("margin_max" to marginMax.toString())
+            add("minutes_minimum" to minutesMinimum.toString())
+            lastGames?.let { add("last_games" to it.toString()) }
+            lineMode?.let { add("line_mode" to it) }
             referenceLine?.let { add("reference_line" to it.toString()) }
             lowerBound?.let { add("lower_bound" to it.toString()) }
             upperBound?.let { add("upper_bound" to it.toString()) }

@@ -114,6 +114,12 @@ data class PlayerStatSummary(
 )
 
 @Serializable
+data class PlayerStatBundle(
+    val history: List<PlayerGameLogEntry>,
+    val summary: PlayerStatSummary? = null,
+)
+
+@Serializable
 data class BookmakerSummary(
     val id: Int,
     val code: String,

@@ -273,6 +273,40 @@ FROM (
 ) metrics
 WHERE row_num = 1;
 
+CREATE TABLE IF NOT EXISTS serving_selection_data (
+  selection_id BIGINT NOT NULL,
+  bookmaker_id BIGINT NOT NULL,
+  decimal_price DOUBLE,
+  implied_prob DOUBLE,
+  margin DOUBLE,
+  observed_at TIMESTAMP,
+  edge_pct DOUBLE,
+  diff_2025 DOUBLE,
+  diff_last_10 DOUBLE,
+  home_away_diff DOUBLE,
+  win_loss_diff DOUBLE,
+  player_position TEXT,
+  matchup_difficulty TEXT,
+  over_matchup_difficulty TEXT,
+  under_matchup_difficulty TEXT,
+  dvp DOUBLE,
+  raw_dvp DOUBLE,
+  dvp_standard_error DOUBLE,
+  dvp_bootstrap_ci_low DOUBLE,
+  dvp_bootstrap_ci_high DOUBLE,
+  dvp_sample_count BIGINT,
+  dvp_match_count BIGINT,
+  dvp_observation_count BIGINT,
+  dvp_model_version TEXT,
+  dvp_generated_at TEXT,
+  PRIMARY KEY (selection_id, bookmaker_id)
+);
+
+CREATE TABLE IF NOT EXISTS serving_latest_player_team (
+  player_id BIGINT PRIMARY KEY,
+  player_team TEXT NOT NULL
+);
+
 INSERT INTO bookmakers (code, display_name)
 VALUES
   ('sportsbet', 'Sportsbet'),

@@ -3,13 +3,13 @@ from __future__ import annotations
 import csv
 import logging
 import math
-from dataclasses import dataclass
+from dataclasses import asdict, dataclass
 from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any, Callable, TypedDict
 
 from app.config import Settings, get_settings
-from app.db.duckdb import connection, fetch_value, initialize_database
+from app.db.duckdb import connection, fetch_value, initialize_database, refresh_serving_tables
 from app.utils.hashing import sha256_file, sha256_text, stable_json_dumps
 from app.utils.time import utc_now
 from ingest.manifest import MANIFEST, ManifestSpec
@@ -284,6 +284,7 @@ class Importer:
                             error_text=str(exc),
                         )
 
+                refresh_serving_tables(conn)
                 status = "completed_with_errors" if summary["error_count"] else "completed"
                 self._finish_import_run(conn, import_run_id, status, summary)
                 summary["import_run_id"] = import_run_id
@@ -782,7 +783,7 @@ class Importer:
         rows = self._read_rds_rows(path)
         rows_loaded = 0
         batch: list[PlayerGameLogRecord] = []
-        batch_size = 500
+        batch_size = 5_000
 
         for row in rows:
             record = self._build_player_game_log(row)
@@ -822,8 +823,67 @@ class Importer:
         )
 
     def _write_player_game_log_batch(self, *, conn: Any, batch: list[PlayerGameLogRecord]) -> int:
+        import pandas as pd
+
+        for player_name in {record.player_name for record in batch}:
+            self._upsert_player(conn, player_name)
+
+        rows: list[dict[str, Any]] = []
         for record in batch:
-            self._upsert_player_game_log(conn=conn, record=record)
+            row = asdict(record)
+            player_name = str(row.pop("player_name"))
+            row["player_id"] = self.player_ids[player_name]
+            rows.append(row)
+
+        relation_name = "_player_game_log_batch"
+        conn.register(relation_name, pd.DataFrame.from_records(rows))
+        try:
+            conn.execute(
+                f"""
+                INSERT INTO player_game_logs BY NAME
+                SELECT * FROM {relation_name}
+                ON CONFLICT (game_log_key) DO UPDATE SET
+                  player_id = excluded.player_id,
+                  source_player_id = excluded.source_player_id,
+                  match_name = excluded.match_name,
+                  season_name = excluded.season_name,
+                  start_time_utc = excluded.start_time_utc,
+                  round_label = excluded.round_label,
+                  venue = excluded.venue,
+                  weather_category = excluded.weather_category,
+                  weather_description = excluded.weather_description,
+                  home_team = excluded.home_team,
+                  away_team = excluded.away_team,
+                  player_team = excluded.player_team,
+                  opposition_team = excluded.opposition_team,
+                  home_away = excluded.home_away,
+                  margin = excluded.margin,
+                  tog_percentage = excluded.tog_percentage,
+                  fantasy_points = excluded.fantasy_points,
+                  goals = excluded.goals,
+                  behinds = excluded.behinds,
+                  disposals = excluded.disposals,
+                  kicks = excluded.kicks,
+                  handballs = excluded.handballs,
+                  marks = excluded.marks,
+                  tackles = excluded.tackles,
+                  hitouts = excluded.hitouts,
+                  frees_for = excluded.frees_for,
+                  frees_against = excluded.frees_against,
+                  total_clearances = excluded.total_clearances,
+                  metres_gained = excluded.metres_gained,
+                  goal_assists = excluded.goal_assists,
+                  cba_percentage = excluded.cba_percentage,
+                  cbas = excluded.cbas,
+                  kick_ins = excluded.kick_ins,
+                  kick_in_percentage = excluded.kick_in_percentage,
+                  kick_ins_play_on = excluded.kick_ins_play_on,
+                  kick_to_handball_ratio = excluded.kick_to_handball_ratio,
+                  hitout_win_percentage = excluded.hitout_win_percentage
+                """
+            )
+        finally:
+            conn.unregister(relation_name)
         return len(batch)
 
     def _build_player_game_log(self, row: dict[str, str]) -> PlayerGameLogRecord | None:
