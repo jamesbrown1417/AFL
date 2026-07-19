@@ -10,6 +10,7 @@ from pathlib import Path
 from app.config import get_settings
 from app.services.weather_service import WeatherService
 from ingest.import_csvs import run_import
+from ingest.incremental_import import run_incremental_import
 
 
 def _remove_if_exists(path: Path) -> None:
@@ -41,14 +42,14 @@ def main() -> None:
         "--reset",
         dest="reset",
         action="store_true",
-        default=True,
-        help="Delete the DuckDB file and rebuild from source artifacts before importing (default).",
+        default=False,
+        help="Delete the DuckDB file and run the legacy full rebuild (parity/fallback mode).",
     )
     parser.add_argument(
         "--no-reset",
         dest="reset",
         action="store_false",
-        help="Keep the existing DuckDB file and run an incremental import instead.",
+        help="Keep unchanged source partitions and replace only changed inputs (default).",
     )
     args = parser.parse_args()
 
@@ -58,10 +59,10 @@ def main() -> None:
     if not args.reset and settings.duckdb_path.exists():
         shutil.copy2(settings.duckdb_path, staged_path)
     staged_settings = settings.model_copy(update={"duckdb_path": staged_path})
-    summary = run_import(
-        staged_settings,
-        triggered_by="manual_full_reset" if args.reset else "manual",
-    )
+    if args.reset:
+        summary = run_import(staged_settings, triggered_by="manual_full_reset")
+    else:
+        summary = run_incremental_import(staged_settings, triggered_by="manual_incremental")
     if summary["status"] not in {"completed", "completed_with_errors"}:
         raise RuntimeError(f"Staged import did not complete: {summary['status']}")
     weather_summary = WeatherService(staged_settings).refresh_upcoming_forecasts()

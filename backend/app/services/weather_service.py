@@ -1,11 +1,15 @@
 from __future__ import annotations
 
 import logging
+import time
+from concurrent.futures import ThreadPoolExecutor, as_completed
+from dataclasses import asdict
 from dataclasses import dataclass
 from datetime import UTC, datetime, timedelta
 from typing import Any
 
 import httpx
+import pandas as pd  # type: ignore[import-untyped]
 
 from app.config import Settings
 from app.db.duckdb import connection, fetch_all
@@ -51,34 +55,81 @@ class WeatherService:
         if unresolved_venues:
             errors.extend(f"unmapped venue: {venue}" for venue in unresolved_venues)
 
+        fetched_rows_by_venue: dict[str, list[WeatherForecastRow]] = {}
+        failed_venues: dict[str, Exception] = {}
         with httpx.Client(timeout=self.settings.weather_request_timeout_seconds) as client:
-            for venue_name in resolved_venues:
+            with ThreadPoolExecutor(max_workers=min(2, len(resolved_venues) or 1)) as executor:
+                futures = {
+                    executor.submit(
+                        self._fetch_forecast_rows,
+                        client=client,
+                        venue=VENUE_COORDINATES[venue_name],
+                    ): venue_name
+                    for venue_name in resolved_venues
+                }
+                for future in as_completed(futures):
+                    venue_name = futures[future]
+                    try:
+                        fetched_rows_by_venue[venue_name] = future.result()
+                    except Exception as exc:  # pragma: no cover - defensive network handling
+                        failed_venues[venue_name] = exc
+
+            # Public forecast APIs may briefly rate-limit concurrent requests.
+            # Retry only failed venues sequentially before retaining the last good cache.
+            for venue_name, initial_error in failed_venues.items():
                 try:
-                    forecast_rows = self._fetch_forecast_rows(
+                    time.sleep(0.35)
+                    fetched_rows_by_venue[venue_name] = self._fetch_forecast_rows(
                         client=client,
                         venue=VENUE_COORDINATES[venue_name],
                     )
                 except Exception as exc:  # pragma: no cover - defensive network handling
                     LOGGER.exception("Failed to refresh weather for %s", venue_name)
-                    errors.append(f"{venue_name}: {exc}")
-                    continue
+                    errors.append(f"{venue_name}: {exc or initial_error}")
 
-                with connection(write=True, settings=self.settings) as conn:
+        if fetched_rows_by_venue:
+            all_rows = [
+                {
+                    **asdict(row),
+                    "fetched_at": fetched_at,
+                    "expires_at": expires_at,
+                }
+                for venue_name in sorted(fetched_rows_by_venue)
+                for row in fetched_rows_by_venue[venue_name]
+            ]
+            with connection(write=True, settings=self.settings) as conn:
+                for venue_name in fetched_rows_by_venue:
                     self._replace_venue_window(
                         conn=conn,
                         venue_name=venue_name,
                         window_start=window_start,
                         window_end=window_end,
                     )
-                    for row in forecast_rows:
-                        self._upsert_forecast_row(
-                            conn=conn,
-                            row=row,
-                            fetched_at=fetched_at,
-                            expires_at=expires_at,
+                if all_rows:
+                    relation_name = "_weather_forecast_batch"
+                    conn.register(relation_name, pd.DataFrame.from_records(all_rows))
+                    try:
+                        conn.execute(
+                            f"""
+                            INSERT INTO weather_forecasts BY NAME
+                            SELECT * FROM {relation_name}
+                            ON CONFLICT (venue, forecast_hour_utc) DO UPDATE SET
+                              temperature_c = EXCLUDED.temperature_c,
+                              wind_kph = EXCLUDED.wind_kph,
+                              precipitation_probability = EXCLUDED.precipitation_probability,
+                              precipitation_mm = EXCLUDED.precipitation_mm,
+                              weather_code = EXCLUDED.weather_code,
+                              weather_label = EXCLUDED.weather_label,
+                              weather_icon_code = EXCLUDED.weather_icon_code,
+                              fetched_at = EXCLUDED.fetched_at,
+                              expires_at = EXCLUDED.expires_at
+                            """
                         )
-                    self._cleanup_expired_rows(conn=conn, cutoff=fetched_at - timedelta(days=1))
+                    finally:
+                        conn.unregister(relation_name)
+                self._cleanup_expired_rows(conn=conn, cutoff=fetched_at - timedelta(days=1))
 
+            for venue_name, forecast_rows in fetched_rows_by_venue.items():
                 refreshed_venues += 1
                 forecast_rows_written += len(forecast_rows)
 

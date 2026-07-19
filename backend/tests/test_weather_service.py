@@ -1,9 +1,13 @@
 from __future__ import annotations
 
-from datetime import timedelta
+from datetime import datetime, timedelta
 
-from app.db.duckdb import connection, fetch_one
-from app.services.weather_service import interpret_weather_code
+from app.db.duckdb import connection, fetch_one, fetch_value
+from app.services.weather_service import (
+    WeatherForecastRow,
+    WeatherService,
+    interpret_weather_code,
+)
 from app.utils.time import utc_now
 
 
@@ -102,3 +106,52 @@ def test_odds_weather_attaches_when_cache_row_exists(client, imported_settings) 
     assert weather["precip_mm"] == 0.8
     assert weather["label"] == "Rain"
     assert weather["icon_code"] == "rain"
+
+
+def test_weather_refresh_bulk_writes_fetched_venues(
+    imported_settings, monkeypatch
+) -> None:
+    forecast_hour = datetime(2026, 7, 19, 5)
+    service = WeatherService(imported_settings)
+    monkeypatch.setattr(
+        service,
+        "_load_upcoming_venues",
+        lambda: ["Adelaide Oval", "Marvel Stadium"],
+    )
+
+    def fake_fetch(*, client, venue):
+        del client
+        return [
+            WeatherForecastRow(
+                venue=venue.venue_name,
+                forecast_hour_utc=forecast_hour,
+                temperature_c=19.0,
+                wind_kph=12.0,
+                precipitation_probability=5.0,
+                precipitation_mm=0.0,
+                weather_code=1,
+                weather_label="Partly cloudy",
+                weather_icon_code="partly_cloudy",
+            )
+        ]
+
+    monkeypatch.setattr(service, "_fetch_forecast_rows", fake_fetch)
+    summary = service.refresh_upcoming_forecasts()
+
+    assert summary["status"] == "completed"
+    assert summary["venues_refreshed"] == 2
+    assert summary["forecast_rows_written"] == 2
+    with connection(settings=imported_settings) as conn:
+        assert (
+            fetch_value(
+                conn,
+                """
+                SELECT COUNT(*)
+                FROM weather_forecasts
+                WHERE venue IN ('Adelaide Oval', 'Marvel Stadium')
+                  AND forecast_hour_utc = ?
+                """,
+                [forecast_hour],
+            )
+            == 2
+        )

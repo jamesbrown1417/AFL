@@ -10,6 +10,141 @@ CREATE SEQUENCE IF NOT EXISTS selections_seq START 1;
 CREATE SEQUENCE IF NOT EXISTS outcome_prices_seq START 1;
 CREATE SEQUENCE IF NOT EXISTS selection_metrics_seq START 1;
 
+CREATE TABLE IF NOT EXISTS source_artifacts (
+  source_path TEXT PRIMARY KEY,
+  file_kind TEXT NOT NULL,
+  content_sha256 TEXT NOT NULL,
+  dependency_fingerprint TEXT NOT NULL,
+  importer_version TEXT NOT NULL,
+  imported_file_id BIGINT,
+  rows_read INTEGER NOT NULL DEFAULT 0,
+  rows_loaded INTEGER NOT NULL DEFAULT 0,
+  updated_at TIMESTAMP NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS normalized_fixture_sources (
+  source_path TEXT NOT NULL,
+  source_row_number BIGINT NOT NULL,
+  event_key TEXT NOT NULL,
+  match_name TEXT NOT NULL,
+  home_team_name TEXT NOT NULL,
+  away_team_name TEXT NOT NULL,
+  start_time_utc TIMESTAMP,
+  round_label TEXT,
+  venue TEXT,
+  event_status TEXT NOT NULL,
+  PRIMARY KEY (source_path, source_row_number)
+);
+
+CREATE TABLE IF NOT EXISTS normalized_odds_sources (
+  source_path TEXT NOT NULL,
+  source_row_number BIGINT NOT NULL,
+  bookmaker_code TEXT NOT NULL,
+  file_kind TEXT NOT NULL,
+  event_key TEXT NOT NULL,
+  match_name TEXT NOT NULL,
+  home_team_name TEXT NOT NULL,
+  away_team_name TEXT NOT NULL,
+  start_time_utc TIMESTAMP,
+  round_label TEXT,
+  venue TEXT,
+  event_status TEXT NOT NULL,
+  external_event_id TEXT,
+  external_competition_id TEXT,
+  event_payload_meta_json JSON NOT NULL,
+  market_key TEXT NOT NULL,
+  market_type_code TEXT NOT NULL,
+  market_name_raw TEXT NOT NULL,
+  player_name TEXT,
+  line_value DOUBLE,
+  stat_side_scope TEXT NOT NULL,
+  selection_key TEXT NOT NULL,
+  selection_type TEXT NOT NULL,
+  selection_label TEXT NOT NULL,
+  sort_order INTEGER NOT NULL,
+  external_market_id TEXT,
+  external_selection_id TEXT,
+  selection_payload_meta_json JSON NOT NULL,
+  sgm_eligible BOOLEAN NOT NULL,
+  decimal_price DOUBLE NOT NULL,
+  implied_prob DOUBLE,
+  margin DOUBLE,
+  PRIMARY KEY (source_path, source_row_number)
+);
+
+CREATE TABLE IF NOT EXISTS normalized_metric_sources (
+  source_path TEXT NOT NULL,
+  source_row_number BIGINT NOT NULL,
+  bookmaker_code TEXT NOT NULL,
+  selection_key TEXT NOT NULL,
+  prob_2025 DOUBLE,
+  prob_last_10 DOUBLE,
+  diff_2025 DOUBLE,
+  diff_last_10 DOUBLE,
+  home_away_diff DOUBLE,
+  win_loss_diff DOUBLE,
+  variation DOUBLE,
+  player_position TEXT,
+  matchup_difficulty TEXT,
+  over_matchup_difficulty TEXT,
+  under_matchup_difficulty TEXT,
+  dvp DOUBLE,
+  raw_dvp DOUBLE,
+  dvp_standard_error DOUBLE,
+  dvp_bootstrap_ci_low DOUBLE,
+  dvp_bootstrap_ci_high DOUBLE,
+  dvp_sample_count INTEGER,
+  dvp_match_count INTEGER,
+  dvp_observation_count INTEGER,
+  dvp_model_version TEXT,
+  dvp_generated_at TEXT,
+  PRIMARY KEY (source_path, source_row_number)
+);
+
+CREATE TABLE IF NOT EXISTS normalized_game_log_sources (
+  source_path TEXT NOT NULL,
+  source_row_number BIGINT NOT NULL,
+  game_log_key TEXT NOT NULL,
+  player_name TEXT NOT NULL,
+  source_player_id TEXT,
+  match_name TEXT NOT NULL,
+  season_name TEXT NOT NULL,
+  start_time_utc TIMESTAMP NOT NULL,
+  round_label TEXT,
+  venue TEXT,
+  weather_category TEXT,
+  weather_description TEXT,
+  home_team TEXT,
+  away_team TEXT,
+  player_team TEXT,
+  opposition_team TEXT,
+  home_away TEXT NOT NULL,
+  margin INTEGER,
+  tog_percentage DOUBLE,
+  fantasy_points DOUBLE,
+  goals DOUBLE,
+  behinds DOUBLE,
+  disposals DOUBLE,
+  kicks DOUBLE,
+  handballs DOUBLE,
+  marks DOUBLE,
+  tackles DOUBLE,
+  hitouts DOUBLE,
+  frees_for DOUBLE,
+  frees_against DOUBLE,
+  total_clearances DOUBLE,
+  metres_gained DOUBLE,
+  goal_assists DOUBLE,
+  cba_percentage DOUBLE,
+  cbas DOUBLE,
+  kick_ins DOUBLE,
+  kick_in_percentage DOUBLE,
+  kick_ins_play_on DOUBLE,
+  kick_to_handball_ratio DOUBLE,
+  hitout_win_percentage DOUBLE,
+  PRIMARY KEY (source_path, source_row_number)
+);
+
 CREATE TABLE IF NOT EXISTS import_runs (
   import_run_id BIGINT PRIMARY KEY DEFAULT nextval('import_runs_seq'),
   started_at TIMESTAMP NOT NULL,
@@ -180,6 +315,7 @@ CREATE TABLE IF NOT EXISTS selection_metrics (
 );
 
 ALTER TABLE selection_metrics ADD COLUMN IF NOT EXISTS bookmaker_id BIGINT;
+ALTER TABLE selection_metrics ADD COLUMN IF NOT EXISTS source_file_id BIGINT;
 
 CREATE TABLE IF NOT EXISTS weather_forecasts (
   venue TEXT NOT NULL,

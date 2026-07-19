@@ -13,10 +13,13 @@ FastAPI + DuckDB backend for querying locally scraped AFL odds data and requesti
 
 The backend reads scraper output from the existing `Data/` directory and writes its own state into `runtime/`.
 
-One-off imports are built and parity-checked in a staging DuckDB file, then
+One-off imports use source hashes and dependency fingerprints to replace only
+changed source partitions. They are built in a staging DuckDB file and then
 atomically published. The previous database is retained as
 `afl.duckdb.previous`, so API reads continue against the last complete dataset
-while a refresh is running. Use `--no-reset` for an incremental staged import.
+while a refresh is running. `--reset` runs the legacy full rebuild as a
+fallback. To compare two builds exhaustively by natural key and value, run
+`python scripts/compare_import_parity.py BASELINE.duckdb CANDIDATE.duckdb`.
 
 ## launchd service
 

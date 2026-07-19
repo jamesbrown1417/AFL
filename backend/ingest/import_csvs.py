@@ -823,7 +823,7 @@ class Importer:
         )
 
     def _write_player_game_log_batch(self, *, conn: Any, batch: list[PlayerGameLogRecord]) -> int:
-        import pandas as pd
+        import pandas as pd  # type: ignore[import-untyped]
 
         for player_name in {record.player_name for record in batch}:
             self._upsert_player(conn, player_name)

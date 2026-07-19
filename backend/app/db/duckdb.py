@@ -43,13 +43,16 @@ def connection(
         conn.close()
 
 
-def initialize_database(settings: Settings | None = None) -> None:
+def initialize_database(
+    settings: Settings | None = None, *, refresh_read_models: bool = True
+) -> None:
     resolved_settings = settings or get_settings()
     schema_path = Path(__file__).with_name("schema.sql")
     schema_sql = schema_path.read_text(encoding="utf-8")
     with connection(write=True, settings=resolved_settings) as conn:
         conn.execute(schema_sql)
-        refresh_serving_tables(conn)
+        if refresh_read_models:
+            refresh_serving_tables(conn)
 
 
 def refresh_serving_tables(conn: duckdb.DuckDBPyConnection) -> None:
