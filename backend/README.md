@@ -13,6 +13,11 @@ FastAPI + DuckDB backend for querying locally scraped AFL odds data and requesti
 
 The backend reads scraper output from the existing `Data/` directory and writes its own state into `runtime/`.
 
+One-off imports are built and parity-checked in a staging DuckDB file, then
+atomically published. The previous database is retained as
+`afl.duckdb.previous`, so API reads continue against the last complete dataset
+while a refresh is running. Use `--no-reset` for an incremental staged import.
+
 ## launchd service
 
 Install the backend as a per-user LaunchAgent:

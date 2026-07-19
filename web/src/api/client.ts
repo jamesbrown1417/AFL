@@ -39,6 +39,8 @@ const defaultSettings: ClientSettings = {
   authToken: '',
 }
 
+const SGM_COMPARE_TIMEOUT_MS = 20_000
+
 function normalizedBaseUrl(baseUrl: string) {
   const trimmed = baseUrl.trim() || defaultSettings.apiBaseUrl
   return trimmed.endsWith('/') ? trimmed : `${trimmed}/`
@@ -66,7 +68,7 @@ function appendQuery(url: URL, query: Record<string, unknown>) {
 async function request<T>(
   settings: ClientSettings,
   path: string,
-  options: RequestInit & { query?: object } = {},
+  options: RequestInit & { query?: object; timeoutMs?: number } = {},
 ): Promise<T> {
   const base = normalizedBaseUrl(settings.apiBaseUrl)
   const url = new URL(path.replace(/^\/+/, ''), base.startsWith('http') ? base : window.location.origin + base)
@@ -77,22 +79,47 @@ async function request<T>(
   if (options.body) headers.set('Content-Type', 'application/json')
   if (settings.authToken.trim()) headers.set('Authorization', `Bearer ${settings.authToken.trim()}`)
 
-  const response = await fetch(url, { ...options, headers })
-  const text = await response.text()
-  if (!response.ok) {
-    let envelope: ApiErrorEnvelope | null
-    try {
-      envelope = text ? (JSON.parse(text) as ApiErrorEnvelope) : null
-    } catch {
-      envelope = null
+  const timeoutController = options.timeoutMs ? new AbortController() : null
+  const timeoutId = timeoutController
+    ? window.setTimeout(() => timeoutController.abort(), options.timeoutMs)
+    : null
+  const abortFromCaller = () => timeoutController?.abort(options.signal?.reason)
+  options.signal?.addEventListener('abort', abortFromCaller, { once: true })
+
+  try {
+    const response = await fetch(url, {
+      ...options,
+      headers,
+      signal: timeoutController?.signal ?? options.signal,
+    })
+    const text = await response.text()
+    if (!response.ok) {
+      let envelope: ApiErrorEnvelope | null
+      try {
+        envelope = text ? (JSON.parse(text) as ApiErrorEnvelope) : null
+      } catch {
+        envelope = null
+      }
+      throw new BackendError(
+        response.status,
+        envelope?.error?.message ?? `Backend request failed with ${response.status}.`,
+        envelope?.error?.code,
+      )
     }
-    throw new BackendError(
-      response.status,
-      envelope?.error?.message ?? `Backend request failed with ${response.status}.`,
-      envelope?.error?.code,
-    )
+    return text ? (JSON.parse(text) as T) : (undefined as T)
+  } catch (error) {
+    if (timeoutController?.signal.aborted && !options.signal?.aborted) {
+      throw new BackendError(
+        408,
+        'The bookmaker comparison took too long. Please try again.',
+        'comparison_timeout',
+      )
+    }
+    throw error
+  } finally {
+    if (timeoutId != null) window.clearTimeout(timeoutId)
+    options.signal?.removeEventListener('abort', abortFromCaller)
   }
-  return text ? (JSON.parse(text) as T) : (undefined as T)
 }
 
 export const api = {
@@ -131,6 +158,7 @@ export const api = {
     request<SgmCompareResponse>(settings, 'pricing/sgm/compare', {
       method: 'POST',
       body: JSON.stringify({ event_id: eventId, selection_ids: selectionIds, force_refresh: forceRefresh }),
+      timeoutMs: SGM_COMPARE_TIMEOUT_MS,
     }),
   compareCgm: (settings: ClientSettings, selectionIds: number[]) =>
     request<CgmCompareResponse>(settings, 'pricing/cgm', {

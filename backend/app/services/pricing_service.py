@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import asyncio
 import json
+import logging
 from datetime import timedelta
 from math import prod
 from typing import Any, cast
@@ -20,6 +21,9 @@ from app.models.api import CgmCompareRequest, RequestedLeg, SgmCompareRequest, S
 from app.utils.errors import AppError
 from app.utils.hashing import sha256_text, stable_json_dumps
 from app.utils.time import utc_now
+
+
+LOGGER = logging.getLogger(__name__)
 
 
 class PricingService:
@@ -44,6 +48,8 @@ class PricingService:
         self,
         request: SgmQuoteRequest,
         client: httpx.AsyncClient,
+        *,
+        retry_attempts: int | None = None,
     ) -> dict[str, Any]:
         adapter = self.adapters.get(request.bookmaker)
         if adapter is None:
@@ -66,6 +72,7 @@ class PricingService:
             request_spec=request_spec,
             resolved_legs=resolved_legs,
             client=client,
+            attempts_override=retry_attempts,
         )
         response = self._store_quote(
             adapter=adapter,
@@ -91,12 +98,29 @@ class PricingService:
         async with httpx.AsyncClient(timeout=self.settings.request_timeout_seconds) as client:
             outcomes = await asyncio.gather(
                 *(
-                    self._quote_sgm_with_client(comparison_request, client)
+                    self._quote_sgm_for_compare(comparison_request, client)
                     for comparison_request in comparison_requests
                 ),
                 return_exceptions=True,
             )
-        results = [outcome for outcome in outcomes if isinstance(outcome, dict)]
+        results: list[dict[str, Any]] = []
+        for comparison_request, outcome in zip(comparison_requests, outcomes, strict=True):
+            if isinstance(outcome, dict):
+                results.append(outcome)
+                continue
+            if isinstance(outcome, AppError):
+                LOGGER.warning(
+                    "SGM comparison skipped bookmaker=%s code=%s message=%s",
+                    comparison_request.bookmaker,
+                    outcome.code,
+                    outcome.message,
+                )
+                continue
+            LOGGER.exception(
+                "SGM comparison failed unexpectedly for bookmaker=%s",
+                comparison_request.bookmaker,
+                exc_info=(type(outcome), outcome, outcome.__traceback__),
+            )
 
         results.sort(key=lambda result: float(result["quoted_price"]), reverse=True)
         return {
@@ -105,6 +129,29 @@ class PricingService:
             "results": results,
         }
 
+    async def _quote_sgm_for_compare(
+        self,
+        request: SgmQuoteRequest,
+        client: httpx.AsyncClient,
+    ) -> dict[str, Any]:
+        try:
+            async with asyncio.timeout(self.settings.sgm_compare_bookmaker_timeout_seconds):
+                return await self._quote_sgm_with_client(
+                    request,
+                    client,
+                    retry_attempts=1,
+                )
+        except TimeoutError as exc:
+            raise AppError(
+                504,
+                f"{request.bookmaker}_compare_timeout",
+                (
+                    f"{request.bookmaker.upper()} did not respond within "
+                    f"{self.settings.sgm_compare_bookmaker_timeout_seconds:g} seconds."
+                ),
+                retriable=True,
+            ) from exc
+
     async def _request_quote_with_retry(
         self,
         *,
@@ -112,8 +159,14 @@ class PricingService:
         request_spec: dict[str, Any],
         resolved_legs: list[ResolvedLeg],
         client: httpx.AsyncClient,
+        attempts_override: int | None = None,
     ) -> QuoteResult:
-        attempts = max(1, self.settings.sgm_retry_attempts)
+        attempts = max(
+            1,
+            self.settings.sgm_retry_attempts
+            if attempts_override is None
+            else attempts_override,
+        )
         last_error: AppError | None = None
         for attempt in range(1, attempts + 1):
             try:

@@ -48,6 +48,7 @@ class Settings(BaseSettings):
     weather_api_url: str = "https://api.open-meteo.com/v1/forecast"
     sgm_retry_attempts: int = 3
     sgm_retry_delay_seconds: float = 0.35
+    sgm_compare_bookmaker_timeout_seconds: float = 12.0
     sportsbet_quote_url: str = "https://www.sportsbet.com.au/apigw/multi-pricer/combinations/price"
     sportsbet_user_agent: str = (
         "Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) "

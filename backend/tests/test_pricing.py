@@ -1,7 +1,10 @@
 from __future__ import annotations
 
 import json
+import asyncio
 from collections import defaultdict
+
+import pytest
 
 from app.bookmakers.base import ResolvedLeg
 from app.bookmakers.pointsbet import PointsbetAdapter
@@ -9,6 +12,8 @@ from app.bookmakers.sportsbet import SportsbetAdapter
 from app.bookmakers.tab import TabAdapter
 from app.config import get_settings
 from app.db.duckdb import connection, fetch_all
+from app.models.api import SgmCompareRequest
+from app.services.pricing_service import PricingService
 
 
 def _selection_ids_by_event(imported_settings, bookmaker_code: str) -> dict[int, list[int]]:
@@ -215,3 +220,37 @@ def test_bet365_pricing_route_uses_formula(client, imported_settings) -> None:
     assert body["bookmaker"] == "bet365"
     expected = round(1 / (0.004 + (1 / body["unadjusted_price"])), 2)
     assert body["quoted_price"] == expected
+
+
+@pytest.mark.asyncio
+async def test_compare_returns_fast_results_when_one_bookmaker_times_out(
+    test_settings,
+    monkeypatch,
+) -> None:
+    test_settings.sgm_compare_bookmaker_timeout_seconds = 0.01
+    service = PricingService(test_settings)
+    service.adapters = {"fast": object(), "slow": object()}  # type: ignore[dict-item]
+    monkeypatch.setattr(service, "_validate_sgm_compare_request", lambda request: [1, 2])
+    slow_cancelled = asyncio.Event()
+    attempts_by_bookmaker: dict[str, int | None] = {}
+
+    async def fake_quote(request, client, *, retry_attempts=None):
+        del client
+        attempts_by_bookmaker[request.bookmaker] = retry_attempts
+        if request.bookmaker == "slow":
+            try:
+                await asyncio.sleep(1)
+            except asyncio.CancelledError:
+                slow_cancelled.set()
+                raise
+        return {"bookmaker": request.bookmaker, "quoted_price": 2.5}
+
+    monkeypatch.setattr(service, "_quote_sgm_with_client", fake_quote)
+
+    result = await service.compare_sgm(
+        SgmCompareRequest(event_id=10, selection_ids=[1, 2], force_refresh=True)
+    )
+
+    assert [row["bookmaker"] for row in result["results"]] == ["fast"]
+    assert slow_cancelled.is_set()
+    assert attempts_by_bookmaker == {"fast": 1, "slow": 1}
