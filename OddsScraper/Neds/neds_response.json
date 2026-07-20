@@ -1,123 +1,5 @@
 {
   "events": {
-    "37bdb449-73e2-408d-9512-dfee45518c1f": {
-      "id": "37bdb449-73e2-408d-9512-dfee45518c1f",
-      "name": "Essendon vs GWS Giants",
-      "url": "/sports/australian-rules/afl/essendon-vs-gws-giants/37bdb449-73e2-408d-9512-dfee45518c1f",
-      "advertisedStart": "2026-07-19T06:40:00.000Z",
-      "eventType": "MATCH",
-      "eventTypeId": "6bfa0efc-05df-4ae1-9b1e-152365290cfd",
-      "bettingStatus": "OPEN",
-      "status": "OPEN",
-      "phase": null,
-      "hasLiveVision": false,
-      "inPlay": false,
-      "sportCategory": {
-        "id": "23d497e6-8aab-4309-905b-9421f42c9bc5",
-        "name": "Australian Rules",
-        "category": "AUSTRALIAN_RULES",
-        "icon": "sports/australian-rules",
-        "slug": "australian-rules",
-        "url": "/sports/australian-rules",
-        "hasRegions": false,
-        "eventCount": 0
-      },
-      "competition": {
-        "id": "ccff2e9a-5347-41aa-902a-bb6b1886d817",
-        "name": "AFL",
-        "url": "/sports/australian-rules/afl",
-        "hasInPlayEvents": true,
-        "region": null
-      },
-      "teams": [
-        {
-          "id": "SportingTeam:b0d35c1a-3c80-4846-a6c6-452d6ea179b7",
-          "name": "Essendon",
-          "colour": "#C8102E",
-          "locale": "HOME",
-          "scores": [],
-          "scoresV2": null,
-          "icon": {
-            "web": "/images/neds/sprites/svg-sports-afl-icon.svg#essendon-bombers"
-          }
-        },
-        {
-          "id": "SportingTeam:cdd639ca-3a27-483d-b876-d98ed89ce042",
-          "name": "GWS Giants",
-          "colour": "#C1440E",
-          "locale": "AWAY",
-          "scores": [],
-          "scoresV2": null,
-          "icon": {
-            "web": "/images/neds/sprites/svg-sports-afl-icon.svg#gws-giants"
-          }
-        }
-      ],
-      "matchClock": {
-        "countDown": false,
-        "maxPeriodSeconds": 1200,
-        "paused": false,
-        "periodSeconds": 0
-      },
-      "marketCount": 266,
-      "markets": {
-        "nodes": [
-          {
-            "id": "SportingMarket:bd258bf1-7c22-435a-b555-fb5dd8d843d1",
-            "name": "Match Betting",
-            "marketTypeId": "be25c37a-71ff-47f6-a1e2-02a494eb5a4d",
-            "handicap": null,
-            "isPrimary": true,
-            "isSuspended": false,
-            "status": "OPEN",
-            "liveBettingAvailable": true,
-            "allowsCashOut": false,
-            "sameGameMultiAvailable": true,
-            "allowOddsBoostExtra": false,
-            "additionalProductTypeIds": null,
-            "entrantCount": 2,
-            "entrants": {
-              "nodes": [
-                {
-                  "id": "SportingEntrant:b72dac6c-8acb-40f2-86e8-95f6f39e9401",
-                  "name": "Essendon",
-                  "handicap": null,
-                  "isSuspended": false,
-                  "role": "HOME",
-                  "icon": {
-                    "web": "/images/neds/sprites/svg-sports-afl-icon.svg#essendon-bombers"
-                  },
-                  "price": {
-                    "id": "b72dac6c-8acb-40f2-86e8-95f6f39e9401:940b8704-e497-4a76-b390-00918ff7d282:",
-                    "odds": {
-                      "numerator": 11,
-                      "denominator": 2
-                    }
-                  }
-                },
-                {
-                  "id": "SportingEntrant:0f2a4677-2552-48f9-a659-0692b6327225",
-                  "name": "GWS Giants",
-                  "handicap": null,
-                  "isSuspended": false,
-                  "role": "AWAY",
-                  "icon": {
-                    "web": "/images/neds/sprites/svg-sports-afl-icon.svg#gws-giants"
-                  },
-                  "price": {
-                    "id": "0f2a4677-2552-48f9-a659-0692b6327225:940b8704-e497-4a76-b390-00918ff7d282:",
-                    "odds": {
-                      "numerator": 11,
-                      "denominator": 100
-                    }
-                  }
-                }
-              ]
-            }
-          }
-        ]
-      }
-    },
     "c2b99836-2d79-4911-a7f3-3ff8ec784fe0": {
       "id": "c2b99836-2d79-4911-a7f3-3ff8ec784fe0",
       "name": "Adelaide Crows vs Collingwood",
@@ -144,7 +26,7 @@
         "id": "ccff2e9a-5347-41aa-902a-bb6b1886d817",
         "name": "AFL",
         "url": "/sports/australian-rules/afl",
-        "hasInPlayEvents": true,
+        "hasInPlayEvents": false,
         "region": null
       },
       "teams": [
@@ -172,7 +54,7 @@
         }
       ],
       "matchClock": null,
-      "marketCount": 1,
+      "marketCount": 79,
       "markets": {
         "nodes": [
           {
@@ -183,9 +65,9 @@
             "isPrimary": true,
             "isSuspended": false,
             "status": "OPEN",
-            "liveBettingAvailable": false,
+            "liveBettingAvailable": true,
             "allowsCashOut": false,
-            "sameGameMultiAvailable": false,
+            "sameGameMultiAvailable": true,
             "allowOddsBoostExtra": false,
             "additionalProductTypeIds": null,
             "entrantCount": 2,
@@ -203,8 +85,8 @@
                   "price": {
                     "id": "79013e42-8bfd-4488-828f-dc16a3c26472:940b8704-e497-4a76-b390-00918ff7d282:",
                     "odds": {
-                      "numerator": 21,
-                      "denominator": 50
+                      "numerator": 11,
+                      "denominator": 25
                     }
                   }
                 },
@@ -220,8 +102,8 @@
                   "price": {
                     "id": "8e7b0aae-61c0-45cb-a484-651d0fc6aa3a:940b8704-e497-4a76-b390-00918ff7d282:",
                     "odds": {
-                      "numerator": 37,
-                      "denominator": 20
+                      "numerator": 9,
+                      "denominator": 5
                     }
                   }
                 }
@@ -257,7 +139,7 @@
         "id": "ccff2e9a-5347-41aa-902a-bb6b1886d817",
         "name": "AFL",
         "url": "/sports/australian-rules/afl",
-        "hasInPlayEvents": true,
+        "hasInPlayEvents": false,
         "region": null
       },
       "teams": [
@@ -285,7 +167,7 @@
         }
       ],
       "matchClock": null,
-      "marketCount": 1,
+      "marketCount": 79,
       "markets": {
         "nodes": [
           {
@@ -296,9 +178,9 @@
             "isPrimary": true,
             "isSuspended": false,
             "status": "OPEN",
-            "liveBettingAvailable": false,
+            "liveBettingAvailable": true,
             "allowsCashOut": false,
-            "sameGameMultiAvailable": false,
+            "sameGameMultiAvailable": true,
             "allowOddsBoostExtra": false,
             "additionalProductTypeIds": null,
             "entrantCount": 2,
@@ -316,8 +198,8 @@
                   "price": {
                     "id": "63d9fdef-a4ae-4513-8462-b0ec620ccab3:940b8704-e497-4a76-b390-00918ff7d282:",
                     "odds": {
-                      "numerator": 21,
-                      "denominator": 20
+                      "numerator": 41,
+                      "denominator": 50
                     }
                   }
                 },
@@ -333,8 +215,8 @@
                   "price": {
                     "id": "fa699ac5-d188-450d-9878-441a7c97842c:940b8704-e497-4a76-b390-00918ff7d282:",
                     "odds": {
-                      "numerator": 77,
-                      "denominator": 100
+                      "numerator": 1,
+                      "denominator": 1
                     }
                   }
                 }
@@ -370,7 +252,7 @@
         "id": "ccff2e9a-5347-41aa-902a-bb6b1886d817",
         "name": "AFL",
         "url": "/sports/australian-rules/afl",
-        "hasInPlayEvents": true,
+        "hasInPlayEvents": false,
         "region": null
       },
       "teams": [
@@ -398,7 +280,7 @@
         }
       ],
       "matchClock": null,
-      "marketCount": 1,
+      "marketCount": 79,
       "markets": {
         "nodes": [
           {
@@ -409,9 +291,9 @@
             "isPrimary": true,
             "isSuspended": false,
             "status": "OPEN",
-            "liveBettingAvailable": false,
+            "liveBettingAvailable": true,
             "allowsCashOut": false,
-            "sameGameMultiAvailable": false,
+            "sameGameMultiAvailable": true,
             "allowOddsBoostExtra": false,
             "additionalProductTypeIds": null,
             "entrantCount": 2,
@@ -429,8 +311,8 @@
                   "price": {
                     "id": "74acd271-7b35-4bac-89f4-4e2bc557812b:940b8704-e497-4a76-b390-00918ff7d282:",
                     "odds": {
-                      "numerator": 7,
-                      "denominator": 100
+                      "numerator": 2,
+                      "denominator": 25
                     }
                   }
                 },
@@ -446,8 +328,234 @@
                   "price": {
                     "id": "5750d02c-b07f-4250-abdc-437e22816733:940b8704-e497-4a76-b390-00918ff7d282:",
                     "odds": {
-                      "numerator": 15,
-                      "denominator": 2
+                      "numerator": 7,
+                      "denominator": 1
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "6f927c6c-066e-40d6-9a84-9e59e5015c47": {
+      "id": "6f927c6c-066e-40d6-9a84-9e59e5015c47",
+      "name": "Carlton vs Gold Coast Suns",
+      "url": "/sports/australian-rules/afl/carlton-vs-gold-coast-suns/6f927c6c-066e-40d6-9a84-9e59e5015c47",
+      "advertisedStart": "2026-07-25T03:05:00.000Z",
+      "eventType": "MATCH",
+      "eventTypeId": "6bfa0efc-05df-4ae1-9b1e-152365290cfd",
+      "bettingStatus": "OPEN",
+      "status": "OPEN",
+      "phase": null,
+      "hasLiveVision": false,
+      "inPlay": false,
+      "sportCategory": {
+        "id": "23d497e6-8aab-4309-905b-9421f42c9bc5",
+        "name": "Australian Rules",
+        "category": "AUSTRALIAN_RULES",
+        "icon": "sports/australian-rules",
+        "slug": "australian-rules",
+        "url": "/sports/australian-rules",
+        "hasRegions": false,
+        "eventCount": 0
+      },
+      "competition": {
+        "id": "ccff2e9a-5347-41aa-902a-bb6b1886d817",
+        "name": "AFL",
+        "url": "/sports/australian-rules/afl",
+        "hasInPlayEvents": false,
+        "region": null
+      },
+      "teams": [
+        {
+          "id": "SportingTeam:4e3043b6-7f36-450b-8a18-4f441ddd45a5",
+          "name": "Carlton",
+          "colour": "#0A1F44",
+          "locale": "HOME",
+          "scores": [],
+          "scoresV2": null,
+          "icon": {
+            "web": "/images/neds/sprites/svg-sports-afl-icon.svg#carlton-fc"
+          }
+        },
+        {
+          "id": "SportingTeam:4f98b824-1fb5-4d3e-a455-42db0764452a",
+          "name": "Gold Coast Suns",
+          "colour": "#A3122F",
+          "locale": "AWAY",
+          "scores": [],
+          "scoresV2": null,
+          "icon": {
+            "web": "/images/neds/sprites/svg-sports-afl-icon.svg#gold-coast-suns"
+          }
+        }
+      ],
+      "matchClock": null,
+      "marketCount": 79,
+      "markets": {
+        "nodes": [
+          {
+            "id": "SportingMarket:efc64773-d95f-44a8-895f-7ff1d5cc8c31",
+            "name": "Match Betting",
+            "marketTypeId": "be25c37a-71ff-47f6-a1e2-02a494eb5a4d",
+            "handicap": null,
+            "isPrimary": true,
+            "isSuspended": false,
+            "status": "OPEN",
+            "liveBettingAvailable": true,
+            "allowsCashOut": false,
+            "sameGameMultiAvailable": true,
+            "allowOddsBoostExtra": false,
+            "additionalProductTypeIds": null,
+            "entrantCount": 2,
+            "entrants": {
+              "nodes": [
+                {
+                  "id": "SportingEntrant:f0fc0e96-1b8b-4a13-a139-0aa05a987933",
+                  "name": "Carlton",
+                  "handicap": null,
+                  "isSuspended": false,
+                  "role": "HOME",
+                  "icon": {
+                    "web": "/images/neds/sprites/svg-sports-afl-icon.svg#carlton-fc"
+                  },
+                  "price": {
+                    "id": "f0fc0e96-1b8b-4a13-a139-0aa05a987933:940b8704-e497-4a76-b390-00918ff7d282:",
+                    "odds": {
+                      "numerator": 17,
+                      "denominator": 25
+                    }
+                  }
+                },
+                {
+                  "id": "SportingEntrant:f868490e-0d93-44ce-89f6-234df0293b1b",
+                  "name": "Gold Coast Suns",
+                  "handicap": null,
+                  "isSuspended": false,
+                  "role": "AWAY",
+                  "icon": {
+                    "web": "/images/neds/sprites/svg-sports-afl-icon.svg#gold-coast-suns"
+                  },
+                  "price": {
+                    "id": "f868490e-0d93-44ce-89f6-234df0293b1b:940b8704-e497-4a76-b390-00918ff7d282:",
+                    "odds": {
+                      "numerator": 23,
+                      "denominator": 20
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "a2f92110-63db-48ea-80e1-d10f4060a4d8": {
+      "id": "a2f92110-63db-48ea-80e1-d10f4060a4d8",
+      "name": "Hawthorn vs Essendon",
+      "url": "/sports/australian-rules/afl/hawthorn-vs-essendon/a2f92110-63db-48ea-80e1-d10f4060a4d8",
+      "advertisedStart": "2026-07-25T06:15:00.000Z",
+      "eventType": "MATCH",
+      "eventTypeId": "6bfa0efc-05df-4ae1-9b1e-152365290cfd",
+      "bettingStatus": "OPEN",
+      "status": "OPEN",
+      "phase": null,
+      "hasLiveVision": false,
+      "inPlay": false,
+      "sportCategory": {
+        "id": "23d497e6-8aab-4309-905b-9421f42c9bc5",
+        "name": "Australian Rules",
+        "category": "AUSTRALIAN_RULES",
+        "icon": "sports/australian-rules",
+        "slug": "australian-rules",
+        "url": "/sports/australian-rules",
+        "hasRegions": false,
+        "eventCount": 0
+      },
+      "competition": {
+        "id": "ccff2e9a-5347-41aa-902a-bb6b1886d817",
+        "name": "AFL",
+        "url": "/sports/australian-rules/afl",
+        "hasInPlayEvents": false,
+        "region": null
+      },
+      "teams": [
+        {
+          "id": "SportingTeam:6b01782f-fab7-4526-80e2-0a00b5287bf8",
+          "name": "Hawthorn",
+          "colour": "#4A2E0B",
+          "locale": "HOME",
+          "scores": [],
+          "scoresV2": null,
+          "icon": {
+            "web": "/images/neds/sprites/svg-sports-afl-icon.svg#hawthorn-hawks"
+          }
+        },
+        {
+          "id": "SportingTeam:7d8d6308-06ff-41f3-886a-056366ffde3e",
+          "name": "Essendon",
+          "colour": "#C8102E",
+          "locale": "AWAY",
+          "scores": [],
+          "scoresV2": null,
+          "icon": {
+            "web": "/images/neds/sprites/svg-sports-afl-icon.svg#essendon-bombers"
+          }
+        }
+      ],
+      "matchClock": null,
+      "marketCount": 79,
+      "markets": {
+        "nodes": [
+          {
+            "id": "SportingMarket:804d4fd8-8327-4688-b9f3-b4e87f2feb8d",
+            "name": "Match Betting",
+            "marketTypeId": "be25c37a-71ff-47f6-a1e2-02a494eb5a4d",
+            "handicap": null,
+            "isPrimary": true,
+            "isSuspended": false,
+            "status": "OPEN",
+            "liveBettingAvailable": true,
+            "allowsCashOut": false,
+            "sameGameMultiAvailable": true,
+            "allowOddsBoostExtra": false,
+            "additionalProductTypeIds": null,
+            "entrantCount": 2,
+            "entrants": {
+              "nodes": [
+                {
+                  "id": "SportingEntrant:e2020f95-0a1a-4a19-970d-89f85d2069d5",
+                  "name": "Hawthorn",
+                  "handicap": null,
+                  "isSuspended": false,
+                  "role": "HOME",
+                  "icon": {
+                    "web": "/images/neds/sprites/svg-sports-afl-icon.svg#hawthorn-hawks"
+                  },
+                  "price": {
+                    "id": "e2020f95-0a1a-4a19-970d-89f85d2069d5:940b8704-e497-4a76-b390-00918ff7d282:",
+                    "odds": {
+                      "numerator": 3,
+                      "denominator": 100
+                    }
+                  }
+                },
+                {
+                  "id": "SportingEntrant:2dca9420-1448-4090-b282-414188d96574",
+                  "name": "Essendon",
+                  "handicap": null,
+                  "isSuspended": false,
+                  "role": "AWAY",
+                  "icon": {
+                    "web": "/images/neds/sprites/svg-sports-afl-icon.svg#essendon-bombers"
+                  },
+                  "price": {
+                    "id": "2dca9420-1448-4090-b282-414188d96574:940b8704-e497-4a76-b390-00918ff7d282:",
+                    "odds": {
+                      "numerator": 11,
+                      "denominator": 1
                     }
                   }
                 }
@@ -483,7 +591,7 @@
         "id": "ccff2e9a-5347-41aa-902a-bb6b1886d817",
         "name": "AFL",
         "url": "/sports/australian-rules/afl",
-        "hasInPlayEvents": true,
+        "hasInPlayEvents": false,
         "region": null
       },
       "teams": [
@@ -511,7 +619,7 @@
         }
       ],
       "matchClock": null,
-      "marketCount": 1,
+      "marketCount": 79,
       "markets": {
         "nodes": [
           {
@@ -522,9 +630,9 @@
             "isPrimary": true,
             "isSuspended": false,
             "status": "OPEN",
-            "liveBettingAvailable": false,
+            "liveBettingAvailable": true,
             "allowsCashOut": false,
-            "sameGameMultiAvailable": false,
+            "sameGameMultiAvailable": true,
             "allowOddsBoostExtra": false,
             "additionalProductTypeIds": null,
             "entrantCount": 2,
@@ -542,7 +650,7 @@
                   "price": {
                     "id": "189c34b3-f80f-4b14-9b7b-512dca315ac7:940b8704-e497-4a76-b390-00918ff7d282:",
                     "odds": {
-                      "numerator": 21,
+                      "numerator": 27,
                       "denominator": 20
                     }
                   }
@@ -559,8 +667,121 @@
                   "price": {
                     "id": "f04d46aa-ea74-4360-af42-12831657d197:940b8704-e497-4a76-b390-00918ff7d282:",
                     "odds": {
-                      "numerator": 77,
-                      "denominator": 100
+                      "numerator": 3,
+                      "denominator": 5
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "39c08530-0bf2-4649-9e3c-d17664965206": {
+      "id": "39c08530-0bf2-4649-9e3c-d17664965206",
+      "name": "Western Bulldogs vs Richmond",
+      "url": "/sports/australian-rules/afl/western-bulldogs-vs-richmond/39c08530-0bf2-4649-9e3c-d17664965206",
+      "advertisedStart": "2026-07-25T09:40:00.000Z",
+      "eventType": "MATCH",
+      "eventTypeId": "6bfa0efc-05df-4ae1-9b1e-152365290cfd",
+      "bettingStatus": "OPEN",
+      "status": "OPEN",
+      "phase": null,
+      "hasLiveVision": false,
+      "inPlay": false,
+      "sportCategory": {
+        "id": "23d497e6-8aab-4309-905b-9421f42c9bc5",
+        "name": "Australian Rules",
+        "category": "AUSTRALIAN_RULES",
+        "icon": "sports/australian-rules",
+        "slug": "australian-rules",
+        "url": "/sports/australian-rules",
+        "hasRegions": false,
+        "eventCount": 0
+      },
+      "competition": {
+        "id": "ccff2e9a-5347-41aa-902a-bb6b1886d817",
+        "name": "AFL",
+        "url": "/sports/australian-rules/afl",
+        "hasInPlayEvents": false,
+        "region": null
+      },
+      "teams": [
+        {
+          "id": "SportingTeam:54d66545-d36d-4413-92ad-fb7f570bc087",
+          "name": "Western Bulldogs",
+          "colour": "#003A8F",
+          "locale": "HOME",
+          "scores": [],
+          "scoresV2": null,
+          "icon": {
+            "web": "/images/neds/sprites/svg-sports-afl-icon.svg#western-bulldogs"
+          }
+        },
+        {
+          "id": "SportingTeam:13266d7f-5eb2-4e4a-a743-694dc18062dc",
+          "name": "Richmond",
+          "colour": "#B38F00",
+          "locale": "AWAY",
+          "scores": [],
+          "scoresV2": null,
+          "icon": {
+            "web": "/images/neds/sprites/svg-sports-afl-icon.svg#richmond-tigers"
+          }
+        }
+      ],
+      "matchClock": null,
+      "marketCount": 79,
+      "markets": {
+        "nodes": [
+          {
+            "id": "SportingMarket:3dd3260d-7ee2-4a93-a020-51ae6ddf2906",
+            "name": "Match Betting",
+            "marketTypeId": "be25c37a-71ff-47f6-a1e2-02a494eb5a4d",
+            "handicap": null,
+            "isPrimary": true,
+            "isSuspended": false,
+            "status": "OPEN",
+            "liveBettingAvailable": true,
+            "allowsCashOut": false,
+            "sameGameMultiAvailable": true,
+            "allowOddsBoostExtra": false,
+            "additionalProductTypeIds": null,
+            "entrantCount": 2,
+            "entrants": {
+              "nodes": [
+                {
+                  "id": "SportingEntrant:2e54c634-6232-4d1f-852c-a5e6ad845405",
+                  "name": "Western Bulldogs",
+                  "handicap": null,
+                  "isSuspended": false,
+                  "role": "HOME",
+                  "icon": {
+                    "web": "/images/neds/sprites/svg-sports-afl-icon.svg#western-bulldogs"
+                  },
+                  "price": {
+                    "id": "2e54c634-6232-4d1f-852c-a5e6ad845405:940b8704-e497-4a76-b390-00918ff7d282:",
+                    "odds": {
+                      "numerator": 1,
+                      "denominator": 10
+                    }
+                  }
+                },
+                {
+                  "id": "SportingEntrant:8c468a68-0e12-4416-bd21-789eed64465e",
+                  "name": "Richmond",
+                  "handicap": null,
+                  "isSuspended": false,
+                  "role": "AWAY",
+                  "icon": {
+                    "web": "/images/neds/sprites/svg-sports-afl-icon.svg#richmond-tigers"
+                  },
+                  "price": {
+                    "id": "8c468a68-0e12-4416-bd21-789eed64465e:940b8704-e497-4a76-b390-00918ff7d282:",
+                    "odds": {
+                      "numerator": 6,
+                      "denominator": 1
                     }
                   }
                 }
@@ -596,7 +817,7 @@
         "id": "ccff2e9a-5347-41aa-902a-bb6b1886d817",
         "name": "AFL",
         "url": "/sports/australian-rules/afl",
-        "hasInPlayEvents": true,
+        "hasInPlayEvents": false,
         "region": null
       },
       "teams": [
@@ -624,7 +845,7 @@
         }
       ],
       "matchClock": null,
-      "marketCount": 1,
+      "marketCount": 79,
       "markets": {
         "nodes": [
           {
@@ -635,9 +856,9 @@
             "isPrimary": true,
             "isSuspended": false,
             "status": "OPEN",
-            "liveBettingAvailable": false,
+            "liveBettingAvailable": true,
             "allowsCashOut": false,
-            "sameGameMultiAvailable": false,
+            "sameGameMultiAvailable": true,
             "allowOddsBoostExtra": false,
             "additionalProductTypeIds": null,
             "entrantCount": 2,
@@ -655,8 +876,8 @@
                   "price": {
                     "id": "d2d576fb-0ce0-4cfc-ab8c-43beea4be5ca:940b8704-e497-4a76-b390-00918ff7d282:",
                     "odds": {
-                      "numerator": 1,
-                      "denominator": 10
+                      "numerator": 11,
+                      "denominator": 100
                     }
                   }
                 },
@@ -672,8 +893,8 @@
                   "price": {
                     "id": "748cb835-ac70-478c-93b5-b15eb7e71661:940b8704-e497-4a76-b390-00918ff7d282:",
                     "odds": {
-                      "numerator": 57,
-                      "denominator": 10
+                      "numerator": 11,
+                      "denominator": 2
                     }
                   }
                 }
@@ -709,7 +930,7 @@
         "id": "ccff2e9a-5347-41aa-902a-bb6b1886d817",
         "name": "AFL",
         "url": "/sports/australian-rules/afl",
-        "hasInPlayEvents": true,
+        "hasInPlayEvents": false,
         "region": null
       },
       "teams": [
@@ -737,7 +958,7 @@
         }
       ],
       "matchClock": null,
-      "marketCount": 1,
+      "marketCount": 79,
       "markets": {
         "nodes": [
           {
@@ -748,9 +969,9 @@
             "isPrimary": true,
             "isSuspended": false,
             "status": "OPEN",
-            "liveBettingAvailable": false,
+            "liveBettingAvailable": true,
             "allowsCashOut": false,
-            "sameGameMultiAvailable": false,
+            "sameGameMultiAvailable": true,
             "allowOddsBoostExtra": false,
             "additionalProductTypeIds": null,
             "entrantCount": 2,
@@ -768,8 +989,8 @@
                   "price": {
                     "id": "9a8172bc-a113-4f91-bf61-9d3e79850a31:940b8704-e497-4a76-b390-00918ff7d282:",
                     "odds": {
-                      "numerator": 8,
-                      "denominator": 5
+                      "numerator": 33,
+                      "denominator": 20
                     }
                   }
                 },
@@ -785,8 +1006,8 @@
                   "price": {
                     "id": "61b1844a-3173-40d0-8c82-e47fae8173fb:940b8704-e497-4a76-b390-00918ff7d282:",
                     "odds": {
-                      "numerator": 1,
-                      "denominator": 2
+                      "numerator": 12,
+                      "denominator": 25
                     }
                   }
                 }
