@@ -1,0 +1,130 @@
+{
+  "entrants": {
+    "7e0263d5-cf4a-4cc6-a866-4674bb2e8271": {
+      "id": "7e0263d5-cf4a-4cc6-a866-4674bb2e8271",
+      "name": "Essendon",
+      "home_away": "HOME",
+      "visible": true,
+      "sort_order": 10,
+      "market_id": "0a9b8794-3fa2-49e8-929f-ad6a1d0d8618"
+    },
+    "810b70c9-7052-497f-86b7-e98d3bca7e3d": {
+      "id": "810b70c9-7052-497f-86b7-e98d3bca7e3d",
+      "name": "Adelaide Crows",
+      "home_away": "AWAY",
+      "visible": true,
+      "sort_order": 20,
+      "market_id": "0a9b8794-3fa2-49e8-929f-ad6a1d0d8618"
+    }
+  },
+  "event_participants": {
+    "3be09fec-9bcf-416b-9cef-6150113d57d2": {
+      "id": "3be09fec-9bcf-416b-9cef-6150113d57d2",
+      "event_id": "ab94a0d4-7e06-4a25-8e6d-23288e539a9a",
+      "name": "Adelaide Crows",
+      "home_away": "AWAY",
+      "colour": "#002F6C"
+    },
+    "4a048bd5-f673-4066-b9dd-586296d6f6b1": {
+      "id": "4a048bd5-f673-4066-b9dd-586296d6f6b1",
+      "event_id": "ab94a0d4-7e06-4a25-8e6d-23288e539a9a",
+      "name": "Essendon",
+      "home_away": "HOME",
+      "colour": "#C8102E"
+    }
+  },
+  "events": {
+    "ab94a0d4-7e06-4a25-8e6d-23288e539a9a": {
+      "id": "ab94a0d4-7e06-4a25-8e6d-23288e539a9a",
+      "name": "Essendon vs Adelaide Crows",
+      "event_type": {
+        "id": "6bfa0efc-05df-4ae1-9b1e-152365290cfd",
+        "name": "Match"
+      },
+      "match_status": "BettingOpen",
+      "advertised_start": "2026-08-02T06:40:00Z",
+      "actual_start": "2026-08-02T06:40:00Z",
+      "visible": true,
+      "slug": "essendon-vs-adelaide-crows",
+      "competition": {
+        "id": "ccff2e9a-5347-41aa-902a-bb6b1886d817",
+        "name": "AFL",
+        "sort_order": 1,
+        "region": "Australia"
+      },
+      "competition_id": "ccff2e9a-5347-41aa-902a-bb6b1886d817",
+      "market_type_group_ids": [
+        "29edb5e1-a717-4769-8bcd-2d43ec38d828"
+      ],
+      "market_type_group_markets": [
+        {
+          "market_type_group_id": "29edb5e1-a717-4769-8bcd-2d43ec38d828",
+          "market_ids": [
+            "0a9b8794-3fa2-49e8-929f-ad6a1d0d8618"
+          ]
+        }
+      ],
+      "market_count": 1,
+      "main_markets": [
+        "0a9b8794-3fa2-49e8-929f-ad6a1d0d8618"
+      ],
+      "market_ids": [
+        "0a9b8794-3fa2-49e8-929f-ad6a1d0d8618"
+      ],
+      "category_id": "23d497e6-8aab-4309-905b-9421f42c9bc5",
+      "round_id": "fdf39484-cde5-4eb4-a9a3-d99758a9d663",
+      "participant_ids": [
+        "3be09fec-9bcf-416b-9cef-6150113d57d2",
+        "4a048bd5-f673-4066-b9dd-586296d6f6b1"
+      ]
+    }
+  },
+  "market_type_groups": {
+    "29edb5e1-a717-4769-8bcd-2d43ec38d828": {
+      "id": "29edb5e1-a717-4769-8bcd-2d43ec38d828",
+      "category_id": "23d497e6-8aab-4309-905b-9421f42c9bc5",
+      "name": "Top Markets",
+      "priority": 352,
+      "type": "MARKET_TYPE_GROUP_TYPE_EVENT"
+    }
+  },
+  "markets": {
+    "0a9b8794-3fa2-49e8-929f-ad6a1d0d8618": {
+      "id": "0a9b8794-3fa2-49e8-929f-ad6a1d0d8618",
+      "event_id": "ab94a0d4-7e06-4a25-8e6d-23288e539a9a",
+      "market_type_id": "be25c37a-71ff-47f6-a1e2-02a494eb5a4d",
+      "market_status_id": "4bc8fe96-296b-4b4c-aea4-85c94f63b9c6",
+      "name": "Match Betting",
+      "advertised_start": {
+        "seconds": 1785652800
+      },
+      "actual_start": {
+        "seconds": 1785652800
+      },
+      "is_primary": true,
+      "visible": true,
+      "entrant_ids": [
+        "7e0263d5-cf4a-4cc6-a866-4674bb2e8271",
+        "810b70c9-7052-497f-86b7-e98d3bca7e3d"
+      ],
+      "num_winners": 1
+    }
+  },
+  "markets_allow_cashout": {
+    "0a9b8794-3fa2-49e8-929f-ad6a1d0d8618": true
+  },
+  "prices": {
+    "7e0263d5-cf4a-4cc6-a866-4674bb2e8271:940b8704-e497-4a76-b390-00918ff7d282:": {
+      "odds": {
+        "numerator": 6,
+        "denominator": 1
+      }
+    },
+    "810b70c9-7052-497f-86b7-e98d3bca7e3d:940b8704-e497-4a76-b390-00918ff7d282:": {
+      "odds": {
+        "numerator": 1,
+        "denominator": 10
+      }
+    }
+  }
+}
