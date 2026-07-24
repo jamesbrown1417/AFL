@@ -1,10 +1,10 @@
 {
   "events": {
-    "58177234-65ef-4062-8636-11368e718a60": {
-      "id": "58177234-65ef-4062-8636-11368e718a60",
-      "name": "AFL Round 20 Specials",
-      "url": "/sports/australian-rules/afl/afl-round-20-specials/58177234-65ef-4062-8636-11368e718a60",
-      "advertisedStart": "2026-07-23T09:29:00.000Z",
+    "2db201e8-a071-4955-8511-1d9e7180377b": {
+      "id": "2db201e8-a071-4955-8511-1d9e7180377b",
+      "name": "Friday AFL Specials - 24/07",
+      "url": "/sports/australian-rules/afl/friday-afl-specials-24-07/2db201e8-a071-4955-8511-1d9e7180377b",
+      "advertisedStart": "2026-07-24T09:39:00.000Z",
       "eventType": "MATCH",
       "eventTypeId": "6bfa0efc-05df-4ae1-9b1e-152365290cfd",
       "bettingStatus": "OPEN",
@@ -31,122 +31,9 @@
       },
       "teams": null,
       "matchClock": null,
-      "marketCount": 12,
+      "marketCount": 13,
       "markets": {
         "nodes": []
-      }
-    },
-    "c2b99836-2d79-4911-a7f3-3ff8ec784fe0": {
-      "id": "c2b99836-2d79-4911-a7f3-3ff8ec784fe0",
-      "name": "Adelaide Crows vs Collingwood",
-      "url": "/sports/australian-rules/afl/adelaide-crows-vs-collingwood/c2b99836-2d79-4911-a7f3-3ff8ec784fe0",
-      "advertisedStart": "2026-07-23T09:30:00.000Z",
-      "eventType": "MATCH",
-      "eventTypeId": "6bfa0efc-05df-4ae1-9b1e-152365290cfd",
-      "bettingStatus": "OPEN",
-      "status": "OPEN",
-      "phase": null,
-      "hasLiveVision": false,
-      "inPlay": false,
-      "sportCategory": {
-        "id": "23d497e6-8aab-4309-905b-9421f42c9bc5",
-        "name": "Australian Rules",
-        "category": "AUSTRALIAN_RULES",
-        "icon": "sports/australian-rules",
-        "slug": "australian-rules",
-        "url": "/sports/australian-rules",
-        "hasRegions": false,
-        "eventCount": 0
-      },
-      "competition": {
-        "id": "ccff2e9a-5347-41aa-902a-bb6b1886d817",
-        "name": "AFL",
-        "url": "/sports/australian-rules/afl",
-        "hasInPlayEvents": false,
-        "region": null
-      },
-      "teams": [
-        {
-          "id": "SportingTeam:15f2d01c-a117-4a15-aa1e-d7c538700058",
-          "name": "Adelaide Crows",
-          "colour": "#002F6C",
-          "locale": "HOME",
-          "scores": [],
-          "scoresV2": null,
-          "icon": {
-            "web": "/images/neds/sprites/svg-sports-afl-icon.svg#adelaide-crows"
-          }
-        },
-        {
-          "id": "SportingTeam:664bd2a2-a02c-44a0-b5fc-99cdda335e7a",
-          "name": "Collingwood",
-          "colour": "#111111",
-          "locale": "AWAY",
-          "scores": [],
-          "scoresV2": null,
-          "icon": {
-            "web": "/images/neds/sprites/svg-sports-afl-icon.svg#collingwood-magpies"
-          }
-        }
-      ],
-      "matchClock": null,
-      "marketCount": 278,
-      "markets": {
-        "nodes": [
-          {
-            "id": "SportingMarket:485a18f2-f673-441f-a3ba-7d3cf3ff1980",
-            "name": "Match Betting",
-            "marketTypeId": "be25c37a-71ff-47f6-a1e2-02a494eb5a4d",
-            "handicap": null,
-            "isPrimary": true,
-            "isSuspended": false,
-            "status": "OPEN",
-            "liveBettingAvailable": true,
-            "allowsCashOut": false,
-            "sameGameMultiAvailable": true,
-            "allowOddsBoostExtra": false,
-            "additionalProductTypeIds": null,
-            "entrantCount": 2,
-            "entrants": {
-              "nodes": [
-                {
-                  "id": "SportingEntrant:79013e42-8bfd-4488-828f-dc16a3c26472",
-                  "name": "Adelaide Crows",
-                  "handicap": null,
-                  "isSuspended": false,
-                  "role": "HOME",
-                  "icon": {
-                    "web": "/images/neds/sprites/svg-sports-afl-icon.svg#adelaide-crows"
-                  },
-                  "price": {
-                    "id": "79013e42-8bfd-4488-828f-dc16a3c26472:940b8704-e497-4a76-b390-00918ff7d282:",
-                    "odds": {
-                      "numerator": 9,
-                      "denominator": 25
-                    }
-                  }
-                },
-                {
-                  "id": "SportingEntrant:8e7b0aae-61c0-45cb-a484-651d0fc6aa3a",
-                  "name": "Collingwood",
-                  "handicap": null,
-                  "isSuspended": false,
-                  "role": "AWAY",
-                  "icon": {
-                    "web": "/images/neds/sprites/svg-sports-afl-icon.svg#collingwood-magpies"
-                  },
-                  "price": {
-                    "id": "8e7b0aae-61c0-45cb-a484-651d0fc6aa3a:940b8704-e497-4a76-b390-00918ff7d282:",
-                    "odds": {
-                      "numerator": 11,
-                      "denominator": 5
-                    }
-                  }
-                }
-              ]
-            }
-          }
-        ]
       }
     },
     "8c8a7ef9-451c-4157-b950-a5bbc0b30ac7": {
@@ -203,7 +90,7 @@
         }
       ],
       "matchClock": null,
-      "marketCount": 202,
+      "marketCount": 275,
       "markets": {
         "nodes": [
           {
@@ -234,8 +121,8 @@
                   "price": {
                     "id": "63d9fdef-a4ae-4513-8462-b0ec620ccab3:940b8704-e497-4a76-b390-00918ff7d282:",
                     "odds": {
-                      "numerator": 87,
-                      "denominator": 100
+                      "numerator": 17,
+                      "denominator": 20
                     }
                   }
                 },
@@ -251,8 +138,8 @@
                   "price": {
                     "id": "fa699ac5-d188-450d-9878-441a7c97842c:940b8704-e497-4a76-b390-00918ff7d282:",
                     "odds": {
-                      "numerator": 47,
-                      "denominator": 50
+                      "numerator": 24,
+                      "denominator": 25
                     }
                   }
                 }
@@ -316,7 +203,7 @@
         }
       ],
       "matchClock": null,
-      "marketCount": 202,
+      "marketCount": 276,
       "markets": {
         "nodes": [
           {
@@ -347,8 +234,8 @@
                   "price": {
                     "id": "74acd271-7b35-4bac-89f4-4e2bc557812b:940b8704-e497-4a76-b390-00918ff7d282:",
                     "odds": {
-                      "numerator": 7,
-                      "denominator": 100
+                      "numerator": 1,
+                      "denominator": 20
                     }
                   }
                 },
@@ -364,8 +251,8 @@
                   "price": {
                     "id": "5750d02c-b07f-4250-abdc-437e22816733:940b8704-e497-4a76-b390-00918ff7d282:",
                     "odds": {
-                      "numerator": 15,
-                      "denominator": 2
+                      "numerator": 9,
+                      "denominator": 1
                     }
                   }
                 }
@@ -429,7 +316,7 @@
         }
       ],
       "matchClock": null,
-      "marketCount": 138,
+      "marketCount": 264,
       "markets": {
         "nodes": [
           {
@@ -542,7 +429,7 @@
         }
       ],
       "matchClock": null,
-      "marketCount": 137,
+      "marketCount": 263,
       "markets": {
         "nodes": [
           {
@@ -655,7 +542,7 @@
         }
       ],
       "matchClock": null,
-      "marketCount": 138,
+      "marketCount": 256,
       "markets": {
         "nodes": [
           {
@@ -768,7 +655,7 @@
         }
       ],
       "matchClock": null,
-      "marketCount": 138,
+      "marketCount": 255,
       "markets": {
         "nodes": [
           {
@@ -881,7 +768,7 @@
         }
       ],
       "matchClock": null,
-      "marketCount": 139,
+      "marketCount": 203,
       "markets": {
         "nodes": [
           {
@@ -994,7 +881,7 @@
         }
       ],
       "matchClock": null,
-      "marketCount": 138,
+      "marketCount": 201,
       "markets": {
         "nodes": [
           {
@@ -1138,7 +1025,7 @@
                   "price": {
                     "id": "e468d16c-aa0f-4aa4-8b18-5011ff878024:940b8704-e497-4a76-b390-00918ff7d282:",
                     "odds": {
-                      "numerator": 11,
+                      "numerator": 9,
                       "denominator": 10
                     }
                   }
@@ -1155,8 +1042,8 @@
                   "price": {
                     "id": "a0959e56-527f-49f2-908e-93e31baa3ac1:940b8704-e497-4a76-b390-00918ff7d282:",
                     "odds": {
-                      "numerator": 73,
-                      "denominator": 100
+                      "numerator": 9,
+                      "denominator": 10
                     }
                   }
                 }
@@ -2042,7 +1929,7 @@
                   "price": {
                     "id": "7e0263d5-cf4a-4cc6-a866-4674bb2e8271:940b8704-e497-4a76-b390-00918ff7d282:",
                     "odds": {
-                      "numerator": 6,
+                      "numerator": 5,
                       "denominator": 1
                     }
                   }
@@ -2059,8 +1946,8 @@
                   "price": {
                     "id": "810b70c9-7052-497f-86b7-e98d3bca7e3d:940b8704-e497-4a76-b390-00918ff7d282:",
                     "odds": {
-                      "numerator": 1,
-                      "denominator": 10
+                      "numerator": 13,
+                      "denominator": 100
                     }
                   }
                 }
