@@ -12,6 +12,29 @@ player_names <- player_names |> select(player_full_name, team_name)
 # Function to fix team names
 source("Functions/fix_team_names.R")
 
+# This script only parses the HTML that AFL_bet365_update.sh captures. If that
+# capture has not run recently the cache still parses cleanly and we would rewrite
+# last round's odds under a fresh timestamp, so stop rather than publish stale data.
+bet365_html_max_age_hours <- 12
+
+stop_if_bet365_cache_stale <- function() {
+  cached <- list.files("Data/BET365_HTML", full.names = TRUE, pattern = "\\.txt$")
+  if (length(cached) == 0) {
+    stop("Bet365: no captured HTML in Data/BET365_HTML - run AFL_bet365_update.sh first.")
+  }
+
+  newest <- max(file.info(cached)$mtime)
+  age_hours <- as.numeric(difftime(Sys.time(), newest, units = "hours"))
+  if (age_hours > bet365_html_max_age_hours) {
+    stop(glue(
+      "Bet365: captured HTML is {round(age_hours)}h old (limit {bet365_html_max_age_hours}h). ",
+      "Run AFL_bet365_update.sh to refresh it - refusing to republish stale odds."
+    ))
+  }
+}
+
+stop_if_bet365_cache_stale()
+
 #===============================================================================
 # Use rvest to get main market information-------------------------------------#
 #===============================================================================

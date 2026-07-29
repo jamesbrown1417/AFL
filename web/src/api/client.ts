@@ -129,7 +129,9 @@ export const api = {
   arbs: (settings: ClientSettings, query: ArbQuery) =>
     request<ArbSearchResult[]>(settings, 'arbs', { query }),
   events: (settings: ClientSettings, bookmaker?: string | null, q?: string | null, limit = 50) =>
-    request<EventSummary[]>(settings, 'events', { query: { bookmaker, q, limit } }),
+    // Only fixtures that have not been played: a bookmaker whose feed has gone stale
+    // should read as "no matches" rather than quietly offering last round's games.
+    request<EventSummary[]>(settings, 'events', { query: { bookmaker, q, limit, upcoming: true } }),
   searchPlayers: (settings: ClientSettings, q: string, limit = 50) =>
     request<PlayerSummary[]>(settings, 'players/search', { query: { q, limit } }),
   searchStatPlayers: (settings: ClientSettings, q: string, limit = 50, filters?: PlayerStatsFilters) =>

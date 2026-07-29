@@ -20,6 +20,7 @@ def list_events(
     date_to: str | None = Query(default=None),
     q: str | None = Query(default=None),
     bookmaker: str | None = Query(default=None),
+    upcoming: bool = Query(default=False),
     limit: int = Query(default=50, ge=1, le=500),
     offset: int = Query(default=0, ge=0),
 ) -> list[EventSummary]:
@@ -28,6 +29,7 @@ def list_events(
         date_to=date_to,
         query=q,
         bookmaker=bookmaker,
+        upcoming=upcoming,
         limit=limit,
         offset=offset,
     )

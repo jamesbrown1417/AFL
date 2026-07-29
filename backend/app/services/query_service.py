@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import csv
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any
 
@@ -191,11 +191,18 @@ class QueryService:
         date_to: str | None,
         query: str | None,
         bookmaker: str | None,
+        upcoming: bool = False,
         limit: int,
         offset: int,
     ) -> list[dict[str, Any]]:
         conditions: list[str] = []
         params: list[Any] = []
+        if upcoming:
+            # Keep matches that are still live (a game runs roughly 2.5 hours) so a
+            # stale bookmaker feed surfaces as an empty list rather than as a list of
+            # fixtures that were played days ago.
+            conditions.append("e.start_time_utc IS NOT NULL AND e.start_time_utc >= ?")
+            params.append((utc_now() - timedelta(hours=3)).replace(tzinfo=None))
         if date_from:
             conditions.append("e.start_time_utc >= ?")
             params.append(date_from)

@@ -390,3 +390,31 @@ def test_player_stat_filters_narrow_venues(client) -> None:
     assert history_response.status_code == 200
     history_venues = {row["venue"] for row in history_response.json() if row["venue"] is not None}
     assert set(narrowed_venues) == history_venues
+
+
+def test_events_upcoming_excludes_played_fixtures(client) -> None:
+    """A bookmaker whose feed has gone stale must read as empty, not as old fixtures."""
+    from datetime import datetime, timedelta, timezone
+
+    cutoff = datetime.now(timezone.utc).replace(tzinfo=None) - timedelta(hours=3)
+
+    all_events = client.get("/api/v1/events", params={"limit": 500}).json()
+    upcoming_events = client.get(
+        "/api/v1/events", params={"limit": 500, "upcoming": "true"}
+    ).json()
+
+    assert len(upcoming_events) < len(all_events)
+    assert upcoming_events
+    for event in upcoming_events:
+        assert event["start_time"] is not None
+        assert datetime.fromisoformat(event["start_time"]) >= cutoff
+
+    upcoming_ids = {event["id"] for event in upcoming_events}
+    played = [
+        event
+        for event in all_events
+        if event["start_time"] is not None
+        and datetime.fromisoformat(event["start_time"]) < cutoff
+    ]
+    assert played
+    assert not upcoming_ids.intersection(event["id"] for event in played)

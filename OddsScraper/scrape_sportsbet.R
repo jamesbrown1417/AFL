@@ -6,7 +6,10 @@ library(jsonlite)
 library(glue)
 
 # URL of website
-sportsbet_url = "https://www.sportsbet.com.au/betting/australian-rules"
+# Use the AFL competition page rather than the australian-rules hub: the hub also
+# renders AFLW / promo cards that have no match link, which breaks the pairing of
+# match cards to match IDs.
+sportsbet_url = "https://www.sportsbet.com.au/betting/australian-rules/afl"
 
 # Player names file
 player_names <- read_rds("Data/2026_start_positions_and_prices.rds")
@@ -35,8 +38,58 @@ standardize_player_names <- function(player_name) {
 
 # Get sportsbet html
 sportsbet_html <-
-sportsbet_url |> 
+sportsbet_url |>
   read_html_live()
+
+# Sportsbet renames its hashed CSS classes periodically, so try each known variant.
+sportsbet_participant_selectors <- c(".participantText_fivg86r", ".participant_f1adow81")
+
+card_participants <- function(card) {
+  for (selector in sportsbet_participant_selectors) {
+    names <- card |> html_nodes(selector) |> html_text()
+    # The newer markup renders the home team as "Collingwood v ".
+    names <- names |> str_replace("\\s*v\\s*$", "") |> str_squish()
+    names <- names[names != ""]
+    if (length(names) >= 2) return(names)
+  }
+  character(0)
+}
+
+card_match_id <- function(card) {
+  href <-
+    card |>
+    html_nodes("a") |>
+    html_attr("href") |>
+    keep(~!is.na(.x) && str_detect(.x, "/australian-rules/afl/")) |>
+    head(1)
+
+  if (length(href) == 0) return(NA_real_)
+  as.numeric(str_extract(href, "\\d{4,10}$"))
+}
+
+# Pair each match card with its match ID in one pass. Cards without both a match
+# link and two participants (promo tiles, futures tiles) are dropped, which keeps
+# team names and match IDs aligned no matter what else Sportsbet renders.
+sportsbet_match_cards <- function() {
+  cards <- sportsbet_html |> html_nodes(".White_fqa53j6")
+
+  parsed <-
+    map(cards, function(card) {
+      names <- card_participants(card)
+      id <- card_match_id(card)
+      if (length(names) < 2 || is.na(id)) return(NULL)
+      tibble(home_team = names[1], away_team = names[2], match_id = id)
+    }) |>
+    compact()
+
+  if (length(parsed) == 0) {
+    stop("Sportsbet: no match cards parsed - the page markup has probably changed.")
+  }
+
+  parsed |>
+    bind_rows() |>
+    distinct(match_id, .keep_all = TRUE)
+}
 
 #===============================================================================
 # Use rvest to get main market information-------------------------------------#
@@ -46,23 +99,8 @@ main_markets_function <- function() {
 
 # Get data from main market page
 matches <-
-  sportsbet_html |> 
+  sportsbet_html |>
     html_nodes(".White_fqa53j6")
-    
-# Function to get team names
-get_team_names <- function(match) {
-    team_names <-
-        match |>
-        html_nodes(".participantText_fivg86r") |>
-        html_text()
-    
-    # Home team and Away Team
-    home_team <- team_names[1]
-    away_team <- team_names[2]
-    
-    # Output
-    tibble(home_team, away_team)
-}
 
 # Function to get odds
 get_odds <- function(match) {
@@ -93,9 +131,8 @@ get_start_time <- function(match) {
 
 # Map functions to each match and combine together
 all_main_market_data <-
-bind_cols(
-    map(matches, get_team_names) |> bind_rows()
-)
+    sportsbet_match_cards() |>
+    select(home_team, away_team)
 
 #===============================================================================
 # Head to Head markets---------------------------------------------------------#
@@ -131,45 +168,14 @@ bind_cols(
 
 player_props_function <- function() {
 
-# Function to get team names
-get_team_names <- function(match) {
-    team_names <-
-        match |>
-        html_nodes(".participantText_fivg86r") |>
-        html_text()
-
-    # Home team and Away Team
-    home_team <- team_names[1]
-    away_team <- team_names[2]
-
-    # Output
-    tibble(home_team, away_team)
-}
-
-
-# Get match links
-match_links <-
-  sportsbet_html |> 
-    html_nodes(".linkMultiMarket_fcmecz0") |>
-    html_attr("href")
-
-# Get match IDs from links
-match_ids <-
-match_links |>
-    str_extract("\\d{4,10}$") |>
-    as.numeric()
-
-# Get data from main market page
-matches <-
-  sportsbet_html |> 
-    html_nodes(".White_fqa53j6")
-
-# Get team names that correspond to each match link
+# Get team names paired with the match ID from the same card
 team_names <-
-    map_dfr(matches, get_team_names) |>
-    bind_cols("match_id" = match_ids) |> 
-  mutate(home_team = fix_team_names(home_team)) |>
-  mutate(away_team = fix_team_names(away_team))
+    sportsbet_match_cards() |>
+    mutate(home_team = fix_team_names(home_team)) |>
+    mutate(away_team = fix_team_names(away_team))
+
+# Get match IDs from the paired cards
+match_ids <- team_names$match_id
 
 # Match info links
 match_info_links <- glue("https://www.sportsbet.com.au/apigw/sportsbook-sports/Sportsbook/Sports/Events/{match_ids}/SportCard?displayWinnersPriceMkt=true&includeLiveMarketGroupings=true&includeCollection=true")

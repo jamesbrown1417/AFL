@@ -4,7 +4,7 @@ import { useVirtualizer } from '@tanstack/react-virtual'
 import { ArrowDown, ArrowUp, BarChart3, Check, Filter, LineChart, Search, Trash2, X } from 'lucide-react'
 import type { ClientSettings } from '../api/client'
 import type { BookmakerSummary, BuilderMode, CgmAgencyComparison, DraftLeg, EventSummary, MetricFilters, OddsSearchResult, SgmAgencyComparison, SortField } from '../api/types'
-import { useBuilderOdds, useCompareCgm, useCompareSgm, useSelectionAgencyPrices } from '../api/queries'
+import { useBuilderOdds, useCompareCgm, useCompareSgm, useEvents, useSelectionAgencyPrices } from '../api/queries'
 import { defaultMetricFilters, defaultPlayerFilters, useAppStore, useClientSettings } from '../store/useAppStore'
 import { allMarketCode, buildCandidateGroups, combinedBasePrice, defaultDescending, favorableMatchupDifficulties, isFavorableMatchupSet, lineWithSideLabel, marketTypeToStatCode, orderedMarketCodes, rawMatchupDifficulty, sortCandidateRows, toDraftLeg } from '../lib/builder'
 import { aflTeamCode, bookmakerLabel, formatDateTime, formatLine, formatPrice, formatShortDate, formatSigned, marketLabel, playerPositionTag, selectionTypeLabel, shortMatchLabel } from '../lib/formatters'
@@ -13,7 +13,7 @@ import { AdaptiveRail, Button, Chip, ConfirmDialog, EmptyState, ErrorBanner, Fie
 export function BuilderWorkspace({
   mode,
   bookmakers,
-  events,
+  events: defaultEvents,
 }: {
   mode: BuilderMode
   bookmakers: BookmakerSummary[]
@@ -61,6 +61,13 @@ export function BuilderWorkspace({
   const [draftMetricFilters, setDraftMetricFilters] = useState<MetricFilters>(defaultMetricFilters)
   const normalizedMetricFilters = useMemo(() => normalizeMetricFilters(metricFilters), [metricFilters])
   const activeMetricFilterCount = useMemo(() => countActiveMetricFilters(normalizedMetricFilters), [normalizedMetricFilters])
+
+  // The match list has to follow the agency picked inside the builder, not the app-wide
+  // default: otherwise switching agency leaves you choosing matches the agency has no odds for.
+  // When the agency matches the app default this shares App's cache entry, so it costs nothing.
+  const builderEventsQuery = useEvents(settings, effectiveBookmaker)
+  const events = builderEventsQuery.data ?? (effectiveBookmaker === selectedDefault ? defaultEvents : [])
+  const eventsLoading = builderEventsQuery.isPending
 
   const legs = mode === 'sgm' ? sgmLegs : cgmLegs
   const selectedSelectionIds = useMemo(() => new Set(legs.map((leg) => leg.selection_id)), [legs])
@@ -396,6 +403,9 @@ export function BuilderWorkspace({
         </Panel>
 
         {candidateQuery.error ? <ErrorBanner message={candidateQuery.error instanceof Error ? candidateQuery.error.message : 'Failed to load builder legs.'} /> : null}
+        {!eventsLoading && events.length === 0 ? (
+          <ErrorBanner message={`${bookmakerLabel(effectiveBookmaker)} has no upcoming matches loaded — its odds feed is probably stale. Pick another agency or re-run the scrape.`} />
+        ) : null}
 
         <Panel className="candidate-panel">
           <div className="section-heading">

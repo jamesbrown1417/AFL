@@ -19,7 +19,9 @@ run_scraping <- function(script_name) {
   tryCatch({
     source(script_name)
   }, error = function(e) {
-    cat("Odds not released yet for:", script_name, "\n")
+    # Report the real error: silently labelling every failure "odds not released"
+    # hides a broken scraper until someone notices matches missing in the app.
+    cat("SCRAPER FAILED:", script_name, "-", conditionMessage(e), "\n")
   })
 }
 
