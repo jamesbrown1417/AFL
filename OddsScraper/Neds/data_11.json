@@ -1,0 +1,130 @@
+{
+  "entrants": {
+    "44a320b0-a139-4b85-aac1-018bb0c82ad0": {
+      "id": "44a320b0-a139-4b85-aac1-018bb0c82ad0",
+      "name": "Hawthorn",
+      "home_away": "AWAY",
+      "visible": true,
+      "sort_order": 20,
+      "market_id": "ffcab334-f221-44c8-aecd-c34d13f51a5e"
+    },
+    "ce264a1d-79c0-4027-a38b-8c8ece7f4880": {
+      "id": "ce264a1d-79c0-4027-a38b-8c8ece7f4880",
+      "name": "Brisbane Lions",
+      "home_away": "HOME",
+      "visible": true,
+      "sort_order": 10,
+      "market_id": "ffcab334-f221-44c8-aecd-c34d13f51a5e"
+    }
+  },
+  "event_participants": {
+    "2c36c2a7-caf5-4a5d-af26-2d9501445595": {
+      "id": "2c36c2a7-caf5-4a5d-af26-2d9501445595",
+      "event_id": "db26010c-a07e-42bc-b3d2-299e842a9e6c",
+      "name": "Hawthorn",
+      "home_away": "AWAY",
+      "colour": "#4A2E0B"
+    },
+    "fce3c1ef-a7a0-47bf-88ae-e59b1755238c": {
+      "id": "fce3c1ef-a7a0-47bf-88ae-e59b1755238c",
+      "event_id": "db26010c-a07e-42bc-b3d2-299e842a9e6c",
+      "name": "Brisbane Lions",
+      "home_away": "HOME",
+      "colour": "#7A0C2E"
+    }
+  },
+  "events": {
+    "db26010c-a07e-42bc-b3d2-299e842a9e6c": {
+      "id": "db26010c-a07e-42bc-b3d2-299e842a9e6c",
+      "name": "Brisbane Lions vs Hawthorn",
+      "event_type": {
+        "id": "6bfa0efc-05df-4ae1-9b1e-152365290cfd",
+        "name": "Match"
+      },
+      "match_status": "BettingOpen",
+      "advertised_start": "2026-08-07T09:40:00Z",
+      "actual_start": "2026-08-07T09:40:00Z",
+      "visible": true,
+      "slug": "brisbane-lions-vs-hawthorn",
+      "competition": {
+        "id": "ccff2e9a-5347-41aa-902a-bb6b1886d817",
+        "name": "AFL",
+        "sort_order": 1,
+        "region": "Australia"
+      },
+      "competition_id": "ccff2e9a-5347-41aa-902a-bb6b1886d817",
+      "market_type_group_ids": [
+        "29edb5e1-a717-4769-8bcd-2d43ec38d828"
+      ],
+      "market_type_group_markets": [
+        {
+          "market_type_group_id": "29edb5e1-a717-4769-8bcd-2d43ec38d828",
+          "market_ids": [
+            "ffcab334-f221-44c8-aecd-c34d13f51a5e"
+          ]
+        }
+      ],
+      "market_count": 1,
+      "main_markets": [
+        "ffcab334-f221-44c8-aecd-c34d13f51a5e"
+      ],
+      "market_ids": [
+        "ffcab334-f221-44c8-aecd-c34d13f51a5e"
+      ],
+      "category_id": "23d497e6-8aab-4309-905b-9421f42c9bc5",
+      "round_id": "2c229b74-604f-477c-be80-6ea4615b5445",
+      "participant_ids": [
+        "2c36c2a7-caf5-4a5d-af26-2d9501445595",
+        "fce3c1ef-a7a0-47bf-88ae-e59b1755238c"
+      ]
+    }
+  },
+  "market_type_groups": {
+    "29edb5e1-a717-4769-8bcd-2d43ec38d828": {
+      "id": "29edb5e1-a717-4769-8bcd-2d43ec38d828",
+      "category_id": "23d497e6-8aab-4309-905b-9421f42c9bc5",
+      "name": "Top Markets",
+      "priority": 352,
+      "type": "MARKET_TYPE_GROUP_TYPE_EVENT"
+    }
+  },
+  "markets": {
+    "ffcab334-f221-44c8-aecd-c34d13f51a5e": {
+      "id": "ffcab334-f221-44c8-aecd-c34d13f51a5e",
+      "event_id": "db26010c-a07e-42bc-b3d2-299e842a9e6c",
+      "market_type_id": "be25c37a-71ff-47f6-a1e2-02a494eb5a4d",
+      "market_status_id": "4bc8fe96-296b-4b4c-aea4-85c94f63b9c6",
+      "name": "Match Betting",
+      "advertised_start": {
+        "seconds": 1786095600
+      },
+      "actual_start": {
+        "seconds": 1786095600
+      },
+      "is_primary": true,
+      "visible": true,
+      "entrant_ids": [
+        "ce264a1d-79c0-4027-a38b-8c8ece7f4880",
+        "44a320b0-a139-4b85-aac1-018bb0c82ad0"
+      ],
+      "num_winners": 1
+    }
+  },
+  "markets_allow_cashout": {
+    "ffcab334-f221-44c8-aecd-c34d13f51a5e": true
+  },
+  "prices": {
+    "44a320b0-a139-4b85-aac1-018bb0c82ad0:940b8704-e497-4a76-b390-00918ff7d282:": {
+      "odds": {
+        "numerator": 3,
+        "denominator": 2
+      }
+    },
+    "ce264a1d-79c0-4027-a38b-8c8ece7f4880:940b8704-e497-4a76-b390-00918ff7d282:": {
+      "odds": {
+        "numerator": 13,
+        "denominator": 25
+      }
+    }
+  }
+}
