@@ -1,51 +1,51 @@
 {
   "entrants": {
-    "02f79fda-0179-4032-8b57-3b4601229149": {
-      "id": "02f79fda-0179-4032-8b57-3b4601229149",
-      "name": "Melbourne",
+    "802d40a8-e7a7-4aae-a172-04b34c58e629": {
+      "id": "802d40a8-e7a7-4aae-a172-04b34c58e629",
+      "name": "GWS Giants",
       "home_away": "HOME",
       "visible": true,
       "sort_order": 10,
-      "market_id": "8454b8f3-d9d8-46ea-93d9-bd1116436431"
+      "market_id": "2662b40f-bb2d-4f78-89e4-4d19c81e183a"
     },
-    "22e0d08f-6456-4255-afd1-ca60e8db349e": {
-      "id": "22e0d08f-6456-4255-afd1-ca60e8db349e",
-      "name": "Fremantle",
+    "888b01ed-a0dc-4b5f-b34c-081cb086c155": {
+      "id": "888b01ed-a0dc-4b5f-b34c-081cb086c155",
+      "name": "Gold Coast Suns",
       "home_away": "AWAY",
       "visible": true,
       "sort_order": 20,
-      "market_id": "8454b8f3-d9d8-46ea-93d9-bd1116436431"
+      "market_id": "2662b40f-bb2d-4f78-89e4-4d19c81e183a"
     }
   },
   "event_participants": {
-    "8f51a5ab-e193-45ff-82ae-01c06f23348b": {
-      "id": "8f51a5ab-e193-45ff-82ae-01c06f23348b",
-      "event_id": "3313716c-f03a-41a5-94aa-d9e58e4fe51f",
-      "name": "Fremantle",
+    "0a44e305-3f3b-45fc-bf0e-b442e1d57519": {
+      "id": "0a44e305-3f3b-45fc-bf0e-b442e1d57519",
+      "event_id": "a2d4d658-89b5-4473-b4a6-a8b3956110a6",
+      "name": "Gold Coast Suns",
       "home_away": "AWAY",
-      "colour": "#2E0F4F"
+      "colour": "#A3122F"
     },
-    "948b753c-36c0-420c-8435-11b5c799b176": {
-      "id": "948b753c-36c0-420c-8435-11b5c799b176",
-      "event_id": "3313716c-f03a-41a5-94aa-d9e58e4fe51f",
-      "name": "Melbourne",
+    "8d046080-117b-427d-9663-d49442abbd91": {
+      "id": "8d046080-117b-427d-9663-d49442abbd91",
+      "event_id": "a2d4d658-89b5-4473-b4a6-a8b3956110a6",
+      "name": "GWS Giants",
       "home_away": "HOME",
-      "colour": "#0A1F44"
+      "colour": "#C1440E"
     }
   },
   "events": {
-    "3313716c-f03a-41a5-94aa-d9e58e4fe51f": {
-      "id": "3313716c-f03a-41a5-94aa-d9e58e4fe51f",
-      "name": "Melbourne vs Fremantle",
+    "a2d4d658-89b5-4473-b4a6-a8b3956110a6": {
+      "id": "a2d4d658-89b5-4473-b4a6-a8b3956110a6",
+      "name": "GWS Giants vs Gold Coast Suns",
       "event_type": {
         "id": "6bfa0efc-05df-4ae1-9b1e-152365290cfd",
         "name": "Match"
       },
       "match_status": "BettingOpen",
-      "advertised_start": "2026-08-08T03:15:00Z",
-      "actual_start": "2026-08-08T03:15:00Z",
+      "advertised_start": "2026-08-09T03:10:00Z",
+      "actual_start": "2026-08-09T03:10:00Z",
       "visible": true,
-      "slug": "melbourne-vs-fremantle",
+      "slug": "gws-giants-vs-gold-coast-suns",
       "competition": {
         "id": "ccff2e9a-5347-41aa-902a-bb6b1886d817",
         "name": "AFL",
@@ -60,22 +60,22 @@
         {
           "market_type_group_id": "29edb5e1-a717-4769-8bcd-2d43ec38d828",
           "market_ids": [
-            "8454b8f3-d9d8-46ea-93d9-bd1116436431"
+            "2662b40f-bb2d-4f78-89e4-4d19c81e183a"
           ]
         }
       ],
       "market_count": 1,
       "main_markets": [
-        "8454b8f3-d9d8-46ea-93d9-bd1116436431"
+        "2662b40f-bb2d-4f78-89e4-4d19c81e183a"
       ],
       "market_ids": [
-        "8454b8f3-d9d8-46ea-93d9-bd1116436431"
+        "2662b40f-bb2d-4f78-89e4-4d19c81e183a"
       ],
       "category_id": "23d497e6-8aab-4309-905b-9421f42c9bc5",
       "round_id": "2c229b74-604f-477c-be80-6ea4615b5445",
       "participant_ids": [
-        "8f51a5ab-e193-45ff-82ae-01c06f23348b",
-        "948b753c-36c0-420c-8435-11b5c799b176"
+        "0a44e305-3f3b-45fc-bf0e-b442e1d57519",
+        "8d046080-117b-427d-9663-d49442abbd91"
       ]
     }
   },
@@ -89,41 +89,41 @@
     }
   },
   "markets": {
-    "8454b8f3-d9d8-46ea-93d9-bd1116436431": {
-      "id": "8454b8f3-d9d8-46ea-93d9-bd1116436431",
-      "event_id": "3313716c-f03a-41a5-94aa-d9e58e4fe51f",
+    "2662b40f-bb2d-4f78-89e4-4d19c81e183a": {
+      "id": "2662b40f-bb2d-4f78-89e4-4d19c81e183a",
+      "event_id": "a2d4d658-89b5-4473-b4a6-a8b3956110a6",
       "market_type_id": "be25c37a-71ff-47f6-a1e2-02a494eb5a4d",
       "market_status_id": "4bc8fe96-296b-4b4c-aea4-85c94f63b9c6",
       "name": "Match Betting",
       "advertised_start": {
-        "seconds": 1786158900
+        "seconds": 1786245000
       },
       "actual_start": {
-        "seconds": 1786158900
+        "seconds": 1786245000
       },
       "is_primary": true,
       "visible": true,
       "entrant_ids": [
-        "02f79fda-0179-4032-8b57-3b4601229149",
-        "22e0d08f-6456-4255-afd1-ca60e8db349e"
+        "802d40a8-e7a7-4aae-a172-04b34c58e629",
+        "888b01ed-a0dc-4b5f-b34c-081cb086c155"
       ],
       "num_winners": 1
     }
   },
   "markets_allow_cashout": {
-    "8454b8f3-d9d8-46ea-93d9-bd1116436431": true
+    "2662b40f-bb2d-4f78-89e4-4d19c81e183a": true
   },
   "prices": {
-    "02f79fda-0179-4032-8b57-3b4601229149:940b8704-e497-4a76-b390-00918ff7d282:": {
+    "802d40a8-e7a7-4aae-a172-04b34c58e629:940b8704-e497-4a76-b390-00918ff7d282:": {
       "odds": {
-        "numerator": 8,
-        "denominator": 5
+        "numerator": 11,
+        "denominator": 20
       }
     },
-    "22e0d08f-6456-4255-afd1-ca60e8db349e:940b8704-e497-4a76-b390-00918ff7d282:": {
+    "888b01ed-a0dc-4b5f-b34c-081cb086c155:940b8704-e497-4a76-b390-00918ff7d282:": {
       "odds": {
-        "numerator": 1,
-        "denominator": 2
+        "numerator": 29,
+        "denominator": 20
       }
     }
   }
