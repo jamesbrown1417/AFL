@@ -1,51 +1,51 @@
 {
   "entrants": {
-    "02f79fda-0179-4032-8b57-3b4601229149": {
-      "id": "02f79fda-0179-4032-8b57-3b4601229149",
-      "name": "Melbourne",
+    "6e53f1a9-a75f-49cc-863b-1ab07f98d25f": {
+      "id": "6e53f1a9-a75f-49cc-863b-1ab07f98d25f",
+      "name": "Sydney Swans",
       "home_away": "HOME",
       "visible": true,
       "sort_order": 10,
-      "market_id": "8454b8f3-d9d8-46ea-93d9-bd1116436431"
+      "market_id": "61b9e6d1-2aa8-4197-be52-784d26b25eb9"
     },
-    "22e0d08f-6456-4255-afd1-ca60e8db349e": {
-      "id": "22e0d08f-6456-4255-afd1-ca60e8db349e",
-      "name": "Fremantle",
+    "b2677552-ab9e-404c-8c73-2f4f70da599d": {
+      "id": "b2677552-ab9e-404c-8c73-2f4f70da599d",
+      "name": "Port Adelaide",
       "home_away": "AWAY",
       "visible": true,
       "sort_order": 20,
-      "market_id": "8454b8f3-d9d8-46ea-93d9-bd1116436431"
+      "market_id": "61b9e6d1-2aa8-4197-be52-784d26b25eb9"
     }
   },
   "event_participants": {
-    "8f51a5ab-e193-45ff-82ae-01c06f23348b": {
-      "id": "8f51a5ab-e193-45ff-82ae-01c06f23348b",
-      "event_id": "3313716c-f03a-41a5-94aa-d9e58e4fe51f",
-      "name": "Fremantle",
-      "home_away": "AWAY",
-      "colour": "#2E0F4F"
-    },
-    "948b753c-36c0-420c-8435-11b5c799b176": {
-      "id": "948b753c-36c0-420c-8435-11b5c799b176",
-      "event_id": "3313716c-f03a-41a5-94aa-d9e58e4fe51f",
-      "name": "Melbourne",
+    "b4399309-fa34-4821-ba63-d0947b20ea2c": {
+      "id": "b4399309-fa34-4821-ba63-d0947b20ea2c",
+      "event_id": "0ebd9e91-bcbd-403f-8899-a98d4bf16efd",
+      "name": "Sydney Swans",
       "home_away": "HOME",
-      "colour": "#0A1F44"
+      "colour": "#C8102E"
+    },
+    "e36b30f2-4888-4c9b-91a4-876b857579e2": {
+      "id": "e36b30f2-4888-4c9b-91a4-876b857579e2",
+      "event_id": "0ebd9e91-bcbd-403f-8899-a98d4bf16efd",
+      "name": "Port Adelaide",
+      "home_away": "AWAY",
+      "colour": "#008A8F"
     }
   },
   "events": {
-    "3313716c-f03a-41a5-94aa-d9e58e4fe51f": {
-      "id": "3313716c-f03a-41a5-94aa-d9e58e4fe51f",
-      "name": "Melbourne vs Fremantle",
+    "0ebd9e91-bcbd-403f-8899-a98d4bf16efd": {
+      "id": "0ebd9e91-bcbd-403f-8899-a98d4bf16efd",
+      "name": "Sydney Swans vs Port Adelaide",
       "event_type": {
         "id": "6bfa0efc-05df-4ae1-9b1e-152365290cfd",
         "name": "Match"
       },
       "match_status": "BettingOpen",
-      "advertised_start": "2026-08-08T03:15:00Z",
-      "actual_start": "2026-08-08T03:15:00Z",
+      "advertised_start": "2026-08-08T06:15:00Z",
+      "actual_start": "2026-08-08T06:15:00Z",
       "visible": true,
-      "slug": "melbourne-vs-fremantle",
+      "slug": "sydney-swans-vs-port-adelaide",
       "competition": {
         "id": "ccff2e9a-5347-41aa-902a-bb6b1886d817",
         "name": "AFL",
@@ -60,22 +60,22 @@
         {
           "market_type_group_id": "29edb5e1-a717-4769-8bcd-2d43ec38d828",
           "market_ids": [
-            "8454b8f3-d9d8-46ea-93d9-bd1116436431"
+            "61b9e6d1-2aa8-4197-be52-784d26b25eb9"
           ]
         }
       ],
       "market_count": 1,
       "main_markets": [
-        "8454b8f3-d9d8-46ea-93d9-bd1116436431"
+        "61b9e6d1-2aa8-4197-be52-784d26b25eb9"
       ],
       "market_ids": [
-        "8454b8f3-d9d8-46ea-93d9-bd1116436431"
+        "61b9e6d1-2aa8-4197-be52-784d26b25eb9"
       ],
       "category_id": "23d497e6-8aab-4309-905b-9421f42c9bc5",
       "round_id": "2c229b74-604f-477c-be80-6ea4615b5445",
       "participant_ids": [
-        "8f51a5ab-e193-45ff-82ae-01c06f23348b",
-        "948b753c-36c0-420c-8435-11b5c799b176"
+        "b4399309-fa34-4821-ba63-d0947b20ea2c",
+        "e36b30f2-4888-4c9b-91a4-876b857579e2"
       ]
     }
   },
@@ -89,41 +89,41 @@
     }
   },
   "markets": {
-    "8454b8f3-d9d8-46ea-93d9-bd1116436431": {
-      "id": "8454b8f3-d9d8-46ea-93d9-bd1116436431",
-      "event_id": "3313716c-f03a-41a5-94aa-d9e58e4fe51f",
+    "61b9e6d1-2aa8-4197-be52-784d26b25eb9": {
+      "id": "61b9e6d1-2aa8-4197-be52-784d26b25eb9",
+      "event_id": "0ebd9e91-bcbd-403f-8899-a98d4bf16efd",
       "market_type_id": "be25c37a-71ff-47f6-a1e2-02a494eb5a4d",
       "market_status_id": "4bc8fe96-296b-4b4c-aea4-85c94f63b9c6",
       "name": "Match Betting",
       "advertised_start": {
-        "seconds": 1786158900
+        "seconds": 1786169700
       },
       "actual_start": {
-        "seconds": 1786158900
+        "seconds": 1786169700
       },
       "is_primary": true,
       "visible": true,
       "entrant_ids": [
-        "02f79fda-0179-4032-8b57-3b4601229149",
-        "22e0d08f-6456-4255-afd1-ca60e8db349e"
+        "6e53f1a9-a75f-49cc-863b-1ab07f98d25f",
+        "b2677552-ab9e-404c-8c73-2f4f70da599d"
       ],
       "num_winners": 1
     }
   },
   "markets_allow_cashout": {
-    "8454b8f3-d9d8-46ea-93d9-bd1116436431": true
+    "61b9e6d1-2aa8-4197-be52-784d26b25eb9": true
   },
   "prices": {
-    "02f79fda-0179-4032-8b57-3b4601229149:940b8704-e497-4a76-b390-00918ff7d282:": {
+    "6e53f1a9-a75f-49cc-863b-1ab07f98d25f:940b8704-e497-4a76-b390-00918ff7d282:": {
       "odds": {
-        "numerator": 9,
-        "denominator": 5
+        "numerator": 13,
+        "denominator": 100
       }
     },
-    "22e0d08f-6456-4255-afd1-ca60e8db349e:940b8704-e497-4a76-b390-00918ff7d282:": {
+    "b2677552-ab9e-404c-8c73-2f4f70da599d:940b8704-e497-4a76-b390-00918ff7d282:": {
       "odds": {
-        "numerator": 21,
-        "denominator": 50
+        "numerator": 9,
+        "denominator": 2
       }
     }
   }

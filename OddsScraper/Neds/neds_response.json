@@ -1,118 +1,5 @@
 {
   "events": {
-    "47545516-76e2-4feb-bfa7-e5c60ccd25a2": {
-      "id": "47545516-76e2-4feb-bfa7-e5c60ccd25a2",
-      "name": "Gold Coast Suns vs Melbourne",
-      "url": "/sports/australian-rules/afl/gold-coast-suns-vs-melbourne/47545516-76e2-4feb-bfa7-e5c60ccd25a2",
-      "advertisedStart": "2026-08-02T05:15:00.000Z",
-      "eventType": "MATCH",
-      "eventTypeId": "6bfa0efc-05df-4ae1-9b1e-152365290cfd",
-      "bettingStatus": "OPEN",
-      "status": "OPEN",
-      "phase": null,
-      "hasLiveVision": false,
-      "inPlay": false,
-      "sportCategory": {
-        "id": "23d497e6-8aab-4309-905b-9421f42c9bc5",
-        "name": "Australian Rules",
-        "category": "AUSTRALIAN_RULES",
-        "icon": "sports/australian-rules",
-        "slug": "australian-rules",
-        "url": "/sports/australian-rules",
-        "hasRegions": false,
-        "eventCount": 0
-      },
-      "competition": {
-        "id": "ccff2e9a-5347-41aa-902a-bb6b1886d817",
-        "name": "AFL",
-        "url": "/sports/australian-rules/afl",
-        "hasInPlayEvents": true,
-        "region": null
-      },
-      "teams": [
-        {
-          "id": "SportingTeam:4b488979-8ab9-432b-9165-ee857f499b06",
-          "name": "Gold Coast Suns",
-          "colour": "#A3122F",
-          "locale": "HOME",
-          "scores": [],
-          "scoresV2": null,
-          "icon": {
-            "web": "/images/neds/sprites/svg-sports-afl-icon.svg#gold-coast-suns"
-          }
-        },
-        {
-          "id": "SportingTeam:2485a5ab-1eb0-40ab-9970-e5644ea3edb0",
-          "name": "Melbourne",
-          "colour": "#0A1F44",
-          "locale": "AWAY",
-          "scores": [],
-          "scoresV2": null,
-          "icon": {
-            "web": "/images/neds/sprites/svg-sports-afl-icon.svg#melbourne-fc"
-          }
-        }
-      ],
-      "matchClock": null,
-      "marketCount": 240,
-      "markets": {
-        "nodes": [
-          {
-            "id": "SportingMarket:fce62975-3809-4127-b53c-313567ed27f8",
-            "name": "Match Betting",
-            "marketTypeId": "be25c37a-71ff-47f6-a1e2-02a494eb5a4d",
-            "handicap": null,
-            "isPrimary": true,
-            "isSuspended": false,
-            "status": "OPEN",
-            "liveBettingAvailable": true,
-            "allowsCashOut": false,
-            "sameGameMultiAvailable": true,
-            "allowOddsBoostExtra": false,
-            "additionalProductTypeIds": null,
-            "entrantCount": 2,
-            "entrants": {
-              "nodes": [
-                {
-                  "id": "SportingEntrant:5e9c270a-2e30-43b5-b446-90a4b278fe4b",
-                  "name": "Gold Coast Suns",
-                  "handicap": null,
-                  "isSuspended": false,
-                  "role": "HOME",
-                  "icon": {
-                    "web": "/images/neds/sprites/svg-sports-afl-icon.svg#gold-coast-suns"
-                  },
-                  "price": {
-                    "id": "5e9c270a-2e30-43b5-b446-90a4b278fe4b:940b8704-e497-4a76-b390-00918ff7d282:",
-                    "odds": {
-                      "numerator": 11,
-                      "denominator": 10
-                    }
-                  }
-                },
-                {
-                  "id": "SportingEntrant:d89d7a7f-acbf-4ca4-a380-3ba8392e83c8",
-                  "name": "Melbourne",
-                  "handicap": null,
-                  "isSuspended": false,
-                  "role": "AWAY",
-                  "icon": {
-                    "web": "/images/neds/sprites/svg-sports-afl-icon.svg#melbourne-fc"
-                  },
-                  "price": {
-                    "id": "d89d7a7f-acbf-4ca4-a380-3ba8392e83c8:940b8704-e497-4a76-b390-00918ff7d282:",
-                    "odds": {
-                      "numerator": 73,
-                      "denominator": 100
-                    }
-                  }
-                }
-              ]
-            }
-          }
-        ]
-      }
-    },
     "ab94a0d4-7e06-4a25-8e6d-23288e539a9a": {
       "id": "ab94a0d4-7e06-4a25-8e6d-23288e539a9a",
       "name": "Essendon vs Adelaide Crows",
@@ -1215,8 +1102,8 @@
                   "price": {
                     "id": "d20cf2ad-6bc0-43d9-ab29-74252761d28d:940b8704-e497-4a76-b390-00918ff7d282:",
                     "odds": {
-                      "numerator": 39,
-                      "denominator": 50
+                      "numerator": 1,
+                      "denominator": 1
                     }
                   }
                 },
@@ -1232,8 +1119,8 @@
                   "price": {
                     "id": "1225e29c-31a7-4615-a7cd-edd5057401e0:940b8704-e497-4a76-b390-00918ff7d282:",
                     "odds": {
-                      "numerator": 1,
-                      "denominator": 1
+                      "numerator": 4,
+                      "denominator": 5
                     }
                   }
                 }
