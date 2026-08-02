@@ -1,51 +1,51 @@
 {
   "entrants": {
-    "04202120-c37f-45ec-8f2e-b861d19c29c1": {
-      "id": "04202120-c37f-45ec-8f2e-b861d19c29c1",
-      "name": "Essendon",
-      "home_away": "AWAY",
-      "visible": true,
-      "sort_order": 20,
-      "market_id": "17d330c2-3797-4c07-9b52-9135f9d21e77"
-    },
-    "c4043eb6-0f1b-4798-a253-4d33741668d7": {
-      "id": "c4043eb6-0f1b-4798-a253-4d33741668d7",
-      "name": "Geelong Cats",
+    "02f79fda-0179-4032-8b57-3b4601229149": {
+      "id": "02f79fda-0179-4032-8b57-3b4601229149",
+      "name": "Melbourne",
       "home_away": "HOME",
       "visible": true,
       "sort_order": 10,
-      "market_id": "17d330c2-3797-4c07-9b52-9135f9d21e77"
+      "market_id": "8454b8f3-d9d8-46ea-93d9-bd1116436431"
+    },
+    "22e0d08f-6456-4255-afd1-ca60e8db349e": {
+      "id": "22e0d08f-6456-4255-afd1-ca60e8db349e",
+      "name": "Fremantle",
+      "home_away": "AWAY",
+      "visible": true,
+      "sort_order": 20,
+      "market_id": "8454b8f3-d9d8-46ea-93d9-bd1116436431"
     }
   },
   "event_participants": {
-    "3c6a3356-94ef-4669-a0a3-41238b40aa5c": {
-      "id": "3c6a3356-94ef-4669-a0a3-41238b40aa5c",
-      "event_id": "6da0eeba-8af6-430e-8a74-ba365789f8c6",
-      "name": "Essendon",
+    "8f51a5ab-e193-45ff-82ae-01c06f23348b": {
+      "id": "8f51a5ab-e193-45ff-82ae-01c06f23348b",
+      "event_id": "3313716c-f03a-41a5-94aa-d9e58e4fe51f",
+      "name": "Fremantle",
       "home_away": "AWAY",
-      "colour": "#C8102E"
+      "colour": "#2E0F4F"
     },
-    "ea3367c3-97f8-4c67-9f3a-c7c738c40f34": {
-      "id": "ea3367c3-97f8-4c67-9f3a-c7c738c40f34",
-      "event_id": "6da0eeba-8af6-430e-8a74-ba365789f8c6",
-      "name": "Geelong Cats",
+    "948b753c-36c0-420c-8435-11b5c799b176": {
+      "id": "948b753c-36c0-420c-8435-11b5c799b176",
+      "event_id": "3313716c-f03a-41a5-94aa-d9e58e4fe51f",
+      "name": "Melbourne",
       "home_away": "HOME",
-      "colour": "#0B2A5B"
+      "colour": "#0A1F44"
     }
   },
   "events": {
-    "6da0eeba-8af6-430e-8a74-ba365789f8c6": {
-      "id": "6da0eeba-8af6-430e-8a74-ba365789f8c6",
-      "name": "Geelong Cats vs Essendon",
+    "3313716c-f03a-41a5-94aa-d9e58e4fe51f": {
+      "id": "3313716c-f03a-41a5-94aa-d9e58e4fe51f",
+      "name": "Melbourne vs Fremantle",
       "event_type": {
         "id": "6bfa0efc-05df-4ae1-9b1e-152365290cfd",
         "name": "Match"
       },
       "match_status": "BettingOpen",
-      "advertised_start": "2026-08-08T06:35:00Z",
-      "actual_start": "2026-08-08T06:35:00Z",
+      "advertised_start": "2026-08-08T03:15:00Z",
+      "actual_start": "2026-08-08T03:15:00Z",
       "visible": true,
-      "slug": "geelong-cats-vs-essendon",
+      "slug": "melbourne-vs-fremantle",
       "competition": {
         "id": "ccff2e9a-5347-41aa-902a-bb6b1886d817",
         "name": "AFL",
@@ -60,22 +60,22 @@
         {
           "market_type_group_id": "29edb5e1-a717-4769-8bcd-2d43ec38d828",
           "market_ids": [
-            "17d330c2-3797-4c07-9b52-9135f9d21e77"
+            "8454b8f3-d9d8-46ea-93d9-bd1116436431"
           ]
         }
       ],
       "market_count": 1,
       "main_markets": [
-        "17d330c2-3797-4c07-9b52-9135f9d21e77"
+        "8454b8f3-d9d8-46ea-93d9-bd1116436431"
       ],
       "market_ids": [
-        "17d330c2-3797-4c07-9b52-9135f9d21e77"
+        "8454b8f3-d9d8-46ea-93d9-bd1116436431"
       ],
       "category_id": "23d497e6-8aab-4309-905b-9421f42c9bc5",
       "round_id": "2c229b74-604f-477c-be80-6ea4615b5445",
       "participant_ids": [
-        "3c6a3356-94ef-4669-a0a3-41238b40aa5c",
-        "ea3367c3-97f8-4c67-9f3a-c7c738c40f34"
+        "8f51a5ab-e193-45ff-82ae-01c06f23348b",
+        "948b753c-36c0-420c-8435-11b5c799b176"
       ]
     }
   },
@@ -89,40 +89,40 @@
     }
   },
   "markets": {
-    "17d330c2-3797-4c07-9b52-9135f9d21e77": {
-      "id": "17d330c2-3797-4c07-9b52-9135f9d21e77",
-      "event_id": "6da0eeba-8af6-430e-8a74-ba365789f8c6",
+    "8454b8f3-d9d8-46ea-93d9-bd1116436431": {
+      "id": "8454b8f3-d9d8-46ea-93d9-bd1116436431",
+      "event_id": "3313716c-f03a-41a5-94aa-d9e58e4fe51f",
       "market_type_id": "be25c37a-71ff-47f6-a1e2-02a494eb5a4d",
       "market_status_id": "4bc8fe96-296b-4b4c-aea4-85c94f63b9c6",
       "name": "Match Betting",
       "advertised_start": {
-        "seconds": 1786170900
+        "seconds": 1786158900
       },
       "actual_start": {
-        "seconds": 1786170900
+        "seconds": 1786158900
       },
       "is_primary": true,
       "visible": true,
       "entrant_ids": [
-        "c4043eb6-0f1b-4798-a253-4d33741668d7",
-        "04202120-c37f-45ec-8f2e-b861d19c29c1"
+        "02f79fda-0179-4032-8b57-3b4601229149",
+        "22e0d08f-6456-4255-afd1-ca60e8db349e"
       ],
       "num_winners": 1
     }
   },
   "markets_allow_cashout": {
-    "17d330c2-3797-4c07-9b52-9135f9d21e77": true
+    "8454b8f3-d9d8-46ea-93d9-bd1116436431": true
   },
   "prices": {
-    "04202120-c37f-45ec-8f2e-b861d19c29c1:940b8704-e497-4a76-b390-00918ff7d282:": {
+    "02f79fda-0179-4032-8b57-3b4601229149:940b8704-e497-4a76-b390-00918ff7d282:": {
       "odds": {
-        "numerator": 13,
-        "denominator": 1
+        "numerator": 9,
+        "denominator": 5
       }
     },
-    "c4043eb6-0f1b-4798-a253-4d33741668d7:940b8704-e497-4a76-b390-00918ff7d282:": {
+    "22e0d08f-6456-4255-afd1-ca60e8db349e:940b8704-e497-4a76-b390-00918ff7d282:": {
       "odds": {
-        "numerator": 1,
+        "numerator": 21,
         "denominator": 50
       }
     }
