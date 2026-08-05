@@ -1,0 +1,130 @@
+{
+  "entrants": {
+    "872d2682-cabb-4d97-82ab-eaa48a677ef5": {
+      "id": "872d2682-cabb-4d97-82ab-eaa48a677ef5",
+      "name": "Melbourne",
+      "home_away": "AWAY",
+      "visible": true,
+      "sort_order": 20,
+      "market_id": "52ff4b70-3f8d-406a-beec-9f7c0a7f1e71"
+    },
+    "91f36175-ed70-4337-b3af-3887fcd63cc2": {
+      "id": "91f36175-ed70-4337-b3af-3887fcd63cc2",
+      "name": "Port Adelaide",
+      "home_away": "HOME",
+      "visible": true,
+      "sort_order": 10,
+      "market_id": "52ff4b70-3f8d-406a-beec-9f7c0a7f1e71"
+    }
+  },
+  "event_participants": {
+    "5840c0a5-c3d1-4de1-9150-202ace3eb807": {
+      "id": "5840c0a5-c3d1-4de1-9150-202ace3eb807",
+      "event_id": "e511f7bd-99d4-4d2d-a7a4-030722d751a9",
+      "name": "Melbourne",
+      "home_away": "AWAY",
+      "colour": "#0A1F44"
+    },
+    "fe5c640a-3894-4ee7-b1bc-e2ac5647c253": {
+      "id": "fe5c640a-3894-4ee7-b1bc-e2ac5647c253",
+      "event_id": "e511f7bd-99d4-4d2d-a7a4-030722d751a9",
+      "name": "Port Adelaide",
+      "home_away": "HOME",
+      "colour": "#008A8F"
+    }
+  },
+  "events": {
+    "e511f7bd-99d4-4d2d-a7a4-030722d751a9": {
+      "id": "e511f7bd-99d4-4d2d-a7a4-030722d751a9",
+      "name": "Port Adelaide vs Melbourne",
+      "event_type": {
+        "id": "6bfa0efc-05df-4ae1-9b1e-152365290cfd",
+        "name": "Match"
+      },
+      "match_status": "BettingOpen",
+      "advertised_start": "2026-08-15T10:10:00Z",
+      "actual_start": "2026-08-15T10:10:00Z",
+      "visible": true,
+      "slug": "port-adelaide-vs-melbourne",
+      "competition": {
+        "id": "ccff2e9a-5347-41aa-902a-bb6b1886d817",
+        "name": "AFL",
+        "sort_order": 1,
+        "region": "Australia"
+      },
+      "competition_id": "ccff2e9a-5347-41aa-902a-bb6b1886d817",
+      "market_type_group_ids": [
+        "29edb5e1-a717-4769-8bcd-2d43ec38d828"
+      ],
+      "market_type_group_markets": [
+        {
+          "market_type_group_id": "29edb5e1-a717-4769-8bcd-2d43ec38d828",
+          "market_ids": [
+            "52ff4b70-3f8d-406a-beec-9f7c0a7f1e71"
+          ]
+        }
+      ],
+      "market_count": 1,
+      "main_markets": [
+        "52ff4b70-3f8d-406a-beec-9f7c0a7f1e71"
+      ],
+      "market_ids": [
+        "52ff4b70-3f8d-406a-beec-9f7c0a7f1e71"
+      ],
+      "category_id": "23d497e6-8aab-4309-905b-9421f42c9bc5",
+      "round_id": "c2c967b5-a802-4fd4-848f-f4bfdc589de8",
+      "participant_ids": [
+        "5840c0a5-c3d1-4de1-9150-202ace3eb807",
+        "fe5c640a-3894-4ee7-b1bc-e2ac5647c253"
+      ]
+    }
+  },
+  "market_type_groups": {
+    "29edb5e1-a717-4769-8bcd-2d43ec38d828": {
+      "id": "29edb5e1-a717-4769-8bcd-2d43ec38d828",
+      "category_id": "23d497e6-8aab-4309-905b-9421f42c9bc5",
+      "name": "Top Markets",
+      "priority": 352,
+      "type": "MARKET_TYPE_GROUP_TYPE_EVENT"
+    }
+  },
+  "markets": {
+    "52ff4b70-3f8d-406a-beec-9f7c0a7f1e71": {
+      "id": "52ff4b70-3f8d-406a-beec-9f7c0a7f1e71",
+      "event_id": "e511f7bd-99d4-4d2d-a7a4-030722d751a9",
+      "market_type_id": "be25c37a-71ff-47f6-a1e2-02a494eb5a4d",
+      "market_status_id": "4bc8fe96-296b-4b4c-aea4-85c94f63b9c6",
+      "name": "Match Betting",
+      "advertised_start": {
+        "seconds": 1786788600
+      },
+      "actual_start": {
+        "seconds": 1786788600
+      },
+      "is_primary": true,
+      "visible": true,
+      "entrant_ids": [
+        "91f36175-ed70-4337-b3af-3887fcd63cc2",
+        "872d2682-cabb-4d97-82ab-eaa48a677ef5"
+      ],
+      "num_winners": 1
+    }
+  },
+  "markets_allow_cashout": {
+    "52ff4b70-3f8d-406a-beec-9f7c0a7f1e71": false
+  },
+  "prices": {
+    "872d2682-cabb-4d97-82ab-eaa48a677ef5:940b8704-e497-4a76-b390-00918ff7d282:": {
+      "odds": {
+        "numerator": 11,
+        "denominator": 20
+      }
+    },
+    "91f36175-ed70-4337-b3af-3887fcd63cc2:940b8704-e497-4a76-b390-00918ff7d282:": {
+      "odds": {
+        "numerator": 29,
+        "denominator": 20
+      }
+    }
+  }
+}
