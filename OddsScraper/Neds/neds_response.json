@@ -1,154 +1,5 @@
 {
   "events": {
-    "0ff5abb6-aa65-4860-8a8d-24da41387335": {
-      "id": "0ff5abb6-aa65-4860-8a8d-24da41387335",
-      "name": "AFL Round 22 Specials",
-      "url": "/sports/australian-rules/afl/afl-round-22-specials/0ff5abb6-aa65-4860-8a8d-24da41387335",
-      "advertisedStart": "2026-08-06T09:29:00.000Z",
-      "eventType": "MATCH",
-      "eventTypeId": "6bfa0efc-05df-4ae1-9b1e-152365290cfd",
-      "bettingStatus": "OPEN",
-      "status": "OPEN",
-      "phase": null,
-      "hasLiveVision": false,
-      "inPlay": false,
-      "sportCategory": {
-        "id": "23d497e6-8aab-4309-905b-9421f42c9bc5",
-        "name": "Australian Rules",
-        "category": "AUSTRALIAN_RULES",
-        "icon": "sports/australian-rules",
-        "slug": "australian-rules",
-        "url": "/sports/australian-rules",
-        "hasRegions": false,
-        "eventCount": 0
-      },
-      "competition": {
-        "id": "ccff2e9a-5347-41aa-902a-bb6b1886d817",
-        "name": "AFL",
-        "url": "/sports/australian-rules/afl",
-        "hasInPlayEvents": false,
-        "region": null
-      },
-      "teams": null,
-      "matchClock": null,
-      "marketCount": 12,
-      "markets": {
-        "nodes": []
-      }
-    },
-    "b6ee7c86-11d7-46dd-8797-0db9ba559558": {
-      "id": "b6ee7c86-11d7-46dd-8797-0db9ba559558",
-      "name": "Western Bulldogs vs North Melbourne",
-      "url": "/sports/australian-rules/afl/western-bulldogs-vs-north-melbourne/b6ee7c86-11d7-46dd-8797-0db9ba559558",
-      "advertisedStart": "2026-08-06T09:30:00.000Z",
-      "eventType": "MATCH",
-      "eventTypeId": "6bfa0efc-05df-4ae1-9b1e-152365290cfd",
-      "bettingStatus": "OPEN",
-      "status": "OPEN",
-      "phase": null,
-      "hasLiveVision": false,
-      "inPlay": false,
-      "sportCategory": {
-        "id": "23d497e6-8aab-4309-905b-9421f42c9bc5",
-        "name": "Australian Rules",
-        "category": "AUSTRALIAN_RULES",
-        "icon": "sports/australian-rules",
-        "slug": "australian-rules",
-        "url": "/sports/australian-rules",
-        "hasRegions": false,
-        "eventCount": 0
-      },
-      "competition": {
-        "id": "ccff2e9a-5347-41aa-902a-bb6b1886d817",
-        "name": "AFL",
-        "url": "/sports/australian-rules/afl",
-        "hasInPlayEvents": false,
-        "region": null
-      },
-      "teams": [
-        {
-          "id": "SportingTeam:fa0bff22-9527-419d-a1bc-b40f7665ded8",
-          "name": "Western Bulldogs",
-          "colour": "#003A8F",
-          "locale": "HOME",
-          "scores": [],
-          "scoresV2": null,
-          "icon": {
-            "web": "/images/neds/sprites/svg-sports-afl-icon.svg#western-bulldogs"
-          }
-        },
-        {
-          "id": "SportingTeam:accda72d-1667-4584-825d-8134f6cc90d0",
-          "name": "North Melbourne",
-          "colour": "#0D2F6F",
-          "locale": "AWAY",
-          "scores": [],
-          "scoresV2": null,
-          "icon": {
-            "web": "/images/neds/sprites/svg-sports-afl-icon.svg#north-melbourne-fc"
-          }
-        }
-      ],
-      "matchClock": null,
-      "marketCount": 279,
-      "markets": {
-        "nodes": [
-          {
-            "id": "SportingMarket:798eee58-a7c1-4b4c-931b-8cb0f3348b40",
-            "name": "Match Betting",
-            "marketTypeId": "be25c37a-71ff-47f6-a1e2-02a494eb5a4d",
-            "handicap": null,
-            "isPrimary": true,
-            "isSuspended": false,
-            "status": "OPEN",
-            "liveBettingAvailable": true,
-            "allowsCashOut": false,
-            "sameGameMultiAvailable": true,
-            "allowOddsBoostExtra": false,
-            "additionalProductTypeIds": null,
-            "entrantCount": 2,
-            "entrants": {
-              "nodes": [
-                {
-                  "id": "SportingEntrant:ab518d2a-d221-42f2-aac8-ca629274bb7d",
-                  "name": "Western Bulldogs",
-                  "handicap": null,
-                  "isSuspended": false,
-                  "role": "HOME",
-                  "icon": {
-                    "web": "/images/neds/sprites/svg-sports-afl-icon.svg#western-bulldogs"
-                  },
-                  "price": {
-                    "id": "ab518d2a-d221-42f2-aac8-ca629274bb7d:940b8704-e497-4a76-b390-00918ff7d282:",
-                    "odds": {
-                      "numerator": 11,
-                      "denominator": 25
-                    }
-                  }
-                },
-                {
-                  "id": "SportingEntrant:e7539cd1-59fc-4ee9-9c4e-ab5f787c05d1",
-                  "name": "North Melbourne",
-                  "handicap": null,
-                  "isSuspended": false,
-                  "role": "AWAY",
-                  "icon": {
-                    "web": "/images/neds/sprites/svg-sports-afl-icon.svg#north-melbourne-fc"
-                  },
-                  "price": {
-                    "id": "e7539cd1-59fc-4ee9-9c4e-ab5f787c05d1:940b8704-e497-4a76-b390-00918ff7d282:",
-                    "odds": {
-                      "numerator": 9,
-                      "denominator": 5
-                    }
-                  }
-                }
-              ]
-            }
-          }
-        ]
-      }
-    },
     "db26010c-a07e-42bc-b3d2-299e842a9e6c": {
       "id": "db26010c-a07e-42bc-b3d2-299e842a9e6c",
       "name": "Brisbane Lions vs Hawthorn",
@@ -203,7 +54,7 @@
         }
       ],
       "matchClock": null,
-      "marketCount": 187,
+      "marketCount": 265,
       "markets": {
         "nodes": [
           {
@@ -316,7 +167,7 @@
         }
       ],
       "matchClock": null,
-      "marketCount": 130,
+      "marketCount": 255,
       "markets": {
         "nodes": [
           {
@@ -347,8 +198,8 @@
                   "price": {
                     "id": "02f79fda-0179-4032-8b57-3b4601229149:940b8704-e497-4a76-b390-00918ff7d282:",
                     "odds": {
-                      "numerator": 8,
-                      "denominator": 5
+                      "numerator": 29,
+                      "denominator": 20
                     }
                   }
                 },
@@ -364,8 +215,8 @@
                   "price": {
                     "id": "22e0d08f-6456-4255-afd1-ca60e8db349e:940b8704-e497-4a76-b390-00918ff7d282:",
                     "odds": {
-                      "numerator": 1,
-                      "denominator": 2
+                      "numerator": 11,
+                      "denominator": 20
                     }
                   }
                 }
@@ -429,7 +280,7 @@
         }
       ],
       "matchClock": null,
-      "marketCount": 187,
+      "marketCount": 256,
       "markets": {
         "nodes": [
           {
@@ -542,7 +393,7 @@
         }
       ],
       "matchClock": null,
-      "marketCount": 121,
+      "marketCount": 254,
       "markets": {
         "nodes": [
           {
@@ -655,7 +506,7 @@
         }
       ],
       "matchClock": null,
-      "marketCount": 121,
+      "marketCount": 252,
       "markets": {
         "nodes": [
           {
@@ -768,7 +619,7 @@
         }
       ],
       "matchClock": null,
-      "marketCount": 121,
+      "marketCount": 183,
       "markets": {
         "nodes": [
           {
@@ -799,8 +650,8 @@
                   "price": {
                     "id": "802d40a8-e7a7-4aae-a172-04b34c58e629:940b8704-e497-4a76-b390-00918ff7d282:",
                     "odds": {
-                      "numerator": 33,
-                      "denominator": 100
+                      "numerator": 9,
+                      "denominator": 25
                     }
                   }
                 },
@@ -816,8 +667,8 @@
                   "price": {
                     "id": "888b01ed-a0dc-4b5f-b34c-081cb086c155:940b8704-e497-4a76-b390-00918ff7d282:",
                     "odds": {
-                      "numerator": 47,
-                      "denominator": 20
+                      "numerator": 11,
+                      "denominator": 5
                     }
                   }
                 }
@@ -881,7 +732,7 @@
         }
       ],
       "matchClock": null,
-      "marketCount": 122,
+      "marketCount": 186,
       "markets": {
         "nodes": [
           {
@@ -912,8 +763,8 @@
                   "price": {
                     "id": "8af31430-9211-4f4d-8078-22beb27a2bdb:940b8704-e497-4a76-b390-00918ff7d282:",
                     "odds": {
-                      "numerator": 37,
-                      "denominator": 20
+                      "numerator": 7,
+                      "denominator": 5
                     }
                   }
                 },
@@ -929,8 +780,8 @@
                   "price": {
                     "id": "32c63f19-63cf-46a4-b487-b9b9fa3379de:940b8704-e497-4a76-b390-00918ff7d282:",
                     "odds": {
-                      "numerator": 11,
-                      "denominator": 25
+                      "numerator": 57,
+                      "denominator": 100
                     }
                   }
                 }
@@ -1929,8 +1780,8 @@
                   "price": {
                     "id": "a439b8fd-f17b-44ff-80a4-89e1e1ba1c34:940b8704-e497-4a76-b390-00918ff7d282:",
                     "odds": {
-                      "numerator": 4,
-                      "denominator": 5
+                      "numerator": 19,
+                      "denominator": 20
                     }
                   }
                 },
@@ -1946,8 +1797,8 @@
                   "price": {
                     "id": "35826cb5-02df-4e77-b3bd-58f85f7c3f6e:940b8704-e497-4a76-b390-00918ff7d282:",
                     "odds": {
-                      "numerator": 51,
-                      "denominator": 50
+                      "numerator": 17,
+                      "denominator": 20
                     }
                   }
                 }
