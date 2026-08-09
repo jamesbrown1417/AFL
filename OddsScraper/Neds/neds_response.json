@@ -1,154 +1,5 @@
 {
   "events": {
-    "791c6ac5-45d3-40c2-b129-b2dc641b34a9": {
-      "id": "791c6ac5-45d3-40c2-b129-b2dc641b34a9",
-      "name": "Sunday AFL Specials - 09/08",
-      "url": "/sports/australian-rules/afl/sunday-afl-specials-09-08/791c6ac5-45d3-40c2-b129-b2dc641b34a9",
-      "advertisedStart": "2026-08-09T03:09:00.000Z",
-      "eventType": "MATCH",
-      "eventTypeId": "6bfa0efc-05df-4ae1-9b1e-152365290cfd",
-      "bettingStatus": "OPEN",
-      "status": "OPEN",
-      "phase": null,
-      "hasLiveVision": false,
-      "inPlay": false,
-      "sportCategory": {
-        "id": "23d497e6-8aab-4309-905b-9421f42c9bc5",
-        "name": "Australian Rules",
-        "category": "AUSTRALIAN_RULES",
-        "icon": "sports/australian-rules",
-        "slug": "australian-rules",
-        "url": "/sports/australian-rules",
-        "hasRegions": false,
-        "eventCount": 0
-      },
-      "competition": {
-        "id": "ccff2e9a-5347-41aa-902a-bb6b1886d817",
-        "name": "AFL",
-        "url": "/sports/australian-rules/afl",
-        "hasInPlayEvents": false,
-        "region": null
-      },
-      "teams": null,
-      "matchClock": null,
-      "marketCount": 13,
-      "markets": {
-        "nodes": []
-      }
-    },
-    "a2d4d658-89b5-4473-b4a6-a8b3956110a6": {
-      "id": "a2d4d658-89b5-4473-b4a6-a8b3956110a6",
-      "name": "GWS Giants vs Gold Coast Suns",
-      "url": "/sports/australian-rules/afl/gws-giants-vs-gold-coast-suns/a2d4d658-89b5-4473-b4a6-a8b3956110a6",
-      "advertisedStart": "2026-08-09T03:10:00.000Z",
-      "eventType": "MATCH",
-      "eventTypeId": "6bfa0efc-05df-4ae1-9b1e-152365290cfd",
-      "bettingStatus": "OPEN",
-      "status": "OPEN",
-      "phase": null,
-      "hasLiveVision": false,
-      "inPlay": false,
-      "sportCategory": {
-        "id": "23d497e6-8aab-4309-905b-9421f42c9bc5",
-        "name": "Australian Rules",
-        "category": "AUSTRALIAN_RULES",
-        "icon": "sports/australian-rules",
-        "slug": "australian-rules",
-        "url": "/sports/australian-rules",
-        "hasRegions": false,
-        "eventCount": 0
-      },
-      "competition": {
-        "id": "ccff2e9a-5347-41aa-902a-bb6b1886d817",
-        "name": "AFL",
-        "url": "/sports/australian-rules/afl",
-        "hasInPlayEvents": false,
-        "region": null
-      },
-      "teams": [
-        {
-          "id": "SportingTeam:8d046080-117b-427d-9663-d49442abbd91",
-          "name": "GWS Giants",
-          "colour": "#C1440E",
-          "locale": "HOME",
-          "scores": [],
-          "scoresV2": null,
-          "icon": {
-            "web": "/images/neds/sprites/svg-sports-afl-icon.svg#gws-giants"
-          }
-        },
-        {
-          "id": "SportingTeam:0a44e305-3f3b-45fc-bf0e-b442e1d57519",
-          "name": "Gold Coast Suns",
-          "colour": "#A3122F",
-          "locale": "AWAY",
-          "scores": [],
-          "scoresV2": null,
-          "icon": {
-            "web": "/images/neds/sprites/svg-sports-afl-icon.svg#gold-coast-suns"
-          }
-        }
-      ],
-      "matchClock": null,
-      "marketCount": 268,
-      "markets": {
-        "nodes": [
-          {
-            "id": "SportingMarket:2662b40f-bb2d-4f78-89e4-4d19c81e183a",
-            "name": "Match Betting",
-            "marketTypeId": "be25c37a-71ff-47f6-a1e2-02a494eb5a4d",
-            "handicap": null,
-            "isPrimary": true,
-            "isSuspended": false,
-            "status": "OPEN",
-            "liveBettingAvailable": true,
-            "allowsCashOut": false,
-            "sameGameMultiAvailable": true,
-            "allowOddsBoostExtra": false,
-            "additionalProductTypeIds": null,
-            "entrantCount": 2,
-            "entrants": {
-              "nodes": [
-                {
-                  "id": "SportingEntrant:802d40a8-e7a7-4aae-a172-04b34c58e629",
-                  "name": "GWS Giants",
-                  "handicap": null,
-                  "isSuspended": false,
-                  "role": "HOME",
-                  "icon": {
-                    "web": "/images/neds/sprites/svg-sports-afl-icon.svg#gws-giants"
-                  },
-                  "price": {
-                    "id": "802d40a8-e7a7-4aae-a172-04b34c58e629:940b8704-e497-4a76-b390-00918ff7d282:",
-                    "odds": {
-                      "numerator": 19,
-                      "denominator": 50
-                    }
-                  }
-                },
-                {
-                  "id": "SportingEntrant:888b01ed-a0dc-4b5f-b34c-081cb086c155",
-                  "name": "Gold Coast Suns",
-                  "handicap": null,
-                  "isSuspended": false,
-                  "role": "AWAY",
-                  "icon": {
-                    "web": "/images/neds/sprites/svg-sports-afl-icon.svg#gold-coast-suns"
-                  },
-                  "price": {
-                    "id": "888b01ed-a0dc-4b5f-b34c-081cb086c155:940b8704-e497-4a76-b390-00918ff7d282:",
-                    "odds": {
-                      "numerator": 41,
-                      "denominator": 20
-                    }
-                  }
-                }
-              ]
-            }
-          }
-        ]
-      }
-    },
     "c4bfc4d4-51bc-4ef7-887b-481f1af217dd": {
       "id": "c4bfc4d4-51bc-4ef7-887b-481f1af217dd",
       "name": "West Coast Eagles vs Collingwood",
@@ -175,7 +26,7 @@
         "id": "ccff2e9a-5347-41aa-902a-bb6b1886d817",
         "name": "AFL",
         "url": "/sports/australian-rules/afl",
-        "hasInPlayEvents": false,
+        "hasInPlayEvents": true,
         "region": null
       },
       "teams": [
@@ -203,7 +54,7 @@
         }
       ],
       "matchClock": null,
-      "marketCount": 269,
+      "marketCount": 272,
       "markets": {
         "nodes": [
           {
@@ -234,7 +85,7 @@
                   "price": {
                     "id": "8af31430-9211-4f4d-8078-22beb27a2bdb:940b8704-e497-4a76-b390-00918ff7d282:",
                     "odds": {
-                      "numerator": 7,
+                      "numerator": 6,
                       "denominator": 5
                     }
                   }
@@ -251,8 +102,8 @@
                   "price": {
                     "id": "32c63f19-63cf-46a4-b487-b9b9fa3379de:940b8704-e497-4a76-b390-00918ff7d282:",
                     "odds": {
-                      "numerator": 57,
-                      "denominator": 100
+                      "numerator": 17,
+                      "denominator": 25
                     }
                   }
                 }
@@ -288,7 +139,7 @@
         "id": "ccff2e9a-5347-41aa-902a-bb6b1886d817",
         "name": "AFL",
         "url": "/sports/australian-rules/afl",
-        "hasInPlayEvents": false,
+        "hasInPlayEvents": true,
         "region": null
       },
       "teams": [
@@ -401,7 +252,7 @@
         "id": "ccff2e9a-5347-41aa-902a-bb6b1886d817",
         "name": "AFL",
         "url": "/sports/australian-rules/afl",
-        "hasInPlayEvents": false,
+        "hasInPlayEvents": true,
         "region": null
       },
       "teams": [
@@ -514,7 +365,7 @@
         "id": "ccff2e9a-5347-41aa-902a-bb6b1886d817",
         "name": "AFL",
         "url": "/sports/australian-rules/afl",
-        "hasInPlayEvents": false,
+        "hasInPlayEvents": true,
         "region": null
       },
       "teams": [
@@ -627,7 +478,7 @@
         "id": "ccff2e9a-5347-41aa-902a-bb6b1886d817",
         "name": "AFL",
         "url": "/sports/australian-rules/afl",
-        "hasInPlayEvents": false,
+        "hasInPlayEvents": true,
         "region": null
       },
       "teams": [
@@ -714,119 +565,6 @@
         ]
       }
     },
-    "d4f83ee4-e407-48d5-9739-52281ff0ea4b": {
-      "id": "d4f83ee4-e407-48d5-9739-52281ff0ea4b",
-      "name": "Brisbane Lions vs Gold Coast Suns",
-      "url": "/sports/australian-rules/afl/brisbane-lions-vs-gold-coast-suns/d4f83ee4-e407-48d5-9739-52281ff0ea4b",
-      "advertisedStart": "2026-08-15T06:15:00.000Z",
-      "eventType": "MATCH",
-      "eventTypeId": "6bfa0efc-05df-4ae1-9b1e-152365290cfd",
-      "bettingStatus": "OPEN",
-      "status": "OPEN",
-      "phase": null,
-      "hasLiveVision": false,
-      "inPlay": false,
-      "sportCategory": {
-        "id": "23d497e6-8aab-4309-905b-9421f42c9bc5",
-        "name": "Australian Rules",
-        "category": "AUSTRALIAN_RULES",
-        "icon": "sports/australian-rules",
-        "slug": "australian-rules",
-        "url": "/sports/australian-rules",
-        "hasRegions": false,
-        "eventCount": 0
-      },
-      "competition": {
-        "id": "ccff2e9a-5347-41aa-902a-bb6b1886d817",
-        "name": "AFL",
-        "url": "/sports/australian-rules/afl",
-        "hasInPlayEvents": false,
-        "region": null
-      },
-      "teams": [
-        {
-          "id": "SportingTeam:2124b3e5-3764-4cda-b0fd-e97849d29dd4",
-          "name": "Brisbane Lions",
-          "colour": "#7A0C2E",
-          "locale": "HOME",
-          "scores": [],
-          "scoresV2": null,
-          "icon": {
-            "web": "/images/neds/sprites/svg-sports-afl-icon.svg#brisbane-lions"
-          }
-        },
-        {
-          "id": "SportingTeam:71eb737e-af8a-401f-a485-9b422918fcc2",
-          "name": "Gold Coast Suns",
-          "colour": "#A3122F",
-          "locale": "AWAY",
-          "scores": [],
-          "scoresV2": null,
-          "icon": {
-            "web": "/images/neds/sprites/svg-sports-afl-icon.svg#gold-coast-suns"
-          }
-        }
-      ],
-      "matchClock": null,
-      "marketCount": 1,
-      "markets": {
-        "nodes": [
-          {
-            "id": "SportingMarket:ad00684b-14e0-40d6-a0e9-6ce547cfbff8",
-            "name": "Match Betting",
-            "marketTypeId": "be25c37a-71ff-47f6-a1e2-02a494eb5a4d",
-            "handicap": null,
-            "isPrimary": true,
-            "isSuspended": false,
-            "status": "OPEN",
-            "liveBettingAvailable": false,
-            "allowsCashOut": false,
-            "sameGameMultiAvailable": false,
-            "allowOddsBoostExtra": false,
-            "additionalProductTypeIds": null,
-            "entrantCount": 2,
-            "entrants": {
-              "nodes": [
-                {
-                  "id": "SportingEntrant:c78018e5-1a81-4bc5-8a44-e5fa932800fe",
-                  "name": "Brisbane Lions",
-                  "handicap": null,
-                  "isSuspended": false,
-                  "role": "HOME",
-                  "icon": {
-                    "web": "/images/neds/sprites/svg-sports-afl-icon.svg#brisbane-lions"
-                  },
-                  "price": {
-                    "id": "c78018e5-1a81-4bc5-8a44-e5fa932800fe:940b8704-e497-4a76-b390-00918ff7d282:",
-                    "odds": {
-                      "numerator": 11,
-                      "denominator": 50
-                    }
-                  }
-                },
-                {
-                  "id": "SportingEntrant:0eacaba3-86c6-40d7-9531-2654769c108d",
-                  "name": "Gold Coast Suns",
-                  "handicap": null,
-                  "isSuspended": false,
-                  "role": "AWAY",
-                  "icon": {
-                    "web": "/images/neds/sprites/svg-sports-afl-icon.svg#gold-coast-suns"
-                  },
-                  "price": {
-                    "id": "0eacaba3-86c6-40d7-9531-2654769c108d:940b8704-e497-4a76-b390-00918ff7d282:",
-                    "odds": {
-                      "numerator": 33,
-                      "denominator": 10
-                    }
-                  }
-                }
-              ]
-            }
-          }
-        ]
-      }
-    },
     "79c5bae2-a720-49fb-9fed-c2ff5f89d870": {
       "id": "79c5bae2-a720-49fb-9fed-c2ff5f89d870",
       "name": "Hawthorn vs Collingwood",
@@ -853,7 +591,7 @@
         "id": "ccff2e9a-5347-41aa-902a-bb6b1886d817",
         "name": "AFL",
         "url": "/sports/australian-rules/afl",
-        "hasInPlayEvents": false,
+        "hasInPlayEvents": true,
         "region": null
       },
       "teams": [
@@ -940,119 +678,6 @@
         ]
       }
     },
-    "be96b943-e872-4235-b0eb-ecc18baaf6b0": {
-      "id": "be96b943-e872-4235-b0eb-ecc18baaf6b0",
-      "name": "GWS Giants vs West Coast Eagles",
-      "url": "/sports/australian-rules/afl/gws-giants-vs-west-coast-eagles/be96b943-e872-4235-b0eb-ecc18baaf6b0",
-      "advertisedStart": "2026-08-16T03:40:00.000Z",
-      "eventType": "MATCH",
-      "eventTypeId": "6bfa0efc-05df-4ae1-9b1e-152365290cfd",
-      "bettingStatus": "OPEN",
-      "status": "OPEN",
-      "phase": null,
-      "hasLiveVision": false,
-      "inPlay": false,
-      "sportCategory": {
-        "id": "23d497e6-8aab-4309-905b-9421f42c9bc5",
-        "name": "Australian Rules",
-        "category": "AUSTRALIAN_RULES",
-        "icon": "sports/australian-rules",
-        "slug": "australian-rules",
-        "url": "/sports/australian-rules",
-        "hasRegions": false,
-        "eventCount": 0
-      },
-      "competition": {
-        "id": "ccff2e9a-5347-41aa-902a-bb6b1886d817",
-        "name": "AFL",
-        "url": "/sports/australian-rules/afl",
-        "hasInPlayEvents": false,
-        "region": null
-      },
-      "teams": [
-        {
-          "id": "SportingTeam:40d1d10f-f693-441a-9196-14d3b305af33",
-          "name": "GWS Giants",
-          "colour": "#C1440E",
-          "locale": "HOME",
-          "scores": [],
-          "scoresV2": null,
-          "icon": {
-            "web": "/images/neds/sprites/svg-sports-afl-icon.svg#gws-giants"
-          }
-        },
-        {
-          "id": "SportingTeam:fcc13a58-a0c8-47dc-9a1e-935a3ea6db0a",
-          "name": "West Coast Eagles",
-          "colour": "#0A2A66",
-          "locale": "AWAY",
-          "scores": [],
-          "scoresV2": null,
-          "icon": {
-            "web": "/images/neds/sprites/svg-sports-afl-icon.svg#west-coast-eagles"
-          }
-        }
-      ],
-      "matchClock": null,
-      "marketCount": 1,
-      "markets": {
-        "nodes": [
-          {
-            "id": "SportingMarket:43f4ad09-38de-4159-9100-71c78a31b058",
-            "name": "Match Betting",
-            "marketTypeId": "be25c37a-71ff-47f6-a1e2-02a494eb5a4d",
-            "handicap": null,
-            "isPrimary": true,
-            "isSuspended": false,
-            "status": "OPEN",
-            "liveBettingAvailable": false,
-            "allowsCashOut": false,
-            "sameGameMultiAvailable": false,
-            "allowOddsBoostExtra": false,
-            "additionalProductTypeIds": null,
-            "entrantCount": 2,
-            "entrants": {
-              "nodes": [
-                {
-                  "id": "SportingEntrant:0e1e8899-89a7-4802-9d6a-88bd43373fe7",
-                  "name": "GWS Giants",
-                  "handicap": null,
-                  "isSuspended": false,
-                  "role": "HOME",
-                  "icon": {
-                    "web": "/images/neds/sprites/svg-sports-afl-icon.svg#gws-giants"
-                  },
-                  "price": {
-                    "id": "0e1e8899-89a7-4802-9d6a-88bd43373fe7:940b8704-e497-4a76-b390-00918ff7d282:",
-                    "odds": {
-                      "numerator": 13,
-                      "denominator": 100
-                    }
-                  }
-                },
-                {
-                  "id": "SportingEntrant:157a5345-115c-4c55-b0ef-71ee5fb3e8b2",
-                  "name": "West Coast Eagles",
-                  "handicap": null,
-                  "isSuspended": false,
-                  "role": "AWAY",
-                  "icon": {
-                    "web": "/images/neds/sprites/svg-sports-afl-icon.svg#west-coast-eagles"
-                  },
-                  "price": {
-                    "id": "157a5345-115c-4c55-b0ef-71ee5fb3e8b2:940b8704-e497-4a76-b390-00918ff7d282:",
-                    "odds": {
-                      "numerator": 5,
-                      "denominator": 1
-                    }
-                  }
-                }
-              ]
-            }
-          }
-        ]
-      }
-    },
     "13b60167-cd1a-412c-b53a-6776e6a9f430": {
       "id": "13b60167-cd1a-412c-b53a-6776e6a9f430",
       "name": "Western Bulldogs vs Carlton",
@@ -1079,7 +704,7 @@
         "id": "ccff2e9a-5347-41aa-902a-bb6b1886d817",
         "name": "AFL",
         "url": "/sports/australian-rules/afl",
-        "hasInPlayEvents": false,
+        "hasInPlayEvents": true,
         "region": null
       },
       "teams": [
@@ -1192,7 +817,7 @@
         "id": "ccff2e9a-5347-41aa-902a-bb6b1886d817",
         "name": "AFL",
         "url": "/sports/australian-rules/afl",
-        "hasInPlayEvents": false,
+        "hasInPlayEvents": true,
         "region": null
       },
       "teams": [
