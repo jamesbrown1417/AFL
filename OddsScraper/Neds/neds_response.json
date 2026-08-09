@@ -1,10 +1,10 @@
 {
   "events": {
-    "c4bfc4d4-51bc-4ef7-887b-481f1af217dd": {
-      "id": "c4bfc4d4-51bc-4ef7-887b-481f1af217dd",
-      "name": "West Coast Eagles vs Collingwood",
-      "url": "/sports/australian-rules/afl/west-coast-eagles-vs-collingwood/c4bfc4d4-51bc-4ef7-887b-481f1af217dd",
-      "advertisedStart": "2026-08-09T06:10:00.000Z",
+    "2cf4805f-c167-43a0-b4ba-870b785a9d68": {
+      "id": "2cf4805f-c167-43a0-b4ba-870b785a9d68",
+      "name": "St Kilda (W) vs Carlton (W)",
+      "url": "/sports/australian-rules/afl/st-kilda-w-vs-carlton-w/2cf4805f-c167-43a0-b4ba-870b785a9d68",
+      "advertisedStart": "2026-08-09T06:35:00.000Z",
       "eventType": "MATCH",
       "eventTypeId": "6bfa0efc-05df-4ae1-9b1e-152365290cfd",
       "bettingStatus": "OPEN",
@@ -31,34 +31,34 @@
       },
       "teams": [
         {
-          "id": "SportingTeam:81b418ba-107c-46b7-93fa-d6d33b302868",
-          "name": "West Coast Eagles",
-          "colour": "#0A2A66",
+          "id": "SportingTeam:bfce31fa-ad3f-4ee5-9d30-7f93b1728d98",
+          "name": "St Kilda (W)",
+          "colour": "#e50035",
           "locale": "HOME",
           "scores": [],
           "scoresV2": null,
           "icon": {
-            "web": "/images/neds/sprites/svg-sports-afl-icon.svg#west-coast-eagles"
+            "web": "/images/neds/sprites/svg-sports-afl-icon.svg#st-kilda-fc"
           }
         },
         {
-          "id": "SportingTeam:40a4709a-32f1-41bc-929d-c3cb3d23f3e3",
-          "name": "Collingwood",
-          "colour": "#111111",
+          "id": "SportingTeam:e4a85afb-69ee-4f15-99e1-9c28bec98446",
+          "name": "Carlton (W)",
+          "colour": "#031a29",
           "locale": "AWAY",
           "scores": [],
           "scoresV2": null,
           "icon": {
-            "web": "/images/neds/sprites/svg-sports-afl-icon.svg#collingwood-magpies"
+            "web": "/images/neds/sprites/svg-sports-afl-icon.svg#carlton-fc"
           }
         }
       ],
       "matchClock": null,
-      "marketCount": 272,
+      "marketCount": 35,
       "markets": {
         "nodes": [
           {
-            "id": "SportingMarket:7d6d75db-507c-48ce-a433-43e890f5e1cc",
+            "id": "SportingMarket:b21a16d6-6fbc-4625-96d3-020d4d10eba4",
             "name": "Match Betting",
             "marketTypeId": "be25c37a-71ff-47f6-a1e2-02a494eb5a4d",
             "handicap": null,
@@ -74,36 +74,36 @@
             "entrants": {
               "nodes": [
                 {
-                  "id": "SportingEntrant:8af31430-9211-4f4d-8078-22beb27a2bdb",
-                  "name": "West Coast Eagles",
+                  "id": "SportingEntrant:1b90bd62-0af5-49e8-9880-136bb5b68854",
+                  "name": "St Kilda (W)",
                   "handicap": null,
                   "isSuspended": false,
                   "role": "HOME",
                   "icon": {
-                    "web": "/images/neds/sprites/svg-sports-afl-icon.svg#west-coast-eagles"
+                    "web": "/images/neds/sprites/svg-sports-afl-icon.svg#st-kilda-fc"
                   },
                   "price": {
-                    "id": "8af31430-9211-4f4d-8078-22beb27a2bdb:940b8704-e497-4a76-b390-00918ff7d282:",
+                    "id": "1b90bd62-0af5-49e8-9880-136bb5b68854:940b8704-e497-4a76-b390-00918ff7d282:",
                     "odds": {
-                      "numerator": 5,
-                      "denominator": 4
+                      "numerator": 8,
+                      "denominator": 5
                     }
                   }
                 },
                 {
-                  "id": "SportingEntrant:32c63f19-63cf-46a4-b487-b9b9fa3379de",
-                  "name": "Collingwood",
+                  "id": "SportingEntrant:026e34fc-a861-4373-a127-9772dc3451eb",
+                  "name": "Carlton (W)",
                   "handicap": null,
                   "isSuspended": false,
                   "role": "AWAY",
                   "icon": {
-                    "web": "/images/neds/sprites/svg-sports-afl-icon.svg#collingwood-magpies"
+                    "web": "/images/neds/sprites/svg-sports-afl-icon.svg#carlton-fc"
                   },
                   "price": {
-                    "id": "32c63f19-63cf-46a4-b487-b9b9fa3379de:940b8704-e497-4a76-b390-00918ff7d282:",
+                    "id": "026e34fc-a861-4373-a127-9772dc3451eb:940b8704-e497-4a76-b390-00918ff7d282:",
                     "odds": {
-                      "numerator": 16,
-                      "denominator": 25
+                      "numerator": 23,
+                      "denominator": 50
                     }
                   }
                 }
@@ -556,119 +556,6 @@
                     "odds": {
                       "numerator": 3,
                       "denominator": 10
-                    }
-                  }
-                }
-              ]
-            }
-          }
-        ]
-      }
-    },
-    "79c5bae2-a720-49fb-9fed-c2ff5f89d870": {
-      "id": "79c5bae2-a720-49fb-9fed-c2ff5f89d870",
-      "name": "Hawthorn vs Collingwood",
-      "url": "/sports/australian-rules/afl/hawthorn-vs-collingwood/79c5bae2-a720-49fb-9fed-c2ff5f89d870",
-      "advertisedStart": "2026-08-15T09:40:00.000Z",
-      "eventType": "MATCH",
-      "eventTypeId": "6bfa0efc-05df-4ae1-9b1e-152365290cfd",
-      "bettingStatus": "OPEN",
-      "status": "OPEN",
-      "phase": null,
-      "hasLiveVision": false,
-      "inPlay": false,
-      "sportCategory": {
-        "id": "23d497e6-8aab-4309-905b-9421f42c9bc5",
-        "name": "Australian Rules",
-        "category": "AUSTRALIAN_RULES",
-        "icon": "sports/australian-rules",
-        "slug": "australian-rules",
-        "url": "/sports/australian-rules",
-        "hasRegions": false,
-        "eventCount": 0
-      },
-      "competition": {
-        "id": "ccff2e9a-5347-41aa-902a-bb6b1886d817",
-        "name": "AFL",
-        "url": "/sports/australian-rules/afl",
-        "hasInPlayEvents": true,
-        "region": null
-      },
-      "teams": [
-        {
-          "id": "SportingTeam:21d30abd-76c5-453f-9b6d-8c1f71e56bca",
-          "name": "Hawthorn",
-          "colour": "#4A2E0B",
-          "locale": "HOME",
-          "scores": [],
-          "scoresV2": null,
-          "icon": {
-            "web": "/images/neds/sprites/svg-sports-afl-icon.svg#hawthorn-hawks"
-          }
-        },
-        {
-          "id": "SportingTeam:4eb0072d-6886-45f9-aec8-9c86b3b4133a",
-          "name": "Collingwood",
-          "colour": "#111111",
-          "locale": "AWAY",
-          "scores": [],
-          "scoresV2": null,
-          "icon": {
-            "web": "/images/neds/sprites/svg-sports-afl-icon.svg#collingwood-magpies"
-          }
-        }
-      ],
-      "matchClock": null,
-      "marketCount": 1,
-      "markets": {
-        "nodes": [
-          {
-            "id": "SportingMarket:3ac99f98-260e-4108-8ef6-88320751e1d5",
-            "name": "Match Betting",
-            "marketTypeId": "be25c37a-71ff-47f6-a1e2-02a494eb5a4d",
-            "handicap": null,
-            "isPrimary": true,
-            "isSuspended": false,
-            "status": "OPEN",
-            "liveBettingAvailable": false,
-            "allowsCashOut": false,
-            "sameGameMultiAvailable": false,
-            "allowOddsBoostExtra": false,
-            "additionalProductTypeIds": null,
-            "entrantCount": 2,
-            "entrants": {
-              "nodes": [
-                {
-                  "id": "SportingEntrant:15439237-7213-4f6f-925f-8a24c29c9f86",
-                  "name": "Hawthorn",
-                  "handicap": null,
-                  "isSuspended": false,
-                  "role": "HOME",
-                  "icon": {
-                    "web": "/images/neds/sprites/svg-sports-afl-icon.svg#hawthorn-hawks"
-                  },
-                  "price": {
-                    "id": "15439237-7213-4f6f-925f-8a24c29c9f86:940b8704-e497-4a76-b390-00918ff7d282:",
-                    "odds": {
-                      "numerator": 7,
-                      "denominator": 20
-                    }
-                  }
-                },
-                {
-                  "id": "SportingEntrant:c0f0eb89-7bc4-443a-addf-199f70d4f445",
-                  "name": "Collingwood",
-                  "handicap": null,
-                  "isSuspended": false,
-                  "role": "AWAY",
-                  "icon": {
-                    "web": "/images/neds/sprites/svg-sports-afl-icon.svg#collingwood-magpies"
-                  },
-                  "price": {
-                    "id": "c0f0eb89-7bc4-443a-addf-199f70d4f445:940b8704-e497-4a76-b390-00918ff7d282:",
-                    "odds": {
-                      "numerator": 43,
-                      "denominator": 20
                     }
                   }
                 }
