@@ -90,7 +90,7 @@
         }
       ],
       "matchClock": null,
-      "marketCount": 186,
+      "marketCount": 145,
       "markets": {
         "nodes": [
           {
@@ -203,7 +203,7 @@
         }
       ],
       "matchClock": null,
-      "marketCount": 184,
+      "marketCount": 121,
       "markets": {
         "nodes": [
           {
@@ -316,7 +316,7 @@
         }
       ],
       "matchClock": null,
-      "marketCount": 186,
+      "marketCount": 122,
       "markets": {
         "nodes": [
           {
@@ -429,7 +429,7 @@
         }
       ],
       "matchClock": null,
-      "marketCount": 186,
+      "marketCount": 122,
       "markets": {
         "nodes": [
           {
@@ -542,7 +542,7 @@
         }
       ],
       "matchClock": null,
-      "marketCount": 187,
+      "marketCount": 123,
       "markets": {
         "nodes": [
           {
@@ -655,7 +655,7 @@
         }
       ],
       "matchClock": null,
-      "marketCount": 184,
+      "marketCount": 122,
       "markets": {
         "nodes": [
           {
@@ -768,7 +768,7 @@
         }
       ],
       "matchClock": null,
-      "marketCount": 185,
+      "marketCount": 121,
       "markets": {
         "nodes": [
           {
@@ -881,7 +881,7 @@
         }
       ],
       "matchClock": null,
-      "marketCount": 186,
+      "marketCount": 122,
       "markets": {
         "nodes": [
           {
@@ -912,8 +912,8 @@
                   "price": {
                     "id": "a439b8fd-f17b-44ff-80a4-89e1e1ba1c34:940b8704-e497-4a76-b390-00918ff7d282:",
                     "odds": {
-                      "numerator": 39,
-                      "denominator": 20
+                      "numerator": 13,
+                      "denominator": 5
                     }
                   }
                 },
@@ -929,8 +929,8 @@
                   "price": {
                     "id": "35826cb5-02df-4e77-b3bd-58f85f7c3f6e:940b8704-e497-4a76-b390-00918ff7d282:",
                     "odds": {
-                      "numerator": 2,
-                      "denominator": 5
+                      "numerator": 7,
+                      "denominator": 25
                     }
                   }
                 }
@@ -1043,6 +1043,119 @@
                     "id": "21177b49-647c-4678-82ce-a14590414303:940b8704-e497-4a76-b390-00918ff7d282:",
                     "odds": {
                       "numerator": 1,
+                      "denominator": 50
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "460e8970-3be4-4011-a72f-1395c04e7aed": {
+      "id": "460e8970-3be4-4011-a72f-1395c04e7aed",
+      "name": "GWS GIANTS (W) vs West Coast Eagles (W)",
+      "url": "/sports/australian-rules/afl/gws-giants-w-vs-west-coast-eagles-w/460e8970-3be4-4011-a72f-1395c04e7aed",
+      "advertisedStart": "2026-08-16T06:45:00.000Z",
+      "eventType": "MATCH",
+      "eventTypeId": "6bfa0efc-05df-4ae1-9b1e-152365290cfd",
+      "bettingStatus": "OPEN",
+      "status": "OPEN",
+      "phase": null,
+      "hasLiveVision": false,
+      "inPlay": false,
+      "sportCategory": {
+        "id": "23d497e6-8aab-4309-905b-9421f42c9bc5",
+        "name": "Australian Rules",
+        "category": "AUSTRALIAN_RULES",
+        "icon": "sports/australian-rules",
+        "slug": "australian-rules",
+        "url": "/sports/australian-rules",
+        "hasRegions": false,
+        "eventCount": 0
+      },
+      "competition": {
+        "id": "ccff2e9a-5347-41aa-902a-bb6b1886d817",
+        "name": "AFL",
+        "url": "/sports/australian-rules/afl",
+        "hasInPlayEvents": false,
+        "region": null
+      },
+      "teams": [
+        {
+          "id": "SportingTeam:32880a98-8511-4856-9a9a-c4922b71655f",
+          "name": "GWS GIANTS (W)",
+          "colour": "#ff6600",
+          "locale": "HOME",
+          "scores": [],
+          "scoresV2": null,
+          "icon": {
+            "web": "/images/neds/sprites/svg-sports-afl-icon.svg#gws-giants"
+          }
+        },
+        {
+          "id": "SportingTeam:214fad43-ebb8-46bf-b1fe-3421478911ef",
+          "name": "West Coast Eagles (W)",
+          "colour": "#003087",
+          "locale": "AWAY",
+          "scores": [],
+          "scoresV2": null,
+          "icon": {
+            "web": "/images/neds/sprites/svg-sports-afl-icon.svg#west-coast-eagles"
+          }
+        }
+      ],
+      "matchClock": null,
+      "marketCount": 24,
+      "markets": {
+        "nodes": [
+          {
+            "id": "SportingMarket:a1d469f5-5693-4cfb-b86b-ad73f5d8d211",
+            "name": "Match Betting",
+            "marketTypeId": "be25c37a-71ff-47f6-a1e2-02a494eb5a4d",
+            "handicap": null,
+            "isPrimary": true,
+            "isSuspended": false,
+            "status": "OPEN",
+            "liveBettingAvailable": true,
+            "allowsCashOut": false,
+            "sameGameMultiAvailable": true,
+            "allowOddsBoostExtra": false,
+            "additionalProductTypeIds": null,
+            "entrantCount": 2,
+            "entrants": {
+              "nodes": [
+                {
+                  "id": "SportingEntrant:e42ac42d-4ec4-4c6d-b4c5-cd9b7c61495b",
+                  "name": "GWS GIANTS (W)",
+                  "handicap": null,
+                  "isSuspended": false,
+                  "role": "HOME",
+                  "icon": {
+                    "web": "/images/neds/sprites/svg-sports-afl-icon.svg#gws-giants"
+                  },
+                  "price": {
+                    "id": "e42ac42d-4ec4-4c6d-b4c5-cd9b7c61495b:940b8704-e497-4a76-b390-00918ff7d282:",
+                    "odds": {
+                      "numerator": 13,
+                      "denominator": 4
+                    }
+                  }
+                },
+                {
+                  "id": "SportingEntrant:a1ea923c-f13c-441b-8add-7b979ffef14d",
+                  "name": "West Coast Eagles (W)",
+                  "handicap": null,
+                  "isSuspended": false,
+                  "role": "AWAY",
+                  "icon": {
+                    "web": "/images/neds/sprites/svg-sports-afl-icon.svg#west-coast-eagles"
+                  },
+                  "price": {
+                    "id": "a1ea923c-f13c-441b-8add-7b979ffef14d:940b8704-e497-4a76-b390-00918ff7d282:",
+                    "odds": {
+                      "numerator": 11,
                       "denominator": 50
                     }
                   }
