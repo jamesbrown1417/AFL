@@ -1,10 +1,10 @@
 {
   "events": {
-    "d2eab138-f654-4288-a4f9-9c5ea4cd534d": {
-      "id": "d2eab138-f654-4288-a4f9-9c5ea4cd534d",
-      "name": "AFL Round 23 Specials",
-      "url": "/sports/australian-rules/afl/afl-round-23-specials/d2eab138-f654-4288-a4f9-9c5ea4cd534d",
-      "advertisedStart": "2026-08-14T10:09:00.000Z",
+    "d8987eea-2394-41d4-83f4-b025260a2d28": {
+      "id": "d8987eea-2394-41d4-83f4-b025260a2d28",
+      "name": "Saturday AFL Specials - 15/08",
+      "url": "/sports/australian-rules/afl/saturday-afl-specials-15-08/d8987eea-2394-41d4-83f4-b025260a2d28",
+      "advertisedStart": "2026-08-15T02:34:00.000Z",
       "eventType": "MATCH",
       "eventTypeId": "6bfa0efc-05df-4ae1-9b1e-152365290cfd",
       "bettingStatus": "OPEN",
@@ -31,122 +31,9 @@
       },
       "teams": null,
       "matchClock": null,
-      "marketCount": 12,
+      "marketCount": 13,
       "markets": {
         "nodes": []
-      }
-    },
-    "ec3be557-cb7e-4a44-b3c4-e8471b27237a": {
-      "id": "ec3be557-cb7e-4a44-b3c4-e8471b27237a",
-      "name": "Fremantle vs Adelaide Crows",
-      "url": "/sports/australian-rules/afl/fremantle-vs-adelaide-crows/ec3be557-cb7e-4a44-b3c4-e8471b27237a",
-      "advertisedStart": "2026-08-14T10:10:00.000Z",
-      "eventType": "MATCH",
-      "eventTypeId": "6bfa0efc-05df-4ae1-9b1e-152365290cfd",
-      "bettingStatus": "OPEN",
-      "status": "OPEN",
-      "phase": null,
-      "hasLiveVision": false,
-      "inPlay": false,
-      "sportCategory": {
-        "id": "23d497e6-8aab-4309-905b-9421f42c9bc5",
-        "name": "Australian Rules",
-        "category": "AUSTRALIAN_RULES",
-        "icon": "sports/australian-rules",
-        "slug": "australian-rules",
-        "url": "/sports/australian-rules",
-        "hasRegions": false,
-        "eventCount": 0
-      },
-      "competition": {
-        "id": "ccff2e9a-5347-41aa-902a-bb6b1886d817",
-        "name": "AFL",
-        "url": "/sports/australian-rules/afl",
-        "hasInPlayEvents": false,
-        "region": null
-      },
-      "teams": [
-        {
-          "id": "SportingTeam:105d6e82-e819-49b9-a2c7-0055958bb0be",
-          "name": "Fremantle",
-          "colour": "#2E0F4F",
-          "locale": "HOME",
-          "scores": [],
-          "scoresV2": null,
-          "icon": {
-            "web": "/images/neds/sprites/svg-sports-afl-icon.svg#fremantle-dockers"
-          }
-        },
-        {
-          "id": "SportingTeam:2aaae67b-aa19-41ce-a124-57f384c24048",
-          "name": "Adelaide Crows",
-          "colour": "#002F6C",
-          "locale": "AWAY",
-          "scores": [],
-          "scoresV2": null,
-          "icon": {
-            "web": "/images/neds/sprites/svg-sports-afl-icon.svg#adelaide-crows"
-          }
-        }
-      ],
-      "matchClock": null,
-      "marketCount": 281,
-      "markets": {
-        "nodes": [
-          {
-            "id": "SportingMarket:8390e9c5-d88a-416b-8cf0-743ea5fee673",
-            "name": "Match Betting",
-            "marketTypeId": "be25c37a-71ff-47f6-a1e2-02a494eb5a4d",
-            "handicap": null,
-            "isPrimary": true,
-            "isSuspended": false,
-            "status": "OPEN",
-            "liveBettingAvailable": true,
-            "allowsCashOut": false,
-            "sameGameMultiAvailable": true,
-            "allowOddsBoostExtra": false,
-            "additionalProductTypeIds": null,
-            "entrantCount": 2,
-            "entrants": {
-              "nodes": [
-                {
-                  "id": "SportingEntrant:d96a352c-c7fd-4628-9857-afcaf1bb83bb",
-                  "name": "Fremantle",
-                  "handicap": null,
-                  "isSuspended": false,
-                  "role": "HOME",
-                  "icon": {
-                    "web": "/images/neds/sprites/svg-sports-afl-icon.svg#fremantle-dockers"
-                  },
-                  "price": {
-                    "id": "d96a352c-c7fd-4628-9857-afcaf1bb83bb:940b8704-e497-4a76-b390-00918ff7d282:",
-                    "odds": {
-                      "numerator": 3,
-                      "denominator": 10
-                    }
-                  }
-                },
-                {
-                  "id": "SportingEntrant:879b2a4e-394b-4944-9abe-ef0bef5f0218",
-                  "name": "Adelaide Crows",
-                  "handicap": null,
-                  "isSuspended": false,
-                  "role": "AWAY",
-                  "icon": {
-                    "web": "/images/neds/sprites/svg-sports-afl-icon.svg#adelaide-crows"
-                  },
-                  "price": {
-                    "id": "879b2a4e-394b-4944-9abe-ef0bef5f0218:940b8704-e497-4a76-b390-00918ff7d282:",
-                    "odds": {
-                      "numerator": 13,
-                      "denominator": 5
-                    }
-                  }
-                }
-              ]
-            }
-          }
-        ]
       }
     },
     "08b3543c-9abd-48c8-a5cd-0b6cde18dd6e": {
@@ -203,7 +90,7 @@
         }
       ],
       "matchClock": null,
-      "marketCount": 253,
+      "marketCount": 282,
       "markets": {
         "nodes": [
           {
@@ -316,7 +203,7 @@
         }
       ],
       "matchClock": null,
-      "marketCount": 257,
+      "marketCount": 286,
       "markets": {
         "nodes": [
           {
@@ -429,7 +316,7 @@
         }
       ],
       "matchClock": null,
-      "marketCount": 256,
+      "marketCount": 284,
       "markets": {
         "nodes": [
           {
@@ -542,7 +429,7 @@
         }
       ],
       "matchClock": null,
-      "marketCount": 256,
+      "marketCount": 284,
       "markets": {
         "nodes": [
           {
@@ -655,7 +542,7 @@
         }
       ],
       "matchClock": null,
-      "marketCount": 255,
+      "marketCount": 279,
       "markets": {
         "nodes": [
           {
@@ -686,8 +573,8 @@
                   "price": {
                     "id": "91f36175-ed70-4337-b3af-3887fcd63cc2:940b8704-e497-4a76-b390-00918ff7d282:",
                     "odds": {
-                      "numerator": 16,
-                      "denominator": 5
+                      "numerator": 31,
+                      "denominator": 10
                     }
                   }
                 },
@@ -703,8 +590,8 @@
                   "price": {
                     "id": "872d2682-cabb-4d97-82ab-eaa48a677ef5:940b8704-e497-4a76-b390-00918ff7d282:",
                     "odds": {
-                      "numerator": 11,
-                      "denominator": 50
+                      "numerator": 6,
+                      "denominator": 25
                     }
                   }
                 }
@@ -768,7 +655,7 @@
         }
       ],
       "matchClock": null,
-      "marketCount": 225,
+      "marketCount": 254,
       "markets": {
         "nodes": [
           {
@@ -881,7 +768,7 @@
         }
       ],
       "matchClock": null,
-      "marketCount": 225,
+      "marketCount": 254,
       "markets": {
         "nodes": [
           {
@@ -994,7 +881,7 @@
         }
       ],
       "matchClock": null,
-      "marketCount": 226,
+      "marketCount": 255,
       "markets": {
         "nodes": [
           {
@@ -1364,8 +1251,8 @@
                   "price": {
                     "id": "00ef57b8-4891-4e7a-bc0b-cc224a5ddcfe:940b8704-e497-4a76-b390-00918ff7d282:",
                     "odds": {
-                      "numerator": 7,
-                      "denominator": 4
+                      "numerator": 17,
+                      "denominator": 10
                     }
                   }
                 },
@@ -1381,8 +1268,8 @@
                   "price": {
                     "id": "3d7b5db1-bad9-4573-a658-38e37bafd5e5:940b8704-e497-4a76-b390-00918ff7d282:",
                     "odds": {
-                      "numerator": 9,
-                      "denominator": 20
+                      "numerator": 11,
+                      "denominator": 25
                     }
                   }
                 }
