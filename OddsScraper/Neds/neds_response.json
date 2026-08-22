@@ -1,118 +1,5 @@
 {
   "events": {
-    "6d135867-b2f1-4ca0-8b11-74add3f61e28": {
-      "id": "6d135867-b2f1-4ca0-8b11-74add3f61e28",
-      "name": "Melbourne vs Western Bulldogs",
-      "url": "/sports/australian-rules/afl/melbourne-vs-western-bulldogs/6d135867-b2f1-4ca0-8b11-74add3f61e28",
-      "advertisedStart": "2026-08-22T06:15:00.000Z",
-      "eventType": "MATCH",
-      "eventTypeId": "6bfa0efc-05df-4ae1-9b1e-152365290cfd",
-      "bettingStatus": "OPEN",
-      "status": "OPEN",
-      "phase": null,
-      "hasLiveVision": false,
-      "inPlay": false,
-      "sportCategory": {
-        "id": "23d497e6-8aab-4309-905b-9421f42c9bc5",
-        "name": "Australian Rules",
-        "category": "AUSTRALIAN_RULES",
-        "icon": "sports/australian-rules",
-        "slug": "australian-rules",
-        "url": "/sports/australian-rules",
-        "hasRegions": false,
-        "eventCount": 0
-      },
-      "competition": {
-        "id": "ccff2e9a-5347-41aa-902a-bb6b1886d817",
-        "name": "AFL",
-        "url": "/sports/australian-rules/afl",
-        "hasInPlayEvents": true,
-        "region": null
-      },
-      "teams": [
-        {
-          "id": "SportingTeam:be822ddd-ab11-462b-a01d-b910981836e8",
-          "name": "Melbourne",
-          "colour": "#0A1F44",
-          "locale": "HOME",
-          "scores": [],
-          "scoresV2": null,
-          "icon": {
-            "web": "/images/neds/sprites/svg-sports-afl-icon.svg#melbourne-fc"
-          }
-        },
-        {
-          "id": "SportingTeam:6d5661b1-01eb-4841-8124-65cd91132efa",
-          "name": "Western Bulldogs",
-          "colour": "#003A8F",
-          "locale": "AWAY",
-          "scores": [],
-          "scoresV2": null,
-          "icon": {
-            "web": "/images/neds/sprites/svg-sports-afl-icon.svg#western-bulldogs"
-          }
-        }
-      ],
-      "matchClock": null,
-      "marketCount": 271,
-      "markets": {
-        "nodes": [
-          {
-            "id": "SportingMarket:a0d1b98f-2594-4c73-a65b-8ea640f4f4da",
-            "name": "Match Betting",
-            "marketTypeId": "be25c37a-71ff-47f6-a1e2-02a494eb5a4d",
-            "handicap": null,
-            "isPrimary": true,
-            "isSuspended": false,
-            "status": "OPEN",
-            "liveBettingAvailable": true,
-            "allowsCashOut": false,
-            "sameGameMultiAvailable": true,
-            "allowOddsBoostExtra": false,
-            "additionalProductTypeIds": null,
-            "entrantCount": 2,
-            "entrants": {
-              "nodes": [
-                {
-                  "id": "SportingEntrant:7f7efd0d-887d-4bd5-a106-8061d5df9078",
-                  "name": "Melbourne",
-                  "handicap": null,
-                  "isSuspended": false,
-                  "role": "HOME",
-                  "icon": {
-                    "web": "/images/neds/sprites/svg-sports-afl-icon.svg#melbourne-fc"
-                  },
-                  "price": {
-                    "id": "7f7efd0d-887d-4bd5-a106-8061d5df9078:940b8704-e497-4a76-b390-00918ff7d282:",
-                    "odds": {
-                      "numerator": 11,
-                      "denominator": 25
-                    }
-                  }
-                },
-                {
-                  "id": "SportingEntrant:0b60eeb2-23c1-40e9-9d7d-5c8de385d267",
-                  "name": "Western Bulldogs",
-                  "handicap": null,
-                  "isSuspended": false,
-                  "role": "AWAY",
-                  "icon": {
-                    "web": "/images/neds/sprites/svg-sports-afl-icon.svg#western-bulldogs"
-                  },
-                  "price": {
-                    "id": "0b60eeb2-23c1-40e9-9d7d-5c8de385d267:940b8704-e497-4a76-b390-00918ff7d282:",
-                    "odds": {
-                      "numerator": 9,
-                      "denominator": 5
-                    }
-                  }
-                }
-              ]
-            }
-          }
-        ]
-      }
-    },
     "4cce5e90-4a4e-486f-b4ad-1b711da543c5": {
       "id": "4cce5e90-4a4e-486f-b4ad-1b711da543c5",
       "name": "Geelong Cats vs Richmond",
@@ -139,7 +26,7 @@
         "id": "ccff2e9a-5347-41aa-902a-bb6b1886d817",
         "name": "AFL",
         "url": "/sports/australian-rules/afl",
-        "hasInPlayEvents": true,
+        "hasInPlayEvents": false,
         "region": null
       },
       "teams": [
@@ -252,7 +139,7 @@
         "id": "ccff2e9a-5347-41aa-902a-bb6b1886d817",
         "name": "AFL",
         "url": "/sports/australian-rules/afl",
-        "hasInPlayEvents": true,
+        "hasInPlayEvents": false,
         "region": null
       },
       "teams": [
@@ -365,7 +252,7 @@
         "id": "ccff2e9a-5347-41aa-902a-bb6b1886d817",
         "name": "AFL",
         "url": "/sports/australian-rules/afl",
-        "hasInPlayEvents": true,
+        "hasInPlayEvents": false,
         "region": null
       },
       "teams": [
@@ -478,7 +365,7 @@
         "id": "ccff2e9a-5347-41aa-902a-bb6b1886d817",
         "name": "AFL",
         "url": "/sports/australian-rules/afl",
-        "hasInPlayEvents": true,
+        "hasInPlayEvents": false,
         "region": null
       },
       "teams": [
@@ -591,7 +478,7 @@
         "id": "ccff2e9a-5347-41aa-902a-bb6b1886d817",
         "name": "AFL",
         "url": "/sports/australian-rules/afl",
-        "hasInPlayEvents": true,
+        "hasInPlayEvents": false,
         "region": null
       },
       "teams": [
@@ -619,7 +506,7 @@
         }
       ],
       "matchClock": null,
-      "marketCount": 266,
+      "marketCount": 267,
       "markets": {
         "nodes": [
           {
