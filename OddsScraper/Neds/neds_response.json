@@ -1,154 +1,5 @@
 {
   "events": {
-    "51e8584c-9c38-417d-ad9c-53d1ac538964": {
-      "id": "51e8584c-9c38-417d-ad9c-53d1ac538964",
-      "name": "Sunday AFL Specials - 23/08",
-      "url": "/sports/australian-rules/afl/sunday-afl-specials-23-08/51e8584c-9c38-417d-ad9c-53d1ac538964",
-      "advertisedStart": "2026-08-23T02:19:00.000Z",
-      "eventType": "MATCH",
-      "eventTypeId": "6bfa0efc-05df-4ae1-9b1e-152365290cfd",
-      "bettingStatus": "OPEN",
-      "status": "OPEN",
-      "phase": null,
-      "hasLiveVision": false,
-      "inPlay": false,
-      "sportCategory": {
-        "id": "23d497e6-8aab-4309-905b-9421f42c9bc5",
-        "name": "Australian Rules",
-        "category": "AUSTRALIAN_RULES",
-        "icon": "sports/australian-rules",
-        "slug": "australian-rules",
-        "url": "/sports/australian-rules",
-        "hasRegions": false,
-        "eventCount": 0
-      },
-      "competition": {
-        "id": "ccff2e9a-5347-41aa-902a-bb6b1886d817",
-        "name": "AFL",
-        "url": "/sports/australian-rules/afl",
-        "hasInPlayEvents": false,
-        "region": null
-      },
-      "teams": null,
-      "matchClock": null,
-      "marketCount": 13,
-      "markets": {
-        "nodes": []
-      }
-    },
-    "b2221cbe-4443-41d9-a0a4-be3b62274ac4": {
-      "id": "b2221cbe-4443-41d9-a0a4-be3b62274ac4",
-      "name": "Essendon vs Port Adelaide",
-      "url": "/sports/australian-rules/afl/essendon-vs-port-adelaide/b2221cbe-4443-41d9-a0a4-be3b62274ac4",
-      "advertisedStart": "2026-08-23T02:20:00.000Z",
-      "eventType": "MATCH",
-      "eventTypeId": "6bfa0efc-05df-4ae1-9b1e-152365290cfd",
-      "bettingStatus": "OPEN",
-      "status": "OPEN",
-      "phase": null,
-      "hasLiveVision": false,
-      "inPlay": false,
-      "sportCategory": {
-        "id": "23d497e6-8aab-4309-905b-9421f42c9bc5",
-        "name": "Australian Rules",
-        "category": "AUSTRALIAN_RULES",
-        "icon": "sports/australian-rules",
-        "slug": "australian-rules",
-        "url": "/sports/australian-rules",
-        "hasRegions": false,
-        "eventCount": 0
-      },
-      "competition": {
-        "id": "ccff2e9a-5347-41aa-902a-bb6b1886d817",
-        "name": "AFL",
-        "url": "/sports/australian-rules/afl",
-        "hasInPlayEvents": false,
-        "region": null
-      },
-      "teams": [
-        {
-          "id": "SportingTeam:ded87dfd-7064-47a1-96a2-550caeec9bc1",
-          "name": "Essendon",
-          "colour": "#C8102E",
-          "locale": "HOME",
-          "scores": [],
-          "scoresV2": null,
-          "icon": {
-            "web": "/images/neds/sprites/svg-sports-afl-icon.svg#essendon-bombers"
-          }
-        },
-        {
-          "id": "SportingTeam:5bd795cd-3203-40cd-b91c-9e96f86bee7d",
-          "name": "Port Adelaide",
-          "colour": "#008A8F",
-          "locale": "AWAY",
-          "scores": [],
-          "scoresV2": null,
-          "icon": {
-            "web": "/images/neds/sprites/svg-sports-afl-icon.svg#port-adelaide-power"
-          }
-        }
-      ],
-      "matchClock": null,
-      "marketCount": 272,
-      "markets": {
-        "nodes": [
-          {
-            "id": "SportingMarket:36578fdf-12d9-463d-bcd9-be62abad1011",
-            "name": "Match Betting",
-            "marketTypeId": "be25c37a-71ff-47f6-a1e2-02a494eb5a4d",
-            "handicap": null,
-            "isPrimary": true,
-            "isSuspended": false,
-            "status": "OPEN",
-            "liveBettingAvailable": true,
-            "allowsCashOut": false,
-            "sameGameMultiAvailable": true,
-            "allowOddsBoostExtra": false,
-            "additionalProductTypeIds": null,
-            "entrantCount": 2,
-            "entrants": {
-              "nodes": [
-                {
-                  "id": "SportingEntrant:2dacd990-86b3-4277-aa01-989956df80b0",
-                  "name": "Essendon",
-                  "handicap": null,
-                  "isSuspended": false,
-                  "role": "HOME",
-                  "icon": {
-                    "web": "/images/neds/sprites/svg-sports-afl-icon.svg#essendon-bombers"
-                  },
-                  "price": {
-                    "id": "2dacd990-86b3-4277-aa01-989956df80b0:940b8704-e497-4a76-b390-00918ff7d282:",
-                    "odds": {
-                      "numerator": 49,
-                      "denominator": 50
-                    }
-                  }
-                },
-                {
-                  "id": "SportingEntrant:43c9f419-9b66-47c1-90f7-47fd862e5fd9",
-                  "name": "Port Adelaide",
-                  "handicap": null,
-                  "isSuspended": false,
-                  "role": "AWAY",
-                  "icon": {
-                    "web": "/images/neds/sprites/svg-sports-afl-icon.svg#port-adelaide-power"
-                  },
-                  "price": {
-                    "id": "43c9f419-9b66-47c1-90f7-47fd862e5fd9:940b8704-e497-4a76-b390-00918ff7d282:",
-                    "odds": {
-                      "numerator": 17,
-                      "denominator": 20
-                    }
-                  }
-                }
-              ]
-            }
-          }
-        ]
-      }
-    },
     "120e57e2-b8b1-4eef-bb60-b322f870f9a6": {
       "id": "120e57e2-b8b1-4eef-bb60-b322f870f9a6",
       "name": "Sydney Swans vs North Melbourne",
@@ -175,7 +26,7 @@
         "id": "ccff2e9a-5347-41aa-902a-bb6b1886d817",
         "name": "AFL",
         "url": "/sports/australian-rules/afl",
-        "hasInPlayEvents": false,
+        "hasInPlayEvents": true,
         "region": null
       },
       "teams": [
@@ -234,8 +85,8 @@
                   "price": {
                     "id": "4474437a-dd27-4979-b83a-5acc2bc6e6bd:940b8704-e497-4a76-b390-00918ff7d282:",
                     "odds": {
-                      "numerator": 17,
-                      "denominator": 20
+                      "numerator": 73,
+                      "denominator": 100
                     }
                   }
                 },
@@ -251,8 +102,8 @@
                   "price": {
                     "id": "ed0f8ca7-f811-4e0e-aceb-eabadfe3fcd5:940b8704-e497-4a76-b390-00918ff7d282:",
                     "odds": {
-                      "numerator": 24,
-                      "denominator": 25
+                      "numerator": 11,
+                      "denominator": 10
                     }
                   }
                 }
@@ -288,7 +139,7 @@
         "id": "ccff2e9a-5347-41aa-902a-bb6b1886d817",
         "name": "AFL",
         "url": "/sports/australian-rules/afl",
-        "hasInPlayEvents": false,
+        "hasInPlayEvents": true,
         "region": null
       },
       "teams": [
@@ -401,7 +252,7 @@
         "id": "ccff2e9a-5347-41aa-902a-bb6b1886d817",
         "name": "AFL",
         "url": "/sports/australian-rules/afl",
-        "hasInPlayEvents": false,
+        "hasInPlayEvents": true,
         "region": null
       },
       "teams": [
@@ -514,7 +365,7 @@
         "id": "ccff2e9a-5347-41aa-902a-bb6b1886d817",
         "name": "AFL",
         "url": "/sports/australian-rules/afl",
-        "hasInPlayEvents": false,
+        "hasInPlayEvents": true,
         "region": null
       },
       "teams": [
