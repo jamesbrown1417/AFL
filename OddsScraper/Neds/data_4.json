@@ -1,0 +1,181 @@
+{
+  "entrants": {
+    "16a07ceb-d845-44be-8015-c60ad50e71f0": {
+      "id": "16a07ceb-d845-44be-8015-c60ad50e71f0",
+      "name": "Western Bulldogs",
+      "home_away": "AWAY",
+      "visible": true,
+      "sort_order": 20,
+      "market_id": "30d7141b-bdad-43de-b212-c641491258d6"
+    },
+    "1fda6c4a-fd84-4cbc-bda0-46201afdd19b": {
+      "id": "1fda6c4a-fd84-4cbc-bda0-46201afdd19b",
+      "name": "Adelaide Crows",
+      "home_away": "HOME",
+      "visible": true,
+      "sort_order": 10,
+      "market_id": "30d7141b-bdad-43de-b212-c641491258d6"
+    },
+    "40e095ea-3e0f-4781-b822-cd8b6a51f125": {
+      "id": "40e095ea-3e0f-4781-b822-cd8b6a51f125",
+      "name": "Western Bulldogs",
+      "home_away": "AWAY",
+      "visible": true,
+      "sort_order": 20,
+      "market_id": "0d7f089f-06d1-47a2-bafa-d9323243fd83"
+    },
+    "505d7ed3-50ee-4e04-879c-284b5e2bf390": {
+      "id": "505d7ed3-50ee-4e04-879c-284b5e2bf390",
+      "name": "Adelaide Crows",
+      "home_away": "HOME",
+      "visible": true,
+      "sort_order": 10,
+      "market_id": "0d7f089f-06d1-47a2-bafa-d9323243fd83"
+    }
+  },
+  "event_participants": {
+    "61a5d203-5ac3-4cde-8aa9-43b68d9c65a1": {
+      "id": "61a5d203-5ac3-4cde-8aa9-43b68d9c65a1",
+      "event_id": "9e32bb6d-7955-4c9c-b6ac-84aeaa165dee",
+      "name": "Western Bulldogs",
+      "home_away": "AWAY",
+      "colour": "#003A8F"
+    },
+    "ba42c744-91fe-44ec-a397-215d04a1d6fc": {
+      "id": "ba42c744-91fe-44ec-a397-215d04a1d6fc",
+      "event_id": "9e32bb6d-7955-4c9c-b6ac-84aeaa165dee",
+      "name": "Adelaide Crows",
+      "home_away": "HOME",
+      "colour": "#002F6C"
+    }
+  },
+  "events": {
+    "9e32bb6d-7955-4c9c-b6ac-84aeaa165dee": {
+      "id": "9e32bb6d-7955-4c9c-b6ac-84aeaa165dee",
+      "name": "Adelaide Crows vs Western Bulldogs",
+      "event_type": {
+        "id": "6bfa0efc-05df-4ae1-9b1e-152365290cfd",
+        "name": "Match"
+      },
+      "match_status": "BettingOpen",
+      "advertised_start": "2026-09-05T09:35:00Z",
+      "actual_start": "2026-09-05T09:35:00Z",
+      "visible": true,
+      "slug": "adelaide-crows-vs-western-bulldogs",
+      "competition": {
+        "id": "ccff2e9a-5347-41aa-902a-bb6b1886d817",
+        "name": "AFL",
+        "sort_order": 1,
+        "region": "Australia"
+      },
+      "competition_id": "ccff2e9a-5347-41aa-902a-bb6b1886d817",
+      "market_type_group_ids": [
+        "29edb5e1-a717-4769-8bcd-2d43ec38d828"
+      ],
+      "market_type_group_markets": [
+        {
+          "market_type_group_id": "29edb5e1-a717-4769-8bcd-2d43ec38d828",
+          "market_ids": [
+            "0d7f089f-06d1-47a2-bafa-d9323243fd83",
+            "30d7141b-bdad-43de-b212-c641491258d6"
+          ]
+        }
+      ],
+      "market_count": 2,
+      "main_markets": [
+        "0d7f089f-06d1-47a2-bafa-d9323243fd83"
+      ],
+      "market_ids": [
+        "0d7f089f-06d1-47a2-bafa-d9323243fd83",
+        "30d7141b-bdad-43de-b212-c641491258d6"
+      ],
+      "category_id": "23d497e6-8aab-4309-905b-9421f42c9bc5",
+      "round_id": "0ad8fcfc-9593-4f91-83a5-4bbfcb3177de",
+      "participant_ids": [
+        "61a5d203-5ac3-4cde-8aa9-43b68d9c65a1",
+        "ba42c744-91fe-44ec-a397-215d04a1d6fc"
+      ]
+    }
+  },
+  "market_type_groups": {
+    "29edb5e1-a717-4769-8bcd-2d43ec38d828": {
+      "id": "29edb5e1-a717-4769-8bcd-2d43ec38d828",
+      "category_id": "23d497e6-8aab-4309-905b-9421f42c9bc5",
+      "name": "Top Markets",
+      "priority": 352,
+      "type": "MARKET_TYPE_GROUP_TYPE_EVENT"
+    }
+  },
+  "markets": {
+    "0d7f089f-06d1-47a2-bafa-d9323243fd83": {
+      "id": "0d7f089f-06d1-47a2-bafa-d9323243fd83",
+      "event_id": "9e32bb6d-7955-4c9c-b6ac-84aeaa165dee",
+      "market_type_id": "be25c37a-71ff-47f6-a1e2-02a494eb5a4d",
+      "market_status_id": "4bc8fe96-296b-4b4c-aea4-85c94f63b9c6",
+      "name": "Match Betting",
+      "advertised_start": {
+        "seconds": 1788600900
+      },
+      "actual_start": {
+        "seconds": 1788600900
+      },
+      "is_primary": true,
+      "visible": true,
+      "entrant_ids": [
+        "505d7ed3-50ee-4e04-879c-284b5e2bf390",
+        "40e095ea-3e0f-4781-b822-cd8b6a51f125"
+      ],
+      "num_winners": 1
+    },
+    "30d7141b-bdad-43de-b212-c641491258d6": {
+      "id": "30d7141b-bdad-43de-b212-c641491258d6",
+      "event_id": "9e32bb6d-7955-4c9c-b6ac-84aeaa165dee",
+      "market_type_id": "d04cddcd-5f42-4d17-ae1c-950dfdaa2c98",
+      "market_status_id": "4bc8fe96-296b-4b4c-aea4-85c94f63b9c6",
+      "name": "Line",
+      "advertised_start": {
+        "seconds": 1788600900
+      },
+      "actual_start": {
+        "seconds": 1788600900
+      },
+      "handicap": 15.5,
+      "visible": true,
+      "entrant_ids": [
+        "1fda6c4a-fd84-4cbc-bda0-46201afdd19b",
+        "16a07ceb-d845-44be-8015-c60ad50e71f0"
+      ],
+      "num_winners": 1
+    }
+  },
+  "markets_allow_cashout": {
+    "0d7f089f-06d1-47a2-bafa-d9323243fd83": true,
+    "30d7141b-bdad-43de-b212-c641491258d6": false
+  },
+  "prices": {
+    "16a07ceb-d845-44be-8015-c60ad50e71f0:940b8704-e497-4a76-b390-00918ff7d282:": {
+      "odds": {
+        "numerator": 9,
+        "denominator": 10
+      }
+    },
+    "1fda6c4a-fd84-4cbc-bda0-46201afdd19b:940b8704-e497-4a76-b390-00918ff7d282:": {
+      "odds": {
+        "numerator": 9,
+        "denominator": 10
+      }
+    },
+    "40e095ea-3e0f-4781-b822-cd8b6a51f125:940b8704-e497-4a76-b390-00918ff7d282:": {
+      "odds": {
+        "numerator": 37,
+        "denominator": 20
+      }
+    },
+    "505d7ed3-50ee-4e04-879c-284b5e2bf390:940b8704-e497-4a76-b390-00918ff7d282:": {
+      "odds": {
+        "numerator": 21,
+        "denominator": 50
+      }
+    }
+  }
+}
