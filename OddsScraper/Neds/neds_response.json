@@ -1,10 +1,10 @@
 {
   "events": {
-    "5e8ccee6-2522-4d7e-80bf-e2ffc26107bb": {
-      "id": "5e8ccee6-2522-4d7e-80bf-e2ffc26107bb",
-      "name": "Geelong Cats vs Carlton",
-      "url": "/sports/australian-rules/afl/geelong-cats-vs-carlton/5e8ccee6-2522-4d7e-80bf-e2ffc26107bb",
-      "advertisedStart": "2026-09-04T09:40:00.000Z",
+    "901a4142-516a-46ef-80c9-34587deb37a6": {
+      "id": "901a4142-516a-46ef-80c9-34587deb37a6",
+      "name": "Saturday AFL Specials - 05/09",
+      "url": "/sports/australian-rules/afl/saturday-afl-specials-05-09/901a4142-516a-46ef-80c9-34587deb37a6",
+      "advertisedStart": "2026-09-05T05:14:00.000Z",
       "eventType": "MATCH",
       "eventTypeId": "6bfa0efc-05df-4ae1-9b1e-152365290cfd",
       "bettingStatus": "OPEN",
@@ -29,88 +29,11 @@
         "hasInPlayEvents": false,
         "region": null
       },
-      "teams": [
-        {
-          "id": "SportingTeam:d100ceb4-0048-4dbf-91d1-72ae222d219c",
-          "name": "Geelong Cats",
-          "colour": "#0B2A5B",
-          "locale": "HOME",
-          "scores": [],
-          "scoresV2": null,
-          "icon": {
-            "web": "/images/neds/sprites/svg-sports-afl-icon.svg#geelong-cats"
-          }
-        },
-        {
-          "id": "SportingTeam:bf54aa22-7b98-4e31-a673-2f840b5f5823",
-          "name": "Carlton",
-          "colour": "#0A1F44",
-          "locale": "AWAY",
-          "scores": [],
-          "scoresV2": null,
-          "icon": {
-            "web": "/images/neds/sprites/svg-sports-afl-icon.svg#carlton-fc"
-          }
-        }
-      ],
+      "teams": null,
       "matchClock": null,
-      "marketCount": 288,
+      "marketCount": 13,
       "markets": {
-        "nodes": [
-          {
-            "id": "SportingMarket:c9876be4-c4ed-427f-9d96-79666cb62e46",
-            "name": "Match Betting",
-            "marketTypeId": "be25c37a-71ff-47f6-a1e2-02a494eb5a4d",
-            "handicap": null,
-            "isPrimary": true,
-            "isSuspended": false,
-            "status": "OPEN",
-            "liveBettingAvailable": true,
-            "allowsCashOut": false,
-            "sameGameMultiAvailable": true,
-            "allowOddsBoostExtra": false,
-            "additionalProductTypeIds": null,
-            "entrantCount": 2,
-            "entrants": {
-              "nodes": [
-                {
-                  "id": "SportingEntrant:6fd8dbdf-c464-4c5f-bd56-651decca691c",
-                  "name": "Geelong Cats",
-                  "handicap": null,
-                  "isSuspended": false,
-                  "role": "HOME",
-                  "icon": {
-                    "web": "/images/neds/sprites/svg-sports-afl-icon.svg#geelong-cats"
-                  },
-                  "price": {
-                    "id": "6fd8dbdf-c464-4c5f-bd56-651decca691c:940b8704-e497-4a76-b390-00918ff7d282:",
-                    "odds": {
-                      "numerator": 1,
-                      "denominator": 2
-                    }
-                  }
-                },
-                {
-                  "id": "SportingEntrant:5664ba5d-901e-4f9e-8634-c51209213e60",
-                  "name": "Carlton",
-                  "handicap": null,
-                  "isSuspended": false,
-                  "role": "AWAY",
-                  "icon": {
-                    "web": "/images/neds/sprites/svg-sports-afl-icon.svg#carlton-fc"
-                  },
-                  "price": {
-                    "id": "5664ba5d-901e-4f9e-8634-c51209213e60:940b8704-e497-4a76-b390-00918ff7d282:",
-                    "odds": {
-                      "numerator": 8,
-                      "denominator": 5
-                    }
-                  }
-                }
-              ]
-            }
-          }
-        ]
+        "nodes": []
       }
     },
     "bae6980a-884d-4686-8aff-3270bf768b5d": {
@@ -167,7 +90,7 @@
         }
       ],
       "matchClock": null,
-      "marketCount": 287,
+      "marketCount": 299,
       "markets": {
         "nodes": [
           {
@@ -280,7 +203,7 @@
         }
       ],
       "matchClock": null,
-      "marketCount": 263,
+      "marketCount": 304,
       "markets": {
         "nodes": [
           {
@@ -329,6 +252,119 @@
                     "id": "40e095ea-3e0f-4781-b822-cd8b6a51f125:940b8704-e497-4a76-b390-00918ff7d282:",
                     "odds": {
                       "numerator": 41,
+                      "denominator": 20
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "d95fa240-3cb3-4ac0-980d-cf2af2104d0f": {
+      "id": "d95fa240-3cb3-4ac0-980d-cf2af2104d0f",
+      "name": "Fremantle vs Geelong Cats",
+      "url": "/sports/australian-rules/afl/fremantle-vs-geelong-cats/d95fa240-3cb3-4ac0-980d-cf2af2104d0f",
+      "advertisedStart": "2026-09-11T09:40:00.000Z",
+      "eventType": "MATCH",
+      "eventTypeId": "6bfa0efc-05df-4ae1-9b1e-152365290cfd",
+      "bettingStatus": "OPEN",
+      "status": "OPEN",
+      "phase": null,
+      "hasLiveVision": false,
+      "inPlay": false,
+      "sportCategory": {
+        "id": "23d497e6-8aab-4309-905b-9421f42c9bc5",
+        "name": "Australian Rules",
+        "category": "AUSTRALIAN_RULES",
+        "icon": "sports/australian-rules",
+        "slug": "australian-rules",
+        "url": "/sports/australian-rules",
+        "hasRegions": false,
+        "eventCount": 0
+      },
+      "competition": {
+        "id": "ccff2e9a-5347-41aa-902a-bb6b1886d817",
+        "name": "AFL",
+        "url": "/sports/australian-rules/afl",
+        "hasInPlayEvents": false,
+        "region": null
+      },
+      "teams": [
+        {
+          "id": "SportingTeam:d015730e-460e-4d73-89ea-abe0be4a257d",
+          "name": "Fremantle",
+          "colour": null,
+          "locale": "HOME",
+          "scores": [],
+          "scoresV2": null,
+          "icon": {
+            "web": "/images/neds/sprites/svg-sports-afl-icon.svg#fremantle-dockers"
+          }
+        },
+        {
+          "id": "SportingTeam:53fc8502-4885-4fbb-a337-402b8cd4a3a8",
+          "name": "Geelong Cats",
+          "colour": null,
+          "locale": "AWAY",
+          "scores": [],
+          "scoresV2": null,
+          "icon": {
+            "web": "/images/neds/sprites/svg-sports-afl-icon.svg#geelong-cats"
+          }
+        }
+      ],
+      "matchClock": null,
+      "marketCount": 2,
+      "markets": {
+        "nodes": [
+          {
+            "id": "SportingMarket:26cfa668-3ed9-4182-8fe6-21eba55ca98c",
+            "name": "Match Betting",
+            "marketTypeId": "be25c37a-71ff-47f6-a1e2-02a494eb5a4d",
+            "handicap": null,
+            "isPrimary": true,
+            "isSuspended": false,
+            "status": "OPEN",
+            "liveBettingAvailable": false,
+            "allowsCashOut": false,
+            "sameGameMultiAvailable": false,
+            "allowOddsBoostExtra": false,
+            "additionalProductTypeIds": null,
+            "entrantCount": 2,
+            "entrants": {
+              "nodes": [
+                {
+                  "id": "SportingEntrant:10f2d137-bf2c-4d42-ba1d-4f6eff72be59",
+                  "name": "Fremantle",
+                  "handicap": null,
+                  "isSuspended": false,
+                  "role": "HOME",
+                  "icon": {
+                    "web": "/images/neds/sprites/svg-sports-afl-icon.svg#fremantle-dockers"
+                  },
+                  "price": {
+                    "id": "10f2d137-bf2c-4d42-ba1d-4f6eff72be59:940b8704-e497-4a76-b390-00918ff7d282:",
+                    "odds": {
+                      "numerator": 3,
+                      "denominator": 5
+                    }
+                  }
+                },
+                {
+                  "id": "SportingEntrant:3c5facb2-9583-45b5-8ca9-1272c4e90c22",
+                  "name": "Geelong Cats",
+                  "handicap": null,
+                  "isSuspended": false,
+                  "role": "AWAY",
+                  "icon": {
+                    "web": "/images/neds/sprites/svg-sports-afl-icon.svg#geelong-cats"
+                  },
+                  "price": {
+                    "id": "3c5facb2-9583-45b5-8ca9-1272c4e90c22:940b8704-e497-4a76-b390-00918ff7d282:",
+                    "odds": {
+                      "numerator": 27,
                       "denominator": 20
                     }
                   }
