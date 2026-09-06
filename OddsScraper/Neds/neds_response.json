@@ -1,10 +1,10 @@
 {
   "events": {
-    "9e32bb6d-7955-4c9c-b6ac-84aeaa165dee": {
-      "id": "9e32bb6d-7955-4c9c-b6ac-84aeaa165dee",
-      "name": "Adelaide Crows vs Western Bulldogs",
-      "url": "/sports/australian-rules/afl/adelaide-crows-vs-western-bulldogs/9e32bb6d-7955-4c9c-b6ac-84aeaa165dee",
-      "advertisedStart": "2026-09-05T09:35:00.000Z",
+    "070a677c-b9d6-4a8a-b62c-a87bde99e3ce": {
+      "id": "070a677c-b9d6-4a8a-b62c-a87bde99e3ce",
+      "name": "Fremantle vs Geelong Cats",
+      "url": "/sports/australian-rules/afl/fremantle-vs-geelong-cats/070a677c-b9d6-4a8a-b62c-a87bde99e3ce",
+      "advertisedStart": "2026-09-11T10:10:00.000Z",
       "eventType": "MATCH",
       "eventTypeId": "6bfa0efc-05df-4ae1-9b1e-152365290cfd",
       "bettingStatus": "OPEN",
@@ -31,34 +31,34 @@
       },
       "teams": [
         {
-          "id": "SportingTeam:ba42c744-91fe-44ec-a397-215d04a1d6fc",
-          "name": "Adelaide Crows",
-          "colour": "#002F6C",
+          "id": "SportingTeam:ef1b3f9d-5e0b-495e-8d3c-2cb3f4e9f6f6",
+          "name": "Fremantle",
+          "colour": "#2E0F4F",
           "locale": "HOME",
           "scores": [],
           "scoresV2": null,
           "icon": {
-            "web": "/images/neds/sprites/svg-sports-afl-icon.svg#adelaide-crows"
+            "web": "/images/neds/sprites/svg-sports-afl-icon.svg#fremantle-dockers"
           }
         },
         {
-          "id": "SportingTeam:61a5d203-5ac3-4cde-8aa9-43b68d9c65a1",
-          "name": "Western Bulldogs",
-          "colour": "#003A8F",
+          "id": "SportingTeam:e9980369-5e89-495e-8296-8d5c8131f350",
+          "name": "Geelong Cats",
+          "colour": "#0B2A5B",
           "locale": "AWAY",
           "scores": [],
           "scoresV2": null,
           "icon": {
-            "web": "/images/neds/sprites/svg-sports-afl-icon.svg#western-bulldogs"
+            "web": "/images/neds/sprites/svg-sports-afl-icon.svg#geelong-cats"
           }
         }
       ],
       "matchClock": null,
-      "marketCount": 305,
+      "marketCount": 104,
       "markets": {
         "nodes": [
           {
-            "id": "SportingMarket:0d7f089f-06d1-47a2-bafa-d9323243fd83",
+            "id": "SportingMarket:d060a463-7f46-4791-b2de-8a009857c610",
             "name": "Match Betting",
             "marketTypeId": "be25c37a-71ff-47f6-a1e2-02a494eb5a4d",
             "handicap": null,
@@ -74,36 +74,36 @@
             "entrants": {
               "nodes": [
                 {
-                  "id": "SportingEntrant:505d7ed3-50ee-4e04-879c-284b5e2bf390",
-                  "name": "Adelaide Crows",
+                  "id": "SportingEntrant:8eb7eb25-f3cb-4c1d-900d-4d530b09735f",
+                  "name": "Fremantle",
                   "handicap": null,
                   "isSuspended": false,
                   "role": "HOME",
                   "icon": {
-                    "web": "/images/neds/sprites/svg-sports-afl-icon.svg#adelaide-crows"
+                    "web": "/images/neds/sprites/svg-sports-afl-icon.svg#fremantle-dockers"
                   },
                   "price": {
-                    "id": "505d7ed3-50ee-4e04-879c-284b5e2bf390:940b8704-e497-4a76-b390-00918ff7d282:",
+                    "id": "8eb7eb25-f3cb-4c1d-900d-4d530b09735f:940b8704-e497-4a76-b390-00918ff7d282:",
                     "odds": {
-                      "numerator": 9,
+                      "numerator": 16,
                       "denominator": 25
                     }
                   }
                 },
                 {
-                  "id": "SportingEntrant:40e095ea-3e0f-4781-b822-cd8b6a51f125",
-                  "name": "Western Bulldogs",
+                  "id": "SportingEntrant:d83e7600-2d09-40e5-9f7b-2efe4d64893d",
+                  "name": "Geelong Cats",
                   "handicap": null,
                   "isSuspended": false,
                   "role": "AWAY",
                   "icon": {
-                    "web": "/images/neds/sprites/svg-sports-afl-icon.svg#western-bulldogs"
+                    "web": "/images/neds/sprites/svg-sports-afl-icon.svg#geelong-cats"
                   },
                   "price": {
-                    "id": "40e095ea-3e0f-4781-b822-cd8b6a51f125:940b8704-e497-4a76-b390-00918ff7d282:",
+                    "id": "d83e7600-2d09-40e5-9f7b-2efe4d64893d:940b8704-e497-4a76-b390-00918ff7d282:",
                     "odds": {
-                      "numerator": 43,
-                      "denominator": 20
+                      "numerator": 5,
+                      "denominator": 4
                     }
                   }
                 }
@@ -113,11 +113,11 @@
         ]
       }
     },
-    "d95fa240-3cb3-4ac0-980d-cf2af2104d0f": {
-      "id": "d95fa240-3cb3-4ac0-980d-cf2af2104d0f",
-      "name": "Fremantle vs Geelong Cats",
-      "url": "/sports/australian-rules/afl/fremantle-vs-geelong-cats/d95fa240-3cb3-4ac0-980d-cf2af2104d0f",
-      "advertisedStart": "2026-09-11T09:40:00.000Z",
+    "8ab7ff33-23bc-4fd3-9174-9bdde00733a8": {
+      "id": "8ab7ff33-23bc-4fd3-9174-9bdde00733a8",
+      "name": "Brisbane Lions vs Adelaide Crows",
+      "url": "/sports/australian-rules/afl/brisbane-lions-vs-adelaide-crows/8ab7ff33-23bc-4fd3-9174-9bdde00733a8",
+      "advertisedStart": "2026-09-12T09:35:00.000Z",
       "eventType": "MATCH",
       "eventTypeId": "6bfa0efc-05df-4ae1-9b1e-152365290cfd",
       "bettingStatus": "OPEN",
@@ -144,79 +144,79 @@
       },
       "teams": [
         {
-          "id": "SportingTeam:d015730e-460e-4d73-89ea-abe0be4a257d",
-          "name": "Fremantle",
-          "colour": null,
+          "id": "SportingTeam:5baa47c5-f0fa-4b32-bfe3-73dafd299c08",
+          "name": "Brisbane Lions",
+          "colour": "#7A0C2E",
           "locale": "HOME",
           "scores": [],
           "scoresV2": null,
           "icon": {
-            "web": "/images/neds/sprites/svg-sports-afl-icon.svg#fremantle-dockers"
+            "web": "/images/neds/sprites/svg-sports-afl-icon.svg#brisbane-lions"
           }
         },
         {
-          "id": "SportingTeam:53fc8502-4885-4fbb-a337-402b8cd4a3a8",
-          "name": "Geelong Cats",
-          "colour": null,
+          "id": "SportingTeam:53a09787-af42-4f61-ae7d-67edb11f0d4f",
+          "name": "Adelaide Crows",
+          "colour": "#002F6C",
           "locale": "AWAY",
           "scores": [],
           "scoresV2": null,
           "icon": {
-            "web": "/images/neds/sprites/svg-sports-afl-icon.svg#geelong-cats"
+            "web": "/images/neds/sprites/svg-sports-afl-icon.svg#adelaide-crows"
           }
         }
       ],
       "matchClock": null,
-      "marketCount": 2,
+      "marketCount": 104,
       "markets": {
         "nodes": [
           {
-            "id": "SportingMarket:26cfa668-3ed9-4182-8fe6-21eba55ca98c",
+            "id": "SportingMarket:30ef1786-150f-449d-83b1-430d8753b951",
             "name": "Match Betting",
             "marketTypeId": "be25c37a-71ff-47f6-a1e2-02a494eb5a4d",
             "handicap": null,
             "isPrimary": true,
             "isSuspended": false,
             "status": "OPEN",
-            "liveBettingAvailable": false,
+            "liveBettingAvailable": true,
             "allowsCashOut": false,
-            "sameGameMultiAvailable": false,
+            "sameGameMultiAvailable": true,
             "allowOddsBoostExtra": false,
             "additionalProductTypeIds": null,
             "entrantCount": 2,
             "entrants": {
               "nodes": [
                 {
-                  "id": "SportingEntrant:10f2d137-bf2c-4d42-ba1d-4f6eff72be59",
-                  "name": "Fremantle",
+                  "id": "SportingEntrant:1d774891-6f70-4866-ba60-8d0a58ab15b6",
+                  "name": "Brisbane Lions",
                   "handicap": null,
                   "isSuspended": false,
                   "role": "HOME",
                   "icon": {
-                    "web": "/images/neds/sprites/svg-sports-afl-icon.svg#fremantle-dockers"
+                    "web": "/images/neds/sprites/svg-sports-afl-icon.svg#brisbane-lions"
                   },
                   "price": {
-                    "id": "10f2d137-bf2c-4d42-ba1d-4f6eff72be59:940b8704-e497-4a76-b390-00918ff7d282:",
+                    "id": "1d774891-6f70-4866-ba60-8d0a58ab15b6:940b8704-e497-4a76-b390-00918ff7d282:",
                     "odds": {
-                      "numerator": 3,
+                      "numerator": 2,
                       "denominator": 5
                     }
                   }
                 },
                 {
-                  "id": "SportingEntrant:3c5facb2-9583-45b5-8ca9-1272c4e90c22",
-                  "name": "Geelong Cats",
+                  "id": "SportingEntrant:edb27f54-dfdb-43ee-abbe-424778d300f2",
+                  "name": "Adelaide Crows",
                   "handicap": null,
                   "isSuspended": false,
                   "role": "AWAY",
                   "icon": {
-                    "web": "/images/neds/sprites/svg-sports-afl-icon.svg#geelong-cats"
+                    "web": "/images/neds/sprites/svg-sports-afl-icon.svg#adelaide-crows"
                   },
                   "price": {
-                    "id": "3c5facb2-9583-45b5-8ca9-1272c4e90c22:940b8704-e497-4a76-b390-00918ff7d282:",
+                    "id": "edb27f54-dfdb-43ee-abbe-424778d300f2:940b8704-e497-4a76-b390-00918ff7d282:",
                     "odds": {
-                      "numerator": 27,
-                      "denominator": 20
+                      "numerator": 2,
+                      "denominator": 1
                     }
                   }
                 }
