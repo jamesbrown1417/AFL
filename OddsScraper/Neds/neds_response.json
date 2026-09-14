@@ -1,10 +1,10 @@
 {
   "events": {
-    "8ab7ff33-23bc-4fd3-9174-9bdde00733a8": {
-      "id": "8ab7ff33-23bc-4fd3-9174-9bdde00733a8",
-      "name": "Brisbane Lions vs Adelaide Crows",
-      "url": "/sports/australian-rules/afl/brisbane-lions-vs-adelaide-crows/8ab7ff33-23bc-4fd3-9174-9bdde00733a8",
-      "advertisedStart": "2026-09-12T09:35:00.000Z",
+    "93a574d7-462d-4ffd-9355-8d327bd20feb": {
+      "id": "93a574d7-462d-4ffd-9355-8d327bd20feb",
+      "name": "AFL Week 4 Finals Specials",
+      "url": "/sports/australian-rules/afl/afl-week-4-finals-specials/93a574d7-462d-4ffd-9355-8d327bd20feb",
+      "advertisedStart": "2026-09-18T09:39:00.000Z",
       "eventType": "MATCH",
       "eventTypeId": "6bfa0efc-05df-4ae1-9b1e-152365290cfd",
       "bettingStatus": "OPEN",
@@ -29,94 +29,17 @@
         "hasInPlayEvents": false,
         "region": null
       },
-      "teams": [
-        {
-          "id": "SportingTeam:5baa47c5-f0fa-4b32-bfe3-73dafd299c08",
-          "name": "Brisbane Lions",
-          "colour": "#7A0C2E",
-          "locale": "HOME",
-          "scores": [],
-          "scoresV2": null,
-          "icon": {
-            "web": "/images/neds/sprites/svg-sports-afl-icon.svg#brisbane-lions"
-          }
-        },
-        {
-          "id": "SportingTeam:53a09787-af42-4f61-ae7d-67edb11f0d4f",
-          "name": "Adelaide Crows",
-          "colour": "#002F6C",
-          "locale": "AWAY",
-          "scores": [],
-          "scoresV2": null,
-          "icon": {
-            "web": "/images/neds/sprites/svg-sports-afl-icon.svg#adelaide-crows"
-          }
-        }
-      ],
+      "teams": null,
       "matchClock": null,
-      "marketCount": 288,
+      "marketCount": 10,
       "markets": {
-        "nodes": [
-          {
-            "id": "SportingMarket:30ef1786-150f-449d-83b1-430d8753b951",
-            "name": "Match Betting",
-            "marketTypeId": "be25c37a-71ff-47f6-a1e2-02a494eb5a4d",
-            "handicap": null,
-            "isPrimary": true,
-            "isSuspended": false,
-            "status": "OPEN",
-            "liveBettingAvailable": true,
-            "allowsCashOut": false,
-            "sameGameMultiAvailable": true,
-            "allowOddsBoostExtra": false,
-            "additionalProductTypeIds": null,
-            "entrantCount": 2,
-            "entrants": {
-              "nodes": [
-                {
-                  "id": "SportingEntrant:1d774891-6f70-4866-ba60-8d0a58ab15b6",
-                  "name": "Brisbane Lions",
-                  "handicap": null,
-                  "isSuspended": false,
-                  "role": "HOME",
-                  "icon": {
-                    "web": "/images/neds/sprites/svg-sports-afl-icon.svg#brisbane-lions"
-                  },
-                  "price": {
-                    "id": "1d774891-6f70-4866-ba60-8d0a58ab15b6:940b8704-e497-4a76-b390-00918ff7d282:",
-                    "odds": {
-                      "numerator": 33,
-                      "denominator": 100
-                    }
-                  }
-                },
-                {
-                  "id": "SportingEntrant:edb27f54-dfdb-43ee-abbe-424778d300f2",
-                  "name": "Adelaide Crows",
-                  "handicap": null,
-                  "isSuspended": false,
-                  "role": "AWAY",
-                  "icon": {
-                    "web": "/images/neds/sprites/svg-sports-afl-icon.svg#adelaide-crows"
-                  },
-                  "price": {
-                    "id": "edb27f54-dfdb-43ee-abbe-424778d300f2:940b8704-e497-4a76-b390-00918ff7d282:",
-                    "odds": {
-                      "numerator": 47,
-                      "denominator": 20
-                    }
-                  }
-                }
-              ]
-            }
-          }
-        ]
+        "nodes": []
       }
     },
-    "2ab7dca7-ddf0-46b7-b98d-9f2415f6b4a8": {
-      "id": "2ab7dca7-ddf0-46b7-b98d-9f2415f6b4a8",
+    "2c7c3a58-4be3-46a7-81dd-e2d07fa6a130": {
+      "id": "2c7c3a58-4be3-46a7-81dd-e2d07fa6a130",
       "name": "Sydney Swans vs Fremantle",
-      "url": "/sports/australian-rules/afl/sydney-swans-vs-fremantle/2ab7dca7-ddf0-46b7-b98d-9f2415f6b4a8",
+      "url": "/sports/australian-rules/afl/sydney-swans-vs-fremantle/2c7c3a58-4be3-46a7-81dd-e2d07fa6a130",
       "advertisedStart": "2026-09-18T09:40:00.000Z",
       "eventType": "MATCH",
       "eventTypeId": "6bfa0efc-05df-4ae1-9b1e-152365290cfd",
@@ -144,9 +67,9 @@
       },
       "teams": [
         {
-          "id": "SportingTeam:feee57ce-ba04-4748-9249-ce5a8dafd763",
+          "id": "SportingTeam:9e6392e1-2f37-4cc1-94f7-55c991a1f39f",
           "name": "Sydney Swans",
-          "colour": null,
+          "colour": "#C8102E",
           "locale": "HOME",
           "scores": [],
           "scoresV2": null,
@@ -155,9 +78,9 @@
           }
         },
         {
-          "id": "SportingTeam:765ae44f-34f3-48c6-8672-26123ecfa56e",
+          "id": "SportingTeam:9fdba8b6-6625-4ba2-8703-056fc3451fb4",
           "name": "Fremantle",
-          "colour": null,
+          "colour": "#2E0F4F",
           "locale": "AWAY",
           "scores": [],
           "scoresV2": null,
@@ -167,27 +90,27 @@
         }
       ],
       "matchClock": null,
-      "marketCount": 3,
+      "marketCount": 186,
       "markets": {
         "nodes": [
           {
-            "id": "SportingMarket:2901d432-165a-4292-ab25-7e0452a4528a",
+            "id": "SportingMarket:5a8cfe5f-142d-4e14-9209-2c526d59d0a3",
             "name": "Match Betting",
             "marketTypeId": "be25c37a-71ff-47f6-a1e2-02a494eb5a4d",
             "handicap": null,
             "isPrimary": true,
             "isSuspended": false,
             "status": "OPEN",
-            "liveBettingAvailable": false,
+            "liveBettingAvailable": true,
             "allowsCashOut": false,
-            "sameGameMultiAvailable": false,
+            "sameGameMultiAvailable": true,
             "allowOddsBoostExtra": false,
             "additionalProductTypeIds": null,
             "entrantCount": 2,
             "entrants": {
               "nodes": [
                 {
-                  "id": "SportingEntrant:12a24730-fa11-4e1a-9908-328ff238fefe",
+                  "id": "SportingEntrant:9c080772-939f-452e-80c6-5fcd00a037cb",
                   "name": "Sydney Swans",
                   "handicap": null,
                   "isSuspended": false,
@@ -196,15 +119,15 @@
                     "web": "/images/neds/sprites/svg-sports-afl-icon.svg#sydney-swans"
                   },
                   "price": {
-                    "id": "12a24730-fa11-4e1a-9908-328ff238fefe:940b8704-e497-4a76-b390-00918ff7d282:",
+                    "id": "9c080772-939f-452e-80c6-5fcd00a037cb:940b8704-e497-4a76-b390-00918ff7d282:",
                     "odds": {
-                      "numerator": 29,
-                      "denominator": 20
+                      "numerator": 3,
+                      "denominator": 2
                     }
                   }
                 },
                 {
-                  "id": "SportingEntrant:f96887d4-01b6-4a4c-9ee6-3dc606d21db7",
+                  "id": "SportingEntrant:fb73c295-bca4-4a83-a263-cbedd2698859",
                   "name": "Fremantle",
                   "handicap": null,
                   "isSuspended": false,
@@ -213,10 +136,123 @@
                     "web": "/images/neds/sprites/svg-sports-afl-icon.svg#fremantle-dockers"
                   },
                   "price": {
-                    "id": "f96887d4-01b6-4a4c-9ee6-3dc606d21db7:940b8704-e497-4a76-b390-00918ff7d282:",
+                    "id": "fb73c295-bca4-4a83-a263-cbedd2698859:940b8704-e497-4a76-b390-00918ff7d282:",
                     "odds": {
                       "numerator": 11,
                       "denominator": 20
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "df33de65-320c-45fb-9b3b-7bbe4a2cf2d3": {
+      "id": "df33de65-320c-45fb-9b3b-7bbe4a2cf2d3",
+      "name": "Hawthorn vs Brisbane Lions",
+      "url": "/sports/australian-rules/afl/hawthorn-vs-brisbane-lions/df33de65-320c-45fb-9b3b-7bbe4a2cf2d3",
+      "advertisedStart": "2026-09-19T07:15:00.000Z",
+      "eventType": "MATCH",
+      "eventTypeId": "6bfa0efc-05df-4ae1-9b1e-152365290cfd",
+      "bettingStatus": "OPEN",
+      "status": "OPEN",
+      "phase": null,
+      "hasLiveVision": false,
+      "inPlay": false,
+      "sportCategory": {
+        "id": "23d497e6-8aab-4309-905b-9421f42c9bc5",
+        "name": "Australian Rules",
+        "category": "AUSTRALIAN_RULES",
+        "icon": "sports/australian-rules",
+        "slug": "australian-rules",
+        "url": "/sports/australian-rules",
+        "hasRegions": false,
+        "eventCount": 0
+      },
+      "competition": {
+        "id": "ccff2e9a-5347-41aa-902a-bb6b1886d817",
+        "name": "AFL",
+        "url": "/sports/australian-rules/afl",
+        "hasInPlayEvents": false,
+        "region": null
+      },
+      "teams": [
+        {
+          "id": "SportingTeam:16c05d7d-a9af-4ed6-aca9-61552ca59a73",
+          "name": "Hawthorn",
+          "colour": "#4A2E0B",
+          "locale": "HOME",
+          "scores": [],
+          "scoresV2": null,
+          "icon": {
+            "web": "/images/neds/sprites/svg-sports-afl-icon.svg#hawthorn-hawks"
+          }
+        },
+        {
+          "id": "SportingTeam:b3a06b67-4115-4c68-8def-ab2043e88334",
+          "name": "Brisbane Lions",
+          "colour": "#7A0C2E",
+          "locale": "AWAY",
+          "scores": [],
+          "scoresV2": null,
+          "icon": {
+            "web": "/images/neds/sprites/svg-sports-afl-icon.svg#brisbane-lions"
+          }
+        }
+      ],
+      "matchClock": null,
+      "marketCount": 186,
+      "markets": {
+        "nodes": [
+          {
+            "id": "SportingMarket:4e6f508c-0bae-43cc-ad7f-5a718ec07bb2",
+            "name": "Match Betting",
+            "marketTypeId": "be25c37a-71ff-47f6-a1e2-02a494eb5a4d",
+            "handicap": null,
+            "isPrimary": true,
+            "isSuspended": false,
+            "status": "OPEN",
+            "liveBettingAvailable": true,
+            "allowsCashOut": false,
+            "sameGameMultiAvailable": true,
+            "allowOddsBoostExtra": false,
+            "additionalProductTypeIds": null,
+            "entrantCount": 2,
+            "entrants": {
+              "nodes": [
+                {
+                  "id": "SportingEntrant:4dce42fe-816f-4bf4-9c7f-d05f9562e9c3",
+                  "name": "Hawthorn",
+                  "handicap": null,
+                  "isSuspended": false,
+                  "role": "HOME",
+                  "icon": {
+                    "web": "/images/neds/sprites/svg-sports-afl-icon.svg#hawthorn-hawks"
+                  },
+                  "price": {
+                    "id": "4dce42fe-816f-4bf4-9c7f-d05f9562e9c3:940b8704-e497-4a76-b390-00918ff7d282:",
+                    "odds": {
+                      "numerator": 1,
+                      "denominator": 1
+                    }
+                  }
+                },
+                {
+                  "id": "SportingEntrant:20821831-7469-4453-a120-9a2fdf4b0c17",
+                  "name": "Brisbane Lions",
+                  "handicap": null,
+                  "isSuspended": false,
+                  "role": "AWAY",
+                  "icon": {
+                    "web": "/images/neds/sprites/svg-sports-afl-icon.svg#brisbane-lions"
+                  },
+                  "price": {
+                    "id": "20821831-7469-4453-a120-9a2fdf4b0c17:940b8704-e497-4a76-b390-00918ff7d282:",
+                    "odds": {
+                      "numerator": 41,
+                      "denominator": 50
                     }
                   }
                 }
