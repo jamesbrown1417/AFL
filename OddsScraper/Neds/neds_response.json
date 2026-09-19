@@ -1,154 +1,5 @@
 {
   "events": {
-    "93a574d7-462d-4ffd-9355-8d327bd20feb": {
-      "id": "93a574d7-462d-4ffd-9355-8d327bd20feb",
-      "name": "AFL Week 4 Finals Specials",
-      "url": "/sports/australian-rules/afl/afl-week-4-finals-specials/93a574d7-462d-4ffd-9355-8d327bd20feb",
-      "advertisedStart": "2026-09-18T09:39:00.000Z",
-      "eventType": "MATCH",
-      "eventTypeId": "6bfa0efc-05df-4ae1-9b1e-152365290cfd",
-      "bettingStatus": "OPEN",
-      "status": "OPEN",
-      "phase": null,
-      "hasLiveVision": false,
-      "inPlay": false,
-      "sportCategory": {
-        "id": "23d497e6-8aab-4309-905b-9421f42c9bc5",
-        "name": "Australian Rules",
-        "category": "AUSTRALIAN_RULES",
-        "icon": "sports/australian-rules",
-        "slug": "australian-rules",
-        "url": "/sports/australian-rules",
-        "hasRegions": false,
-        "eventCount": 0
-      },
-      "competition": {
-        "id": "ccff2e9a-5347-41aa-902a-bb6b1886d817",
-        "name": "AFL",
-        "url": "/sports/australian-rules/afl",
-        "hasInPlayEvents": false,
-        "region": null
-      },
-      "teams": null,
-      "matchClock": null,
-      "marketCount": 11,
-      "markets": {
-        "nodes": []
-      }
-    },
-    "2c7c3a58-4be3-46a7-81dd-e2d07fa6a130": {
-      "id": "2c7c3a58-4be3-46a7-81dd-e2d07fa6a130",
-      "name": "Sydney Swans vs Fremantle",
-      "url": "/sports/australian-rules/afl/sydney-swans-vs-fremantle/2c7c3a58-4be3-46a7-81dd-e2d07fa6a130",
-      "advertisedStart": "2026-09-18T09:40:00.000Z",
-      "eventType": "MATCH",
-      "eventTypeId": "6bfa0efc-05df-4ae1-9b1e-152365290cfd",
-      "bettingStatus": "OPEN",
-      "status": "OPEN",
-      "phase": null,
-      "hasLiveVision": false,
-      "inPlay": false,
-      "sportCategory": {
-        "id": "23d497e6-8aab-4309-905b-9421f42c9bc5",
-        "name": "Australian Rules",
-        "category": "AUSTRALIAN_RULES",
-        "icon": "sports/australian-rules",
-        "slug": "australian-rules",
-        "url": "/sports/australian-rules",
-        "hasRegions": false,
-        "eventCount": 0
-      },
-      "competition": {
-        "id": "ccff2e9a-5347-41aa-902a-bb6b1886d817",
-        "name": "AFL",
-        "url": "/sports/australian-rules/afl",
-        "hasInPlayEvents": false,
-        "region": null
-      },
-      "teams": [
-        {
-          "id": "SportingTeam:9e6392e1-2f37-4cc1-94f7-55c991a1f39f",
-          "name": "Sydney Swans",
-          "colour": "#C8102E",
-          "locale": "HOME",
-          "scores": [],
-          "scoresV2": null,
-          "icon": {
-            "web": "/images/neds/sprites/svg-sports-afl-icon.svg#sydney-swans"
-          }
-        },
-        {
-          "id": "SportingTeam:9fdba8b6-6625-4ba2-8703-056fc3451fb4",
-          "name": "Fremantle",
-          "colour": "#2E0F4F",
-          "locale": "AWAY",
-          "scores": [],
-          "scoresV2": null,
-          "icon": {
-            "web": "/images/neds/sprites/svg-sports-afl-icon.svg#fremantle-dockers"
-          }
-        }
-      ],
-      "matchClock": null,
-      "marketCount": 285,
-      "markets": {
-        "nodes": [
-          {
-            "id": "SportingMarket:5a8cfe5f-142d-4e14-9209-2c526d59d0a3",
-            "name": "Match Betting",
-            "marketTypeId": "be25c37a-71ff-47f6-a1e2-02a494eb5a4d",
-            "handicap": null,
-            "isPrimary": true,
-            "isSuspended": false,
-            "status": "OPEN",
-            "liveBettingAvailable": true,
-            "allowsCashOut": false,
-            "sameGameMultiAvailable": true,
-            "allowOddsBoostExtra": false,
-            "additionalProductTypeIds": null,
-            "entrantCount": 2,
-            "entrants": {
-              "nodes": [
-                {
-                  "id": "SportingEntrant:9c080772-939f-452e-80c6-5fcd00a037cb",
-                  "name": "Sydney Swans",
-                  "handicap": null,
-                  "isSuspended": false,
-                  "role": "HOME",
-                  "icon": {
-                    "web": "/images/neds/sprites/svg-sports-afl-icon.svg#sydney-swans"
-                  },
-                  "price": {
-                    "id": "9c080772-939f-452e-80c6-5fcd00a037cb:940b8704-e497-4a76-b390-00918ff7d282:",
-                    "odds": {
-                      "numerator": 3,
-                      "denominator": 2
-                    }
-                  }
-                },
-                {
-                  "id": "SportingEntrant:fb73c295-bca4-4a83-a263-cbedd2698859",
-                  "name": "Fremantle",
-                  "handicap": null,
-                  "isSuspended": false,
-                  "role": "AWAY",
-                  "icon": {
-                    "web": "/images/neds/sprites/svg-sports-afl-icon.svg#fremantle-dockers"
-                  },
-                  "price": {
-                    "id": "fb73c295-bca4-4a83-a263-cbedd2698859:940b8704-e497-4a76-b390-00918ff7d282:",
-                    "odds": {
-                      "numerator": 11,
-                      "denominator": 20
-                    }
-                  }
-                }
-              ]
-            }
-          }
-        ]
-      }
-    },
     "df33de65-320c-45fb-9b3b-7bbe4a2cf2d3": {
       "id": "df33de65-320c-45fb-9b3b-7bbe4a2cf2d3",
       "name": "Hawthorn vs Brisbane Lions",
@@ -234,8 +85,8 @@
                   "price": {
                     "id": "4dce42fe-816f-4bf4-9c7f-d05f9562e9c3:940b8704-e497-4a76-b390-00918ff7d282:",
                     "odds": {
-                      "numerator": 1,
-                      "denominator": 1
+                      "numerator": 51,
+                      "denominator": 50
                     }
                   }
                 },
@@ -251,8 +102,8 @@
                   "price": {
                     "id": "20821831-7469-4453-a120-9a2fdf4b0c17:940b8704-e497-4a76-b390-00918ff7d282:",
                     "odds": {
-                      "numerator": 41,
-                      "denominator": 50
+                      "numerator": 4,
+                      "denominator": 5
                     }
                   }
                 }
