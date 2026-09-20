@@ -1,10 +1,10 @@
 {
   "events": {
-    "df33de65-320c-45fb-9b3b-7bbe4a2cf2d3": {
-      "id": "df33de65-320c-45fb-9b3b-7bbe4a2cf2d3",
-      "name": "Hawthorn vs Brisbane Lions",
-      "url": "/sports/australian-rules/afl/hawthorn-vs-brisbane-lions/df33de65-320c-45fb-9b3b-7bbe4a2cf2d3",
-      "advertisedStart": "2026-09-19T07:15:00.000Z",
+    "a248f969-e7b1-43c9-a6a8-03178e3a3d68": {
+      "id": "a248f969-e7b1-43c9-a6a8-03178e3a3d68",
+      "name": "Fremantle vs Brisbane Lions",
+      "url": "/sports/australian-rules/afl/fremantle-vs-brisbane-lions/a248f969-e7b1-43c9-a6a8-03178e3a3d68",
+      "advertisedStart": "2026-09-26T04:30:00.000Z",
       "eventType": "MATCH",
       "eventTypeId": "6bfa0efc-05df-4ae1-9b1e-152365290cfd",
       "bettingStatus": "OPEN",
@@ -31,18 +31,18 @@
       },
       "teams": [
         {
-          "id": "SportingTeam:16c05d7d-a9af-4ed6-aca9-61552ca59a73",
-          "name": "Hawthorn",
-          "colour": "#4A2E0B",
+          "id": "SportingTeam:c15d681c-a6cb-40c2-9859-510b93afcb8d",
+          "name": "Fremantle",
+          "colour": "#2E0F4F",
           "locale": "HOME",
           "scores": [],
           "scoresV2": null,
           "icon": {
-            "web": "/images/neds/sprites/svg-sports-afl-icon.svg#hawthorn-hawks"
+            "web": "/images/neds/sprites/svg-sports-afl-icon.svg#fremantle-dockers"
           }
         },
         {
-          "id": "SportingTeam:b3a06b67-4115-4c68-8def-ab2043e88334",
+          "id": "SportingTeam:74e715c2-3fe2-4035-bac5-a024a4d54b26",
           "name": "Brisbane Lions",
           "colour": "#7A0C2E",
           "locale": "AWAY",
@@ -54,11 +54,11 @@
         }
       ],
       "matchClock": null,
-      "marketCount": 291,
+      "marketCount": 185,
       "markets": {
         "nodes": [
           {
-            "id": "SportingMarket:4e6f508c-0bae-43cc-ad7f-5a718ec07bb2",
+            "id": "SportingMarket:c462b870-16cc-43e7-9dda-a8dbcf9fbb05",
             "name": "Match Betting",
             "marketTypeId": "be25c37a-71ff-47f6-a1e2-02a494eb5a4d",
             "handicap": null,
@@ -74,24 +74,24 @@
             "entrants": {
               "nodes": [
                 {
-                  "id": "SportingEntrant:4dce42fe-816f-4bf4-9c7f-d05f9562e9c3",
-                  "name": "Hawthorn",
+                  "id": "SportingEntrant:23774be8-76a6-405b-9869-0c78afced3bc",
+                  "name": "Fremantle",
                   "handicap": null,
                   "isSuspended": false,
                   "role": "HOME",
                   "icon": {
-                    "web": "/images/neds/sprites/svg-sports-afl-icon.svg#hawthorn-hawks"
+                    "web": "/images/neds/sprites/svg-sports-afl-icon.svg#fremantle-dockers"
                   },
                   "price": {
-                    "id": "4dce42fe-816f-4bf4-9c7f-d05f9562e9c3:940b8704-e497-4a76-b390-00918ff7d282:",
+                    "id": "23774be8-76a6-405b-9869-0c78afced3bc:940b8704-e497-4a76-b390-00918ff7d282:",
                     "odds": {
-                      "numerator": 51,
-                      "denominator": 50
+                      "numerator": 13,
+                      "denominator": 10
                     }
                   }
                 },
                 {
-                  "id": "SportingEntrant:20821831-7469-4453-a120-9a2fdf4b0c17",
+                  "id": "SportingEntrant:cf5ce9f7-a882-4a07-8479-f1ad2686c4cd",
                   "name": "Brisbane Lions",
                   "handicap": null,
                   "isSuspended": false,
@@ -100,10 +100,10 @@
                     "web": "/images/neds/sprites/svg-sports-afl-icon.svg#brisbane-lions"
                   },
                   "price": {
-                    "id": "20821831-7469-4453-a120-9a2fdf4b0c17:940b8704-e497-4a76-b390-00918ff7d282:",
+                    "id": "cf5ce9f7-a882-4a07-8479-f1ad2686c4cd:940b8704-e497-4a76-b390-00918ff7d282:",
                     "odds": {
-                      "numerator": 4,
-                      "denominator": 5
+                      "numerator": 31,
+                      "denominator": 50
                     }
                   }
                 }
